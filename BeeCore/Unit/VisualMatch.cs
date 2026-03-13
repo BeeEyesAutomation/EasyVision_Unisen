@@ -299,7 +299,7 @@ namespace BeeCore
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
 
-            if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
+            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.NG)
                 cl = Color.Red;
             else
                 cl = Color.LimeGreen;

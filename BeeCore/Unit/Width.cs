@@ -282,7 +282,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
-            switch(Common.PropetyTools[Global.IndexChoose][Index].Results)
+            switch(Common.PropetyTools[Global.IndexProgChoose][Index].Results)
             {
                 case Results.OK:
                     cl =  Global.ParaShow.ColorOK;
@@ -292,7 +292,7 @@ namespace BeeCore
                     break;
             }
             Pen pen = new Pen(Global.ParaShow.ColorInfor, Global.ParaShow.ThicknessLine);
-            String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexProgChoose][Index].Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
                 Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);

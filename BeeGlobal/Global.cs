@@ -1,6 +1,7 @@
 ﻿using OpenCvSharp;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,11 @@ namespace BeeGlobal
 {
     public class Global
     {
+        public static bool IsReConnectCCD;
+        public static dynamic SettingPLC;
+        public static dynamic Header;
+        public static bool IsShutDown;
+        public static dynamic Main=null;
         public static bool _IsDummy = false;
         public static event Action<bool> ChangeDummy;
  
@@ -286,6 +292,9 @@ namespace BeeGlobal
                 }
             }
         }
+    
+        public static string _pathSqlMaster;
+        public static SqlConnection cnn = new SqlConnection();
         public static ImgShow ImgShow = ImgShow.Result;
         public static int NumProgFromPLC = 1;
         public static TypeCamera TypeCamera;
@@ -295,7 +304,7 @@ namespace BeeGlobal
         public static bool IsPLCChangeProg = false;
         public static int IndexCCCD = 0;
         public static String PathPython = "";
-        public static int IndexChoose = 0;
+        public static int IndexProgChoose = 0;
         public static String Project = "";
         public static RectRotate rotAreaAdj;
       

@@ -559,7 +559,7 @@ namespace BeeInterface
             this.btn4.ImageTintNormal = System.Drawing.Color.Empty;
             this.btn4.ImageTintOpacity = 0.5F;
             this.btn4.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btn4.IsCLick = true;
+            this.btn4.IsCLick = false;
             this.btn4.IsNotChange = false;
             this.btn4.IsRect = false;
             this.btn4.IsTouch = true;
@@ -1367,7 +1367,6 @@ namespace BeeInterface
             this.trackGain.TrackWidthRatio = 1F;
             this.trackGain.UnitText = "";
             this.trackGain.Value = 1F;
-            this.trackGain.Visible = false;
             this.trackGain.WheelStep = 1F;
             this.trackGain.ValueChanged += new System.Action<float>(this.trackGain_ValueChanged);
             this.trackGain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackGain_MouseDown);

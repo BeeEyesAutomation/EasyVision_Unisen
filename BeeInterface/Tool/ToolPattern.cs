@@ -45,7 +45,7 @@ namespace BeeInterface
             {
                 imgTemp.Image = Propety.bmRaw;
             }
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             trackAngle.Value =(int) Propety.Angle;
            
 
@@ -61,10 +61,10 @@ namespace BeeInterface
 
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick =! Propety.rotArea.IsWhite;
-            trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
-            trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
-            trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+            trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
+            trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
+            trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
+            trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
             if (Propety.MaxObject == 0) Propety.MaxObject = 1;
             AdjMaximumObj.Value = Propety.MaxObject;
             AdjStepAngle.Value = Propety.StepAngle;
@@ -119,13 +119,13 @@ namespace BeeInterface
             btnZero0.IsCLick=Propety.ZeroPos==ZeroPos.Zero?true:false;
             btnZeroAdj.IsCLick = Propety.ZeroPos == ZeroPos.ZeroADJ ? true : false;
 
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
         }
 
         private void ToolPattern_StatusToolChanged(StatusTool obj)
         {
             if (Global.IsRun) return;
-            if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true;
             }
@@ -133,7 +133,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (float)trackScore.Value;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (float)trackScore.Value;
            
 
         }
@@ -292,7 +292,7 @@ namespace BeeInterface
         private void btnAreaWhite_Click(object sender, EventArgs e)
         {
             Propety.IsAreaWhite = true;
-            GetTemp(Propety.rotCrop, BeeCore.Common.listCamera[Global. IndexChoose].matRaw);
+            GetTemp(Propety.rotCrop, BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw);
           //  G.EditTool.View.imgView.Invalidate();
         }
 
@@ -324,8 +324,8 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.IsBusy)
-                Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.RunWorkerAsync();
+            if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
+                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }
@@ -456,7 +456,7 @@ namespace BeeInterface
         private void NewShape(ShapeType newShape)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety;
+            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
             RectRotate rr = null;
             if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
             else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;

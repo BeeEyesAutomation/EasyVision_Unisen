@@ -1059,7 +1059,7 @@ namespace BeeCore
         {
             if (ResultItems != null)
                 ResultItems.Clear();
-            Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
+            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
             list_Patterns = new List<BeeCpp.Pattern>();
             rectRotates = new List<RectRotate>();
            
@@ -1386,7 +1386,7 @@ namespace BeeCore
         }
         public async void RunMode(RectRotate rectRotate)
         {
-            Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
+            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
             rectRotates = new List<RectRotate>();
             listScore = new List<double>();
             listP_Center = new List<System.Drawing.Point>();
@@ -2023,7 +2023,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText =new SolidBrush( Global.ParaShow.TextColor);
             Color cl = Color.LimeGreen;
-            if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
+            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.NG)
             {
                 cl = Global.ParaShow.ColorNG;
             }

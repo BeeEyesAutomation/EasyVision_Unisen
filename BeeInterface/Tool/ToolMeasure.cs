@@ -50,11 +50,11 @@ namespace BeeInterface
          
          
            // numScale.Value=(decimal)Propety.Scale ;
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-            trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
-            trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
-            trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+            trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
+            trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
+            trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
+            trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
             if (Propety.listPointChoose.Count>=4)
             {
                 if (Propety.listPointChoose[0].Item1 != null)
@@ -117,15 +117,15 @@ namespace BeeInterface
             //   // Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
 
             //};
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolYolo_StatusToolChanged;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolYolo_StatusToolChanged;
 
         }
         private void ToolYolo_StatusToolChanged(StatusTool obj)
         {
             if (Global.IsRun) return;
-            if (Propety.Index >= Common.PropetyTools[Global.IndexChoose].Count)
+            if (Propety.Index >= Common.PropetyTools[Global.IndexProgChoose].Count)
                 return;
-            if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
                // Propety.rectTrain = Propety.rectRotates;//note
                 btnTest.Enabled = true;
@@ -133,7 +133,7 @@ namespace BeeInterface
         }
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = trackScore.Value;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = trackScore.Value;
 
         }
 
@@ -489,8 +489,8 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
+                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }

@@ -55,6 +55,8 @@ namespace BeeCore
             if (rotArea == null) rotArea = new RectRotate();
             if (rotCrop == null) rotCrop = new RectRotate();
             DetectIntersect = new DetectIntersect();
+            if (Common.PropetyTools[IndexThread][Index].Score == 0)
+                Common.PropetyTools[IndexThread][Index].Score = 80;
             Common.PropetyTools[IndexThread][Index].StepValue = 1;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
             Common.PropetyTools[IndexThread][Index].MaxValue = 100;
@@ -427,7 +429,7 @@ namespace BeeCore
             listScore = new List<double>();
             listP_Center = new List<System.Drawing.Point>();
             list_AngleCenter = new List<float>();
-            Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
+            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
             matProcess=new Mat();
             using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
@@ -696,7 +698,7 @@ namespace BeeCore
 
                     if (scoreSum != 0f && rectRotates.Count > 0)
                     {
-                        Common.PropetyTools[Global.IndexChoose][Index].ScoreResult =
+                        Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult =
                             (int)Math.Round(scoreSum / rectRotates.Count, 1);
                     }
                 }
@@ -815,7 +817,7 @@ namespace BeeCore
             Brush brushText =new SolidBrush( Global.ParaShow.TextColor);
             Color cl = Color.LimeGreen;
 
-            if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
+            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.NG)
             {
                 cl = Global.ParaShow.ColorNG;
             }

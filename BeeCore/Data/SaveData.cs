@@ -15,7 +15,7 @@ namespace BeeCore
         {
          
             
-            if (Global.Config.IsSaveCommon)
+            if (Global.Config.IsSaveProg)
             {
                 String path = "Common";
                 if (!Directory.Exists(path))

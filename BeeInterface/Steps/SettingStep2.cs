@@ -29,7 +29,7 @@ namespace BeeInterface
         {
             if (Global.ParaCommon.matRegister != null)
             {
-                switch (Global.IndexChoose)
+                switch (Global.IndexProgChoose)
                 {
                     case 0:
                         Global.Config.SizeCCD = Global.ParaCommon.matRegister.Size;// = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
@@ -71,7 +71,8 @@ namespace BeeInterface
                 if (Global.ParaCommon.matRegister != null)
                     Global.listRegsImg.Add(new ItemRegsImg("IMAGE", Global.ParaCommon.matRegister));
             }
-            RegisterImg.LoadAllItem(Global.listRegsImg);
+            RegisterImg.LoadAllItem(Global.listRegsImg, Global.ParaCommon.ListIndexMatReg[Global.IndexProgChoose]);
+          
 
         }
         private void SettingStep2_Load(object sender, EventArgs e)
@@ -99,7 +100,7 @@ namespace BeeInterface
                     if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty())
                     {
 
-                        switch (Global.IndexChoose)
+                        switch (Global.IndexProgChoose)
                         {
                             case 0:
                                 Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
@@ -167,7 +168,7 @@ namespace BeeInterface
                 {
                     if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty())
                     {
-                        switch (Global.IndexChoose)
+                        switch (Global.IndexProgChoose)
                         {
                             case 0:
                                 Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
@@ -216,12 +217,13 @@ namespace BeeInterface
 
         private void RegisterImg_SelectedItemChanged(object sender, RegisterImgSelectionChangedEventArgs e)
         {
+      
             if (IsLoad)
             {
                 IsLoad = false;
                 return;
-            }    
-              
+            }
+            Global.ParaCommon.ListIndexMatReg[Global.IndexProgChoose]=e.IndexChange;
             using (Mat clone = e.Image?.Clone())
             {if(clone==null)
                 {
@@ -238,7 +240,7 @@ namespace BeeInterface
                 }    
                 // phần Global của bạn — giữ nguyên
                 BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = clone.Clone();
-                switch (Global.IndexChoose)
+                switch (Global.IndexProgChoose)
                 {
                     case 0:
                         Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());

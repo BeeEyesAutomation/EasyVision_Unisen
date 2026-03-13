@@ -133,12 +133,12 @@ namespace BeeUi
             this.splitter5 = new System.Windows.Forms.Splitter();
             this.StepProccessBar = new BeeInterface.StepProgressBar();
             this.rjButton1 = new BeeInterface.RJButton();
-            this.pInfor = new BeeUi.ViewHost();
-            this.pEditTool = new BeeUi.ViewHost();
+            this.pInfor = new   ViewHost();
+            this.pEditTool = new ViewHost();
             this.BarRight = new BeeUi.Unit.Cameras();
             this.hideBar = new BeeUi.Unit.HideBar();
             this.pHeader = new BeeUi.Common.Header();
-            this.BtnHeaderBar = new BeeUi.Unit.BtnHeaderBar();
+            this.BtnHeaderBar = new BtnHeaderBar();
             this.statusStrip1.SuspendLayout();
             this.pEdit.SuspendLayout();
             this.pRight.SuspendLayout();
@@ -1372,7 +1372,7 @@ namespace BeeUi
         public System.Windows.Forms.Panel pName;
         public System.Windows.Forms.PictureBox iconTool;
         private System.Windows.Forms.PictureBox pictureBox1;
-        public Unit.BtnHeaderBar BtnHeaderBar;
+        public BtnHeaderBar BtnHeaderBar;
         private System.Windows.Forms.Label label3;
 
         private RJButton rjButton1;

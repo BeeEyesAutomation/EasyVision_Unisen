@@ -78,7 +78,7 @@ namespace BeeInterface
         Mat matRS = new Mat(); 
         private void trackScore_ValueChanged(float obj)
         {
-           Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
+           Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (int)trackScore.Value;
            
 
         }
@@ -449,7 +449,7 @@ namespace BeeInterface
         private void btnAreaBlack_Click(object sender, EventArgs e)
         {
             //Propety.IsAreaWhite = false;
-            // GetTemp(Propety.rotCrop,BeeCore.Common.listCamera[Global. IndexChoose].matRaw );
+            // GetTemp(Propety.rotCrop,BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw );
             //G.EditTool.View.imgView.Invalidate();
         }
 
@@ -466,7 +466,7 @@ namespace BeeInterface
         private void btnAreaWhite_Click(object sender, EventArgs e)
         {
             //Propety.IsAreaWhite = true;
-            //GetTemp(Propety.rotCrop, BeeCore.Common.listCamera[Global. IndexChoose].matRaw);
+            //GetTemp(Propety.rotCrop, BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw);
             //G.EditTool.View.imgView.Invalidate();
         }
 
@@ -524,7 +524,7 @@ namespace BeeInterface
         {
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Width / 2, -BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Height / 2, BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Width, BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Height), new PointF(BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Width / 2, BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Height / 2), 0, AnchorPoint.None);
+            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Width / 2, -BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Height / 2, BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Width, BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Height), new PointF(BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Width / 2, BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Height / 2), 0, AnchorPoint.None);
 
            
            Global.TypeCrop= TypeCrop.Area;

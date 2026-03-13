@@ -309,8 +309,8 @@ namespace BeeInterface
         {
             IsPress = true;
             btn.Font = new Font("Arial", 14, FontStyle.Bold);
-            //X: G.Header.tmReadPLC.Enabled = false;
-            //    if (G.Header.workPLC.IsBusy)
+            //X: Global.Header.tmReadPLC.Enabled = false;
+            //    if (Global.Header.workPLC.IsBusy)
             //    {
             //        await Task.Delay(5);
             //        goto X;
@@ -319,7 +319,7 @@ namespace BeeInterface
 
             await Task.Run(() => Global.Comunication.Protocol.WriteInPut(numAdd, btn.IsCLick));
 
-            //  G.Header.tmReadPLC.Enabled = true;
+            //  Global.Header.tmReadPLC.Enabled = true;
             IsPress = false;
             btn.Font = new Font("Arial", 14, FontStyle.Regular);
         }
@@ -327,8 +327,8 @@ namespace BeeInterface
         {
             IsPress = true;
             btn.Font = new Font("Arial", 14, FontStyle.Bold);
-            //X: G.Header.tmReadPLC.Enabled = false;
-            //    if (G.Header.workPLC.IsBusy)
+            //X: Global.Header.tmReadPLC.Enabled = false;
+            //    if (Global.Header.workPLC.IsBusy)
             //    {
             //        await Task.Delay(5);
             //        goto X;
@@ -337,7 +337,7 @@ namespace BeeInterface
             Global.Comunication.Protocol.SetOutPut(numAdd, btn.IsCLick);
             await Task.Run(() => Global.Comunication.Protocol.WriteOutPut());
 
-            //  G.Header.tmReadPLC.Enabled = true;
+            //  Global.Header.tmReadPLC.Enabled = true;
             IsPress = false;
             btn.Font = new Font("Arial", 14, FontStyle.Regular);
         }

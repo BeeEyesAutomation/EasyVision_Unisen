@@ -193,6 +193,135 @@ namespace BeeCore.Algorithm
             }
             return 255;
         }
+        public static Mat EdgeForCenterline(Mat src)
+        {
+            Mat gray = new Mat();
+
+            if (src.Channels() == 3)
+                Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+            else
+                gray = src.Clone();
+
+            Mat blur = new Mat();
+            Cv2.GaussianBlur(gray, blur, new Size(3, 3), 0.8);
+
+            Mat gx = new Mat();
+            Mat gy = new Mat();
+
+            Cv2.Scharr(blur, gx, MatType.CV_16S, 1, 0);
+            Cv2.Scharr(blur, gy, MatType.CV_16S, 0, 1);
+
+            Cv2.ConvertScaleAbs(gx, gx);
+            Cv2.ConvertScaleAbs(gy, gy);
+
+            Mat grad = new Mat();
+            Cv2.Add(gx, gy, grad);
+
+            Mat bin = new Mat();
+            Cv2.Threshold(grad, bin, 0, 255, ThresholdTypes.Binary | ThresholdTypes.Otsu);
+
+            Mat kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
+            Cv2.MorphologyEx(bin, bin, MorphTypes.Close, kernel);
+
+            return bin;
+        }
+        public static List<Point2f> ExtractCenterLineHorizontal(Mat edge)
+        {
+            List<Point2f> pts = new List<Point2f>();
+
+            int rows = edge.Rows;
+            int cols = edge.Cols;
+
+            for (int x = 0; x < cols; x++)
+            {
+                int yTop = -1;
+                int yBottom = -1;
+
+                for (int y = 0; y < rows; y++)
+                {
+                    if (edge.At<byte>(y, x) > 0)
+                    {
+                        if (yTop < 0) yTop = y;
+                        yBottom = y;
+                    }
+                }
+
+                if (yTop >= 0)
+                {
+                    float yc = (yTop + yBottom) * 0.5f;
+                    pts.Add(new Point2f(x, yc));
+                }
+            }
+
+            return pts;
+        }
+        public static List<Point2f> ExtractCenterLineVertical(Mat edge)
+        {
+            List<Point2f> pts = new List<Point2f>();
+
+            int rows = edge.Rows;
+            int cols = edge.Cols;
+
+            for (int y = 0; y < rows; y++)
+            {
+                int xLeft = -1;
+                int xRight = -1;
+
+                for (int x = 0; x < cols; x++)
+                {
+                    if (edge.At<byte>(y, x) > 0)
+                    {
+                        if (xLeft < 0) xLeft = x;
+                        xRight = x;
+                    }
+                }
+
+                if (xLeft >= 0)
+                {
+                    float xc = (xLeft + xRight) * 0.5f;
+                    pts.Add(new Point2f(xc, y));
+                }
+            }
+
+            return pts;
+        }
+        public static Mat GetUltraThinEdgesFast(Mat src, double percentile = 0.995)
+        {
+            Mat gray = new Mat();
+
+            if (src.Channels() == 3)
+                Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+            else
+                gray = src.Clone();
+
+            // 1. Blur nhẹ
+            Mat blur = new Mat();
+            Cv2.GaussianBlur(gray, blur, new Size(3, 3), 0.8);
+
+            // 2. Morphological Gradient (edge rất nhanh)
+            Mat grad = new Mat();
+            Mat kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
+            Cv2.MorphologyEx(blur, grad, MorphTypes.Gradient, kernel);
+
+            // 3. Percentile threshold
+            byte[] data = new byte[grad.Rows * grad.Cols];
+            grad.GetArray(out data);
+
+            Array.Sort(data);
+            int idx = (int)(data.Length * percentile);
+            idx = Math.Max(0, Math.Min(idx, data.Length - 1));
+            byte th = data[idx];
+            Mat bin = new Mat();
+            Cv2.Threshold(grad, bin, th, 255, ThresholdTypes.Binary);
+
+            // 4. làm mỏng cạnh
+            Cv2.Erode(bin, bin, kernel, iterations: 1);
+
+            // 5. remove noise nhỏ
+            Cv2.MorphologyEx(bin, bin, MorphTypes.Close, kernel);
+            Cv2.MedianBlur(bin, bin, 3);
+            return bin;
+        }
         public static Mat EdgeAnyAngleFast(Mat src)
         {
             Mat gray;

@@ -359,7 +359,7 @@ namespace BeeCore
                     switch (methord)
                     {
                         case MethordEdge.CloseEdges:
-                            return Filters.EdgeAnyAngleFast(m);
+                            return Filters.EdgeForCenterline(m);
                         break;
                     case MethordEdge.Binary:
                        return  Filters.Threshold(m, ThresholdBinary, ThresholdTypes.Binary);
@@ -387,7 +387,7 @@ namespace BeeCore
             
             if (raw.Type() == MatType.CV_8UC3)
                 Cv2.CvtColor(raw, raw, ColorConversionCodes.BGR2GRAY);
-            rotBot = new RectRotate(new RectangleF(-WidthDetectBoxBR / 2f , -H / 4f, WidthDetectBoxBR, H / 2f), new PointF(W / 2 + OffSetBR, 3 * H / 4f), 0, AnchorPoint.None);
+            rotBot = new RectRotate(new RectangleF(-(WidthDetectBoxBR*2) / 2f , -H / 4f, WidthDetectBoxBR*2, H / 2f), new PointF(W / 2 + OffSetBR, 3 * H / 4f), 0, AnchorPoint.None);
             using (Mat crop = Cropper.CropRotatedRect(raw, rotBot, null))
             {
 
@@ -470,7 +470,7 @@ namespace BeeCore
             line3 = new Line2D(LineLeft.Vx, LineLeft.Vy, LineLeft.X0, LineLeft.Y0);
             line4 = new Line2D(LineRight.Vx, LineRight.Vy, LineRight.X0, LineRight.Y0);
                 rotBotCalib = ShrinkRectByLine(rotBot, LineBot, OffSetBoxLine, true);
-                rotRightCalib = ShrinkRectByLine(rotRigth, LineRight, OffSetBoxLine);
+                rotRightCalib = ShrinkRectByLine(rotRigth, LineRight, OffSetBoxLine*2);
                 rotBotCalib = FitRectInsideImageVer(rotBotCalib, new Size(W, H));
                 rotRightCalib = FitRectInsideImageVer(rotRightCalib, new Size(W, H));
                 rectPage = InsertLine.CreateRectRotate_BotAxis(line1, line2, line3, line4);
@@ -545,7 +545,7 @@ namespace BeeCore
         {
             if (ResultItems != null)
                 ResultItems.Clear();
-            Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
+            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
            
             rectRotates = new List<RectRotate>();
            
@@ -1034,7 +1034,7 @@ namespace BeeCore
         }
         public async void RunMode(RectRotate rectRotate)
         {
-            Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
+            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
             rectRotates = new List<RectRotate>();
          
             listP_Center = new List<System.Drawing.Point>();
@@ -1081,7 +1081,7 @@ namespace BeeCore
                                 using (Mat crop1 = CropRoiView(raw, rotBotCalib))
                                 using (Mat Edge = Processing(crop1, MethordEdge))
                                 {
-
+                                  
 
                                     LineBot = RansacLine.FindBestLine(
                                         Edge.Data, Edge.Width, Edge.Height, (int)Edge.Step(),
@@ -1152,7 +1152,7 @@ namespace BeeCore
                     }
                     ResultItemChips = new List<ResultItem>();
 
-                    using (Mat matBlack = Cropper.CropRotatedRectUltraFast3(raw, rectRotate))
+                    using (Mat matBlack = Cropper.CropRotatedRect(raw, rectRotate,null))
                     {
 
                         ResultItems = new List<ResultItem>();
@@ -1527,7 +1527,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText =new SolidBrush( Global.ParaShow.TextColor);
             Color cl = Color.LimeGreen;
-            if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
+            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.NG)
             {
                 cl = Global.ParaShow.ColorNG;
             }

@@ -79,19 +79,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
-      <HintPath>..\packages\CyotekImageBox.2.0.0-beta.2\lib\net472\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis, Version=1.70.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.1.70.0\lib\net462\Google.Apis.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Auth, Version=1.70.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.Auth.1.70.0\lib\net462\Google.Apis.Auth.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Core, Version=1.70.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.Core.1.70.0\lib\net462\Google.Apis.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Drive.v3, Version=1.70.0.3856, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.Drive.v3.1.70.0.3856\lib\net462\Google.Apis.Drive.v3.dll</HintPath>
+      <HintPath>..\packages\CyotekImageBox.2.0.0-beta.2\lib\net48\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -147,153 +135,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Account.Designer.cs">
-      <DependentUpon>Account.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Commons\Cryto.cs" />
-    <Compile Include="Commons\Decompile.cs" />
-    <Compile Include="Commons\Func.cs" />
-    <Compile Include="Commons\KeyAcitve.cs" />
-    <Compile Include="Commons\Gui.cs" />
-    <Compile Include="Commons\RsDirPermissions.cs" />
-    <Compile Include="Commons\SqlServer.cs" />
-    <Compile Include="FormCheckUpdate.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormCheckUpdate.Designer.cs">
-      <DependentUpon>FormCheckUpdate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MessageChoose.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MessageChoose.Designer.cs">
-      <DependentUpon>MessageChoose.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormChoose.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormChoose.Designer.cs">
-      <DependentUpon>FormChoose.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormReport.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormReport.Designer.cs">
-      <DependentUpon>FormReport.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form\FormActive.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\FormActive.Designer.cs">
       <DependentUpon>FormActive.cs</DependentUpon>
     </Compile>
-    <Compile Include="GoogleDriveDllManager.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="QuickSetting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="QuickSetting.Designer.cs">
-      <DependentUpon>QuickSetting.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UiPerf.cs" />
-    <Compile Include="Unit\AddFilters.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\AddFilters.Designer.cs">
-      <DependentUpon>AddFilters.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tool\SettingCamera.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\SettingCamera.designer.cs">
-      <DependentUpon>SettingCamera.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tool\ucReport.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\ucReport.Designer.cs">
-      <DependentUpon>ucReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\StatusBar.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\StatusBar.Designer.cs">
-      <DependentUpon>StatusBar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\HideBar.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\HideBar.Designer.cs">
-      <DependentUpon>HideBar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\BtnHeaderBar.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\BtnHeaderBar.Designer.cs">
-      <DependentUpon>BtnHeaderBar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\BarRight.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\BarRight.Designer.cs">
-      <DependentUpon>BarRight.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\EditBar.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\EditBar.Designer.cs">
-      <DependentUpon>EditBar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\EditProg.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\EditProg.Designer.cs">
-      <DependentUpon>EditProg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\Eraser.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\Eraser.Designer.cs">
-      <DependentUpon>Eraser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\InforBar.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\InforBar.Designer.cs">
-      <DependentUpon>InforBar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Commons\Global.cs" />
-    <Compile Include="Commons\KbdListener.cs" />
     <Compile Include="Form\ShowEraser.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\ShowEraser.Designer.cs">
       <DependentUpon>ShowEraser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\Header.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\Header.Designer.cs">
-      <DependentUpon>Header.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\SimImgs.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\SimImgs.Designer.cs">
-      <DependentUpon>SimImgs.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\RegisterImgs.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\RegisterImgs.Designer.cs">
-      <DependentUpon>RegisterImgs.cs</DependentUpon>
     </Compile>
     <Compile Include="Unit\EditTool.cs">
       <SubType>UserControl</SubType>
@@ -325,93 +183,14 @@
     <Compile Include="Form\ScanCCD.Designer.cs">
       <DependentUpon>ScanCCD.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\AddTool.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form\AddTool.Designer.cs">
-      <DependentUpon>AddTool.cs</DependentUpon>
-    </Compile>
     <Compile Include="Tool\DataContractAttribute.cs" />
-    <Compile Include="Tool\ToolSettings.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\ToolSettings.Designer.cs">
-      <DependentUpon>ToolSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\View.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\View.Designer.cs">
-      <DependentUpon>View.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Account.resx">
-      <DependentUpon>Account.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormCheckUpdate.resx">
-      <DependentUpon>FormCheckUpdate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MessageChoose.resx">
-      <DependentUpon>MessageChoose.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormChoose.resx">
-      <DependentUpon>FormChoose.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormReport.resx">
-      <DependentUpon>FormReport.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form\FormActive.resx">
       <DependentUpon>FormActive.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="QuickSetting.resx">
-      <DependentUpon>QuickSetting.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\AddFilters.resx">
-      <DependentUpon>AddFilters.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\SettingCamera.resx">
-      <DependentUpon>SettingCamera.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\ucReport.resx">
-      <DependentUpon>ucReport.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\StatusBar.resx">
-      <DependentUpon>StatusBar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\HideBar.resx">
-      <DependentUpon>HideBar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\BtnHeaderBar.resx">
-      <DependentUpon>BtnHeaderBar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\BarRight.resx">
-      <DependentUpon>BarRight.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\EditBar.resx">
-      <DependentUpon>EditBar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\EditProg.resx">
-      <DependentUpon>EditProg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\Eraser.resx">
-      <DependentUpon>Eraser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\InforBar.resx">
-      <DependentUpon>InforBar.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form\ShowEraser.resx">
       <DependentUpon>ShowEraser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\Header.resx">
-      <DependentUpon>Header.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\SimImgs.resx">
-      <DependentUpon>SimImgs.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\RegisterImgs.resx">
-      <DependentUpon>RegisterImgs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\EditTool.resx">
       <DependentUpon>EditTool.cs</DependentUpon>
@@ -430,16 +209,6 @@
     <EmbeddedResource Include="Form\ScanCCD.resx">
       <DependentUpon>ScanCCD.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\AddTool.resx">
-      <DependentUpon>AddTool.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\ToolSettings.resx">
-      <DependentUpon>ToolSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\View.resx">
-      <DependentUpon>View.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -450,6 +219,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Commons\" />
     <Folder Include="Data\" />
     <Folder Include="Menu\" />
   </ItemGroup>
@@ -487,10 +257,6 @@
     <ProjectReference Include="..\BeeCore\BeeCore.csproj">
       <Project>{ac6e4007-f2a0-49f3-b777-dde4c58c5adc}</Project>
       <Name>BeeCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BeeCV\BeeCV.vcxproj">
-      <Project>{ef3f0d87-d9d4-4971-a005-1899d08ed33c}</Project>
-      <Name>BeeCV</Name>
     </ProjectReference>
     <ProjectReference Include="..\BeeGlobal\BeeGlobal.csproj">
       <Project>{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>

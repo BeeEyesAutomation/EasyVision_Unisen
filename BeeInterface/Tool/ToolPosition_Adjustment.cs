@@ -29,14 +29,14 @@ namespace BeeInterface
         }
         public void LoadPara()
         {
-            Propety = Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety;
+           
             if (Propety.bmRaw != null)
             {
                 imgTemp.Image = Propety.bmRaw;
             }
           //  if (Propety.rotPositionAdjustment != null)
               // Propety.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None);
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+            trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
             trackAngle.Value = (int)Propety.Angle;
             if (Propety.Angle > 360) Propety.Angle = 360;
 
@@ -125,8 +125,8 @@ namespace BeeInterface
                 btnHighSpeed.IsCLick = true;
             else
                 btnNormal.IsCLick = true;
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolPosition_Adjustment_StatusToolChanged;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPosition_Adjustment_StatusToolChanged;
             btnCropArea.IsCLick = true;
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
@@ -149,7 +149,7 @@ namespace BeeInterface
         {
             if (Global.IsRun) return;
            
-            if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true; btnTest.IsCLick = false;
                 if (Propety.IsCalib)
@@ -326,7 +326,7 @@ namespace BeeInterface
 
         //private void btnUndo_Click(object sender, EventArgs e)
         //{
-        //    G.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Cols, MatType.CV_8UC1);
+        //    G.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Rows, BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Cols, MatType.CV_8UC1);
 
         //}
 
@@ -368,8 +368,8 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
-            //numScore.Value =Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (int)trackScore.Value;
+            //numScore.Value =Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
 
         }
 
@@ -393,10 +393,10 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
           
-            if (!Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.IsBusy)
+            if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
             {
                 btnTest.Enabled = false;
-                Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.RunWorkerAsync();
+                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();
 
             }    
                
@@ -408,8 +408,8 @@ namespace BeeInterface
         private void numScore_ValueChanged(object sender, EventArgs e)
         {
 
-          //  Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
-            //numScore.Value =Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+          //  Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (int)trackScore.Value;
+            //numScore.Value =Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
         }
         private void trackAngle_ValueChanged(float obj)
         {
@@ -666,8 +666,8 @@ namespace BeeInterface
         {
             btnCalib.Enabled = false;
             Propety.IsCalib= true;
-            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
+                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else
                 Propety.IsCalib = false;
         }

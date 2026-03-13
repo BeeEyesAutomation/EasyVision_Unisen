@@ -97,7 +97,7 @@ namespace BeeCore
       private bool IsDone1=false,  IsDone2 = false,  IsDone3 = false,  IsDone4 = false;
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
-        X: Common.PropetyTools[Global.IndexChoose][Index].Results = Results.OK;
+        X: Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.OK;
           
           PropetyTool PropetyTool1 = BeeCore.Common.PropetyTools[IndexThread][BeeCore.Common.PropetyTools[IndexThread].FindIndex(a => a.Name == listPointChoose[0].Item1)];
             PropetyTool PropetyTool2 = BeeCore.Common.PropetyTools[IndexThread][BeeCore.Common.PropetyTools[IndexThread].FindIndex(a => a.Name == listPointChoose[1].Item1)];
@@ -124,11 +124,11 @@ namespace BeeCore
                     }
 
                     else
-                        Common.PropetyTools[Global.IndexChoose][Index].Results = Results.NG;
+                        Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
                 }
                 else
                 {
-                    Common.PropetyTools[Global.IndexChoose][Index].Results = Results.NG;
+                    Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
                 }
 
 
@@ -148,11 +148,11 @@ namespace BeeCore
                     }
 
                     else
-                        Common.PropetyTools[Global.IndexChoose][Index].Results = Results.NG;
+                        Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
                 }
                 else
                 {
-                    Common.PropetyTools[Global.IndexChoose][Index].Results = Results.NG; 
+                    Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG; 
                 }
             }
             if (TypeMeasure == TypeMeasure.PointToPoint)
@@ -176,11 +176,11 @@ namespace BeeCore
                         }
 
                         else
-                            Common.PropetyTools[Global.IndexChoose][Index].Results = Results.NG;
+                            Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
                     }
                     else
                     {
-                        Common.PropetyTools[Global.IndexChoose][Index].Results = Results.NG;
+                        Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
                     }
 
                 }
@@ -220,11 +220,11 @@ namespace BeeCore
                             }
 
                             else
-                                Common.PropetyTools[Global.IndexChoose][Index].Results = Results.NG;
+                                Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
                         }
                         else
                         {
-                            Common.PropetyTools[Global.IndexChoose][Index].Results = Results.NG;
+                            Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
                         }
                     }
                     catch (Exception ex)
@@ -263,8 +263,8 @@ namespace BeeCore
                         IsDone2 = false;
                         IsDone3 = false;
                         IsDone4 = false;
-                    Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
-                        if ( Common.PropetyTools[Global.IndexChoose][Index].Results == Results.OK)
+                    Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
+                        if ( Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.OK)
                         {
                             pCenter1 = listLine1Point[0];
                             pCenter2 = listLine1Point[1];
@@ -274,10 +274,10 @@ namespace BeeCore
                             AngleDetect = Cal.GetAngleBetweenSegments(pCenter1, pCenter2, pCenter3, pCenter4);
                             // AngleDetect = Cal.Finddistasnce(listLine1Point[0], listLine1Point[1]) / Scale;
                             AngleDetect = Math.Round(AngleDetect, 1);
-                            Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = (float)AngleDetect;
-                            if (Common.PropetyTools[Global.IndexChoose][Index].ScoreResult <= Common.PropetyTools[Global.IndexChoose][Index].Score)
-                                Common.PropetyTools[Global.IndexChoose][Index].Results = Results.OK;
-                            else Common.PropetyTools[Global.IndexChoose][Index].Results = Results.NG;
+                            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = (float)AngleDetect;
+                            if (Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult <= Common.PropetyTools[Global.IndexProgChoose][Index].Score)
+                                Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.OK;
+                            else Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
                         }
                        
                  
@@ -321,9 +321,9 @@ namespace BeeCore
                                 break;
                         }
                         AngleDetect = Math.Round(AngleDetect, 2);
-                        Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = (float)AngleDetect;
+                        Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = (float)AngleDetect;
                        
-                    //if (ScoreRs <= Common.PropetyTools[Global.IndexChoose][Index].Score)
+                    //if (ScoreRs <= Common.PropetyTools[Global.IndexProgChoose][Index].Score)
                         //    IsOK = true;
                         //else IsOK = false;
 
@@ -367,7 +367,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
+            switch (Common.PropetyTools[Global.IndexProgChoose][Index].Results)
             {
                 case Results.OK:
                     cl = Global.ParaShow.ColorOK;

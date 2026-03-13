@@ -24,6 +24,7 @@ namespace BeeGlobal
         public List<int> indexLogic5 = new List<int>();
         public List<int> indexLogic6 = new List<int>();
          public  int _TypeLight=1;
+        public List<int> ListIndexMatReg=new List<int> { 0,0,0,0};
         // _Exposure = 0, _Gain=1, _TypeResolution=1,
         public int TypeLight
         {

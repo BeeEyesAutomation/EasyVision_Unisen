@@ -60,7 +60,7 @@ namespace BeeInterface
             //        btn.ForeColor = Color.Black;
             //        btn.BorderRadius = 10;
             //        btn.Height = 30;
-            //        if (Propety.listScore[index] >Common.PropetyTools[Global.IndexChoose][Propety.Index].Score)
+            //        if (Propety.listScore[index] >Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score)
             //            btn.IsCLick = true;
             //        else
             //            btn.IsCLick = false;
@@ -83,18 +83,18 @@ namespace BeeInterface
         public void LoadPara()
         {
 
-            Propety = Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety;
+            Propety = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety;
             Global.TypeCrop = TypeCrop.Area;
             txtContent.Text = Propety.Matching;
 
-            trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
-            trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
-            trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+            trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
+            trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
+            trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
+            trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
 
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolOCR_StatusToolChanged;
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolOCR_ScoreChanged;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolOCR_StatusToolChanged;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ScoreChanged += ToolOCR_ScoreChanged;
             AdjLimitArea.Value = Propety.LimitArea;
         
             numCLAHE.Value = Propety.Clahe;
@@ -110,7 +110,7 @@ namespace BeeInterface
             lay2Mask.Visible = Global.TypeCrop==TypeCrop.Mask ? true : false;
             if (IsNew)
             {
-                Common.PropetyTools[Global.IndexChoose][Propety.Index].ItemTool.Enabled = false;
+                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ItemTool.Enabled = false;
                 IsNew = false;
                 if (!workLoadModel.IsBusy)
                     workLoadModel.RunWorkerAsync();
@@ -133,7 +133,7 @@ namespace BeeInterface
         private void trackScore_ValueChanged(float obj)
         {
 
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (int)trackScore.Value;
 
         }
 
@@ -226,7 +226,7 @@ namespace BeeInterface
         private void btnAreaBlack_Click(object sender, EventArgs e)
         {
             //    Propety.IsAreaWhite = false;
-            //   GetTemp(Propety.rotCrop,BeeCore.Common.listCamera[Global. IndexChoose].matRaw );
+            //   GetTemp(Propety.rotCrop,BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw );
 
         }
 
@@ -243,7 +243,7 @@ namespace BeeInterface
         private void btnAreaWhite_Click(object sender, EventArgs e)
         {
             //   Propety.IsAreaWhite = true;
-            //  GetTemp(Propety.rotCrop, BeeCore.Common.listCamera[Global. IndexChoose].matRaw);
+            //  GetTemp(Propety.rotCrop, BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw);
 
         }
 
@@ -283,7 +283,7 @@ namespace BeeInterface
 
         private void trackNumObject_ValueChanged_1(int obj)
         {
-            //G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global. IndexChoose].matRaw.ToBitmap();
+            //G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.ToBitmap();
             //G.EditTool.View.imgView.Invalidate();
             //Propety.NumObject = trackNumObject.Value;
             //G.IsCheck = true;
@@ -404,8 +404,8 @@ namespace BeeInterface
         private void btnTest_Click_1(object sender, EventArgs e)
         {
 
-            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
+                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }
@@ -480,10 +480,10 @@ namespace BeeInterface
 
         private void tmCheckFist_Tick(object sender, EventArgs e)
         {
-            //if (BeeCore.Common.listCamera[Global.IndexChoose].IsConnected)
+            //if (BeeCore.Common.listCamera[Global.IndexProgChoose].IsConnected)
             //{
-            //    BeeCore.Common.listCamera[Global.IndexChoose].Read();
-            //    if (BeeCore.Common.listCamera[Global.IndexChoose].IsConnected)
+            //    BeeCore.Common.listCamera[Global.IndexProgChoose].Read();
+            //    if (BeeCore.Common.listCamera[Global.IndexProgChoose].IsConnected)
             //    {
             //        //Propety.Check1(Propety.rotArea);
             //        tmCheckFist.Enabled = false;
@@ -544,8 +544,8 @@ namespace BeeInterface
 
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].ItemTool.Enabled = true;
-          //  Common.PropetyTools[Global.IndexChoose][Propety.Index].ItemTool.Name = Common.PropetyTools[Global.IndexChoose][Propety.Index].Name;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ItemTool.Enabled = true;
+          //  Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ItemTool.Name = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Name;
         }
 
         private void numEnhance_ValueChanged(object sender, EventArgs e)
@@ -702,7 +702,7 @@ namespace BeeInterface
         private void NewShape(ShapeType newShape)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety;
+            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
             RectRotate rr = null;
             if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
             else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;

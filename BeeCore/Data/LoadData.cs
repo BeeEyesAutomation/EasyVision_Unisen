@@ -41,31 +41,37 @@ namespace BeeCore {
         }
         public static ParaCommon Para(String Project)
         {
-            ParaCommon ParaCam = new ParaCommon();
+            ParaCommon ParaCommon = new ParaCommon();
             try
             {
 
-                if (Global.Config.IsSaveCommon)
+                if (Global.Config.IsSaveProg)
                 {
                     if (File.Exists("Common\\Common.para"))
-                        ParaCam = Access.LoadParaComon("Common\\Common.para");
+                        ParaCommon = Access.LoadParaComon("Common\\Common.para");
                     else
-                        ParaCam = new ParaCommon();
+                        ParaCommon = new ParaCommon();
                 }
                 else
                 {
                     if (File.Exists("Program\\" + Project + "\\" + Project + ".para"))
-                        ParaCam = Access.LoadParaComon("Program\\" + Project + "\\" + Project + ".para");
+                        ParaCommon = Access.LoadParaComon("Program\\" + Project + "\\" + Project + ".para");
                     else
-                        ParaCam = new ParaCommon();
+                        ParaCommon = new ParaCommon();
                 }
             }
             catch (Exception ex)
             {
                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Load Common", ex.Message.ToString()));
             }
-        //    if(ParaCam.listRegsImg==null) ParaCam.listRegsImg = new List<ItemRegsImg>();
-            return ParaCam;
+            if(ParaCommon.ListIndexMatReg==null)
+
+            {
+                ParaCommon.ListIndexMatReg = new List<int> { 0, 0, 0, 0 };
+
+            }    
+        //    if(ParaCommon.listRegsImg==null) ParaCommon.listRegsImg = new List<ItemRegsImg>();
+            return ParaCommon;
         }
         public static Comunication Comunication(String Project)
         {

@@ -29,9 +29,9 @@ namespace BeeUi
             //    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
             //    ?.SetValue(this, true, null);
             InitializeComponent();
-            G.Main = this;
+            Global.Main = this;
             Global.EditTool = this.editTool1;
-            //G.Header = editTool1.header1;
+            //Global.Header = editTool1.header1;
             this.MinimumSize = new Size(1190, 780);
         }
         //protected override CreateParams CreateParams
@@ -78,18 +78,17 @@ namespace BeeUi
             //if(G.DeviceConnectForm!=null)
             //G.DeviceConnectForm.FormClosingDo(sender, e);
             editTool1.DesTroy();
-            if (G.AddTool!=null)
-            G.AddTool.Close();
+          
             G.Load.Close();
             Global.ScanCCD.Close();
             if(G.FormActive!=null)
             G.FormActive.Close();
-            if (G.IsShutDown)
+            if (Global.IsShutDown)
                 Process.Start("shutdown", "/s /t 3"); // t=0 để tắt ngay sau khi gọi lệnh
             Application.Exit();
             Process.GetCurrentProcess().Kill(); // Tắt tiến trình hiện tại (hơi "mạnh tay")
           
-            if (G.IsReConnectCCD)
+            if (Global.IsReConnectCCD)
                 Application.Restart();
         }
       

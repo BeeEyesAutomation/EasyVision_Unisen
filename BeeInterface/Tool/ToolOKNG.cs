@@ -39,7 +39,7 @@ namespace BeeInterface
 
 
 
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             trackResize.Value =(int) Propety.ScaleResize;
             btnEnResizeSample.IsCLick = Propety.EnResize;
 
@@ -50,13 +50,13 @@ namespace BeeInterface
             numCPU.Enabled = Propety.Multi;
             btnMulti.IsCLick=Propety.Multi;
             btnSingle.IsCLick=!Propety.Multi;
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
         }
 
         private void ToolPattern_StatusToolChanged(StatusTool obj)
         {
             if (Global.IsRun) return;
-            if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true;
             }
@@ -64,7 +64,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-          //  Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (float)trackScore.Value;
+          //  Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (float)trackScore.Value;
            
 
         }
@@ -160,8 +160,8 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.IsBusy)
-                Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.RunWorkerAsync();
+            if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
+                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }

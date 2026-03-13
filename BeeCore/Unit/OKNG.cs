@@ -486,7 +486,7 @@ namespace BeeCore
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
 
-            if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
+            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.NG)
             {
                 cl = Color.Red;
                 //if (BeeCore.Common.PropetyTools[IndexThread][Index].UsedTool == UsedTool.Invertse &&
@@ -507,7 +507,7 @@ namespace BeeCore
             if (Global.ParaShow.IsShowBox)
                 Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);
 
-            if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.OK)
+            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.OK)
             {
                 ScoreOK += 10;
                 ScoreNG -= 10;

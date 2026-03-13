@@ -69,7 +69,7 @@ namespace BeeInterface
 
             //}
             pItemsRs.Controls.Clear();
-            foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+            foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
             {
                 ItemRS itemRs = new ItemRS();
                 ItemLogic itemLogic = new ItemLogic();

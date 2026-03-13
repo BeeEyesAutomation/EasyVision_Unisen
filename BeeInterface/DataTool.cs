@@ -63,7 +63,7 @@ namespace BeeInterface
                 }
 
                 // ==== load config ====
-                if (!Global.IsIntialProgram || !Global.Config.IsSaveCommon)
+                if (!Global.IsIntialProgram || !Global.Config.IsSaveProg)
                     Global.ParaCommon = LoadData.Para(NameProject);
 
                 if (!Global.IsIntialProgram || !Global.Config.IsSaveCommunication)
@@ -231,7 +231,7 @@ namespace BeeInterface
                     }    
                 }    
                 NameProject = NameProject.Replace(".prog", "");
-                if (!Global.IsIntialProgram || !Global.Config.IsSaveCommon)
+                if (!Global.IsIntialProgram || !Global.Config.IsSaveProg)
                     Global.ParaCommon = LoadData.Para(NameProject);
                 if (!Global.IsIntialProgram || !Global.Config.IsSaveCommunication)
                     Global.Comunication = LoadData.Comunication(NameProject);
@@ -533,7 +533,7 @@ namespace BeeInterface
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                BeeCore.Common.PropetyTools[Global.IndexChoose].Remove(PropetyTool);
+                BeeCore.Common.PropetyTools[Global.IndexProgChoose].Remove(PropetyTool);
                 return null;
             }
             return itemTool;
@@ -630,7 +630,7 @@ namespace BeeInterface
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
-               BeeCore.Common.PropetyTools[Global.IndexChoose].Remove(PropetyTool);
+               BeeCore.Common.PropetyTools[Global.IndexProgChoose].Remove(PropetyTool);
                 return null;
             }
             return control;

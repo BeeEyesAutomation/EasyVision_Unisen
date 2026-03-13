@@ -445,7 +445,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
+            switch (Common.PropetyTools[Global.IndexProgChoose][Index].Results)
             {
                 case Results.OK:
                     cl = Global.ParaShow.ColorOK;

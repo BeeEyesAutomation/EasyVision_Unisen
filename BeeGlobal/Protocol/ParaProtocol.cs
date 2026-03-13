@@ -691,9 +691,9 @@ namespace BeeGlobal
                                                     Global.IsAllowReadPLC = false;
                                                     Global.TriggerNum = TriggerNum.Trigger4;
                                                     if (Global.Config.IsMultiProg)
-                                                        Global.IndexChoose = 3;
+                                                        Global.IndexProgChoose = 3;
                                                     else
-                                                        Global.IndexChoose = 0;
+                                                        Global.IndexProgChoose = 0;
                                                     Global.StatusProcessing = StatusProcessing.Trigger;
 
                                                     IO_Processing = IO_Processing.Trigger;
@@ -704,9 +704,9 @@ namespace BeeGlobal
                                                 if (GetInPut(I_O_Input.Trigger3) == true)
                                                 {
                                                     if (Global.Config.IsMultiProg)
-                                                        Global.IndexChoose = 2;
+                                                        Global.IndexProgChoose = 2;
                                                     else
-                                                        Global.IndexChoose = 0;
+                                                        Global.IndexProgChoose = 0;
                                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 3..."));
                                                     Global.TriggerInternal = false;
                                                     Global.IsAllowReadPLC = false;
@@ -720,9 +720,9 @@ namespace BeeGlobal
                                                 if (GetInPut(I_O_Input.Trigger2) == true)
                                                 {
                                                     if (Global.Config.IsMultiProg)
-                                                        Global.IndexChoose = 1;
+                                                        Global.IndexProgChoose = 1;
                                                     else
-                                                        Global.IndexChoose = 0;
+                                                        Global.IndexProgChoose = 0;
                                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 2..."));
                                                     Global.TriggerInternal = false;
                                                     Global.IsAllowReadPLC = false;
@@ -736,7 +736,7 @@ namespace BeeGlobal
                                                 if (GetInPut(I_O_Input.Trigger) == true)
                                                 {
 
-                                                    Global.IndexChoose = 0;
+                                                    Global.IndexProgChoose = 0;
                                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
                                                     Global.TriggerInternal = false;
                                                     Global.IsAllowReadPLC = false;
@@ -1410,7 +1410,7 @@ namespace BeeGlobal
                     await WriteOutPut();
                     break;
                 case IO_Processing.Result:
-                    bool IsOK = Global.ListResult[Global.IndexChoose] == Results.OK ? true : false;
+                    bool IsOK = Global.ListResult[Global.IndexProgChoose] == Results.OK ? true : false;
                     bool IsOKTotal = false;
                     if (Global.TotalOK == Results.OK) IsOKTotal = true;
                     try

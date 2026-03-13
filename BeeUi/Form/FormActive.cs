@@ -246,8 +246,8 @@ namespace BeeUi
            
             if (G.Load != null)
                 G.Load.Close();
-            if (G.Main != null)
-                G.Main.Close();
+            if (Global.Main != null)
+                Global.Main.Close();
             this.Close();
             Process.GetCurrentProcess().Kill();
         }

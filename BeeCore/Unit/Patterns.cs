@@ -473,7 +473,7 @@ namespace BeeCore
         public bool IsLimitCouter = true;
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
-            Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
+            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
             // 5) Gom kết quả
             rectRotates = new List<RectRotate>();
             listScore = new List<double>();
@@ -621,7 +621,7 @@ namespace BeeCore
 
                     if (scoreSum != 0 && rectRotates.Count > 0)
                     {
-                        Common.PropetyTools[Global.IndexChoose][Index].ScoreResult =
+                        Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult =
                             (int)Math.Round(scoreSum / rectRotates.Count, 1);
                     }
                 }
@@ -686,7 +686,7 @@ namespace BeeCore
             //if (!Global.IsRun)
             //{
             //    Global.StatusDraw = StatusDraw.Check;
-            //    if (Common.PropetyTools[Global.IndexChoose][Index].Results==Results.OK)
+            //    if (Common.PropetyTools[Global.IndexProgChoose][Index].Results==Results.OK)
             //    {
             //        rotPositionAdjustment = rectRotates[0].Clone();
             //        Global.rotOriginAdj = new RectRotate(rotCrop._rect, new PointF(rotArea._PosCenter.X -rotArea._rect.Width / 2 + rotPositionAdjustment._PosCenter.X,rotArea._PosCenter.Y - rotArea._rect.Height / 2 + rotPositionAdjustment._PosCenter.Y), rotPositionAdjustment._rectRotation, AnchorPoint.None);
@@ -717,7 +717,7 @@ namespace BeeCore
             //int OffSetY = (int)(rotA._PosCenter.Y - rotA._rect.Height / 2);
             //OffSetX = (OffSetX > 0) ? 0 : -OffSetX;
             //OffSetY = (OffSetY > 0) ? 0 : -OffSetY;
-            if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
+            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.NG)
 			{
 				cl = Global.ParaShow.ColorNG;
 			}
@@ -928,7 +928,7 @@ namespace BeeCore
 
 				//}
     //            if (scoreRs != 0)
-    //                Common.PropetyTools[Global.IndexChoose][Index].ScoreResult =(int)Math.Round( scoreRs / rectRotates.Count(),1);
+    //                Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult =(int)Math.Round( scoreRs / rectRotates.Count(),1);
 
 
     //            matProcess.Dispose();

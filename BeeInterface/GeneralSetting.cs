@@ -126,7 +126,7 @@ namespace BeeInterface
             btnResetReady.IsCLick = Global.Config.IsResetReady;
             numRetryCam.Value = Global.Config.NumRetryCamera;
             numRetryPLC.Value = Global.Config.NumRetryPLC;
-            btnSaveCommon.IsCLick = Global.Config.IsSaveCommon;
+         
             btnSaveParaCamera.IsCLick = Global.Config.IsSaveParaCam;
             btnSaveGraphic.IsCLick = Global.Config.IsSaveParaShow;
             btnSaveImgRegister.IsCLick = Global.Config.IsSaveListRegister;
@@ -492,7 +492,7 @@ namespace BeeInterface
 
         private void btnSaveCommon_Click(object sender, EventArgs e)
         {
-            Global.Config.IsSaveCommon = btnSaveCommon.IsCLick;
+         
         }
 
         

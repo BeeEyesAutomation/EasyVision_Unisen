@@ -41,13 +41,13 @@ namespace BeeInterface
         {
 
        
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolCircle_StatusToolChanged;
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolCircle_ScoreChanged;
-            trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
-            trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
-            trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolCircle_StatusToolChanged;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ScoreChanged += ToolCircle_ScoreChanged;
+            trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
+            trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
+            trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
+            trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
             
             AdjScale.Value= (float) Propety.Scale;
             trackThreshold.IsInital = true;
@@ -223,7 +223,7 @@ private void SetShapeFor(TypeCrop which, ShapeType shape)
 private void NewShape(ShapeType newShape)
 {
     // 1) Chốt shape hiện tại
-    var prop = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety;
+    var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
     RectRotate rr = null;
     if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
     else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;
@@ -379,7 +379,7 @@ private void ToolCircle_ScoreChanged(float obj)
 
         private void ToolCircle_StatusToolChanged(StatusTool obj)
         {
-           if(Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool==StatusTool.Done)
+           if(Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool==StatusTool.Done)
                 if (Propety.IsCalibs)
                 {
                     btnCalib.IsCLick = false;
@@ -393,7 +393,7 @@ private void ToolCircle_ScoreChanged(float obj)
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score =trackScore.Value;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score =trackScore.Value;
           
         }
         public Circle Propety=new Circle();
@@ -423,8 +423,8 @@ private void ToolCircle_ScoreChanged(float obj)
         private void btnTest_Click(object sender, EventArgs e)
         {
           
-          if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+          if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
+                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }
@@ -516,8 +516,8 @@ private void ToolCircle_ScoreChanged(float obj)
         {
             btnCalib.Enabled = false;
             Propety.IsCalibs = btnCalib.IsCLick;
-            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
+                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }

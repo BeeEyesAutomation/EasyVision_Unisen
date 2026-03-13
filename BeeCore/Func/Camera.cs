@@ -229,7 +229,7 @@ namespace BeeCore
             Results = Results.OK;
            // foreach (List<PropetyTool> PropetyTools in BeeCore.Common.PropetyTools)
             {
-                foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+                foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
                 {
                     if (PropetyTool.UsedTool == UsedTool.NotUsed)
                     {
@@ -309,7 +309,7 @@ namespace BeeCore
                             g.DrawString("OK", new Font("Arial", Global.ParaShow.FontSize*3), Brushes.Green, new PointF(10, sz.Height + 5));
                         else
                             g.DrawString("NG", new Font("Arial", Global.ParaShow.FontSize * 3), Brushes.Red, new PointF(10, sz.Height + 5));
-                        var tools = BeeCore.Common.PropetyTools[Global.IndexChoose];
+                        var tools = BeeCore.Common.PropetyTools[Global.IndexProgChoose];
                         if(Global.Config.IsAutoTrigger&&Global.StatusProcessing!=StatusProcessing.Drawing)
                         {
                             tools[Global.IndexToolAuto].Propety.DrawResult(g);
@@ -367,11 +367,11 @@ namespace BeeCore
                                     Cv2.PyrDown(raw, raw);
                                     break;
                             }
-                            if (Global.listMatRs[Global.IndexChoose] == null) Global.listMatRs[Global.IndexChoose] = new Mat();
-                            if (!Global.listMatRs[Global.IndexChoose].IsDisposed)
-                                if (!Global.listMatRs[Global.IndexChoose].Empty()) Global.listMatRs[Global.IndexChoose].Dispose();
-                            Global.listMatRaw[Global.IndexChoose] = raw.Clone();
-                            Global.listMatRs[Global.IndexChoose] = matRs.Clone();
+                            if (Global.listMatRs[Global.IndexProgChoose] == null) Global.listMatRs[Global.IndexProgChoose] = new Mat();
+                            if (!Global.listMatRs[Global.IndexProgChoose].IsDisposed)
+                                if (!Global.listMatRs[Global.IndexProgChoose].Empty()) Global.listMatRs[Global.IndexProgChoose].Dispose();
+                            Global.listMatRaw[Global.IndexProgChoose] = raw.Clone();
+                            Global.listMatRs[Global.IndexProgChoose] = matRs.Clone();
                             //if (Global.Config.IsSaveRaw)
                             //    Cv2.ImWrite(pathRaw + "//" + Global.Project + "_" + Results.ToString() + "_" + Global.Config.POCurrent + "_" + Global.TriggerNum.ToString() + "_" + Hour + ".png", raw);
                             //if (Global.Config.IsSaveRS)
@@ -1614,7 +1614,7 @@ namespace BeeCore
                    
                     if (!ReConnect())
                     {
-                        await TimingUtils.DelayAccurateAsync(1000);
+                      
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Reconnect 2.."));
                         if (!ReConnect())
                         {
@@ -1641,7 +1641,7 @@ namespace BeeCore
 
 
                 }
-                await TimingUtils.DelayAccurateAsync(5);
+         
                 goto X;
 
             }

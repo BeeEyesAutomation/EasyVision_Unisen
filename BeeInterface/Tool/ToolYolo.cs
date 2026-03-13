@@ -57,7 +57,7 @@ namespace BeeInterface
         {
             try
             {
-                Propety = Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety;
+                Propety = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety;
 
                 if (Propety.listModels == null) Propety.listModels = new List<string>();
                 Propety.listModels = Propety.listModels.Distinct().ToList();
@@ -144,10 +144,10 @@ namespace BeeInterface
                 //picTemp1.Image = Propety.matTemp;
                 //picTemp2.Image = Propety.matTemp2;
 
-                trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
-                trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
-                trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
-                trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+                trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
+                trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
+                trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
+                trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
                 numEpoch.Value = Propety.Epoch;
                btnMergeBox.IsCLick=Propety.FilterBox==FilterBox.Merge?true:false;
                 btnRemoveBox.IsCLick = Propety.FilterBox == FilterBox.Remove ? true : false;
@@ -186,7 +186,7 @@ namespace BeeInterface
                         break;
 
                 }
-                Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolYolo_StatusToolChanged;
+                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolYolo_StatusToolChanged;
                 
             }
             catch (Exception ex)
@@ -201,9 +201,9 @@ namespace BeeInterface
         private void ToolYolo_StatusToolChanged(StatusTool obj)
         {
             if (Global.IsRun) return;
-            if (Propety.Index >= Common.PropetyTools[Global.IndexChoose].Count)
+            if (Propety.Index >= Common.PropetyTools[Global.IndexProgChoose].Count)
                 return;
-            if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
                 Propety.rectTrain = Propety.rectRotates;//note
                 btnTest.Enabled = true;
@@ -213,7 +213,7 @@ namespace BeeInterface
         private void trackScore_ValueChanged(float obj)
         {
 
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (int)trackScore.Value;
           
         }
 
@@ -401,7 +401,7 @@ namespace BeeInterface
 
         private void trackNumObject_ValueChanged_1(int obj)
         {
-            //G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global. IndexChoose].matRaw.ToBitmap();
+            //G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.ToBitmap();
             //G.EditTool.View.imgView.Invalidate();
             //Propety.NumObject = trackNumObject.Value;
             //G.IsCheck = true;
@@ -547,8 +547,8 @@ namespace BeeInterface
         private void btnTest_Click_1(object sender, EventArgs e)
         {
            btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
+                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }
@@ -636,10 +636,10 @@ namespace BeeInterface
 
         private void tmCheckFist_Tick(object sender, EventArgs e)
         {
-            //if (BeeCore.Common.listCamera[Global. IndexChoose].IsConnected)
+            //if (BeeCore.Common.listCamera[Global. IndexProgChoose].IsConnected)
             //{
-            //    BeeCore.Common.listCamera[Global. IndexChoose].Read();
-            //    if (BeeCore.Common.listCamera[Global. IndexChoose].IsConnected)
+            //    BeeCore.Common.listCamera[Global. IndexProgChoose].Read();
+            //    if (BeeCore.Common.listCamera[Global. IndexProgChoose].IsConnected)
             //    {
             //       // Propety.Check();
             //        tmCheckFist.Enabled = false;
@@ -1110,7 +1110,7 @@ namespace BeeInterface
                 if (Propety.rotCrop == null)
                 {
                     int with = 50, height = 50;
-                    Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Width / 2, BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Height / 2), 0, AnchorPoint.None);
+                    Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Width / 2, BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Height / 2), 0, AnchorPoint.None);
 
                 }
              
@@ -1210,7 +1210,7 @@ namespace BeeInterface
 
             try
             {
-                Propety.Training(Common.PropetyTools[Global.IndexChoose][Propety.Index].Name, Propety.pathFullModel, pathYaml);
+                Propety.Training(Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Name, Propety.pathFullModel, pathYaml);
 
             }
             catch (Exception ex)
@@ -1391,7 +1391,7 @@ namespace BeeInterface
             if (MessageBox.Show("Are you sure", "Reload All Para of Label", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                
-                String[] Content = Propety.LoadNameModel(Common.PropetyTools[Global.IndexChoose][Propety.Index].Name);
+                String[] Content = Propety.LoadNameModel(Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Name);
                 if (Content != null && Content.Length > 0)
                 {
                     Propety.labelItems = new List<LabelItem>();
@@ -1442,9 +1442,9 @@ namespace BeeInterface
         public List<PointF[]> listBoxCorners = new List<PointF[]>();
         private void btnCheck_Click(object sender, EventArgs e)
         {
-            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
+            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
             {
-                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             }
                 
             else
@@ -1459,7 +1459,7 @@ namespace BeeInterface
 
         private void btnEnable_Click(object sender, EventArgs e)
         {
-            Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].IsSendResult = btnEnable.IsCLick;
+            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].IsSendResult = btnEnable.IsCLick;
 
         }
 
@@ -1470,12 +1470,12 @@ namespace BeeInterface
 
         private void btnBits_Click(object sender, EventArgs e)
         {
-           // Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.Bits;
+           // Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.Bits;
         }
 
         private void btnString_Click(object sender, EventArgs e)
         {
-           // Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.String;
+           // Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.String;
         }
 
         private void btnMergeBox_Click(object sender, EventArgs e)
@@ -1580,7 +1580,7 @@ namespace BeeInterface
         private void NewShape(ShapeType newShape)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety;
+            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
             RectRotate rr = null;
             if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
             else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;

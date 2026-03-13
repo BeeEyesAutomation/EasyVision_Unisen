@@ -127,7 +127,7 @@ namespace BeeGlobal
                     newFile = file;
                 if (string.Equals(file, newFile, StringComparison.OrdinalIgnoreCase))
                     continue;
-
+                if(!File.Exists(newFile))
                 File.Move(file, newFile);
             }
 

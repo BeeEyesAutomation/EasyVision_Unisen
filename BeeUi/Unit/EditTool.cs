@@ -5,6 +5,7 @@ using BeeInterface;
 using BeeUi.Commons;
 using BeeUi.Tool;
 using BeeUi.Unit;
+using Microsoft.VisualBasic.Devices;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -25,6 +26,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using static BeeInterface.DashboardImages;
 using Point = System.Drawing.Point;
+using View = BeeInterface.View;
 
 namespace BeeUi
 {
@@ -74,24 +76,24 @@ namespace BeeUi
             Global.ToolSettings.btnDelect.Enabled = !Global.IsRun;
             Global.ToolSettings.btnEnEdit.Enabled = Global.IsRun;
             Global.ToolSettings.btnRename.Enabled = !Global.IsRun;
-            G.Header.btnShowList.Enabled = true;
-            G.Header.txtQrCode.Enabled = true;
-            G.Header.pEdit.Enabled = true;
+            Global.Header.btnShowList.Enabled = true;
+            Global.Header.txtQrCode.Enabled = true;
+            Global.Header.pEdit.Enabled = true;
             switch (Global.Config.Users)
             {
                 case Users.Admin:
 					G.StatusDashboard.btnReset.Enabled = true;
 					Global.EditTool.View.btnContinuous.Enabled = Global.IsRun;
-					G.Header.btnMode.Enabled = true;
+					Global.Header.btnMode.Enabled = true;
                     View.pBtn.Enabled= true;
-					G.Header.pEdit.Enabled = true;
-                    G.Header.pModel.Enabled = true;
-                    G.Header.pPO.Enabled = true;
+					Global.Header.pEdit.Enabled = true;
+                    Global.Header.pModel.Enabled = true;
+                    Global.Header.pPO.Enabled = true;
                     this.BtnHeaderBar.btnSetting.Enabled = true;
                     this.BtnHeaderBar.btncheck.Enabled = true;
                     this.BtnHeaderBar.btnReport.Enabled = true;
-                    G.Header.btnDummy.Enabled = true;
-                    G.Header.btnTraining.Enabled = true;
+                    Global.Header.btnDummy.Enabled = true;
+                    Global.Header.btnTraining.Enabled = true;
                     Global.ToolSettings.btnEnEdit.Enabled = true;
                     View.btnTypeTrig.Enabled = true;
 					BarRight.btnFlowChart.Enabled = true;
@@ -103,18 +105,18 @@ namespace BeeUi
 				case Users.Leader:
 
 					Global.EditTool.View.btnContinuous.Enabled = false;
-                    G.Header.btnTraining.Enabled = false;
-                    G.Header.btnDummy.Enabled = true;
+                    Global.Header.btnTraining.Enabled = false;
+                    Global.Header.btnDummy.Enabled = true;
                     G.StatusDashboard.btnReset.Enabled = true;
                     this.BtnHeaderBar.btnSetting.Enabled = false;
                     this.BtnHeaderBar.btncheck.Enabled = false;
                     this.BtnHeaderBar.btnReport.Enabled = true;
-                    G.Header.btnMode.Enabled = false;
+                    Global.Header.btnMode.Enabled = false;
 					View.pBtn.Enabled = true;
 					View.btnTypeTrig.Enabled = false;
-                    G.Header.pEdit.Enabled = false;
-                    G.Header.pModel.Enabled = false;
-                    G.Header.pPO.Enabled = false;
+                    Global.Header.pEdit.Enabled = false;
+                    Global.Header.pModel.Enabled = false;
+                    Global.Header.pPO.Enabled = false;
                     Global.ToolSettings.btnEnEdit.Enabled = false;
                     BarRight.btnFlowChart.Enabled = true;
 					BarRight.btnHistory.Enabled = true;
@@ -124,18 +126,18 @@ namespace BeeUi
 					break;
 				case Users.User:
 					Global.EditTool.View.btnContinuous.Enabled = false;
-                    G.Header.btnDummy.Enabled = true;
-                    G.Header.btnMode.Enabled = false;
-                    G.Header.btnTraining.Enabled = false;
+                    Global.Header.btnDummy.Enabled = true;
+                    Global.Header.btnMode.Enabled = false;
+                    Global.Header.btnTraining.Enabled = false;
                     G.StatusDashboard.btnReset.Enabled = false;
                     this.BtnHeaderBar.btnSetting.Enabled = false;
                     this.BtnHeaderBar.btncheck.Enabled = false;
                     this.BtnHeaderBar.btnReport.Enabled = false;
                     View.pBtn.Enabled = false;
 					View.btnTypeTrig.Enabled = false;
-                    G.Header.pEdit.Enabled = false;
-                    G.Header.pModel.Enabled = false;
-                    G.Header.pPO.Enabled = false;
+                    Global.Header.pEdit.Enabled = false;
+                    Global.Header.pModel.Enabled = false;
+                    Global.Header.pPO.Enabled = false;
                     Global.ToolSettings.btnEnEdit.Enabled = false;
                     BarRight.btnFlowChart.Enabled = true;
 					BarRight.btnHistory.Enabled = false;
@@ -181,7 +183,7 @@ namespace BeeUi
              
                 if (BeeCore.Common.listCamera[Global.IndexCCCD] == null)
                 {
-                    BeeCore.Common.listCamera[Global.IndexCCCD] = new Camera(new ParaCamera(), Global.IndexChoose);
+                    BeeCore.Common.listCamera[Global.IndexCCCD] = new Camera(new ParaCamera(), Global.IndexProgChoose);
                     Global.ScanCCD.ShowDialog();
                     return;
                 }
@@ -199,7 +201,7 @@ namespace BeeUi
                 {
                    
                     case Step.Run:
-                        Global.IndexChoose = 0;
+                        Global.IndexProgChoose = 0;
                         Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
                         Global.EditTool.View.btnChangeImg.Visible = true;
                         Global.EditTool.View.imgView.AutoCenter = true;
@@ -210,10 +212,9 @@ namespace BeeUi
                         BarRight.Visible = true;
                         pHeader.Visible = true;
                         Global.IsRun = true; Acccess(Global.IsRun);
-                        G.Header.btnMode.Text = "Run";
-                        G.Header.btnMode.IsCLick = false;
+                     
                         pName.Visible = false;
-                        G.SettingPLC.Visible = false;
+                       
                         pInfor.Show("Dashboard");
                         pEditTool.Show("Tool");
                        
@@ -257,7 +258,7 @@ namespace BeeUi
                                             Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
                                             Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
                                         }
-                            foreach(PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+                            foreach(PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
                             {
                                 if (propetyTool.ItemTool == null)
                                     continue;
@@ -280,7 +281,7 @@ namespace BeeUi
                         break;
                     case Step.Step1:
 
-                        foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+                        foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
                         {
                             if (PropetyTool.ItemTool != null)
                                 PropetyTool.ItemTool.IsEdit = false;
@@ -299,8 +300,7 @@ namespace BeeUi
                         BarRight.Visible = false;
                         Global.IsRun = false; Acccess(Global.IsRun);
                         Global.EditTool.View.btnLive.Enabled = true;
-                        G.Header.btnMode.Text = "Edit";
-                        G.Header.btnMode.IsCLick = true;
+                     
                    
                         Global.StepEdit.btnStep1.IsCLick = true;
 
@@ -343,7 +343,7 @@ namespace BeeUi
                         {
                           
                             
-                                switch (Global.IndexChoose)
+                                switch (Global.IndexProgChoose)
                                 {
                                     case 0:
                                         matReg = Global.ParaCommon.matRegister.ToMat();
@@ -407,11 +407,11 @@ namespace BeeUi
                         pName.Visible = true;
                        
                         pEditTool.Show("Tool");
-                        ShowTool.ShowChart( Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
+                        ShowTool.ShowChart( Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexProgChoose]);
                         Mat matReg2 = new Mat();
                         try
                         {
-                            switch (Global.IndexChoose)
+                            switch (Global.IndexProgChoose)
                             {
                                 case 0:
                                     matReg2 = Global.ParaCommon.matRegister.ToMat();
@@ -506,8 +506,8 @@ namespace BeeUi
 
 
 
-                //   G.Header. btnMode.Text = "RUN";
-                //    G.Header.btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
+                //   Global.Header. btnMode.Text = "RUN";
+                //    Global.Header.btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
                 //    Global.Step = Step.Run;
 
                 //}
@@ -534,8 +534,12 @@ namespace BeeUi
         }
       
         public async void DesTroy()
-        {
-            SaveData.Config(Global.Config);
+        { 
+            
+            
+            
+            clock.Stop();
+        SaveData.Config(Global.Config);
             View.tmContinuous.Enabled = false;
             if(Global.LogsDashboard!=null)
             Global.LogsDashboard.Dispose();
@@ -583,8 +587,8 @@ namespace BeeUi
 			View.split3.Enabled = !IsLock;
 			View.split4.Enabled = !IsLock;
 			View.split5.Enabled = !IsLock;
-			G.Header.split1.Enabled = !IsLock;
-			G.Header.split2.Enabled = !IsLock;
+			Global.Header.split1.Enabled = !IsLock;
+			Global.Header.split2.Enabled = !IsLock;
 			Global.ToolSettings.split1.Enabled = !IsLock;
 			G.StatusDashboard.IsLockSplit = IsLock;
 		}
@@ -648,12 +652,12 @@ namespace BeeUi
                 G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
                 G.StatusDashboard.MidHeaderBackColor = Color.FromArgb(Global.Config.AlphaBar, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
                   }
-
+            Global.SettingPLC=new ProtocolPLC();
             Global.StepEdit=new StepEdit();
             pEditTool.Register("Tool", () => Global.ToolSettings);
             pEditTool.Register("Step1", () => Global.StepEdit.SettingStep1);
             pEditTool.Register("Step2", () => Global.StepEdit.SettingStep2);
-            pEditTool.Register("PLC", () => G.SettingPLC);
+            pEditTool.Register("PLC", () => Global.SettingPLC);
             pEditTool.Register("Step4", () => Global.StepEdit.SettingStep4);
             pEditTool.Register("Images", () => DashboardImages);
             pEditTool.Register("Logs", () => Global.LogsDashboard);
@@ -694,9 +698,25 @@ namespace BeeUi
             Global.DisPLCChange += Global_DisPLCChange;
             StepProccessBar.Visible = Global.Config.IsShowProgressingPLC;
             Global.ByPassResultChanged += Global_ByPassResultChanged;
+
+            clock = new FlipClockDashboard();
+          
+           
             //
         }
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            clock.Width = 200;
+            clock.Dock = DockStyle.Left;
+            pTop.Controls.Add(clock);
+         //   clock.BackColor = Color.FromArgb(240, Color.White);
+            clock.BringToFront();
+            clock.Start();
+        }
 
+
+        FlipClockDashboard clock;
         private void Global_ByPassResultChanged(bool obj)
         {
             this.Invoke((Action)(() =>
@@ -798,9 +818,9 @@ namespace BeeUi
             if (MessageBox.Show("Sure", "Initial Python", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
               
-                //foreach (Tools tool in G.listAlltool[Global.IndexChoose])
+                //foreach (Tools tool in G.listAlltool[Global.IndexProgChoose])
                 //    tool.tool.LoadPara();
-              //  G.Header.workLoadProgram.RunWorkerAsync();
+              //  Global.Header.workLoadProgram.RunWorkerAsync();
             }
         }
 
@@ -902,10 +922,10 @@ namespace BeeUi
                 Access.SaveProg("Program\\" + Global.Project + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
                 //  Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
 
-                G.Header.RefreshListPJ();
-                G.Header.ChangeProgram(Global.Project);
-                //if (!G.Header.workLoadProgram.IsBusy)
-                //    G.Header.workLoadProgram.RunWorkerAsync();
+                Global.Header.RefreshListPJ();
+                Global.Header.ChangeProgram(Global.Project);
+                //if (!Global.Header.workLoadProgram.IsBusy)
+                //    Global.Header.workLoadProgram.RunWorkerAsync();
               
             }
         }
@@ -1086,8 +1106,8 @@ namespace BeeUi
 			View.split3.Height = 5;
 			View.split4.Height = 5;
 			View.split5.Height = 5;
-			G.Header.split1.Height = 5;
-			G.Header.split2.Height = 5;
+			Global.Header.split1.Height = 5;
+			Global.Header.split2.Height = 5;
 			Global.ToolSettings.split1.Height = 5;
 			
 			tmReLoadSplit.Enabled = false;
@@ -1343,10 +1363,10 @@ namespace BeeUi
                 string tarPath = openFile.FileName;
                 TarProgramHelper.ImportToDefaultProgram(tarPath);
                 Global.Project = Path.GetFileNameWithoutExtension(tarPath);
-                G.Header.RefreshListPJ();
-                G.Header.ChangeProgram(Global.Project);
-                //if (!G.Header.workLoadProgram.IsBusy)
-                //    G.Header.workLoadProgram.RunWorkerAsync();
+                Global.Header.RefreshListPJ();
+                Global.Header.ChangeProgram(Global.Project);
+                //if (!Global.Header.workLoadProgram.IsBusy)
+                //    Global.Header.workLoadProgram.RunWorkerAsync();
             }
 
             //string tarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ProgramBackup.tar");
@@ -1390,11 +1410,11 @@ namespace BeeUi
             SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Title = "Export List";
             saveFile.Filter = " Text|*.txt";
-            BeeCore.Common.PropetyTools[Global.IndexChoose] = new List<BeeCore.PropetyTool>();
+            BeeCore.Common.PropetyTools[Global.IndexProgChoose] = new List<BeeCore.PropetyTool>();
             
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
-                File.WriteAllLines(saveFile.FileName, G.Header.listNameProg);
+                File.WriteAllLines(saveFile.FileName, Global.Header.listNameProg);
              }
         }
 
@@ -1402,17 +1422,17 @@ namespace BeeUi
         {
             SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Title = "New Program";
-            BeeCore.Common.PropetyTools[Global.IndexChoose] = new List<BeeCore.PropetyTool>();
+            BeeCore.Common.PropetyTools[Global.IndexProgChoose] = new List<BeeCore.PropetyTool>();
             saveFile.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Program";
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
                 Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
                 Directory.CreateDirectory("Program\\" + Global.Project);
                 Access.SaveProg("Program\\" + Global.Project + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
-                G.Header.RefreshListPJ();
-                G.Header.ChangeProgram(Global.Project);
-                //if (!G.Header.workLoadProgram.IsBusy)
-                //    G.Header.workLoadProgram.RunWorkerAsync();
+                Global.Header.RefreshListPJ();
+                Global.Header.ChangeProgram(Global.Project);
+                //if (!Global.Header.workLoadProgram.IsBusy)
+                //    Global.Header.workLoadProgram.RunWorkerAsync();
             }
         }
 

@@ -115,7 +115,7 @@ namespace BeeInterface
                     xf.Scale(s, s);
                     g.Transform = xf;
 
-                    var tools = BeeCore.Common.PropetyTools[Global.IndexChoose];
+                    var tools = BeeCore.Common.PropetyTools[Global.IndexProgChoose];
                     foreach (var tool in tools)
                         if (tool.UsedTool != UsedTool.NotUsed)
                             tool.Propety.DrawResult(g);

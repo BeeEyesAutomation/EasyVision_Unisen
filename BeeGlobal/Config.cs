@@ -55,7 +55,7 @@ namespace BeeGlobal
         public bool IsShowFull = false;
         public bool IsAutoTrigger = false;
         public DisplayResolution DisplayResolution=DisplayResolution.Full;
-        public bool IsSaveCommon = false;
+
         public bool IsSaveProg = false;
         public bool IsSaveCommunication=true;
         public bool IsSaveListRegister = true;

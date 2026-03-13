@@ -723,7 +723,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = new SolidBrush(Global.ParaShow.TextColor);
             Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
+            switch (Common.PropetyTools[Global.IndexProgChoose][Index].Results)
             {
                 case Results.OK:
                     cl =  Global.ParaShow.ColorOK;

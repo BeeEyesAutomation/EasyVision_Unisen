@@ -75,8 +75,8 @@ namespace BeeInterface
         private void btnBoth_Click(object sender, EventArgs e)
         {
            
-            //    if (G.Header.SerialPort1.IsOpen)
-            //        G.Header.SerialPort1.WriteLine("Both");
+            //    if (Global.Header.SerialPort1.IsOpen)
+            //        Global.Header.SerialPort1.WriteLine("Both");
             //else
             //    MessageBox.Show("Port Close");
             Global.ParaCommon.TypeLight = 3;

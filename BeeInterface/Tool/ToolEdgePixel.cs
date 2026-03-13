@@ -42,14 +42,14 @@ namespace BeeInterface
             try
             {
                
-                trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
-                trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
-                trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
-                trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+                trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
+                trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
+                trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
+                trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
 
-                Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-                Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolWidth_StatusToolChanged;
-                Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolWidth_ScoreChanged;
+                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolWidth_StatusToolChanged;
+                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ScoreChanged += ToolWidth_ScoreChanged;
                 AdjThreshod.Value = Propety.ThresholdBinary;
 
                
@@ -107,7 +107,7 @@ namespace BeeInterface
 
         private void ToolWidth_StatusToolChanged(StatusTool obj)
         {if (Global.IsRun) return;
-            if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true;
               
@@ -117,7 +117,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score=trackScore.Value;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score=trackScore.Value;
          }
         public bool IsClear = false;
         public EdgePixel Propety=new EdgePixel();
@@ -164,8 +164,8 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
+                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }
@@ -382,7 +382,7 @@ namespace BeeInterface
         private void NewShape(ShapeType newShape)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety;
+            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
             RectRotate rr = null;
             if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
             else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;

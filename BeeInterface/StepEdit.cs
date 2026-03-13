@@ -52,7 +52,7 @@ namespace BeeInterface
             //{
             //    btnStep1.Width=
             //}
-            //  if(G.Header!=null)
+            //  if(Global.Header!=null)
             // this.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
 
             //   Global.StepEdit = this;
@@ -123,15 +123,15 @@ namespace BeeInterface
     
         private void StepEdit_VisibleChanged(object sender, EventArgs e)
         { 
-        //{if (G.Header == null) return;
+        //{if (Global.Header == null) return;
         //    if(this.Visible==true&&!G.IsRun)
         //    {
         //        btnStep1.PerformClick();
         //    }
         //    else
         //    {
-        //        if (G.Header != null)
-        //            G.Header.workLoadProgram.RunWorkerAsync();
+        //        if (Global.Header != null)
+        //            Global.Header.workLoadProgram.RunWorkerAsync();
         //    }
         }
       public  SettingStep4 SettingStep4=new SettingStep4();
@@ -146,7 +146,7 @@ namespace BeeInterface
         private void btnSaveProgram_Click(object sender, EventArgs e)
         {
             SaveData.Project(Global.Project);
-            //G.Header.Mode();
+            //Global.Header.Mode();
         }
 
         private void StepEdit_SizeChanged(object sender, EventArgs e)

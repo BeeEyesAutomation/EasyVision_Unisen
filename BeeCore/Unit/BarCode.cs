@@ -60,7 +60,7 @@ namespace BeeCore
         [NonSerialized]
         public List<CodeSymbologyCli> listTypeBarcode;
         public ModeCheck ModeCheck = ModeCheck.Single;
-        public int IndexChoose = 0;
+        public int IndexProgChoose = 0;
         public int _OffSetArea = 30;
         public bool Is1D;
         public void UpdateOffSet()
@@ -97,9 +97,9 @@ namespace BeeCore
         public void SetTemp( RectRotate rot)
         {
             int w = OffSetArea,h = OffSetArea;
-                if (IndexChoose< listTypeBarcode.Count())
+                if (IndexProgChoose< listTypeBarcode.Count())
                 {
-                    Is1D = listTypeBarcode[IndexChoose].Is1D();
+                    Is1D = listTypeBarcode[IndexProgChoose].Is1D();
                 }    
             if (Is1D)
                 h = h * 4;
@@ -308,7 +308,7 @@ namespace BeeCore
         public void Scan()
         {
 
-            Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
+            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
             // 5) Gom kết quả
             rectRotates = new List<RectRotate>();
             listScore = new List<double>();
@@ -385,7 +385,7 @@ namespace BeeCore
 
                     if (scoreSum != 0 && rectRotates.Count > 0)
                     {
-                        Common.PropetyTools[Global.IndexChoose][Index].ScoreResult =
+                        Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult =
                             (int)Math.Round(scoreSum / rectRotates.Count, 1);
                     }
                 }
@@ -451,10 +451,10 @@ namespace BeeCore
             rectRotates = combined.Select(b => b).ToList();
             if (ModeCheck==ModeCheck.Single&& listRotScan.Count()>0)
             {
-                if(IndexChoose>= listRotScan.Count()) IndexChoose = 0;
+                if(IndexProgChoose>= listRotScan.Count()) IndexProgChoose = 0;
 
-                listRotScan[IndexChoose]._dragAnchor = AnchorPoint.Center;
-                SetTemp(listRotScan[IndexChoose]);
+                listRotScan[IndexProgChoose]._dragAnchor = AnchorPoint.Center;
+                SetTemp(listRotScan[IndexProgChoose]);
             }
          
             Common.PropetyTools[IndexThread][Index].Results = Results.OK;
@@ -464,7 +464,7 @@ namespace BeeCore
         }
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
-            Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
+            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
             // 5) Gom kết quả
             rectRotates = new List<RectRotate>();
             listScore = new List<double>();
@@ -539,7 +539,7 @@ namespace BeeCore
 
                     if (scoreSum != 0 && rectRotates.Count > 0)
                     {
-                        Common.PropetyTools[Global.IndexChoose][Index].ScoreResult =
+                        Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult =
                             (int)Math.Round(scoreSum / rectRotates.Count, 1);
                     }
                 }
@@ -662,7 +662,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
+            switch (Common.PropetyTools[Global.IndexProgChoose][Index].Results)
             {
                 case Results.OK:
                     cl =  Global.ParaShow.ColorOK;

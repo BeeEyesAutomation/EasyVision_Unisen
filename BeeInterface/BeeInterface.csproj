@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,10 +30,23 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.2.0.0-beta.2\lib\net472\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis, Version=1.70.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.1.70.0\lib\net462\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth, Version=1.70.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.70.0\lib\net462\Google.Apis.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Core, Version=1.70.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Core.1.70.0\lib\net462\Google.Apis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Drive.v3, Version=1.70.0.3856, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Drive.v3.1.70.0.3856\lib\net462\Google.Apis.Drive.v3.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -48,9 +62,12 @@
       <HintPath>C:\Lib\OpenCvSharp.UserInterface.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,6 +79,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppRestart.cs" />
+    <Compile Include="Class\Cryto.cs" />
+    <Compile Include="Class\Decompile.cs" />
+    <Compile Include="Class\Func.cs" />
+    <Compile Include="Class\GoogleDriveDllManager.cs" />
+    <Compile Include="Class\Gui.cs" />
+    <Compile Include="Class\KbdListener.cs" />
+    <Compile Include="Class\KeyAcitve.cs" />
+    <Compile Include="Class\RsDirPermissions.cs" />
+    <Compile Include="Class\SqlServer.cs" />
     <Compile Include="Comunication\WriteValuePLCSystems.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -113,6 +139,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FileName.cs" />
+    <Compile Include="DashBoard\FlipClockControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FormWarning.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -132,11 +161,47 @@
     <Compile Include="GeneralSetting.Designer.cs">
       <DependentUpon>GeneralSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="General\Account.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="General\Account.Designer.cs">
+      <DependentUpon>Account.cs</DependentUpon>
+    </Compile>
+    <Compile Include="General\FormCheckUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="General\FormCheckUpdate.Designer.cs">
+      <DependentUpon>FormCheckUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="General\FormChoose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="General\FormChoose.Designer.cs">
+      <DependentUpon>FormChoose.cs</DependentUpon>
+    </Compile>
+    <Compile Include="General\FormReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="General\FormReport.Designer.cs">
+      <DependentUpon>FormReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="General\InforGroup.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="General\InforGroup.Designer.cs">
       <DependentUpon>InforGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="General\MessageChoose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="General\MessageChoose.Designer.cs">
+      <DependentUpon>MessageChoose.cs</DependentUpon>
+    </Compile>
+    <Compile Include="General\QuickSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="General\QuickSetting.Designer.cs">
+      <DependentUpon>QuickSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="Global.cs" />
     <Compile Include="GlobalIconManager.cs" />
@@ -157,6 +222,97 @@
     </Compile>
     <Compile Include="General\ItemRS.Designer.cs">
       <DependentUpon>ItemRS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\AddFilters.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\AddFilters.Designer.cs">
+      <DependentUpon>AddFilters.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\AddTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Group\AddTool.Designer.cs">
+      <DependentUpon>AddTool.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\BarRight.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\BarRight.Designer.cs">
+      <DependentUpon>BarRight.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\BtnHeaderBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\BtnHeaderBar.Designer.cs">
+      <DependentUpon>BtnHeaderBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\EditBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\EditBar.Designer.cs">
+      <DependentUpon>EditBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\EditProg.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\EditProg.Designer.cs">
+      <DependentUpon>EditProg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\Header.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\Header.Designer.cs">
+      <DependentUpon>Header.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\HideBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\HideBar.Designer.cs">
+      <DependentUpon>HideBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\InforBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\InforBar.Designer.cs">
+      <DependentUpon>InforBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\RegisterImgs.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\RegisterImgs.Designer.cs">
+      <DependentUpon>RegisterImgs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\SimImgs.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\SimImgs.Designer.cs">
+      <DependentUpon>SimImgs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\StatusBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\StatusBar.Designer.cs">
+      <DependentUpon>StatusBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\ToolSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\ToolSettings.Designer.cs">
+      <DependentUpon>ToolSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\ucReport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\ucReport.Designer.cs">
+      <DependentUpon>ucReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\ViewHost.cs" />
+    <Compile Include="Group\View.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\View.Designer.cs">
+      <DependentUpon>View.cs</DependentUpon>
     </Compile>
     <Compile Include="ItemValue.cs">
       <SubType>UserControl</SubType>
@@ -179,16 +335,21 @@
     <Compile Include="PLC\ucBitOutput.Designer.cs">
       <DependentUpon>ucBitOutput.cs</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="PLC\ProtocolPLC.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PLC\ProtocolPLC.Designer.cs">
       <DependentUpon>ProtocolPLC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="ShowTool.cs" />
     <Compile Include="StepEdit.cs">
@@ -394,8 +555,26 @@
     <EmbeddedResource Include="GeneralSetting.resx">
       <DependentUpon>GeneralSetting.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="General\Account.resx">
+      <DependentUpon>Account.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="General\FormCheckUpdate.resx">
+      <DependentUpon>FormCheckUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="General\FormChoose.resx">
+      <DependentUpon>FormChoose.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="General\FormReport.resx">
+      <DependentUpon>FormReport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="General\InforGroup.resx">
       <DependentUpon>InforGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="General\MessageChoose.resx">
+      <DependentUpon>MessageChoose.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="General\QuickSetting.resx">
+      <DependentUpon>QuickSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GroupControl\OK_Cancel.resx">
       <DependentUpon>OK_Cancel.cs</DependentUpon>
@@ -406,6 +585,53 @@
     <EmbeddedResource Include="General\ItemRS.resx">
       <DependentUpon>ItemRS.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Group\AddFilters.resx">
+      <DependentUpon>AddFilters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\AddTool.resx">
+      <DependentUpon>AddTool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\BarRight.resx">
+      <DependentUpon>BarRight.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\BtnHeaderBar.resx">
+      <DependentUpon>BtnHeaderBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\EditBar.resx">
+      <DependentUpon>EditBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\EditProg.resx">
+      <DependentUpon>EditProg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\Header.resx">
+      <DependentUpon>Header.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\HideBar.resx">
+      <DependentUpon>HideBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\InforBar.resx">
+      <DependentUpon>InforBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\RegisterImgs.resx">
+      <DependentUpon>RegisterImgs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\SimImgs.resx">
+      <DependentUpon>SimImgs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\StatusBar.resx">
+      <DependentUpon>StatusBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\ToolSettings.resx">
+      <DependentUpon>ToolSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\ucReport.resx">
+      <DependentUpon>ucReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\View.resx">
+      <DependentUpon>View.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ItemValue.resx">
       <DependentUpon>ItemValue.cs</DependentUpon>
     </EmbeddedResource>
@@ -415,13 +641,13 @@
     <EmbeddedResource Include="PLC\ucBitOutput.resx">
       <DependentUpon>ucBitOutput.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="PLC\ProtocolPLC.resx">
       <DependentUpon>ProtocolPLC.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="StepEdit.resx">
       <DependentUpon>StepEdit.cs</DependentUpon>
@@ -533,6 +759,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Resources\BID_SLIDER_HANDLE_NON_ACTIVE.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -791,9 +1021,6 @@
     <None Include="Resources\Hand.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Barcode.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Sort Right_2.png" />
   </ItemGroup>
   <ItemGroup>
@@ -807,6 +1034,480 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Flow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Access_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Add Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Aperture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Automatic_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Back.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_COPY_D_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_DELETE_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_EXTRACTION_ADD_D.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_EXTRACTION_ADD_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_EXTRACTION_EXCLUSION_D.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_EXTRACTION_EXCLUSION_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_OPERATION_SIMULATION_PC_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_TOOL_EDIT_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Brightness.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Brightness_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Bug.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Camera_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Camera_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Camera_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Camera1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Center of Gravity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Center of Gravity_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Change_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Chevron Down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Chevron Right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Chevron Right_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Circle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Close Window.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Code_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Code_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Collapse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cursor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Customer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Down Button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Download.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Drag And Drop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dropper.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EASY_LONG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EASY1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Edit Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Edit Image_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Edit Property_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Edit Property_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\End.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Enlarge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Erase.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Erase_1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Erase_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Erase_2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Erase_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Eraser.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Eraser.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Example.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Exposure.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Fantasy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Fantasy_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\File.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Flip Vertical.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Folder_11.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Forward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Full Screen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Hand Drag.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Hand Drag_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\HD 1080p.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Image Gallery.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Image.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Image_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Image_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Image_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Installing Updates.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Installing Updates_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Invert Colors.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Key_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Language Skill.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Language Skill_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Language Skill_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Language Skill_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Live Video On.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LOG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Logout_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Logout_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Long.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Menu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Menubar_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Minus_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Minus_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Natural User Interface 2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Password.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Play_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Play_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\plc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Plus_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PrepareDlgProgress.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Prison.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Prison_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Profile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Qr Code_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Record.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Record_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Record_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rectangular.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rectangular.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rectangular_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rename.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Right Click.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rotate.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rotate_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RS-232 Female.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RS-232 Female_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RS-232 Male.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RS-232 Male_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Save as.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Save_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Show Property.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Show Property_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Show Property_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shutdown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Small4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Small5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sort Left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sort Left_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sort Right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sort Right_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sort Right_21.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Statistic Document.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Support.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Test Passed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Undo_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Undo_2 - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Undo_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\User.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Warning.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom In.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom In_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom In_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom In_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom Out.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom Out_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom Out_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom Out_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Barcode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Color Dropper1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Eraser1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rotate1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Warning1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_TOOL_HELPIMAGE_EDGE_PRESENCE1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Export1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

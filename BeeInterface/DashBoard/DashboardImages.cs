@@ -133,7 +133,7 @@ namespace BeeInterface
         private readonly RadioButton _rbRaw = new RadioButton { Text = "Raw", AutoSize = true, Font = new Font("Arial", 14), Dock = DockStyle.Fill };
         private readonly RadioButton _rbResult = new RadioButton { Text = "Result", AutoSize = true, Font = new Font("Arial", 14), Dock = DockStyle.Fill };
         private readonly ComboBox _cbFilter = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Font = new Font("Arial", 14), Dock = DockStyle.Fill };
-        private readonly Button _btnRefresh = new Button { Font = new Font("Arial", 14), Height = 35, Text = "Refresh", Width = 120, TextAlign = ContentAlignment.MiddleCenter, TextImageRelation = TextImageRelation.ImageBeforeText, Image = Properties.Resources.Refresh25, Dock = DockStyle.Fill };
+        private readonly Button _btnRefresh = new Button { Font = new Font("Arial", 14), Height = 35, Text = "Refresh", Width = 120, TextAlign = ContentAlignment.MiddleCenter, TextImageRelation = TextImageRelation.ImageBeforeText, Image = Properties.Resources.Refresh, Dock = DockStyle.Fill };
 
         private readonly TableLayoutPanel _row1Flow = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink };
         private readonly TableLayoutPanel _row2Flow = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink };

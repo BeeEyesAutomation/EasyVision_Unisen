@@ -59,7 +59,7 @@ namespace BeeCore
             return this.MemberwiseClone();
         }
         public bool IsScan = false;
-        public int IndexChoose = 0;
+        public int IndexProgChoose = 0;
         public ModeCheck ModeCheck = ModeCheck.Single;
         public String pathFullModel = "";
         [NonSerialized]
@@ -536,10 +536,10 @@ namespace BeeCore
             if (ModeCheck == ModeCheck.Single)
             {
            
-                if (IndexChoose < listRotScan.Count)
+                if (IndexProgChoose < listRotScan.Count)
                 {
-                    listRotScan[IndexChoose]._dragAnchor = AnchorPoint.Center;
-                    SetTemp(listRotScan[IndexChoose]);
+                    listRotScan[IndexProgChoose]._dragAnchor = AnchorPoint.Center;
+                    SetTemp(listRotScan[IndexProgChoose]);
                 }
             }
 
@@ -554,7 +554,7 @@ namespace BeeCore
         }
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
-            Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
+            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
             // 5) Gom kết quả
             rectRotates = new List<RectRotate>();
             listScore = new List<double>();
@@ -634,7 +634,7 @@ namespace BeeCore
 
                     if (scoreSum != 0 && rectRotates.Count > 0)
                     {
-                        Common.PropetyTools[Global.IndexChoose][Index].ScoreResult =
+                        Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult =
                             (int)Math.Round(scoreSum / rectRotates.Count, 1);
                     }
                 }
@@ -740,7 +740,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
+            switch (Common.PropetyTools[Global.IndexProgChoose][Index].Results)
             {
                 case Results.OK:
                     cl =  Global.ParaShow.ColorOK;

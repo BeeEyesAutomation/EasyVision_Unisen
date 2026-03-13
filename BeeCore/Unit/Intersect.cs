@@ -279,7 +279,7 @@ namespace BeeCore
             Brush brushText = new SolidBrush(Global.ParaShow.TextColor);
             Color cl = Color.LimeGreen;
 
-            if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
+            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.NG)
                 cl = Global.ParaShow.ColorNG;
             else
                 cl = Global.ParaShow.ColorOK;

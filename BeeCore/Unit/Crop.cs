@@ -79,16 +79,16 @@ namespace BeeCore
                     if (rotArea != null)
                     {
                         matProcess = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask);
-                        String path = PathSaveImage + "\\" + Global.Project + "\\" + Common.PropetyTools[Global.IndexChoose][Index].Name + "_" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss") + ".png";
+                        String path = PathSaveImage + "\\" + Global.Project + "\\" + Common.PropetyTools[Global.IndexProgChoose][Index].Name + "_" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss") + ".png";
                         string dir = PathSaveImage + "\\" + Global.Project;
                         if (!Directory.Exists(dir))
                             Directory.CreateDirectory(dir);
                         Cv2.ImWrite(path, matProcess);
-                        Common.PropetyTools[Global.IndexChoose][Index].Results = Results.OK;
+                        Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.OK;
                     }
                     else
                     {
-                        Common.PropetyTools[Global.IndexChoose][Index].Results = Results.NG;
+                        Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
                     }    
                 }
                 catch(Exception e)
@@ -136,7 +136,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
+            switch (Common.PropetyTools[Global.IndexProgChoose][Index].Results)
             {
                 case Results.OK:
                     cl =  Global.ParaShow.ColorOK;
@@ -145,7 +145,7 @@ namespace BeeCore
                     cl = Global.ParaShow.ColorNG;
                     break;
             }
-            String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexProgChoose][Index].Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
                 Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);

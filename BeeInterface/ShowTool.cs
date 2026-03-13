@@ -68,6 +68,8 @@ namespace BeeCore.Funtion
                         control.RowCount = row + 1;
                         if(tool==null)
                             continue;
+                        if (tool.ItemTool == null)
+                            continue;
                         tool.ItemTool.Dock = DockStyle.Fill;
                         tool.ItemTool.Margin = new Padding(5, 0, 10, 5);
                         control.Controls.Add(tool.ItemTool, 0, row);

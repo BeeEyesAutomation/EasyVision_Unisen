@@ -1,6 +1,4 @@
 ﻿
-using BeeCore;
-using BeeCore.Funtion;
 using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -8,10 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace BeeInterface
 {
@@ -25,11 +20,13 @@ namespace BeeInterface
 
         /// <summary>Mat của ảnh được chọn (mat gốc trong dashboard). Nếu cần giữ lâu, hãy Clone() ở ngoài.</summary>
         public Mat Image { get; }
+        public int IndexChange { get; }
 
-        public RegisterImgSelectionChangedEventArgs(string name, Mat image)
+        public RegisterImgSelectionChangedEventArgs(string name, Mat image,int index)
         {
             Name = name;
             Image = image;
+            IndexChange = index;
         }
     }
 
@@ -407,7 +404,8 @@ namespace BeeInterface
                 TextAlign = ContentAlignment.MiddleLeft,
                 Margin = new Padding(0, 0, 0, 0)
             };
-            btnChange = new RJButton { BorderColor = bgTL2, Corner = Corner.None, BorderRadius = 10, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = false, IsNotChange = false, Text = "Change", IsCLick = IsChange, TextImageRelation = TextImageRelation.ImageBeforeText, Dock = DockStyle.Fill, Image = Properties.Resources.Refresh25, Margin = new Padding(0, 0, 0, 0) };
+            
+            btnChange = new RJButton { BorderColor = bgTL2, Corner = Corner.None, BorderRadius = 10, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = false, IsNotChange = false, Text = "Change", IsCLick = IsChange, TextImageRelation = TextImageRelation.ImageBeforeText, Dock = DockStyle.Fill, Image = Properties.Resources.Refresh, Margin = new Padding(0, 0, 0, 0) };
             btnNew = new RJButton { BorderColor = bgTL2, Corner = Corner.Right, BorderRadius = 10, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = false, IsNotChange = false, Text = "Add", IsCLick =! IsChange, TextImageRelation = TextImageRelation.ImageBeforeText, Dock = DockStyle.Fill, Image = Properties.Resources.Add, Margin = new Padding(0, 0, 5, 0) };
             btnUp = new RJButton {BorderRadius=5, BorderColor = bgTL2, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = true, IsNotChange = true, Text = "Up", IsCLick = false,Dock = DockStyle.Fill, Margin = new Padding(0, 5, 5, 5)};
             btndown = new RJButton { BorderRadius = 5, BorderColor = bgTL2, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = true, IsNotChange = true, Text = "Down", IsCLick = false,  Dock = DockStyle.Fill, Margin = new Padding(5, 5, 5, 5) };
@@ -529,7 +527,7 @@ namespace BeeInterface
             // 6. Báo là hiện không có item nào được chọn
             SelectedItemChanged?.Invoke(
                 this,
-                new RegisterImgSelectionChangedEventArgs(null, null)
+                new RegisterImgSelectionChangedEventArgs(null, null,-1)
             );
 
             // 7. Cập nhật layout (flow trống thì cũng ok)
@@ -776,6 +774,7 @@ namespace BeeInterface
                 new RegisterImgSelectionChangedEventArgs(
                     _selectedThumb.Item.Name,
                     _selectedThumb.Item.Image
+                    ,IndexSelected
                 )
             );
 
@@ -818,7 +817,7 @@ namespace BeeInterface
         public int IndexSelected = 0;
         private void SelectThumb(ImageThumbControl thumb)
         {
-            if (_selectedThumb == thumb) return;
+          //  if (_selectedThumb == thumb) return;
             if (_selectedThumb != null)
             {
                 _selectedThumb.Selected = false; _selectedThumb.Invalidate();
@@ -840,7 +839,7 @@ namespace BeeInterface
                     this,
                     new RegisterImgSelectionChangedEventArgs(
                         _selectedThumb.Item.Name,
-                        _selectedThumb.Item.Image
+                        _selectedThumb.Item.Image,IndexSelected
                     )
                 );
             }
