@@ -44,11 +44,11 @@ namespace BeeInterface
 				imgTemp.Image = Propety.bmRaw;
 			}
             
-            btnOnBinary.IsCLick = Propety.IsBinary;
-            this.btnOnBinary.Text = Propety.IsBinary == true ? "ON" : "OFF";
+            btnAutoBinary.IsCLick = Propety.IsBinary;
+            //this.btnAutoBinary.Text = Propety.IsBinary == true ? "ON" : "OFF";
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
 
-            AdjBorder.Value = Propety.Border;
+          
             trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
             trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
             trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
@@ -56,7 +56,7 @@ namespace BeeInterface
             if (Propety.rotArea == null)
                 Propety.rotArea = new RectRotate();
 
-            AdjColorTolerance.Value = Propety.ThreshBinary;
+          
          
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
             btnArea.IsCLick = true;
@@ -76,7 +76,12 @@ namespace BeeInterface
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
             AdjAspect.Value= Propety.Aspect;
-         //   lay2Mask.Visible = Global.TypeCrop == TypeCrop.Mask ? true : false;
+           lay2Mask.Visible = Global.TypeCrop == TypeCrop.Mask ? true : false;
+            layColorTolerace.Visible = Propety.TypeImg == TypeMat.Color ? true : false;
+            layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
+            AdjColorTolerance.Value = Propety.ColorTolerance;
+            AdjThreshGray.Value=Propety.ThreshBinary;
+            btnAutoBinary.IsCLick=Propety.IsAutoThreshBinary;
         }
 
         private void btnCropRect_Click(object sender, EventArgs e)
@@ -96,7 +101,7 @@ namespace BeeInterface
         private void btnCropArea_Click(object sender, EventArgs e)
         {
             Global.StatusDraw = StatusDraw.Edit;
-           // lay2Mask.Visible = false;
+            lay2Mask.Visible = false;
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
 
@@ -110,7 +115,7 @@ namespace BeeInterface
         private void btnClear_Click(object sender, EventArgs e)
         {
             Global.StatusDraw = StatusDraw.Edit;
-           // lay2Mask.Visible = true;
+          lay2Mask.Visible = true;
             Global.TypeCrop = TypeCrop.Mask;
             Propety.TypeCrop = Global.TypeCrop;
             if (Propety.rotMask == null)
@@ -344,7 +349,7 @@ namespace BeeInterface
             if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true;
-                AdjValueTemp.Value = Propety.pxRS;
+              
             }
         }
 
@@ -549,7 +554,7 @@ namespace BeeInterface
 
         private void AdjColorTolerance_ValueChanged(float obj)
         {
-            Propety.ThreshBinary = (int)AdjColorTolerance.Value;
+            Propety.ColorTolerance = (int)AdjColorTolerance.Value;
         }
 
         private void AdjThreshod_ValueChanged(float obj)
@@ -599,7 +604,7 @@ namespace BeeInterface
 
         private void rjButton1_Click(object sender, EventArgs e)
         {
-            AdjColorTolerance.Visible=!btn3.IsCLick;
+           
         }
 
         private void btn4_Click(object sender, EventArgs e)
@@ -622,11 +627,7 @@ namespace BeeInterface
             lay6.Visible = !btn6.IsCLick;
         }
 
-        private void btn7_Click(object sender, EventArgs e)
-        {
-            AdjValueTemp.Visible=!btn7.IsCLick;
-        }
-
+      
         private void btn8_Click(object sender, EventArgs e)
         {
             trackScore.Visible = !btn8.IsCLick;
@@ -657,15 +658,40 @@ namespace BeeInterface
             Propety.Aspect=AdjAspect.Value;
         }
 
-        private void AdjBorder_ValueChanged(float obj)
+   
+
+       
+
+        private void AdjThreshGray_ValueChanged(float obj)
         {
-            Propety.Border =(int) AdjBorder.Value;
+            Propety.ThreshBinary =(int) AdjThreshGray.Value;
         }
 
-        private void btnOnBinary_Click(object sender, EventArgs e)
+        private void btnAutoBinary_Click(object sender, EventArgs e)
         {
-            Propety.IsBinary = btnOnBinary.IsCLick;
-            this.btnOnBinary.Text = Propety.IsBinary == true ? "ON" : "OFF";
+            Propety.IsAutoThreshBinary=btnAutoBinary.IsCLick;
+            AdjThreshGray.Enabled = !Propety.IsAutoThreshBinary;
+        }
+
+        private void btnColor_Click(object sender, EventArgs e)
+        {
+            Propety.TypeImg=TypeMat.Color;
+            layColorTolerace.Visible=Propety.TypeImg==TypeMat.Color?true :false;
+            layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
+        }
+
+        private void btn3_Click(object sender, EventArgs e)
+        {
+            layColorTolerace.Visible = !btn3.IsCLick;
+            layGray.Visible=!btn3.IsCLick;
+            layTypeMat.Visible = !btn3.IsCLick;
+        }
+
+        private void btnGray_Click(object sender, EventArgs e)
+        {
+            Propety.TypeImg = TypeMat.Binary;
+            layColorTolerace.Visible = Propety.TypeImg == TypeMat.Color ? true : false;
+            layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
         }
     }
 }

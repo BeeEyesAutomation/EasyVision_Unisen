@@ -15,9 +15,9 @@ namespace BeeGlobal
     public class Global
     {
         public static bool IsReConnectCCD;
-        public static dynamic SettingPLC;
-        public static dynamic Header;
+
         public static bool IsShutDown;
+        public static List<int> ListIndexChoose=new List<int>();    
         public static dynamic Main=null;
         public static bool _IsDummy = false;
         public static event Action<bool> ChangeDummy;
@@ -296,7 +296,7 @@ namespace BeeGlobal
         public static string _pathSqlMaster;
         public static SqlConnection cnn = new SqlConnection();
         public static ImgShow ImgShow = ImgShow.Result;
-        public static int NumProgFromPLC = 1;
+        public static int NumProgFromPLC = 4;
         public static TypeCamera TypeCamera;
         public static Model Model = new Model();
         public static ParaCommon ParaCommon = new ParaCommon();

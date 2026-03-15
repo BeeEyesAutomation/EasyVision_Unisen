@@ -24,7 +24,7 @@ namespace BeeGlobal
     }
     public enum CornerAdj
     {
-        Bottom,Left,Right,Top,MidBotRight
+        Bottom, Left, Right, Top, MidBotRight
 
     }
     public enum ValuePLC {
@@ -58,8 +58,8 @@ namespace BeeGlobal
         // 🔹 THÊM
         public double AngleLineA_Deg;   // góc line A so với ảnh raw
         public double AngleLineB_Deg;   // góc line B so với ảnh raw
-      
-                                        // 🔹 THÊM
+
+        // 🔹 THÊM
         public SideLR LineA_SideOf_LineB; // trái / phải
         public SideTB LineB_SideOf_LineA; // trên / dưới
     }
@@ -80,7 +80,7 @@ namespace BeeGlobal
     }
     public enum DisplayResolution
     {
-        Full,Normal
+        Full, Normal
     }
     public enum ModeSaveProg
     {
@@ -88,15 +88,15 @@ namespace BeeGlobal
     }
     public enum TypeOutputRS
     {
-        AllTime,Blink,OKNG
+        AllTime, Blink, OKNG
     }
     public enum ModeCheck
     {
-       Single,Multi
+        Single, Multi
     }
     public enum ColorGp
     {
-        HSV,RGB,BGR
+        HSV, RGB, BGR
     }
     public enum Users
     {
@@ -104,12 +104,12 @@ namespace BeeGlobal
     }
     public enum ZeroPos
     {
-        Zero,ZeroADJ
+        Zero, ZeroADJ
     }
     //Corner
     public enum Values
     {
-        Mean, Median, Min,Max
+        Mean, Median, Min, Max
     }
     public enum MethodSample
     {
@@ -130,7 +130,7 @@ namespace BeeGlobal
         Reconnect,
         ErrorConnect,
         Ready,
-       
+
     }
     public enum CameraStatus
     {
@@ -162,13 +162,13 @@ namespace BeeGlobal
         Any, Horizontal, Vertical
     }
     public enum TriggerNum
-     {
+    {
         Trigger0,
         Trigger1,
         Trigger2,
         Trigger3,
         Trigger4
-     }
+    }
     public enum GapExtremum
     {
         Nearest,
@@ -179,11 +179,11 @@ namespace BeeGlobal
     public enum TypeIO
     {
         Input,
-        Output,ValueIn,ValueOut
+        Output, ValueIn, ValueOut
     }
     public enum TypeVar
     {
-        Int,Float,String
+        Int, Float, String
     }
     public enum I_O_Input
     {
@@ -205,7 +205,7 @@ namespace BeeGlobal
         Light1,
         Light2,
         Light3,
-        Alive, Dummy,Training,ResetQty
+        Alive, Dummy, Training, ResetQty
     }
     public enum ValueInput
     {
@@ -216,11 +216,11 @@ namespace BeeGlobal
     public enum ValueOutput
     {
         None,
-       
+
         Total,
         QtyOK,
         QtyNG,
-     
+
     }
     public enum I_O_Output
     {
@@ -250,8 +250,8 @@ namespace BeeGlobal
         Alive,
         Logic5,
         Logic6,
-        DoneCCD1,DoneCCD2, DoneCCD3, DoneCCD4,
-        ByPass,EditMode
+        DoneCCD1, DoneCCD2, DoneCCD3, DoneCCD4,
+        ByPass, EditMode
 
     }
     public enum SegmentStatType { Shortest, Longest, Average }
@@ -259,36 +259,36 @@ namespace BeeGlobal
     {
         Edit,
         Check,
-        Color,None,Choose,Scan
+        Color, None, Choose, Scan
     }
     public enum StatusIO
     {
         NotConnect,
         Reading,
         None,
-        Writing, ErrRead,ErrWrite
+        Writing, ErrRead, ErrWrite
     }
     public enum MethordEdge
     {
         StrongEdges,
         CloseEdges,
-        Binary,InvertBinary,None
+        Binary, InvertBinary, None
     }
     public enum TypeMeasure
     {
-        Angle,Distance,PointToPoint
+        Angle, Distance, PointToPoint
     }
     public enum TypeControler
     {
-        PLC,IO,PCI
+        PLC, IO, PCI
     }
     public enum DirectMeasure
     {
-       X,Y,XY
+        X, Y, XY
     }
     public enum MethordMeasure
     {
-       Min,Max,Medium
+        Min, Max, Medium
     }
     public enum Corner
     {
@@ -299,7 +299,7 @@ namespace BeeGlobal
     public enum ShapeType
     {
         Rectangle,
-        Ellipse,Hexagon,Polygon
+        Ellipse, Hexagon, Polygon
     }
 
     public enum AnchorPoint
@@ -307,7 +307,7 @@ namespace BeeGlobal
         None,
         TopLeft, TopRight, BottomLeft, BottomRight,
         Rotation, Center,
-        V0, V1, V2, V3, V4, V5 , Vertex// 6 đỉnh lục giác
+        V0, V1, V2, V3, V4, V5, Vertex// 6 đỉnh lục giác
     }
     public enum Result
     {
@@ -322,12 +322,15 @@ namespace BeeGlobal
     }
     public enum IO_Processing
     {
-      None,Trigger, Trigger2, Trigger3,DoneCCD, Trigger4, Result,Reset,Error,NoneErr,Close,ChangeMode,Light,ChangeProg,ByPass,Busy,TriggerLight,SendValue
+        None, Trigger, Trigger2, Trigger3, DoneCCD, Trigger4, Result, Reset, Error, NoneErr, Close, ChangeMode, Light, ChangeProg, ByPass, Busy, TriggerLight, SendValue
     }
     public enum AreaCrop
     {
         Rect, Circle
     }
+    public enum TypeMat{
+Color,Binary}
+
     public enum TypeTool
     {
         Position_Adjustment=0,

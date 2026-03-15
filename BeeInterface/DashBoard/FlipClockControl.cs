@@ -10,7 +10,7 @@ public class FlipClockDashboard : Control
 
 
 
-    public Color DigitBackColor { get; set; } = Color.FromArgb(20, 20, 20);
+    public Color DigitBackColor { get; set; } = Color.FromArgb(50,20, 20, 20);
     public Color DigitForeColor { get; set; } = Color.White;
 
     public int DigitSpacing { get; set; } = 6;
@@ -63,7 +63,7 @@ public class FlipClockDashboard : Control
         int digitWidth = (Width - DigitSpacing * (count + 1)) / count;
         int digitHeight = Height - DigitSpacing * 2;
 
-        float fontSize = digitHeight * 0.65f;
+        float fontSize = digitHeight * 0.8f;
 
         using (Font f = new Font("Consolas", fontSize, FontStyle.Bold))
         {
@@ -74,8 +74,8 @@ public class FlipClockDashboard : Control
             {
                 int x = DigitSpacing + i * (digitWidth + DigitSpacing);
                 int y = DigitSpacing;
-
-                Rectangle rect = new Rectangle(x, y, digitWidth, digitHeight);
+                int offSet = 5;
+                Rectangle rect = new Rectangle(x- offSet, y- offSet, digitWidth+ offSet*2, digitHeight+ offSet*2);
 
                 if (_time[i] != ':')
                 {

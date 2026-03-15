@@ -34,6 +34,14 @@ namespace BeeCore
         public int ValueXMax { get; set; }//HAU
         public int ValueYMax { get; set; }//HAU
         public int ValueCounter { get; set; }//HAU
+                                             // ===== LIST BOX AREA =====
+
+        /// <summary>
+        /// Các index box được chọn
+        /// </summary>
+        public List<int> ListIndexBox { get; set; } = new List<int>();
+        [field: NonSerialized]
+        public List<int> ListIndexBoxBackup { get; set; } = new List<int>();
     }
-    
+
 }

@@ -137,7 +137,7 @@ namespace BeeUi
             this.pEditTool = new ViewHost();
             this.BarRight = new BeeUi.Unit.Cameras();
             this.hideBar = new BeeUi.Unit.HideBar();
-            this.pHeader = new BeeUi.Common.Header();
+            this.pHeader = new Header();
             this.BtnHeaderBar = new BtnHeaderBar();
             this.statusStrip1.SuspendLayout();
             this.pEdit.SuspendLayout();
@@ -1387,7 +1387,7 @@ namespace BeeUi
         private System.Windows.Forms.Splitter split2;
         public System.Windows.Forms.Panel LayoutEnd;
         private AutoFontLabel autoFontLabel1;
-        public Common.Header pHeader;
+        public Header pHeader;
         private System.Windows.Forms.Splitter split1;
         public System.Windows.Forms.Panel pView;
         private System.Windows.Forms.Splitter split0;

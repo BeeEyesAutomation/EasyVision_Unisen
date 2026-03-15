@@ -37,10 +37,10 @@ namespace BeeUi.Unit
                                              //   Access.SaveProg("Program\\" + Global.Project + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
                                              //  Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
 
-                    Global.Header.RefreshListPJ();
+                     BeeInterface.G.Header.RefreshListPJ();
                     Global.IsLoadProgFist = true;
-                    Global.Header.ChangeProgram(Global.Project);
-                       // Global.Header.workLoadProgram.RunWorkerAsync();
+                     BeeInterface.G.Header.ChangeProgram(Global.Project);
+                       //  BeeInterface.G.Header.workLoadProgram.RunWorkerAsync();
                 }
                 else
                 {
@@ -52,7 +52,7 @@ namespace BeeUi.Unit
                 //IsLoad=true;
                 //G.listProgram.DataSource = PathFile;
                 //txtQrCode.Text = G.listProgram.SelectedValue.ToString();
-                //if (G.listProgram.FindStringExact(Properties.Settings.Default.programCurrent) == 0)
+                //if (G.listProgram.FindStringExact(BeeInterface.Properties.Settings.Default.programCurrent) == 0)
                 //{
                 //    this.LoadProg("Program\\" + G.listProgram.SelectedValue.ToString());
                 //}
@@ -72,8 +72,8 @@ namespace BeeUi.Unit
                 Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
                Directory.CreateDirectory("Program\\"+Global.Project);
                 Access.SaveProg("Program\\" + Global.Project+"\\"+ Global.Project+ ".prog", BeeCore.Common.PropetyTools);
-                Global.Header.RefreshListPJ();
-                Global.Header.ChangeProgram(Global.Project);
+                 BeeInterface.G.Header.RefreshListPJ();
+                 BeeInterface.G.Header.ChangeProgram(Global.Project);
              
             }
         }
@@ -104,7 +104,7 @@ namespace BeeUi.Unit
                 //if(G.listProgram.Items.Count>0)
                 //G.listProgram.SelectedIndex = indexCur - 1;
                // Directory.Delete("Program\\" + Global.Project,true);
-                Global.Header.RefreshListPJ();
+                 BeeInterface.G.Header.RefreshListPJ();
               //  string[] files = Directory.GetFiles("Program", "*.prog", SearchOption.TopDirectoryOnly);
               //String[]  PathFile = files.Select(a => Path.GetFileName(a)).ToArray();
               //  G.listProgram.DataSource = PathFile; IsSaveAs = true;
@@ -112,10 +112,10 @@ namespace BeeUi.Unit
                 Global.Project = G.listProgram.Items[0].ToString();
                 BeeInterface.Properties.Settings.Default.programCurrent = Global.Project;
                 BeeInterface.Properties.Settings.Default.Save();
-                Global.Header.RefreshListPJ(); Global.IsLoadProgFist = true;
-                Global.Header.ChangeProgram(Global.Project);
-                //if (!Global.Header.workLoadProgram.IsBusy)
-                //    Global.Header.workLoadProgram.RunWorkerAsync();
+                 BeeInterface.G.Header.RefreshListPJ(); Global.IsLoadProgFist = true;
+                 BeeInterface.G.Header.ChangeProgram(Global.Project);
+                //if (! BeeInterface.G.Header.workLoadProgram.IsBusy)
+                //     BeeInterface.G.Header.workLoadProgram.RunWorkerAsync();
 
             }
 
@@ -217,9 +217,9 @@ namespace BeeUi.Unit
 
         private void btnRename_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show(" Rename Prog To " + Global.Header.txtQrCode.Text+ " .Are you sure!", "Rename Prog", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show(" Rename Prog To " +  BeeInterface.G.Header.txtQrCode.Text+ " .Are you sure!", "Rename Prog", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                String newName = Global.Header.txtQrCode.Text.Trim();
+                String newName =  BeeInterface.G.Header.txtQrCode.Text.Trim();
                 if ( Directory.Exists("Program\\"+Global.Project) && !Directory.Exists("Program\\" + newName))
                 {
                    
@@ -235,7 +235,7 @@ namespace BeeUi.Unit
              
                    
                     G.listProgram.Visible = false;
-                    Global.Header.RefreshListPJ();
+                     BeeInterface.G.Header.RefreshListPJ();
 
                     Global.Project = newName;
                     BeeInterface.Properties.Settings.Default.programCurrent = Global.Project;

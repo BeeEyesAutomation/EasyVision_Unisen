@@ -1586,60 +1586,90 @@ struct MvFrameGuard
 //}
 uchar* CCD::ReadCCD(int indexCCD, int* rows, int* cols, int* Type)
 {
+	
 	auto t0 = std::chrono::steady_clock::now();
-	*rows = *cols = *Type = 0;
-
-	if (IsWaiting || !m_pcMyCamera[indexCCD])
-		return nullptr;
-
-	MV_FRAME_OUT frameOut{};
-	if (m_pcMyCamera[indexCCD]->GetImageBuffer(&frameOut, 1000) != MV_OK)
-		return nullptr;
-
-	MvFrameGuard guard(m_pcMyCamera[indexCCD], &frameOut);
-
-	auto& info = frameOut.stFrameInfo;
-	if (!frameOut.pBufAddr || info.nWidth == 0 || info.nHeight == 0)
-		return nullptr;
-
-	const int w = info.nWidth;
-	const int h = info.nHeight;
-
 	uchar* image_uchar = nullptr;
-
-	// =====================================================
-	// 1️⃣ Nếu là Mono8 → copy trực tiếp
-	// =====================================================
-	if (info.enPixelType == PixelType_Gvsp_Mono8)
+	*rows = *cols = *Type = 0;
+	switch (TypeCamera)
 	{
-		size_t imageSize = (size_t)w * h;
-		image_uchar = new uchar[imageSize];
-
-		std::memcpy(image_uchar, frameOut.pBufAddr, imageSize);
-
-		*rows = h;
-		*cols = w;
-		*Type = CV_8UC1;
-	}
-	// =====================================================
-	// 2️⃣ Nếu KHÔNG phải Mono8 → convert sang BGR
-	// =====================================================
-	else
-	{
-		cv::Mat dstBGR;
-
-		if (!ConvertBySDKEx(m_pcMyCamera[indexCCD], frameOut, dstBGR))
+	case 1: { // Camera SDK
+		if (IsWaiting || !m_pcMyCamera[indexCCD])
 			return nullptr;
 
-		size_t imageSize = (size_t)w * h * 3;
-		image_uchar = new uchar[imageSize];
+		MV_FRAME_OUT frameOut{};
+		if (m_pcMyCamera[indexCCD]->GetImageBuffer(&frameOut, 1000) != MV_OK)
+			return nullptr;
 
-		std::memcpy(image_uchar, dstBGR.data, imageSize);
+		MvFrameGuard guard(m_pcMyCamera[indexCCD], &frameOut);
 
-		*rows = h;
-		*cols = w;
-		*Type = CV_8UC3;
+		auto& info = frameOut.stFrameInfo;
+		if (!frameOut.pBufAddr || info.nWidth == 0 || info.nHeight == 0)
+			return nullptr;
+
+		const int w = info.nWidth;
+		const int h = info.nHeight;
+
+
+
+		// =====================================================
+		// 1️⃣ Nếu là Mono8 → copy trực tiếp
+		// =====================================================
+		if (info.enPixelType == PixelType_Gvsp_Mono8)
+		{
+			size_t imageSize = (size_t)w * h;
+			image_uchar = new uchar[imageSize];
+
+			std::memcpy(image_uchar, frameOut.pBufAddr, imageSize);
+
+			*rows = h;
+			*cols = w;
+			*Type = CV_8UC1;
+		}
+		// =====================================================
+		// 2️⃣ Nếu KHÔNG phải Mono8 → convert sang BGR
+		// =====================================================
+		else
+		{
+			cv::Mat dstBGR;
+
+			if (!ConvertBySDKEx(m_pcMyCamera[indexCCD], frameOut, dstBGR))
+				return nullptr;
+
+			size_t imageSize = (size_t)w * h * 3;
+			image_uchar = new uchar[imageSize];
+
+			std::memcpy(image_uchar, dstBGR.data, imageSize);
+
+			*rows = h;
+			*cols = w;
+			*Type = CV_8UC3;
+		}
+		break;
 	}
+	default: { // OpenCV VideoCapture
+		cv::Mat frame;
+		if (!camUSB.grab() || !camUSB.retrieve(frame))
+			return nullptr;
+
+		cv::Mat out;
+		if (frame.type() == CV_8UC1)
+			cv::cvtColor(frame, out, cv::COLOR_GRAY2BGR);
+		else if (frame.type() == CV_8UC4)
+			cv::cvtColor(frame, out, cv::COLOR_BGRA2BGR);
+		else
+			out = frame;
+
+		*rows = out.rows;
+		*cols = out.cols;
+		*Type = out.type();
+
+		int size = (int)(out.total() * out.elemSize());
+		image_uchar = new uchar[size];
+		memcpy(image_uchar, out.data, size);
+		break;
+	}
+	}
+	
 
 	// ================= FPS =================
 	frameCount++;

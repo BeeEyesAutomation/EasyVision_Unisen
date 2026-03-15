@@ -41,6 +41,8 @@ namespace BeeCore
         public event Action<int> PercentChange;
         [NonSerialized]
         public bool IsNew = false;
+        public ModeCheck ModeCheck = ModeCheck.Single;
+        public List<RectRotate> listRotScan = new List<RectRotate>();
         public int Percent
         {
             get => _Percent;
@@ -76,7 +78,8 @@ namespace BeeCore
         {
            
             if (rotArea == null) rotArea = new RectRotate();
-           
+            if (rotMask == null) rotMask = new RectRotate();
+            if (listRotScan == null) listRotScan = new List<RectRotate>();
             Common.PropetyTools[IndexThread][Index].StepValue = 1;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
             Common.PropetyTools[IndexThread][Index].MaxValue = 100;
@@ -303,6 +306,8 @@ namespace BeeCore
         public Compares CompareArea = Compares.More;
         public float LimitArea = 100;
         public int Epoch =100;
+        [NonSerialized]
+        public String NameChoose = "";
         public Mode TypeMode
         {
             get
@@ -722,369 +727,61 @@ namespace BeeCore
         [NonSerialized]
         public List< ResultItem> ResultItem=new List<ResultItem>() ;
         int numOK = 0, numNG = 0;
-        public void Complete()
+        double CalcArea(ResultItem r, LabelItem item, out double percentOut)
         {
-            if (Global.IsIntialPython)
+            percentOut = 0;
+
+            if (item.Name == "T_CHI")
             {
-                try
-                {
+                Rect rect = new Rect(
+                    (int)r.rot._PosCenter.X + (int)r.rot._rect.X,
+                    (int)r.rot._PosCenter.Y + (int)r.rot._rect.Y,
+                    (int)r.rot._rect.Width,
+                    (int)r.rot._rect.Height);
 
+                if (r.matProcess == null)
+                    r.matProcess = new Mat();
 
-                    try
-                    {
-                        ResultItem = new List<ResultItem>();
-                        rectRotates = new List<RectRotate>();
-                        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-                        int i = 0;
-                        numOK = 0; numNG = 0;
-                        int scoreRS = 0;
-                        List<String> _listLabelCompare = new List<String>();
-                        if (labelItems == null)
-                        {
-                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                            return;
-                        }
-                        Content = "";
-                   
-                        foreach (ResultItem rs in resultTemp)
-                        {
-                            ResultItem.Add(new ResultItem(rs.Name));
-                            ResultItem[i].rot = rs.rot;
-                            ResultItem[i].Score = rs.Score;
-                            int index = labelItems.FindIndex(item => string.Equals(item.Name, rs.Name, StringComparison.OrdinalIgnoreCase));
-                            if (index > -1)
-                            {
-                                LabelItem item = labelItems[index];
-                                if (!item.IsUse)
-                                { i++; continue; }
-                                bool IsOK = false;
-                                if (item.IsX)
-                                    if (IntersectX(rs.rot, item.ValueX))
-                                        IsOK = true;
-                                     else
-                                    { i++; continue; }
-                                if (item.IsY)
-                                      if (IntersectY(rs.rot, item.ValueY))
-                                            IsOK = true;
-                                        else
-                                    { i++; continue; }
-                                if (item.IsXMax)
-                                    if (IntersectXMax(rs.rot, item.ValueXMax))
-                                        IsOK = true;
-                                    else
-                                    { i++; continue; }
-                                if (item.IsYMax)
-                                    if (IntersectYMax(rs.rot, item.ValueYMax))
-                                        IsOK = true;
-                                    else
-                                    { i++; continue; }
-                                if (item.IsHeight)
-                                {
-                                    IsOK = false;
-                                    if (rs.rot._rect.Height >= item.ValueHeight)
-                                        IsOK = true;
+                if (!r.matProcess.Empty())
+                    r.matProcess.Dispose();
 
-                                }    
-                                   
-                                if (item.IsWidth)
-                                {
-                                    IsOK = false;
-                                    if (rs.rot._rect.Width >= item.ValueWidth)
-                                        IsOK = true;
-                                }
-                                if (IsLine)
-                                {
-                                    
-                                    if (item.IsDistance)
-                                    {
-                                        if (LineVerital != null)
-                                        {
-                                            PointF point = new PointF();
-                                            ResultItem[i].Distance = (float)Cal.DistanceLine2D_RectRotate(LineVerital, rs.rot, out point);
-                                            if (ResultItem[i].Distance <= item.ValueDistance)
-                                                IsOK = true;
+                r.matProcess = matCropTemp.Clone();
 
-                                            ResultItem[i].point = point;
+                percentOut = CalcMissingPercent_AutoMinMax(ref r.matProcess, rect);
 
-                                        }
-                                        if(!Line2D.Found)
-                                            IsOK = true;
-
-                                    }
-                                }
-                                    double Area = 0;
-                                if (item.IsArea)
-                                {
-                                    IsOK = false;
-                                    if (item.Name=="T_CHI")
-                                    {
-                                      
-                                        Rect rect=  new Rect((int)rs.rot._PosCenter.X+(int)rs.rot._rect.X, (int)rs.rot._PosCenter.Y + (int)rs.rot._rect.Y, (int)rs.rot._rect.Width, (int)rs.rot._rect.Height);
-                                        if (ResultItem[i].matProcess == null) ResultItem[i].matProcess = new Mat();
-                                        if (!ResultItem[i].matProcess.Empty()) ResultItem[i].matProcess.Dispose();
-                                        ResultItem[i].matProcess = matCropTemp.Clone();
-                                        percent =  CalcMissingPercent_AutoMinMax(ref ResultItem[i].matProcess, rect);
-                                        Area = percent * rs.rot._rect.Size.Width * rs.rot._rect.Size.Height / 100;
-                                        if (Area >= item.ValueArea * 100)
-                                            IsOK = true;
-                                      
-                                    }
-                                    else
-                                    {
-                                        if (item.Name == "B_CHI")
-                                        {
-                                            Area = rs.rot._rect.Size.Width * rs.rot._rect.Size.Height;
-                                            if (Area >= item.ValueArea * 100)
-                                            {
-                                                IsOK = true;
-                                            }    
-                                            else
-                                            {
-                                                if (item.IsCounter)
-                                                {
-                                                    int count = resultTemp.Count(it => it.Name == rs.Name); ;// labelList.Count(l => l == label);
-                                                    if (count >= item.ValueCounter)
-                                                        IsOK = true;
-                                                    else
-                                                        IsOK = false;
-                                                }
-
-                                            }    
-                                        }
-                                        else
-                                        {
-                                            Area = rs.rot._rect.Size.Width * rs.rot._rect.Size.Height;
-                                            if (Area >= item.ValueArea * 100)
-                                                IsOK = true;
-                                        }    
-                                          
-                                      
-                                    }
-
-                                }
-                                
-                                if (item.Name != "B_CHI")
-                                    if (item.IsCounter)
-                                {
-                                    int count = resultTemp.Count(it => it.Name == rs.Name); ;//  labelList.Count(l => l == label);
-                                        if (count >= item.ValueCounter)
-                                        IsOK = true;
-                                    else
-                                        IsOK = false;
-                                }
-                                if (!item.IsHeight && !item.IsWidth && !item.IsArea && !item.IsX && !item.IsY && !item.IsXMax && !item.IsYMax && !item.IsDistance && !item.IsCounter)
-                                    IsOK = true;
-                                ResultItem[i].IsOK = IsOK;
-                               
-                                ResultItem[i].Area =(float) Area;
-                                ResultItem[i].Percent = (float)percent;
-                                
-                                if (IsOK)
-                                {
-                                    //listOK.Add(true);
-                                    //rectRotates.Add(rs.rot);
-                                    //listLabel.Add(label);
-                                    //scoreRS += (int)scoreList[i];
-                                    //listScore.Add(scoreList[i]);
-                                    numOK++;
-                                }
-                                //else
-                                //{
-                                //    listOK.Add(false);
-                                //    rectRotates.Add(rs.rot);
-                                //    listLabel.Add(label);
-                                //    scoreRS += (int)scoreList[i];
-                                //    listScore.Add(scoreList[i]);
-
-                                //}
-                                //if (IsCheckLine)
-                                //{
-                                //    switch (CompareLine)
-                                //    {
-                                //        case Compares.More:
-
-                                //            break;
-                                //        case Compares.Less:
-                                //            if (rs.rot._rect.Height <= yLine)
-                                //            {
-                                //                listOK.Add(true);
-                                //                rectRotates.Add(rs.rot);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-                                //                numOK++;
-                                //            }
-                                //            else
-                                //            {
-                                //                listOK.Add(false);
-                                //                rectRotates.Add(rs.rot);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-
-                                //            }
-                                //            break;
-                                //    }
-
-
-                                //}
-                                //else if (IsCheckArea)
-                                //{
-                                //    switch (CompareArea)
-                                //    {
-                                //        case Compares.More:
-                                //            if (rs.rot._rect.Size.Width * rs.rot._rect.Size.Height >= LimitArea*100)
-                                //            {
-                                //                listOK.Add(true);
-                                //                rectRotates.Add(rs.rot);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-                                //                numOK++;
-                                //            }
-                                //            else
-                                //            {
-                                //                listOK.Add(false);
-                                //                rectRotates.Add(rs.rot);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-
-                                //            }
-                                //            break;
-                                //        case Compares.Less:
-                                //            if (rs.rot._rect.Size.Width * rs.rot._rect.Size.Height <= LimitArea*100)
-                                //            {
-                                //                listOK.Add(true);
-                                //                rectRotates.Add(rs.rot);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-                                //                numOK++;
-                                //            }
-                                //            else
-                                //            {
-                                //                listOK.Add(false);
-                                //                rectRotates.Add(rs.rot);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-
-                                //            }
-                                //            break;
-                                //    }
-
-
-                                //}
-                                //else
-                                //{
-                                //    listOK.Add(true);
-                                //    Content += label;
-                                //    rectRotates.Add(rs.rot);
-                                //    listLabel.Add(label);
-                                //    scoreRS += (int)scoreList[i];
-                                //    listScore.Add(scoreList[i]); numOK++;
-                                //}
-
-                            }
-                            i++;
-                        }
-                        //if (IsArrangeBox)
-                        //{
-                        //    List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
-
-                        //    for (int j = 0; j < rectRotates.Count; j++)
-                        //    {
-                        //        combined.Add(new RotatedBoxInfo
-                        //        {
-                        //            Box = rectRotates[j],
-                        //            Label = ResultItem[j].Name,
-                        //            Score = ResultItem[j].Score
-                        //        });
-                        //    }
-                        //    switch (ArrangeBox)
-                        //    {
-                        //        case ArrangeBox.X_Left_Rigth:
-                        //            // Sort theo X tăng dần (trái → phải)
-                        //            combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
-                        //            break;
-                        //        case ArrangeBox.X_Right_Left:
-                        //            // Sort theo X giảm dần (phải → trái)
-                        //            combined = combined.OrderByDescending(b => b.Box._PosCenter.X).ToList();
-
-                        //            break;
-                        //        case ArrangeBox.Y_Left_Rigth:
-                        //            // Sort theo Y tăng dần (trên → dưới)
-                        //            combined = combined.OrderBy(b => b.Box._PosCenter.Y).ToList();
-                        //            break;
-                        //        case ArrangeBox.Y_Right_Left:
-                        //            combined = combined.OrderByDescending(b => b.Box._PosCenter.Y).ToList();
-                        //            break;
-                        //    }
-                        //    rectRotates = combined.Select(b => b.Box).ToList();
-                        //    listLabel = combined.Select(b => b.Label).ToList();
-                        //    listScore = combined.Select(b => b.Score).ToList();
-                        //    Content = "";
-                        //    foreach (string s in listLabel)
-                        //        Content += s;
-                        //}
-                        Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(scoreRS / (rectRotates.Count() * 1.0));
-                        if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
-                        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-                        switch (Compare)
-                        {
-                            case Compares.Equal:
-                                if (numOK != NumObject)
-                                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                                break;
-                            case Compares.Less:
-                                if (numOK >= NumObject)
-                                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                                break;
-                            case Compares.More:
-                                if (numOK <= NumObject)
-                                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                                break;
-                        }
-                        if (IsEnContent)
-                        {
-                            if (Matching != Content)
-                            {
-                                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                            }
-                        }
-                        if(IsLine)
-                        {
-                           if(!Line2D.Found)
-                                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                        }    
-                        G.IsChecked = true;
-                        // MessageBox.Show($"Predict xong: {boxes.len()} boxes");
-                    }
-                    catch (Exception ex)
-                    {
-
-                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
-                        // Global.Ex = "Complete_Learning" + ex.Message;
-                        // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
-                    //  Global.Ex = "Complete_Learning" + ex.Message;
-                    // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
-                }
-            }
-            else
-            {
-
-                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "No Initial"));
-                //  Global.Ex = "No Initial PY";
-                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                return percentOut * r.rot._rect.Width * r.rot._rect.Height / 100;
             }
 
+            return r.rot._rect.Width * r.rot._rect.Height;
+        }
+        int FindScanBox(ResultItem rs ,String Name)
+        {
+            for (int k = 0; k < listRotScan.Count; k++)
+            {
+                if(listRotScan[k].Name != Name) continue ;
+                if (listRotScan[k].ContainsPoint(rs.rot._PosCenter))
+                  
+                    return k;
+            }
+
+            return -1;
+        }
+        double CalcScanArea(int scanIndex, LabelItem item)
+        {
+            RectRotate scan = listRotScan[scanIndex];
+
+            double area = 0;
+
+            foreach (var r in resultTemp)
+            {
+                if (r.Name != item.Name)
+                    continue;
+
+                if (scan.ContainsPoint(r.rot._PosCenter))
+                    area += r.Area;
+            }
+
+            return area;
         }
         //public void Complete()
         //{
@@ -1096,14 +793,11 @@ namespace BeeCore
 
         //            try
         //            {
-        //                listOK = new List<bool>();
-        //                listLabel = new List<string>();
+        //                ResultItem = new List<ResultItem>();
         //                rectRotates = new List<RectRotate>();
-        //                listScore = new List<float>();
-        //                // cycleTime = (int)G.YoloPlus.Cycle;
         //                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
         //                int i = 0;
-        //                int numOK = 0, numNG = 0;
+        //                numOK = 0; numNG = 0;
         //                int scoreRS = 0;
         //                List<String> _listLabelCompare = new List<String>();
         //                if (labelItems == null)
@@ -1112,106 +806,289 @@ namespace BeeCore
         //                    return;
         //                }
         //                Content = "";
-        //                //foreach (Labels label in listLabelCompare)
-        //                //{
-        //                //    if (label == null) continue;
-        //                //    if (!label.IsEn) continue;
-        //                //    _listLabelCompare.Add(label.label);
-        //                //}
-        //                foreach (String label in labelList)
-        //                {
-        //                    String labelConvert = label;
-        //                    if(TypeYolo==TypeYolo.RCNN)
-        //                    {
-        //                        int indexLabel = Convert.ToInt32(label);
 
-        //                        labelConvert = labelItems[indexLabel-1].Name;
-        //                    }    
-        //                    int index = labelItems.FindIndex(item =>string.Equals(item.Name, labelConvert, StringComparison.OrdinalIgnoreCase));
-        //                    if (index>-1)
+        //                foreach (ResultItem rs in resultTemp)
+        //                {
+        //                    ResultItem.Add(new ResultItem(rs.Name));
+        //                    ResultItem[i].rot = rs.rot;
+        //                    ResultItem[i].Score = rs.Score;
+        //                    int index = labelItems.FindIndex(item => string.Equals(item.Name, rs.Name, StringComparison.OrdinalIgnoreCase));
+        //                    if (index > -1)
         //                    {
         //                        LabelItem item = labelItems[index];
         //                        if (!item.IsUse)
         //                        { i++; continue; }
         //                        bool IsOK = false;
+        //                        if (item.IsX)
+        //                            if (IntersectX(rs.rot, item.ValueX))
+        //                                IsOK = true;
+        //                             else
+        //                            { i++; continue; }
+        //                        if (item.IsY)
+        //                              if (IntersectY(rs.rot, item.ValueY))
+        //                                    IsOK = true;
+        //                                else
+        //                            { i++; continue; }
+        //                        if (item.IsXMax)
+        //                            if (IntersectXMax(rs.rot, item.ValueXMax))
+        //                                IsOK = true;
+        //                            else
+        //                            { i++; continue; }
+        //                        if (item.IsYMax)
+        //                            if (IntersectYMax(rs.rot, item.ValueYMax))
+        //                                IsOK = true;
+        //                            else
+        //                            { i++; continue; }
         //                        if (item.IsHeight)
+        //                        {
+        //                            IsOK = false;
         //                            if (rs.rot._rect.Height >= item.ValueHeight)
         //                                IsOK = true;
+
+        //                        }    
+
         //                        if (item.IsWidth)
+        //                        {
+        //                            IsOK = false;
         //                            if (rs.rot._rect.Width >= item.ValueWidth)
         //                                IsOK = true;
-        //                        if (item.IsArea)
-        //                            if (rs.rot._rect.Size.Width * rs.rot._rect.Size.Height >= item.ValueArea * 100)
-        //                                IsOK = true;
-        //                        if(!item.IsHeight&&!item.IsWidth&&!item.IsArea)
-        //                            IsOK = true;
-        //                        if (IsOK)
-        //                        {
-        //                            listOK.Add(true);
-        //                            rectRotates.Add(rs.rot);
-        //                            listLabel.Add(labelConvert);
-        //                            scoreRS += (int)scoreList[i];
-        //                            listScore.Add(scoreList[i]);
-        //                            numOK++;
         //                        }
-        //                        else
+        //                        if (IsLine)
         //                        {
-        //                            listOK.Add(false);
-        //                            rectRotates.Add(rs.rot);
-        //                            listLabel.Add(labelConvert);
-        //                            scoreRS += (int)scoreList[i];
-        //                            listScore.Add(scoreList[i]);
+
+        //                            if (item.IsDistance)
+        //                            {
+        //                                if (LineVerital != null)
+        //                                {
+        //                                    PointF point = new PointF();
+        //                                    ResultItem[i].Distance = (float)Cal.DistanceLine2D_RectRotate(LineVerital, rs.rot, out point);
+        //                                    if (ResultItem[i].Distance <= item.ValueDistance)
+        //                                        IsOK = true;
+
+        //                                    ResultItem[i].point = point;
+
+        //                                }
+        //                                if(!Line2D.Found)
+        //                                    IsOK = true;
+
+        //                            }
+        //                        }
+        //                            double Area = 0;
+        //                        if (item.IsArea)
+        //                        {
+        //                            IsOK = false;
+        //                            if (item.Name=="T_CHI")
+        //                            {
+
+        //                                Rect rect=  new Rect((int)rs.rot._PosCenter.X+(int)rs.rot._rect.X, (int)rs.rot._PosCenter.Y + (int)rs.rot._rect.Y, (int)rs.rot._rect.Width, (int)rs.rot._rect.Height);
+        //                                if (ResultItem[i].matProcess == null) ResultItem[i].matProcess = new Mat();
+        //                                if (!ResultItem[i].matProcess.Empty()) ResultItem[i].matProcess.Dispose();
+        //                                ResultItem[i].matProcess = matCropTemp.Clone();
+        //                                percent =  CalcMissingPercent_AutoMinMax(ref ResultItem[i].matProcess, rect);
+        //                                Area = percent * rs.rot._rect.Size.Width * rs.rot._rect.Size.Height / 100;
+        //                                if (Area >= item.ValueArea * 100)
+        //                                    IsOK = true;
+
+        //                            }
+        //                            else
+        //                            {
+        //                                if (item.Name == "B_CHI")
+        //                                {
+        //                                    Area = rs.rot._rect.Size.Width * rs.rot._rect.Size.Height;
+        //                                    if (Area >= item.ValueArea * 100)
+        //                                    {
+        //                                        IsOK = true;
+        //                                    }    
+        //                                    else
+        //                                    {
+        //                                        if (item.IsCounter)
+        //                                        {
+        //                                            int count = resultTemp.Count(it => it.Name == rs.Name); ;// labelList.Count(l => l == label);
+        //                                            if (count >= item.ValueCounter)
+        //                                                IsOK = true;
+        //                                            else
+        //                                                IsOK = false;
+        //                                        }
+
+        //                                    }    
+        //                                }
+        //                                else
+        //                                {
+        //                                    Area = rs.rot._rect.Size.Width * rs.rot._rect.Size.Height;
+        //                                    if (Area >= item.ValueArea * 100)
+        //                                        IsOK = true;
+        //                                }    
+
+
+        //                            }
 
         //                        }
-                           
+
+        //                        if (item.Name != "B_CHI")
+        //                            if (item.IsCounter)
+        //                        {
+        //                            int count = resultTemp.Count(it => it.Name == rs.Name); ;//  labelList.Count(l => l == label);
+        //                                if (count >= item.ValueCounter)
+        //                                IsOK = true;
+        //                            else
+        //                                IsOK = false;
+        //                        }
+        //                        if (!item.IsHeight && !item.IsWidth && !item.IsArea && !item.IsX && !item.IsY && !item.IsXMax && !item.IsYMax && !item.IsDistance && !item.IsCounter)
+        //                            IsOK = true;
+        //                        ResultItem[i].IsOK = IsOK;
+
+        //                        ResultItem[i].Area =(float) Area;
+        //                        ResultItem[i].Percent = (float)percent;
+
+        //                        if (IsOK)
+        //                        {
+        //                            //listOK.Add(true);
+        //                            //rectRotates.Add(rs.rot);
+        //                            //listLabel.Add(label);
+        //                            //scoreRS += (int)scoreList[i];
+        //                            //listScore.Add(scoreList[i]);
+        //                            numOK++;
+        //                        }
+        //                        //else
+        //                        //{
+        //                        //    listOK.Add(false);
+        //                        //    rectRotates.Add(rs.rot);
+        //                        //    listLabel.Add(label);
+        //                        //    scoreRS += (int)scoreList[i];
+        //                        //    listScore.Add(scoreList[i]);
+
+        //                        //}
+        //                        //if (IsCheckLine)
+        //                        //{
+        //                        //    switch (CompareLine)
+        //                        //    {
+        //                        //        case Compares.More:
+
+        //                        //            break;
+        //                        //        case Compares.Less:
+        //                        //            if (rs.rot._rect.Height <= yLine)
+        //                        //            {
+        //                        //                listOK.Add(true);
+        //                        //                rectRotates.Add(rs.rot);
+        //                        //                listLabel.Add(label);
+        //                        //                scoreRS += (int)scoreList[i];
+        //                        //                listScore.Add(scoreList[i]);
+        //                        //                numOK++;
+        //                        //            }
+        //                        //            else
+        //                        //            {
+        //                        //                listOK.Add(false);
+        //                        //                rectRotates.Add(rs.rot);
+        //                        //                listLabel.Add(label);
+        //                        //                scoreRS += (int)scoreList[i];
+        //                        //                listScore.Add(scoreList[i]);
+
+        //                        //            }
+        //                        //            break;
+        //                        //    }
+
+
+        //                        //}
+        //                        //else if (IsCheckArea)
+        //                        //{
+        //                        //    switch (CompareArea)
+        //                        //    {
+        //                        //        case Compares.More:
+        //                        //            if (rs.rot._rect.Size.Width * rs.rot._rect.Size.Height >= LimitArea*100)
+        //                        //            {
+        //                        //                listOK.Add(true);
+        //                        //                rectRotates.Add(rs.rot);
+        //                        //                listLabel.Add(label);
+        //                        //                scoreRS += (int)scoreList[i];
+        //                        //                listScore.Add(scoreList[i]);
+        //                        //                numOK++;
+        //                        //            }
+        //                        //            else
+        //                        //            {
+        //                        //                listOK.Add(false);
+        //                        //                rectRotates.Add(rs.rot);
+        //                        //                listLabel.Add(label);
+        //                        //                scoreRS += (int)scoreList[i];
+        //                        //                listScore.Add(scoreList[i]);
+
+        //                        //            }
+        //                        //            break;
+        //                        //        case Compares.Less:
+        //                        //            if (rs.rot._rect.Size.Width * rs.rot._rect.Size.Height <= LimitArea*100)
+        //                        //            {
+        //                        //                listOK.Add(true);
+        //                        //                rectRotates.Add(rs.rot);
+        //                        //                listLabel.Add(label);
+        //                        //                scoreRS += (int)scoreList[i];
+        //                        //                listScore.Add(scoreList[i]);
+        //                        //                numOK++;
+        //                        //            }
+        //                        //            else
+        //                        //            {
+        //                        //                listOK.Add(false);
+        //                        //                rectRotates.Add(rs.rot);
+        //                        //                listLabel.Add(label);
+        //                        //                scoreRS += (int)scoreList[i];
+        //                        //                listScore.Add(scoreList[i]);
+
+        //                        //            }
+        //                        //            break;
+        //                        //    }
+
+
+        //                        //}
+        //                        //else
+        //                        //{
+        //                        //    listOK.Add(true);
+        //                        //    Content += label;
+        //                        //    rectRotates.Add(rs.rot);
+        //                        //    listLabel.Add(label);
+        //                        //    scoreRS += (int)scoreList[i];
+        //                        //    listScore.Add(scoreList[i]); numOK++;
+        //                        //}
+
         //                    }
         //                    i++;
         //                }
-        //                int k = 0; BitsResult = new bool[16];
-        //                foreach (bool Iss in listOK)
-        //                {
-        //                    BitsResult[k] = Iss;
-        //                        k++;
-        //                }
-        //                if (IsArrangeBox)
-        //                {
-        //                    List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
+        //                //if (IsArrangeBox)
+        //                //{
+        //                //    List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
 
-        //                    for (int j = 0; j < rectRotates.Count; j++)
-        //                    {
-        //                        combined.Add(new RotatedBoxInfo
-        //                        {
-        //                            Box = rectRotates[j],
-        //                            Label = listLabel[j],
-        //                            Score = listScore[j]
-        //                        });
-        //                    }
-        //                    switch (ArrangeBox)
-        //                    {
-        //                        case ArrangeBox.X_Left_Rigth:
-        //                            // Sort theo X tăng dần (trái → phải)
-        //                            combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
-        //                            break;
-        //                        case ArrangeBox.X_Right_Left:
-        //                            // Sort theo X giảm dần (phải → trái)
-        //                            combined = combined.OrderByDescending(b => b.Box._PosCenter.X).ToList();
+        //                //    for (int j = 0; j < rectRotates.Count; j++)
+        //                //    {
+        //                //        combined.Add(new RotatedBoxInfo
+        //                //        {
+        //                //            Box = rectRotates[j],
+        //                //            Label = ResultItem[j].Name,
+        //                //            Score = ResultItem[j].Score
+        //                //        });
+        //                //    }
+        //                //    switch (ArrangeBox)
+        //                //    {
+        //                //        case ArrangeBox.X_Left_Rigth:
+        //                //            // Sort theo X tăng dần (trái → phải)
+        //                //            combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
+        //                //            break;
+        //                //        case ArrangeBox.X_Right_Left:
+        //                //            // Sort theo X giảm dần (phải → trái)
+        //                //            combined = combined.OrderByDescending(b => b.Box._PosCenter.X).ToList();
 
-        //                            break;
-        //                        case ArrangeBox.Y_Left_Rigth:
-        //                            // Sort theo Y tăng dần (trên → dưới)
-        //                            combined = combined.OrderBy(b => b.Box._PosCenter.Y).ToList();
-        //                            break;
-        //                        case ArrangeBox.Y_Right_Left:
-        //                            combined = combined.OrderByDescending(b => b.Box._PosCenter.Y).ToList();
-        //                            break;
-        //                    }
-        //                    rectRotates = combined.Select(b => b.Box).ToList();
-        //                    listLabel = combined.Select(b => b.Label).ToList();
-        //                    listScore = combined.Select(b => b.Score).ToList();
-        //                    Content = "";
-        //                    foreach (string s in listLabel)
-        //                        Content += s;
-        //                }
+        //                //            break;
+        //                //        case ArrangeBox.Y_Left_Rigth:
+        //                //            // Sort theo Y tăng dần (trên → dưới)
+        //                //            combined = combined.OrderBy(b => b.Box._PosCenter.Y).ToList();
+        //                //            break;
+        //                //        case ArrangeBox.Y_Right_Left:
+        //                //            combined = combined.OrderByDescending(b => b.Box._PosCenter.Y).ToList();
+        //                //            break;
+        //                //    }
+        //                //    rectRotates = combined.Select(b => b.Box).ToList();
+        //                //    listLabel = combined.Select(b => b.Label).ToList();
+        //                //    listScore = combined.Select(b => b.Score).ToList();
+        //                //    Content = "";
+        //                //    foreach (string s in listLabel)
+        //                //        Content += s;
+        //                //}
         //                Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(scoreRS / (rectRotates.Count() * 1.0));
         //                if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
         //                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
@@ -1237,37 +1114,343 @@ namespace BeeCore
         //                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
         //                    }
         //                }
-
+        //                if(IsLine)
+        //                {
+        //                   if(!Line2D.Found)
+        //                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //                }    
         //                G.IsChecked = true;
         //                // MessageBox.Show($"Predict xong: {boxes.len()} boxes");
         //            }
         //            catch (Exception ex)
         //            {
-        //                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
+
+        //                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
+        //                // Global.Ex = "Complete_Learning" + ex.Message;
+        //                // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
         //            }
         //        }
         //        catch (Exception ex)
         //        {
-        //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
+
+        //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
+        //            //  Global.Ex = "Complete_Learning" + ex.Message;
         //            // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
         //        }
         //    }
         //    else
         //    {
-        //        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning","No Initial PY"));
-           
-        //        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //    }    
-               
-        //}
 
+        //        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "No Initial"));
+        //        //  Global.Ex = "No Initial PY";
+        //        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //    }
+
+        //}
+        public void Complete()
+        {
+            if (!Global.IsIntialPython)
+            {
+                Global.LogsDashboard.AddLog(
+                    new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "No Initial"));
+                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                return;
+            }
+
+            try
+            {
+                ResultItem = new List<ResultItem>();
+                rectRotates = new List<RectRotate>();
+
+                numOK = 0;
+                numNG = 0;
+                int scoreRS = 0;
+
+                if (labelItems == null)
+                {
+                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    return;
+                }
+
+                //--------------------------------
+                // PASS 1 : build ResultItem
+                //--------------------------------
+
+                foreach (var rs in resultTemp)
+                {
+                    ResultItem.Add(new ResultItem(rs.Name)
+                    {
+                        rot = rs.rot,
+                        Score = rs.Score
+                    });
+                }
+
+                //--------------------------------
+                // counter cache
+                //--------------------------------
+
+                Dictionary<string, int> labelCounter =
+                    ResultItem.GroupBy(x => x.Name)
+                    .ToDictionary(g => g.Key, g => g.Count());
+
+                //--------------------------------
+                // PASS 2 : compute Area per object
+                //--------------------------------
+
+                for (int i = 0; i < ResultItem.Count; i++)
+                {
+                    var r = ResultItem[i];
+
+                    int index = labelItems.FindIndex(x =>
+                        string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
+
+                    if (index < 0)
+                        continue;
+
+                    LabelItem item = labelItems[index];
+
+                    double percentLocal;
+                    double area = CalcArea(r, item, out percentLocal);
+
+                    r.Area = (float)area;
+                    r.Percent = (float)percentLocal;
+                }
+
+                //--------------------------------
+                // PASS 3 : compute ScanBox Area
+                //--------------------------------
+
+                Dictionary<int, double> scanAreaCache = new Dictionary<int, double>();
+
+                foreach (var r in ResultItem)
+                {
+                    int index = labelItems.FindIndex(x =>
+                        string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
+
+                    if (index < 0)
+                        continue;
+
+                    LabelItem item = labelItems[index];
+
+                    if (item.ListIndexBox == null)
+                        continue;
+
+                    foreach (int scanIndex in item.ListIndexBox)
+                    {
+                        if (!scanAreaCache.ContainsKey(scanIndex))
+                        {
+                            RectRotate scan = listRotScan[scanIndex];
+
+                            double areaSum = 0;
+
+                            foreach (var rr in ResultItem)
+                            {
+                                if (rr.Name != item.Name)
+                                    continue;
+
+                                if (scan.ContainsPoint(rr.rot._PosCenter))
+                                    areaSum += rr.Area;
+                            }
+
+                            scanAreaCache[scanIndex] = areaSum;
+                        }
+                    }
+                }
+
+                //--------------------------------
+                // PASS 4 : evaluate rules
+                //--------------------------------
+
+                for (int i = 0; i < ResultItem.Count; i++)
+                {
+                    var r = ResultItem[i];
+
+                    int index = labelItems.FindIndex(x =>
+                        string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
+
+                    if (index < 0)
+                        continue;
+
+                    LabelItem item = labelItems[index];
+                   
+                    bool IsOK = false;
+                    if (!item.IsUse)
+                    {
+                        r.IsOK = false;
+                        continue;
+                    }    
+                      
+                    //--------------------------------
+                    // X/Y rule
+                    //--------------------------------
+
+                    if (item.IsX && !IntersectX(r.rot, item.ValueX))
+                        continue;
+
+                    if (item.IsY && !IntersectY(r.rot, item.ValueY))
+                        continue;
+
+                    if (item.IsXMax && !IntersectXMax(r.rot, item.ValueXMax))
+                        continue;
+
+                    if (item.IsYMax && !IntersectYMax(r.rot, item.ValueYMax))
+                        continue;
+
+                    //--------------------------------
+                    // size rule
+                    //--------------------------------
+
+                    if (item.IsHeight)
+                        IsOK = r.rot._rect.Height >= item.ValueHeight;
+
+                    if (item.IsWidth)
+                        IsOK = r.rot._rect.Width >= item.ValueWidth;
+
+                    //--------------------------------
+                    // AREA rule
+                    //--------------------------------
+
+                    if (item.IsArea)
+                    {
+                        double areaCompare = r.Area;
+
+                        if (item.ListIndexBox != null && item.ListIndexBox.Count > 0)
+                        {
+                            int scanIndex = FindScanBox(r,item.Name);
+
+                            if (scanIndex >= 0 && scanAreaCache.ContainsKey(scanIndex))
+                                areaCompare = scanAreaCache[scanIndex];
+                        }
+
+                        if (areaCompare >= item.ValueArea * 100)
+                            IsOK = true;
+
+                        //--------------------------------
+                        // B_CHI counter fallback
+                        //--------------------------------
+
+                        if (item.Name == "B_CHI" && !IsOK && item.IsCounter)
+                        {
+                            if (labelCounter.ContainsKey(r.Name) &&
+                                labelCounter[r.Name] >= item.ValueCounter)
+                                IsOK = true;
+                        }
+                    }
+
+                    //--------------------------------
+                    // Counter rule
+                    //--------------------------------
+
+                    if (item.Name != "B_CHI" && item.IsCounter)
+                    {
+                        if (labelCounter.ContainsKey(r.Name) &&
+                            labelCounter[r.Name] >= item.ValueCounter)
+                            IsOK = true;
+                        else
+                            IsOK = false;
+                    }
+
+                    //--------------------------------
+                    // save result
+                    //--------------------------------
+
+                    r.IsOK = IsOK;
+
+                    if (IsOK)
+                        numOK++;
+                }
+
+                //--------------------------------
+                // RESULT COMPARE
+                //--------------------------------
+
+                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+
+                switch (Compare)
+                {
+                    case Compares.Equal:
+                        if (numOK != NumObject)
+                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                        break;
+
+                    case Compares.Less:
+                        if (numOK >= NumObject)
+                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                        break;
+
+                    case Compares.More:
+                        if (numOK <= NumObject)
+                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                        break;
+                }
+
+                if (IsLine && !Line2D.Found)
+                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+
+                G.IsChecked = true;
+            }
+            catch (Exception ex)
+            {
+                Global.LogsDashboard.AddLog(
+                    new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
+            }
+        }
+        [NonSerialized]
+        public bool IsScan = false;
         public Graphics DrawResult(Graphics gc)
         {
+            Brush brushText = new SolidBrush(Global.ParaShow.TextColor);
             if (rotAreaAdjustment == null && Global.IsRun) return gc;
             gc.ResetTransform();
             RectRotate rotA = rotArea;
             if (Global.IsRun) rotA = rotAreaAdjustment;
             var mat = new Matrix();
+            int i = 0;
+
+                Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+                Color clScan= Color.White;
+               
+
+                    if (listRotScan != null)
+                    foreach (RectRotate rot in listRotScan)
+                    {
+                        if (IsScan)
+                        {
+                        if (rot.Name != "")
+                            clScan = Global.ParaShow.ColorChoose;
+                            else
+                                clScan = Global.ParaShow.ColorNone;
+                        }
+                        else
+                        {
+                            if (rot.Name !="")
+                                clScan = Global.ParaShow.ColorChoose;
+                            else
+                                continue;
+
+                        }    
+                           
+                        Pen penScan = new Pen(clScan, Global.ParaShow.ThicknessLine);
+                        mat = new Matrix();
+                            if (!Global.IsRun)
+                            {
+                                mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                                mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                            }
+                            mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                            mat.Rotate(rotA._rectRotation);
+                            mat.Translate(rotA._rect.X, rotA._rect.Y);
+                        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                        mat.Rotate(rot._rectRotation);
+                        gc.Transform = mat;
+                        Draws.Box1Label(gc, rot._rect, rot.Name, font, brushText, clScan, Global.ParaShow.ThicknessLine);
+
+                      ////  Draws.Box1Label(gc, rotA, rot.Name, "Count: " + numOK, font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
+                      
+                      //      Draws.DrawRectRotate(gc, rot, penScan);
+                        }
+                        gc.ResetTransform();
+                
             //if (Line2D.Found)
             //{
 
@@ -1280,7 +1463,7 @@ namespace BeeCore
             //    mat.Rotate(rotA._rectRotation);
             //    mat.Translate(rotA._rect.X, rotA._rect.Y);
             //    gc.Transform = mat;
-                
+
 
             //    //PointF p1 = new PointF(LineVerital.X1, LiLineVeritalne2D.Y1);
             //    //PointF p2 = new PointF(LineVerital.X2, LineVerital.Y2);
@@ -1322,7 +1505,7 @@ namespace BeeCore
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
 
-            Brush brushText = new SolidBrush(Global.ParaShow.TextColor);
+          
             Color cl = Color.LimeGreen;
             switch (Common.PropetyTools[Global.IndexProgChoose][Index].Results)
             {
@@ -1335,7 +1518,7 @@ namespace BeeCore
             }
             Pen pen = new Pen(Color.Blue, 2);
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            //Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
                 Draws.Box2Label(gc, rotA, nameTool,"Count: "+ numOK, font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
             if (IsLine)
@@ -1416,6 +1599,8 @@ namespace BeeCore
                     }
                     gc.ResetTransform();  
             }
+            if (ResultItem == null)
+                return gc;
             foreach (ResultItem rs in ResultItem)
             {
                 Color clShow = Global.ParaShow.ColorNone;

@@ -1512,6 +1512,7 @@ namespace BeeInterface
             lay22.Visible = !btn2.IsCLick;
             lay23.Visible = !btn2.IsCLick;
             lay24.Visible = !btn2.IsCLick;
+           
         }
 
         private void btnArea_Click(object sender, EventArgs e)
@@ -1525,6 +1526,7 @@ namespace BeeInterface
             btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
+            layListScan.Visible = false;
         }
 
         private void btnMask_Click(object sender, EventArgs e)
@@ -1533,9 +1535,10 @@ namespace BeeInterface
             lay2Mask.Visible = true;
             Global.TypeCrop = TypeCrop.Mask;
             Propety.TypeCrop = Global.TypeCrop;
+           
             if (Propety.rotMask == null)
             {
-                Propety.rotMask = DataTool.NewRotRect(TypeCrop.Mask); ;
+                Propety.rotMask = new RectRotate();
             }
             btnElip.IsCLick = Propety.rotMask.Shape == ShapeType.Ellipse ? true : false;
             btnRect.IsCLick = Propety.rotMask.Shape == ShapeType.Rectangle ? true : false;
@@ -1543,6 +1546,7 @@ namespace BeeInterface
             btnPolygon.IsCLick = Propety.rotMask.Shape == ShapeType.Polygon ? true : false;
             btnWhite.IsCLick = Propety.rotMask.IsWhite;
             btnBlack.IsCLick = !Propety.rotMask.IsWhite;
+            layListScan.Visible =true;
         }
         ShapeType ShapeType = ShapeType.Rectangle;
         private void SetShapeFor(TypeCrop which, ShapeType shape)
@@ -1766,6 +1770,7 @@ namespace BeeInterface
             btnPolygon.IsCLick = Propety.rotCrop.Shape == ShapeType.Polygon ? true : false;
             btnWhite.IsCLick = Propety.rotCrop.IsWhite;
             btnBlack.IsCLick = !Propety.rotCrop.IsWhite;
+            layListScan.Visible = false;
         }
 
         private void btnOnline_Click(object sender, EventArgs e)
@@ -1831,13 +1836,73 @@ namespace BeeInterface
 
         private void btnAddToList_Click(object sender, EventArgs e)
         {
-            RectRotate rot = Propety.rotCrop.Clone();
-            PointF pCenter = Propety.rotCrop.WorldToLocal(rot._PosCenter);
+            RectRotate rot = Propety.rotMask.Clone();
+            PointF pCenter = Propety.rotArea.WorldToLocal(rot._PosCenter);
 
             rot._PosCenter = pCenter;
-            // rot.UpdateFromPolygon(false);
-            Propety.ListRotCrop.Add(rot);
+            Propety.ListRotMask.Add(rot);
             Global.EditTool.View.imgView.Invalidate();
+        }
+
+        private void btnUnoMask_Click(object sender, EventArgs e)
+        {
+            if (Propety.ListRotMask.Count() > 0)
+                Propety.ListRotMask.RemoveAt(Propety.ListRotMask.Count() - 1);
+            Global.EditTool.View.imgView.Invalidate();
+        }
+
+        private void btnClearAllMask_Click(object sender, EventArgs e)
+        {
+            if (Propety.ListRotMask.Count() > 0)
+                Propety.ListRotMask.Clear();
+            Global.EditTool.View.imgView.Invalidate();
+        }
+
+        private void dashboardLabel_ChooseAreaRequest(int arg1, LabelItem arg2)
+        {
+            // ví dụ lấy box từ vision engine
+
+        }
+
+        private void dashboardLabel_ChooseAreaBegin(int arg1, LabelItem arg2)
+        {
+            this.Invoke((Action)(async () =>
+            {
+                Global.ListIndexChoose = new List<int>();
+                Propety.listRotScan = Propety.ListRotMask;
+                Propety.ModeCheck = ModeCheck.Multi;
+                Propety.NameChoose = arg2.Name;
+                Global.StatusDraw = StatusDraw.Scan;
+                Propety.IsScan = true;
+                Global.EditTool.View.imgView.Invalidate();
+            }));
+        }
+
+        private void dashboardLabel_ChooseAreaEnd(int arg1, LabelItem arg2)
+        {
+            this.Invoke((Action)(async () =>
+            {
+                Global.StatusDraw = StatusDraw.Edit;
+                Global.EditTool.View.imgView.Invalidate();
+                Propety.IsScan = false;
+                Propety.NameChoose = "";
+                int i = 0;
+                foreach (RectRotate rot in Propety.listRotScan)
+                {
+                    if (rot._dragAnchor == AnchorPoint.Center)
+                        Global.ListIndexChoose.Add(i);
+                    i++;
+                }
+                List<int> list = Global.ListIndexChoose;
+
+                arg2.ListIndexBox = list;
+            }));
+        }
+
+        private void btn1M_Click(object sender, EventArgs e)
+        {
+            layTypeYolo.Visible = !btn1M.IsCLick;
+            layoutSetLearning.Visible=!btn1M.IsCLick;
         }
     }
 }

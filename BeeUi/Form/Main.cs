@@ -31,7 +31,7 @@ namespace BeeUi
             InitializeComponent();
             Global.Main = this;
             Global.EditTool = this.editTool1;
-            //Global.Header = editTool1.header1;
+            // BeeInterface.G.Header = editTool1.header1;
             this.MinimumSize = new Size(1190, 780);
         }
         //protected override CreateParams CreateParams

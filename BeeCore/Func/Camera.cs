@@ -245,7 +245,7 @@ namespace BeeCore
             }
             return Results;
         }
-        public void DrawResult( )
+        public void DrawResult()
         {
             if (_disposed) return;
 
@@ -255,6 +255,7 @@ namespace BeeCore
             {
                 src = matRaw?.Clone();
             }
+
             if (src == null || src.Empty() || src.Width <= 0 || src.Height <= 0)
             {
                 src?.Dispose();
@@ -268,12 +269,17 @@ namespace BeeCore
                 working = EnsureWorkingBuffer(src);
                 src.CopyTo(working);
             }
+
             src.Dispose();
 
-            // 3) Convert -> Bitmap & vẽ overlay
+            // Cache giá trị tránh race condition
+            int triggerLocal =(int) Global.TriggerNum;
+            var resultLocal = Results;
+
             using (Mat bgr = EnsureBgr8Uc3AliasOrConvert(working, out bool createdTemp))
             {
                 Bitmap canvas = null;
+
                 try
                 {
                     canvas = BitmapConverter.ToBitmap(bgr);
@@ -286,51 +292,60 @@ namespace BeeCore
                         g.CompositingQuality = CompositingQuality.HighSpeed;
                         g.PixelOffsetMode = PixelOffsetMode.Half;
 
+                        //========================
+                        // 1. Vẽ TEXT (không scale)
+                        //========================
+
+                        string triggerText = triggerLocal.ToString();
+                        string resultText = resultLocal == Results.OK ? "OK" : "NG";
+
+                        using (Font fontBig = new Font("Arial", Global.ParaShow.FontSize *4, FontStyle.Bold))
+                        {
+                            SizeF sz = g.MeasureString(triggerText, fontBig);
+
+                            g.DrawString(triggerText, fontBig, Brushes.DarkGray, new PointF(100, 50));
+
+                            Brush brushResult = resultLocal == Results.OK ? Brushes.Green : Brushes.Red;
+
+                            g.DrawString(resultText, fontBig, brushResult, new PointF(100, sz.Height + 50));
+                        }
+
+                        //========================
+                        // 2. Apply zoom transform
+                        //========================
+
                         xf.Translate(Global.pScroll.X, Global.pScroll.Y);
                         float s = Global.ScaleZoom;
-              
                         xf.Scale(s, s);
+
                         g.Transform = xf;
-                        SizeF sz = new SizeF();
-                        //if (Global.Config.IsMultiProg)
-                        //{
-                        //     sz = g.MeasureString(Para.Name, new Font("Arial", Global.ParaShow.FontSize));
 
-                        //    g.DrawString(Para.Name, new Font("Arial", Global.ParaShow.FontSize), Brushes.DarkGray, new PointF(10, 10));
-                        //}
-                        //else
-                        //{
-                             sz = g.MeasureString(Global.TriggerNum.ToString(), new Font("Arial", Global.ParaShow.FontSize*3));
+                        //========================
+                        // 3. Draw tools overlay
+                        //========================
 
-                            g.DrawString(Global.TriggerNum.ToString(), new Font("Arial", Global.ParaShow.FontSize*3), Brushes.DarkGray, new PointF(10, 10));
-                    //    }
-
-                        if (Results == Results.OK)
-                            g.DrawString("OK", new Font("Arial", Global.ParaShow.FontSize*3), Brushes.Green, new PointF(10, sz.Height + 5));
-                        else
-                            g.DrawString("NG", new Font("Arial", Global.ParaShow.FontSize * 3), Brushes.Red, new PointF(10, sz.Height + 5));
                         var tools = BeeCore.Common.PropetyTools[Global.IndexProgChoose];
-                        if(Global.Config.IsAutoTrigger&&Global.StatusProcessing!=StatusProcessing.Drawing)
+
+                        if (Global.Config.IsAutoTrigger && Global.StatusProcessing != StatusProcessing.Drawing)
                         {
                             tools[Global.IndexToolAuto].Propety.DrawResult(g);
                         }
                         else
+                        {
                             foreach (var tool in tools)
                             {
                                 if (tool.UsedTool != UsedTool.NotUsed)
                                     tool.Propety.DrawResult(g);
-                            }    
-                            
-                       
-                      
-                        //String Content = "OK Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-                        //     if (!Global.TotalOK)
-                        //    Content = "NG Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-                        //g.DrawString(Content, new Font("Arial", 12, FontStyle.Regular),new SolidBrush(Color.WhiteSmoke),new Point(10,10));
+                            }
+                        }
                     }
 
-                    // 4) Tạo bmResult bằng copy pixel data trực tiếp từ canvas
+                    //========================
+                    // 4. Copy bitmap result
+                    //========================
+
                     Bitmap storeCopy = new Bitmap(canvas.Width, canvas.Height, canvas.PixelFormat);
+
                     using (var gCopy = Graphics.FromImage(storeCopy))
                     {
                         gCopy.DrawImageUnscaled(canvas, 0, 0);
@@ -338,53 +353,49 @@ namespace BeeCore
 
                     lock (_bmLock)
                     {
-                       bmResult?.Dispose();
-                       bmResult = storeCopy;
-                        //String pathRaw, pathRS;
-                        //String date = DateTime.Now.ToString("yyyyMMdd");
-                        //String Hour = DateTime.Now.ToString("HHmmss");
-                        //pathRaw = "Report//" + date + "//Raw";
-                        //pathRS = "Report//" + date + "//Result";
-                        //if (!Directory.Exists(pathRaw))
-                        //    Directory.CreateDirectory(pathRaw);
-                        //if (!Directory.Exists(pathRS))
-                        //    Directory.CreateDirectory(pathRS);
+                        bmResult?.Dispose();
+                        bmResult = storeCopy;
+
                         Mat matRs = bmResult.ToMat();
+
                         using (Mat raw = matRaw.Clone())
                         {
-
-
                             switch (Global.Config.TypeSave)
                             {
                                 case 1:
                                     Cv2.PyrDown(matRs, matRs);
                                     Cv2.PyrDown(matRs, matRs);
+
                                     Cv2.PyrDown(raw, raw);
                                     Cv2.PyrDown(raw, raw);
                                     break;
+
                                 case 2:
                                     Cv2.PyrDown(matRs, matRs);
                                     Cv2.PyrDown(raw, raw);
                                     break;
                             }
-                            if (Global.listMatRs[Global.IndexProgChoose] == null) Global.listMatRs[Global.IndexProgChoose] = new Mat();
+
+                            if (Global.listMatRs[Global.IndexProgChoose] == null)
+                                Global.listMatRs[Global.IndexProgChoose] = new Mat();
+
                             if (!Global.listMatRs[Global.IndexProgChoose].IsDisposed)
-                                if (!Global.listMatRs[Global.IndexProgChoose].Empty()) Global.listMatRs[Global.IndexProgChoose].Dispose();
+                                if (!Global.listMatRs[Global.IndexProgChoose].Empty())
+                                    Global.listMatRs[Global.IndexProgChoose].Dispose();
+
                             Global.listMatRaw[Global.IndexProgChoose] = raw.Clone();
                             Global.listMatRs[Global.IndexProgChoose] = matRs.Clone();
-                            //if (Global.Config.IsSaveRaw)
-                            //    Cv2.ImWrite(pathRaw + "//" + Global.Project + "_" + Results.ToString() + "_" + Global.Config.POCurrent + "_" + Global.TriggerNum.ToString() + "_" + Hour + ".png", raw);
-                            //if (Global.Config.IsSaveRS)
-                            //    Cv2.ImWrite(pathRS + "//" + Global.Project + "_" + Global.Config.POCurrent + "_" + Global.TriggerNum.ToString() + "_" + "_" + Results.ToString() + "_" + Hour + ".png", matRs);
+
                             matRs.Dispose();
                         }
-                     
-                        //  bmResult.Save("Result"+ IndexCCD + ".png");
                     }
-                    canvas = null; // tránh dispose ở finally
-                 
 
-                    // 6) Xác nhận buffer hiển thị
+                    canvas = null;
+
+                    //========================
+                    // 5. Swap display buffer
+                    //========================
+
                     lock (_swapLock)
                     {
                         _displayMat = working;
@@ -396,6 +407,157 @@ namespace BeeCore
                 }
             }
         }
+        //public void DrawResult( )
+        //{
+        //    if (_disposed) return;
+
+        //    // 1) Lấy frame nguồn
+        //    Mat src;
+        //    lock (_camLock)
+        //    {
+        //        src = matRaw?.Clone();
+        //    }
+        //    if (src == null || src.Empty() || src.Width <= 0 || src.Height <= 0)
+        //    {
+        //        src?.Dispose();
+        //        return;
+        //    }
+
+        //    // 2) Chuẩn bị buffer
+        //    Mat working;
+        //    lock (_swapLock)
+        //    {
+        //        working = EnsureWorkingBuffer(src);
+        //        src.CopyTo(working);
+        //    }
+        //    src.Dispose();
+
+        //    // 3) Convert -> Bitmap & vẽ overlay
+        //    using (Mat bgr = EnsureBgr8Uc3AliasOrConvert(working, out bool createdTemp))
+        //    {
+        //        Bitmap canvas = null;
+        //        try
+        //        {
+        //            canvas = BitmapConverter.ToBitmap(bgr);
+
+        //            using (var g = Graphics.FromImage(canvas))
+        //            using (var xf = new Matrix())
+        //            {
+        //                g.SmoothingMode = SmoothingMode.None;
+        //                g.InterpolationMode = InterpolationMode.NearestNeighbor;
+        //                g.CompositingQuality = CompositingQuality.HighSpeed;
+        //                g.PixelOffsetMode = PixelOffsetMode.Half;
+
+        //                xf.Translate(Global.pScroll.X, Global.pScroll.Y);
+        //                float s = Global.ScaleZoom;
+
+        //                xf.Scale(s, s);
+        //                g.Transform = xf;
+        //                SizeF sz = new SizeF();
+        //                //if (Global.Config.IsMultiProg)
+        //                //{
+        //                //     sz = g.MeasureString(Para.Name, new Font("Arial", Global.ParaShow.FontSize));
+
+        //                //    g.DrawString(Para.Name, new Font("Arial", Global.ParaShow.FontSize), Brushes.DarkGray, new PointF(10, 10));
+        //                //}
+        //                //else
+        //                //{
+        //                     sz = g.MeasureString(Global.TriggerNum.ToString(), new Font("Arial", Global.ParaShow.FontSize*6));
+
+        //                    g.DrawString(Global.TriggerNum.ToString(), new Font("Arial", Global.ParaShow.FontSize*6), Brushes.DarkGray, new PointF(100, 50));
+        //            //    }
+
+        //                if (Results == Results.OK)
+        //                    g.DrawString("OK", new Font("Arial", Global.ParaShow.FontSize*6), Brushes.Green, new PointF(100, sz.Height + 5));
+        //                else
+        //                    g.DrawString("NG", new Font("Arial", Global.ParaShow.FontSize * 6), Brushes.Red, new PointF(100, sz.Height + 5));
+        //                var tools = BeeCore.Common.PropetyTools[Global.IndexProgChoose];
+        //                if(Global.Config.IsAutoTrigger&&Global.StatusProcessing!=StatusProcessing.Drawing)
+        //                {
+        //                    tools[Global.IndexToolAuto].Propety.DrawResult(g);
+        //                }
+        //                else
+        //                    foreach (var tool in tools)
+        //                    {
+        //                        if (tool.UsedTool != UsedTool.NotUsed)
+        //                            tool.Propety.DrawResult(g);
+        //                    }    
+
+
+
+        //                //String Content = "OK Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+        //                //     if (!Global.TotalOK)
+        //                //    Content = "NG Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+        //                //g.DrawString(Content, new Font("Arial", 12, FontStyle.Regular),new SolidBrush(Color.WhiteSmoke),new Point(10,10));
+        //            }
+
+        //            // 4) Tạo bmResult bằng copy pixel data trực tiếp từ canvas
+        //            Bitmap storeCopy = new Bitmap(canvas.Width, canvas.Height, canvas.PixelFormat);
+        //            using (var gCopy = Graphics.FromImage(storeCopy))
+        //            {
+        //                gCopy.DrawImageUnscaled(canvas, 0, 0);
+        //            }
+
+        //            lock (_bmLock)
+        //            {
+        //               bmResult?.Dispose();
+        //               bmResult = storeCopy;
+        //                //String pathRaw, pathRS;
+        //                //String date = DateTime.Now.ToString("yyyyMMdd");
+        //                //String Hour = DateTime.Now.ToString("HHmmss");
+        //                //pathRaw = "Report//" + date + "//Raw";
+        //                //pathRS = "Report//" + date + "//Result";
+        //                //if (!Directory.Exists(pathRaw))
+        //                //    Directory.CreateDirectory(pathRaw);
+        //                //if (!Directory.Exists(pathRS))
+        //                //    Directory.CreateDirectory(pathRS);
+        //                Mat matRs = bmResult.ToMat();
+        //                using (Mat raw = matRaw.Clone())
+        //                {
+
+
+        //                    switch (Global.Config.TypeSave)
+        //                    {
+        //                        case 1:
+        //                            Cv2.PyrDown(matRs, matRs);
+        //                            Cv2.PyrDown(matRs, matRs);
+        //                            Cv2.PyrDown(raw, raw);
+        //                            Cv2.PyrDown(raw, raw);
+        //                            break;
+        //                        case 2:
+        //                            Cv2.PyrDown(matRs, matRs);
+        //                            Cv2.PyrDown(raw, raw);
+        //                            break;
+        //                    }
+        //                    if (Global.listMatRs[Global.IndexProgChoose] == null) Global.listMatRs[Global.IndexProgChoose] = new Mat();
+        //                    if (!Global.listMatRs[Global.IndexProgChoose].IsDisposed)
+        //                        if (!Global.listMatRs[Global.IndexProgChoose].Empty()) Global.listMatRs[Global.IndexProgChoose].Dispose();
+        //                    Global.listMatRaw[Global.IndexProgChoose] = raw.Clone();
+        //                    Global.listMatRs[Global.IndexProgChoose] = matRs.Clone();
+        //                    //if (Global.Config.IsSaveRaw)
+        //                    //    Cv2.ImWrite(pathRaw + "//" + Global.Project + "_" + Results.ToString() + "_" + Global.Config.POCurrent + "_" + Global.TriggerNum.ToString() + "_" + Hour + ".png", raw);
+        //                    //if (Global.Config.IsSaveRS)
+        //                    //    Cv2.ImWrite(pathRS + "//" + Global.Project + "_" + Global.Config.POCurrent + "_" + Global.TriggerNum.ToString() + "_" + "_" + Results.ToString() + "_" + Hour + ".png", matRs);
+        //                    matRs.Dispose();
+        //                }
+
+        //                //  bmResult.Save("Result"+ IndexCCD + ".png");
+        //            }
+        //            canvas = null; // tránh dispose ở finally
+
+
+        //            // 6) Xác nhận buffer hiển thị
+        //            lock (_swapLock)
+        //            {
+        //                _displayMat = working;
+        //            }
+        //        }
+        //        finally
+        //        {
+        //            canvas?.Dispose();
+        //        }
+        //    }
+        //}
         public  bool Status()
         {
 

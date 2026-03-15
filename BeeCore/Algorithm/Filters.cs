@@ -17,6 +17,90 @@ namespace BeeCore.Algorithm
     /// </summary>
     public static class Filters
     {
+
+        public static Mat BinaryTextAuto(Mat src, int blockSize = 31, int c = 8, int minArea = 20)
+        {
+            Mat gray = new Mat();
+
+            if (src.Channels() == 3)
+                Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+            else
+                gray = src.Clone();
+
+            // blur nhẹ giảm noise
+            Cv2.GaussianBlur(gray, gray, new Size(3, 3), 0);
+
+            // adaptive threshold
+            Mat binInv = new Mat();
+            Cv2.AdaptiveThreshold(
+                gray,
+                binInv,
+                255,
+                AdaptiveThresholdTypes.GaussianC,
+                ThresholdTypes.BinaryInv,
+                blockSize,
+                c
+            );
+
+            // text=0 background=255
+            Mat bin = new Mat();
+            Cv2.BitwiseNot(binInv, bin);
+
+            // remove small noise
+         //   Mat clean = RemoveSmallBlackDots(bin, minArea);
+
+            gray.Dispose();
+            binInv.Dispose();
+            //bin.Dispose();
+
+            return bin;
+        }
+
+        private static Mat RemoveSmallBlackDots(Mat binTextBlack, int minArea)
+        {
+            Mat inv = new Mat();
+            Cv2.BitwiseNot(binTextBlack, inv);
+
+            Mat labels = new Mat();
+            Mat stats = new Mat();
+            Mat centroids = new Mat();
+
+            int nLabels = Cv2.ConnectedComponentsWithStats(
+                inv,
+                labels,
+                stats,
+                centroids,
+                PixelConnectivity.Connectivity8,
+                MatType.CV_32S
+            );
+
+            Mat cleanInv = Mat.Zeros(inv.Size(), MatType.CV_8UC1);
+
+            for (int i = 1; i < nLabels; i++)
+            {
+                int area = stats.Get<int>(i, (int)ConnectedComponentsTypes.Area);
+
+                if (area >= minArea)
+                {
+                    using (Mat mask = new Mat())
+                    {
+                        Cv2.Compare(labels, i, mask, CmpType.EQ);
+                        cleanInv.SetTo(255, mask);
+                    }
+                }
+            }
+
+            Mat result = new Mat();
+            Cv2.BitwiseNot(cleanInv, result);
+
+            inv.Dispose();
+            labels.Dispose();
+            stats.Dispose();
+            centroids.Dispose();
+            cleanInv.Dispose();
+
+            return result;
+        }
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
         {
             if (value.CompareTo(min) < 0) return min;

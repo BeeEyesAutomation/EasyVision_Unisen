@@ -76,24 +76,24 @@ namespace BeeUi
             Global.ToolSettings.btnDelect.Enabled = !Global.IsRun;
             Global.ToolSettings.btnEnEdit.Enabled = Global.IsRun;
             Global.ToolSettings.btnRename.Enabled = !Global.IsRun;
-            Global.Header.btnShowList.Enabled = true;
-            Global.Header.txtQrCode.Enabled = true;
-            Global.Header.pEdit.Enabled = true;
+             BeeInterface.G.Header.btnShowList.Enabled = true;
+             BeeInterface.G.Header.txtQrCode.Enabled = true;
+             BeeInterface.G.Header.pEdit.Enabled = true;
             switch (Global.Config.Users)
             {
                 case Users.Admin:
-					G.StatusDashboard.btnReset.Enabled = true;
+					BeeInterface.  G.StatusDashboard.btnReset.Enabled = true;
 					Global.EditTool.View.btnContinuous.Enabled = Global.IsRun;
-					Global.Header.btnMode.Enabled = true;
+					 BeeInterface.G.Header.btnMode.Enabled = true;
                     View.pBtn.Enabled= true;
-					Global.Header.pEdit.Enabled = true;
-                    Global.Header.pModel.Enabled = true;
-                    Global.Header.pPO.Enabled = true;
+					 BeeInterface.G.Header.pEdit.Enabled = true;
+                     BeeInterface.G.Header.pModel.Enabled = true;
+                     BeeInterface.G.Header.pPO.Enabled = true;
                     this.BtnHeaderBar.btnSetting.Enabled = true;
                     this.BtnHeaderBar.btncheck.Enabled = true;
                     this.BtnHeaderBar.btnReport.Enabled = true;
-                    Global.Header.btnDummy.Enabled = true;
-                    Global.Header.btnTraining.Enabled = true;
+                     BeeInterface.G.Header.btnDummy.Enabled = true;
+                     BeeInterface.G.Header.btnTraining.Enabled = true;
                     Global.ToolSettings.btnEnEdit.Enabled = true;
                     View.btnTypeTrig.Enabled = true;
 					BarRight.btnFlowChart.Enabled = true;
@@ -105,18 +105,18 @@ namespace BeeUi
 				case Users.Leader:
 
 					Global.EditTool.View.btnContinuous.Enabled = false;
-                    Global.Header.btnTraining.Enabled = false;
-                    Global.Header.btnDummy.Enabled = true;
-                    G.StatusDashboard.btnReset.Enabled = true;
+                     BeeInterface.G.Header.btnTraining.Enabled = false;
+                     BeeInterface.G.Header.btnDummy.Enabled = true;
+                   BeeInterface.  G.StatusDashboard.btnReset.Enabled = true;
                     this.BtnHeaderBar.btnSetting.Enabled = false;
                     this.BtnHeaderBar.btncheck.Enabled = false;
                     this.BtnHeaderBar.btnReport.Enabled = true;
-                    Global.Header.btnMode.Enabled = false;
+                     BeeInterface.G.Header.btnMode.Enabled = false;
 					View.pBtn.Enabled = true;
 					View.btnTypeTrig.Enabled = false;
-                    Global.Header.pEdit.Enabled = false;
-                    Global.Header.pModel.Enabled = false;
-                    Global.Header.pPO.Enabled = false;
+                     BeeInterface.G.Header.pEdit.Enabled = false;
+                     BeeInterface.G.Header.pModel.Enabled = false;
+                     BeeInterface.G.Header.pPO.Enabled = false;
                     Global.ToolSettings.btnEnEdit.Enabled = false;
                     BarRight.btnFlowChart.Enabled = true;
 					BarRight.btnHistory.Enabled = true;
@@ -126,18 +126,18 @@ namespace BeeUi
 					break;
 				case Users.User:
 					Global.EditTool.View.btnContinuous.Enabled = false;
-                    Global.Header.btnDummy.Enabled = true;
-                    Global.Header.btnMode.Enabled = false;
-                    Global.Header.btnTraining.Enabled = false;
-                    G.StatusDashboard.btnReset.Enabled = false;
+                     BeeInterface.G.Header.btnDummy.Enabled = true;
+                     BeeInterface.G.Header.btnMode.Enabled = false;
+                     BeeInterface.G.Header.btnTraining.Enabled = false;
+                    BeeInterface.G.StatusDashboard.btnReset.Enabled = false;
                     this.BtnHeaderBar.btnSetting.Enabled = false;
                     this.BtnHeaderBar.btncheck.Enabled = false;
                     this.BtnHeaderBar.btnReport.Enabled = false;
                     View.pBtn.Enabled = false;
 					View.btnTypeTrig.Enabled = false;
-                    Global.Header.pEdit.Enabled = false;
-                    Global.Header.pModel.Enabled = false;
-                    Global.Header.pPO.Enabled = false;
+                     BeeInterface.G.Header.pEdit.Enabled = false;
+                     BeeInterface.G.Header.pModel.Enabled = false;
+                     BeeInterface.G.Header.pPO.Enabled = false;
                     Global.ToolSettings.btnEnEdit.Enabled = false;
                     BarRight.btnFlowChart.Enabled = true;
 					BarRight.btnHistory.Enabled = false;
@@ -179,7 +179,7 @@ namespace BeeUi
         {
             try
             {
-                
+                Global.Step= Step;
              
                 if (BeeCore.Common.listCamera[Global.IndexCCCD] == null)
                 {
@@ -201,6 +201,15 @@ namespace BeeUi
                 {
                    
                     case Step.Run:
+                     
+                        foreach (List< PropetyTool> ListPropetyTool in BeeCore.Common.PropetyTools)
+                        {if (ListPropetyTool == null) continue;
+                            foreach (PropetyTool PropetyTool in ListPropetyTool)
+                            {
+                                if (PropetyTool.ItemTool != null)
+                                    PropetyTool.ItemTool.IsCLick = false;
+                            }
+                        }
                         Global.IndexProgChoose = 0;
                         Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
                         Global.EditTool.View.btnChangeImg.Visible = true;
@@ -228,11 +237,48 @@ namespace BeeUi
                             {
 
 
-                                if (Global.Config.NumTrig == 2 && Global.NumProgFromPLC == Global.Config.NumTrig)
+                                if (Global.Config.NumTrig >1 && Global.NumProgFromPLC == Global.Config.NumTrig)
                                 {
-                                    MatMergerOptions opt = new MatMergerOptions();
-                                    opt.Direction = MergeDirection.Vertical;
-                                    matRegStep1 = MatMerger.Merge(Global.ParaCommon.matRegister.ToMat(), Global.ParaCommon.matRegister2.ToMat(), opt);
+                                  //  MatMergerOptions opt = new MatMergerOptions();
+                                  //  opt.Direction = MergeDirection.Vertical;
+                                    var opt = new MatMergerOptions
+                                    {
+                                        Direction = MergeDirection.Vertical
+                                    };
+                                    Mat matRS=new Mat();
+                        switch(Global.NumProgFromPLC)
+                                    {
+                                        case 2:
+                                            matRS = MatMerger.MergeMany(new[]
+                                              {
+                                                Global.ParaCommon.matRegister.ToMat(),
+                                                Global.ParaCommon.matRegister2.ToMat(),
+                                               
+                                            }, opt);
+                                            break;
+                                        case 3:
+                                            matRS = MatMerger.MergeMany(new[]
+                                           {
+                                                Global.ParaCommon.matRegister.ToMat(),
+                                                Global.ParaCommon.matRegister2.ToMat(),
+                                                Global.ParaCommon.matRegister3.ToMat(),
+
+                                            }, opt);
+                                            break;
+                                        case 4:
+                                            matRS = MatMerger.MergeMany(new[]
+                                                                                   {
+                                                Global.ParaCommon.matRegister.ToMat(),
+                                                Global.ParaCommon.matRegister2.ToMat(),
+                                                Global.ParaCommon.matRegister3.ToMat(),
+                                                 Global.ParaCommon.matRegister4.ToMat(),
+
+                                            }, opt);
+                                            break;
+                                      
+                                    }
+
+                                    matRegStep1 = matRS;// MatMerger.Merge(Global.ParaCommon.matRegister.ToMat(), Global.ParaCommon.matRegister2.ToMat(), opt);
                                 }
                                 else
                                 {
@@ -278,6 +324,10 @@ namespace BeeUi
                         }
                      
                       View.RefreshExternal(Global.Config.IsExternal);
+                        BeeInterface.G.Header.btnMode.IsCLick = false;
+                        BeeInterface.G.Header.btnMode.Text = "RUN";
+
+                        Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
                         break;
                     case Step.Step1:
 
@@ -318,10 +368,10 @@ namespace BeeUi
                       
                         lbTool.Text = "1.Setup Camera";
 
-                      ///  pName.Visible = true;
-                       
+                        BeeInterface.G.Header.btnMode.IsCLick = true;
+                        BeeInterface.G.Header.btnMode.Text = "EDIT";
 
-                       //this.ResumeLayout();
+                        Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
                         break;
                     case Step.Step2:
                         iconTool.Visible = false;
@@ -451,8 +501,8 @@ namespace BeeUi
                                     FormWarning formWarning = new FormWarning("Image Master", "Please,Register Image!");
                                     formWarning.ShowDialog();
                                     Global.StepEdit.btnStep2.IsCLick = true;
-                                    Step = Step.Step2; pEditTool.Show("Step2");
-                                    goto X;
+                                    Global.Step = Step.Step2;
+                                   
                                 }
                             }
                            else
@@ -460,8 +510,8 @@ namespace BeeUi
                                 FormWarning formWarning = new FormWarning("Image Master", "Please,Register Image!");
                                 formWarning.ShowDialog();
                                 Global.StepEdit.btnStep2.IsCLick = true;
-                                Step = Step.Step2; pEditTool.Show("Step2");
-                                goto X;
+                                Global.Step = Step.Step2;
+                             
                             }
                         }
                         catch (Exception ex)
@@ -469,8 +519,8 @@ namespace BeeUi
                             FormWarning formWarning = new FormWarning("Image Master", "Please,Register Image!");
                             formWarning.ShowDialog();
                             Global.StepEdit.btnStep2.IsCLick = true;
-                            Step = Step.Step2; pEditTool.Show("Step2");
-                            goto X;
+                           Global. Step = Step.Step2; 
+                          
 
                         }
                         finally
@@ -506,8 +556,8 @@ namespace BeeUi
 
 
 
-                //   Global.Header. btnMode.Text = "RUN";
-                //    Global.Header.btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
+                //    BeeInterface.G.Header. btnMode.Text = "RUN";
+                //     BeeInterface.G.Header.btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
                 //    Global.Step = Step.Run;
 
                 //}
@@ -587,10 +637,10 @@ namespace BeeUi
 			View.split3.Enabled = !IsLock;
 			View.split4.Enabled = !IsLock;
 			View.split5.Enabled = !IsLock;
-			Global.Header.split1.Enabled = !IsLock;
-			Global.Header.split2.Enabled = !IsLock;
+			 BeeInterface.G.Header.split1.Enabled = !IsLock;
+			 BeeInterface.G.Header.split2.Enabled = !IsLock;
 			Global.ToolSettings.split1.Enabled = !IsLock;
-			G.StatusDashboard.IsLockSplit = IsLock;
+			BeeInterface.G.StatusDashboard.IsLockSplit = IsLock;
 		}
         private Version GetDllVersion(string filePath)
         {
@@ -612,9 +662,13 @@ namespace BeeUi
                StepProccessBar.SetSteps(ListStep);
                StepProccessBar.DoneCount = 0;
             }
-        
-        StepProccessBar.SetSteps(new[] { "Start", "Marking 1", "Camera 1", "Marking 2", "Camera 2", "Done" });
-            StepProccessBar.DoneCount = 0;
+        else
+            {
+                StepProccessBar.SetSteps(new[] { "Start", "Marking 1", "Camera 1", "Marking 2", "Camera 2", "Done" });
+                StepProccessBar.DoneCount = 0;
+
+            }    
+             
             // Chưa chạy gì
 
 
@@ -645,23 +699,23 @@ namespace BeeUi
                 Global.ToolSettings.pAllTool.Visible = true;
                 Global.ToolSettings.Dock = DockStyle.Fill;
             }
-            if (G.StatusDashboard == null)
+            if (BeeInterface.G.StatusDashboard == null)
             {
-                G.StatusDashboard = new StatusDashboard();
-                G.StatusDashboard.InfoBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
-                G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
-                G.StatusDashboard.MidHeaderBackColor = Color.FromArgb(Global.Config.AlphaBar, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
+               BeeInterface.  G.StatusDashboard = new StatusDashboard();
+               BeeInterface.  G.StatusDashboard.InfoBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
+               BeeInterface.  G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
+               BeeInterface.  G.StatusDashboard.MidHeaderBackColor = Color.FromArgb(Global.Config.AlphaBar, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
                   }
-            Global.SettingPLC=new ProtocolPLC();
+            BeeInterface.G.SettingPLC=new ProtocolPLC();
             Global.StepEdit=new StepEdit();
             pEditTool.Register("Tool", () => Global.ToolSettings);
             pEditTool.Register("Step1", () => Global.StepEdit.SettingStep1);
             pEditTool.Register("Step2", () => Global.StepEdit.SettingStep2);
-            pEditTool.Register("PLC", () => Global.SettingPLC);
+            pEditTool.Register("PLC", () => BeeInterface.G.SettingPLC);
             pEditTool.Register("Step4", () => Global.StepEdit.SettingStep4);
             pEditTool.Register("Images", () => DashboardImages);
             pEditTool.Register("Logs", () => Global.LogsDashboard);
-            pInfor.Register("Dashboard", () => G.StatusDashboard);
+            pInfor.Register("Dashboard", () =>BeeInterface.  G.StatusDashboard);
             pInfor.Register("StepEdit", () => Global.StepEdit);
            progBarTool.Checked = Global.EditTool.pHeader.Visible ;
             btnShowTop.Checked = Global.EditTool.pTop.Visible;
@@ -700,8 +754,12 @@ namespace BeeUi
             Global.ByPassResultChanged += Global_ByPassResultChanged;
 
             clock = new FlipClockDashboard();
-          
-           
+            BeeInterface.G.StatusDashboard.CycleTime = 0;
+            BeeInterface.G.StatusDashboard.CamTime = 0;
+            BeeInterface.G.StatusDashboard.TotalTimes = Global.Config.SumTime;
+            BeeInterface.G.StatusDashboard.OkCount = Global.Config.SumOK;
+            BeeInterface.G.StatusDashboard.NgCount = Global.Config.SumNG;
+
             //
         }
         protected override void OnLoad(EventArgs e)
@@ -710,7 +768,7 @@ namespace BeeUi
             clock.Width = 200;
             clock.Dock = DockStyle.Left;
             pTop.Controls.Add(clock);
-         //   clock.BackColor = Color.FromArgb(240, Color.White);
+            clock.BackColor = pTop.BackColor;
             clock.BringToFront();
             clock.Start();
         }
@@ -820,7 +878,7 @@ namespace BeeUi
               
                 //foreach (Tools tool in G.listAlltool[Global.IndexProgChoose])
                 //    tool.tool.LoadPara();
-              //  Global.Header.workLoadProgram.RunWorkerAsync();
+              //   BeeInterface.G.Header.workLoadProgram.RunWorkerAsync();
             }
         }
 
@@ -922,10 +980,10 @@ namespace BeeUi
                 Access.SaveProg("Program\\" + Global.Project + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
                 //  Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
 
-                Global.Header.RefreshListPJ();
-                Global.Header.ChangeProgram(Global.Project);
-                //if (!Global.Header.workLoadProgram.IsBusy)
-                //    Global.Header.workLoadProgram.RunWorkerAsync();
+                 BeeInterface.G.Header.RefreshListPJ();
+                 BeeInterface.G.Header.ChangeProgram(Global.Project);
+                //if (! BeeInterface.G.Header.workLoadProgram.IsBusy)
+                //     BeeInterface.G.Header.workLoadProgram.RunWorkerAsync();
               
             }
         }
@@ -1106,8 +1164,8 @@ namespace BeeUi
 			View.split3.Height = 5;
 			View.split4.Height = 5;
 			View.split5.Height = 5;
-			Global.Header.split1.Height = 5;
-			Global.Header.split2.Height = 5;
+			 BeeInterface.G.Header.split1.Height = 5;
+			 BeeInterface.G.Header.split2.Height = 5;
 			Global.ToolSettings.split1.Height = 5;
 			
 			tmReLoadSplit.Enabled = false;
@@ -1363,10 +1421,10 @@ namespace BeeUi
                 string tarPath = openFile.FileName;
                 TarProgramHelper.ImportToDefaultProgram(tarPath);
                 Global.Project = Path.GetFileNameWithoutExtension(tarPath);
-                Global.Header.RefreshListPJ();
-                Global.Header.ChangeProgram(Global.Project);
-                //if (!Global.Header.workLoadProgram.IsBusy)
-                //    Global.Header.workLoadProgram.RunWorkerAsync();
+                 BeeInterface.G.Header.RefreshListPJ();
+                 BeeInterface.G.Header.ChangeProgram(Global.Project);
+                //if (! BeeInterface.G.Header.workLoadProgram.IsBusy)
+                //     BeeInterface.G.Header.workLoadProgram.RunWorkerAsync();
             }
 
             //string tarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ProgramBackup.tar");
@@ -1414,7 +1472,7 @@ namespace BeeUi
             
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
-                File.WriteAllLines(saveFile.FileName, Global.Header.listNameProg);
+                File.WriteAllLines(saveFile.FileName,  BeeInterface.G.Header.listNameProg);
              }
         }
 
@@ -1429,10 +1487,10 @@ namespace BeeUi
                 Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
                 Directory.CreateDirectory("Program\\" + Global.Project);
                 Access.SaveProg("Program\\" + Global.Project + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
-                Global.Header.RefreshListPJ();
-                Global.Header.ChangeProgram(Global.Project);
-                //if (!Global.Header.workLoadProgram.IsBusy)
-                //    Global.Header.workLoadProgram.RunWorkerAsync();
+                 BeeInterface.G.Header.RefreshListPJ();
+                 BeeInterface.G.Header.ChangeProgram(Global.Project);
+                //if (! BeeInterface.G.Header.workLoadProgram.IsBusy)
+                //     BeeInterface.G.Header.workLoadProgram.RunWorkerAsync();
             }
         }
 

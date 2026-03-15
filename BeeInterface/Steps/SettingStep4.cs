@@ -28,9 +28,9 @@ namespace BeeInterface
         {
            
           
-            SaveData.Project(Global.Project);
+          
             Global.EditTool.RefreshGuiEdit(Step.Run);
-            Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
+       
 
         }
 

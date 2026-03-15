@@ -8,6 +8,28 @@ namespace BeeGlobal
     [Serializable()]
     public class RectRotate
     {
+        public bool ContainsPointRect(PointF pWorld, float eps = 1e-4f)
+        {
+            // World -> local (center origin)
+            float dx = pWorld.X - _PosCenter.X;
+            float dy = pWorld.Y - _PosCenter.Y;
+
+            double rad = -_rectRotation * Math.PI / 180.0;
+            float c = (float)Math.Cos(rad);
+            float s = (float)Math.Sin(rad);
+
+            float xL = dx * c - dy * s;
+            float yL = dx * s + dy * c;
+
+            // rect local
+            float halfW = _rect.Width * 0.5f;
+            float halfH = _rect.Height * 0.5f;
+
+            return (xL >= -halfW - eps &&
+                    xL <= halfW + eps &&
+                    yL >= -halfH - eps &&
+                    yL <= halfH + eps);
+        }
         public PointF WorldToLocal(PointF pWorld)
         {
             // 1) World -> Local (gốc tại center)

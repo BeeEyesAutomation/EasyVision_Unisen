@@ -1,5 +1,7 @@
 ﻿using BeeCore;
+using BeeGlobal;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -9,6 +11,7 @@ namespace BeeInterface
 {
     public class DashboardListCompact : Control
     {
+        
         // ===== Data =====
         private BindingList<LabelItem> _items = new BindingList<LabelItem>();
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
@@ -123,10 +126,13 @@ namespace BeeInterface
             };
 
             MouseDown += OnMouseDown;
+        
             MouseWheel += OnMouseWheel;
 
             RecomputeScale();
         }
+
+      
 
         // ===== Scaling =====
         private static int S(float baseVal, float scale)
@@ -235,32 +241,123 @@ namespace BeeInterface
                 }
             }
         }
+        private void GetHeaderRects(int itemIndex, int yTop, int totalWidth,
+    out Rectangle headerRect,
+    out Rectangle nameRect,
+    out Rectangle btnRect,
+    out bool showButton)
+        {
+            headerRect = new Rectangle(_padX, yTop + 2, totalWidth - _padX * 2, _nameH - 4);
 
+            int btnW = (int)(100 * _scale);
+
+            LabelItem it = _items[itemIndex];
+
+            showButton = it.IsUse &&
+                         (_chooseActiveIndex < 0 || _chooseActiveIndex == itemIndex);
+
+            if (showButton)
+            {
+                btnRect = new Rectangle(
+                    headerRect.Right - btnW - 4,
+                    headerRect.Y + 2,
+                    btnW,
+                    headerRect.Height - 4);
+
+                nameRect = new Rectangle(
+                    headerRect.X + 6,
+                    headerRect.Y,
+                    headerRect.Width - btnW - 12,
+                    headerRect.Height);
+            }
+            else
+            {
+                btnRect = Rectangle.Empty;
+
+                nameRect = new Rectangle(
+                    headerRect.X + 6,
+                    headerRect.Y,
+                    headerRect.Width - 12,
+                    headerRect.Height);
+            }
+        }
         private void DrawUseButton(Graphics g, int itemIndex, int yTop, LabelItem it, int totalWidth)
         {
-            Rectangle r = new Rectangle(_padX, yTop + 2, totalWidth - _padX * 2, _nameH - 4);
+            Rectangle headerRect, nameRect, btnRect;
+            bool showButton;
+
+            GetHeaderRects(itemIndex, yTop, totalWidth,
+                out headerRect,
+                out nameRect,
+                out btnRect,
+                out showButton);
 
             Color back = it.IsUse ? Color.FromArgb(246, 201, 110) : Color.FromArgb(190, 190, 190);
             Color border = it.IsUse ? Color.FromArgb(220, 178, 98) : Color.FromArgb(160, 160, 160);
-            Color fore = Color.Black;
 
             using (SolidBrush b = new SolidBrush(back))
-            {
-                g.FillRectangle(b, r);
-            }
-            using (Pen p = new Pen(border))
-            {
-                g.DrawRectangle(p, r.X, r.Y, r.Width - 1, r.Height - 1);
-            }
+                g.FillRectangle(b, headerRect);
 
+            using (Pen p = new Pen(border))
+                g.DrawRectangle(p, headerRect.X, headerRect.Y, headerRect.Width - 1, headerRect.Height - 1);
+
+            // TEXT NAME
             TextRenderer.DrawText(
                 g,
                 string.IsNullOrEmpty(it.Name) ? ("Item " + (itemIndex + 1)) : it.Name,
                 _scaledFontBold,
-                r,
-                fore,
+                nameRect,
+                Color.Black,
                 TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+
+            if (!showButton)
+                return;
+
+            bool pressed = (_chooseActiveIndex == itemIndex);
+
+            Color btnBack = pressed
+                ? Color.FromArgb(50, 130, 210)
+                : Color.FromArgb(250, 230, 150);
+
+            using (SolidBrush b = new SolidBrush(btnBack))
+                g.FillRectangle(b, btnRect);
+
+            using (Pen p = new Pen(Color.FromArgb(210, 180, 90)))
+                g.DrawRectangle(p, btnRect);
+
+            TextRenderer.DrawText(
+                g,
+                "Choose Area",
+                _scaledFontBold,
+                btnRect,
+                Color.Black,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
+        //private void DrawUseButton(Graphics g, int itemIndex, int yTop, LabelItem it, int totalWidth)
+        //{
+        //    Rectangle r = new Rectangle(_padX, yTop + 2, totalWidth - _padX * 2, _nameH - 4);
+
+        //    Color back = it.IsUse ? Color.FromArgb(246, 201, 110) : Color.FromArgb(190, 190, 190);
+        //    Color border = it.IsUse ? Color.FromArgb(220, 178, 98) : Color.FromArgb(160, 160, 160);
+        //    Color fore = Color.Black;
+
+        //    using (SolidBrush b = new SolidBrush(back))
+        //    {
+        //        g.FillRectangle(b, r);
+        //    }
+        //    using (Pen p = new Pen(border))
+        //    {
+        //        g.DrawRectangle(p, r.X, r.Y, r.Width - 1, r.Height - 1);
+        //    }
+
+        //    TextRenderer.DrawText(
+        //        g,
+        //        string.IsNullOrEmpty(it.Name) ? ("Item " + (itemIndex + 1)) : it.Name,
+        //        _scaledFontBold,
+        //        r,
+        //        fore,
+        //        TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+        //}
 
         private void DrawLine(Graphics g, int itemIndex, int lineIndex, int baseY, string label, LabelItem it,
                               bool flag, int value, Segment flagSeg, Segment valSeg, int totalWidth)
@@ -337,16 +434,20 @@ namespace BeeInterface
         {
             None,
             UseToggle,
+            ChooseAreaLimit,
+
             Area, ValueArea,
             Width, ValueWidth,
             Height, ValueHeight,
             X, ValueX,
             Y, ValueY,
-          
+
             Counter,
             ValueCounter,
+
             XMax, ValueXMax,
             YMax, ValueYMax,
+
             Distance, ValueDistance
         }
 
@@ -363,16 +464,64 @@ namespace BeeInterface
             int item = pt.Y / _itemHeight;
             idx = _vbar.Value + item;
             if (idx < 0 || idx >= _items.Count) return false;
-
+            //if (_chooseActiveIndex >= 0 && _chooseActiveIndex != idx )
+            //    return false;
             int top = item * _itemHeight;
+            Rectangle headerRect, nameRect, btnRect;
+            bool showButton;
 
-            Rectangle useRect = new Rectangle(_padX, top + 2, w - _padX * 2, _nameH - 4);
-            if (useRect.Contains(pt))
+            GetHeaderRects(idx, top, w,
+                out headerRect,
+                out nameRect,
+                out btnRect,
+                out showButton);
+
+            // button trước
+            if (showButton && btnRect.Contains(pt))
             {
-                seg = Segment.UseToggle;
-                targetRect = useRect;
+                seg = Segment.ChooseAreaLimit;
+                targetRect = btnRect;
                 return true;
             }
+
+            // label toggle
+            if (nameRect.Contains(pt))
+            {
+                seg = Segment.UseToggle;
+                targetRect = nameRect;
+                return true;
+            }
+            //Rectangle headerRect = new Rectangle(_padX, top + 2, w - _padX * 2, _nameH - 4);
+
+            //int btnW = (int)(90 * _scale);
+
+            //Rectangle btnRect = new Rectangle(
+            //    headerRect.Right - btnW - 4,
+            //    headerRect.Y + 2,
+            //    btnW,
+            //    headerRect.Height - 4);
+
+            //Rectangle nameRect = new Rectangle(
+            //    headerRect.X,
+            //    headerRect.Y,
+            //    Math.Max(1, headerRect.Width - btnW - 8),
+            //    headerRect.Height);
+
+            //// ưu tiên check nút trước
+            //if (btnRect.Contains(pt))
+            //{
+            //    seg = Segment.ChooseAreaLimit;
+            //    targetRect = btnRect;
+            //    return true;
+            //}
+
+            //// sau đó mới check vùng tên để toggle IsUse
+            //if (nameRect.Contains(pt))
+            //{
+            //    seg = Segment.UseToggle;
+            //    targetRect = nameRect;
+            //    return true;
+            //}
 
             int baseY = top + _nameH;
             for (int line = 0; line < BASE_LINES; line++)
@@ -425,26 +574,91 @@ namespace BeeInterface
             }
             return false;
         }
+        public event Action<int, LabelItem> ChooseAreaBegin;
+        public event Action<int, LabelItem> ChooseAreaEnd;
+        private int _chooseActiveIndex = -1;
+        //protected override void OnMouseUp(MouseEventArgs e)
+        //{
+        //    base.OnMouseUp(e);
 
-        // ===== Interaction =====
-        private void OnMouseDown(object sender, MouseEventArgs e)
+        //    if (_chooseActiveIndex < 0)
+        //        return;
+
+        //    int idx = _chooseActiveIndex;
+        //    _chooseActiveIndex = -1;
+
+        //    if (idx >= 0 && idx < _items.Count)
+        //    {
+        //        LabelItem it = _items[idx];
+
+        //        // gán lại list box detect
+        //        it.ListIndexBox = Global.ListIndexChoose;
+
+        //        Invalidate(RowRect(idx));
+        //    }
+        //}
+        protected override void OnMouseClick(MouseEventArgs e)
         {
+            base.OnMouseClick(e);
+
             int idx;
             Segment seg;
             Rectangle rect;
-            if (!HitTest(e.Location, out idx, out seg, out rect)) return;
+
+            if (!HitTest(e.Location, out idx, out seg, out rect))
+                return;
+
+            // đang choose 1 item thì chỉ cho item khác bấm UseToggle
+            if (_chooseActiveIndex >= 0 && _chooseActiveIndex != idx && seg != Segment.UseToggle)
+                return;
 
             LabelItem it = _items[idx];
 
+            if (seg == Segment.ChooseAreaLimit)
+            {
+                if (_chooseActiveIndex != idx)
+                {
+                    _chooseActiveIndex = idx;
+                    it.ListIndexBox.Clear();
+                    ChooseAreaBegin?.Invoke(idx, it);
+                }
+                else
+                {
+                    _chooseActiveIndex = -1;
+                    ChooseAreaEnd?.Invoke(idx, it);
+                }
+
+                Invalidate();
+                return;
+            }
+
+            if (seg == Segment.UseToggle)
+            {
+                it.IsUse = !it.IsUse;
+                if (!it.IsUse) HideEditor();
+                UpdateScroll();
+                Invalidate();
+                return;
+            }
+        }   // ===== Interaction =====
+        private void OnMouseDown(object sender, MouseEventArgs e)
+        {
+            int idx=0;
+            Segment seg;
+            Rectangle rect;
+
+            if (!HitTest(e.Location, out idx, out seg, out rect))
+                return;
+
+            LabelItem it = _items[idx];
+
+
+
+
+
+
             switch (seg)
             {
-                case Segment.UseToggle:
-                    it.IsUse = !it.IsUse;
-                    if (!it.IsUse) HideEditor();
-                    UpdateScroll();
-                    Invalidate(RowRect(idx));
-                    break;
-
                 default:
                     if (!it.IsUse) return;
 
@@ -477,36 +691,42 @@ namespace BeeInterface
                             UpdateScroll();
                             Invalidate(RowRect(idx));
                             break;
+
                         case Segment.XMax:
                             it.IsXMax = !it.IsXMax;
                             if (!it.IsXMax && IsEditing(idx, Segment.ValueXMax)) HideEditor();
                             UpdateScroll();
                             Invalidate(RowRect(idx));
                             break;
+
                         case Segment.Y:
                             it.IsY = !it.IsY;
                             if (!it.IsY && IsEditing(idx, Segment.ValueY)) HideEditor();
                             UpdateScroll();
                             Invalidate(RowRect(idx));
                             break;
+
                         case Segment.YMax:
                             it.IsYMax = !it.IsYMax;
                             if (!it.IsYMax && IsEditing(idx, Segment.ValueYMax)) HideEditor();
                             UpdateScroll();
                             Invalidate(RowRect(idx));
                             break;
+
                         case Segment.Counter:
                             it.IsCounter = !it.IsCounter;
                             if (!it.IsCounter && IsEditing(idx, Segment.ValueCounter)) HideEditor();
                             UpdateScroll();
                             Invalidate(RowRect(idx));
                             break;
+
                         case Segment.Distance:
                             it.IsDistance = !it.IsDistance;
                             if (!it.IsDistance && IsEditing(idx, Segment.ValueDistance)) HideEditor();
                             UpdateScroll();
                             Invalidate(RowRect(idx));
                             break;
+
                         case Segment.ValueArea:
                             if (it.IsArea) BeginEdit(idx, seg, it.ValueArea, rect);
                             break;
@@ -526,6 +746,7 @@ namespace BeeInterface
                         case Segment.ValueY:
                             if (it.IsY) BeginEdit(idx, seg, it.ValueY, rect);
                             break;
+
                         case Segment.ValueXMax:
                             if (it.IsXMax) BeginEdit(idx, seg, it.ValueXMax, rect);
                             break;
@@ -533,9 +754,11 @@ namespace BeeInterface
                         case Segment.ValueYMax:
                             if (it.IsYMax) BeginEdit(idx, seg, it.ValueYMax, rect);
                             break;
+
                         case Segment.ValueCounter:
                             if (it.IsCounter) BeginEdit(idx, seg, it.ValueCounter, rect);
                             break;
+
                         case Segment.ValueDistance:
                             if (it.IsDistance) BeginEdit(idx, seg, it.ValueDistance, rect);
                             break;

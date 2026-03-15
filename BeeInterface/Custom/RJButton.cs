@@ -399,17 +399,20 @@ namespace BeeInterface
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
+
             if (Visible)
             {
                 SmoothAncestors();
 
-                // TÍNH LAYOUT NGAY, đừng chờ Idle
-                if (IsHandleCreated)
-                    UpdateTextImageLayoutCore();
-
-                SafeInvalidate();
+                BeginInvoke((Action)(() =>
+                {
+                    if (!IsDisposed)
+                    {
+                        UpdateTextImageLayoutCore();
+                        SafeInvalidate();
+                    }
+                }));
             }
-           // if (Visible) SmoothAncestors();
         }
 
         protected override void Dispose(bool disposing)
@@ -1031,15 +1034,15 @@ namespace BeeInterface
         {
             base.OnResize(e);
 
-            // ✅ Debounce resize để tránh bão UpdateRegionPaths/RequestLayout
-           // if (InDesignMode)
-            {
-                UpdateRegionPaths();
-                RequestLayout();
-                return;
-            }
+            UpdateRegionPaths();
 
-            StartResizeDebounce();
+            // TÍNH LAYOUT NGAY
+            if (IsHandleCreated && Visible)
+                UpdateTextImageLayoutCore();
+            else
+                RequestLayout();
+
+            SafeInvalidate();
         }
 
         private void StartResizeDebounce()

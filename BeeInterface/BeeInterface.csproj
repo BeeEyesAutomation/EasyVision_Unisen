@@ -88,21 +88,21 @@
     <Compile Include="Class\KeyAcitve.cs" />
     <Compile Include="Class\RsDirPermissions.cs" />
     <Compile Include="Class\SqlServer.cs" />
-    <Compile Include="Comunication\WriteValuePLCSystems.cs">
+    <Compile Include="Comunications\WriteValuePLCSystems.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Comunication\WriteValuePLCSystems.Designer.cs">
+    <Compile Include="Comunications\WriteValuePLCSystems.Designer.cs">
       <DependentUpon>WriteValuePLCSystems.cs</DependentUpon>
     </Compile>
     <Compile Include="ControlStylePersistence.cs" />
     <Compile Include="Custom\AutoLabel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CameraForm.cs">
+    <Compile Include="FormFlowChart.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CameraForm.Designer.cs">
-      <DependentUpon>CameraForm.cs</DependentUpon>
+    <Compile Include="FormFlowChart.Designer.cs">
+      <DependentUpon>FormFlowChart.cs</DependentUpon>
     </Compile>
     <Compile Include="ConvertImg.cs" />
     <Compile Include="CustomGui.cs" />
@@ -540,10 +540,10 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="CameraForm.resx">
-      <DependentUpon>CameraForm.cs</DependentUpon>
+    <EmbeddedResource Include="FormFlowChart.resx">
+      <DependentUpon>FormFlowChart.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Comunication\WriteValuePLCSystems.resx">
+    <EmbeddedResource Include="Comunications\WriteValuePLCSystems.resx">
       <DependentUpon>WriteValuePLCSystems.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormWarning.resx">
@@ -760,7 +760,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Resources\BID_SLIDER_HANDLE_NON_ACTIVE.jpg" />
@@ -1508,6 +1508,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Export1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Refresh_1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -355,6 +355,14 @@ namespace BeeGlobal
         }
         [NonSerialized]
         public PCI_Card PCI_Card1 = new PCI_Card();
+        public void SetInput( I_O_Input I_O_Input,int value)
+        {
+            int ix = ParaBits.FindIndex(a => a.I_O_Input == I_O_Input && a.TypeIO == TypeIO.Input);
+            if (ix >= 0)
+            {
+                ParaBits[ix].Value = Convert.ToInt32(value);
+            }
+        }
         public async Task<bool> Connect(  )
         {
            
@@ -603,9 +611,13 @@ namespace BeeGlobal
                                             if (GetInPut(I_O_Input.Training) == true && !Global.IsAutoTemp)
                                             {
                                                 Global.IsAutoTemp = true;
-                                                WriteInput(I_O_Input.Training, false);
-
                                             }
+
+                                            else if (GetInPut(I_O_Input.Training) == false && Global.IsAutoTemp)
+                                            {
+                                                Global.IsAutoTemp = false;
+                                            }
+                                         
                                         }
                                         if (GetInPut(I_O_Input.Shuttdown) == true)
                                         {
@@ -1646,10 +1658,10 @@ namespace BeeGlobal
                     SetLight(false);
                     await WriteOutPut();
                     WriteInput(I_O_Input.ChangeProg, false);
-
-                    //if (AddCountProg != null)
-                    //    if (AddCountProg != "")
-                    //       ValueCountProg = PlcClient.ReadInt(AddCountProg);
+                    WriteInput(I_O_Input.Training, false);
+                    SetInput(I_O_Input.ChangeProg, 0);
+                    SetInput(I_O_Input.Training, 0);
+                  
                     break;
             }
             valueInput = new bool[16];

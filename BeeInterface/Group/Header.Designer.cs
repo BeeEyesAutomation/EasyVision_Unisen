@@ -1,8 +1,9 @@
 ﻿using BeeCore;
 using BeeGlobal;
 using BeeInterface;
+using BeeUi.Unit;
 
-namespace BeeUi.Common
+namespace BeeInterface
 {
     partial class Header
     {
@@ -222,7 +223,7 @@ namespace BeeUi.Common
             this.btnShowList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowList.Font = new System.Drawing.Font("Microsoft Sans Serif", 17.24219F);
             this.btnShowList.ForeColor = System.Drawing.Color.White;
-            this.btnShowList.Image =BeeInterface.Properties.Resources.Down_Button;
+            this.btnShowList.Image = global::BeeInterface.Properties.Resources.Down_Button;
             this.btnShowList.ImageDisabled = null;
             this.btnShowList.ImageHover = null;
             this.btnShowList.ImageNormal = null;
@@ -385,7 +386,7 @@ namespace BeeUi.Common
             this.btnTraining.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTraining.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
             this.btnTraining.ForeColor = System.Drawing.Color.IndianRed;
-            this.btnTraining.Image = BeeInterface.Properties.Resources.Change_1;
+            this.btnTraining.Image = global::BeeInterface.Properties.Resources.Change_1;
             this.btnTraining.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnTraining.ImageDisabled = null;
             this.btnTraining.ImageHover = null;
@@ -488,7 +489,7 @@ namespace BeeUi.Common
             this.btnEnterPO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEnterPO.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
             this.btnEnterPO.ForeColor = System.Drawing.Color.Black;
-            this.btnEnterPO.Image = BeeInterface.Properties.Resources.Rename;
+            this.btnEnterPO.Image = global::BeeInterface.Properties.Resources.Rename;
             this.btnEnterPO.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnEnterPO.ImageDisabled = null;
             this.btnEnterPO.ImageHover = null;
@@ -637,6 +638,7 @@ namespace BeeUi.Common
             this.btnDummy.Text = "Dummy";
             this.btnDummy.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.btnDummy.UseVisualStyleBackColor = false;
+            this.btnDummy.Click += new System.EventHandler(this.btnDummy_Click);
             // 
             // Header
             // 
@@ -683,7 +685,7 @@ namespace BeeUi.Common
         public TextBoxAuto txtQrCode;
         public System.Windows.Forms.Splitter split1;
         public System.Windows.Forms.Splitter split2;
-        public Unit.EditProg pEdit;
+        public EditProg pEdit;
         public RJButton btnTraining;
         public RJButton btnEnterPO;
         private AutoFontLabel lbPO;

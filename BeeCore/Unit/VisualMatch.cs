@@ -1,8 +1,10 @@
-﻿using BeeCore.Func;
+﻿using BeeCore.Algorithm;
+using BeeCore.Func;
 using BeeCore.Funtion;
 using BeeCpp;
 using BeeGlobal;
 using CvPlus;
+using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using Python.Runtime;
@@ -68,7 +70,8 @@ namespace BeeCore
         public float Aspect = 0.1f;
         public int ColorTolerance = 1;
         public int MaxDiffPixels = 1;
-       
+        public TypeMat TypeImg = TypeMat.Color;
+        public bool IsAutoThreshBinary = false;
         [NonSerialized]
         Mat matTemp;
         public Mat LearnPattern(Mat raw, bool IsNoCrop)
@@ -76,39 +79,29 @@ namespace BeeCore
 
             using (Mat img = raw.Clone())
             {
-                if (IsBinary)
+              
+                Mat matFilter = new Mat() ;
+                matFilter = img.Clone();
+                switch (TypeImg)
                 {
-                    Mat gray = new Mat(), blurBg = new Mat(), norm = new Mat(), bin = new Mat();
-
-                    if (img.Channels() == 3)
-                        Cv2.CvtColor(img, img, ColorConversionCodes.BGR2GRAY);
-
-                    //Cv2.AdaptiveThreshold(
-                    //     gray,
-                    //     img,
-                    //     255,
-                    //     AdaptiveThresholdTypes.GaussianC,
-                    //     ThresholdTypes.Binary,
-                    //     35,   // block size
-                    //     5     // bias
-                    // );
-
-
-                    //// background
-                    //Cv2.GaussianBlur(img, blurBg,new  Size(51, 51), 0);
-
-                    //// normalize
-                    //Cv2.Subtract(img, blurBg, norm);
-
-                    //// binary
-                    //Cv2.Threshold(norm, img, 0, 255, ThresholdTypes.Otsu);
-                    Cv2.Threshold(img, img, ThreshBinary, 255, ThresholdTypes.Binary);
+                    case TypeMat.Color:
+                        if (matFilter.Channels() == 1)
+                            Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.GRAY2BGR);
+                        else if (matFilter.Channels() == 4)
+                            Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.BGRA2BGR);
+                        break;
+                    case TypeMat.Binary:
+                        if (img.Channels() == 3)
+                            Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.BGR2GRAY);
+                        if (IsAutoThreshBinary)
+                        {
+                            matFilter = Filters.BinaryTextAuto(img, 31, 8, SzClearNoise);
+                        }
+                        else
+                            Cv2.Threshold(matFilter, matFilter, ThreshBinary, 255, ThresholdTypes.Binary);
+                        break;
                 }
-                // Chuẩn hóa kênh về BGR 3 kênh
-                if (img.Channels() == 1)
-                    Cv2.CvtColor(img, img, ColorConversionCodes.GRAY2BGR);
-                else if (img.Channels() == 4)
-                    Cv2.CvtColor(img, img, ColorConversionCodes.BGRA2BGR);
+               
 
                 int w = 0, h = 0, s = 0, c = 0;
                 IntPtr intpr = IntPtr.Zero;
@@ -120,16 +113,16 @@ namespace BeeCore
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
 
                     intpr = ColorPixel.SetImgeSample(
-                             img.Data, img.Width, img.Height, (int)img.Step(), img.Channels()
+                             matFilter.Data, matFilter.Width, matFilter.Height, (int)matFilter.Step(), matFilter.Channels()
                         , rrCli, rrMaskCli,IsNoCrop,0,
                             out w, out h, out s, out c);
 
-                    // Gọi native – chú ý truyền đúng kích thước crop
+                 
                
                     if (intpr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
                         return mat; // trả Mat rỗng
 
-                    // Map kênh trả về
+                
                     MatType mt = c == 1 ? MatType.CV_8UC1
                                 : c == 3 ? MatType.CV_8UC3
                                 : MatType.CV_8UC4;
@@ -137,7 +130,7 @@ namespace BeeCore
                     // Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
                     using (var m = new Mat(h, w, mt, intpr, s))
                     {
-                        // CopyTo hoặc Clone đều OK; Clone gọn hơn:
+                        
                         mat = m.Clone();
                     }
 
@@ -146,6 +139,8 @@ namespace BeeCore
                 }
                 finally
                 {
+                    if(!matFilter.IsDisposed)
+                        matFilter.Dispose();
                     if (intpr != IntPtr.Zero)
                         ColorPixel.FreeBuffer(intpr); // rất quan trọng
                 }
@@ -183,11 +178,7 @@ namespace BeeCore
             Common.PropetyTools[IndexThread][Index].MaxValue = 5000;
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
         }
-
-        //IsProcess,Convert.ToBoolean((int) TypeMode)
         public List<RectRotate> rectRotates = new List<RectRotate>();
-    
-
         public bool IsLimitCouter = true;
         public float PxTemp = 0;
         [NonSerialized]
@@ -201,29 +192,40 @@ namespace BeeCore
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
 
-            try
-            {
+           
                 pxRS=0;
-                using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
+                using (Mat img = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
                 {
-                    if (raw.Empty()) return;
-                    if (IsBinary)
+                   
+                    if (img.Empty()) return;
+                    Mat matFilter = img.Clone();
+                try
+                {
+                    switch (TypeImg)
                     {
-                        if (raw.Channels() == 3)
-                            Cv2.CvtColor(raw, raw, ColorConversionCodes.BGR2GRAY);
-                        Cv2.Threshold(raw, raw, ThreshBinary, 255, ThresholdTypes.Binary);
-                    }
-
-                    if (raw.Type() == MatType.CV_8UC1)
-                    {
-                        Cv2.CvtColor(raw, raw, ColorConversionCodes.GRAY2BGR);
+                        case TypeMat.Color:
+                            if (matFilter.Channels() == 1)
+                                Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.GRAY2BGR);
+                            else if (matFilter.Channels() == 4)
+                                Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.BGRA2BGR);
+                            break;
+                        case TypeMat.Binary:
+                            if (img.Channels() == 3)
+                                Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.BGR2GRAY);
+                            if (IsAutoThreshBinary)
+                            {
+                                matFilter = Filters.BinaryTextAuto(img, 31, 8, SzClearNoise);
+                            }
+                            else
+                                Cv2.Threshold(matFilter, matFilter, ThreshBinary, 255, ThresholdTypes.Binary);
+                            break;
                     }
                     var rrCli = Converts.ToCli(rotArea); // như ở reply trước
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
 
-                    ColorPixel.SetImgeRaw(raw.Data, raw.Width, raw.Height, (int)raw.Step(), raw.Channels(), rrCli,rrMaskCli,0);
+                    ColorPixel.SetImgeRaw(matFilter.Data, matFilter.Width, matFilter.Height, (int)matFilter.Step(), matFilter.Channels(), rrCli,rrMaskCli,0);
 
-                    if (raw.Empty()) return;
+                  
                     int w = 0, h = 0, s = 0, c = 0;
                     IsAlign = ModeCalibVisualMatch == ModeCalibVisualMatch.OFF ? false : true;
                     IntPtr intpr = IntPtr.Zero;
@@ -243,19 +245,21 @@ namespace BeeCore
 
 
 
-
-
                 }
-            }
-            catch (Exception ex)
-            {
+                catch (Exception ex)
+                {
 
-                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "VisalMatch", ex.ToString()));
-            }
-            finally
-            {
+                    Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "VisalMatch", ex.ToString()));
+                }
+                finally
+                {
+                    if (!matFilter.IsDisposed)
+                        matFilter.Dispose();
+                   
+                }
 
             }
+            
         }
         public bool IsCalib;
         public void Complete()

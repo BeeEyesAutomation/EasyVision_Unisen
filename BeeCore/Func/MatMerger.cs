@@ -1,5 +1,6 @@
-﻿using System;
-using OpenCvSharp;
+﻿using OpenCvSharp;
+using System;
+using System.Collections.Generic;
 namespace BeeCore
 {
     public enum MergeDirection
@@ -130,6 +131,66 @@ namespace BeeCore
             Mat bgr2 = new Mat();
             Cv2.CvtColor(u8, bgr2, ColorConversionCodes.BGRA2BGR);
             return bgr2;
+        }
+        public static Mat MergeMany(IEnumerable<Mat> mats, MatMergerOptions opt = null)
+        {
+            if (opt == null)
+                opt = new MatMergerOptions();
+
+            if (mats == null)
+                throw new ArgumentNullException(nameof(mats));
+
+            List<Mat> list = new List<Mat>();
+
+            foreach (var m in mats)
+            {
+                if (m == null || m.Empty())
+                    throw new ArgumentException("Input Mat empty.");
+
+                Mat src = opt.ForceBgr8U ? EnsureBgr8U(m) : m;
+                list.Add(src);
+            }
+
+            if (list.Count == 0)
+                throw new ArgumentException("No images.");
+
+            Mat first = list[0];
+
+            // normalize size
+            for (int i = 1; i < list.Count; i++)
+            {
+                Mat cur = list[i];
+
+                if (opt.Direction == MergeDirection.Horizontal)
+                {
+                    if (cur.Rows != first.Rows)
+                    {
+                        if (opt.SizeMode == SizeMode.ResizeToMatch)
+                            list[i] = ResizeKeepAspect(cur, targetRows: first.Rows, targetCols: null, opt.Interp);
+                        else
+                            list[i] = PadToRows(cur, first.Rows, opt.PadColor);
+                    }
+                }
+                else
+                {
+                    if (cur.Cols != first.Cols)
+                    {
+                        if (opt.SizeMode == SizeMode.ResizeToMatch)
+                            list[i] = ResizeKeepAspect(cur, targetRows: null, targetCols: first.Cols, opt.Interp);
+                        else
+                            list[i] = PadToCols(cur, first.Cols, opt.PadColor);
+                    }
+                }
+            }
+
+            Mat outMat = new Mat();
+
+            if (opt.Direction == MergeDirection.Horizontal)
+                Cv2.HConcat(list, outMat);
+            else
+                Cv2.VConcat(list, outMat);
+
+            return outMat;
         }
 
         private static Mat ResizeKeepAspect(Mat src, int? targetRows, int? targetCols, InterpolationFlags interp)

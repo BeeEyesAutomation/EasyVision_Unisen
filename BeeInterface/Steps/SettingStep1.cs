@@ -61,6 +61,7 @@ namespace BeeInterface
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Global.EditTool.RefreshGuiEdit(Step.Run);
+ 
         }
         public int indexTool;
    
@@ -75,8 +76,8 @@ namespace BeeInterface
         private void btnBoth_Click(object sender, EventArgs e)
         {
            
-            //    if (Global.Header.SerialPort1.IsOpen)
-            //        Global.Header.SerialPort1.WriteLine("Both");
+            //    if ( BeeInterface.G.Header.SerialPort1.IsOpen)
+            //         BeeInterface.G.Header.SerialPort1.WriteLine("Both");
             //else
             //    MessageBox.Show("Port Close");
             Global.ParaCommon.TypeLight = 3;

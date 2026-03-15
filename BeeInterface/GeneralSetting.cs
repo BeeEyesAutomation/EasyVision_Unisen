@@ -30,6 +30,8 @@ namespace BeeInterface
         //  BeeCore.Config ConfigPrev;
         private void IOSetting_Load(object sender, EventArgs e)
         {
+            btnOnManual.IsCLick = Global.Config.IsManual;
+            btnOffManual.IsCLick = !Global.Config.IsManual;
             btnSaveAllPara.IsCLick = Global.Config.IsSaveAllPara;
             if (btnSaveAllPara.IsCLick) btnSaveAllPara.Text = "ON";
             else btnSaveAllPara.Text = "OFF";
@@ -716,6 +718,16 @@ namespace BeeInterface
             Global.Config.IsShowImgTrig = btnShowImgTrig.IsCLick;
             if (btnShowImgTrig.IsCLick) btnShowImgTrig.Text = "ON";
             else btnShowImgTrig.Text = "OFF";
+        }
+
+        private void btnOnManual_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsManual=btnOnManual.IsCLick;
+        }
+
+        private void btnOffManual_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsManual = !btnOffManual.IsCLick;
         }
     }
 }

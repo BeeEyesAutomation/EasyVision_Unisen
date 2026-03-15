@@ -1,15 +1,7 @@
 ﻿
 using BeeCore;
-using BeeCore.EtherNetIP;
-using BeeCore.Funtion;
 using BeeGlobal;
-using BeeInterface;
-
-using BeeUi.Tool;
-using Google.Apis.Auth.OAuth2;
-using Newtonsoft.Json.Linq;
-using OpenCvSharp;
-using OpenCvSharp.Extensions;
+using BeeUi;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,9 +10,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -28,16 +17,13 @@ using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using G = BeeInterface.G;
-using Image = System.Drawing.Image;
+
 using Point = System.Drawing.Point;
 using Timer = System.Windows.Forms.Timer;
 using UserControl = System.Windows.Forms.UserControl;
-using View = BeeInterface.View;
 
-namespace BeeUi.Common
+
+namespace BeeInterface
 {
     [Serializable()]
     public partial class Header : UserControl
@@ -46,8 +32,8 @@ namespace BeeUi.Common
         public Header()
         {
             InitializeComponent();
-         //  btnHide.Click += async (s, e) => await FadePanel(); ;
-            Global.Header = this;
+            //  btnHide.Click += async (s, e) => await FadePanel(); ;
+            BeeInterface.G.Header = this;
            
         }
         bool IsLoaded;
@@ -141,7 +127,7 @@ namespace BeeUi.Common
                 //G.IsReConnectCCD = true;
                 //Global.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
                 //G.ScanCCD.Show();
-                //Global.Header.tmReadPLC.Enabled = false;
+                // BeeInterface.G.Header.tmReadPLC.Enabled = false;
 
 
             }
@@ -191,7 +177,7 @@ namespace BeeUi.Common
                     formChoose.ShowDialog();
                     if (Global.Step == Step.Step1)
                     {
-                        CameraForm cameraForm = new CameraForm();
+                        FormFlowChart cameraForm = new FormFlowChart();
                         cameraForm.ShowDialog();
                     }
                     else
@@ -322,14 +308,14 @@ namespace BeeUi.Common
                 Global.ToolSettings = new ToolSettings();
 
             }
-            if (Global.SettingPLC == null)
+            if ( BeeInterface.G.SettingPLC == null)
             {
-                Global.SettingPLC = new ProtocolPLC();
+                BeeInterface.G.SettingPLC = new ProtocolPLC();
             }
 
             if (Global.Comunication == null)
             {
-                Global.Comunication = new Comunication();
+                Global.Comunication = new BeeGlobal. Comunication();
                 Global.Comunication.Protocol = new ParaProtocol();
               
 
@@ -344,7 +330,7 @@ namespace BeeUi.Common
                 // Access.SaveProg("Program\\Default.prog", new List<PropetyTool>());
 
 
-                Global.Project = BeeInterface.Properties.Settings.Default.programCurrent;
+           
 
 
                 txtQrCode.Text = Global.Project;
@@ -380,7 +366,7 @@ namespace BeeUi.Common
                 btnShowList.Enabled = true;
                 Global.IsChangeProg = false;
                 return;
-                //    G.listProgram.SelectedIndex = G.listProgram.FindStringExact(Properties.Settings.Default.programCurrent);
+                //    G.listProgram.SelectedIndex = G.listProgram.FindStringExact(BeeInterface.Properties.Settings.Default.programCurrent);
 
             }
             txtQrCode.Enabled = false;
@@ -1047,8 +1033,13 @@ txtQrCode.Focus();
 
         }
 
-        private async void btnTraining_Click(object sender, EventArgs e)
+        private  void btnTraining_Click(object sender, EventArgs e)
         {
+            if(!Global.Config.IsManual)
+            {
+                FormWarning formWarning = new FormWarning("Infor", "Please turn Training on on the HMI");
+                formWarning.ShowDialog();
+            }    
             Global.IsAutoTemp = btnTraining.IsCLick;
 
             //if (Global.Comunication.Protocol.IsConnected)
@@ -1083,6 +1074,15 @@ txtQrCode.Focus();
         private void pEdit_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnDummy_Click(object sender, EventArgs e)
+        {
+            if (!Global.Config.IsManual)
+            {
+                FormWarning formWarning = new FormWarning("Infor", "Please turn Dummy on on the HMI");
+                formWarning.ShowDialog();
+            }
         }
 
         bool IsKeyEnter = false;

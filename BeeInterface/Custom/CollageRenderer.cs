@@ -284,22 +284,65 @@ namespace BeeInterface
 
             int w = maxW;
             int h = maxH;
-
             if (preset == CollageLayout.Two)
             {
                 bool wide = ResolveWide(w, h, orientation);
-                if (wide) w = maxW * 2 + gutter;
-                else h = maxH * 2 + gutter;
+
+                if (wide)
+                    w = maxW * 2 + gutter;
+                else
+                    h = maxH * 2 + gutter;
             }
             else if (preset == CollageLayout.ThreeRow)
             {
-                w = maxW * 3 + gutter * 2;
+                bool wide = ResolveWide(w, h, orientation);
+
+                if (wide) // horizontal
+                {
+                    w = maxW * 3 + gutter * 2;
+                    h = maxH;
+                }
+                else // vertical
+                {
+                    w = maxW;
+                    h = maxH * 3 + gutter * 2;
+                }
             }
-            else if (preset == CollageLayout.FourGrid || preset == CollageLayout.AutoWeighted)
+            else if (preset == CollageLayout.FourGrid)
+            {
+                bool wide = ResolveWide(w, h, orientation);
+
+                if (wide) // 2x2
+                {
+                    w = maxW * 2 + gutter;
+                    h = maxH * 2 + gutter;
+                }
+                else // 4 rows
+                {
+                    w = maxW;
+                    h = maxH * 4 + gutter * 3;
+                }
+            }
+            else if (preset == CollageLayout.AutoWeighted)
             {
                 w = maxW * 2 + gutter;
                 h = maxH * 2 + gutter;
             }
+            //if (preset == CollageLayout.Two)
+            //{
+            //    bool wide = ResolveWide(w, h, orientation);
+            //    if (wide) w = maxW * 2 + gutter;
+            //    else h = maxH * 2 + gutter;
+            //}
+            //else if (preset == CollageLayout.ThreeRow)
+            //{
+            //    w = maxW * 3 + gutter * 2;
+            //}
+            //else if (preset == CollageLayout.FourGrid || preset == CollageLayout.AutoWeighted)
+            //{
+            //    w = maxW * 2 + gutter;
+            //    h = maxH * 2 + gutter;
+            //}
 
             if (downscale > 1)
             {
@@ -331,14 +374,17 @@ namespace BeeInterface
         }
 
         private static List<Rectangle> ComputeCellsPreset(
-            Rectangle dst,
-            int n,
-            int gutter,
-            CollageLayout preset,
-            LayoutOrientation orientation)
+         Rectangle dst,
+         int n,
+         int gutter,
+         CollageLayout preset,
+         LayoutOrientation orientation)
         {
             List<Rectangle> res = new List<Rectangle>(n);
-            bool wide = ResolveWide(dst.Width, dst.Height, orientation);
+
+            bool horizontal =
+                orientation == LayoutOrientation.ForceHorizontal ||
+                (orientation == LayoutOrientation.Auto && dst.Width >= dst.Height);
 
             if (preset == CollageLayout.One || n == 1)
             {
@@ -346,39 +392,88 @@ namespace BeeInterface
                 return res;
             }
 
+            // ================= TWO =================
             if (preset == CollageLayout.Two)
             {
-                if (wide)
+                if (horizontal)
                 {
                     int w = (dst.Width - gutter) / 2;
+
                     res.Add(new Rectangle(dst.X, dst.Y, w, dst.Height));
-                    res.Add(new Rectangle(dst.X + w + gutter, dst.Y, dst.Width - w - gutter, dst.Height));
+                    res.Add(new Rectangle(dst.X + w + gutter, dst.Y,
+                                          dst.Width - w - gutter, dst.Height));
                 }
                 else
                 {
                     int h = (dst.Height - gutter) / 2;
+
                     res.Add(new Rectangle(dst.X, dst.Y, dst.Width, h));
-                    res.Add(new Rectangle(dst.X, dst.Y + h + gutter, dst.Width, dst.Height - h - gutter));
+                    res.Add(new Rectangle(dst.X, dst.Y + h + gutter,
+                                          dst.Width, dst.Height - h - gutter));
                 }
+
                 return res;
             }
 
+            // ================= THREE =================
             if (preset == CollageLayout.ThreeRow)
             {
-                int w = (dst.Width - gutter * 2) / 3;
-                for (int i = 0; i < 3; i++)
-                    res.Add(new Rectangle(dst.X + i * (w + gutter), dst.Y, w, dst.Height));
+                if (horizontal)
+                {
+                    int w = (dst.Width - gutter * 2) / 3;
+
+                    for (int i = 0; i < 3; i++)
+                        res.Add(new Rectangle(
+                            dst.X + i * (w + gutter),
+                            dst.Y,
+                            w,
+                            dst.Height));
+                }
+                else
+                {
+                    int h = (dst.Height - gutter * 2) / 3;
+
+                    for (int i = 0; i < 3; i++)
+                        res.Add(new Rectangle(
+                            dst.X,
+                            dst.Y + i * (h + gutter),
+                            dst.Width,
+                            h));
+                }
+
                 return res;
             }
 
-            int cw = (dst.Width - gutter) / 2;
-            int ch = (dst.Height - gutter) / 2;
+            // ================= FOUR =================
+            if (preset == CollageLayout.FourGrid)
+            {
+                if (horizontal)
+                {
+                    int cw = (dst.Width - gutter) / 2;
+                    int ch = (dst.Height - gutter) / 2;
 
-            res.Add(new Rectangle(dst.X, dst.Y, cw, ch));
-            res.Add(new Rectangle(dst.X + cw + gutter, dst.Y, dst.Width - cw - gutter, ch));
-            res.Add(new Rectangle(dst.X, dst.Y + ch + gutter, cw, dst.Height - ch - gutter));
-            res.Add(new Rectangle(dst.X + cw + gutter, dst.Y + ch + gutter,
-                                  dst.Width - cw - gutter, dst.Height - ch - gutter));
+                    res.Add(new Rectangle(dst.X, dst.Y, cw, ch));
+                    res.Add(new Rectangle(dst.X + cw + gutter, dst.Y, cw, ch));
+                    res.Add(new Rectangle(dst.X, dst.Y + ch + gutter, cw, ch));
+                    res.Add(new Rectangle(dst.X + cw + gutter, dst.Y + ch + gutter, cw, ch));
+                }
+                else
+                {
+                    int h = (dst.Height - gutter * 3) / 4;
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        res.Add(new Rectangle(
+                            dst.X,
+                            dst.Y + i * (h + gutter),
+                            dst.Width,
+                            h));
+                    }
+                }
+
+                return res;
+            }
+
             return res;
         }
 

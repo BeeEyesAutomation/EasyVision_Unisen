@@ -299,7 +299,7 @@ namespace BeeUi.Tool
             // 
             this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRefresh.BackColor = System.Drawing.Color.White;
-            this.btnRefresh.BackgroundImage = BeeInterface.Properties.Resources.Refresh;
+            this.btnRefresh.BackgroundImage = BeeInterface.Properties.Resources.Refresh25;
             this.btnRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnRefresh.Location = new System.Drawing.Point(895, 6);
             this.btnRefresh.Name = "btnRefresh";

@@ -1,5 +1,5 @@
 ﻿using BeeCore;
-using BeeUi.Common;
+
 using BeeUi.Commons;
 using BeeUi.Tool;
 using System;
@@ -52,7 +52,7 @@ namespace BeeUi
        
         
      
-        public static StatusDashboard StatusDashboard;
+
    
       
        

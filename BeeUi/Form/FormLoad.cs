@@ -163,7 +163,7 @@ namespace BeeUi
         {
 
       
-            Global.Project =Properties.Settings.Default.programCurrent.Replace(".prog", "");
+            Global.Project =BeeInterface.Properties.Settings.Default.programCurrent.Replace(".prog", "");
 
             Global.Config = LoadData.Config();
             Global.ListProgNo = LoadData.ProgNo();
@@ -311,7 +311,7 @@ namespace BeeUi
 
         private void workLoadProg_DoWork(object sender, DoWorkEventArgs e)
         {
-            Global.Project = Properties.Settings.Default.programCurrent;
+            Global.Project = BeeInterface.Properties.Settings.Default.programCurrent;
             DataTool.LoadProjectData(Global.Project);
            
         }

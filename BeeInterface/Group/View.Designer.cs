@@ -83,13 +83,13 @@ namespace BeeInterface
             this.tmShow = new System.Windows.Forms.Timer(this.components);
             this.split5 = new System.Windows.Forms.Splitter();
             this.pBtn = new System.Windows.Forms.Panel();
+            this.splitter2 = new System.Windows.Forms.Splitter();
+            this.btnChangeImg = new BeeInterface.RJButton();
             this.splitter3 = new System.Windows.Forms.Splitter();
             this.pImageShow = new System.Windows.Forms.TableLayoutPanel();
             this.btnShowImgHistory = new BeeInterface.RJButton();
             this.btnShowRaw = new BeeInterface.RJButton();
             this.btnShowResult = new BeeInterface.RJButton();
-            this.splitter2 = new System.Windows.Forms.Splitter();
-            this.btnChangeImg = new BeeInterface.RJButton();
             this.split4 = new System.Windows.Forms.Splitter();
             this.btnTypeTrig = new BeeInterface.RJButton();
             this.btnMenu = new System.Windows.Forms.Button();
@@ -209,7 +209,7 @@ namespace BeeInterface
             // 
             // newShapeTool
             // 
-            this.newShapeTool.Image = BeeInterface.Properties.Resources.Cursor;
+            this.newShapeTool.Image = global::BeeInterface.Properties.Resources.Cursor;
             this.newShapeTool.Name = "newShapeTool";
             this.newShapeTool.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.newShapeTool.Size = new System.Drawing.Size(183, 22);
@@ -322,7 +322,7 @@ namespace BeeInterface
             this.btnMenuMove.FlatAppearance.BorderSize = 0;
             this.btnMenuMove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuMove.ForeColor = System.Drawing.Color.White;
-            this.btnMenuMove.Image = BeeInterface.Properties.Resources.Right_Click;
+            this.btnMenuMove.Image = global::BeeInterface.Properties.Resources.Right_Click;
             this.btnMenuMove.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuMove.ImageDisabled = null;
             this.btnMenuMove.ImageHover = null;
@@ -374,7 +374,7 @@ namespace BeeInterface
             this.btnMouseRight.FlatAppearance.BorderSize = 0;
             this.btnMouseRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMouseRight.ForeColor = System.Drawing.Color.White;
-            this.btnMouseRight.Image = BeeInterface.Properties.Resources.Menubar_1;
+            this.btnMouseRight.Image = global::BeeInterface.Properties.Resources.Menubar_1;
             this.btnMouseRight.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMouseRight.ImageDisabled = null;
             this.btnMouseRight.ImageHover = null;
@@ -427,7 +427,7 @@ namespace BeeInterface
             this.btnClick.FlatAppearance.BorderSize = 0;
             this.btnClick.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClick.ForeColor = System.Drawing.Color.White;
-            this.btnClick.Image = BeeInterface.Properties.Resources.Cursor;
+            this.btnClick.Image = global::BeeInterface.Properties.Resources.Cursor;
             this.btnClick.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnClick.ImageDisabled = null;
             this.btnClick.ImageHover = null;
@@ -480,7 +480,7 @@ namespace BeeInterface
             this.btnZoomOut.FlatAppearance.BorderSize = 0;
             this.btnZoomOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnZoomOut.ForeColor = System.Drawing.Color.White;
-            this.btnZoomOut.Image = BeeInterface.Properties.Resources.Zoom_Out;
+            this.btnZoomOut.Image = global::BeeInterface.Properties.Resources.Zoom_Out;
             this.btnZoomOut.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnZoomOut.ImageDisabled = null;
             this.btnZoomOut.ImageHover = null;
@@ -535,7 +535,7 @@ namespace BeeInterface
             this.btnZoomIn.FlatAppearance.BorderSize = 0;
             this.btnZoomIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnZoomIn.ForeColor = System.Drawing.Color.White;
-            this.btnZoomIn.Image = BeeInterface.Properties.Resources.Zoom_In;
+            this.btnZoomIn.Image = global::BeeInterface.Properties.Resources.Zoom_In;
             this.btnZoomIn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnZoomIn.ImageDisabled = null;
             this.btnZoomIn.ImageHover = null;
@@ -590,7 +590,7 @@ namespace BeeInterface
             this.btnFull.FlatAppearance.BorderSize = 0;
             this.btnFull.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFull.ForeColor = System.Drawing.Color.White;
-            this.btnFull.Image = BeeInterface.Properties.Resources.Full_Screen;
+            this.btnFull.Image = global::BeeInterface.Properties.Resources.Full_Screen;
             this.btnFull.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnFull.ImageDisabled = null;
             this.btnFull.ImageHover = null;
@@ -643,7 +643,7 @@ namespace BeeInterface
             this.btnPan.FlatAppearance.BorderSize = 0;
             this.btnPan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPan.ForeColor = System.Drawing.Color.White;
-            this.btnPan.Image = BeeInterface.Properties.Resources.Hand;
+            this.btnPan.Image = global::BeeInterface.Properties.Resources.Hand;
             this.btnPan.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnPan.ImageDisabled = null;
             this.btnPan.ImageHover = null;
@@ -696,7 +696,7 @@ namespace BeeInterface
             this.btnShowCenter.FlatAppearance.BorderSize = 0;
             this.btnShowCenter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowCenter.ForeColor = System.Drawing.Color.White;
-            this.btnShowCenter.Image = BeeInterface.Properties.Resources.Center_of_Gravity_1;
+            this.btnShowCenter.Image = global::BeeInterface.Properties.Resources.Center_of_Gravity_1;
             this.btnShowCenter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnShowCenter.ImageDisabled = null;
             this.btnShowCenter.ImageHover = null;
@@ -749,7 +749,7 @@ namespace BeeInterface
             this.btnGird.FlatAppearance.BorderSize = 0;
             this.btnGird.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGird.ForeColor = System.Drawing.Color.White;
-            this.btnGird.Image = BeeInterface.Properties.Resources.Prison_1;
+            this.btnGird.Image = global::BeeInterface.Properties.Resources.Prison_1;
             this.btnGird.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnGird.ImageDisabled = null;
             this.btnGird.ImageHover = null;
@@ -802,7 +802,7 @@ namespace BeeInterface
             this.btnShowArea.FlatAppearance.BorderSize = 0;
             this.btnShowArea.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowArea.ForeColor = System.Drawing.Color.White;
-            this.btnShowArea.Image = BeeInterface.Properties.Resources.Rectangular_1;
+            this.btnShowArea.Image = global::BeeInterface.Properties.Resources.Rectangular_1;
             this.btnShowArea.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnShowArea.ImageDisabled = null;
             this.btnShowArea.ImageHover = null;
@@ -953,6 +953,75 @@ namespace BeeInterface
             this.pBtn.SizeChanged += new System.EventHandler(this.pBtn_SizeChanged);
             this.pBtn.Paint += new System.Windows.Forms.PaintEventHandler(this.pBtn_Paint_1);
             // 
+            // splitter2
+            // 
+            this.splitter2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
+            this.splitter2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter2.Location = new System.Drawing.Point(979, 5);
+            this.splitter2.MinExtra = 1;
+            this.splitter2.MinSize = 10;
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(10, 50);
+            this.splitter2.TabIndex = 43;
+            this.splitter2.TabStop = false;
+            // 
+            // btnChangeImg
+            // 
+            this.btnChangeImg.AutoFont = true;
+            this.btnChangeImg.AutoFontHeightRatio = 0.75F;
+            this.btnChangeImg.AutoFontMax = 100F;
+            this.btnChangeImg.AutoFontMin = 8F;
+            this.btnChangeImg.AutoFontWidthRatio = 1F;
+            this.btnChangeImg.AutoImage = true;
+            this.btnChangeImg.AutoImageMaxRatio = 0.75F;
+            this.btnChangeImg.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnChangeImg.AutoImageTint = true;
+            this.btnChangeImg.BackColor = System.Drawing.Color.Silver;
+            this.btnChangeImg.BackgroundColor = System.Drawing.Color.Silver;
+            this.btnChangeImg.BorderColor = System.Drawing.Color.Silver;
+            this.btnChangeImg.BorderRadius = 5;
+            this.btnChangeImg.BorderSize = 1;
+            this.btnChangeImg.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnChangeImg.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnChangeImg.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnChangeImg.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnChangeImg.Corner = BeeGlobal.Corner.Both;
+            this.btnChangeImg.DebounceResizeMs = 16;
+            this.btnChangeImg.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnChangeImg.FlatAppearance.BorderSize = 0;
+            this.btnChangeImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChangeImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.btnChangeImg.ForeColor = System.Drawing.Color.Black;
+            this.btnChangeImg.Image = global::BeeInterface.Properties.Resources.Image_Gallery;
+            this.btnChangeImg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnChangeImg.ImageDisabled = null;
+            this.btnChangeImg.ImageHover = null;
+            this.btnChangeImg.ImageNormal = null;
+            this.btnChangeImg.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnChangeImg.ImagePressed = null;
+            this.btnChangeImg.ImageTextSpacing = 0;
+            this.btnChangeImg.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnChangeImg.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnChangeImg.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnChangeImg.ImageTintOpacity = 0.5F;
+            this.btnChangeImg.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnChangeImg.IsCLick = false;
+            this.btnChangeImg.IsNotChange = false;
+            this.btnChangeImg.IsRect = false;
+            this.btnChangeImg.IsTouch = false;
+            this.btnChangeImg.IsUnGroup = true;
+            this.btnChangeImg.Location = new System.Drawing.Point(989, 5);
+            this.btnChangeImg.Margin = new System.Windows.Forms.Padding(5);
+            this.btnChangeImg.Multiline = false;
+            this.btnChangeImg.Name = "btnChangeImg";
+            this.btnChangeImg.Size = new System.Drawing.Size(122, 50);
+            this.btnChangeImg.TabIndex = 42;
+            this.btnChangeImg.Text = "Change Image";
+            this.btnChangeImg.TextColor = System.Drawing.Color.Black;
+            this.btnChangeImg.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnChangeImg.UseVisualStyleBackColor = false;
+            this.btnChangeImg.Click += new System.EventHandler(this.btnChangeImg_Click);
+            // 
             // splitter3
             // 
             this.splitter3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
@@ -1011,7 +1080,7 @@ namespace BeeInterface
             this.btnShowImgHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowImgHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnShowImgHistory.ForeColor = System.Drawing.Color.Black;
-            this.btnShowImgHistory.Image = BeeInterface.Properties.Resources.Image25;
+            this.btnShowImgHistory.Image = global::BeeInterface.Properties.Resources.Image25;
             this.btnShowImgHistory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnShowImgHistory.ImageDisabled = null;
             this.btnShowImgHistory.ImageHover = null;
@@ -1066,9 +1135,9 @@ namespace BeeInterface
             this.btnShowRaw.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnShowRaw.FlatAppearance.BorderSize = 0;
             this.btnShowRaw.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowRaw.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.23438F);
+            this.btnShowRaw.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnShowRaw.ForeColor = System.Drawing.Color.Black;
-            this.btnShowRaw.Image = BeeInterface.Properties.Resources.ImgRaw;
+            this.btnShowRaw.Image = global::BeeInterface.Properties.Resources.ImgRaw;
             this.btnShowRaw.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnShowRaw.ImageDisabled = null;
             this.btnShowRaw.ImageHover = null;
@@ -1123,7 +1192,7 @@ namespace BeeInterface
             this.btnShowResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnShowResult.FlatAppearance.BorderSize = 0;
             this.btnShowResult.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.71875F);
+            this.btnShowResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnShowResult.ForeColor = System.Drawing.Color.Black;
             this.btnShowResult.Image = ((System.Drawing.Image)(resources.GetObject("btnShowResult.Image")));
             this.btnShowResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1154,75 +1223,6 @@ namespace BeeInterface
             this.btnShowResult.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnShowResult.UseVisualStyleBackColor = false;
             this.btnShowResult.Click += new System.EventHandler(this.btnShowResult_Click);
-            // 
-            // splitter2
-            // 
-            this.splitter2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
-            this.splitter2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter2.Location = new System.Drawing.Point(979, 5);
-            this.splitter2.MinExtra = 1;
-            this.splitter2.MinSize = 10;
-            this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(10, 50);
-            this.splitter2.TabIndex = 43;
-            this.splitter2.TabStop = false;
-            // 
-            // btnChangeImg
-            // 
-            this.btnChangeImg.AutoFont = true;
-            this.btnChangeImg.AutoFontHeightRatio = 0.75F;
-            this.btnChangeImg.AutoFontMax = 100F;
-            this.btnChangeImg.AutoFontMin = 8F;
-            this.btnChangeImg.AutoFontWidthRatio = 1F;
-            this.btnChangeImg.AutoImage = true;
-            this.btnChangeImg.AutoImageMaxRatio = 0.75F;
-            this.btnChangeImg.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnChangeImg.AutoImageTint = true;
-            this.btnChangeImg.BackColor = System.Drawing.Color.Silver;
-            this.btnChangeImg.BackgroundColor = System.Drawing.Color.Silver;
-            this.btnChangeImg.BorderColor = System.Drawing.Color.Silver;
-            this.btnChangeImg.BorderRadius = 5;
-            this.btnChangeImg.BorderSize = 1;
-            this.btnChangeImg.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.btnChangeImg.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.btnChangeImg.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
-            this.btnChangeImg.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnChangeImg.Corner = BeeGlobal.Corner.Both;
-            this.btnChangeImg.DebounceResizeMs = 16;
-            this.btnChangeImg.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnChangeImg.FlatAppearance.BorderSize = 0;
-            this.btnChangeImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChangeImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.btnChangeImg.ForeColor = System.Drawing.Color.Black;
-            this.btnChangeImg.Image = BeeInterface.Properties.Resources.Image_Gallery;
-            this.btnChangeImg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnChangeImg.ImageDisabled = null;
-            this.btnChangeImg.ImageHover = null;
-            this.btnChangeImg.ImageNormal = null;
-            this.btnChangeImg.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnChangeImg.ImagePressed = null;
-            this.btnChangeImg.ImageTextSpacing = 0;
-            this.btnChangeImg.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnChangeImg.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnChangeImg.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnChangeImg.ImageTintOpacity = 0.5F;
-            this.btnChangeImg.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnChangeImg.IsCLick = false;
-            this.btnChangeImg.IsNotChange = false;
-            this.btnChangeImg.IsRect = false;
-            this.btnChangeImg.IsTouch = false;
-            this.btnChangeImg.IsUnGroup = true;
-            this.btnChangeImg.Location = new System.Drawing.Point(989, 5);
-            this.btnChangeImg.Margin = new System.Windows.Forms.Padding(5);
-            this.btnChangeImg.Multiline = false;
-            this.btnChangeImg.Name = "btnChangeImg";
-            this.btnChangeImg.Size = new System.Drawing.Size(122, 50);
-            this.btnChangeImg.TabIndex = 42;
-            this.btnChangeImg.Text = "Change Image";
-            this.btnChangeImg.TextColor = System.Drawing.Color.Black;
-            this.btnChangeImg.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnChangeImg.UseVisualStyleBackColor = false;
-            this.btnChangeImg.Click += new System.EventHandler(this.btnChangeImg_Click);
             // 
             // split4
             // 
@@ -1296,7 +1296,7 @@ namespace BeeInterface
             this.btnMenu.BackColor = System.Drawing.Color.Transparent;
             this.btnMenu.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
-            this.btnMenu.Image = BeeInterface.Properties.Resources.Menu;
+            this.btnMenu.Image = global::BeeInterface.Properties.Resources.Menu;
             this.btnMenu.Location = new System.Drawing.Point(1429, 5);
             this.btnMenu.Name = "btnMenu";
             this.btnMenu.Size = new System.Drawing.Size(60, 50);
@@ -1343,7 +1343,7 @@ namespace BeeInterface
             this.btnLive.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLive.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnLive.ForeColor = System.Drawing.Color.Black;
-            this.btnLive.Image = BeeInterface.Properties.Resources.Record_2;
+            this.btnLive.Image = global::BeeInterface.Properties.Resources.Record;
             this.btnLive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnLive.ImageDisabled = null;
             this.btnLive.ImageHover = null;
@@ -1413,7 +1413,7 @@ namespace BeeInterface
             this.btnContinuous.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnContinuous.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnContinuous.ForeColor = System.Drawing.Color.Black;
-            this.btnContinuous.Image = BeeInterface.Properties.Resources.Play_2;
+            this.btnContinuous.Image = global::BeeInterface.Properties.Resources.Play_2;
             this.btnContinuous.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnContinuous.ImageDisabled = null;
             this.btnContinuous.ImageHover = null;
@@ -1482,7 +1482,7 @@ namespace BeeInterface
             this.btnCap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCap.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnCap.ForeColor = System.Drawing.Color.Black;
-            this.btnCap.Image = BeeInterface.Properties.Resources.Natural_User_Interface_2;
+            this.btnCap.Image = global::BeeInterface.Properties.Resources.Natural_User_Interface_2;
             this.btnCap.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCap.ImageDisabled = null;
             this.btnCap.ImageHover = null;

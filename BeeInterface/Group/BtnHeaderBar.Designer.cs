@@ -45,11 +45,11 @@ namespace BeeInterface
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 5;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.Controls.Add(this.btnQuickSetting, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.btncheck, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnSetting, 4, 0);
@@ -90,7 +90,7 @@ namespace BeeInterface
             this.btnQuickSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnQuickSetting.FlatAppearance.BorderSize = 0;
             this.btnQuickSetting.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQuickSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.35156F);
+            this.btnQuickSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnQuickSetting.ForeColor = System.Drawing.Color.Black;
             this.btnQuickSetting.Image = global::BeeInterface.Properties.Resources.Settings;
             this.btnQuickSetting.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -120,6 +120,7 @@ namespace BeeInterface
             this.btnQuickSetting.TextColor = System.Drawing.Color.Black;
             this.btnQuickSetting.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnQuickSetting.UseVisualStyleBackColor = false;
+            this.btnQuickSetting.Visible = false;
             this.btnQuickSetting.Click += new System.EventHandler(this.btnQuickSetting_Click);
             // 
             // btncheck
@@ -149,7 +150,7 @@ namespace BeeInterface
             this.btncheck.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btncheck.FlatAppearance.BorderSize = 0;
             this.btncheck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btncheck.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.05469F);
+            this.btncheck.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btncheck.ForeColor = System.Drawing.Color.Black;
             this.btncheck.Image = ((System.Drawing.Image)(resources.GetObject("btncheck.Image")));
             this.btncheck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -208,7 +209,7 @@ namespace BeeInterface
             this.btnSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSetting.FlatAppearance.BorderSize = 0;
             this.btnSetting.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.05469F);
+            this.btnSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnSetting.ForeColor = System.Drawing.Color.Black;
             this.btnSetting.Image = global::BeeInterface.Properties.Resources.Support;
             this.btnSetting.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -267,9 +268,9 @@ namespace BeeInterface
             this.btnReport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnReport.FlatAppearance.BorderSize = 0;
             this.btnReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.05469F);
+            this.btnReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnReport.ForeColor = System.Drawing.Color.Black;
-            this.btnReport.Image = BeeInterface.Properties.Resources.Report;
+            this.btnReport.Image = global::BeeInterface.Properties.Resources.Report;
             this.btnReport.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnReport.ImageDisabled = null;
             this.btnReport.ImageHover = null;
@@ -326,9 +327,9 @@ namespace BeeInterface
             this.btnUser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnUser.FlatAppearance.BorderSize = 0;
             this.btnUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.05469F);
+            this.btnUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnUser.ForeColor = System.Drawing.Color.Black;
-            this.btnUser.Image = BeeInterface.Properties.Resources.User;
+            this.btnUser.Image = global::BeeInterface.Properties.Resources.User;
             this.btnUser.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnUser.ImageDisabled = null;
             this.btnUser.ImageHover = null;

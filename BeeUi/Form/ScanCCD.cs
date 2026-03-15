@@ -266,7 +266,7 @@ namespace BeeUi
                             Global.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
                             Global.EditTool.lbCam.Text = "Camera Connected";
 
-                            String sProgram = Properties.Settings.Default.programCurrent;
+                            String sProgram = BeeInterface.Properties.Settings.Default.programCurrent;
                             G.Load.lb.Text = "Loading program.. (" + sProgram + ")";
                             this.Hide();
                             G.Load.Hide();
@@ -494,6 +494,7 @@ namespace BeeUi
             {
                 if (camera != null)
                 {
+                    camera.IsSkip = false;
                     NumNoneNull++;
                     if (camera.IsConnected)
                     {
@@ -689,7 +690,7 @@ namespace BeeUi
                         Global.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
                         Global.EditTool.lbCam.Text = "Camera Connected";
 
-                        String sProgram = Properties.Settings.Default.programCurrent;
+                        String sProgram = BeeInterface.Properties.Settings.Default.programCurrent;
                         G.Load.lb.Text = "Loading program.. (" + sProgram + ")";
 
                         G.Load.Hide();
@@ -724,7 +725,7 @@ namespace BeeUi
                     //if (G.IsReConnectCCD)
                     //{
                     //    G.IsReConnectCCD = false;
-                    //    Global.Header.tmReadPLC.Enabled = true;
+                    //     BeeInterface.G.Header.tmReadPLC.Enabled = true;
                     //}
 
                     BeeCore.Common.listCamera[Global.IndexCCCD].Read();
@@ -764,14 +765,14 @@ namespace BeeUi
             if (Global.IndexProgChoose < 0) Global.IndexProgChoose = 0;
             if (Global.ToolSettings!=null)
             Global.ToolSettings.pAllTool.Controls.Clear();
-            if (Global.Header == null)
+            if ( BeeInterface.G.Header == null)
             {
                 return;
                 this.Close();
             }
-            Global.Header.stepShow = 0;
-            Global.Header.indexToolShow = 0;
-            Global.Header.tmShow.Enabled = true;
+             BeeInterface.G.Header.stepShow = 0;
+             BeeInterface.G.Header.indexToolShow = 0;
+             BeeInterface.G.Header.tmShow.Enabled = true;
             
         }
 
@@ -961,7 +962,7 @@ namespace BeeUi
                             Global.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
                             Global.EditTool.lbCam.Text = "Camera Connected";
 
-                            String sProgram = Properties.Settings.Default.programCurrent;
+                            String sProgram = BeeInterface.Properties.Settings.Default.programCurrent;
                             G.Load.lb.Text = "Loading program.. (" + sProgram + ")";
 
                             G.Load.Hide();
@@ -996,7 +997,7 @@ namespace BeeUi
                         //if (G.IsReConnectCCD)
                         //{
                         //    G.IsReConnectCCD = false;
-                        //    Global.Header.tmReadPLC.Enabled = true;
+                        //     BeeInterface.G.Header.tmReadPLC.Enabled = true;
                         //}
 
                         BeeCore.Common.listCamera[Global.IndexCCCD].Read();

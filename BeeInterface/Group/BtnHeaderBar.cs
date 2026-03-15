@@ -55,7 +55,7 @@ namespace BeeInterface
         private async void btnfull_Click(object sender, EventArgs e)
         {
          //   btnSettingPLC.Enabled = !btnExit.IsCLick;
-         ////   Global.Header.Visible =! btnfull.IsCLick;
+         ////    BeeInterface.G.Header.Visible =! btnfull.IsCLick;
          // //  await Task.Delay(500);
          // //  G.InforBar.Visible =! btnfull.IsCLick;
          //  // await Task.Delay(500);

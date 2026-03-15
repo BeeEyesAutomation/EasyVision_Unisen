@@ -1,6 +1,6 @@
 ﻿namespace BeeInterface
 {
-    partial class CameraForm
+    partial class FormFlowChart
     {
         /// <summary>
         /// Required designer variable.
@@ -58,13 +58,13 @@
             this.pCamera.Controls.Add(this.btnCamera1, 0, 0);
             this.pCamera.Controls.Add(this.btnCamera2, 1, 0);
             this.pCamera.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pCamera.Location = new System.Drawing.Point(0, 44);
+            this.pCamera.Location = new System.Drawing.Point(1, 45);
             this.pCamera.Margin = new System.Windows.Forms.Padding(1);
             this.pCamera.Name = "pCamera";
             this.pCamera.RowCount = 2;
             this.pCamera.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.pCamera.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.pCamera.Size = new System.Drawing.Size(445, 110);
+            this.pCamera.Size = new System.Drawing.Size(442, 107);
             this.pCamera.TabIndex = 32;
             // 
             // btnDelect4
@@ -113,7 +113,7 @@
             this.btnDelect4.IsRect = true;
             this.btnDelect4.IsTouch = false;
             this.btnDelect4.IsUnGroup = false;
-            this.btnDelect4.Location = new System.Drawing.Point(338, 70);
+            this.btnDelect4.Location = new System.Drawing.Point(335, 67);
             this.btnDelect4.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
             this.btnDelect4.Multiline = false;
             this.btnDelect4.Name = "btnDelect4";
@@ -171,11 +171,11 @@
             this.btnDelect3.IsRect = true;
             this.btnDelect3.IsTouch = false;
             this.btnDelect3.IsUnGroup = false;
-            this.btnDelect3.Location = new System.Drawing.Point(227, 70);
+            this.btnDelect3.Location = new System.Drawing.Point(225, 67);
             this.btnDelect3.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
             this.btnDelect3.Multiline = false;
             this.btnDelect3.Name = "btnDelect3";
-            this.btnDelect3.Size = new System.Drawing.Size(106, 35);
+            this.btnDelect3.Size = new System.Drawing.Size(105, 35);
             this.btnDelect3.TabIndex = 37;
             this.btnDelect3.Text = "Delect Cam 3";
             this.btnDelect3.TextColor = System.Drawing.Color.Black;
@@ -229,11 +229,11 @@
             this.btnDelect2.IsRect = true;
             this.btnDelect2.IsTouch = false;
             this.btnDelect2.IsUnGroup = false;
-            this.btnDelect2.Location = new System.Drawing.Point(116, 70);
+            this.btnDelect2.Location = new System.Drawing.Point(115, 67);
             this.btnDelect2.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
             this.btnDelect2.Multiline = false;
             this.btnDelect2.Name = "btnDelect2";
-            this.btnDelect2.Size = new System.Drawing.Size(106, 35);
+            this.btnDelect2.Size = new System.Drawing.Size(105, 35);
             this.btnDelect2.TabIndex = 36;
             this.btnDelect2.Text = "Delect Cam 2";
             this.btnDelect2.TextColor = System.Drawing.Color.Black;
@@ -287,11 +287,11 @@
             this.btnCamera4.IsRect = true;
             this.btnCamera4.IsTouch = false;
             this.btnCamera4.IsUnGroup = false;
-            this.btnCamera4.Location = new System.Drawing.Point(333, 5);
+            this.btnCamera4.Location = new System.Drawing.Point(330, 5);
             this.btnCamera4.Margin = new System.Windows.Forms.Padding(0, 5, 10, 5);
             this.btnCamera4.Multiline = false;
             this.btnCamera4.Name = "btnCamera4";
-            this.btnCamera4.Size = new System.Drawing.Size(102, 55);
+            this.btnCamera4.Size = new System.Drawing.Size(102, 52);
             this.btnCamera4.TabIndex = 34;
             this.btnCamera4.Text = "FlowChart 4";
             this.btnCamera4.TextColor = System.Drawing.Color.Black;
@@ -345,11 +345,11 @@
             this.btnCamera3.IsRect = true;
             this.btnCamera3.IsTouch = false;
             this.btnCamera3.IsUnGroup = false;
-            this.btnCamera3.Location = new System.Drawing.Point(222, 5);
+            this.btnCamera3.Location = new System.Drawing.Point(220, 5);
             this.btnCamera3.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.btnCamera3.Multiline = false;
             this.btnCamera3.Name = "btnCamera3";
-            this.btnCamera3.Size = new System.Drawing.Size(111, 55);
+            this.btnCamera3.Size = new System.Drawing.Size(110, 52);
             this.btnCamera3.TabIndex = 33;
             this.btnCamera3.Text = "FlowChart 3";
             this.btnCamera3.TextColor = System.Drawing.Color.Black;
@@ -407,7 +407,7 @@
             this.btnCamera1.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
             this.btnCamera1.Multiline = false;
             this.btnCamera1.Name = "btnCamera1";
-            this.btnCamera1.Size = new System.Drawing.Size(106, 55);
+            this.btnCamera1.Size = new System.Drawing.Size(105, 52);
             this.btnCamera1.TabIndex = 32;
             this.btnCamera1.Text = "FlowChart 1";
             this.btnCamera1.TextColor = System.Drawing.Color.Black;
@@ -461,11 +461,11 @@
             this.btnCamera2.IsRect = true;
             this.btnCamera2.IsTouch = false;
             this.btnCamera2.IsUnGroup = false;
-            this.btnCamera2.Location = new System.Drawing.Point(111, 5);
+            this.btnCamera2.Location = new System.Drawing.Point(110, 5);
             this.btnCamera2.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.btnCamera2.Multiline = false;
             this.btnCamera2.Name = "btnCamera2";
-            this.btnCamera2.Size = new System.Drawing.Size(111, 55);
+            this.btnCamera2.Size = new System.Drawing.Size(110, 52);
             this.btnCamera2.TabIndex = 19;
             this.btnCamera2.Text = "FlowChart 2";
             this.btnCamera2.TextColor = System.Drawing.Color.Black;
@@ -479,23 +479,25 @@
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Location = new System.Drawing.Point(1, 1);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(445, 44);
+            this.label1.Size = new System.Drawing.Size(442, 44);
             this.label1.TabIndex = 33;
             this.label1.Text = "Choose Flow Chart";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // CameraForm
+            // FormFlowChart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(445, 154);
             this.Controls.Add(this.pCamera);
             this.Controls.Add(this.label1);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "CameraForm";
+            this.Name = "FormFlowChart";
+            this.Padding = new System.Windows.Forms.Padding(1, 1, 2, 2);
             this.Text = "CameraForm";
             this.Load += new System.EventHandler(this.CameraForm_Load);
             this.Leave += new System.EventHandler(this.CameraForm_Leave);

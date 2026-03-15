@@ -12,9 +12,9 @@ using System.Windows.Forms;
 
 namespace BeeInterface
 {
-    public partial class CameraForm : Form
+    public partial class FormFlowChart : Form
     {
-        public CameraForm()
+        public FormFlowChart()
         {
             InitializeComponent();
         }

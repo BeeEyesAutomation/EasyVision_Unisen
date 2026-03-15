@@ -105,7 +105,7 @@ namespace BeeInterface
             this.btnRename.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRename.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnRename.ForeColor = System.Drawing.Color.Black;
-            this.btnRename.Image = BeeInterface.Properties.Resources.Rename;
+            this.btnRename.Image = global::BeeInterface.Properties.Resources.Rename;
             this.btnRename.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnRename.ImageDisabled = null;
             this.btnRename.ImageHover = null;
@@ -163,7 +163,7 @@ namespace BeeInterface
             this.btnCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnCopy.ForeColor = System.Drawing.Color.Black;
-            this.btnCopy.Image = BeeInterface.Properties.Resources.BID_ICON_COPY_D_32BIT;
+            this.btnCopy.Image = global::BeeInterface.Properties.Resources.BID_ICON_COPY_D_32BIT;
             this.btnCopy.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnCopy.ImageDisabled = null;
             this.btnCopy.ImageHover = null;
@@ -220,7 +220,7 @@ namespace BeeInterface
             this.btnEnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEnEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnEnEdit.ForeColor = System.Drawing.Color.Black;
-            this.btnEnEdit.Image = BeeInterface.Properties.Resources.BID_ICON_TOOL_EDIT_E_32BIT;
+            this.btnEnEdit.Image = global::BeeInterface.Properties.Resources.BID_ICON_TOOL_EDIT_E_32BIT;
             this.btnEnEdit.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnEnEdit.ImageDisabled = null;
             this.btnEnEdit.ImageHover = null;
@@ -278,7 +278,7 @@ namespace BeeInterface
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnAdd.ForeColor = System.Drawing.Color.Black;
-            this.btnAdd.Image = BeeInterface.Properties.Resources.Add;
+            this.btnAdd.Image = global::BeeInterface.Properties.Resources.Add;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnAdd.ImageDisabled = null;
             this.btnAdd.ImageHover = null;
@@ -336,7 +336,7 @@ namespace BeeInterface
             this.btnDelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnDelect.ForeColor = System.Drawing.Color.Black;
-            this.btnDelect.Image = BeeInterface .Properties.Resources.BID_ICON_DELETE_E_32BIT;
+            this.btnDelect.Image = global::BeeInterface.Properties.Resources.BID_ICON_DELETE_E_32BIT;
             this.btnDelect.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnDelect.ImageDisabled = null;
             this.btnDelect.ImageHover = null;
@@ -370,7 +370,7 @@ namespace BeeInterface
             // 
             this.pAllTool.AutoScroll = true;
             this.pAllTool.ColumnCount = 1;
-            this.pAllTool.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.pAllTool.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.pAllTool.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pAllTool.Location = new System.Drawing.Point(2, 59);
             this.pAllTool.Name = "pAllTool";

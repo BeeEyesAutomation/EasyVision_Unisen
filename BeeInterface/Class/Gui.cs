@@ -1,7 +1,7 @@
 ﻿using BeeCore;
 using BeeGlobal;
 using BeeInterface;
-using BeeUi.Common;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,10 +25,10 @@ namespace BeeUi.Commons
            // Global.EditTool.pMain.BackColor = Color.FromArgb(AlphaBg, color.R, color.G, color.B);
             Global.EditTool.View.BackColor = Color.FromArgb(AlphaBg, color.R, color.G, color.B);
             Global.EditTool.pHeader.BackColor = Color.FromArgb(190, color.R, color.G, color.B);
-            Global.Header.BackColor =  Color.FromArgb(AlphaBg, color.R,color.G,color.B);
-            // Global.Header.pPO.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
-            //Global.Header.pModel.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
-            //Global.Header.pCamera.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
+             BeeInterface.G.Header.BackColor =  Color.FromArgb(AlphaBg, color.R,color.G,color.B);
+            //  BeeInterface.G.Header.pPO.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
+            // BeeInterface.G.Header.pModel.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
+            // BeeInterface.G.Header.pCamera.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
             G.StatusDashboard.InfoBlockBackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
             G.StatusDashboard.StatusBlockBackColor= Color.FromArgb(AlphaBar-50, color.R, color.G, color.B);
             G.StatusDashboard.MidHeaderBackColor= Color.FromArgb(AlphaBar, color.R, color.G, color.B);
@@ -36,7 +36,7 @@ namespace BeeUi.Commons
           //   G.StatusDashboard.picChart.BackColor = Color.FromArgb(AlphaText, color.R, color.G, color.B);
            // Global.EditTool.View.pTool.BackColor = Color.FromArgb(AlphaMenu, color.R, color.G, color.B);
             Global.ToolSettings.pBtn.BackColor = Color.FromArgb(AlphaMenu, color.R, color.G, color.B);
-            foreach (Control c in Global.Header.Controls)
+            foreach (Control c in  BeeInterface.G.Header.Controls)
             {
                 if (c is RJButton)
                 {
@@ -85,9 +85,9 @@ namespace BeeUi.Commons
         }
         public static void RefreshRadius( int radius)
         {
-           // Global.Header.pPO.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, Global.Header.pPO.Width, Global.Header.pPO.Height, radius, radius));
-            //Global.Header.pModel.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, Global.Header.pModel.Width, Global.Header.pModel.Height, radius, radius));
-           // Global.Header.pCamera.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, Global.Header.pCamera.Width, Global.Header.pCamera.Height, radius, radius));
+           //  BeeInterface.G.Header.pPO.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0,  BeeInterface.G.Header.pPO.Width,  BeeInterface.G.Header.pPO.Height, radius, radius));
+            // BeeInterface.G.Header.pModel.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0,  BeeInterface.G.Header.pModel.Width,  BeeInterface.G.Header.pModel.Height, radius, radius));
+           //  BeeInterface.G.Header.pCamera.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0,  BeeInterface.G.Header.pCamera.Width,  BeeInterface.G.Header.pCamera.Height, radius, radius));
          //   Global.EditTool.View.pTool.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, Global.EditTool.View.pTool.Width, Global.EditTool.View.pTool.Height, radius, radius));
         
          //   Global.ToolSettings.pBtn.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, Global.ToolSettings.pBtn.Width, Global.ToolSettings.pBtn.Height, radius, radius));

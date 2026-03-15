@@ -405,7 +405,7 @@ namespace BeeInterface
                 Margin = new Padding(0, 0, 0, 0)
             };
             
-            btnChange = new RJButton { BorderColor = bgTL2, Corner = Corner.None, BorderRadius = 10, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = false, IsNotChange = false, Text = "Change", IsCLick = IsChange, TextImageRelation = TextImageRelation.ImageBeforeText, Dock = DockStyle.Fill, Image = Properties.Resources.Refresh, Margin = new Padding(0, 0, 0, 0) };
+            btnChange = new RJButton { BorderColor = bgTL2, Corner = Corner.None, BorderRadius = 10, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = false, IsNotChange = false, Text = "Change", IsCLick = IsChange, TextImageRelation = TextImageRelation.ImageBeforeText, Dock = DockStyle.Fill, Image = Properties.Resources.Refresh25, Margin = new Padding(0, 0, 0, 0) };
             btnNew = new RJButton { BorderColor = bgTL2, Corner = Corner.Right, BorderRadius = 10, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = false, IsNotChange = false, Text = "Add", IsCLick =! IsChange, TextImageRelation = TextImageRelation.ImageBeforeText, Dock = DockStyle.Fill, Image = Properties.Resources.Add, Margin = new Padding(0, 0, 5, 0) };
             btnUp = new RJButton {BorderRadius=5, BorderColor = bgTL2, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = true, IsNotChange = true, Text = "Up", IsCLick = false,Dock = DockStyle.Fill, Margin = new Padding(0, 5, 5, 5)};
             btndown = new RJButton { BorderRadius = 5, BorderColor = bgTL2, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = true, IsNotChange = true, Text = "Down", IsCLick = false,  Dock = DockStyle.Fill, Margin = new Padding(5, 5, 5, 5) };
