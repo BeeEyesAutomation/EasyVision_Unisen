@@ -111,7 +111,8 @@ namespace BeeCore
                 {
                     var rrCli = Converts.ToCli(rotArea); // như ở reply trước
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
-
+                    if(ColorPixel==null)
+                        ColorPixel = new ColorPixel();
                     intpr = ColorPixel.SetImgeSample(
                              matFilter.Data, matFilter.Width, matFilter.Height, (int)matFilter.Step(), matFilter.Channels()
                         , rrCli, rrMaskCli,IsNoCrop,0,
@@ -222,7 +223,8 @@ namespace BeeCore
                     }
                     var rrCli = Converts.ToCli(rotArea); // như ở reply trước
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
-
+                    if (ColorPixel == null)
+                        ColorPixel = new ColorPixel();
                     ColorPixel.SetImgeRaw(matFilter.Data, matFilter.Width, matFilter.Height, (int)matFilter.Step(), matFilter.Channels(), rrCli,rrMaskCli,0);
 
                   

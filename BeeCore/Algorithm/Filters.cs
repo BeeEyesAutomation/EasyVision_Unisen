@@ -47,59 +47,68 @@ namespace BeeCore.Algorithm
             Cv2.BitwiseNot(binInv, bin);
 
             // remove small noise
-         //   Mat clean = RemoveSmallBlackDots(bin, minArea);
+         Mat clean = RemoveSmallBlackDots(bin, minArea);
 
             gray.Dispose();
             binInv.Dispose();
-            //bin.Dispose();
+           bin.Dispose();
 
-            return bin;
+            return clean;
         }
 
-        private static Mat RemoveSmallBlackDots(Mat binTextBlack, int minArea)
+        private static unsafe Mat RemoveSmallBlackDots(Mat binTextBlack, int minArea)
         {
-            Mat inv = new Mat();
-            Cv2.BitwiseNot(binTextBlack, inv);
+            if (binTextBlack == null || binTextBlack.Empty())
+                return new Mat();
 
-            Mat labels = new Mat();
-            Mat stats = new Mat();
-            Mat centroids = new Mat();
+            if (binTextBlack.Type() != MatType.CV_8UC1)
+                throw new ArgumentException("binTextBlack must be CV_8UC1");
 
-            int nLabels = Cv2.ConnectedComponentsWithStats(
-                inv,
-                labels,
-                stats,
-                centroids,
-                PixelConnectivity.Connectivity8,
-                MatType.CV_32S
-            );
-
-            Mat cleanInv = Mat.Zeros(inv.Size(), MatType.CV_8UC1);
-
-            for (int i = 1; i < nLabels; i++)
+            using (Mat inv = new Mat())
+            using (Mat labels = new Mat())
+            using (Mat stats = new Mat())
+            using (Mat centroids = new Mat())
             {
-                int area = stats.Get<int>(i, (int)ConnectedComponentsTypes.Area);
+                Cv2.BitwiseNot(binTextBlack, inv);
 
-                if (area >= minArea)
+                int nLabels = Cv2.ConnectedComponentsWithStats(
+                    inv,
+                    labels,
+                    stats,
+                    centroids,
+                    PixelConnectivity.Connectivity8,
+                    MatType.CV_32S
+                );
+
+                byte[] keep = new byte[nLabels];
+                keep[0] = 0;
+
+                for (int i = 1; i < nLabels; i++)
                 {
-                    using (Mat mask = new Mat())
+                    int area = stats.Get<int>(i, (int)ConnectedComponentsTypes.Area);
+                    if (area >= minArea)
+                        keep[i] = 1;
+                }
+
+                Mat result = new Mat(binTextBlack.Size(), MatType.CV_8UC1, Scalar.All(255));
+
+                int rows = labels.Rows;
+                int cols = labels.Cols;
+
+                for (int y = 0; y < rows; y++)
+                {
+                    int* pLabel = (int*)labels.Ptr(y).ToPointer();
+                    byte* pDst = (byte*)result.Ptr(y).ToPointer();
+
+                    for (int x = 0; x < cols; x++)
                     {
-                        Cv2.Compare(labels, i, mask, CmpType.EQ);
-                        cleanInv.SetTo(255, mask);
+                        int lb = pLabel[x];
+                        pDst[x] = (lb > 0 && keep[lb] != 0) ? (byte)0 : (byte)255;
                     }
                 }
+
+                return result;
             }
-
-            Mat result = new Mat();
-            Cv2.BitwiseNot(cleanInv, result);
-
-            inv.Dispose();
-            labels.Dispose();
-            stats.Dispose();
-            centroids.Dispose();
-            cleanInv.Dispose();
-
-            return result;
         }
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
         {

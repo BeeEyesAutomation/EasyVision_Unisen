@@ -1,6 +1,8 @@
 ﻿using BeeCore;
+using BeeCore.Funtion;
 using BeeGlobal;
 using BeeInterface;
+using Cyotek.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -38,12 +40,23 @@ namespace BeeInterface
 
         public void LoadPara()
         {
+            imgTemp.Cursor = Cursors.Hand;
+            imgTemp.AllowClickZoom = true;
+            imgTemp.AllowDoubleClick = true;
+            imgTemp.PanMode = ImageBoxPanMode.None;
+
+            imgTemp.InvertMouse = false;
+
 
             if (Propety.bmRaw != null)
             {
-				imgTemp.Image = Propety.bmRaw;
-			}
-            
+              
+                imgTemp.Image = Propety.bmRaw;
+                
+                ShowTool.Full(imgTemp, Propety.bmRaw.Size,true);
+            }
+            btnColor.IsCLick= Propety.TypeImg == TypeMat.Color ? true : false;
+            btnGray.IsCLick = Propety.TypeImg == TypeMat.Binary ? true : false;
             btnAutoBinary.IsCLick = Propety.IsBinary;
             //this.btnAutoBinary.Text = Propety.IsBinary == true ? "ON" : "OFF";
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
@@ -427,12 +440,13 @@ namespace BeeInterface
 
         private void btnLearning_Click(object sender, EventArgs e)
         {
-
+            imgTemp.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
             if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety.rotArea != null)
                 if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety.rotArea._rect.Width != 0 && Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety.rotArea._rect.Height != 0)
                 {
                     Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety.bmRaw = Propety.LearnPattern(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone(), false).ToBitmap();
                     imgTemp.Image = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety.bmRaw;
+                    ShowTool.Full(imgTemp, Propety.bmRaw.Size, true);
                 }
 
 
@@ -693,5 +707,7 @@ namespace BeeInterface
             layColorTolerace.Visible = Propety.TypeImg == TypeMat.Color ? true : false;
             layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
         }
+
+       
     }
 }

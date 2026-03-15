@@ -1037,7 +1037,8 @@ txtQrCode.Focus();
         {
             if(!Global.Config.IsManual)
             {
-                FormWarning formWarning = new FormWarning("Infor", "Please turn Training on on the HMI");
+                btnTraining.IsCLick = false;
+                FormWarning formWarning = new FormWarning("Infor", "Please turn on Training on the HMI");
                 formWarning.ShowDialog();
             }    
             Global.IsAutoTemp = btnTraining.IsCLick;
@@ -1080,7 +1081,8 @@ txtQrCode.Focus();
         {
             if (!Global.Config.IsManual)
             {
-                FormWarning formWarning = new FormWarning("Infor", "Please turn Dummy on on the HMI");
+                btnDummy.IsCLick = false;
+                FormWarning formWarning = new FormWarning("Infor", "Please turn on Dummy on the HMI");
                 formWarning.ShowDialog();
             }
         }

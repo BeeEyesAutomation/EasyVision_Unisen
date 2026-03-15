@@ -77,8 +77,8 @@ namespace BeeInterface
             this.btnCrop = new BeeInterface.RJButton();
             this.btnArea = new BeeInterface.RJButton();
             this.lay6 = new System.Windows.Forms.TableLayoutPanel();
-            this.imgTemp = new System.Windows.Forms.PictureBox();
             this.btnLearning = new BeeInterface.RJButton();
+            this.imgTemp = new Cyotek.Windows.Forms.ImageBox();
             this.trackScore = new BeeInterface.AdjustBarEx();
             this.lay1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnCropFull = new BeeInterface.RJButton();
@@ -104,7 +104,6 @@ namespace BeeInterface
             this.lay23.SuspendLayout();
             this.lay21.SuspendLayout();
             this.lay6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.imgTemp)).BeginInit();
             this.lay1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -746,7 +745,7 @@ namespace BeeInterface
             this.btn8.IsRect = false;
             this.btn8.IsTouch = true;
             this.btn8.IsUnGroup = true;
-            this.btn8.Location = new System.Drawing.Point(6, 1083);
+            this.btn8.Location = new System.Drawing.Point(6, 1183);
             this.btn8.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.btn8.Multiline = false;
             this.btn8.Name = "btn8";
@@ -2178,32 +2177,20 @@ namespace BeeInterface
             // lay6
             // 
             this.lay6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.lay6.ColumnCount = 2;
-            this.lay6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70.79646F));
-            this.lay6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.20354F));
+            this.lay6.ColumnCount = 1;
+            this.lay6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.lay6.Controls.Add(this.btnLearning, 0, 1);
             this.lay6.Controls.Add(this.imgTemp, 0, 0);
-            this.lay6.Controls.Add(this.btnLearning, 1, 0);
             this.lay6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lay6.Location = new System.Drawing.Point(6, 873);
             this.lay6.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lay6.Name = "lay6";
             this.lay6.Padding = new System.Windows.Forms.Padding(5);
-            this.lay6.RowCount = 1;
+            this.lay6.RowCount = 2;
             this.lay6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay6.Size = new System.Drawing.Size(467, 200);
+            this.lay6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.lay6.Size = new System.Drawing.Size(467, 300);
             this.lay6.TabIndex = 75;
-            // 
-            // imgTemp
-            // 
-            this.imgTemp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.imgTemp.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imgTemp.Location = new System.Drawing.Point(10, 10);
-            this.imgTemp.Margin = new System.Windows.Forms.Padding(5);
-            this.imgTemp.Name = "imgTemp";
-            this.imgTemp.Size = new System.Drawing.Size(313, 180);
-            this.imgTemp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.imgTemp.TabIndex = 31;
-            this.imgTemp.TabStop = false;
             // 
             // btnLearning
             // 
@@ -2250,17 +2237,37 @@ namespace BeeInterface
             this.btnLearning.IsRect = false;
             this.btnLearning.IsTouch = false;
             this.btnLearning.IsUnGroup = true;
-            this.btnLearning.Location = new System.Drawing.Point(338, 15);
-            this.btnLearning.Margin = new System.Windows.Forms.Padding(10);
+            this.btnLearning.Location = new System.Drawing.Point(8, 243);
             this.btnLearning.Multiline = false;
             this.btnLearning.Name = "btnLearning";
-            this.btnLearning.Size = new System.Drawing.Size(114, 170);
-            this.btnLearning.TabIndex = 5;
+            this.btnLearning.Size = new System.Drawing.Size(451, 49);
+            this.btnLearning.TabIndex = 8;
             this.btnLearning.Text = "Teach";
             this.btnLearning.TextColor = System.Drawing.Color.Black;
             this.btnLearning.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnLearning.UseVisualStyleBackColor = false;
             this.btnLearning.Click += new System.EventHandler(this.btnLearning_Click);
+            // 
+            // imgTemp
+            // 
+            this.imgTemp.AlwaysShowHScroll = true;
+            this.imgTemp.AlwaysShowVScroll = true;
+            this.imgTemp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.imgTemp.AutoCenter = false;
+            this.imgTemp.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.imgTemp.GridColor = System.Drawing.Color.Transparent;
+            this.imgTemp.GridScale = Cyotek.Windows.Forms.ImageBoxGridScale.None;
+            this.imgTemp.Location = new System.Drawing.Point(5, 5);
+            this.imgTemp.Margin = new System.Windows.Forms.Padding(0);
+            this.imgTemp.Name = "imgTemp";
+            this.imgTemp.PanMode = Cyotek.Windows.Forms.ImageBoxPanMode.Left;
+            this.imgTemp.ShortcutsEnabled = false;
+            this.imgTemp.Size = new System.Drawing.Size(457, 235);
+            this.imgTemp.TabIndex = 6;
+            this.imgTemp.TextBackColor = System.Drawing.Color.White;
+            this.imgTemp.Click += new System.EventHandler(this.btnLearning_Click);
             // 
             // trackScore
             // 
@@ -2291,7 +2298,7 @@ namespace BeeInterface
             this.trackScore.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.trackScore.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.trackScore.KeyboardStep = 1F;
-            this.trackScore.Location = new System.Drawing.Point(6, 1118);
+            this.trackScore.Location = new System.Drawing.Point(6, 1218);
             this.trackScore.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.trackScore.MatchTextboxFontToThumb = true;
             this.trackScore.Max = 100F;
@@ -2781,7 +2788,6 @@ namespace BeeInterface
             this.lay23.ResumeLayout(false);
             this.lay21.ResumeLayout(false);
             this.lay6.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.imgTemp)).EndInit();
             this.lay1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -2801,8 +2807,6 @@ namespace BeeInterface
         private GroupControl.OK_Cancel oK_Cancel1;
         private AdjustBarEx trackScore;
         private System.Windows.Forms.TableLayoutPanel lay6;
-        private System.Windows.Forms.PictureBox imgTemp;
-        private RJButton btnLearning;
         private System.Windows.Forms.Panel pInspect;
         private RJButton btnTest;
         private System.Windows.Forms.TableLayoutPanel lay21;
@@ -2852,5 +2856,7 @@ namespace BeeInterface
         private System.Windows.Forms.TableLayoutPanel layColorTolerace;
         private System.Windows.Forms.Label label2;
         private AdjustBarEx AdjColorTolerance;
+        public Cyotek.Windows.Forms.ImageBox imgTemp;
+        private RJButton btnLearning;
     }
 }
