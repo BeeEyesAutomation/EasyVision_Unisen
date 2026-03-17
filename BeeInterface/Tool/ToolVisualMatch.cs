@@ -57,6 +57,11 @@ namespace BeeInterface
             }
             btnColor.IsCLick= Propety.TypeImg == TypeMat.Color ? true : false;
             btnGray.IsCLick = Propety.TypeImg == TypeMat.Binary ? true : false;
+            AdjThreshGray.Enabled =! Propety.IsAutoThreshBinary;
+            if (!btn3.IsCLick)
+            {
+                layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
+            }
             btnAutoBinary.IsCLick = Propety.IsBinary;
             //this.btnAutoBinary.Text = Propety.IsBinary == true ? "ON" : "OFF";
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;

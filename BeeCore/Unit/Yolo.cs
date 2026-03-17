@@ -1295,7 +1295,21 @@ namespace BeeCore
 
                     if (item.IsYMax && !IntersectYMax(r.rot, item.ValueYMax))
                         continue;
+                    //--------------------------------
+                    // ScanBox rule (NEW)
+                    //--------------------------------
+                    int scanIndex = -1;
+                    if (item.ListIndexBox != null && item.ListIndexBox.Count > 0)
+                    {
+                         scanIndex = FindScanBox(r, item.Name);
 
+                        // nằm ngoài toàn bộ scan box → loại luôn
+                        if (scanIndex < 0)
+                        {
+                            r.IsOK = false;
+                            continue;
+                        }
+                    }
                     //--------------------------------
                     // size rule
                     //--------------------------------
@@ -1316,7 +1330,7 @@ namespace BeeCore
 
                         if (item.ListIndexBox != null && item.ListIndexBox.Count > 0)
                         {
-                            int scanIndex = FindScanBox(r,item.Name);
+                          //  int scanIndex = FindScanBox(r,item.Name);
 
                             if (scanIndex >= 0 && scanAreaCache.ContainsKey(scanIndex))
                                 areaCompare = scanAreaCache[scanIndex];
@@ -1349,12 +1363,13 @@ namespace BeeCore
                         else
                             IsOK = false;
                     }
+                    if (!item.IsHeight && !item.IsWidth && !item.IsArea && !item.IsX && !item.IsY && !item.IsXMax && !item.IsYMax && !item.IsDistance && !item.IsCounter)
+                        IsOK = true;
+                        //--------------------------------
+                        // save result
+                        //--------------------------------
 
-                    //--------------------------------
-                    // save result
-                    //--------------------------------
-
-                    r.IsOK = IsOK;
+                        r.IsOK = IsOK;
 
                     if (IsOK)
                         numOK++;

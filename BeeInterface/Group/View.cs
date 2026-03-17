@@ -2551,7 +2551,7 @@ namespace BeeInterface
                         {
                             Global.IsAutoTemp = false;
                             Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
-                            BeeInterface.G.Header.btnTraining.Enabled = false;
+                         //   BeeInterface.G.Header.btnTraining.Enabled = false;
                             BeeInterface.G.Header.btnTraining.IsCLick = false;
 
                         }

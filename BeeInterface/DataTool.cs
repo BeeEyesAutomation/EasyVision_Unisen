@@ -184,15 +184,27 @@ namespace BeeInterface
                 }
 
                 // ==== set model ====
-                foreach (var list in BeeCore.Common.PropetyTools)
+                foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
                 {
-                    if (list == null) continue;
-                    foreach (var t in list)
-                        t?.Propety?.SetModel();
+                    if (ListTool == null) continue;
 
-                    //if (!Global.Config.IsMultiProg)
-                    //    break;
+                    foreach (PropetyTool propety in ListTool)
+                    {
+                        try
+                        {
+                            if (propety != null)
+                                if (propety.Propety != null)
+                                    propety.Propety.SetModel();
+                        }
+                        catch(Exception ex)
+                        {
+                            Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "BuildUI", ex.Message));
+                            Console.WriteLine(ex.Message);
+                        }
+                    }
+                 
                 }
+
             }
             catch (Exception ex)
             {

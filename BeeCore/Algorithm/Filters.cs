@@ -55,6 +55,58 @@ namespace BeeCore.Algorithm
 
             return clean;
         }
+        public static Mat FillInnerHolesOnly(Mat binTextBlack, double maxHoleArea = 5000)
+        {
+            if (binTextBlack == null || binTextBlack.Empty())
+                return null;
+
+            Mat result = binTextBlack.Clone();
+            Mat inv = new Mat();
+
+            try
+            {
+                // Đảo ảnh: chữ trắng, nền đen
+                Cv2.BitwiseNot(binTextBlack, inv);
+
+                Point[][] contours;
+                HierarchyIndex[] hierarchy;
+
+                // RETR_CCOMP hoặc RETR_TREE đều được
+                Cv2.FindContours(
+                    inv,
+                    out contours,
+                    out hierarchy,
+                    RetrievalModes.CComp,
+                    ContourApproximationModes.ApproxSimple
+                );
+
+                if (contours == null || contours.Length == 0 || hierarchy == null)
+                    return result;
+
+                for (int i = 0; i < contours.Length; i++)
+                {
+                    // parent >= 0 nghĩa là contour này là contour con
+                    // trong ảnh inv, contour con thường chính là hole bên trong vùng trắng
+                    if (hierarchy[i].Parent >= 0)
+                    {
+                        double area = System.Math.Abs(Cv2.ContourArea(contours[i]));
+
+                        // lọc diện tích để tránh fill nhầm vùng lớn
+                        if (area > 0 && area <= maxHoleArea)
+                        {
+                            // Fill contour hole thành đen trên ảnh gốc
+                            Cv2.DrawContours(result, contours, i, Scalar.Black, -1);
+                        }
+                    }
+                }
+
+                return result;
+            }
+            finally
+            {
+                inv.Dispose();
+            }
+        }
 
         private static unsafe Mat RemoveSmallBlackDots(Mat binTextBlack, int minArea)
         {

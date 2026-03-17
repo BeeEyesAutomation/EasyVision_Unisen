@@ -606,7 +606,7 @@ namespace BeeGlobal
                                                 Global.IsDummy = false;
                                             }
                                         }
-                                        if (Global.Config.IsEnTrain)
+                                        if (Global.Config.IsEnTrain&&!Global.Config.IsManual)
                                         {
                                             if (GetInPut(I_O_Input.Training) == true && !Global.IsAutoTemp)
                                             {

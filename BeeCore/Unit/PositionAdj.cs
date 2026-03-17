@@ -41,26 +41,34 @@ namespace BeeCore
         public bool IsNew = false;
         public void SetModel()
         {
-            if (Pattern == null)
+            try
             {
-                Pattern = new Pattern();
-              
+                if (Pattern == null)
+                {
+                    Pattern = new Pattern();
+
+                }
+                rotMask = null;
+                if (rotArea == null) rotArea = new RectRotate();
+                if (rotCrop == null) rotCrop = new RectRotate();
+                if (bmRaw != null)
+                {
+                    matTemp = bmRaw.ToMat();
+                    LearnPattern(matTemp, true);
+                }
+               
+                DetectIntersect = new DetectIntersect();
+                if (Common.PropetyTools[IndexThread][Index].Score == 0)
+                    Common.PropetyTools[IndexThread][Index].Score = 80;
+                Common.PropetyTools[IndexThread][Index].StepValue = 1;
+                Common.PropetyTools[IndexThread][Index].MinValue = 0;
+                Common.PropetyTools[IndexThread][Index].MaxValue = 100;
+                Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
             }
-            if (bmRaw != null)
+            catch(Exception ex)
             {
-                matTemp = bmRaw.ToMat();
-                LearnPattern(matTemp, true);
+
             }
-            rotMask = null;
-            if (rotArea == null) rotArea = new RectRotate();
-            if (rotCrop == null) rotCrop = new RectRotate();
-            DetectIntersect = new DetectIntersect();
-            if (Common.PropetyTools[IndexThread][Index].Score == 0)
-                Common.PropetyTools[IndexThread][Index].Score = 80;
-            Common.PropetyTools[IndexThread][Index].StepValue = 1;
-            Common.PropetyTools[IndexThread][Index].MinValue = 0;
-            Common.PropetyTools[IndexThread][Index].MaxValue = 100;
-            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
         }
         public object Clone()
         {
@@ -313,12 +321,14 @@ namespace BeeCore
 
                        var rrCli = Converts.ToCli(rotCrop); // như ở reply trước
                         RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
-
-                        intpr = Pattern.SetImgeSample(img.Data, img.Width, img.Height, (int)img.Step(), img.Channels(), rrCli, rrMaskCli, IsNoCrop,
+                    //if (Pattern == null)
+                    //    Pattern = new Pattern();
+                    intpr = Pattern.SetImgeSample(img.Data, img.Width, img.Height, (int)img.Step(), img.Channels(), rrCli, rrMaskCli, IsNoCrop,
                                 out w, out h, out s, out c);
 
                         if (intpr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
                             return mat; // trả Mat rỗng
+                    
                         Pattern.LearnPattern();
                         // Map kênh trả về
                         MatType mt = c == 1 ? MatType.CV_8UC1

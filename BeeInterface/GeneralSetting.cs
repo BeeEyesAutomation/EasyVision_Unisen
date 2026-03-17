@@ -514,7 +514,9 @@ namespace BeeInterface
                 String[] sConent=File.ReadAllLines(openFileDialog.FileName);
                 foreach (String s in sConent)
                 {
+                    if(s.Trim().Length == 0)   continue;
                    String[] col = s.Split('\t');
+                    if (col.Length == 0) continue;
                     String Name = col[1].Replace("_", "").Trim();
                     int No = 0;
                     if (int.TryParse(col[0], out No))

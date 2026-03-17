@@ -610,6 +610,8 @@ namespace BeeInterface
                 btnRtu.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PLC ? false : true;
                 btnKeyence.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
                 btnMitsu.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
+                btnMitsu2.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
+                btnMisu3.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
                 btnDelta.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
                 layBrand.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
                 layTypeComunication.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
@@ -1217,6 +1219,7 @@ namespace BeeInterface
             btnKeyence.Enabled = true;
             btnMitsu.Enabled = true;
             btnDelta.Enabled = true;
+            btnMisu3.Enabled = true;
             btnMitsu.PerformClick();
             layBrand.Enabled = true;
             laySettingCom.Enabled = true;
@@ -1236,6 +1239,7 @@ namespace BeeInterface
             btnMitsu.Enabled = false;
             btnDelta.Enabled = false;
             laySettingCom.Enabled = true;
+            btnMisu3.Enabled = false;
             btnRtu.PerformClick();
         }
 
@@ -1413,6 +1417,11 @@ namespace BeeInterface
 
             }
             this.btnEnableEditInput.Text = this.btnEnableEditInput.IsCLick == true ? "ON" : "OFF";
+        }
+
+        private void btnMisu3_Click(object sender, EventArgs e)
+        {
+            Global.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Mitsubishi3;
         }
     }
 }

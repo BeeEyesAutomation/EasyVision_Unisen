@@ -220,6 +220,7 @@ namespace BeeInterface
             this.layColorTolerace.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layColorTolerace.Size = new System.Drawing.Size(467, 50);
             this.layColorTolerace.TabIndex = 116;
+            this.layColorTolerace.Visible = false;
             // 
             // label2
             // 
@@ -319,6 +320,7 @@ namespace BeeInterface
             this.layTypeMat.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
             this.layTypeMat.Size = new System.Drawing.Size(467, 55);
             this.layTypeMat.TabIndex = 115;
+            this.layTypeMat.Visible = false;
             // 
             // btnGray
             // 
@@ -454,6 +456,7 @@ namespace BeeInterface
             this.layGray.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layGray.Size = new System.Drawing.Size(467, 50);
             this.layGray.TabIndex = 114;
+            this.layGray.Visible = false;
             // 
             // AdjThreshGray
             // 
@@ -972,7 +975,7 @@ namespace BeeInterface
             this.btn3.ImageTintNormal = System.Drawing.Color.Empty;
             this.btn3.ImageTintOpacity = 0.5F;
             this.btn3.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btn3.IsCLick = false;
+            this.btn3.IsCLick = true;
             this.btn3.IsNotChange = false;
             this.btn3.IsRect = false;
             this.btn3.IsTouch = true;

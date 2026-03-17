@@ -79,64 +79,80 @@ namespace BeeCore
 
             using (Mat img = raw.Clone())
             {
-              
-                Mat matFilter = new Mat() ;
-                matFilter = img.Clone();
-                switch (TypeImg)
-                {
-                    case TypeMat.Color:
-                        if (matFilter.Channels() == 1)
-                            Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.GRAY2BGR);
-                        else if (matFilter.Channels() == 4)
-                            Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.BGRA2BGR);
-                        break;
-                    case TypeMat.Binary:
-                        if (img.Channels() == 3)
-                            Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.BGR2GRAY);
-                        if (IsAutoThreshBinary)
-                        {
-                            matFilter = Filters.BinaryTextAuto(img, 31, 8, SzClearNoise);
-                        }
-                        else
-                            Cv2.Threshold(matFilter, matFilter, ThreshBinary, 255, ThresholdTypes.Binary);
-                        break;
-                }
-               
-
                 int w = 0, h = 0, s = 0, c = 0;
-                IntPtr intpr = IntPtr.Zero;
+
                 Mat mat = new Mat();
 
+                IntPtr intpr = IntPtr.Zero;
+                Mat matFilter = new Mat();
                 try
                 {
-                    var rrCli = Converts.ToCli(rotArea); // như ở reply trước
-                    RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
-                    if(ColorPixel==null)
-                        ColorPixel = new ColorPixel();
-                    intpr = ColorPixel.SetImgeSample(
-                             matFilter.Data, matFilter.Width, matFilter.Height, (int)matFilter.Step(), matFilter.Channels()
-                        , rrCli, rrMaskCli,IsNoCrop,0,
-                            out w, out h, out s, out c);
 
-                 
-               
-                    if (intpr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
-                        return mat; // trả Mat rỗng
-
-                
-                    MatType mt = c == 1 ? MatType.CV_8UC1
-                                : c == 3 ? MatType.CV_8UC3
-                                : MatType.CV_8UC4;
-
-                    // Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
-                    using (var m = new Mat(h, w, mt, intpr, s))
+                  
+                matFilter = img.Clone();
+                    if (IsNoCrop)
                     {
-                        
-                        mat = m.Clone();
+                        if (matFilter.Channels() == 1)
+                            Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.GRAY2BGR);
+                        ColorPixel.SetImgeSampleNoCrop(
+                                  matFilter.Data, matFilter.Width, matFilter.Height, (int)matFilter.Step(), matFilter.Channels());
                     }
+                    else
+                    {
+                        switch (TypeImg)
+                        {
+                            case TypeMat.Color:
+                                if (matFilter.Channels() == 1)
+                                    Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.GRAY2BGR);
+                                else if (matFilter.Channels() == 4)
+                                    Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.BGRA2BGR);
+                                break;
+                            case TypeMat.Binary:
+                                if (img.Channels() == 3)
+                                    Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.BGR2GRAY);
+                                if (IsAutoThreshBinary)
+                                {
+                                    matFilter = Filters.BinaryTextAuto(matFilter, 31, 8, SzClearNoise);
+                                  //  matFilter= Filters.FillInnerHolesOnly(matFilter);
+                                }
+                                else
+                                    Cv2.Threshold(matFilter, matFilter, ThreshBinary, 255, ThresholdTypes.Binary);
+                                if (matFilter.Channels() == 1)
+                                    Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.GRAY2BGR);
+                                break;
+                        }
 
-                    // Giữ sống input đến sau khi native xong
-                    GC.KeepAlive(img);
+
+
+                        var rrCli = Converts.ToCli(rotArea); // như ở reply trước
+                        RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
+                        if (ColorPixel == null)
+                            ColorPixel = new ColorPixel();
+                        intpr = ColorPixel.SetImgeSample(
+                                 matFilter.Data, matFilter.Width, matFilter.Height, (int)matFilter.Step(), matFilter.Channels()
+                            , rrCli, rrMaskCli, IsNoCrop, 0,
+                                out w, out h, out s, out c);
+
+
+
+                        if (intpr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
+                            return mat; // trả Mat rỗng
+
+
+                        MatType mt = c == 1 ? MatType.CV_8UC1
+                                    : c == 3 ? MatType.CV_8UC3
+                                    : MatType.CV_8UC4;
+
+                        // Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
+                        using (var m = new Mat(h, w, mt, intpr, s))
+                        {
+
+                            mat = m.Clone();
+                        }
+
+                        // Giữ sống input đến sau khi native xong
+                        GC.KeepAlive(img);
+                    }
                 }
                 finally
                 {
@@ -161,23 +177,33 @@ namespace BeeCore
 
         public void SetModel()
         {
-            ColorPixel = new ColorPixel();
-            rotCrop = null;
-           
-            if (rotArea == null)
-                rotArea = new RectRotate();
-            if(bmRaw != null)
+            try
             {
-                matTemp = bmRaw.ToMat();
-              
-                LearnPattern(matTemp, true);
-            }
-           
-            Common.PropetyTools[IndexThread][Index].StepValue = 1;
-			Common.PropetyTools[IndexThread][Index].MinValue = 0;
 
-            Common.PropetyTools[IndexThread][Index].MaxValue = 5000;
-            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+
+                ColorPixel = new ColorPixel();
+                rotCrop = null;
+
+                if (rotArea == null)
+                    rotArea = new RectRotate();
+                if (bmRaw != null)
+                {
+                    matTemp = bmRaw.ToMat();
+
+                    LearnPattern(matTemp, true);
+                }
+
+                Common.PropetyTools[IndexThread][Index].StepValue = 1;
+                Common.PropetyTools[IndexThread][Index].MinValue = 0;
+
+                Common.PropetyTools[IndexThread][Index].MaxValue = 5000;
+                Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+            }
+            catch(Exception ex)
+            {
+                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "VisualMatch", ex.Message));
+
+            }
         }
         public List<RectRotate> rectRotates = new List<RectRotate>();
         public bool IsLimitCouter = true;
@@ -219,6 +245,8 @@ namespace BeeCore
                             }
                             else
                                 Cv2.Threshold(matFilter, matFilter, ThreshBinary, 255, ThresholdTypes.Binary);
+                            if (matFilter.Channels() == 1)
+                                Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.GRAY2BGR);
                             break;
                     }
                     var rrCli = Converts.ToCli(rotArea); // như ở reply trước

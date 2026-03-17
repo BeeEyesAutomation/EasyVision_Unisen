@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 namespace PlcLib
 {
     [Serializable()]
-    public enum PlcBrand { Mitsubishi, Mitsubishi2, Keyence, Omron, Siemens, ModbusRtu, ModbusAscii, Delta, Pana }
+    public enum PlcBrand { Mitsubishi, Mitsubishi2, Mitsubishi3, Keyence, Omron, Siemens, ModbusRtu, ModbusAscii, Delta, Pana }
     public enum ConnectionType { Tcp, Serial }
 
     public sealed class PlcClient : IDisposable
@@ -173,6 +173,27 @@ namespace PlcLib
                         fx.SumCheck = false;        // thử cả true/false (tùy PLC cấu hình checksum)
                         return fx;
                     }
+                case PlcBrand.Mitsubishi3:
+                    if (_connType == ConnectionType.Serial)
+                    {
+                        var fx = new MelsecFxSerial();
+                        //fx.LogNet = new LogNetSingle("fx485.log");
+                        fx.SerialPortInni(sp =>
+                        {
+                            sp.PortName = _com;
+                            sp.BaudRate = _baud;
+                            sp.DataBits = DataBits;                                  // 7
+                            sp.Parity = Parity;        // Even
+                            sp.StopBits = StopBits;       // 2   <-- đổi từ One -> Two
+                            sp.RtsEnable = rtsEnable;
+                            sp.DtrEnable = dtrEnable;
+                            sp.ReadTimeout = _timeoutMs;
+                            sp.WriteTimeout = _timeoutMs;
+                        });
+                       
+                        return fx;
+                    }
+                    break;
                 case PlcBrand.Mitsubishi2:
                     if (_connType == ConnectionType.Tcp)
                     {
@@ -334,6 +355,7 @@ namespace PlcLib
                 default:
                     throw new NotSupportedException("PLC brand chưa hỗ trợ.");
             }
+            return null;
         }
         // ====== Connect / Disconnect (không dùng NetworkDeviceBase/SerialDeviceBase) ======
         public async Task<bool> ConnectAsync()

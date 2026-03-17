@@ -120,7 +120,6 @@ namespace BeeInterface
             this.btnQuickSetting.TextColor = System.Drawing.Color.Black;
             this.btnQuickSetting.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnQuickSetting.UseVisualStyleBackColor = false;
-            this.btnQuickSetting.Visible = false;
             this.btnQuickSetting.Click += new System.EventHandler(this.btnQuickSetting_Click);
             // 
             // btncheck
