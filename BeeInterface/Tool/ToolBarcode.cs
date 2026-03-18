@@ -44,6 +44,8 @@ namespace BeeInterface
           
             try
             {
+                btnOnSendResult.IsCLick = Propety.IsSendResult;
+                txtAdd.Text = Propety.AddPLC;
                
                 trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
                 trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
@@ -501,6 +503,21 @@ namespace BeeInterface
         {
             Propety.ModeCheck= ModeCheck.Single;
             AdjIndexProgChoose.Enabled = Propety.ModeCheck == ModeCheck.Single ? true : false;
+        }
+
+        private void txtAdd_TextChanged(object sender, EventArgs e)
+        {
+            Propety.AddPLC= txtAdd.Text.Trim();
+        }
+
+        private void btnOnSendResult_Click(object sender, EventArgs e)
+        {
+            Propety.IsSendResult = true;
+        }
+
+        private void btnOffSendResult_Click(object sender, EventArgs e)
+        {
+            Propety.IsSendResult = false;
         }
     }
 }

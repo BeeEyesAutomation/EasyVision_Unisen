@@ -74,6 +74,7 @@ namespace BeeCore
         public bool IsAutoThreshBinary = false;
         [NonSerialized]
         Mat matTemp;
+        public bool IsBlack = false;
         public Mat LearnPattern(Mat raw, bool IsNoCrop)
         {
 
@@ -113,10 +114,13 @@ namespace BeeCore
                                 if (IsAutoThreshBinary)
                                 {
                                     matFilter = Filters.BinaryTextAuto(matFilter, 31, 8, SzClearNoise);
-                                  //  matFilter= Filters.FillInnerHolesOnly(matFilter);
+                                    //  matFilter= Filters.FillInnerHolesOnly(matFilter);
                                 }
                                 else
+                                {
                                     Cv2.Threshold(matFilter, matFilter, ThreshBinary, 255, ThresholdTypes.Binary);
+                                    matFilter = Filters.RemoveSmallBlackDots(matFilter, SzClearNoise);
+                                }
                                 if (matFilter.Channels() == 1)
                                     Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.GRAY2BGR);
                                 break;
@@ -130,7 +134,7 @@ namespace BeeCore
                             ColorPixel = new ColorPixel();
                         intpr = ColorPixel.SetImgeSample(
                                  matFilter.Data, matFilter.Width, matFilter.Height, (int)matFilter.Step(), matFilter.Channels()
-                            , rrCli, rrMaskCli, IsNoCrop, 0,
+                            , rrCli, rrMaskCli, IsNoCrop, !IsBlack,
                                 out w, out h, out s, out c);
 
 
@@ -244,7 +248,11 @@ namespace BeeCore
                                 matFilter = Filters.BinaryTextAuto(img, 31, 8, SzClearNoise);
                             }
                             else
+                            {
                                 Cv2.Threshold(matFilter, matFilter, ThreshBinary, 255, ThresholdTypes.Binary);
+                                matFilter= Filters.RemoveSmallBlackDots(matFilter, SzClearNoise);
+                            }    
+                             
                             if (matFilter.Channels() == 1)
                                 Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.GRAY2BGR);
                             break;
@@ -253,16 +261,16 @@ namespace BeeCore
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
                     if (ColorPixel == null)
                         ColorPixel = new ColorPixel();
-                    ColorPixel.SetImgeRaw(matFilter.Data, matFilter.Width, matFilter.Height, (int)matFilter.Step(), matFilter.Channels(), rrCli,rrMaskCli,0);
+                    ColorPixel.SetImgeRaw(matFilter.Data, matFilter.Width, matFilter.Height, (int)matFilter.Step(), matFilter.Channels(), rrCli,rrMaskCli,!IsBlack);
 
                   
                     int w = 0, h = 0, s = 0, c = 0;
                     IsAlign = ModeCalibVisualMatch == ModeCalibVisualMatch.OFF ? false : true;
                     IntPtr intpr = IntPtr.Zero;
                     if (IsBinary)
-                         intpr = ColorPixel.CheckImageFromMat(IsAlign,(int) ModeCalibVisualMatch, IsMultiCPU, 200, SzClearNoise,Aspect, out pxRS,ref OffsetX, ref OffsetY, ref OffsetAngle, out w, out h, out s, out c);
+                         intpr = ColorPixel.CheckImageFromMat(IsAlign,(int) ModeCalibVisualMatch, IsMultiCPU, 200, 0,Aspect, Border, out pxRS,ref OffsetX, ref OffsetY, ref OffsetAngle, out w, out h, out s, out c);
                    else
-                        intpr = ColorPixel.CheckImageFromMat(IsAlign, (int)ModeCalibVisualMatch, IsMultiCPU, ThreshBinary, SzClearNoise, Aspect, out pxRS, ref OffsetX, ref OffsetY, ref OffsetAngle, out w, out h, out s, out c);
+                        intpr = ColorPixel.CheckImageFromMat(IsAlign, (int)ModeCalibVisualMatch, IsMultiCPU, ColorTolerance, SzClearNoise, Aspect,Border, out pxRS, ref OffsetX, ref OffsetY, ref OffsetAngle, out w, out h, out s, out c);
 
                     matProcess = new Mat();
 
@@ -341,8 +349,10 @@ namespace BeeCore
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
                 Draws.Box2Label(gc, rotA, nameTool, pxRS + " Px", font, cl, brushText, Global.ParaShow.Opacity, Global.ParaShow.ThicknessLine);
-            //Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.ParaShow.ThicknessLine);
+           if(!Global.IsRun&& Border>0)
+            { gc.DrawRectangle(new Pen(new SolidBrush( Color.FromArgb(100,0,0,255)), Border), Rectangle.Round(rotA._rect));
 
+            }    
             gc.ResetTransform();
           
             {if(matProcess!=null)

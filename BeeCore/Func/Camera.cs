@@ -227,10 +227,12 @@ namespace BeeCore
         public Results SumResult()
         {
             Results = Results.OK;
-           // foreach (List<PropetyTool> PropetyTools in BeeCore.Common.PropetyTools)
+            // foreach (List<PropetyTool> PropetyTools in BeeCore.Common.PropetyTools)
             {
+                if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] == null) return Results.None;
                 foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
                 {
+                  
                     if (PropetyTool.UsedTool == UsedTool.NotUsed)
                     {
                         continue;

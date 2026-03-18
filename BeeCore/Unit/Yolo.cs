@@ -1284,17 +1284,51 @@ namespace BeeCore
                     // X/Y rule
                     //--------------------------------
 
-                    if (item.IsX && !IntersectX(r.rot, item.ValueX))
-                        continue;
+                    if (item.IsX)
+                        if(IntersectX(r.rot, item.ValueX))
+                        {
+                            IsOK = true;
+                            r.IsOK = IsOK;
 
-                    if (item.IsY && !IntersectY(r.rot, item.ValueY))
-                        continue;
+                            if (r.IsOK)
+                                numOK++;
+                            continue;
+                        }    
+                          
 
-                    if (item.IsXMax && !IntersectXMax(r.rot, item.ValueXMax))
-                        continue;
+                    if (item.IsY )
+                        if(IntersectY(r.rot, item.ValueY))
+                        {
+                            IsOK = true;
+                            r.IsOK = IsOK;
 
-                    if (item.IsYMax && !IntersectYMax(r.rot, item.ValueYMax))
-                        continue;
+                            if (r.IsOK)
+                                numOK++;
+                            continue;
+                        }
+
+                    if (item.IsXMax)
+                        if(IntersectXMax(r.rot, item.ValueXMax))
+                    {
+                        IsOK = true;
+                            r.IsOK = IsOK;
+
+                            if (r.IsOK)
+                                numOK++;
+                            continue;
+                    }
+                   
+                    if (item.IsYMax )
+                        if(IntersectYMax(r.rot, item.ValueYMax))
+                    {
+                        IsOK = true;
+                            r.IsOK = IsOK;
+
+                            if (r.IsOK)
+                                numOK++;
+                            continue;
+                    }
+                    
                     //--------------------------------
                     // ScanBox rule (NEW)
                     //--------------------------------
@@ -1371,7 +1405,7 @@ namespace BeeCore
 
                         r.IsOK = IsOK;
 
-                    if (IsOK)
+                    if (r.IsOK)
                         numOK++;
                 }
 

@@ -101,44 +101,111 @@ using namespace cv;
 
     // ---------- FAST path: vector hóa + đa luồng nội bộ OpenCV (không filter) ----------
 // ---------- FAST path: grayscale + blur để giảm viền ----------
-     int ColorPx:: DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise,float Aspect)
-    {
-        Rect roi(0, 0, tpl.cols, tpl.rows);
-        Mat I = img(roi), T = tpl;
+      int ColorPx::DiffCount_Fast(const Mat& img,
+          const Mat& tpl,
+          int tol,
+          Mat* annotated,
+          int SzClearNoise,
+          float Aspect,
+          int borderOffset)
+      {
+          Rect roi(0, 0, tpl.cols, tpl.rows);
+          Mat I = img(roi), T = tpl;
 
-        // 1. Grayscale
-        Mat g1, g2;
-        cvtColor(I, g1, COLOR_BGR2GRAY);
-        cvtColor(T, g2, COLOR_BGR2GRAY);
+          // 1. Grayscale
+          Mat g1, g2;
+          cvtColor(I, g1, COLOR_BGR2GRAY);
+          cvtColor(T, g2, COLOR_BGR2GRAY);
 
-        // 2. Normalize
-        normalize(g1, g1, 0, 255, NORM_MINMAX);
-        normalize(g2, g2, 0, 255, NORM_MINMAX);
+          // 2. Normalize
+          normalize(g1, g1, 0, 255, NORM_MINMAX);
+          normalize(g2, g2, 0, 255, NORM_MINMAX);
 
-        // 3. Blur nhẹ để kill sub-pixel
-        GaussianBlur(g1, g1, Size(3, 3), 0.8);
-        GaussianBlur(g2, g2, Size(3, 3), 0.8);
+          // 3. Blur nhẹ để kill sub-pixel
+          GaussianBlur(g1, g1, Size(3, 3), 0.8);
+          GaussianBlur(g2, g2, Size(3, 3), 0.8);
 
-        // 4. Diff
-        Mat diff;
-        absdiff(g1, g2, diff);                // 8UC1
+          // 4. Diff
+          Mat diff;
+          absdiff(g1, g2, diff);
 
-        // 5. Threshold
-        Mat mask;
-        threshold(diff, mask, tol, 255, THRESH_BINARY);  // tol chính là ngưỡng diff gray
-        RemoveSmallBlobs(mask,  SzClearNoise);
-      
-        mask=  RemoveByThicknessDT(mask, Aspect);
-        // 6. Đếm
-        int diffCount = countNonZero(mask);
+          // 5. Threshold
+          Mat mask;
+          threshold(diff, mask, tol, 255, THRESH_BINARY);
 
-        if (annotated) {
-            annotated->create(img.size(), img.type());
-            annotated->setTo(Scalar(0, 0, 0));                // nền đen
-            annotated->operator()(roi).setTo(Scalar(0, 0, 255), mask); // tô đỏ chỗ khác
-        }
-        return diffCount;
-    }
+          RemoveSmallBlobs(mask, SzClearNoise);
+          mask = RemoveByThicknessDT(mask, Aspect);
+
+          // 5.1 Remove border theo độ dày borderOffset
+          if (borderOffset > 0)
+          {
+              int b = std::min(borderOffset, std::min(mask.cols / 2, mask.rows / 2));
+              if (b > 0)
+              {
+                  // top
+                  mask(Rect(0, 0, mask.cols, b)).setTo(0);
+
+                  // bottom
+                  mask(Rect(0, mask.rows - b, mask.cols, b)).setTo(0);
+
+                  // left
+                  mask(Rect(0, 0, b, mask.rows)).setTo(0);
+
+                  // right
+                  mask(Rect(mask.cols - b, 0, b, mask.rows)).setTo(0);
+              }
+          }
+
+          // 6. Đếm
+          int diffCount = countNonZero(mask);
+
+          if (annotated)
+          {
+              annotated->create(img.size(), img.type());
+              annotated->setTo(Scalar(0, 0, 0));
+              annotated->operator()(roi).setTo(Scalar(0, 0, 255), mask);
+          }
+
+          return diffCount;
+      }
+    // int ColorPx:: DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise,float Aspect)
+    //{
+    //    Rect roi(0, 0, tpl.cols, tpl.rows);
+    //    Mat I = img(roi), T = tpl;
+
+    //    // 1. Grayscale
+    //    Mat g1, g2;
+    //    cvtColor(I, g1, COLOR_BGR2GRAY);
+    //    cvtColor(T, g2, COLOR_BGR2GRAY);
+
+    //    // 2. Normalize
+    //    normalize(g1, g1, 0, 255, NORM_MINMAX);
+    //    normalize(g2, g2, 0, 255, NORM_MINMAX);
+
+    //    // 3. Blur nhẹ để kill sub-pixel
+    //    GaussianBlur(g1, g1, Size(3, 3), 0.8);
+    //    GaussianBlur(g2, g2, Size(3, 3), 0.8);
+
+    //    // 4. Diff
+    //    Mat diff;
+    //    absdiff(g1, g2, diff);                // 8UC1
+
+    //    // 5. Threshold
+    //    Mat mask;
+    //    threshold(diff, mask, tol, 255, THRESH_BINARY);  // tol chính là ngưỡng diff gray
+    //    RemoveSmallBlobs(mask,  SzClearNoise);
+    //  
+    //    mask=  RemoveByThicknessDT(mask, Aspect);
+    //    // 6. Đếm
+    //    int diffCount = countNonZero(mask);
+
+    //    if (annotated) {
+    //        annotated->create(img.size(), img.type());
+    //        annotated->setTo(Scalar(0, 0, 0));                // nền đen
+    //        annotated->operator()(roi).setTo(Scalar(0, 0, 255), mask); // tô đỏ chỗ khác
+    //    }
+    //    return diffCount;
+    //}
 
 
     // ---------- PARALLEL tiled (KHÔNG early-exit) ----------
@@ -317,7 +384,7 @@ using namespace cv;
 
     // ---------- Strategy (luôn quét hết) ----------
      int ColorPx:: PixelCheck_MT_FullScan(const Mat& img, const Mat& tpl,
-      int tol, Mat* annotated, int SzClearNoise,bool IsMultiCPU, float Aspect)
+      int tol, Mat* annotated, int SzClearNoise,bool IsMultiCPU, float Aspect,int borderOffset)
     {
       /*  CV_Assert(!img.empty() && !tpl.empty());
         CV_Assert(tpl.cols <= img.cols && tpl.rows <= img.rows);
@@ -328,7 +395,7 @@ using namespace cv;
         // chọn song song toàn phần cho ảnh lớn, còn lại fast path;
         // KHÔNG early-exit ở cả hai nhánh
       //  const bool big = IsMultiCPU; // >= 4MP
-        int diffCount = DiffCount_Fast(img, tpl, tol, annotated, SzClearNoise,Aspect); /*big
+        int diffCount = DiffCount_Fast(img, tpl, tol, annotated, SzClearNoise,Aspect, borderOffset); /*big
             ? DiffCount_ParallelFull(img, tpl, tol, annotated)
             :  DiffCount_Fast(img, tpl, tol, annotated,  SzClearNoise);*/
 
@@ -350,7 +417,7 @@ using namespace cv;
 //    return matRs;
 //}
 // === PUBLIC API ===
-System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool NoCrop, int Thiness,
+System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool NoCrop, bool IsWhite,
     [System::Runtime::InteropServices::Out] int% outW,
     [System::Runtime::InteropServices::Out] int% outH,
     [System::Runtime::InteropServices::Out] int% outStride,
@@ -366,7 +433,7 @@ System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int t
             : Nullable<RectRotateCli>();
         com->CropRotToMat(
             tplData, tplW, tplH, tplStride, tplChannels,
-            rr, mask, /*returnMaskOnly*/ false, Thiness,
+            rr, mask, IsWhite, 0,
             System::IntPtr(&_img->temp)
         );
     
@@ -383,7 +450,7 @@ System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int t
     
     return mem;
 }
-void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask, int Thiness)
+void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool IsWhite)
 {
   
     Nullable<RectRotateCli> mask =
@@ -391,7 +458,7 @@ void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplS
         : Nullable<RectRotateCli>();
     com->CropRotToMat(
         tplData, tplW, tplH, tplStride, tplChannels,
-        rr, mask, /*returnMaskOnly*/ false, Thiness,
+        rr, mask,IsWhite, 0,
         System::IntPtr(&_img->raw)
     );
    
@@ -505,7 +572,7 @@ void ColorPixel::SaveRandom(int i)
 }
 IntPtr ColorPixel::CheckImageFromMat(
     bool IsAlign,int ModeAlign,bool IsMultiCPU,
-    int colorTolerance, int SzClearNoise, float Aspect,
+    int colorTolerance, int SzClearNoise, float Aspect,int borderOffset,
     float% outPx, float% outOffsetX, float% outOffsetY, float% Offsetangle,
     int% outW, int% outH, int% outStride, int% outChannels)
 {
@@ -566,14 +633,14 @@ IntPtr ColorPixel::CheckImageFromMat(
         //outOffsetX = ofs.x;
         //outOffsetY = ofs.y;
         //Offsetangle = angle;
-       outPx = _img->PixelCheck_MT_FullScan(R.aligned, _img->temp.clone(), colorTolerance, &annotated, SzClearNoise, IsMultiCPU,Aspect);
+       outPx = _img->PixelCheck_MT_FullScan(R.aligned, _img->temp.clone(), colorTolerance, &annotated, SzClearNoise, IsMultiCPU,Aspect, borderOffset);
    }
    else
    {
       
       // cv::imwrite("i.png", _img->raw);
       // Mat temp = _img->temp.clone();
-       outPx =_img-> PixelCheck_MT_FullScan(_img->raw, _img->temp, colorTolerance, &annotated, SzClearNoise, IsMultiCPU, Aspect);
+       outPx =_img-> PixelCheck_MT_FullScan(_img->raw, _img->temp, colorTolerance, &annotated, SzClearNoise, IsMultiCPU, Aspect, borderOffset);
        outOffsetX =0;
        outOffsetY =0;
        Offsetangle =0;

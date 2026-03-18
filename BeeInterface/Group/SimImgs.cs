@@ -83,18 +83,46 @@ namespace BeeUi.Unit
                         break;
                     case TriggerNum.Trigger1:
                         Global.TriggerNum = TriggerNum.Trigger2;
-                        Global.IndexProgChoose = 1;
+                        if (BeeCore.Common.PropetyTools[1] != null)
+                            Global.IndexProgChoose = 1;
+                        else
+                        {
+                            Global.TriggerNum = TriggerNum.Trigger1;
+                            Global.IndexProgChoose = 0;
+
+
+                        }
+
                         break;
                     case TriggerNum.Trigger2:
                         Global.TriggerNum = TriggerNum.Trigger3;
-                        Global.IndexProgChoose = 2;
+
+                        if (BeeCore.Common.PropetyTools[2] != null)
+                            Global.IndexProgChoose = 2;
+                        else
+                        {
+                            Global.TriggerNum = TriggerNum.Trigger1;
+                            Global.IndexProgChoose = 0;
+
+
+                        }
+
                         break;
                     case TriggerNum.Trigger3:
                         Global.TriggerNum = TriggerNum.Trigger4;
-                        Global.IndexProgChoose = 3;
+                        if (BeeCore.Common.PropetyTools[3] != null)
+                            Global.IndexProgChoose = 3;
+                        else
+                        {
+                            Global.TriggerNum = TriggerNum.Trigger1;
+                            Global.IndexProgChoose = 0;
+
+
+                        }
+
                         break;
                 }
-               // Global.StatusProcessing = StatusProcessing.Read;
+                // Global.StatusProcessing = StatusProcessing.Read;
             }
             else
                 Global.TriggerNum = TriggerNum.Trigger1;

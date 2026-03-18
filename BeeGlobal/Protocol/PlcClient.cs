@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 namespace PlcLib
 {
     [Serializable()]
-    public enum PlcBrand { Mitsubishi, Mitsubishi2, Mitsubishi3, Keyence, Omron, Siemens, ModbusRtu, ModbusAscii, Delta, Pana }
+    public enum PlcBrand { Mitsubishi, Mitsubishi2, Keyence, Omron, Siemens, ModbusRtu, ModbusAscii, Delta, Pana, Mitsubishi3 }
     public enum ConnectionType { Tcp, Serial }
 
     public sealed class PlcClient : IDisposable

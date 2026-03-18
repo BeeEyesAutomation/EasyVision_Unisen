@@ -108,7 +108,7 @@ namespace BeeCore.Algorithm
             }
         }
 
-        private static unsafe Mat RemoveSmallBlackDots(Mat binTextBlack, int minArea)
+        public static unsafe Mat RemoveSmallBlackDots(Mat binTextBlack, int minArea)
         {
             if (binTextBlack == null || binTextBlack.Empty())
                 return new Mat();

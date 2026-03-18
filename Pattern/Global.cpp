@@ -505,7 +505,8 @@ void CommonPlus::RunCrop(
     const cv::Mat& src,
     const RectRotateCli% rr,
     const RectRotateCli* rrMask,
-    bool returnMaskOnly,
+    
+    bool IsWhite,
     int Thiness,
     cv::Mat& out)
 {
@@ -599,7 +600,7 @@ void CommonPlus::RunCrop(
             );
 
             cv::bitwise_and(cropMask, mask2, finalMask);
-            bg = rrMask->IsWhite ?
+            bg = IsWhite ?
                 cv::Scalar(255, 255, 255, 255) :
                 cv::Scalar(0, 0, 0, 0);
         }
@@ -607,7 +608,7 @@ void CommonPlus::RunCrop(
             finalMask = cropMask.clone();
         }
 
-        if (returnMaskOnly) { out = finalMask.clone(); return; }
+     //   if (returnMaskOnly) { out = finalMask.clone(); return; }
         
         // 9) Áp mask lên patch
       /* bg = rrMask->IsWhite ?
@@ -624,7 +625,7 @@ void CommonPlus::RunCrop(
 
             if (rrMask)
             {
-                borderColor = rrMask->IsWhite ?
+                borderColor = IsWhite ?
                     cv::Scalar(255, 255, 255) :
                     cv::Scalar(0, 0, 0);
             }

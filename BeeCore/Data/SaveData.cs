@@ -158,7 +158,7 @@ namespace BeeCore
         }
         public static void Project(String Project)
         {
-            try
+          //  try
             {
                 Config(Global.Config);
                    String path = "Program\\" + Project;
@@ -178,12 +178,12 @@ namespace BeeCore
                 // Access.SaveParaComon(path + "\\" + Global.Project + ".para", Global.ParaCommon);
                 //Access.SaveParaCamera(path + "\\" + Global.Project + ".cam", Global.listParaCamera);
             }
-            catch(Exception ex)
-            {
-                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR,"Save Prog", ex.Message.ToString()));
+            //catch(Exception ex)
+            //{
+            //    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR,"Save Prog", ex.Message.ToString()));
 
-               // MessageBox.Show(ex.Message);
-            }
+            //   // MessageBox.Show(ex.Message);
+            //}
         }
     }
 }

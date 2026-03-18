@@ -462,6 +462,7 @@ namespace BeeCore
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Scan;
         }
+        public String ContentQR = "";
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
@@ -496,7 +497,10 @@ namespace BeeCore
                     opts.FindBoxes = false;// ModeCheck== ModeCheck.Single? false:true;
                     BarcodeCoreCli.DetectAll(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels(), rrCli, rrMaskCli,opts, ref listRectBarcode,ref listContentBarcode,ref listTypeBarcode);
 
-
+                    if(listContentBarcode.Count>0)
+                    {
+                        ContentQR = listContentBarcode[0];
+                    }    
                     // 3) Nạp ảnh vào Pattern (con trỏ phải còn sống đến sau khi Match)
                     GC.KeepAlive(matProcess);
 
@@ -618,7 +622,7 @@ namespace BeeCore
             {
                if( Global.Comunication.Protocol.IsConnected)
                 {
-                //  await  Global.Comunication.Protocol.WriteResultBits(AddPLC, BitsResult);
+                  await  Global.Comunication.Protocol.WriteResultString(AddPLC, ContentQR);
                 }
             }
         }

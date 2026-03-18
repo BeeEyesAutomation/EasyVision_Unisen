@@ -545,6 +545,8 @@ namespace BeeInterface
         // ⬇️ CỜ MỚI: Polygon bẩn trong lúc kéo (hoãn update center/bounds/angle)
         private bool _polyDirtyDuringDrag = false;
         bool  IsNewShape = false;
+        private bool _mouseDown = false;
+        private const int DRAG_THRESHOLD = 4;
 
         // ====== MouseDown ======
         private void imgView_MouseDown(object sender, MouseEventArgs e)
@@ -552,11 +554,12 @@ namespace BeeInterface
             if (Global.IndexToolSelected == -1) return;
               
             if (Global.IsRun) return;
-         
+
             //if (Global.StatusDraw == StatusDraw.Scan && e.Button == MouseButtons.Left)
             //    Global.StatusDraw = StatusDraw.Choose;
             pDown = e.Location;
-            _drag = true;
+            _mouseDown = true;
+            _drag = false;
 
             if (Global.StatusDraw == StatusDraw.Color)
                 BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.AddColor();
@@ -722,6 +725,14 @@ namespace BeeInterface
             {
                 HideAngleControl();
                 return;
+            }
+            if (_mouseDown && !_drag)
+            {
+                int dx = e.X - pDown.X;
+                int dy = e.Y - pDown.Y;
+
+                if (Math.Abs(dx) >= DRAG_THRESHOLD || Math.Abs(dy) >= DRAG_THRESHOLD)
+                    _drag = true;
             }
             imgView.Cursor = Cursors.Default;
             // Lưu vị trí chuột để OnPaint vẽ preview
@@ -1431,6 +1442,12 @@ namespace BeeInterface
         }
         private void imgView_MouseUp(object sender, MouseEventArgs e)
         {
+            _mouseDown = false;
+            _drag = false;
+            IsNewShape = false;
+            _maybeCreate = false;
+            _creatingNew = false;
+            _polyDirtyDuringDrag = false;
             if (Global.IndexToolSelected == -1) return;
             if (Global.IsRun) return;
             // Chốt nhánh tạo mới
@@ -3454,15 +3471,43 @@ namespace BeeInterface
                             break;
                         case TriggerNum.Trigger1:
                             Global.TriggerNum = TriggerNum.Trigger2;
-                            Global.IndexProgChoose = 1;
-                            break;
+                            if (BeeCore.Common.PropetyTools[1] != null)   
+                                Global.IndexProgChoose = 1;
+                            else
+                            {
+                                Global.TriggerNum = TriggerNum.Trigger1;
+                                Global.IndexProgChoose = 0;
+
+                               
+                            }    
+
+                                break;
                         case TriggerNum.Trigger2:
                             Global.TriggerNum = TriggerNum.Trigger3;
-                            Global.IndexProgChoose = 2;
+                           
+                            if (BeeCore.Common.PropetyTools[2] != null)
+                                Global.IndexProgChoose = 2;
+                            else
+                            {
+                                Global.TriggerNum = TriggerNum.Trigger1;
+                                Global.IndexProgChoose = 0;
+
+
+                            }
+                           
                             break;
                         case TriggerNum.Trigger3:
                             Global.TriggerNum = TriggerNum.Trigger4;
-                            Global.IndexProgChoose = 3;
+                            if (BeeCore.Common.PropetyTools[3] != null)
+                                Global.IndexProgChoose = 3;
+                            else
+                            {
+                                Global.TriggerNum = TriggerNum.Trigger1;
+                                Global.IndexProgChoose = 0;
+
+
+                            }
+                           
                             break;
                     }
                     Global.StatusProcessing = StatusProcessing.Read;
@@ -3491,15 +3536,43 @@ namespace BeeInterface
                             break;
                         case TriggerNum.Trigger1:
                             Global.TriggerNum = TriggerNum.Trigger2;
-                            Global.IndexProgChoose = 1;
+                            if (BeeCore.Common.PropetyTools[1] != null)
+                                Global.IndexProgChoose = 1;
+                            else
+                            {
+                                Global.TriggerNum = TriggerNum.Trigger1;
+                                Global.IndexProgChoose = 0;
+
+
+                            }
+
                             break;
                         case TriggerNum.Trigger2:
                             Global.TriggerNum = TriggerNum.Trigger3;
-                            Global.IndexProgChoose = 2;
+
+                            if (BeeCore.Common.PropetyTools[2] != null)
+                                Global.IndexProgChoose = 2;
+                            else
+                            {
+                                Global.TriggerNum = TriggerNum.Trigger1;
+                                Global.IndexProgChoose = 0;
+
+
+                            }
+
                             break;
                         case TriggerNum.Trigger3:
                             Global.TriggerNum = TriggerNum.Trigger4;
-                            Global.IndexProgChoose = 3;
+                            if (BeeCore.Common.PropetyTools[3] != null)
+                                Global.IndexProgChoose = 3;
+                            else
+                            {
+                                Global.TriggerNum = TriggerNum.Trigger1;
+                                Global.IndexProgChoose = 0;
+
+
+                            }
+
                             break;
                     }
                     Global.TriggerInternal = true;

@@ -9,8 +9,8 @@ namespace BeeCpp
     class ColorPx {
     public:    bool IsBGR8(const Mat& m);
     public:  cv::Mat temp; cv::Mat raw;
-   public:      int PixelCheck_MT_FullScan(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise, bool IsMultiCPU,  float Aspect);
-    public:   int DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise, float Aspect);
+   public:      int PixelCheck_MT_FullScan(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise, bool IsMultiCPU,  float Aspect,int borderOffset);
+    public:   int DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise, float Aspect,int borderOffset);
     public: void RemoveSmallBlobs(cv::Mat& mask, int minArea );
     public: Mat RemoveByThicknessDT(const Mat& bin255, float minRadius = 2.0f);
         ColorPx() {}
@@ -43,16 +43,16 @@ namespace BeeCpp
      //   System::IntPtr imgData, int imgW, int imgH, int imgStride, int imgChannels,
         // So khớp trực tiếp từ Mat (OpenCvSharp) — data pointer + w/h/stride/channels.
         System::IntPtr CheckImageFromMat(bool IsAlign, int ModeAlign,bool IsMultiCPU, int colorTolerance,
-            int SzClearNoise, float Aspect,
+            int SzClearNoise, float Aspect,int borderOffset,
             [System::Runtime::InteropServices::Out] float% PxOut,
             float% outOffsetX, float% outOffsetY, float% Offsetangle,
             [System::Runtime::InteropServices::Out] int% outW,
             [System::Runtime::InteropServices::Out] int% outH,
             [System::Runtime::InteropServices::Out] int% outStride,
             [System::Runtime::InteropServices::Out] int% outChannels);
-        void  SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels , RectRotateCli rr, Nullable<RectRotateCli> rrMask,int Thiness);
+        void  SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels , RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool IsWhite);
         System::IntPtr SetImgeSample(IntPtr data, int w, int h, int stride, int ch
-            , RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool NoCrop, int Thiness,
+            , RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool NoCrop, bool IsWhite,
             [System::Runtime::InteropServices::Out] int% outW,
             [System::Runtime::InteropServices::Out] int% outH,
             [System::Runtime::InteropServices::Out] int% outStride,

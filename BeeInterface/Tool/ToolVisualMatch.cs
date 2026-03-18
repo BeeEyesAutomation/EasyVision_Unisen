@@ -60,7 +60,9 @@ namespace BeeInterface
             AdjThreshGray.Enabled =! Propety.IsAutoThreshBinary;
             if (!btn3.IsCLick)
             {
+                layColorTolerace.Visible = Propety.TypeImg == TypeMat.Color ? true : false;
                 layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
+              //  layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
             }
             btnAutoBinary.IsCLick = Propety.IsBinary;
             //this.btnAutoBinary.Text = Propety.IsBinary == true ? "ON" : "OFF";
@@ -80,8 +82,7 @@ namespace BeeInterface
             btnArea.IsCLick = true;
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
-            btnSingleCPU.IsCLick =! Propety.IsMultiCPU;
-            btnMultiCPU.IsCLick = Propety.IsMultiCPU;
+        
             AdjClearNoise.Value = Propety.SzClearNoise;
             btnOFFCalib.IsCLick = Propety.ModeCalibVisualMatch == ModeCalibVisualMatch.OFF ? true : false;
             btnSlowCalib.IsCLick = Propety.ModeCalibVisualMatch == ModeCalibVisualMatch.Slow ? true : false;
@@ -94,9 +95,9 @@ namespace BeeInterface
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
             AdjAspect.Value= Propety.Aspect;
-           lay2Mask.Visible = Global.TypeCrop == TypeCrop.Mask ? true : false;
-            layColorTolerace.Visible = Propety.TypeImg == TypeMat.Color ? true : false;
-            layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
+            btnWhite.IsCLick = !Propety.IsBlack;
+            btnBlack.IsCLick= Propety.IsBlack;
+            AdjOffSetBorder.Value= Propety.Border ;
             AdjColorTolerance.Value = Propety.ColorTolerance;
             AdjThreshGray.Value=Propety.ThreshBinary;
             btnAutoBinary.IsCLick=Propety.IsAutoThreshBinary;
@@ -105,6 +106,7 @@ namespace BeeInterface
         private void btnCropRect_Click(object sender, EventArgs e)
         {
             Global.StatusDraw = StatusDraw.Edit;
+
             Global.TypeCrop = TypeCrop.Crop;
             Propety.TypeCrop = Global.TypeCrop;
             btnElip.IsCLick = Propety.rotCrop.Shape == ShapeType.Ellipse ? true : false;
@@ -119,7 +121,7 @@ namespace BeeInterface
         private void btnCropArea_Click(object sender, EventArgs e)
         {
             Global.StatusDraw = StatusDraw.Edit;
-            lay2Mask.Visible = false;
+           // lay2Mask.Visible = false;
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
 
@@ -133,7 +135,7 @@ namespace BeeInterface
         private void btnClear_Click(object sender, EventArgs e)
         {
             Global.StatusDraw = StatusDraw.Edit;
-          lay2Mask.Visible = true;
+        //  lay2Mask.Visible = true;
             Global.TypeCrop = TypeCrop.Mask;
             Propety.TypeCrop = Global.TypeCrop;
             if (Propety.rotMask == null)
@@ -144,8 +146,7 @@ namespace BeeInterface
             btnRect.IsCLick = Propety.rotMask.Shape == ShapeType.Rectangle ? true : false;
             btnHexagon.IsCLick = Propety.rotMask.Shape == ShapeType.Hexagon ? true : false;
             btnPolygon.IsCLick = Propety.rotMask.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotMask.IsWhite;
-            btnBlack.IsCLick = !Propety.rotMask.IsWhite;
+          
 
 
         }
@@ -324,9 +325,10 @@ namespace BeeInterface
 
         private void btnWhite_Click(object sender, EventArgs e)
         {
-            if (Propety.rotMask == null)
-                Propety.rotMask = new RectRotate();
-            Propety.rotMask.IsWhite = btnWhite.IsCLick;
+            Propety.IsBlack =! btnWhite.IsCLick;
+            //if (Propety.rotMask == null)
+            //    Propety.rotMask = new RectRotate();
+            //Propety.rotMask.IsWhite = btnWhite.IsCLick;
             //switch (Global.TypeCrop)
             //{
             //    case TypeCrop.Area:
@@ -343,9 +345,10 @@ namespace BeeInterface
 
         private void btnBlack_Click(object sender, EventArgs e)
         {
-            if (Propety.rotMask == null)
-                Propety.rotMask = new RectRotate();
-            Propety.rotMask.IsWhite = !btnBlack.IsCLick;
+            Propety.IsBlack = btnBlack.IsCLick;
+            //if (Propety.rotMask == null)
+            //    Propety.rotMask = new RectRotate();
+            //Propety.rotMask.IsWhite = !btnBlack.IsCLick;
             //switch (Global.TypeCrop)
             //{
             //    case TypeCrop.Area:
@@ -444,13 +447,12 @@ namespace BeeInterface
       
 
         private void btnLearning_Click(object sender, EventArgs e)
-        {
-            imgTemp.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
-            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety.rotArea != null)
-                if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety.rotArea._rect.Width != 0 && Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety.rotArea._rect.Height != 0)
+        {   // tránh leak bộ nhớ nếu là Bitmap tự tạo
+            if (Propety.rotArea != null)
+                if (Propety.rotArea._rect.Width != 0 && Propety.rotArea._rect.Height != 0)
                 {
-                    Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety.bmRaw = Propety.LearnPattern(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone(), false).ToBitmap();
-                    imgTemp.Image = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety.bmRaw;
+                    Propety.bmRaw = Propety.LearnPattern(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone(), false).ToBitmap();
+                    imgTemp.Image = Propety.bmRaw;
                     ShowTool.Full(imgTemp, Propety.bmRaw.Size, true);
                 }
 
@@ -697,6 +699,12 @@ namespace BeeInterface
             Propety.TypeImg=TypeMat.Color;
             layColorTolerace.Visible=Propety.TypeImg==TypeMat.Color?true :false;
             layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
+            if (!btn3.IsCLick)
+            {
+                layColorTolerace.Visible = Propety.TypeImg == TypeMat.Color ? true : false;
+                layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
+                //  layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
+            }
         }
 
         private void btn3_Click(object sender, EventArgs e)
@@ -704,6 +712,12 @@ namespace BeeInterface
             layColorTolerace.Visible = !btn3.IsCLick;
             layGray.Visible=!btn3.IsCLick;
             layTypeMat.Visible = !btn3.IsCLick;
+            if (!btn3.IsCLick)
+            {
+                layColorTolerace.Visible = Propety.TypeImg == TypeMat.Color ? true : false;
+                layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
+                //  layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
+            }
         }
 
         private void btnGray_Click(object sender, EventArgs e)
@@ -711,8 +725,32 @@ namespace BeeInterface
             Propety.TypeImg = TypeMat.Binary;
             layColorTolerace.Visible = Propety.TypeImg == TypeMat.Color ? true : false;
             layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
+            if (!btn3.IsCLick)
+            {
+                layColorTolerace.Visible = Propety.TypeImg == TypeMat.Color ? true : false;
+                layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
+                //  layGray.Visible = Propety.TypeImg == TypeMat.Binary ? true : false;
+            }
         }
 
-       
+        private void btnBG_Click(object sender, EventArgs e)
+        {
+            lay2BG.Visible = !btnBG.IsCLick;
+        }
+
+        private void btn9_Click(object sender, EventArgs e)
+        {
+            AdjAspect.Visible = !btn9.IsCLick;
+        }
+
+        private void btnBorder_Click(object sender, EventArgs e)
+        {
+            AdjOffSetBorder.Visible = !btnBorder.IsCLick;
+        }
+
+        private void AdjOffSetBorder_ValueChanged(float obj)
+        {
+         Propety.Border=(int) AdjOffSetBorder.Value;
+        }
     }
 }
