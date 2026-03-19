@@ -216,6 +216,9 @@ namespace BeeInterface
             this.panel5 = new System.Windows.Forms.Panel();
             this.colorChoose = new System.Windows.Forms.ColorDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.tableLayoutPanel35 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnEnQuickST = new BeeInterface.RJButton();
+            this.label24 = new System.Windows.Forms.Label();
             this.PageData.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.laySaveCamera.SuspendLayout();
@@ -271,6 +274,7 @@ namespace BeeInterface
             this.panel3.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.panel5.SuspendLayout();
+            this.tableLayoutPanel35.SuspendLayout();
             this.SuspendLayout();
             // 
             // PageData
@@ -5967,6 +5971,7 @@ namespace BeeInterface
             this.tableLayoutPanel10.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanel10.ColumnCount = 1;
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel35, 0, 8);
             this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel29, 0, 6);
             this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel26, 0, 7);
             this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel23, 0, 5);
@@ -5980,7 +5985,8 @@ namespace BeeInterface
             this.tableLayoutPanel10.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
-            this.tableLayoutPanel10.RowCount = 9;
+            this.tableLayoutPanel10.RowCount = 10;
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -7108,6 +7114,94 @@ namespace BeeInterface
             // 
             this.openFileDialog.FileName = "openFileDialog1";
             // 
+            // tableLayoutPanel35
+            // 
+            this.tableLayoutPanel35.BackColor = System.Drawing.Color.White;
+            this.tableLayoutPanel35.ColumnCount = 2;
+            this.tableLayoutPanel35.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel35.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel35.Controls.Add(this.btnEnQuickST, 1, 0);
+            this.tableLayoutPanel35.Controls.Add(this.label24, 0, 0);
+            this.tableLayoutPanel35.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel35.Location = new System.Drawing.Point(5, 532);
+            this.tableLayoutPanel35.Margin = new System.Windows.Forms.Padding(5, 15, 5, 0);
+            this.tableLayoutPanel35.Name = "tableLayoutPanel35";
+            this.tableLayoutPanel35.RowCount = 1;
+            this.tableLayoutPanel35.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel35.Size = new System.Drawing.Size(427, 55);
+            this.tableLayoutPanel35.TabIndex = 47;
+            // 
+            // btnEnQuickST
+            // 
+            this.btnEnQuickST.AutoFont = true;
+            this.btnEnQuickST.AutoFontHeightRatio = 0.75F;
+            this.btnEnQuickST.AutoFontMax = 100F;
+            this.btnEnQuickST.AutoFontMin = 6F;
+            this.btnEnQuickST.AutoFontWidthRatio = 0.92F;
+            this.btnEnQuickST.AutoImage = true;
+            this.btnEnQuickST.AutoImageMaxRatio = 0.75F;
+            this.btnEnQuickST.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnEnQuickST.AutoImageTint = true;
+            this.btnEnQuickST.BackColor = System.Drawing.Color.White;
+            this.btnEnQuickST.BackgroundColor = System.Drawing.Color.White;
+            this.btnEnQuickST.BorderColor = System.Drawing.Color.White;
+            this.btnEnQuickST.BorderRadius = 5;
+            this.btnEnQuickST.BorderSize = 1;
+            this.btnEnQuickST.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnEnQuickST.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnEnQuickST.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnEnQuickST.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnEnQuickST.Corner = BeeGlobal.Corner.Both;
+            this.btnEnQuickST.DebounceResizeMs = 6;
+            this.btnEnQuickST.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnEnQuickST.FlatAppearance.BorderSize = 0;
+            this.btnEnQuickST.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEnQuickST.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.07813F);
+            this.btnEnQuickST.ForeColor = System.Drawing.Color.Black;
+            this.btnEnQuickST.Image = null;
+            this.btnEnQuickST.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnEnQuickST.ImageDisabled = null;
+            this.btnEnQuickST.ImageHover = null;
+            this.btnEnQuickST.ImageNormal = null;
+            this.btnEnQuickST.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnEnQuickST.ImagePressed = null;
+            this.btnEnQuickST.ImageTextSpacing = 6;
+            this.btnEnQuickST.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnEnQuickST.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnEnQuickST.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnEnQuickST.ImageTintOpacity = 0.5F;
+            this.btnEnQuickST.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnEnQuickST.IsCLick = false;
+            this.btnEnQuickST.IsNotChange = false;
+            this.btnEnQuickST.IsRect = false;
+            this.btnEnQuickST.IsTouch = false;
+            this.btnEnQuickST.IsUnGroup = true;
+            this.btnEnQuickST.Location = new System.Drawing.Point(218, 5);
+            this.btnEnQuickST.Margin = new System.Windows.Forms.Padding(5);
+            this.btnEnQuickST.Multiline = false;
+            this.btnEnQuickST.Name = "btnEnQuickST";
+            this.btnEnQuickST.Size = new System.Drawing.Size(204, 45);
+            this.btnEnQuickST.TabIndex = 40;
+            this.btnEnQuickST.Text = "OFF";
+            this.btnEnQuickST.TextColor = System.Drawing.Color.Black;
+            this.btnEnQuickST.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnEnQuickST.UseVisualStyleBackColor = false;
+            this.btnEnQuickST.Click += new System.EventHandler(this.btnEnQuickST_Click);
+            // 
+            // label24
+            // 
+            this.label24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.label24.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.ForeColor = System.Drawing.Color.Transparent;
+            this.label24.Location = new System.Drawing.Point(0, 0);
+            this.label24.Margin = new System.Windows.Forms.Padding(0);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(213, 55);
+            this.label24.TabIndex = 39;
+            this.label24.Text = "Enable Quick ST";
+            this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // GeneralSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -7180,6 +7274,7 @@ namespace BeeInterface
             this.panel3.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
+            this.tableLayoutPanel35.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -7368,5 +7463,8 @@ namespace BeeInterface
         private RJButton btnOffManual;
         private RJButton btnOnManual;
         private RJButton rjButton7;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel35;
+        private RJButton btnEnQuickST;
+        private System.Windows.Forms.Label label24;
     }
 }

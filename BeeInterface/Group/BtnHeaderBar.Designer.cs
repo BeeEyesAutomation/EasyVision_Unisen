@@ -367,6 +367,7 @@ namespace BeeInterface
             this.DoubleBuffered = true;
             this.Name = "BtnHeaderBar";
             this.Size = new System.Drawing.Size(648, 53);
+            this.Load += new System.EventHandler(this.BtnHeaderBar_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 

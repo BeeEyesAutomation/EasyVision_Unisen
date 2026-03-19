@@ -560,7 +560,7 @@ namespace BeeCore
             }
         }
         public int LimitCounter = 0;
-        public void Complete()
+        public async void Complete()
         {
             if (IsScan)
             {
@@ -608,7 +608,7 @@ namespace BeeCore
                 //}
 
             }
-
+         await   SendResult();
         }
       
         public string AddPLC = "";

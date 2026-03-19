@@ -30,6 +30,9 @@ namespace BeeInterface
         //  BeeCore.Config ConfigPrev;
         private void IOSetting_Load(object sender, EventArgs e)
         {
+            if (btnEnQuickST.IsCLick) btnEnQuickST.Text = "ON";
+            else btnEnQuickST.Text = "OFF";
+            btnEnQuickST.IsCLick= Global.Config.IsQuickST ;
             btnOnManual.IsCLick = Global.Config.IsManual;
             btnOffManual.IsCLick = !Global.Config.IsManual;
             btnSaveAllPara.IsCLick = Global.Config.IsSaveAllPara;
@@ -730,6 +733,14 @@ namespace BeeInterface
         private void btnOffManual_Click(object sender, EventArgs e)
         {
             Global.Config.IsManual = !btnOffManual.IsCLick;
+        }
+
+        private void btnEnQuickST_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsQuickST = btnEnQuickST.IsCLick;
+            G.BtnHeaderBar.btnQuickSetting.Visible = Global.Config.IsQuickST;
+            if (btnEnQuickST.IsCLick) btnEnQuickST.Text = "ON";
+            else btnEnQuickST.Text = "OFF";
         }
     }
 }

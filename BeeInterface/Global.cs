@@ -11,6 +11,7 @@ namespace BeeInterface
 {
     public struct G
     {
+        public static BtnHeaderBar BtnHeaderBar;
         public static ProtocolPLC SettingPLC;
         public static Header Header;
         public static EditProg EditProg;

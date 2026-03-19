@@ -55,6 +55,7 @@ namespace BeeInterface
                 
                 ShowTool.Full(imgTemp, Propety.bmRaw.Size,true);
             }
+            
             btnColor.IsCLick= Propety.TypeImg == TypeMat.Color ? true : false;
             btnGray.IsCLick = Propety.TypeImg == TypeMat.Binary ? true : false;
             AdjThreshGray.Enabled =! Propety.IsAutoThreshBinary;

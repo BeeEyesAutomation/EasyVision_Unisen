@@ -707,6 +707,34 @@ bool CCD::GetPara(
 	std::cerr << "❌ Không đọc được thông tin tham số: " << key << std::endl;
 	return false;
 }
+bool  CCD::SetEnum(int indexCCD, System::String^ namePara,int Focus)
+{
+	string key = marshal_as<string>(namePara);
+	if (indexCCD < 0 || indexCCD >= (int)m_pcMyCamera.size() || m_pcMyCamera[indexCCD] == nullptr) {
+		std::cerr << "❌ Camera index invalid/null" << std::endl;
+		return false;
+	}
+
+	using msclr::interop::marshal_as;
+	m_pcMyCamera[indexCCD]->SetEnumValue(key.c_str(), Focus);
+
+	return true;
+}
+int CCD::GetEnum(int indexCCD, System::String^ namePara)
+{
+	string key = marshal_as<string>(namePara);
+	if (indexCCD < 0 || indexCCD >= (int)m_pcMyCamera.size() || m_pcMyCamera[indexCCD] == nullptr) {
+		std::cerr << "❌ Camera index invalid/null" << std::endl;
+		return -1;
+	} 
+	MVCC_ENUMVALUE stEnumValue = { 0 };
+	int nRet = m_pcMyCamera[indexCCD]->GetEnumValue(key.c_str(), &stEnumValue);
+	if (nRet != MV_OK)
+		return -1;
+
+	return (int)stEnumValue.nCurValue;
+
+}
 void CCD::SetFocus(int Focus)
 {
 	camUSB.set(CAP_PROP_AUTOFOCUS, 0);
@@ -990,7 +1018,7 @@ bool ConnectHik( int index,int indexCCD)
 		}
 	
 
-		m_pcMyCamera[indexCCD]->SetEnumValue("BalanceWhiteAuto", 0);
+		/*m_pcMyCamera[indexCCD]->SetEnumValue("BalanceWhiteAuto", 0);
 
 		m_pcMyCamera[indexCCD]->SetEnumValue("BalanceRatioSelector", 0);
 		m_pcMyCamera[indexCCD]->SetIntValue("BalanceRatio", 1857);
@@ -999,7 +1027,7 @@ bool ConnectHik( int index,int indexCCD)
 		m_pcMyCamera[indexCCD]->SetIntValue("BalanceRatio", 1024);
 
 		m_pcMyCamera[indexCCD]->SetEnumValue("BalanceRatioSelector", 2);
-		m_pcMyCamera[indexCCD]->SetIntValue("BalanceRatio", 1978);
+		m_pcMyCamera[indexCCD]->SetIntValue("BalanceRatio", 1978);*/
 		m_pcMyCamera[indexCCD]->StartGrabbing();
 
 	return true;

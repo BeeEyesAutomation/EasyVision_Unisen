@@ -245,9 +245,16 @@ namespace BeeInterface
                 await BeeCore.Common.listCamera[Global.IndexCCCD].GetHeight();
                 await BeeCore.Common.listCamera[Global.IndexCCCD].GetOffSetX();
                 await BeeCore.Common.listCamera[Global.IndexCCCD].GetOffSetY();
-                //await BeeCore.Common.listCamera[Global.IndexCCCD].GetCenterX();
-                //await BeeCore.Common.listCamera[Global.IndexCCCD].GetCenterY();
-                if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera == TypeCamera.USB)
+                if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera == TypeCamera.MVS)
+                {
+                    await BeeCore.Common.listCamera[Global.IndexCCCD].GetAutoWb();
+                    await BeeCore.Common.listCamera[Global.IndexCCCD].GetR_WB();
+                    await BeeCore.Common.listCamera[Global.IndexCCCD].GetG_WB();
+                    await BeeCore.Common.listCamera[Global.IndexCCCD].GetB_WB();
+                }
+                    //await BeeCore.Common.listCamera[Global.IndexCCCD].GetCenterX();
+                    //await BeeCore.Common.listCamera[Global.IndexCCCD].GetCenterY();
+                    if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera == TypeCamera.USB)
                 {
                     BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Step = 1;
                     BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Min = 3;
@@ -299,6 +306,24 @@ namespace BeeInterface
                 AdjOffSetY.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Max;
                 AdjOffSetY.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Step;
                 AdjOffSetY.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Value;
+
+                AdjR_WB.IsInital = true;
+                AdjR_WB.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Min;
+                AdjR_WB.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Max;
+                AdjR_WB.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Step;
+                AdjR_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Value;
+             
+                AdjG_WB.IsInital = true;
+                AdjG_WB.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Min;
+                AdjG_WB.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Max;
+                AdjG_WB.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Step;
+                AdjG_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Value;
+
+                AdjB_WB.IsInital = true;
+                AdjB_WB.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Min;
+                AdjB_WB.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Max;
+                AdjB_WB.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Step;
+                AdjB_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Value;
             }
             //  btnCenterX.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterX);
             //  btnCenterY.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterY);
@@ -519,6 +544,8 @@ namespace BeeInterface
             AdjFocus.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Focus;
             AdDelayTrig.IsInital = true;
             AdDelayTrig.Value = Global.Comunication.Protocol.DelayTrigger;
+            btnOnWB.IsCLick = BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsWB;
+            btnOffWB.IsCLick=!BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsWB;
             if (AdDelayTrig.Max > Global.Config.LimitDelayTrigger)
             {
                 AdDelayTrig.Max = Global.Config.LimitDelayTrigger;
@@ -633,9 +660,44 @@ namespace BeeInterface
             AdjOffSetY.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Step;
             AdjOffSetY.IsInital = true;
             AdjOffSetY.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Value;
+
+            AdjR_WB.IsInital = true;
+            AdjR_WB.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Min;
+            AdjR_WB.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Max;
+            AdjR_WB.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Step;
+            AdjR_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Value;
+
+            AdjG_WB.IsInital = true;
+            AdjG_WB.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Min;
+            AdjG_WB.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Max;
+            AdjG_WB.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Step;
+            AdjG_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Value;
+
+            AdjB_WB.IsInital = true;
+            AdjB_WB.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Min;
+            AdjB_WB.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Max;
+            AdjB_WB.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Step;
+            AdjB_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Value;
             btnCenterX.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterX);
             btnCenterY.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterY);
-
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsWB)
+            {
+                btn11.Visible = false;
+                btn12.Visible = false;
+                btn13.Visible = false;
+                AdjR_WB.Visible = false;
+                AdjG_WB.Visible = false;
+                AdjB_WB.Visible = false;
+            }
+            else
+            {
+                btn11.Visible = true;
+                btn12.Visible = true;
+                btn13.Visible = true;
+                AdjR_WB.Visible = !btn11.IsCLick;
+                AdjG_WB.Visible = !btn12.IsCLick;
+                AdjB_WB.Visible = !btn13.IsCLick;
+            }
 
         }
 
@@ -922,6 +984,154 @@ namespace BeeInterface
                 }
 
             }
+        }
+
+        private async void btnOnWB_Click(object sender, EventArgs e)
+        {
+            BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsWB = btnOnWB.IsCLick;
+            await BeeCore.Common.listCamera[Global.IndexCCCD].SetAutoWb();
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsWB)
+            {
+                btn11.Visible = false;
+                btn12.Visible = false;
+                btn13.Visible = false;
+                AdjR_WB.Visible = false;
+                AdjG_WB.Visible = false;
+                AdjB_WB.Visible = false;
+            }
+            else
+            {
+                btn11.Visible = true;
+                btn12.Visible = true;
+                btn13.Visible = true;
+                AdjR_WB.Visible = !btn11.IsCLick;
+                AdjG_WB.Visible = !btn12.IsCLick;
+                AdjB_WB.Visible = !btn13.IsCLick;
+            }
+
+        }
+
+        private async void btnOffWB_Click(object sender, EventArgs e)
+        {
+            BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsWB =! btnOffWB.IsCLick;
+            await BeeCore.Common.listCamera[Global.IndexCCCD].SetAutoWb();
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsWB)
+            {
+                btn11.Visible = false;
+                btn12.Visible = false;
+                btn13.Visible = false;
+                AdjR_WB.Visible = false;
+                AdjG_WB.Visible = false;
+                AdjB_WB.Visible = false;
+            }
+            else
+            {
+                btn11.Visible = true;
+                btn12.Visible = true;
+                btn13.Visible = true;
+                AdjR_WB.Visible = !btn11.IsCLick;
+                AdjG_WB.Visible = !btn12.IsCLick;
+                AdjB_WB.Visible = !btn13.IsCLick;
+            }
+        }
+
+        private async void AdjR_WB_ValueChanged(float obj)
+        {
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].IsSetPara) return;
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown) return;
+
+            BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Value = (int)AdjR_WB.Value;
+            await BeeCore.Common.listCamera[Global.IndexCCCD].SetR_WB();
+            AdjR_WB.IsInital = true;
+            AdjR_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Value;
+
+
+        }
+
+        private async void AdjG_WB_ValueChanged(float obj)
+        {
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].IsSetPara) return;
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown) return;
+
+            BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Value = (int)AdjG_WB.Value;
+            await BeeCore.Common.listCamera[Global.IndexCCCD].SetG_WB();
+            AdjG_WB.IsInital = true;
+            AdjG_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Value;
+        }
+
+        private  async  void AdjB_WB_ValueChanged(float obj)
+        {
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].IsSetPara) return;
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown) return;
+
+            BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Value = (int)AdjB_WB.Value;
+            await BeeCore.Common.listCamera[Global.IndexCCCD].SetB_WB();
+            AdjB_WB.IsInital = true;
+            AdjB_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Value;
+        }
+
+        private void btn10_Click(object sender, EventArgs e)
+        {
+            layWB.Visible = !btn10.IsCLick;
+        }
+
+        private void btn11_Click(object sender, EventArgs e)
+        {
+            AdjR_WB.Visible = !btn11.IsCLick;
+        }
+
+        private void btn12_Click(object sender, EventArgs e)
+        {
+            AdjG_WB.Visible = !btn12.IsCLick;
+        }
+
+        private void btn13_Click(object sender, EventArgs e)
+        {
+            AdjB_WB.Visible=!btn13.IsCLick;
+        }
+
+        private async void AdjR_WB_MouseUp(object sender, MouseEventArgs e)
+        {
+            BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = false;
+            BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Value = (int)AdjR_WB.Value;
+            await BeeCore.Common.listCamera[Global.IndexCCCD].SetR_WB();
+            AdjR_WB.IsInital = true;
+            AdjR_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Value;
+        }
+
+        private void AdjR_WB_MouseDown(object sender, MouseEventArgs e)
+        {
+            BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = true;
+        
+          }
+
+        private void AdjG_WB_MouseDown(object sender, MouseEventArgs e)
+        {
+            BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = true;
+        }
+
+        private void AdjB_WB_MouseDown(object sender, MouseEventArgs e)
+        {
+            BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = true;
+        }
+
+        private async void AdjG_WB_MouseUp(object sender, MouseEventArgs e)
+        {
+            BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = false;
+            BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Value = (int)AdjG_WB.Value;
+            await BeeCore.Common.listCamera[Global.IndexCCCD].SetG_WB();
+            AdjG_WB.IsInital = true;
+            AdjG_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Value;
+
+        }
+
+        private async void AdjB_WB_MouseUp(object sender, MouseEventArgs e)
+        {
+            BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = false;
+            BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Value = (int)AdjB_WB.Value;
+            await BeeCore.Common.listCamera[Global.IndexCCCD].SetB_WB();
+            AdjB_WB.IsInital = true;
+            AdjB_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Value;
         }
     }
 }

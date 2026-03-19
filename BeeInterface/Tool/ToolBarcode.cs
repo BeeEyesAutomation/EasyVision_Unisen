@@ -45,6 +45,7 @@ namespace BeeInterface
             try
             {
                 btnOnSendResult.IsCLick = Propety.IsSendResult;
+                btnOffSendResult.IsCLick =! Propety.IsSendResult;
                 txtAdd.Text = Propety.AddPLC;
                
                 trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;

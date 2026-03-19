@@ -578,7 +578,67 @@ namespace BeeCore
         
         public int IndexConnect = -1;
         public  async Task<bool> Connect(String NameCCD , TypeCamera typeCamera)
-        {switch(typeCamera)
+        {
+            bool IsFail = false;
+            if (Para.Exposure == null)
+            {
+                IsFail = true;
+                Para.Exposure = new ValuePara();
+            }
+
+            if (Para.Gain == null)
+            {
+                IsFail = true;
+                Para.Gain = new ValuePara();
+            }
+
+            if (Para.Shift == null)
+            {
+                IsFail = true;
+                Para.Shift = new ValuePara();
+            }
+
+            if (Para.Width == null)
+            {
+                IsFail = true;
+                Para.Width = new ValuePara();
+            }
+
+            if (Para.Height == null)
+            {
+                IsFail = true;
+                Para.Height = new ValuePara();
+            }
+
+            if (Para.OffSetX == null)
+            {
+                IsFail = true;
+                Para.OffSetX = new ValuePara();
+            }
+
+            if (Para.OffSetY == null)
+            {
+                IsFail = true;
+                Para.OffSetY = new ValuePara();
+            }
+
+            if (Para.R_WB == null)
+            {
+                IsFail = true;
+                Para.R_WB = new ValuePara();
+            }
+            if (Para.G_WB == null)
+            {
+                IsFail = true;
+                Para.G_WB = new ValuePara();
+            }
+            if (Para.B_WB == null)
+            {
+                IsFail = true;
+                Para.B_WB = new ValuePara();
+            }
+
+            switch (typeCamera)
             {
                 case TypeCamera.TinyIV:
                     IsConnected = HEROJE.Connect(0);
@@ -611,49 +671,7 @@ namespace BeeCore
                         //    CCDPlus.ReadRaw(true);
                         //else
                         Read();
-                        bool IsFail = false;
-                        if (Para.Exposure == null)
-                        {
-                            IsFail = true;
-                            Para.Exposure = new ValuePara();
-                        }
-
-                        if (Para.Gain == null)
-                        {
-                            IsFail = true;
-                            Para.Gain = new ValuePara();
-                        }
-
-                        if (Para.Shift == null)
-                        {
-                            IsFail = true;
-                            Para.Shift = new ValuePara();
-                        }
-
-                        if (Para.Width == null)
-                        {
-                            IsFail = true;
-                            Para.Width = new ValuePara();
-                        }
-
-                        if (Para.Height == null)
-                        {
-                            IsFail = true;
-                            Para.Height = new ValuePara();
-                        }
-
-                        if (Para.OffSetX == null)
-                        {
-                            IsFail = true;
-                            Para.OffSetX = new ValuePara();
-                        }
-
-                        if (Para.OffSetY == null)
-                        {
-                            IsFail = true;
-                            Para.OffSetY = new ValuePara();
-                        }
-
+                      
                         //if (!IsFail && Para.Width.Value > Para.Width.Min + 1 && Para.Height.Value > Para.Height.Min + 1)
                         //    await SetFullPara();
 
@@ -714,7 +732,17 @@ namespace BeeCore
                 }
                 else
                 {
-                    
+                    if(Para.TypeCamera== TypeCamera.MVS)
+                    {
+                        await SetAutoWb();
+                        if (!Para.IsWB)
+                        {
+                            await SetR_WB();
+                            await SetG_WB();
+                            await SetB_WB();
+                        }    
+                    }    
+                        
                     await SetWidth();
                     await SetHeight();
                     await SetOffSetX();
@@ -806,7 +834,352 @@ namespace BeeCore
             IsSetPara = false;
             return true;
         }
-   
+        public async Task<bool> SetR_WB()
+        {
+            try
+            {
+
+                IsSetPara = true;
+
+                await TimingUtils.DelayAccurateAsync(5);
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.Pylon:
+                       
+                        break;
+                    case TypeCamera.MVS:
+                        cancel = new CancellationTokenSource(2000);
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+                                //m_pcMyCamera[indexCCD]->SetEnumValue("BalanceWhiteAuto", 0);
+
+                                //m_pcMyCamera[indexCCD]->SetEnumValue("BalanceRatioSelector", 0);
+                                //m_pcMyCamera[indexCCD]->SetIntValue("BalanceRatio", 1857);
+
+                                //m_pcMyCamera[indexCCD]->SetEnumValue("BalanceRatioSelector", 1);
+                                //m_pcMyCamera[indexCCD]->SetIntValue("BalanceRatio", 1024);
+
+                                //m_pcMyCamera[indexCCD]->SetEnumValue("BalanceRatioSelector", 2);
+                                //m_pcMyCamera[indexCCD]->SetIntValue("BalanceRatio", 1978);
+
+                                break;
+                            case 1://Hik
+                                await Task.Run(() => CCDPlus.SetEnum(IndexCCD, "BalanceRatioSelector",0), cancel.Token);
+                                Para.R_WB.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "BalanceRatio", Para.R_WB.Value), cancel.Token);
+                                break;
+                        }
+
+                        break;
+                    case TypeCamera.USB:
+                      
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Err += ex.Message;
+                return false;// ex.Message;
+            }
+            IsSetPara = false;
+            return true;
+        }
+        public async Task<bool> SetG_WB()
+        {
+            try
+            {
+
+                IsSetPara = true;
+
+                await TimingUtils.DelayAccurateAsync(5);
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.Pylon:
+
+                        break;
+                    case TypeCamera.MVS:
+                        cancel = new CancellationTokenSource(2000);
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+                             
+
+                                break;
+                            case 1://Hik
+                                await Task.Run(() => CCDPlus.SetEnum(IndexCCD, "BalanceRatioSelector",1), cancel.Token);
+                                Para.R_WB.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "BalanceRatio", Para.G_WB.Value), cancel.Token);
+                                break;
+                        }
+
+                        break;
+                    case TypeCamera.USB:
+                      
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Err += ex.Message;
+                return false;// ex.Message;
+            }
+            IsSetPara = false;
+            return true;
+        }
+        public async Task<bool> SetB_WB()
+        {
+            try
+            {
+
+                IsSetPara = true;
+
+                await TimingUtils.DelayAccurateAsync(5);
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.Pylon:
+
+                        break;
+                    case TypeCamera.MVS:
+                        cancel = new CancellationTokenSource(2000);
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+
+
+                                break;
+                            case 1://Hik
+                                await Task.Run(() => CCDPlus.SetEnum(IndexCCD, "BalanceRatioSelector", 2), cancel.Token);
+                                Para.R_WB.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "BalanceRatio", Para.B_WB.Value), cancel.Token);
+                                break;
+                        }
+
+                        break;
+                    case TypeCamera.USB:
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Err += ex.Message;
+                return false;// ex.Message;
+            }
+            IsSetPara = false;
+            return true;
+        }
+        public async Task<bool> SetAutoWb()
+        {
+            try
+            {
+             
+                IsSetPara = true;
+
+                await TimingUtils.DelayAccurateAsync(5);
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.Pylon:
+                      //  Para.Exposure.Value = PylonCam.SetExposure(Para.Exposure.Value);
+                        break;
+                    case TypeCamera.MVS:
+                        cancel = new CancellationTokenSource(2000);
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+
+                              //  Para.Exposure.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "ExposureTimeRaw", Para.Exposure.Value), cancel.Token);
+
+                                break;
+                            case 1://Hik
+                                if(!Para.IsWB)
+                                {
+                                    if(Para.R_WB.Value==0&&Para.G_WB.Value == 0 && Para.B_WB.Value == 0)
+                                    {  
+                                        Para.R_WB.Value = 1857;
+                                        Para.G_WB.Value = 1024;
+                                        Para.B_WB.Value = 1978;
+
+                                    }
+                                }
+                               await Task.Run(() => CCDPlus.SetEnum(IndexCCD, "BalanceWhiteAuto", Convert.ToInt32( Para.IsWB)), cancel.Token);
+                                break;
+                        }
+
+                        break;
+                    case TypeCamera.USB:
+                     //   CCDPlus.SetExposure(-(int)Para.Exposure.Value);
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Err += ex.Message;
+                return false;// ex.Message;
+            }
+            IsSetPara = false;
+            return true;
+        }
+        public async Task<bool> GetR_WB()
+        {
+            try
+            {
+
+                cancel = new CancellationTokenSource(2000);
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.Pylon:
+                        Err = PylonCam.LastError;
+                        return true;
+                        break;
+                    case TypeCamera.MVS:
+
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+                             
+                                break;
+                            case 1://Hik
+                                await Task.Run(() => CCDPlus.SetEnum(IndexCCD, "BalanceRatioSelector", 0), cancel.Token);
+                                await Task.Run(() => CCDPlus.GetPara(IndexCCD, "BalanceRatio",  ref Para.R_WB.Min, ref Para.R_WB.Max, ref Para.R_WB.Step, ref Para.R_WB.Value), cancel.Token);
+
+                                break;
+                        }
+
+                        break;
+                    case TypeCamera.USB:
+                         break;
+                  
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+            return false;
+        }
+        public async Task<bool> GetG_WB()
+        {
+            try
+            {
+
+                cancel = new CancellationTokenSource(2000);
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.Pylon:
+                        Err = PylonCam.LastError;
+                        return true;
+                        break;
+                    case TypeCamera.MVS:
+
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+
+                                break;
+                            case 1://Hik
+                                await Task.Run(() => CCDPlus.SetEnum(IndexCCD, "BalanceRatioSelector", 1), cancel.Token);
+                                await Task.Run(() => CCDPlus.GetPara(IndexCCD, "BalanceRatio", ref Para.G_WB.Min, ref Para.G_WB.Max, ref Para.G_WB.Step, ref Para.G_WB.Value), cancel.Token);
+
+                                break;
+                        }
+
+                        break;
+                    case TypeCamera.USB:
+                        break;
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+            return false;
+        }
+        public async Task<bool> GetB_WB()
+        {
+            try
+            {
+
+                cancel = new CancellationTokenSource(2000);
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.Pylon:
+                        Err = PylonCam.LastError;
+                        return true;
+                        break;
+                    case TypeCamera.MVS:
+
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+
+                                break;
+                            case 1://Hik
+                               
+                                await Task.Run(() => CCDPlus.SetEnum(IndexCCD, "BalanceRatioSelector", 2), cancel.Token);
+                                await Task.Run(() => CCDPlus.GetPara(IndexCCD, "BalanceRatio", ref Para.B_WB.Min, ref Para.B_WB.Max, ref Para.B_WB.Step, ref Para.B_WB.Value), cancel.Token);
+
+                                break;
+                        }
+
+                        break;
+                    case TypeCamera.USB:
+                        break;
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+            return false;
+        }
+        public async Task<bool> GetAutoWb()
+        {
+            try
+            {
+
+                cancel = new CancellationTokenSource(2000);
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.Pylon:
+                       
+                        return true;
+                        break;
+                    case TypeCamera.MVS:
+
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+                            
+                                break;
+                            case 1://Hik
+                            Para.IsWB=Convert.ToBoolean(    await Task.Run(() => CCDPlus.GetEnum(IndexCCD, "BalanceWhiteAuto"), cancel.Token));
+                                return true;
+
+                                break;
+                        }
+
+                        break;
+                    case TypeCamera.USB:
+                     
+                        break;
+                        //case TypeCamera.TinyIV:
+
+                        //   return Convert.ToInt32( HEROJE.GetExposure());
+                        //    break;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+            return false;
+        }
+
         public async Task< bool> GetExpo()
         {
             try

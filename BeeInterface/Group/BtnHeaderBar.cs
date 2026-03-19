@@ -20,6 +20,7 @@ namespace BeeInterface
         public BtnHeaderBar()
         {
             InitializeComponent();
+            G.BtnHeaderBar = this;
         }
 
         private void btnSetting_Click(object sender, EventArgs e)
@@ -150,6 +151,11 @@ namespace BeeInterface
         {
             QuickSetting quickSetting = new QuickSetting();
             quickSetting.ShowDialog();
+        }
+
+        private void BtnHeaderBar_Load(object sender, EventArgs e)
+        {
+          btnQuickSetting.Visible = Global.Config.IsQuickST;
         }
     }
 }

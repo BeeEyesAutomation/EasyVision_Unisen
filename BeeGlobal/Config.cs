@@ -66,6 +66,7 @@ namespace BeeGlobal
         public bool IsSaveAllPara= true;
         public bool IsShowImgTrig = true;
         public bool IsManual = true;
+        public bool IsQuickST = false;
         public bool IsEnPO = true;
         public bool IsWaitCenter = false;
         public bool IsEnDummy = true;
