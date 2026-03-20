@@ -3524,66 +3524,69 @@ namespace BeeInterface
                
             else
             {
-                if (Global.Config.NumTrig > 1)
-                {
+             //   Global.TriggerNum = TriggerNum.Trigger0;
+             //   Global.IndexProgChoose = 0;
+                Global.TriggerInternal = true;
+                //if (Global.Config.NumTrig > 1)
+                //{
 
 
-                    switch (Global.TriggerNum)
-                    {
-                        case TriggerNum.Trigger0:
-                            Global.TriggerNum = TriggerNum.Trigger1;
-                            Global.IndexProgChoose = 0;
-                            break;
-                        case TriggerNum.Trigger1:
-                            Global.TriggerNum = TriggerNum.Trigger2;
-                            if (BeeCore.Common.PropetyTools[1] != null)
-                                Global.IndexProgChoose = 1;
-                            else
-                            {
-                                Global.TriggerNum = TriggerNum.Trigger1;
-                                Global.IndexProgChoose = 0;
+                //    switch (Global.TriggerNum)
+                //    {
+                //        case TriggerNum.Trigger0:
+                //            Global.TriggerNum = TriggerNum.Trigger1;
+                //            Global.IndexProgChoose = 0;
+                //            break;
+                //        case TriggerNum.Trigger1:
+                //            Global.TriggerNum = TriggerNum.Trigger2;
+                //            if (BeeCore.Common.PropetyTools[1] != null)
+                //                Global.IndexProgChoose = 1;
+                //            else
+                //            {
+                //                Global.TriggerNum = TriggerNum.Trigger1;
+                //                Global.IndexProgChoose = 0;
 
 
-                            }
+                //            }
 
-                            break;
-                        case TriggerNum.Trigger2:
-                            Global.TriggerNum = TriggerNum.Trigger3;
+                //            break;
+                //        case TriggerNum.Trigger2:
+                //            Global.TriggerNum = TriggerNum.Trigger3;
 
-                            if (BeeCore.Common.PropetyTools[2] != null)
-                                Global.IndexProgChoose = 2;
-                            else
-                            {
-                                Global.TriggerNum = TriggerNum.Trigger1;
-                                Global.IndexProgChoose = 0;
-
-
-                            }
-
-                            break;
-                        case TriggerNum.Trigger3:
-                            Global.TriggerNum = TriggerNum.Trigger4;
-                            if (BeeCore.Common.PropetyTools[3] != null)
-                                Global.IndexProgChoose = 3;
-                            else
-                            {
-                                Global.TriggerNum = TriggerNum.Trigger1;
-                                Global.IndexProgChoose = 0;
+                //            if (BeeCore.Common.PropetyTools[2] != null)
+                //                Global.IndexProgChoose = 2;
+                //            else
+                //            {
+                //                Global.TriggerNum = TriggerNum.Trigger1;
+                //                Global.IndexProgChoose = 0;
 
 
-                            }
+                //            }
 
-                            break;
-                    }
-                    Global.TriggerInternal = true;
-                }
-                else
-                {
-                    Global.TriggerNum = TriggerNum.Trigger1;
-                    Global.IndexProgChoose = 0;
-                    Global.TriggerInternal = true;
+                //            break;
+                //        case TriggerNum.Trigger3:
+                //            Global.TriggerNum = TriggerNum.Trigger4;
+                //            if (BeeCore.Common.PropetyTools[3] != null)
+                //                Global.IndexProgChoose = 3;
+                //            else
+                //            {
+                //                Global.TriggerNum = TriggerNum.Trigger1;
+                //                Global.IndexProgChoose = 0;
 
-                }    
+
+                //            }
+
+                //            break;
+                //    }
+                //    Global.TriggerInternal = true;
+                //}
+                //else
+                //{
+                //    Global.TriggerNum = TriggerNum.Trigger0;
+                //    Global.IndexProgChoose = 0;
+                //    Global.TriggerInternal = true;
+
+              //  }    
                
             }    
                

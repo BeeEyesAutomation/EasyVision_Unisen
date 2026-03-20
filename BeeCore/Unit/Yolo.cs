@@ -479,112 +479,171 @@ namespace BeeCore
                             CropOffSetY = (rotArea._PosCenter.Y - rotArea._rect.Height / 2);
                             CropOffSetX = (CropOffSetX > 0) ? 0 : -CropOffSetX;
                             CropOffSetY = (CropOffSetY > 0) ? 0 : -CropOffSetY;
-
-                            // === Crop ROI ===
-                            using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
+                            if (IsCropSingle&& labelItems.Count>0)
                             {
-
-                                if (matCrop.Empty()) return;
-
-                                if (matCrop.Type().Depth != MatType.CV_8U)
+                                using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
                                 {
-                                    using (var tmp8u = new Mat())
+
+                                    if (matCrop.Empty()) return;
+
+                                    if (matCrop.Type().Depth != MatType.CV_8U)
                                     {
-                                        Cv2.ConvertScaleAbs(matCrop, tmp8u); // 16U/32F -> 8U
-                                        matCrop.AssignTo(tmp8u);             // ghi đè dữ liệu (OpenCvSharp: AssignTo giữ shape/type mới)
+                                        using (var tmp8u = new Mat())
+                                        {
+                                            Cv2.ConvertScaleAbs(matCrop, tmp8u); // 16U/32F -> 8U
+                                            matCrop.AssignTo(tmp8u);             // ghi đè dữ liệu (OpenCvSharp: AssignTo giữ shape/type mới)
+                                        }
                                     }
+                                    // 2) đảm bảo đúng số kênh
+                                    if (matCrop.Channels() == 1)
+                                    {
+                                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                                    }
+                                    else if (matCrop.Channels() == 4)
+                                    {
+                                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGRA2BGR);
+                                    }
+                                    Parallel.For(0, listRotScan.Count,
+                                 new ParallelOptions { MaxDegreeOfParallelism = Math.Min(300, Environment.ProcessorCount) },
+                                 i =>
+                                 {
+                                     using (Mat matTemp = Cropper.CropRotatedRect(matCrop, listRotScan[i], null))
+                                     {
+
+                                         int h = matCrop.Rows;
+                                         int w = matCrop.Cols;
+                                         int ch = matCrop.Channels(); // 3
+                                         int stride = (int)matCrop.Step(); // bytes/row (có thể > w*ch)
+                                         IntPtr p = matCrop.Data;
+                                         float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+                                         string toolName = Common.PropetyTools[IndexThread][Index].Name ?? "default";
+                                         dynamic dyn = G.objYolo;
+                                         if (dyn == null)
+                                         {
+                                             Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "Loi Khoi Tao Yolo"));
+
+                                         }
+                                         result = dyn.predict((long)p, h, w, ch, stride, conf, toolName);
+
+                                        if(result.Length()>0)
+                                         {
+                                             resultTemp.Add(new BeeCore.ResultItem((labelItems[0].Name).ToString()));
+                                             resultTemp[resultTemp.Count - 1].rot = listRotScan[i];
+                                             resultTemp[resultTemp.Count - 1].Score = (float)((PyObject)result[1][0]).As<double>() * 100f;
+                                         }
+                                     }
+                                 });
                                 }
-
-                                // 2) đảm bảo đúng số kênh
-                                if (matCrop.Channels() == 1)
-                                {
-                                    Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
-                                }
-                                else if (matCrop.Channels() == 4)
-                                {
-                                    Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGRA2BGR);
-                                }
-
-                                if (matCropTemp == null) matCropTemp = new Mat();
-                                if (!matCropTemp.Empty()) matCropTemp.Dispose();
-                                matCropTemp = matCrop.Clone();
-                                // nếu đã 3 kênh BGR thì giữ nguyên
-
-                                int h = matCrop.Rows;
-                                int w = matCrop.Cols;
-                                int ch = matCrop.Channels(); // 3
-                                int stride = (int)matCrop.Step(); // bytes/row (có thể > w*ch)
-                                IntPtr p = matCrop.Data;
-
-                                float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
-                                string toolName = Common.PropetyTools[IndexThread][Index].Name ?? "default";
-
-                                // === Gọi YOLO (nhận: (boxes, scores, labels)) ===
-                                // Ký hiệu: result là tuple-like (3 phần)
-                                dynamic dyn = G.objYolo;
-                                if (dyn == null)
-                                    throw new InvalidOperationException("objYolo chưa được khởi tạo.");
-
-                                result = dyn.predict((long)p, h, w, ch, stride, conf, toolName);
-
-                                // Ép về PyObject để chủ động Dispose
-                                boxes = (PyObject)result[0];
-                                scores = (PyObject)result[1];
-                                labels = (PyObject)result[2];
-
-                                int n = (int)boxes.Length();
-
-                                // === Chuẩn bị danh sách output ===
-                                //  if (resultTemp == null) resultTemp = new List<ResultItem>(n);
-                              
-                                //else { boxList.Clear(); if (boxList.Capacity < n) boxList.Capacity = n; }
-
-                                //if (scoreList == null) scoreList = new List<float>(n);
-                                //else { scoreList.Clear(); if (scoreList.Capacity < n) scoreList.Capacity = n; }
-
-                                //if (labelList == null) labelList = new List<string>(n);
-                                //else { labelList.Clear(); if (labelList.Capacity < n) labelList.Capacity = n; }
-
-                                // === Đọc kết quả ===
-                                for (int j = 0; j < n; j++)
-                                {
-                                    var b = boxes[j];   // PyObject
-                                    float x1 = (float)b[0].As<double>();
-                                    float y1 = (float)b[1].As<double>();
-                                    float x2 = (float)b[2].As<double>();
-                                    float y2 = (float)b[3].As<double>();
-
-                                    float bw = x2 - x1;
-                                    float bh = y2 - y1;
-                                    float cx = x1 + bw * 0.5f;
-                                    float cy = y1 + bh * 0.5f;
-
-                                    var rt = new RectRotate(
-                                        new System.Drawing.RectangleF(-bw / 2f, -bh / 2f, bw, bh),
-                                        new System.Drawing.PointF(cx, cy),
-                                        0f, AnchorPoint.None);
-                                    resultTemp.Add(new BeeCore.ResultItem(((PyObject)labels[j]).ToString()));
-                                    resultTemp[resultTemp.Count - 1].rot = rt;
-                                    resultTemp[resultTemp.Count - 1].Score = (float)((PyObject)scores[j]).As<double>() * 100f;
-                                    //boxList.Add(rt);
-                                    //scoreList.Add((float)((PyObject)scores[j]).As<double>() * 100f);
-                                    //labelList.Add(((PyObject)labels[j]).ToString());
-                                }
-                                switch (FilterBox)
-                                {
-                                    case FilterBox.Merge:
-                                        resultTemp = ResultFilter.MergeSameNameOverlap(resultTemp, ThreshOverlap);
-                                        break;
-                                    case FilterBox.Remove:
-                                        resultTemp = ResultFilter.FilterRectRotate(resultTemp, ThreshOverlap);
-                                        break;
-                                }
-
-                                //  resultTemp = ResultFilter.FilterRectRotate(resultTemp,0.8f);// = FilterRect.RemoveInnerRectRotates(boxList, 0.6f);
-                                // đảm bảo matCrop còn sống trong suốt thời gian Python dùng p
-                                GC.KeepAlive(matCrop);
                             }
-                        }
+                            else
+                            {
+                                // === Crop ROI ===
+                                using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
+                                {
+
+                                    if (matCrop.Empty()) return;
+
+                                    if (matCrop.Type().Depth != MatType.CV_8U)
+                                    {
+                                        using (var tmp8u = new Mat())
+                                        {
+                                            Cv2.ConvertScaleAbs(matCrop, tmp8u); // 16U/32F -> 8U
+                                            matCrop.AssignTo(tmp8u);             // ghi đè dữ liệu (OpenCvSharp: AssignTo giữ shape/type mới)
+                                        }
+                                    }
+
+                                    // 2) đảm bảo đúng số kênh
+                                    if (matCrop.Channels() == 1)
+                                    {
+                                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                                    }
+                                    else if (matCrop.Channels() == 4)
+                                    {
+                                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGRA2BGR);
+                                    }
+
+                                    if (matCropTemp == null) matCropTemp = new Mat();
+                                    if (!matCropTemp.Empty()) matCropTemp.Dispose();
+                                    matCropTemp = matCrop.Clone();
+                                    // nếu đã 3 kênh BGR thì giữ nguyên
+
+                                    int h = matCrop.Rows;
+                                    int w = matCrop.Cols;
+                                    int ch = matCrop.Channels(); // 3
+                                    int stride = (int)matCrop.Step(); // bytes/row (có thể > w*ch)
+                                    IntPtr p = matCrop.Data;
+
+                                    float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+                                    string toolName = Common.PropetyTools[IndexThread][Index].Name ?? "default";
+
+                                    // === Gọi YOLO (nhận: (boxes, scores, labels)) ===
+                                    // Ký hiệu: result là tuple-like (3 phần)
+                                    dynamic dyn = G.objYolo;
+                                    if (dyn == null)
+                                        throw new InvalidOperationException("objYolo chưa được khởi tạo.");
+
+                                    result = dyn.predict((long)p, h, w, ch, stride, conf, toolName);
+
+                                    // Ép về PyObject để chủ động Dispose
+                                    boxes = (PyObject)result[0];
+                                    scores = (PyObject)result[1];
+                                    labels = (PyObject)result[2];
+
+                                    int n = (int)boxes.Length();
+
+                                    // === Chuẩn bị danh sách output ===
+                                    //  if (resultTemp == null) resultTemp = new List<ResultItem>(n);
+
+                                    //else { boxList.Clear(); if (boxList.Capacity < n) boxList.Capacity = n; }
+
+                                    //if (scoreList == null) scoreList = new List<float>(n);
+                                    //else { scoreList.Clear(); if (scoreList.Capacity < n) scoreList.Capacity = n; }
+
+                                    //if (labelList == null) labelList = new List<string>(n);
+                                    //else { labelList.Clear(); if (labelList.Capacity < n) labelList.Capacity = n; }
+
+                                    // === Đọc kết quả ===
+                                    for (int j = 0; j < n; j++)
+                                    {
+                                        var b = boxes[j];   // PyObject
+                                        float x1 = (float)b[0].As<double>();
+                                        float y1 = (float)b[1].As<double>();
+                                        float x2 = (float)b[2].As<double>();
+                                        float y2 = (float)b[3].As<double>();
+
+                                        float bw = x2 - x1;
+                                        float bh = y2 - y1;
+                                        float cx = x1 + bw * 0.5f;
+                                        float cy = y1 + bh * 0.5f;
+
+                                        var rt = new RectRotate(
+                                            new System.Drawing.RectangleF(-bw / 2f, -bh / 2f, bw, bh),
+                                            new System.Drawing.PointF(cx, cy),
+                                            0f, AnchorPoint.None);
+                                        resultTemp.Add(new BeeCore.ResultItem(((PyObject)labels[j]).ToString()));
+                                        resultTemp[resultTemp.Count - 1].rot = rt;
+                                        resultTemp[resultTemp.Count - 1].Score = (float)((PyObject)scores[j]).As<double>() * 100f;
+                                        //boxList.Add(rt);
+                                        //scoreList.Add((float)((PyObject)scores[j]).As<double>() * 100f);
+                                        //labelList.Add(((PyObject)labels[j]).ToString());
+                                    }
+                                    switch (FilterBox)
+                                    {
+                                        case FilterBox.Merge:
+                                            resultTemp = ResultFilter.MergeSameNameOverlap(resultTemp, ThreshOverlap);
+                                            break;
+                                        case FilterBox.Remove:
+                                            resultTemp = ResultFilter.FilterRectRotate(resultTemp, ThreshOverlap);
+                                            break;
+                                    }
+
+                                    //  resultTemp = ResultFilter.FilterRectRotate(resultTemp,0.8f);// = FilterRect.RemoveInnerRectRotates(boxList, 0.6f);
+                                    // đảm bảo matCrop còn sống trong suốt thời gian Python dùng p
+                                    GC.KeepAlive(matCrop);
+                                }
+                            }
+                        
+                            }
                         catch (PythonException pyEx)
                         {
                             Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", pyEx.ToString()));
@@ -613,6 +672,7 @@ namespace BeeCore
         public bool IsSendResult;
         public ArrangeBox ArrangeBox=new ArrangeBox();
         public bool IsArrangeBox = false;
+        public bool IsCropSingle = false;
         public async Task SendResult()
         {
             if (IsSendResult)
