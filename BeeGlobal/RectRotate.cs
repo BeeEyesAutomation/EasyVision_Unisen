@@ -146,7 +146,8 @@ namespace BeeGlobal
         public List<PointF> PolyLocalPoints { get;  set; } // polygon points (local)
         public bool IsPolygonClosed { get; set; }
         public int ActiveVertexIndex { get; set; }
-
+        [NonSerialized]
+        public int NumInside = 0;
         public bool AutoExpandBounds { get; set; } = true;
         public bool AutoOrientPolygon { get; set; } = true; // auto xoay theo PCA khi chuẩn hoá polygon (MouseUp)
 

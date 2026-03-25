@@ -785,102 +785,7 @@ namespace BeeCore
                             CropOffSetY = (rotArea._PosCenter.Y - rotArea._rect.Height / 2);
                             CropOffSetX = (CropOffSetX > 0) ? 0 : -CropOffSetX;
                             CropOffSetY = (CropOffSetY > 0) ? 0 : -CropOffSetY;
-                            //        if (IsCropSingle&& labelItems.Count>0)
-                            //        {
-                            //            using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
-                            //            {
-
-                            //                if (matCrop.Empty()) return;
-
-                            //                if (matCrop.Type().Depth != MatType.CV_8U)
-                            //                {
-                            //                    using (var tmp8u = new Mat())
-                            //                    {
-                            //                        Cv2.ConvertScaleAbs(matCrop, tmp8u); // 16U/32F -> 8U
-                            //                        matCrop.AssignTo(tmp8u);             // ghi đè dữ liệu (OpenCvSharp: AssignTo giữ shape/type mới)
-                            //                    }
-                            //                }
-                            //                // 2) đảm bảo đúng số kênh
-                            //                if (matCrop.Channels() == 1)
-                            //                {
-                            //                    Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
-                            //                }
-                            //                else if (matCrop.Channels() == 4)
-                            //                {
-                            //                    Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGRA2BGR);
-                            //                }
-                            //                try{ 
-                            //                for (int i = 0; i < ListRotMask.Count; i++)
-                            //                //   Parallel.For(0, ListRotMask.Count,
-                            //                //new ParallelOptions { MaxDegreeOfParallelism = Math.Min(300, Environment.ProcessorCount) },
-                            //                //i =>
-                            //                {
-                            //                    using (Mat matTemp = CropRoiView(matCrop, ListRotMask[i]))
-                            //                    {
-
-                            //                        int h = matTemp.Rows;
-                            //                        int w = matTemp.Cols;
-                            //                        int ch = matTemp.Channels(); // 3
-                            //                        int stride = (int)matTemp.Step(); // bytes/row (có thể > w*ch)
-                            //                        IntPtr p = matTemp.Data;
-                            //                        float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
-                            //                        string toolName = Common.PropetyTools[IndexThread][Index].Name ?? "default";
-                            //                        dynamic dyn = G.objYolo;
-                            //                        if (dyn == null)
-                            //                        {
-                            //                            Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "Loi Khoi Tao Yolo"));
-
-                            //                        }
-                            //                        result = dyn.predict((long)p, h, w, ch, stride, conf, toolName);
-                            //                        boxes = (PyObject)result[0];
-                            //                        scores = (PyObject)result[1];
-                            //                        labels = (PyObject)result[2];
-
-                            //                            int n = (int)boxes.Length();
-                            //                        if (n > 0)
-                            //                        {
-                            //                                var b = boxes[0];   // PyObject
-                            //                                float x1 = (float)b[0].As<double>();
-                            //                                float y1 = (float)b[1].As<double>();
-                            //                                float x2 = (float)b[2].As<double>();
-                            //                                float y2 = (float)b[3].As<double>();
-
-                            //                                float bw = x2 - x1;
-                            //                                float bh = y2 - y1;
-                            //                                float cx = x1 + bw * 0.5f;
-                            //                                float cy = y1 + bh * 0.5f;
-                            //                                  Point pCenter =new System.Drawing.Point(
-                            //                   (int)(ListRotMask[i]._PosCenter.X - ListRotMask[i]._rect.Width / 2f + cx),
-                            //                   (int)(ListRotMask[i]._PosCenter.Y - ListRotMask[i]._rect.Height / 2f + cy));
-
-                            //                                var rt = new RectRotate(
-                            //                                    new System.Drawing.RectangleF(-bw / 2f, -bh / 2f, bw, bh),
-                            //                                    new System.Drawing.PointF(pCenter.X, pCenter.Y),
-                            //                                    0f, AnchorPoint.None);
-                            //                                resultTemp.Add(new BeeCore.ResultItem(((PyObject)labels[0]).ToString()));
-                            //                            resultTemp[resultTemp.Count - 1].rot = rt;
-                            //                            resultTemp[resultTemp.Count - 1].IsOK = true;
-                            //                            resultTemp[resultTemp.Count - 1].Score = (float)((PyObject)scores[0]).As<double>() * 100f;
-                            //                        }
-                            //                        else
-                            //                        {
-
-                            //                            resultTemp.Add(new BeeCore.ResultItem("NG"));
-                            //                            resultTemp[resultTemp.Count - 1].rot = ListRotMask[i];
-                            //                            resultTemp[resultTemp.Count - 1].IsOK = false;
-                            //                            resultTemp[resultTemp.Count - 1].Score = 0;
-
-                            //                        }
-
-                            //                    }
-                            //                };
-                            //            }
-                            //                 catch (Exception ex)
-                            //            {
-                            //                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
-                            //            }
-                            //}
-                            //        }
+                        
                             if (IsCropSingle && labelItems.Count > 0)
                             {
                                 using (Mat matCrop = Cropper.CropRotatedRect(
@@ -997,8 +902,8 @@ namespace BeeCore
                                                     float cy = y1 + bh * 0.5f;
 
                                                     Point pCenter = new Point(
-                                                        (int)(roi._PosCenter.X - roi._rect.Width / 2f + cx),
-                                                        (int)(roi._PosCenter.Y - roi._rect.Height / 2f + cy)
+                                                        (int)(cx),
+                                                        (int)(cy)
                                                     );
 
                                                     var rt = new RectRotate(
@@ -1371,7 +1276,6 @@ namespace BeeCore
 
             return area;
         }
-
         public void Complete()
         {
             if (!Global.IsIntialPython)
@@ -1385,10 +1289,7 @@ namespace BeeCore
             try
             {
                 ResultItem = new List<ResultItem>();
-                rectRotates = new List<RectRotate>();
-
                 numOK = 0;
-                numNG = 0;
 
                 if (labelItems == null)
                 {
@@ -1397,482 +1298,390 @@ namespace BeeCore
                 }
 
                 //--------------------------------
-                // PASS 0 : map label (tối ưu)
+                // MAP LABEL
                 //--------------------------------
                 var labelMap = labelItems
                     .GroupBy(x => x.Name.ToLower())
                     .ToDictionary(g => g.Key, g => g.First());
 
                 //--------------------------------
-                // PASS 1 : build ResultItem
+                // BUILD RESULT
                 //--------------------------------
-                if(resultTemp!=null)
-                foreach (var rs in resultTemp)
+                if (resultTemp != null)
                 {
-                    ResultItem.Add(new ResultItem(rs.Name)
-                    {matProcess=rs.matProcess,
-                        IsOK = rs.IsOK,
-                        rot = rs.rot,
-                        Score = rs.Score
-                    });
+                    foreach (var rs in resultTemp)
+                    {
+                        ResultItem.Add(new ResultItem(rs.Name)
+                        {
+                            matProcess = rs.matProcess,
+                            IsOK = rs.IsOK,
+                            rot = rs.rot,
+                            Score = rs.Score
+                        });
+                    }
                 }
 
                 //--------------------------------
-                // counter global
+                // HELPER
                 //--------------------------------
-                Dictionary<string, int> labelCounter =
-                    ResultItem.GroupBy(x => x.Name)
-                    .ToDictionary(g => g.Key, g => g.Count());
-
-                //--------------------------------
-                // PASS 2 : Area
-                //--------------------------------
-                for (int i = 0; i < ResultItem.Count; i++)
+                bool IsBool = false;
+                String lbName = "";
+                bool IsInside(RectRotate scan, RectRotate r)
                 {
-                    var r = ResultItem[i];
+                    if (scan == null || r == null) return false;
+                    //if (IsCropSingle)
+                    //{
+                    //    RectangleF scanRect = new RectangleF(0, 0, scan._rect.Width, scan._rect.Height);
 
-                    if (!labelMap.ContainsKey(r.Name.ToLower()))
-                        continue;
+                    //    RectangleF objRect = new RectangleF(
+                    //        r._PosCenter.X - r._rect.Width / 2f,
+                    //        r._PosCenter.Y - r._rect.Height / 2f,
+                    //        r._rect.Width,
+                    //        r._rect.Height
+                    //    );
 
-                    var item = labelMap[r.Name.ToLower()];
+                    //    return objRect.Left >= scanRect.Left &&
+                    //           objRect.Top >= scanRect.Top &&
+                    //           objRect.Right <= scanRect.Right &&
+                    //           objRect.Bottom <= scanRect.Bottom;
+                    //}
+                    //else
+                    //{
+                    //    // world mode: nên check 4 góc của object
+                    //    PointF p1 = new PointF(r._PosCenter.X - r._rect.Width / 2f, r._PosCenter.Y - r._rect.Height / 2f);
+                    //    PointF p2 = new PointF(r._PosCenter.X + r._rect.Width / 2f, r._PosCenter.Y - r._rect.Height / 2f);
+                    //    PointF p3 = new PointF(r._PosCenter.X + r._rect.Width / 2f, r._PosCenter.Y + r._rect.Height / 2f);
+                    //    PointF p4 = new PointF(r._PosCenter.X - r._rect.Width / 2f, r._PosCenter.Y + r._rect.Height / 2f);
+
+                    //    return scan.ContainsPoint(p1) &&
+                    //           scan.ContainsPoint(p2) &&
+                    //           scan.ContainsPoint(p3) &&
+                    //           scan.ContainsPoint(p4);
+                    //}
 
                     if (IsCropSingle)
-                    {if (!item.IsUse)
-                            ResultItem[i].IsOK = false;
-                        else
-                        {
-                            if (r.IsOK)
-                                numOK++;
-                        }
-                        continue;
-                    }
-
-                    double percentLocal;
-                    double area = CalcArea(r, item, out percentLocal);
-
-                    r.Area = (float)area;
-                    r.Percent = (float)percentLocal;
-                }
-
-                //--------------------------------
-                // PASS 3 : ScanBox Area Cache
-                //--------------------------------
-                Dictionary<int, double> scanAreaCache = new Dictionary<int, double>();
-
-                if (!IsCropSingle)
-                {
-                    foreach (var r in ResultItem)
                     {
-                        if (!labelMap.ContainsKey(r.Name.ToLower()))
-                            continue;
+                        RectangleF rect = new RectangleF(0, 0, scan._rect.Width, scan._rect.Height);
+               
+                       
+                        return rect.Contains(r._PosCenter);
+                    }
+                    else
+                        return scan.ContainsPoint(r._PosCenter);
+                }
+                
+                //--------------------------------
+                // SCANBOX (FIX CHUẨN)
+                //--------------------------------
+                if (listRotScan != null && listRotScan.Count > 0)
+                {
+                    for (int scanIndex = 0; scanIndex < listRotScan.Count; scanIndex++)
+                    {
+                        var scan = listRotScan[scanIndex];
 
-                        var item = labelMap[r.Name.ToLower()];
+    
 
-                        if (item.ListIndexBox == null)
-                            continue;
+                                bool boxOK = true;
+                                bool hasRule = false;
 
-                        foreach (int scanIndex in item.ListIndexBox)
-                        {
-                            if (!scanAreaCache.ContainsKey(scanIndex))
-                            {
-                                RectRotate scan = listRotScan[scanIndex];
-
-                                double sum = 0;
-
-                                foreach (var rr in ResultItem)
+                                foreach (var item in labelItems)
                                 {
-                                    if (rr.Name != item.Name)
+                                    if (item == null || !item.IsUse)
                                         continue;
 
-                                    if (scan.ContainsPoint(rr.rot._PosCenter))
-                                        sum += rr.Area;
-                                }
+                                    if (item.ListIndexBox == null || !item.ListIndexBox.Contains(scanIndex))
+                                        continue;
 
-                                scanAreaCache[scanIndex] = sum;
-                            }
-                        }
-                    }
-                }
+                                    hasRule = true;
 
-                //--------------------------------
-                // PASS 3.5 : ScanBox Counter (NEW)
-                //--------------------------------
-                Dictionary<int, int> scanCounter = new Dictionary<int, int>();
-                HashSet<int> scanBoxOK = new HashSet<int>();
+                                    //--------------------------------
+                                    // GET OBJECTS IN BOX
+                                    //--------------------------------
+                                    List<ResultItem> objs;
 
-                if (!IsCropSingle)
-                {
-                    foreach (var r in ResultItem)
-                    {
-                        if (!labelMap.ContainsKey(r.Name.ToLower()))
-                            continue;
-
-                        var item = labelMap[r.Name.ToLower()];
-
-                        if (!item.IsCounter || item.ListIndexBox == null || item.ListIndexBox.Count == 0)
-                            continue;
-
-                        int scanIndex = FindScanBox(r, item.Name);
-
-                        if (scanIndex < 0)
-                        {
-                            r.rot = null;
-                            r.IsOK = false;
-                            continue;
-                        }
-                      
-
-                        if (!scanCounter.ContainsKey(scanIndex))
-                            scanCounter[scanIndex] = 0;
-
-                        scanCounter[scanIndex]++;
-                    }
-
-                    foreach (var kv in scanCounter)
-                    {
-                        int scanIndex = kv.Key;
-                        int count = kv.Value;
-
-                        var item = labelItems.FirstOrDefault(x =>
-                            x.ListIndexBox != null &&
-                            x.ListIndexBox.Contains(scanIndex) &&
-                            x.IsCounter);
-
-                        if (item == null)
-                            continue;
-
-                        if (count >= item.ValueCounter)
-                            scanBoxOK.Add(scanIndex);
-                    }
-
-                    // set OK cho tất cả object trong box đạt
-                    foreach (var r in ResultItem)
-                    {
-                        if (r.rot == null) continue;
-                        if (!labelMap.ContainsKey(r.Name.ToLower()))
-                            continue;
-
-                        var item = labelMap[r.Name.ToLower()];
-
-                        if (!item.IsCounter || item.ListIndexBox == null)
-                            continue;
-
-                        int scanIndex = FindScanBox(r, item.Name);
-
-                        if (scanIndex >= 0 && scanBoxOK.Contains(scanIndex))
-                            r.IsOK = true;
-                    }
-
-                    // 👉 chỉ cộng theo box
-                    numOK += scanBoxOK.Count;
-                }
-
-               
-                if (!IsCropSingle)
-                {
-                    for (int i = 0; i < ResultItem.Count; i++)
-                    {
-                        var r = ResultItem[i];
-                        if(r.rot==null) continue;
-                        if (!labelMap.ContainsKey(r.Name.ToLower()))
-                            continue;
-
-                        var item = labelMap[r.Name.ToLower()];
-
-                        if (!item.IsUse)
-                        {
-                            r.IsOK = false;
-                            continue;
-                        }
-
-                        // nếu đã OK từ scanbox counter → skip
-                        if (item.IsCounter && item.ListIndexBox != null && r.IsOK && !item.IsMinColor)
-                            continue;
-
-                        bool IsOK = false;
-
-                        //--------------------------------
-                        // X/Y
-                        //--------------------------------
-                        if (item.IsX && IntersectX(r.rot, item.ValueX))
-                            IsOK = true;
-
-                        if (item.IsY && IntersectY(r.rot, item.ValueY))
-                            IsOK = true;
-
-                        if (item.IsXMax && IntersectXMax(r.rot, item.ValueXMax))
-                            IsOK = true;
-
-                        if (item.IsYMax && IntersectYMax(r.rot, item.ValueYMax))
-                            IsOK = true;
-
-                        //--------------------------------
-                        // SIZE
-                        //--------------------------------
-                        if (item.IsHeight)
-                            IsOK = r.rot._rect.Height >= item.ValueHeight;
-
-                        if (item.IsWidth)
-                            IsOK = r.rot._rect.Width >= item.ValueWidth;
-
-                        //--------------------------------
-                        // AREA
-                        //--------------------------------
-                        if (item.IsArea)
-                        {
-                            double areaCompare = r.Area;
-
-                            int scanIndex = FindScanBox(r, item.Name);
-
-                            if (scanIndex >= 0 && scanAreaCache.ContainsKey(scanIndex))
-                                areaCompare = scanAreaCache[scanIndex];
-
-                            if (areaCompare >= item.ValueArea * 100)
-                                IsOK = true;
-                        }
-                        
-                        //--------------------------------
-                        // 🔥 COLOR (FIX CHUẨN)
-                        //--------------------------------
-                        if (item.IsMinColor||item.IsCounter)
-                        {
-                            int scanIndex = FindScanBox(r, item.Name);
-
-                            if (scanIndex >= 0)
-                            {
-                                int expectedCount = item.IsCounter ? item.ValueCounter : 1;
-                                var listInBox = ResultItem
-                                .Where(x => x.Name == item.Name &&
-                                            x.rot != null &&
-                                            scanIndex >= 0 &&
-                                            scanIndex < listRotScan.Count &&
-                                            listRotScan[scanIndex].ContainsPoint(x.rot._PosCenter))
-                                .OrderBy(x => x.rot._PosCenter.X)
-                                .ToList();
-                                // ❌ nếu r không phải object đầu tiên → skip
-                                if (listInBox.Count > 0 && listInBox[0] != r)
-                                    continue;
-                                //var listInBox = ResultItem
-                                //    .Where(x => x.Name == item.Name &&
-                                //                listRotScan[scanIndex].ContainsPoint(x.rot._PosCenter))
-                                //    .OrderBy(x => x.rot._PosCenter.X)
-                                //    .ToList();
-
-                                // đảm bảo đủ size cho ListRSGroup
-                                int totalGroup = listRotScan != null ? listRotScan.Count : 0;
-                              
-
-                                // mặc định box này fail
-                                listRotScan[scanIndex].IsOK = false;
-
-                                // 1. check đủ số lượng
-                                bool counterOK = listInBox.Count >= expectedCount;
-                                if (counterOK )
-                                {
-                                    listRotScan[scanIndex].IsOK = true;
-                                }
-                                else
-                                {
-                                    listRotScan[scanIndex].IsOK = false;
-                                }
-                                // 2. check màu
-                                bool colorOKAll = true;
-                                if (item.IsMinColor)
-                                {
-                                    for (int j = 0; j < expectedCount; j++)
+                                    if (IsCropSingle)
                                     {
-                                        if (j >= listInBox.Count)
+                                        objs = new List<ResultItem>();
+
+                                        if (scanIndex < ResultItem.Count)
                                         {
-                                            colorOKAll = false;
-                                            break;
-                                        }
+                                            var r = ResultItem[scanIndex];
 
-                                        var rr = listInBox[j];
-                                        int globalIndex = scanIndex * expectedCount + j;
-
-                                        if (globalIndex >= item.ListColorArea.Count 
-                                       )
-                                        {
-                                            colorOKAll = false;
-                                            rr.IsOK = false;
-                                            continue;
-                                        }
-
-                                       
-                                        using (Mat matCrop2 = CropRoiView(matCropTemp, rr.rot))
-                                        {
-                                            if (rr.matProcess == null)
-                                                rr.matProcess = new Mat();
-
-                                            int val = CheckColor(item.ListColorArea[globalIndex], ref rr.matProcess, matCrop2);
-                                            rr.ValueColor = val;
-
-                                            if (!Global.IsRun)
-                                                item.ListTempColor[globalIndex] = val;
-
-                                            int valTemp = item.ListTempColor[globalIndex];
-
-
-
-                                            if (valTemp > 0)
-                                                rr.PercentColor = (float)((Math.Abs(val - valTemp) / (valTemp * 1.0)) * 100.0);
-
-                                            // ValueMinColor = % sai cho phép
-                                            bool colorOK = rr.PercentColor <= item.ValueMinColor;
-
-                                            if (colorOK == false)
-                                            {
-                                                counterOK = false;
-                                                numOK--;
-                                                Console.WriteLine("FAILT");
-                                            }
-                                            else
-                                            {
-                                                Console.WriteLine("TRUE");
-                                            }
-                                            // AND với logic trước (counter / area / ...)
-                                            rr.IsOK = rr.IsOK && colorOK;
-                                        }
+                                    if (r.rot != null &&
+                                        r.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        objs.Add(r);
                                     }
-                                    // 3. boxscan OK khi cả counter và color đều OK
-                                    if (counterOK && colorOKAll)
-                                    {
-                                        listRotScan[scanIndex].IsOK = true;
+                                    else
+                                        r.IsOK = false;
+                                        }
                                     }
                                     else
                                     {
-                                        listRotScan[scanIndex].IsOK = false;
+                                        objs = ResultItem
+                                            .Where(x =>
+                                                x.rot != null &&
+                                                x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase) &&
+                                                scan.ContainsPoint(x.rot._PosCenter))
+                                            .OrderBy(x => x.rot._PosCenter.X)
+                                            .ToList();
+                                    }
+                            scan.NumInside = objs.Count;
+                            //--------------------------------
+                            // NO OBJECT
+                            //--------------------------------
+                            if (objs.Count == 0)
+                                    {
+                                        boxOK = false;
+                                        continue;
+                                    }
+                           
+                            //--------------------------------
+                            // COUNTER
+                            //--------------------------------
+                            if (item.IsCounter)
+                                    {
+                                        if (objs.Count < item.ValueCounter)
+                                        {
+                                            foreach (var rr in objs)
+                                                rr.IsOK = false;
+                                 
+                                            boxOK = false;
+                                            continue;
+                                        }
+                                    }
+
+                                    //--------------------------------
+                                    // LOOP OBJECT
+                                    //--------------------------------
+                                    for (int j = 0; j < objs.Count; j++)
+                                    {
+                                        var r = objs[j];
+                                        bool ok = true;
+
+                                        //--------------------------------
+                                        // SIZE
+                                        //--------------------------------
+                                        if (item.IsWidth)
+                                            ok &= r.rot._rect.Width >= item.ValueWidth;
+
+                                        if (item.IsHeight)
+                                            ok &= r.rot._rect.Height >= item.ValueHeight;
+
+                                        //--------------------------------
+                                        // POSITION
+                                        //--------------------------------
+                                        if (item.IsX)
+                                            ok &= IntersectX(r.rot, item.ValueX);
+
+                                        if (item.IsY)
+                                            ok &= IntersectY(r.rot, item.ValueY);
+
+                                        if (item.IsXMax)
+                                            ok &= IntersectXMax(r.rot, item.ValueXMax);
+
+                                        if (item.IsYMax)
+                                            ok &= IntersectYMax(r.rot, item.ValueYMax);
+
+                                        //--------------------------------
+                                        // AREA (SCANBOX LEVEL)
+                                        //--------------------------------
+                                        if (item.IsArea)
+                                        {
+                                            double sumArea = objs.Sum(x => x.Area);
+                                            ok &= sumArea >= item.ValueArea * 100;
+                                        }
+
+                                        //--------------------------------
+                                        // COLOR
+                                        //--------------------------------
+                                        if (item.IsMinColor)
+                                        {
+                                            if (j >= item.ListColorArea.Count || j >= item.ListTempColor.Count)
+                                            {
+                                                ok = false;
+                                            }
+                                            else
+                                            {
+                                                using (Mat matCrop2 = CropRoiView(matCropTemp, r.rot))
+                                                {
+                                                    if (r.matProcess == null)
+                                                        r.matProcess = new Mat();
+
+                                                    int val = CheckColor(item.ListColorArea[scanIndex * item.ValueCounter + j], ref r.matProcess, matCrop2);
+
+                                                    if (!Global.IsRun)
+                                                        item.ListTempColor[scanIndex*item.ValueCounter+ j] = val;
+
+                                                    int valTemp = item.ListTempColor[scanIndex * item.ValueCounter + j];
+
+                                                  r.PercentColor = (float)((Math.Abs(val - valTemp) / (valTemp*1.0)) * 100.0);
+
+                                                    ok &= r.PercentColor <= item.ValueMinColor;
+                                                }
+                                            }
+                                        }
+
+                                        r.IsOK = ok;
+
+                                        if (!ok)
+                                            boxOK = false;
+                                        
                                     }
                                 }
 
-                              
-                                //// số object cần check
-                                //int expectedCount = item.IsCounter ? item.ValueCounter : 1;
+                                //--------------------------------
+                                // NO RULE → OK
+                                //--------------------------------
+                                if (!hasRule)
+                                {
+                                    scan.IsOK = true;
+                                    numOK++;
+                                    continue;
+                                }
 
-                                //// lấy list object trong box
-                                //var listInBox = ResultItem
-                                //    .Where(x => x.Name == item.Name &&
-                                //                listRotScan[scanIndex].ContainsPoint(x.rot._PosCenter))
-                                //    .OrderBy(x => x.rot._PosCenter.X)
-                                //    .ToList();
-                                //int boxStart = scanIndex * expectedCount;
-                                //// ❗ Loop theo TEMPLATE (KHÔNG lệch j)
-                                ////Parallel.For(0, expectedCount, new ParallelOptions { MaxDegreeOfParallelism = Math.Min(item.ListIndexBox.Count, Environment.ProcessorCount) },
-                                //// j =>
+                                scan.IsOK = boxOK;
 
-                                //for (int j = 0; j < expectedCount; j++)
-                                //{
-                                //    // 👉 index global bắt đầu của box này
+                                if (boxOK)
+                                    numOK++;
+                            
+                        }
+                }
+                else
+                {
+                    foreach (var item in labelItems)
+                    {
+                        if (item == null || !item.IsUse)
+                            continue;
 
+                        //--------------------------------
+                        // GET OBJECTS THEO LABEL
+                        //--------------------------------
+                        var objs = ResultItem
+                            .Where(x => x.rot != null &&
+                                        x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase))
+                            .OrderBy(x => x.rot._PosCenter.X)
+                            .ToList();
 
+                        //--------------------------------
+                        // KHÔNG CÓ OBJECT
+                        //--------------------------------
+                        if (objs.Count == 0)
+                            continue;
 
+                        //--------------------------------
+                        // COUNTER
+                        //--------------------------------
+                        if (item.IsCounter)
+                        {
+                            if (objs.Count < item.ValueCounter)
+                            {
+                                foreach (var r in objs)
+                                    r.IsOK = false;
 
-
-                                //    int globalIndex = boxStart + j;
-                                //    if (j < listInBox.Count)
-                                //    {
-                                //        var rr = listInBox[j];
-
-                                //        using (Mat matCrop2 = CropRoiView(matCropTemp, rr.rot))
-                                //        {
-                                //            if (rr.matProcess == null) rr.matProcess = new Mat();
-                                //            int val = CheckColor(item.ListColorArea[globalIndex], ref rr.matProcess, matCrop2);
-
-                                //            rr.ValueColor = val;
-                                //            if (!Global.IsRun)
-                                //            {
-                                //                item.ListTempColor[globalIndex] = rr.ValueColor;
-
-                                //            }
-                                //            int valTemp = (item.ListTempColor != null && j < item.ListTempColor.Count)
-                                //                ? item.ListTempColor[globalIndex]
-                                //                : 0;
-
-
-
-                                //            if (valTemp > 0)
-                                //                rr.PercentColor = (float)((Math.Abs(val - valTemp) / (valTemp * 1.0)) * 100.0);
-
-                                //            // ValueMinColor = % sai cho phép
-                                //            bool colorOK = rr.PercentColor <= item.ValueMinColor;
-
-                                //            if (colorOK == false)
-                                //            {
-                                //                numOK--;
-                                //                Console.WriteLine("FAILT");
-                                //            }
-                                //            else
-                                //            {
-                                //                Console.WriteLine("TRUE");
-                                //            }
-                                //            // AND với logic trước (counter / area / ...)
-                                //            rr.IsOK = rr.IsOK && colorOK;
-                                //        }
-                                //    }
-                                //    //});
-                                //}
-                                //// ❗ nếu thiếu object → NG hết
-                                //if (listInBox.Count < expectedCount)
-                                //{
-                                //    foreach (var rr in listInBox)
-                                //        rr.IsOK = false;
-                                //}
-
-                                continue; // skip logic thường
+                                continue;
                             }
                         }
 
                         //--------------------------------
-                        // Counter thường (không scanbox)
+                        // LOOP OBJECT
                         //--------------------------------
-                        if (item.Name != "B_CHI" && item.IsCounter)
+                        for (int j = 0; j < objs.Count; j++)
                         {
-                            if (item.ListIndexBox != null && item.ListIndexBox.Count > 0)
-                                continue;
+                            var r = objs[j];
+                            bool ok = true;
 
-                            if (labelCounter.ContainsKey(r.Name) &&
-                                labelCounter[r.Name] >= item.ValueCounter)
-                                IsOK = true;
-                            else
-                                IsOK = false;
+                            //--------------------------------
+                            // SIZE
+                            //--------------------------------
+                            if (item.IsWidth)
+                                ok &= r.rot._rect.Width >= item.ValueWidth;
+
+                            if (item.IsHeight)
+                                ok &= r.rot._rect.Height >= item.ValueHeight;
+
+                            //--------------------------------
+                            // POSITION
+                            //--------------------------------
+                            if (item.IsX)
+                                ok &= IntersectX(r.rot, item.ValueX);
+
+                            if (item.IsY)
+                                ok &= IntersectY(r.rot, item.ValueY);
+
+                            if (item.IsXMax)
+                                ok &= IntersectXMax(r.rot, item.ValueXMax);
+
+                            if (item.IsYMax)
+                                ok &= IntersectYMax(r.rot, item.ValueYMax);
+
+                            //--------------------------------
+                            // AREA (GLOBAL)
+                            //--------------------------------
+                            if (item.IsArea)
+                            {
+                                double sumArea = objs.Sum(x => x.Area);
+                                ok &= sumArea >= item.ValueArea * 100;
+                            }
+
+                            //--------------------------------
+                            // COLOR (GLOBAL INDEX)
+                            //--------------------------------
+                            if (item.IsMinColor)
+                            {
+                                if (j >= item.ListColorArea.Count || j >= item.ListTempColor.Count)
+                                {
+                                    ok = false;
+                                }
+                                else
+                                {
+                                    using (Mat matCrop2 = CropRoiView(matCropTemp, r.rot))
+                                    {
+                                        if (r.matProcess == null)
+                                            r.matProcess = new Mat();
+
+                                        int val = CheckColor(item.ListColorArea[j], ref r.matProcess, matCrop2);
+
+                                        if (!Global.IsRun)
+                                            item.ListTempColor[j] = val;
+
+                                        int valTemp = item.ListTempColor[j];
+
+                                        if (valTemp > 0)
+                                        {
+                                            float percent = (float)(Math.Abs(val - valTemp) / valTemp * 100.0);
+                                            ok &= percent <= item.ValueMinColor;
+                                        }
+                                        else
+                                        {
+                                            ok = false;
+                                        }
+                                    }
+                                }
+                            }
+
+                            r.IsOK = ok;
                         }
 
                         //--------------------------------
-                        // default
+                        // COUNT OK
                         //--------------------------------
-                        if (!item.IsHeight && !item.IsWidth && !item.IsArea &&
-                            !item.IsX && !item.IsY && !item.IsXMax &&
-                            !item.IsYMax && !item.IsDistance && !item.IsCounter && !item.IsMinColor)
-                            IsOK = true;
-
-                        r.IsOK = IsOK;
-
-                        if (r.IsOK)
-                            numOK++;
+                        numOK += objs.Count(x => x.IsOK);
                     }
-                }
-                //--------------------------------
-                // RESULT
-                //--------------------------------
-                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                }    
+                    //--------------------------------
+                    // RESULT
+                    //--------------------------------
+                    Common.PropetyTools[IndexThread][Index].Results = Results.OK;
 
-                switch (Compare)
-                {
-                    case Compares.Equal:
-                        if (numOK != NumObject)
-                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                        break;
+                if (Compare == Compares.Equal && numOK != NumObject)
+                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
 
-                    case Compares.Less:
-                        if (numOK >= NumObject)
-                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                        break;
+                if (Compare == Compares.Less && numOK >= NumObject)
+                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
 
-                    case Compares.More:
-                        if (numOK <= NumObject)
-                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                        break;
-                }
+                if (Compare == Compares.More && numOK <= NumObject)
+                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
 
                 if (IsLine && !Line2D.Found)
                     Common.PropetyTools[IndexThread][Index].Results = Results.NG;
@@ -1885,7 +1694,6 @@ namespace BeeCore
                     new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
             }
         }
-        //Oldnew
         //public void Complete()
         //{
         //    if (!Global.IsIntialPython)
@@ -1903,7 +1711,6 @@ namespace BeeCore
 
         //        numOK = 0;
         //        numNG = 0;
-        //        int scoreRS = 0;
 
         //        if (labelItems == null)
         //        {
@@ -1912,252 +1719,164 @@ namespace BeeCore
         //        }
 
         //        //--------------------------------
+        //        // PASS 0 : map label
+        //        //--------------------------------
+        //        var labelMap = labelItems
+        //            .GroupBy(x => x.Name.ToLower())
+        //            .ToDictionary(g => g.Key, g => g.First());
+
+        //        //--------------------------------
         //        // PASS 1 : build ResultItem
         //        //--------------------------------
-
-        //        foreach (var rs in resultTemp)
-        //        {
-        //            ResultItem.Add(new ResultItem(rs.Name)
-        //            {IsOK=rs.IsOK,
-        //                rot = rs.rot,
-        //                Score = rs.Score
-        //            });
-        //        }
-
-        //        //--------------------------------
-        //        // counter cache
-        //        //--------------------------------
-
-        //        Dictionary<string, int> labelCounter =
-        //            ResultItem.GroupBy(x => x.Name)
-        //            .ToDictionary(g => g.Key, g => g.Count());
-
-        //        //--------------------------------
-        //        // PASS 2 : compute Area per object
-        //        //--------------------------------
-
-        //        for (int i = 0; i < ResultItem.Count; i++)
-        //        {
-        //            var r = ResultItem[i];
-
-        //            int index = labelItems.FindIndex(x =>
-        //                string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
-
-        //            if (index < 0)
-        //                continue;
-        //            if (IsCropSingle)
+        //        if (resultTemp != null)
+        //            foreach (var rs in resultTemp)
         //            {
-        //               if( r.IsOK)
-        //                numOK++;
-        //                continue;
-        //            }    
-
-        //            LabelItem item = labelItems[index];
-
-        //            double percentLocal;
-        //            double area = CalcArea(r, item, out percentLocal);
-
-        //            r.Area = (float)area;
-        //            r.Percent = (float)percentLocal;
-        //        }
-
-        //        //--------------------------------
-        //        // PASS 3 : compute ScanBox Area
-        //        //--------------------------------
-
-        //        Dictionary<int, double> scanAreaCache = new Dictionary<int, double>();
-        //        if (!IsCropSingle)
-        //            foreach (var r in ResultItem)
-        //        {
-        //            int index = labelItems.FindIndex(x =>
-        //                string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
-
-        //            if (index < 0)
-        //                continue;
-
-        //            LabelItem item = labelItems[index];
-
-        //            if (item.ListIndexBox == null)
-        //                continue;
-
-        //            foreach (int scanIndex in item.ListIndexBox)
-        //            {
-        //                if (!scanAreaCache.ContainsKey(scanIndex))
+        //                ResultItem.Add(new ResultItem(rs.Name)
         //                {
-        //                    RectRotate scan = listRotScan[scanIndex];
+        //                    matProcess = rs.matProcess,
+        //                    IsOK = rs.IsOK,
+        //                    rot = rs.rot,
+        //                    Score = rs.Score
+        //                });
+        //            }
 
-        //                    double areaSum = 0;
+        //        //--------------------------------
+        //        // PASS 2 : Area
+        //        //--------------------------------
+        //        foreach (var r in ResultItem)
+        //        {
+        //            if (!labelMap.ContainsKey(r.Name.ToLower()))
+        //                continue;
 
-        //                    foreach (var rr in ResultItem)
+        //            var item = labelMap[r.Name.ToLower()];
+
+        //            if (!IsCropSingle)
+        //            {
+        //                double percentLocal;
+        //                double area = CalcArea(r, item, out percentLocal);
+        //                r.Area = (float)area;
+        //                r.Percent = (float)percentLocal;
+        //            }
+        //        }
+
+        //        //--------------------------------
+        //        // PASS 3 : ScanBox xử lý chính
+        //        //--------------------------------
+        //        if (!IsCropSingle && listRotScan != null && listRotScan.Count > 0)
+        //        {
+        //            for (int scanIndex = 0; scanIndex < listRotScan.Count; scanIndex++)
+        //            {
+        //                var scan = listRotScan[scanIndex];
+
+        //                // lấy object trong box
+        //                var listInBox = ResultItem
+        //                    .Where(x => x.rot != null &&
+        //                                scan.ContainsPoint(x.rot._PosCenter))
+        //                    .ToList();
+
+        //                // ❌ KHÔNG có object → FAIL luôn
+        //                if (listInBox.Count == 0)
+        //                {
+        //                    scan.IsOK = false;
+        //                    continue;
+        //                }
+
+        //                bool boxOK = true;
+
+        //                //--------------------------------
+        //                // GROUP theo label
+        //                //--------------------------------
+        //                var groupByLabel = listInBox
+        //                    .GroupBy(x => x.Name);
+
+        //                foreach (var group in groupByLabel)
+        //                {
+        //                    string name = group.Key;
+
+        //                    if (!labelMap.ContainsKey(name.ToLower()))
+        //                        continue;
+
+        //                    var item = labelMap[name.ToLower()];
+        //                    var objs = group.OrderBy(x => x.rot._PosCenter.X).ToList();
+
+        //                    //--------------------------------
+        //                    // COUNTER
+        //                    //--------------------------------
+        //                    if (item.IsCounter)
         //                    {
-        //                        if (rr.Name != item.Name)
-        //                            continue;
+        //                        int need = item.ValueCounter;
 
-        //                        if (scan.ContainsPoint(rr.rot._PosCenter))
-        //                            areaSum += rr.Area;
+        //                        if (objs.Count < need)
+        //                        {
+        //                            boxOK = false;
+        //                            continue;
+        //                        }
         //                    }
 
-        //                    scanAreaCache[scanIndex] = areaSum;
+        //                    //--------------------------------
+        //                    // COLOR
+        //                    //--------------------------------
+        //                    if (item.IsMinColor)
+        //                    {
+        //                        for (int j = 0; j < objs.Count; j++)
+        //                        {
+        //                            var rr = objs[j];
+
+        //                            if (j >= item.ListColorArea.Count)
+        //                            {
+        //                                rr.IsOK = false;
+        //                                boxOK = false;
+        //                                continue;
+        //                            }
+
+        //                            using (Mat matCrop2 = CropRoiView(matCropTemp, rr.rot))
+        //                            {
+        //                                if (rr.matProcess == null)
+        //                                    rr.matProcess = new Mat();
+
+        //                                int val = CheckColor(item.ListColorArea[j], ref rr.matProcess, matCrop2);
+        //                                rr.ValueColor = val;
+
+        //                                if (!Global.IsRun)
+        //                                    item.ListTempColor[j] = val;
+
+        //                                int valTemp = item.ListTempColor[j];
+
+        //                                if (valTemp > 0)
+        //                                {
+        //                                    rr.PercentColor =
+        //                                        (float)(Math.Abs(val - valTemp) / (valTemp * 1.0) * 100.0);
+        //                                }
+
+        //                                bool colorOK = rr.PercentColor <= item.ValueMinColor;
+
+        //                                if (!colorOK)
+        //                                {
+        //                                    rr.IsOK = false;
+        //                                    boxOK = false;
+        //                                }
+        //                                else
+        //                                {
+        //                                    rr.IsOK = true;
+        //                                }
+        //                            }
+        //                        }
+        //                    }
         //                }
+
+        //                //--------------------------------
+        //                // SET BOX RESULT
+        //                //--------------------------------
+        //                scan.IsOK = boxOK;
+
+        //                if (boxOK)
+        //                    numOK++;
         //            }
         //        }
 
         //        //--------------------------------
-        //        // PASS 4 : evaluate rules
+        //        // RESULT FINAL
         //        //--------------------------------
-        //        if (!IsCropSingle)
-        //            for (int i = 0; i < ResultItem.Count; i++)
-        //        {
-        //            var r = ResultItem[i];
-
-        //            int index = labelItems.FindIndex(x =>
-        //                string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
-
-        //            if (index < 0)
-        //                continue;
-
-        //            LabelItem item = labelItems[index];
-
-        //            bool IsOK = false;
-        //            if (!item.IsUse)
-        //            {
-        //                r.IsOK = false;
-        //                continue;
-        //            }    
-
-        //            //--------------------------------
-        //            // X/Y rule
-        //            //--------------------------------
-
-        //            if (item.IsX)
-        //                if(IntersectX(r.rot, item.ValueX))
-        //                {
-        //                    IsOK = true;
-        //                    r.IsOK = IsOK;
-
-        //                    if (r.IsOK)
-        //                        numOK++;
-        //                    continue;
-        //                }    
-
-
-        //            if (item.IsY )
-        //                if(IntersectY(r.rot, item.ValueY))
-        //                {
-        //                    IsOK = true;
-        //                    r.IsOK = IsOK;
-
-        //                    if (r.IsOK)
-        //                        numOK++;
-        //                    continue;
-        //                }
-
-        //            if (item.IsXMax)
-        //                if(IntersectXMax(r.rot, item.ValueXMax))
-        //            {
-        //                IsOK = true;
-        //                    r.IsOK = IsOK;
-
-        //                    if (r.IsOK)
-        //                        numOK++;
-        //                    continue;
-        //            }
-
-        //            if (item.IsYMax )
-        //                if(IntersectYMax(r.rot, item.ValueYMax))
-        //            {
-        //                IsOK = true;
-        //                    r.IsOK = IsOK;
-
-        //                    if (r.IsOK)
-        //                        numOK++;
-        //                    continue;
-        //            }
-
-        //            //--------------------------------
-        //            // ScanBox rule (NEW)
-        //            //--------------------------------
-        //            int scanIndex = -1;
-        //            if (item.ListIndexBox != null && item.ListIndexBox.Count > 0)
-        //            {
-        //                 scanIndex = FindScanBox(r, item.Name);
-
-        //                // nằm ngoài toàn bộ scan box → loại luôn
-        //                if (scanIndex < 0)
-        //                {
-        //                    r.IsOK = false;
-        //                    continue;
-        //                }
-        //            }
-        //            //--------------------------------
-        //            // size rule
-        //            //--------------------------------
-
-        //            if (item.IsHeight)
-        //                IsOK = r.rot._rect.Height >= item.ValueHeight;
-
-        //            if (item.IsWidth)
-        //                IsOK = r.rot._rect.Width >= item.ValueWidth;
-        //            if(item.ValueCounter)
-        //            //--------------------------------
-        //            // AREA rule
-        //            //--------------------------------
-
-        //            if (item.IsArea)
-        //            {
-        //                double areaCompare = r.Area;
-
-        //                if (item.ListIndexBox != null && item.ListIndexBox.Count > 0)
-        //                {
-        //                  //  int scanIndex = FindScanBox(r,item.Name);
-
-        //                    if (scanIndex >= 0 && scanAreaCache.ContainsKey(scanIndex))
-        //                        areaCompare = scanAreaCache[scanIndex];
-        //                }
-
-        //                if (areaCompare >= item.ValueArea * 100)
-        //                    IsOK = true;
-
-        //                //--------------------------------
-        //                // B_CHI counter fallback
-        //                //--------------------------------
-
-        //                if (item.Name == "B_CHI" && !IsOK && item.IsCounter)
-        //                {
-        //                    if (labelCounter.ContainsKey(r.Name) &&
-        //                        labelCounter[r.Name] >= item.ValueCounter)
-        //                        IsOK = true;
-        //                }
-        //            }
-
-        //            //--------------------------------
-        //            // Counter rule
-        //            //--------------------------------
-
-        //            if (item.Name != "B_CHI" && item.IsCounter)
-        //            {
-        //                if (labelCounter.ContainsKey(r.Name) &&
-        //                    labelCounter[r.Name] >= item.ValueCounter)
-        //                    IsOK = true;
-        //                else
-        //                    IsOK = false;
-        //            }
-        //            if (!item.IsHeight && !item.IsWidth && !item.IsArea && !item.IsX && !item.IsY && !item.IsXMax && !item.IsYMax && !item.IsDistance && !item.IsCounter)
-        //                IsOK = true;
-        //                //--------------------------------
-        //                // save result
-        //                //--------------------------------
-
-        //                r.IsOK = IsOK;
-
-        //            if (r.IsOK)
-        //                numOK++;
-        //        }
-
-        //        //--------------------------------
-        //        // RESULT COMPARE
-        //        //--------------------------------
-
         //        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
 
         //        switch (Compare)
@@ -2189,6 +1908,7 @@ namespace BeeCore
         //            new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
         //    }
         //}
+
         public bool IsColorAllObjLabel = false;
         [NonSerialized]
         public bool IsScan = false;
@@ -2210,7 +1930,7 @@ namespace BeeCore
                     if (listRotScan != null)
                     foreach (RectRotate rot in listRotScan)
                 {
-                    String cOK = "OK";
+                    String cOK ="("+ rot.NumInside+ ") OK";
                     if (Global.StatusDraw==StatusDraw.Scan)
                         {
                         cOK = "";
@@ -2246,7 +1966,7 @@ namespace BeeCore
                         //if (Global.IsRun)
                         {
                            
-                            if (!IsCropSingle)
+                            //if (!IsCropSingle)
                             {
                                 int index = labelItems.FindIndex(item => string.Equals(item.Name, rot.Name, StringComparison.OrdinalIgnoreCase));
 
@@ -2257,7 +1977,7 @@ namespace BeeCore
                                         clScan = Global.ParaShow.ColorOK;
                                     else
                                     {
-                                        cOK = "NG";
+                                        cOK = "(" + rot.NumInside + ") NG";
                                         clScan = Global.ParaShow.ColorNG;
                                     }
                                 }
@@ -2272,16 +1992,16 @@ namespace BeeCore
                                     }
                                 }
                             }
-                            else
-                            {
-                                if (rot.Name != "")
-                                    clScan = Global.ParaShow.ColorChoose;
-                                else
-                                {
-                                    clScan = Global.ParaShow.ColorNone;
-                                    //  continue;
-                                }
-                            }
+                            //else
+                            //{
+                            //    if (rot.Name != "")
+                            //        clScan = Global.ParaShow.ColorChoose;
+                            //    else
+                            //    {
+                            //        clScan = Global.ParaShow.ColorNone;
+                            //        //  continue;
+                            //    }
+                            //}
                         }
                     
                         //else
@@ -2313,10 +2033,7 @@ namespace BeeCore
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
                     int indexArea = i + 1;
-                    if(IsCropSingle)
-                        Draws.Box1Label(gc, rot._rect, indexArea + "." + rot.Name, font, brushText, clScan, Global.ParaShow.ThicknessLine);
-                    else
-
+                   
                         Draws.Box2Label(gc, rot, indexArea + "."+ rot.Name, cOK, font, clScan, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
 
 
@@ -2478,10 +2195,16 @@ namespace BeeCore
             }
             if (ResultItem == null)
                 return gc;
+            i = 0;
             foreach (ResultItem rs in ResultItem)
             {
-                if (rs.rot == null) continue;
+                if (rs.rot == null)
+                {
+                    i++;
+                    continue;
+                }
                 Color clShow = Global.ParaShow.ColorNone;
+
                 if(IsCropSingle)
                 {
                     if (rs.IsOK == true)
@@ -2600,6 +2323,15 @@ namespace BeeCore
                       
                         //  mat = new Matrix();
                         //mat = new Matrix();
+                        if(IsCropSingle)
+                        {
+                        
+                           
+                            mat.Translate(listRotScan[i]._PosCenter.X, listRotScan[i]._PosCenter.Y);
+                            mat.Translate(listRotScan[i]._rect.X, listRotScan[i]._rect.Y);
+                            mat.Rotate(listRotScan[i]._rectRotation);
+                            gc.Transform = mat;
+                        }    
                         mat.Translate(rs.rot._PosCenter.X, rs.rot._PosCenter.Y);
                         mat.Rotate(rs.rot._rectRotation);
                         gc.Transform = mat;
@@ -2652,6 +2384,13 @@ namespace BeeCore
                 }
                 else
                 {
+                    if (IsCropSingle)
+                    {
+                        mat.Translate(listRotScan[i]._PosCenter.X, listRotScan[i]._PosCenter.Y);
+                        mat.Translate(listRotScan[i]._rect.X, listRotScan[i]._rect.Y);
+                        mat.Rotate(listRotScan[i]._rectRotation);
+                        gc.Transform = mat;
+                    }
                     mat.Translate(rs.rot._PosCenter.X, rs.rot._PosCenter.Y);
                     mat.Rotate(rs.rot._rectRotation);
                     gc.Transform = mat;
@@ -2684,28 +2423,8 @@ namespace BeeCore
 
 
                 }
+                i++;
 
-                //else
-                //{
-
-
-                //    int index = i + 1;
-                //    Color clShow = Color.Red;
-                //    if (!listOK[i])
-                //        clShow = Color.LightGray;
-                //    else
-                //        clShow = cl;
-                //    //String content = "(" + listLabel[i] + ") \n" + Math.Round(listScore[i], 1) + "%";
-                //    //if (IsCheckArea)
-                //    //    content = rot._rect.Height + " px";
-                //    //  Font font = new Font("Arial", 30, FontStyle.Bold);
-                //    //  SizeF sz2 = gc.MeasureString(content, font);
-
-                //    //  Draws.Box1Label(gc, rot._rect, Math.Round(listScore[i], 1) + "%", Global.fontRS, brushText, Brushes.Transparent, true);
-                //    i++;
-                //    //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
-                //    gc.ResetTransform();
-                //}
 
             }
             //if (rectRotates != null)

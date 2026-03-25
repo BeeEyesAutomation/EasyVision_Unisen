@@ -90,7 +90,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(412, 272);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(412, 364);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // lay23
@@ -864,6 +864,7 @@
             this.btnClearAllMask.TextColor = System.Drawing.Color.Black;
             this.btnClearAllMask.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnClearAllMask.UseVisualStyleBackColor = false;
+            this.btnClearAllMask.Click += new System.EventHandler(this.btnClearAllMask_Click);
             // 
             // btnAddToList
             // 
@@ -1169,7 +1170,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.DoubleBuffered = true;
             this.Name = "EditRectRot";
-            this.Size = new System.Drawing.Size(412, 272);
+            this.Size = new System.Drawing.Size(412, 364);
             this.Load += new System.EventHandler(this.EditRectRot_Load);
             this.VisibleChanged += new System.EventHandler(this.EditRectRot_VisibleChanged);
             this.tableLayoutPanel1.ResumeLayout(false);

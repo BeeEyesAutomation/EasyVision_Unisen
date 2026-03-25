@@ -222,7 +222,8 @@ namespace BeeInterface
                 rot._PosCenter = pCenter;
                 if(obj < Propety.ListRotMask.Count())
                 Propety.ListRotMask[obj] = rot;
-               
+                
+
             }
 
         }
@@ -248,7 +249,7 @@ namespace BeeInterface
         }
 
         private void EditRectRot_RotateCurentChanged(RectRotate obj)
-        {
+        {if (obj == null) return;
            switch(obj.TypeCrop)
             {
                 case TypeCrop.Area:
@@ -1994,14 +1995,15 @@ namespace BeeInterface
                 Propety.IsScan = false;
                 Propety.NameChoose = "";
                 int i = 0;
+               
                 foreach (RectRotate rot in Propety.listRotScan)
                 {
-                    if (rot._dragAnchor == AnchorPoint.Center)
+                    if (rot._dragAnchor == AnchorPoint.Center&&rot.Name== arg2.Name)
                         Global.ListIndexChoose.Add(i);
                     i++;
                 }
                 List<int> list = Global.ListIndexChoose;
-
+              
                 arg2.ListIndexBox = list;
             }));
         }

@@ -449,6 +449,8 @@ namespace BeeInterface.Group
             rotCurrent = rotTemp.Clone();
             rotCurrent.TypeCrop = rotTemp.TypeCrop;
             rotCurrent.Name = rotTemp.Name;
+            Rot[index] = rotCurrent;
+            Global.rotCurrent = rotCurrent.Clone();
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
 
@@ -462,8 +464,20 @@ namespace BeeInterface.Group
             rotCurrent = new RectRotate(new RectangleF(-Global.Config.SizeCCD.Width / 2, -Global.Config.SizeCCD.Height / 2, Global.Config.SizeCCD.Width, Global.Config.SizeCCD.Height), new PointF(Global.Config.SizeCCD.Width / 2, Global.Config.SizeCCD.Height / 2), 0, AnchorPoint.None);
             rotCurrent.TypeCrop = rotTemp.TypeCrop;
             rotCurrent.Name = rotTemp.Name;
+            Rot[index] = rotCurrent;
+            Global.rotCurrent = rotCurrent.Clone();
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
+        }
+
+        private void btnClearAllMask_Click(object sender, EventArgs e)
+        {
+
+            if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ListRotMask.Count> 0)
+                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ListRotMask.Clear(); Global.StatusDraw = StatusDraw.None;
+            Global.StatusDraw = StatusDraw.None;
+            Global.StatusDraw = StatusDraw.Edit;
+          
         }
     }
 }
