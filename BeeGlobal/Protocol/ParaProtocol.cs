@@ -1,4 +1,5 @@
 ﻿
+using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Flann;
 using OpenCvSharp.ML;
@@ -254,7 +255,10 @@ namespace BeeGlobal
         public bool DtrEnable, RtsEnable;
         //hau
         public List<PLCResult> PLCResults = new List<PLCResult>();
+        [NonSerialized]
         private bool IsPressLive = false;
+        [NonSerialized]
+        private bool IsPressEstop = false;
         public String AddPO = "";
         public String AddCountProg = "";
         public int _ValueCountProg = 2;
@@ -352,6 +356,19 @@ namespace BeeGlobal
             int ix = AddressOutPut[(int)I_O_Output];
             if (ix == -1) return;
             PlcClient.WriteBit(AddWrite+ "." + AddressOutPut[(int)I_O_Output], Value);
+        }
+        public bool  ReadOutputBit(I_O_Output I_O_Output)
+        {
+
+            if (!IsConnected) return false;
+            //int ix = AddressOutPut[(int)I_O_Output];
+      
+            int index = ParaBits.FindIndex(a => a.Adddress == AddressOutPut[(int)I_O_Output] && a.TypeIO == TypeIO.Output);
+            if (index >= 0)
+            {
+               return Convert.ToBoolean( ParaBits[index].Value) ;
+            }
+            return false;
         }
         [NonSerialized]
         public PCI_Card PCI_Card1 = new PCI_Card();
@@ -482,11 +499,12 @@ namespace BeeGlobal
                             Global.IsPLCChangeProg = true;
                             Global.IsChangeProg = true;
 
-
-                            if (AddPO != null)
+                            if (Global.Config.IsEnPO)
+                                if (AddPO != null)
                                 if (AddPO != "")
                                     ValuePO = PlcClient.ReadStringAsciiKey(AddPO, 16).Trim();
-                            if (AddCountProg != null)
+                            if (Global.Config.IsEnChangeProg)
+                                if (AddCountProg != null)
                                 if (AddCountProg != "")
                                     ValueCountProg = PlcClient.ReadInt(AddCountProg);
                             if (AddQty != null)
@@ -566,11 +584,28 @@ namespace BeeGlobal
                                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready], !Global.IsLive);//Ready false
                                             await WriteOutPut();
                                         }
+                                        if (GetInPut(I_O_Input.EStop) == true && !Global.IsEstop)
+                                        {
+                                            //SetInput(I_O_Input.EStop, 1);
+                                           
+                                            Global.IsEstop = true;
+
+                                        }
+                                        else if (GetInPut(I_O_Input.EStop) == false && Global.IsEstop)
+                                        {
+                                            //SetInput(I_O_Input.EStop, 0);
+                                          
+
+                                            Global.IsEstop = false;
+                                        }
+                                        if (Global.Config.IsEnChangeProg)
                                         if (GetInPut(I_O_Input.ChangeProg) == true && !Global.IsChangeProg)
                                         {
-                                            if (AddCountProg != null)
-                                                if (AddCountProg != "")
-                                                    ValueCountProg = PlcClient.ReadInt(AddCountProg);
+                                                if (Global.Config.IsEnCountChart)
+                                                    if (AddCountProg != null)
+                                                        if (AddCountProg != "")
+                                                            ValueCountProg = PlcClient.ReadInt(AddCountProg);
+
                                             if (AddProg != null)
                                                 if (AddProg != "")
                                                     NoProg = PlcClient.ReadInt(AddProg);
@@ -761,7 +796,8 @@ namespace BeeGlobal
 
                                                     try
                                                     {
-                                                        if (AddPO != null)
+                                                        if (Global.Config.EnterPO)
+                                                            if (AddPO != null)
                                                             if (AddPO != "")
                                                                 ValuePO = PlcClient.ReadStringAsciiKey(AddPO, 16).Trim();
                                                         if (AddQty != null)
@@ -1087,6 +1123,8 @@ namespace BeeGlobal
                         {
                             if (_ioLock==null) _ioLock = new SemaphoreSlim(1, 1);
                             await _ioLock.WaitAsync();
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "WriteIO", _IO_Processing.ToString()));
+
                             await WriteIO(value);
                         }
                         catch (Exception ex)
@@ -1131,7 +1169,7 @@ namespace BeeGlobal
                 return false;
             }
             Global.StatusIO = StatusIO.Writing;
-            switch (_IO_Processing)
+             switch (_IO_Processing)
             {
                 case IO_Processing.SendValue:
                     foreach(PLCResult pLCResult in PLCResults)
@@ -1643,6 +1681,7 @@ namespace BeeGlobal
                     await WriteOutPut();
                     break;
                 case IO_Processing.Reset:
+
                     if (TypeControler == TypeControler.PCI)
                         break;
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready

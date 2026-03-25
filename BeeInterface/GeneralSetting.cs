@@ -32,8 +32,10 @@ namespace BeeInterface
         {
             if (btnEnQuickST.IsCLick) btnEnQuickST.Text = "ON";
             else btnEnQuickST.Text = "OFF";
+           btnEnChangeProg.IsCLick = Global.Config.IsEnChangeProg ;
             btnEnQuickST.IsCLick= Global.Config.IsQuickST ;
             btnOnManual.IsCLick = Global.Config.IsManual;
+            btnEnNumFollowChart.IsCLick=Global.Config.IsEnCountChart ;
             btnOffManual.IsCLick = !Global.Config.IsManual;
             btnSaveAllPara.IsCLick = Global.Config.IsSaveAllPara;
             if (btnSaveAllPara.IsCLick) btnSaveAllPara.Text = "ON";
@@ -741,6 +743,17 @@ namespace BeeInterface
             G.BtnHeaderBar.btnQuickSetting.Visible = Global.Config.IsQuickST;
             if (btnEnQuickST.IsCLick) btnEnQuickST.Text = "ON";
             else btnEnQuickST.Text = "OFF";
+        }
+
+        private void btnEnNumFollowChart_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsEnCountChart = btnEnNumFollowChart.IsCLick;
+          
+        }
+
+        private void rjButton8_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsEnChangeProg=btnEnChangeProg.IsCLick;
         }
     }
 }

@@ -50,6 +50,8 @@ namespace BeeGlobal
 
             return new PointF(xC + w * 0.5f, yC + h * 0.5f);
         }
+        public TypeCrop TypeCrop { get; set; }
+
 
         public PointF LocalToWorld(PointF pLocalTL)
         {
@@ -69,6 +71,7 @@ namespace BeeGlobal
             float yW = xC * s + yC * c + _PosCenter.Y;
             return new PointF(xW, yW);
         }
+        
 
         /// <summary>
         /// Center world của rect src -> local(top-left) của rect dst
@@ -131,7 +134,7 @@ namespace BeeGlobal
         public bool IsOK = false;
         public float Score = 0;
         public float Value = 0;
-        public String Name = "";
+        public String Name  { get; set; }
         public RectangleF _rect { get; set; }                 // ALWAYS: (-w/2,-h/2,w,h)
         public PointF _PosCenter { get; set; }                // world center
         private float _angle = 0f;
@@ -163,7 +166,8 @@ namespace BeeGlobal
         }
 
         protected RectRotate(RectRotate clone)
-        {
+        {   Name=clone.Name;
+            TypeCrop = clone.TypeCrop;
             _rect = clone._rect;
             _PosCenter = clone._PosCenter;
             _rectRotation = clone._rectRotation;

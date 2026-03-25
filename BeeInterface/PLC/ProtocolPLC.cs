@@ -500,7 +500,11 @@ namespace BeeInterface
                 cbParity.Text = Global.Comunication.Protocol.Parity.ToString();
                 cbStopBits.Text = Global.Comunication.Protocol.StopBits.ToString();
                 cbDataBits.Text = Global.Comunication.Protocol.DataBit.ToString();
-
+                pPO.Visible = Global.Config.IsEnPO;
+                pProcess.Visible = Global.Config.IsShowProgressingPLC;
+                pProgNo.Visible = Global.Config.IsEnChangeProg;
+                pCountChart.Visible = Global.Config.IsEnCountChart;
+                
                 btnIO.IsCLick = Global.Comunication.Protocol.TypeControler == TypeControler.IO ? true : false;
                 btnIsPLC.IsCLick = Global.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
                 //cbO0.Text = nameOut[0];
@@ -577,7 +581,7 @@ namespace BeeInterface
                     btnMitsu2.IsCLick = true;
                 if (Global.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.ModbusRtu)
                     btnRtu.IsCLick = true;
-
+                btnMisu3.IsCLick= Global.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Mitsubishi3 ? true : false;
                 txtIP.Text = Global.Comunication.Protocol.sIP;
                 txtPort.Text = Global.Comunication.Protocol.PortIP.ToString();
               
@@ -1315,6 +1319,7 @@ namespace BeeInterface
         {
             if (Global.Comunication.Protocol.AddProg != null)
                 if (Global.Comunication.Protocol.AddProg != "")
+                    if(Global.Comunication.Protocol.IsConnected)
                     Global.Comunication.Protocol.NoProg = Global.Comunication.Protocol.PlcClient.ReadInt(Global.Comunication.Protocol.AddProg);
             txtProg.Text = "No" + Global.Comunication.Protocol.NoProg;
         }

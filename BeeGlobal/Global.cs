@@ -1,4 +1,5 @@
-﻿using OpenCvSharp;
+﻿
+using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -14,8 +15,52 @@ namespace BeeGlobal
 {
     public class Global
     {
+        public static int IndexRotChoose = -1;
+        public static ColorGp ColorGp = ColorGp.HSV;
+        public static Color _ColorSample;
+        public static event Action<Color> ColorSampleChange;
+        public static Color ColorSample
+        {
+            get => _ColorSample;
+            set
+            {
+                if (_ColorSample != value)
+                {
+                    _ColorSample = value;
+                    ColorSampleChange?.Invoke(_ColorSample); // Gọi event
+                }
+            }
+        }
+        public static bool _IsSetColor = false;
+        public static event Action<bool> SetColorChange;
+        public static bool IsSetColor
+        {
+            get => _IsSetColor;
+            set
+            {
+                if (_IsSetColor != value)
+                {
+                    _IsSetColor = value;
+                    SetColorChange?.Invoke(_IsSetColor); // Gọi event
+                }
+            }
+        }
+   
         public static bool IsReConnectCCD;
-
+        public static bool IsGetColor = false;
+        //public static bool IsGetColor
+        //{
+        //    get => _IsGetColor;
+        //    set
+        //    {
+        //        if (_IsGetColor != value)
+        //        {
+        //            _IsGetColor = value;
+        //            GetColor?.Invoke(_IsGetColor); // Gọi event
+        //        }
+        //    }
+        //}
+        public static event Action<bool> GetColor;
         public static bool IsShutDown;
         public static List<int> ListIndexChoose=new List<int>();    
         public static dynamic Main=null;
@@ -165,6 +210,20 @@ namespace BeeGlobal
                 }
             }
         }
+        public static bool _IsEstop = false;
+        public static event Action<bool>  EStopChanged;
+        public static bool IsEstop
+        {
+            get => _IsEstop;
+            set
+            {
+                if (_IsEstop != value)
+                {
+                    _IsEstop = value;
+                    EStopChanged?.Invoke(_IsEstop); // Gọi event
+                }
+            }
+        }
         public static bool _IsChangeProg = false;
         public static event Action<bool> ChangeProg;
         public static bool IsIntialProgram = false;
@@ -272,12 +331,12 @@ namespace BeeGlobal
         public static float PerScaleWidth, PerScaleHeight;
         public static bool Initialed = false;
        
-        public static float Scale = 1, AngleOrigin;
+        public static float Scale = 1;
         public static Color ColorRead = Color.SkyBlue;
         public static Color ColorProssing = Color.Blue;
         public static Color ColorTrigger = Color.LightBlue;
         public static Color ColorNone = Color.Gray;
-        public static TypeCrop _TypeCrop = TypeCrop.Crop;
+       public static TypeCrop _TypeCrop = TypeCrop.Crop;
         public static event Action<TypeCrop> TypeCropChanged;
         public static bool IsIntialPython = false;
         public static TypeCrop TypeCrop
@@ -292,7 +351,7 @@ namespace BeeGlobal
                 }
             }
         }
-    
+
         public static string _pathSqlMaster;
         public static SqlConnection cnn = new SqlConnection();
         public static ImgShow ImgShow = ImgShow.Result;
@@ -309,6 +368,21 @@ namespace BeeGlobal
         public static RectRotate rotAreaAdj;
       
         public static RectRotate rotCurrentAdj;
+        public static RectRotate _rotCurrent { get; set; }
+        public static event Action<RectRotate> RotateCurentChanged;
+        public static RectRotate rotCurrent
+        {
+            get => _rotCurrent;
+            set
+            {
+                if (_rotCurrent != value)
+                {
+                    _rotCurrent = value;
+                    RotateCurentChanged?.Invoke(_rotCurrent); // Gọi event
+                }
+            }
+        }
+     
         public static Rectangle ClientRectangleMain;
      
         public static OpenCvSharp.Point pOrigin = new OpenCvSharp.Point();

@@ -118,7 +118,7 @@ namespace BeeInterface
                     var tools = BeeCore.Common.PropetyTools[Global.IndexProgChoose];
                     foreach (var tool in tools)
                         if (tool.UsedTool != UsedTool.NotUsed)
-                            tool.Propety.DrawResult(g);
+                            tool.Propety2.DrawResult(g);
                 }
 
                 // 6) Swap: cập nhật bmResult (clone một lần, ảnh cũ dispose) + hiển thị lên imgView

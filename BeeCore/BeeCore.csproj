@@ -257,6 +257,7 @@
   <ItemGroup>
     <Compile Include="Actions.cs" />
     <Compile Include="AddTool.cs" />
+    <Compile Include="Algorithm\Colors.cs" />
     <Compile Include="Algorithm\DetectIntersect.cs" />
     <Compile Include="Algorithm\EdgePoints.cs" />
     <Compile Include="Algorithm\FilletCornerMeasure.cs" />

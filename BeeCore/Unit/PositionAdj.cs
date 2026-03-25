@@ -48,15 +48,44 @@ namespace BeeCore
                     Pattern = new Pattern();
 
                 }
-                rotMask = null;
                 if (rotArea == null) rotArea = new RectRotate();
                 if (rotCrop == null) rotCrop = new RectRotate();
+                if (rotMask == null) rotMask = new RectRotate();
+               
+                rotCrop.Name = "Area Temp";
+                rotCrop.TypeCrop = TypeCrop.Crop;
+
+
+                rotMask.Name = "Area Mask";
+                rotMask.TypeCrop = TypeCrop.Mask;
+
+                rotArea.Name = "Area Check";
+                rotArea.TypeCrop = TypeCrop.Area;
+
+              
                 if (bmRaw != null)
                 {
                     matTemp = bmRaw.ToMat();
                     LearnPattern(matTemp, true);
                 }
-               
+               //if(rotOriginAdj != null)
+               // {
+               //     Matrix mat = new Matrix();
+               //     System.Drawing.Point pZero = new System.Drawing.Point(0, 0);
+               //     PointF[] pMatrix = { pZero };
+               //     mat.Translate(rotArea._PosCenter.X, rotArea._PosCenter.Y);
+               //     mat.Rotate(rotArea._rectRotation);
+               //     mat.Translate(rotArea._rect.X, rotArea._rect.Y);
+               //     mat.Translate(rotOriginAdj._PosCenter.X, rotOriginAdj._PosCenter.Y);
+               //     mat.Rotate(rotOriginAdj._rectRotation);
+               //     mat.TransformPoints(pMatrix);
+               //     int x = (int)pMatrix[0].X;// (int)rotArea._PosCenter.X -(int) rotArea ._rect.Width/2 + (int)rot._PosCenter.X;
+               //     int y = (int)pMatrix[0].Y; ;// (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)rot._PosCenter.Y;
+                  
+               //     //Global.AngleOrigin = rotOriginAdj._rectRotation;
+               //     //Global.pOrigin = new OpenCvSharp.Point(x, y);
+                  
+               // }    
                 DetectIntersect = new DetectIntersect();
                 if (Common.PropetyTools[IndexThread][Index].Score == 0)
                     Common.PropetyTools[IndexThread][Index].Score = 80;
@@ -752,20 +781,21 @@ namespace BeeCore
                 mat.TransformPoints(pMatrix);
                 int x = (int)pMatrix[0].X;// (int)rotArea._PosCenter.X -(int) rotArea ._rect.Width/2 + (int)rot._PosCenter.X;
                 int y = (int)pMatrix[0].Y; ;// (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)rot._PosCenter.Y;
-                Global.AngleOrigin = rectRotates[0]._rectRotation;
-                Global.pOrigin = new OpenCvSharp.Point(x, y);
-                if (Global.Config.IsWaitCenter&&Global.Config.IsAutoTrigger&&Global.IsRun)
-                {
-                    if (rotCrop != null)
-                        if (!rotCrop.ContainsPoint(new PointF( Global.pOrigin.X,Global.pOrigin.Y)))
-                        {
-                            results = Results.NG;
-                            Common.PropetyTools[IndexThread][Index].Results = results;
+             //   rotOriginAdj = rectRotates[0].Clone();
+                //Global.AngleOrigin = rectRotates[0]._rectRotation;
+                //Global.pOrigin = new OpenCvSharp.Point(x, y);
+                //if (Global.Config.IsWaitCenter&&Global.Config.IsAutoTrigger&&Global.IsRun)
+                //{
+                //    if (rotCrop != null)
+                //        if (!rotCrop.ContainsPoint(new PointF( Global.pOrigin.X,Global.pOrigin.Y)))
+                //        {
+                //            results = Results.NG;
+                //            Common.PropetyTools[IndexThread][Index].Results = results;
 
-                            return;
-                        }
+                //            return;
+                //        }
 
-                }
+                //}
 
             }
             if (MethodSample == MethodSample.Corner)

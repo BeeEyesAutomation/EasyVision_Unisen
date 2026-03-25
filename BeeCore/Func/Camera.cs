@@ -330,14 +330,15 @@ namespace BeeCore
 
                         if (Global.Config.IsAutoTrigger && Global.StatusProcessing != StatusProcessing.Drawing)
                         {
-                            tools[Global.IndexToolAuto].Propety.DrawResult(g);
+                            tools[Global.IndexToolAuto].Propety2.DrawResult(g);
                         }
                         else
                         {
                             foreach (var tool in tools)
                             {
+                                if (tool == null) continue;
                                 if (tool.UsedTool != UsedTool.NotUsed)
-                                    tool.Propety.DrawResult(g);
+                                    tool.Propety2.DrawResult(g);
                             }
                         }
                     }
@@ -402,6 +403,11 @@ namespace BeeCore
                     {
                         _displayMat = working;
                     }
+                }
+                catch(Exception ex)
+                {
+                    Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "DrawRS", ex.Message));
+                                   
                 }
                 finally
                 {

@@ -498,12 +498,22 @@ namespace BeeCore
 
 
 
-            
-            rotCrop = null;
-            
-                if (rotArea == null) rotArea = new RectRotate();
-                 //if (rotMask == null) rotMask = new RectRotate();
-                 Common.PropetyTools[IndexThread][Index].StepValue = 1;
+
+            if (rotArea == null) rotArea = new RectRotate();
+            if (rotCrop == null) rotCrop = new RectRotate();
+            if (rotMask == null) rotMask = new RectRotate();
+
+            rotCrop.Name = "Area Temp";
+            rotCrop.TypeCrop = TypeCrop.Crop;
+
+
+            rotMask.Name = "Area Mask";
+            rotMask.TypeCrop = TypeCrop.Mask;
+
+            rotArea.Name = "Area Check";
+            rotArea.TypeCrop = TypeCrop.Area;
+            //if (rotMask == null) rotMask = new RectRotate();
+            Common.PropetyTools[IndexThread][Index].StepValue = 1;
                 Common.PropetyTools[IndexThread][Index].MinValue = 0;
                 Common.PropetyTools[IndexThread][Index].MaxValue = 100;
             if (sAllow == "")

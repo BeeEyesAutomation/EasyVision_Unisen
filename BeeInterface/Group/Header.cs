@@ -352,6 +352,15 @@ namespace BeeInterface
         private SaveProgressDialog LoadDiaLog=new  SaveProgressDialog();
        public async void  ChangeProgram(String program,bool IsBypass=false)
         {
+            if (!Global.Config.IsEnCountChart)
+            {
+                if (Global.Config.IsMultiProg)
+                    Global.NumProgFromPLC = Global.Config.NumTrig;
+                else
+                    Global.NumProgFromPLC = 1;
+
+            }    
+               
 
             if (IsLoad)
             {

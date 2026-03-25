@@ -1,22 +1,22 @@
 ﻿
+using BeeCore.Funtion;
+using BeeCpp;
+using BeeGlobal;
 using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using Python.Runtime;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using System.ComponentModel;
-using BeeCore.Funtion;
-using OpenCvSharp.Extensions;
-using Python.Runtime;
 using Point = OpenCvSharp.Point;
-using System.Linq;
 using Size = OpenCvSharp.Size;
-using System.IO;
-using BeeGlobal;
 
 namespace BeeCore
 {
@@ -72,7 +72,8 @@ namespace BeeCore
         public static  void InitialTranslate()
         {
         }
-
+        public static HSVCli HSVSample;
+        public static RGBCli RGBSample;
         public static RectangleF GetBoundingBox(RectRotate rr)
         {
             float w = rr._rect.Width;
@@ -269,9 +270,11 @@ namespace BeeCore
                                     dynamic cls = mod.GetAttr("ObjectDetector"); // class
                                     G.objYolo = cls.Invoke();
                                     Global.IsLearning = true;
-                                }
+                                File.WriteAllText("OK.txt", "");
+                            }
                                 catch (Exception ex)
                                 {
+                                File.WriteAllText("ErrLearning.txt" ,ex.Message);
                                     Global.IsLearning = false;
                                 }
                           

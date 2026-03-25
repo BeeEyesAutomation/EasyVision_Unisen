@@ -2,6 +2,7 @@
 using BeeCore.Funtion;
 using BeeGlobal;
 using BeeInterface;
+using BeeInterface.Group;
 using Cyotek.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp;
@@ -40,6 +41,12 @@ namespace BeeInterface
 
         public void LoadPara()
         {
+            EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotMask };
+            EditRectRot1.Refresh();
+            EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
+            EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
+
+            this.VisibleChanged += ToolVisualMatch_VisibleChanged;
             imgTemp.Cursor = Cursors.Hand;
             imgTemp.AllowClickZoom = true;
             imgTemp.AllowDoubleClick = true;
@@ -80,7 +87,7 @@ namespace BeeInterface
           
          
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
-            btnArea.IsCLick = true;
+          
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
         
@@ -89,12 +96,9 @@ namespace BeeInterface
             btnSlowCalib.IsCLick = Propety.ModeCalibVisualMatch == ModeCalibVisualMatch.Slow ? true : false;
             btnNormalCalib.IsCLick = Propety.ModeCalibVisualMatch==ModeCalibVisualMatch.Normal ? true : false;
             btnFastCalib.IsCLick = Propety.ModeCalibVisualMatch==ModeCalibVisualMatch.Fast ? true : false;
-			btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotArea.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotArea.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick = !Propety.rotArea.IsWhite;
+
+            //btnWhite.IsCLick = Propety.rotArea.IsWhite;
+            //btnBlack.IsCLick = !Propety.rotArea.IsWhite;
             AdjAspect.Value= Propety.Aspect;
             btnWhite.IsCLick = !Propety.IsBlack;
             btnBlack.IsCLick= Propety.IsBlack;
@@ -104,53 +108,30 @@ namespace BeeInterface
             btnAutoBinary.IsCLick=Propety.IsAutoThreshBinary;
         }
 
-        private void btnCropRect_Click(object sender, EventArgs e)
+        private void ToolVisualMatch_VisibleChanged(object sender, EventArgs e)
         {
-            Global.StatusDraw = StatusDraw.Edit;
-
-            Global.TypeCrop = TypeCrop.Crop;
-            Propety.TypeCrop = Global.TypeCrop;
-            btnElip.IsCLick = Propety.rotCrop.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotCrop.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotCrop.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotCrop.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotCrop.IsWhite;
-            btnBlack.IsCLick = !Propety.rotCrop.IsWhite;
-
-        }
-
-        private void btnCropArea_Click(object sender, EventArgs e)
-        {
-            Global.StatusDraw = StatusDraw.Edit;
-           // lay2Mask.Visible = false;
-            Global.TypeCrop = TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
-
-            btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotArea.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotArea.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick = !Propety.rotArea.IsWhite;
-        }
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-            Global.StatusDraw = StatusDraw.Edit;
-        //  lay2Mask.Visible = true;
-            Global.TypeCrop = TypeCrop.Mask;
-            Propety.TypeCrop = Global.TypeCrop;
-            if (Propety.rotMask == null)
+            if (!this.Visible)
             {
-                Propety.rotMask = DataTool.NewRotRect(TypeCrop.Mask); ;
+
+                EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             }
-            btnElip.IsCLick = Propety.rotMask.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotMask.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotMask.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotMask.Shape == ShapeType.Polygon ? true : false;
-          
-
-
         }
+
+        private void EditRectRot1_RotateCurentChanged(RectRotate obj)
+        {
+            switch (obj.TypeCrop)
+            {
+                case TypeCrop.Area:
+                    Propety.rotArea = obj; break;
+                case TypeCrop.Crop:
+                    Propety.rotCrop = obj; break;
+                case TypeCrop.Mask:
+                    Propety.rotMask = obj; break;
+
+            }
+        }
+
+     
         private void btnNone_Click(object sender, EventArgs e)
         {
             switch (Global.TypeCrop)
@@ -204,7 +185,7 @@ namespace BeeInterface
         private void NewShape(ShapeType newShape)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
+            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2;
             RectRotate rr = null;
             if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
             else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;
@@ -610,17 +591,11 @@ namespace BeeInterface
 			Propety.ModeCalibVisualMatch = ModeCalibVisualMatch.Fast;
 		}
 
-        private void btn1_Click(object sender, EventArgs e)
-        {
-            lay1.Visible = !btn1.IsCLick;
-        }
+       
 
         private void btn2_Click(object sender, EventArgs e)
         {
-            lay21.Visible = !btn2.IsCLick;
-            lay22.Visible = !btn2.IsCLick;
-            lay23.Visible = !btn2.IsCLick;
-            lay24.Visible = !btn2.IsCLick;
+          EditRectRot1.Visible = !btn2.IsCLick;
             
         }
 

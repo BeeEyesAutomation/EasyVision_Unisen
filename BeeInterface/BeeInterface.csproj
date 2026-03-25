@@ -32,6 +32,26 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.2.0.0-beta.2\lib\net472\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
@@ -258,6 +278,12 @@
     </Compile>
     <Compile Include="Group\EditProg.Designer.cs">
       <DependentUpon>EditProg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Group\EditRectRot.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Group\EditRectRot.Designer.cs">
+      <DependentUpon>EditRectRot.cs</DependentUpon>
     </Compile>
     <Compile Include="Group\Header.cs">
       <SubType>UserControl</SubType>
@@ -602,6 +628,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Group\EditProg.resx">
       <DependentUpon>EditProg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Group\EditRectRot.resx">
+      <DependentUpon>EditRectRot.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Group\Header.resx">
       <DependentUpon>Header.cs</DependentUpon>

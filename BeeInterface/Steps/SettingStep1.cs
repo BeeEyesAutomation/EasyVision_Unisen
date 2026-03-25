@@ -660,26 +660,34 @@ namespace BeeInterface
             AdjOffSetY.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Step;
             AdjOffSetY.IsInital = true;
             AdjOffSetY.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Value;
+            if(BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB!=null)
+            {
+                AdjR_WB.IsInital = true;
+                AdjR_WB.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Min;
+                AdjR_WB.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Max;
+                AdjR_WB.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Step;
+                AdjR_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Value;
+            }
 
-            AdjR_WB.IsInital = true;
-            AdjR_WB.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Min;
-            AdjR_WB.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Max;
-            AdjR_WB.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Step;
-            AdjR_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.R_WB.Value;
-
-            AdjG_WB.IsInital = true;
-            AdjG_WB.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Min;
-            AdjG_WB.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Max;
-            AdjG_WB.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Step;
-            AdjG_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Value;
-
-            AdjB_WB.IsInital = true;
-            AdjB_WB.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Min;
-            AdjB_WB.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Max;
-            AdjB_WB.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Step;
-            AdjB_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Value;
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB != null)
+            {
+                AdjG_WB.IsInital = true;
+                AdjG_WB.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Min;
+                AdjG_WB.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Max;
+                AdjG_WB.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Step;
+                AdjG_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.G_WB.Value;
+            }
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB != null)
+            {
+                AdjB_WB.IsInital = true;
+                AdjB_WB.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Min;
+                AdjB_WB.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Max;
+                AdjB_WB.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Step;
+                AdjB_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Value;
+            }
             btnCenterX.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterX);
             btnCenterY.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterY);
+
             if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsWB)
             {
                 btn11.Visible = false;
@@ -1132,6 +1140,61 @@ namespace BeeInterface
             await BeeCore.Common.listCamera[Global.IndexCCCD].SetB_WB();
             AdjB_WB.IsInital = true;
             AdjB_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Value;
+        }
+
+        private void btnOutput1_Click(object sender, EventArgs e)
+        {
+           
+            if (Global.Comunication.Protocol.IsConnected)
+            {
+                btnOutput1.IsCLick = Global.Comunication.Protocol.ReadOutputBit(I_O_Output.Logic1);
+
+                Global.Comunication.Protocol.WriteOutputBit(I_O_Output.Logic1, btnOutput1.IsCLick);
+            }
+            else
+            {
+                btnOutput1.IsCLick = !btnOutput1.IsCLick;
+            }
+        }
+
+        private void btnOutput2_Click(object sender, EventArgs e)
+        {
+            if (Global.Comunication.Protocol.IsConnected)
+            {
+                btnOutput2.IsCLick = Global.Comunication.Protocol.ReadOutputBit(I_O_Output.Logic2);
+                Global.Comunication.Protocol.WriteOutputBit(I_O_Output.Logic2, btnOutput2.IsCLick);
+            }
+            else
+            {
+                btnOutput2.IsCLick = !btnOutput2.IsCLick;
+            }
+
+        }
+
+        private void btnOutput3_Click(object sender, EventArgs e)
+        {
+            if (Global.Comunication.Protocol.IsConnected)
+            {
+                btnOutput3.IsCLick = Global.Comunication.Protocol.ReadOutputBit(I_O_Output.Logic3);
+                Global.Comunication.Protocol.WriteOutputBit(I_O_Output.Logic3, btnOutput3.IsCLick);
+            }
+            else
+            {
+                btnOutput3.IsCLick = !btnOutput3.IsCLick;
+            }
+        }
+
+        private void btnOutput4_Click(object sender, EventArgs e)
+        {
+            if (Global.Comunication.Protocol.IsConnected)
+            {
+                btnOutput4.IsCLick = Global.Comunication.Protocol.ReadOutputBit(I_O_Output.Logic4);
+                Global.Comunication.Protocol.WriteOutputBit(I_O_Output.Logic1, btnOutput4.IsCLick);
+            }
+            else
+            {
+                btnOutput4.IsCLick = !btnOutput4.IsCLick;
+            }
         }
     }
 }

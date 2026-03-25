@@ -107,6 +107,7 @@ namespace BeeCore
         public int IndexCamera = 0;
         public String Name = "";
         public dynamic Propety;
+        public dynamic Propety2 { get; set; }
         public TypeTool TypeTool;
         public bool[] IndexLogics = new bool[6];
         public UsedTool UsedTool=UsedTool.NotUsed;
@@ -239,12 +240,12 @@ namespace BeeCore
                 if (UsedTool == UsedTool.NotUsed && Global.IsRun)
                     return;
                 if (!Global.IsRun)
-                    Propety.rotAreaAdjustment = Propety.rotArea;
-                if (Propety.rotAreaAdjustment == null)
-                    Propety.rotAreaAdjustment = Propety.rotArea;
+                    Propety2.rotAreaAdjustment = Propety2.rotArea;
+                if (Propety2.rotAreaAdjustment == null)
+                    Propety2.rotAreaAdjustment = Propety2.rotArea;
                 if (!Global.IsRun)
-                    Propety.rotMaskAdjustment = Propety.rotMask;
-                Propety.DoWork(Propety.rotAreaAdjustment, Propety.rotMaskAdjustment);
+                    Propety2.rotMaskAdjustment = Propety2.rotMask;
+                Propety2.DoWork(Propety2.rotAreaAdjustment, Propety2.rotMaskAdjustment);
             }
             catch (Exception ex)
             {
@@ -262,7 +263,7 @@ namespace BeeCore
                 return;
             }
             else
-                Propety.Complete();
+                Propety2.Complete();
             timer.Stop();
             CycleTime = (int)timer.Elapsed.TotalMilliseconds;
             switch (UsedTool)
@@ -289,7 +290,7 @@ namespace BeeCore
         {
             this.Name = Name;
             this.TypeTool = TypeTool;
-            this.Propety = Propety;
+            this.Propety2 = Propety;
             //worker = new BackgroundWorker();
             //worker.DoWork += (sender, e) =>
             //{
@@ -314,7 +315,7 @@ namespace BeeCore
 
         public object Clone()
         {
-            PropetyTool propety = new PropetyTool(this.Propety.Clone(), this.TypeTool, this.Name);
+            PropetyTool propety = new PropetyTool(this.Propety2.Clone(), this.TypeTool, this.Name);
             return propety;
         }
     }

@@ -1,5 +1,7 @@
 ﻿using BeeCore;
+using BeeCpp;
 using BeeGlobal;
+using BeeInterface.Group;
 using Cyotek.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp;
@@ -25,6 +27,7 @@ using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Label = System.Windows.Forms.Label;
 using Point = System.Drawing.Point;
+using ShapeType = BeeGlobal.ShapeType;
 using Size = System.Drawing.Size;
 
 namespace BeeInterface
@@ -52,13 +55,24 @@ namespace BeeInterface
         bool IsIni = false;
       
         public StepSetModel StepEdit = StepSetModel.SetModel;
-      
+
+   
         public void LoadPara()
         {
             try
             {
-                Propety = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety;
 
+                EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea , Propety.rotCrop, Propety.rotMask, Propety.rotLimit };
+                EditRectRot1.RotateCurentChanged -= EditRectRot_RotateCurentChanged;
+                EditRectRot1.RotateCurentChanged += EditRectRot_RotateCurentChanged;
+                EditRectRot1.ChooseEditBegin += EditRectRot1_ChooseEditBegin;
+                EditRectRot1.ChooseEditEnd += EditRectRot1_ChooseEditEnd;
+                this.VisibleChanged += ToolYolo_VisibleChanged;
+                EditRectRot1.Refresh();
+                Global.SetColorChange -= Global_SetColorChange;
+                Global.SetColorChange += Global_SetColorChange;
+                btnNoCropMask.IsCLick = !Propety.IsCropSingle;
+                btnCropMask.IsCLick = Propety.IsCropSingle;
                 if (Propety.listModels == null) Propety.listModels = new List<string>();
                 Propety.listModels = Propety.listModels.Distinct().ToList();
                 Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
@@ -68,6 +82,7 @@ namespace BeeInterface
                 laySetLine3.Visible = Propety.IsLine;
                 AdjThreshLine.Value = Propety.ThresholdLine;
                 AdjTolerance.Value = Propety.ToleranceLine;
+                trackNumObject.Value = Propety.NumObject;
                 btnTypeYolo.IsCLick = Propety.TypeYolo == TypeYolo.YOLO ?true:false ;
                 btnTypeOnnx.IsCLick = Propety.TypeYolo == TypeYolo.Onnx ? true : false;
                 btnTypeRCNN.IsCLick = Propety.TypeYolo == TypeYolo.RCNN ? true : false;
@@ -139,7 +154,7 @@ namespace BeeInterface
                 //   txtLabel.Text = Propety.PathLabels; ;
                 RefreshLabels();
 
-                Global.TypeCrop = TypeCrop.Area;
+              //  Global.TypeCrop = TypeCrop.Area;
               //  CustomGui.RoundRg(tabLbs, 10, Corner.Bottom);
                 //picTemp1.Image = Propety.matTemp;
                 //picTemp2.Image = Propety.matTemp2;
@@ -156,7 +171,7 @@ namespace BeeInterface
                 AdjOverLap.Value = Propety.ThreshOverlap;
                 btnOnline.IsCLick = Propety.IsLine;
                 btnOffLine.IsCLick=!Propety.IsLine;
-                btnCrop.Enabled=Propety.IsLine;
+                //btnCrop.Enabled=Propety.IsLine;
                 switch (Propety.Compare)
                 {
                     case Compares.Equal:
@@ -196,6 +211,82 @@ namespace BeeInterface
             //Propety.TypeMode = Propety.TypeMode;
 
         }
+
+        private void EditRectRot1_ChooseEditEnd(int obj)
+        {
+            if (Propety.rotLimit != null)
+            {
+             
+                RectRotate rot = Propety.rotLimit.Clone();
+                PointF pCenter = Propety.rotArea.WorldToLocal(rot._PosCenter);
+                rot._PosCenter = pCenter;
+                if(obj < Propety.ListRotMask.Count())
+                Propety.ListRotMask[obj] = rot;
+               
+            }
+
+        }
+
+        private void EditRectRot1_ChooseEditBegin(bool obj)
+        {
+            Propety.ModeCheck = ModeCheck.Single;
+            Propety.listRotScan = Propety.ListRotMask;
+            foreach (RectRotate rectRotate in Propety.listRotScan)
+                rectRotate._dragAnchor = AnchorPoint.None;
+        }
+
+        private void ToolYolo_VisibleChanged(object sender, EventArgs e)
+        {
+            if (!this.Visible)
+            {
+                EditRectRot1.ChooseEditBegin -= EditRectRot1_ChooseEditBegin;
+                EditRectRot1.ChooseEditEnd -= EditRectRot1_ChooseEditEnd;
+                EditRectRot1.RotateCurentChanged -= EditRectRot_RotateCurentChanged;
+            } 
+                
+           
+        }
+
+        private void EditRectRot_RotateCurentChanged(RectRotate obj)
+        {
+           switch(obj.TypeCrop)
+            {
+                case TypeCrop.Area:
+                    Propety.rotArea = obj; break;
+                case TypeCrop.Crop:
+                    Propety.rotCrop = obj; break;
+                case TypeCrop.Mask:
+                    Propety.rotMask = obj; break;
+                case TypeCrop.Limit:
+                    Propety.rotLimit = obj; break;
+            }    
+        }
+
+        private void Global_SetColorChange(bool obj)
+        {   try
+            {
+              
+                Invoke(new Action(() =>
+                {
+                    if (Global.ColorSample == null)
+                        return;
+                    if (BeeCore.Common.HSVSample == null)
+                        return;
+
+                    HSVCli = BeeCore.Common.HSVSample;
+                    //  tableLayoutModel.BackColor = Global.ColorSample;
+                    _currentColorItem.SampleColor = Global.ColorSample;
+                    _currentColorItem.HSV = new BeeCore.Core.HSV(BeeCore.Common.HSVSample.H, BeeCore.Common.HSVSample.S, BeeCore.Common.HSVSample.V);
+                    dashboardLabel.Invalidate();
+                }));
+            }
+            catch(Exception ex)
+            {
+
+            }
+           
+        }
+
         String Er = "";
 
         private void ToolYolo_StatusToolChanged(StatusTool obj)
@@ -239,8 +330,8 @@ namespace BeeInterface
 
         private void btnCropArea_Click(object sender, EventArgs e)
         {
-           Global.TypeCrop= TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
+           //Global.TypeCrop= TypeCrop.Area;
+           // Propety.TypeCrop = Global.TypeCrop;
   
         }
 
@@ -511,8 +602,8 @@ namespace BeeInterface
         bool IsFullSize;
         private void btnCropHalt_Click_1(object sender, EventArgs e)
         {
-            Global.TypeCrop = TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
+            //Global.TypeCrop = TypeCrop.Area;
+            //Propety.TypeCrop = Global.TypeCrop;
             IsFullSize = false;
             Propety.rotArea = Propety.rotAreaTemp.Clone();
             Global.StatusDraw = StatusDraw.Edit;
@@ -528,8 +619,8 @@ namespace BeeInterface
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
             Propety.rotArea = new RectRotate(new RectangleF(-Global.Config.SizeCCD.Width / 2, -Global.Config.SizeCCD.Height / 2, Global.Config.SizeCCD.Width, Global.Config.SizeCCD.Height), new PointF(Global.Config.SizeCCD.Width / 2, Global.Config.SizeCCD.Height / 2), 0, AnchorPoint.None);
-            Global.TypeCrop = TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
+            //Global.TypeCrop = TypeCrop.Area;
+            //Propety.TypeCrop = Global.TypeCrop;
             Global.StatusDraw = StatusDraw.Edit;
             // G.EditTool.View.imgView.Invalidate();
             //G.EditTool.View.Cursor = Cursors.Default;
@@ -539,8 +630,8 @@ namespace BeeInterface
 
         private void btnCropRect_Click_1(object sender, EventArgs e)
         {
-            Global.TypeCrop = TypeCrop.Crop;
-            Propety.TypeCrop = Global.TypeCrop;
+            //Global.TypeCrop = TypeCrop.Crop;
+            //Propety.TypeCrop = Global.TypeCrop;
 
         }
 
@@ -626,7 +717,7 @@ namespace BeeInterface
 
         private void rjButton6_Click(object sender, EventArgs e)
         {
-            Propety.Compare = Compares.Equal;
+         
         }
 
         private void trackScore_Load_1(object sender, EventArgs e)
@@ -651,13 +742,12 @@ namespace BeeInterface
 
         private void rjButton3_Click_2(object sender, EventArgs e)
         {
-            Propety.Compare = Compares.More;
+           
         }
 
         private void rjButton7_Click(object sender, EventArgs e)
         {
-            Propety.Compare = Compares.Less;
-            //   Propety.
+           
         }
 
       
@@ -1105,8 +1195,8 @@ namespace BeeInterface
                 {
                     MessageBox.Show("Please select models fist");
                 }
-               Global.TypeCrop= TypeCrop.Crop;
-                Propety.TypeCrop = Global.TypeCrop;
+               //Global.TypeCrop= TypeCrop.Crop;
+               // Propety.TypeCrop = Global.TypeCrop;
                 if (Propety.rotCrop == null)
                 {
                     int with = 50, height = 50;
@@ -1118,8 +1208,8 @@ namespace BeeInterface
             else
             {
                 Propety.rotCrop = null;
-               Global.TypeCrop= TypeCrop.Area;
-                Propety.TypeCrop = Global.TypeCrop;
+               //Global.TypeCrop= TypeCrop.Area;
+               // Propety.TypeCrop = Global.TypeCrop;
 
             }
         }
@@ -1508,45 +1598,57 @@ namespace BeeInterface
 
         private void btn2_Click(object sender, EventArgs e)
         {
-            lay21.Visible = !btn2.IsCLick;
-            lay22.Visible = !btn2.IsCLick;
-            lay23.Visible = !btn2.IsCLick;
-            lay24.Visible = !btn2.IsCLick;
+            EditRectRot1.Visible = !btn2.IsCLick;
+        //    lay21.Visible = !btn2.IsCLick;
+        //    lay22.Visible = !btn2.IsCLick;
+        //    lay23.Visible = !btn2.IsCLick;
+        //    lay24.Visible = !btn2.IsCLick;
            
         }
 
-        private void btnArea_Click(object sender, EventArgs e)
-        {
-            Global.TypeCrop = TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
+        //private void btnArea_Click(object sender, EventArgs e)
+        //{
+          
+        //    bool IsCLick = btnArea.IsCLick ;
+        //    if(IsCLick)
+        //    Global.RotateCurentChanged += Global_RotateCurentChanged;
+        //    else
+        //    Global.RotateCurentChanged -= Global_RotateCurentChanged;
+        //    btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
+        //    btnRect.IsCLick = Propety.rotArea.Shape == ShapeType.Rectangle ? true : false;
+        //    btnHexagon.IsCLick = Propety.rotArea.Shape == ShapeType.Hexagon ? true : false;
+        //    btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
+        //    btnWhite.IsCLick = Propety.rotArea.IsWhite;
+        //    btnBlack.IsCLick = !Propety.rotArea.IsWhite;
+        //    layListScan.Visible = false;
+        //}
 
-            btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotArea.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotArea.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick = !Propety.rotArea.IsWhite;
-            layListScan.Visible = false;
+        private void Global_RotateCurentChanged(RectRotate obj)
+        {
+           //if(btnArea.IsCLick)
+           //Propety.rotArea = obj;
+           // if (btnArea.IsCLick)
+           //     Propety.rotArea = obj;
         }
 
         private void btnMask_Click(object sender, EventArgs e)
         {
             Global.StatusDraw = StatusDraw.Edit;
-            lay2Mask.Visible = true;
-            Global.TypeCrop = TypeCrop.Mask;
-            Propety.TypeCrop = Global.TypeCrop;
+           // lay2Mask.Visible = true;
+            //Global.TypeCrop = TypeCrop.Mask;
+            //Propety.TypeCrop = Global.TypeCrop;
            
-            if (Propety.rotMask == null)
-            {
-                Propety.rotMask = new RectRotate();
-            }
-            btnElip.IsCLick = Propety.rotMask.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotMask.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotMask.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotMask.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotMask.IsWhite;
-            btnBlack.IsCLick = !Propety.rotMask.IsWhite;
-            layListScan.Visible =true;
+            //if (Propety.rotMask == null)
+            //{
+            //    Propety.rotMask = new RectRotate();
+            //}
+            //btnElip.IsCLick = Propety.rotMask.Shape == ShapeType.Ellipse ? true : false;
+            //btnRect.IsCLick = Propety.rotMask.Shape == ShapeType.Rectangle ? true : false;
+            //btnHexagon.IsCLick = Propety.rotMask.Shape == ShapeType.Hexagon ? true : false;
+            //btnPolygon.IsCLick = Propety.rotMask.Shape == ShapeType.Polygon ? true : false;
+            //btnWhite.IsCLick = Propety.rotMask.IsWhite;
+            //btnBlack.IsCLick = !Propety.rotMask.IsWhite;
+            //layListScan.Visible =true;
         }
         ShapeType ShapeType = ShapeType.Rectangle;
         private void SetShapeFor(TypeCrop which, ShapeType shape)
@@ -1574,21 +1676,21 @@ namespace BeeInterface
             }
 
 
-            Global.TypeCrop = which;
+           // Global.TypeCrop = which;
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
 
 
 
         }
-        private void NewShape(ShapeType newShape)
+        private void NewShape(ShapeType newShape,int W=0,int H=0)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
+            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2;
             RectRotate rr = null;
-            if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
-            else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;
-            else rr = prop?.rotCrop;
+            //if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
+            //else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;
+            //else rr = prop?.rotCrop;
 
             if (rr != null)
             {
@@ -1625,11 +1727,12 @@ namespace BeeInterface
             {
                 // tuỳ code lưu trữ của bạn mà tạo mới:
                 rr = new RectRotate();
+             
                 if (Global.TypeCrop == TypeCrop.Area) prop.rotArea = rr;
                 else if (Global.TypeCrop == TypeCrop.Mask) prop.rotMask = rr;
                 else prop.rotCrop = rr;
             }
-
+         
             rr.Shape = newShape;
 
             switch (newShape)
@@ -1663,7 +1766,10 @@ namespace BeeInterface
 
                     break;
             }
-
+            if (W != 0 && H != 0)
+            {rr._PosCenter = new PointF(Global.Config.SizeCCD.Width/2, Global.Config.SizeCCD.Height / 2);
+                rr._rect = new RectangleF(-W / 2, -H / 2, W, H);
+            }
             // Cập nhật về prop
             if (Global.TypeCrop == TypeCrop.Area) prop.rotArea = rr;
             else if (Global.TypeCrop == TypeCrop.Mask) prop.rotMask = rr;
@@ -1702,81 +1808,82 @@ namespace BeeInterface
           
         }
 
-        private void btnNone_Click(object sender, EventArgs e)
-        {
-            switch (Global.TypeCrop)
-            {
-                case TypeCrop.Crop:
-                  
-                    Propety.rotCrop.Shape = btnElip.IsCLick == true ? ShapeType.Ellipse : ShapeType.Rectangle;
-                    break;
-                //case TypeCrop.Area:
-                //    Propety.rotArea.Shape= btnElip.IsCLick==true ? ShapeType.Ellipse: ShapeType.Rectangle;
-                //    break;
-                case TypeCrop.Mask:
-                    Propety.rotMask = null;// = btnElip.IsCLick;
-                    break;
+        //private void btnNone_Click(object sender, EventArgs e)
+        //{
+        //    switch (Global.TypeCrop)
+        //    {
+        //        case TypeCrop.Crop:
 
-            }
-        }
+        //            Propety.rotCrop.Shape = btnElip.IsCLick == true ? ShapeType.Ellipse : ShapeType.Rectangle;
+        //            break;
+        //        //case TypeCrop.Area:
+        //        //    Propety.rotArea.Shape= btnElip.IsCLick==true ? ShapeType.Ellipse: ShapeType.Rectangle;
+        //        //    break;
+        //        case TypeCrop.Mask:
+        //            Propety.rotMask = null;// = btnElip.IsCLick;
+        //            break;
 
-        private void btnNewShape_Click(object sender, EventArgs e)
-        {
-            NewShape(ShapeType);
-        }
+        //    }
+        //}
 
-        private void btnWhite_Click(object sender, EventArgs e)
-        {
-            switch (Global.TypeCrop)
-            {
-                case TypeCrop.Area:
-                    Propety.rotArea.IsWhite = btnWhite.IsCLick;
-                    break;
-                case TypeCrop.Crop:
-                    Propety.rotCrop.IsWhite = btnWhite.IsCLick;
-                    break;
-                case TypeCrop.Mask:
-                    Propety.rotMask.IsWhite = btnWhite.IsCLick;
-                    break;
-            }
-        }
+        //private void btnNewShape_Click(object sender, EventArgs e)
+        //{
+        //    NewShape(ShapeType,(int)numW.Value, (int)numH.Value);
+        //    Global.StatusDraw = StatusDraw.Edit;
+        //}
 
-        private void btnBlack_Click(object sender, EventArgs e)
-        {
-            switch (Global.TypeCrop)
-            {
-                case TypeCrop.Area:
-                    Propety.rotArea.IsWhite = !btnBlack.IsCLick;
-                    break;
-                case TypeCrop.Crop:
-                    Propety.rotCrop.IsWhite = !btnBlack.IsCLick;
-                    break;
-                case TypeCrop.Mask:
-                    Propety.rotMask.IsWhite = !btnBlack.IsCLick;
-                    break;
-            }
-        }
+        //private void btnWhite_Click(object sender, EventArgs e)
+        //{
+        //    switch (Global.TypeCrop)
+        //    {
+        //        case TypeCrop.Area:
+        //            Propety.rotArea.IsWhite = btnWhite.IsCLick;
+        //            break;
+        //        case TypeCrop.Crop:
+        //            Propety.rotCrop.IsWhite = btnWhite.IsCLick;
+        //            break;
+        //        case TypeCrop.Mask:
+        //            Propety.rotMask.IsWhite = btnWhite.IsCLick;
+        //            break;
+        //    }
+        //}
 
-        private void btnCrop_Click(object sender, EventArgs e)
-        { 
-           Propety.IsLine = true;
-            if (Propety.rotCrop == null) Propety.rotCrop = new RectRotate();
-            Global.StatusDraw = StatusDraw.Edit;
-            Global.TypeCrop = TypeCrop.Crop;
-            Propety.TypeCrop = Global.TypeCrop;
-            btnElip.IsCLick = Propety.rotCrop.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotCrop.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotCrop.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotCrop.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotCrop.IsWhite;
-            btnBlack.IsCLick = !Propety.rotCrop.IsWhite;
-            layListScan.Visible = false;
-        }
+        //private void btnBlack_Click(object sender, EventArgs e)
+        //{
+        //    switch (Global.TypeCrop)
+        //    {
+        //        case TypeCrop.Area:
+        //            Propety.rotArea.IsWhite = !btnBlack.IsCLick;
+        //            break;
+        //        case TypeCrop.Crop:
+        //            Propety.rotCrop.IsWhite = !btnBlack.IsCLick;
+        //            break;
+        //        case TypeCrop.Mask:
+        //            Propety.rotMask.IsWhite = !btnBlack.IsCLick;
+        //            break;
+        //    }
+        //}
+
+        //private void btnCrop_Click(object sender, EventArgs e)
+        //{ 
+        //   Propety.IsLine = true;
+        //    if (Propety.rotCrop == null) Propety.rotCrop = new RectRotate();
+        //    Global.StatusDraw = StatusDraw.Edit;
+        //    Global.TypeCrop = TypeCrop.Crop;
+        //    Propety.TypeCrop = Global.TypeCrop;
+        //    btnElip.IsCLick = Propety.rotCrop.Shape == ShapeType.Ellipse ? true : false;
+        //    btnRect.IsCLick = Propety.rotCrop.Shape == ShapeType.Rectangle ? true : false;
+        //    btnHexagon.IsCLick = Propety.rotCrop.Shape == ShapeType.Hexagon ? true : false;
+        //    btnPolygon.IsCLick = Propety.rotCrop.Shape == ShapeType.Polygon ? true : false;
+        //    btnWhite.IsCLick = Propety.rotCrop.IsWhite;
+        //    btnBlack.IsCLick = !Propety.rotCrop.IsWhite;
+        //    layListScan.Visible = false;
+        //}
 
         private void btnOnline_Click(object sender, EventArgs e)
         {
-            Propety.IsLine=btnOnline.IsCLick;
-           btnCrop.Enabled=Propety.IsLine;
+            Propety.IsLine = btnOnline.IsCLick;
+         //   btnCrop.Enabled = Propety.IsLine;
             laySetLine.Visible = Propety.IsLine;
             laySetLine2.Visible = Propety.IsLine;
             laySetLine3.Visible = Propety.IsLine;
@@ -1784,8 +1891,8 @@ namespace BeeInterface
 
         private void tnOffLine_Click(object sender, EventArgs e)
         {
-            Propety.IsLine =! btnOffLine.IsCLick;
-            btnCrop.Enabled = Propety.IsLine;
+            Propety.IsLine = !btnOffLine.IsCLick;
+          //  btnCrop.Enabled = Propety.IsLine;
             laySetLine.Visible = Propety.IsLine;
             laySetLine2.Visible = Propety.IsLine;
             laySetLine3.Visible = Propety.IsLine;
@@ -1873,7 +1980,7 @@ namespace BeeInterface
                 Propety.ModeCheck = ModeCheck.Multi;
                 Propety.NameChoose = arg2.Name;
                 Global.StatusDraw = StatusDraw.Scan;
-                Propety.IsScan = true;
+            
                 Global.EditTool.View.imgView.Invalidate();
             }));
         }
@@ -1903,6 +2010,117 @@ namespace BeeInterface
         {
             layTypeYolo.Visible = !btn1M.IsCLick;
             layoutSetLearning.Visible=!btn1M.IsCLick;
+        }
+
+        private void btnNoCropMask_Click(object sender, EventArgs e)
+        {
+            Propety.IsCropSingle = !btnNoCropMask.IsCLick;
+        }
+
+        private void btnCropMask_Click(object sender, EventArgs e)
+        {
+            Propety.IsCropSingle = btnCropMask.IsCLick;
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            Propety.ModeCheck = ModeCheck.Single;
+            Propety.listRotScan = Propety.ListRotMask;
+            //Propety.IsScan = btnEdit.IsCLick; ;
+
+            //if (btnEdit.IsCLick)
+            //{
+            //    btnEdit.Text = "OK"; Global.StatusDraw = StatusDraw.Scan;
+            //    //RectRotate rot = Propety.ListRotMask[(int)numIndexArea.Value];
+            //    //PointF pCenter = Propety.rotArea.LocalToWorld(rot._PosCenter);
+
+            //    //rot._PosCenter = pCenter;
+            //    //Propety.rotMask = rot;
+            //}
+            //else
+            //{
+            //    if (Propety.rotMask != null)
+            //    { 
+            //        btnEdit.Text = "Edit";
+            //        RectRotate rot = Propety.rotMask.Clone();
+            //        PointF pCenter = Propety.rotArea.WorldToLocal(rot._PosCenter);
+            //        rot._PosCenter = pCenter;
+            //        Propety.rotMask = new RectRotate();
+                    
+            //        Propety.ListRotMask[Propety.IndexProgChoose] = rot; 
+            //        Global.StatusDraw = StatusDraw.Edit;
+            //    }
+
+            //}
+
+         
+        }
+        private LabelItem _currentColorItem;
+        private void dashboardLabel_ChooseColorBegin(int arg1, LabelItem arg2)
+        {
+            _currentColorItem = arg2;
+           // arg2.SampleColor = Global.ColorSample;
+            // bật chế độ pick màu
+            Global.IsGetColor = true;
+          
+
+            Global.ColorGp = ColorGp.HSV;
+
+            Global.StatusDraw = StatusDraw.Color;
+           
+
+        }
+        private HSVCli HSVCli;
+      
+
+        private void dashboardLabel_ChooseColorEnd(int arg1, LabelItem arg2)
+        {
+          //  arg2.SampleColor = Global.ColorSample;
+            Global.IsGetColor = false;
+            Global.StatusDraw = StatusDraw.Edit;
+            Propety.SetListTemp();
+
+        }
+
+        private void btnEqual_Click(object sender, EventArgs e)
+        {
+            Propety.Compare = Compares.Equal;
+        }
+
+        private void btnMore_Click(object sender, EventArgs e)
+        {
+            Propety.Compare = Compares.More;
+        }
+
+        private void btnLess_Click(object sender, EventArgs e)
+        {
+            Propety.Compare = Compares.Less;
+            //   Propety.
+        }
+
+        private void rjButton4_Click(object sender, EventArgs e)
+        {
+            lay1.Visible =! btn1.IsCLick;
+        }
+
+        private void btn3_Click(object sender, EventArgs e)
+        {
+            trackScore.Visible = !btn3.IsCLick;
+        }
+
+        private void btn4_Click(object sender, EventArgs e)
+        {
+            layComparison.Visible = !btn4.IsCLick;
+        }
+
+        private void btnAreaLimit_Click(object sender, EventArgs e)
+        {
+           // Global.rotAreaAdj
+        }
+
+        private void btn3_Click_1(object sender, EventArgs e)
+        {
+            trackScore.Visible = !btn3.IsCLick;
         }
     }
 }

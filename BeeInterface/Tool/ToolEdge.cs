@@ -78,9 +78,10 @@ namespace BeeInterface
                         btnInvert.IsCLick = true; layThreshod.Enabled = true;
                         break;
                 }
-             
-              
-                
+
+                 AdjRANSACThreshold.Value=(float) Propety.RansacThreshold ;
+                AdjRANSACIterations.Value = Propety.RansacIterations;
+                trackMinInlier.Value =(float) Propety.MinInliers;
                 AdjMorphology.Value = Propety.SizeClose;
                 AdjOpen.Value = Propety.SizeOpen;
                 AdjClearNoise.Value = Propety.SizeClearsmall;
@@ -205,7 +206,7 @@ namespace BeeInterface
         private void NewShape(ShapeType newShape)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
+            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2;
             RectRotate rr = null;
             if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
             else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;
@@ -638,7 +639,7 @@ namespace BeeInterface
         private void btnCalib_Click(object sender, EventArgs e)
         {
             btnCalib.Enabled = false;
-            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.IsCalibs = true;
+            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.IsCalibs = true;
             if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
                 Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else

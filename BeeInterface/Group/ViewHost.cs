@@ -149,14 +149,64 @@ namespace BeeInterface
             if (InvokeRequired) BeginInvoke(a);
             else a();
         }
+     
         public bool Unregister(string key, bool removeExistingView = true, bool disposeView = true)
         {
-           
+            if (string.IsNullOrWhiteSpace(key))
+                return false;
 
-            return false;
+            bool removedFactory = _factories.Remove(key);
+            Control target = null;
+
+            foreach (Control c in this.Controls)
+            {
+                if (string.Equals(c.Name, key, StringComparison.OrdinalIgnoreCase))
+                {
+                    target = c;
+                    break;
+                }
+            }
+
+            if (target == null)
+                return removedFactory;
+
+            using (RedrawScope.Freeze(this))
+            {
+                bool wasCurrent = (Current == target);
+
+                if (removeExistingView && this.Controls.Contains(target))
+                    this.Controls.Remove(target);
+
+                if (wasCurrent)
+                {
+                    Current = null;
+
+                    // tìm view khác còn dùng được
+                    foreach (Control c in this.Controls)
+                    {
+                        if (c != null && !c.IsDisposed)
+                        {
+                            c.Visible = true;
+                            c.BringToFront();
+                            Current = c;
+                            break;
+                        }
+                    }
+
+                    // ẩn các control còn lại ngoài Current
+                    foreach (Control c in this.Controls)
+                    {
+                        if (c != null && !c.IsDisposed)
+                            c.Visible = (c == Current);
+                    }
+                }
+            }
+
+            if (disposeView && target != null && !target.IsDisposed)
+                target.Dispose();
+
+            return true;
         }
-
-
         // Hiện view theo key (tạo lần đầu, sau dùng lại)
         public bool Show(string key)
         {

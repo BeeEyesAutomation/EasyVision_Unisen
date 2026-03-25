@@ -53,7 +53,7 @@ namespace BeeInterface
                     foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
                     {
                        
-                        propetyTool.Propety.Index = index;
+                        propetyTool.Propety2.Index = index;
                         propetyTool.ItemTool.IndexTool = index;
                         if(propetyTool.ItemTool2!=null)
                             propetyTool.ItemTool2.IndexTool = index;
@@ -76,21 +76,31 @@ namespace BeeInterface
         {
             if (btnEnEdit.IsCLick)
             {
-              foreach (List< PropetyTool> List in BeeCore.Common.PropetyTools)
-                if(List!=null)
-                foreach (PropetyTool propetyTool in List)
+                foreach (List<PropetyTool> List in BeeCore.Common.PropetyTools)
                 {
-                    propetyTool.ItemTool.IsEdit = true;
+                    if (List != null)
+                        foreach (PropetyTool propetyTool in List)
+                        {
+                            if (propetyTool.ItemTool == null) continue;
+                            propetyTool.ItemTool.IsEdit = true;
+                        }
+                    if (!Global.Config.IsMultiProg)
+                        break;
                 }
             }
             else
             {
                 foreach (List<PropetyTool> List in BeeCore.Common.PropetyTools)
+                {
                     if (List != null)
                         foreach (PropetyTool propetyTool in List)
                         {
+                            if (propetyTool.ItemTool == null) continue;
                             propetyTool.ItemTool.IsEdit = false;
                         }
+                    if (!Global.Config.IsMultiProg)
+                        break;
+                }
             }
         }
      
@@ -120,7 +130,7 @@ namespace BeeInterface
             {
                 propetyTools.Complete();
             };
-            propetyTools.Propety.SetModel();
+            propetyTools.Propety2.SetModel();
             BeeInterface.Load.ArrangeLogic();
             ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexProgChoose]);
 

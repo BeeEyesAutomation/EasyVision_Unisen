@@ -1,5 +1,7 @@
 ﻿using BeeCore;
+using BeeCore.Algorithm;
 using BeeCore.Funtion;
+using BeeCpp;
 using BeeGlobal;
 using BeeInterface;
 using BeeUi;
@@ -31,6 +33,7 @@ using System.Windows.Forms;
 using Camera = BeeCore.Camera;
 using Control = System.Windows.Forms.Control;
 using Point = System.Drawing.Point;
+using ShapeType = BeeGlobal.ShapeType;
 using Size = System.Drawing.Size;
 using Timer = System.Windows.Forms.Timer;
 using UserControl = System.Windows.Forms.UserControl;
@@ -500,26 +503,27 @@ namespace BeeInterface
         }
 
         // Lấy/đặt rr theo TypeCrop (giống nguyên tác)
-        private RectRotate GetCurrentRR()
-        {
-            var tool = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected];
-            if (tool == null || tool.Propety == null) return null;
-            if (Global.TypeCrop == TypeCrop.Area) return BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotArea;
-            else if (Global.TypeCrop == TypeCrop.Mask) return BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotMask;
-            else return BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop;
-        }
-        private void SetCurrentRR(RectRotate rr)
-        {
-            var tool = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected];
-            if (tool == null) return;
-            if (Global.TypeCrop == TypeCrop.Area) BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotArea = rr;
-            else if (Global.TypeCrop == TypeCrop.Mask) BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotMask = rr;
-            else tool.Propety.rotCrop = rr;
-            if(tool.TypeTool==TypeTool.Position_Adjustment|| tool.TypeTool == TypeTool.Pattern)
-            {
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.ReSetAngle();
-            }    
-        }
+        //private RectRotate GetCurrentRR()
+        //{
+        //    return null; 
+        //    //var tool = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected];
+        //    //if (tool == null || tool.Propety == null) return null;
+        //    //if (Global.TypeCrop == TypeCrop.Area) return BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotArea;
+        //    //else if (Global.TypeCrop == TypeCrop.Mask) return BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotMask;
+        //    //else return BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop;
+        //}
+        //private void SetCurrentRR(RectRotate rr)
+        //{
+        //    //var tool = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected];
+        //    //if (tool == null) return;
+        //    //if (Global.TypeCrop == TypeCrop.Area) BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotArea = rr;
+        //    //else if (Global.TypeCrop == TypeCrop.Mask) BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotMask = rr;
+        //    //else tool.Propety.rotCrop = rr;
+        //    //if(tool.TypeTool==TypeTool.Position_Adjustment|| tool.TypeTool == TypeTool.Pattern)
+        //    //{
+        //    //    BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.ReSetAngle();
+        //    //}    
+        //}
 
   
         private static bool BoundsContainAll(RectangleF r, IList<PointF> pts)
@@ -554,34 +558,52 @@ namespace BeeInterface
             if (Global.IndexToolSelected == -1) return;
               
             if (Global.IsRun) return;
-
+            if (!_mouseDown)
+                if (Global.IsGetColor)
+                    Global.IsSetColor = false;
             //if (Global.StatusDraw == StatusDraw.Scan && e.Button == MouseButtons.Left)
             //    Global.StatusDraw = StatusDraw.Choose;
             pDown = e.Location;
             _mouseDown = true;
             _drag = false;
 
-            if (Global.StatusDraw == StatusDraw.Color)
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.AddColor();
+            //if (Global.StatusDraw == StatusDraw.Color)
+            //    BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.AddColor();
 
 
             if (Global.StatusDraw == StatusDraw.Scan)
             {
                 int i = 0;
-                if (IndexRotChoose >= 0)
+                if (Global.IndexRotChoose >= 0)
                 {
                    
-                    if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.ModeCheck == ModeCheck.Single)
+                    if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ModeCheck == ModeCheck.Single)
                     {
-                        BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.IndexProgChoose = IndexRotChoose;
+                        BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.IndexProgChoose = Global.IndexRotChoose;
 
-                        foreach (RectRotate rot in BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.listRotScan)
+                        foreach (RectRotate rot in BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.listRotScan)
                         {
-                            if (i == IndexRotChoose)
+                            if (i == Global.IndexRotChoose)
                             {
+                               
                                 rot._dragAnchor = AnchorPoint.Center;
-                                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.SetTemp(rot);
-
+                                //if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeTool==TypeTool.BarCode||
+                                //    BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeTool == TypeTool.CraftOCR)
+                                //BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.SetTemp(rot);
+                                if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeTool == TypeTool.Learning)
+                                {
+                               
+                                    RectRotate rot2 = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ListRotMask[Global.IndexRotChoose].Clone();
+                                    PointF pCenter = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.rotArea.LocalToWorld(rot2._PosCenter);
+                                    rot2.TypeCrop = Global.rotCurrent.TypeCrop;
+                                    rot2._PosCenter = pCenter;
+                                    Global.rotCurrent = rot2;
+                                    
+                                    // Propety.rotMask.Name = Propety.ListRotMask[IndexRotChoose].Name;
+                                 //   Global.TypeCrop = TypeCrop.Mask;
+                                    Global.StatusDraw = StatusDraw.Edit;
+                                    
+                                }
                             }
 
                             else
@@ -594,7 +616,7 @@ namespace BeeInterface
                     }
                     else
                     {
-                        RectRotate rot = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.listRotScan[IndexRotChoose];
+                        RectRotate rot = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.listRotScan[Global.IndexRotChoose];
                         if (rot._dragAnchor == AnchorPoint.Center)
                         {
                             rot._dragAnchor = AnchorPoint.None;
@@ -605,7 +627,7 @@ namespace BeeInterface
                         else
                         {
                             rot._dragAnchor = AnchorPoint.Center;
-                            rot.Name = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.NameChoose;
+                            rot.Name = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.NameChoose;
                         }
                            
                        // BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.SetMulTemp();
@@ -616,7 +638,7 @@ namespace BeeInterface
             }
                 imgView.Invalidate();
             
-            RectRotate rr = GetCurrentRR();
+            RectRotate rr = Global.rotCurrent;
             if (rr == null) return;
             if (Global.StatusDraw == StatusDraw.Check && rr._dragAnchor != AnchorPoint.None)
                 Global.StatusDraw = StatusDraw.Edit;
@@ -712,7 +734,7 @@ namespace BeeInterface
         // ====== MouseMove ======
         private float _rotStartAngleLocal = 0f; // góc local lúc bắt đầu xoay (radian)
         private float _rotBase = 0f;            // rotation ban đầu (degree) để cộng delta
-        public int IndexRotChoose = -1;
+       
         private void imgView_MouseMove(object sender, MouseEventArgs e)
         {
             if (Global.IndexToolSelected == -1)
@@ -740,8 +762,8 @@ namespace BeeInterface
            
             if (Global.StatusDraw == StatusDraw.Scan)
             { int j = 0;
-                List<RectRotate> listScan = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.listRotScan;
-                RectRotate rotArea = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotArea;
+                List<RectRotate> listScan = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.listRotScan;
+                RectRotate rotArea = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.rotArea;
 
                 float s = (float)(imgView.Zoom / 100.0);
 
@@ -751,12 +773,12 @@ namespace BeeInterface
                 );
 
                 PointF pLocalArea = rotArea.WorldToLocal(pWorld);
-                IndexRotChoose = -1;
+            Global.IndexRotChoose = -1;
                 foreach (RectRotate rot in listScan)
                 {
                     if (rot.ContainsPoint(pLocalArea))
                     {
-                        IndexRotChoose = j;
+                        Global.IndexRotChoose = j;
                     }
                     j++;
                 }
@@ -830,33 +852,42 @@ namespace BeeInterface
         
 
             // ===== Color picker =====
-            if (Global.IndexToolSelected >= 0)
+           // if (Global.IndexToolSelected >= 0)
             {
-                var tool = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected];
-                if (tool.TypeTool == TypeTool.Color_Area)
+                if (Global.IsGetColor)
                 {
-                    if (tool.Propety.IsGetColor)
-                    {
-                        imgView.Cursor = new Cursor(BeeInterface.Properties.Resources.Color_Dropper.Handle);
-                        imgView.AllowClickZoom = false;
-                        imgView.PanMode = ImageBoxPanMode.None;
-                        if (!workGetColor.IsBusy) workGetColor.RunWorkerAsync();
-                        return;
-                    }
-                    else imgView.Cursor = Cursors.Default;
+                    imgView.Cursor = new Cursor(BeeInterface.Properties.Resources.Color_Dropper.Handle);
+                    imgView.AllowClickZoom = false;
+                    imgView.PanMode = ImageBoxPanMode.None;
+                    if (!workGetColor.IsBusy) workGetColor.RunWorkerAsync();
+                    return;
                 }
+                else imgView.Cursor = Cursors.Default;
+                //var tool = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected];
+                //if (tool.TypeTool == TypeTool.Color_Area)
+                //{
+                //    if (Global.IsGetColor)
+                //    {
+                //        imgView.Cursor = new Cursor(BeeInterface.Properties.Resources.Color_Dropper.Handle);
+                //        imgView.AllowClickZoom = false;
+                //        imgView.PanMode = ImageBoxPanMode.None;
+                //        if (!workGetColor.IsBusy) workGetColor.RunWorkerAsync();
+                //        return;
+                //    }
+                //    else imgView.Cursor = Cursors.Default;
+               // }
             }
 
             //if (Global.StatusDraw != StatusDraw.Edit) return;
 
             try
             {
-                Func<RectRotate> getCurrentRR = GetCurrentRR;
-                Action<RectRotate> setCurrentRR = SetCurrentRR;
-                var rrSrc = getCurrentRR();
+                // Func<RectRotate> getCurrentRR = GetCurrentRR;
+                ///  Action<RectRotate> setCurrentRR = SetCurrentRR;
+                var rrSrc = Global.rotCurrent;
                 // ====== NHÁNH TẠO MỚI (sau Clear) ======
                 if (_drag && _maybeCreate &&
-                    ((getCurrentRR() != null ? getCurrentRR()._dragAnchor : AnchorPoint.None) == AnchorPoint.None))
+                    ((rrSrc != null ? rrSrc._dragAnchor : AnchorPoint.None) == AnchorPoint.None))
                 {
                     _createEndImg = ScreenToImage(e.Location);
 
@@ -880,11 +911,13 @@ namespace BeeInterface
                             0f,
                             AnchorPoint.None
                         );
+                        rrNew.TypeCrop = rrSrc.TypeCrop;
+                        rrNew.Name = rrSrc.Name;
                         rrNew.Shape = shape;
 
                         _previewNew = rrNew;
                         _creatingNew = true;
-                        setCurrentRR(rrNew);
+                       Global.rotCurrent= rrNew;
                         imgView.Invalidate();
                         return;
                     }
@@ -908,6 +941,8 @@ namespace BeeInterface
 
                     // clone rrSrc
                     RectRotate rotateRect = new RectRotate(rrSrc._rect, rrSrc._PosCenter, rrSrc._rectRotation, rrSrc._dragAnchor);
+                   rotateRect.Name= rrSrc.Name;
+                    rotateRect.TypeCrop = rrSrc.TypeCrop;
                     rotateRect.Shape = rrSrc.Shape;
                     if (rrSrc.HexVertexOffsets != null)
                         for (int i = 0; i < 6; i++) rotateRect.HexVertexOffsets[i] = rrSrc.HexVertexOffsets[i];
@@ -1158,7 +1193,8 @@ namespace BeeInterface
                     }
 
                     // Clamp theo ảnh cho Area (trừ polygon)
-                    if (Global.TypeCrop == TypeCrop.Area && rotateRect.Shape != ShapeType.Polygon)
+                    //Global.TypeCrop == TypeCrop.Area &&
+                    if ( rotateRect.Shape != ShapeType.Polygon)
                     {
                         float x = rotateRect._PosCenter.X - rotateRect._rect.Width / 2f;
                         float y = rotateRect._PosCenter.Y - rotateRect._rect.Height / 2f;
@@ -1179,6 +1215,8 @@ namespace BeeInterface
                         rotateRect._rectRotation,
                         rotateRect._dragAnchor
                     );
+                    rrNew.TypeCrop = rotateRect.TypeCrop;
+                    rrNew.Name=rotateRect.Name;
                     rrNew.Shape = rotateRect.Shape;
                     for (int i = 0; i < 6; i++) rrNew.HexVertexOffsets[i] = rotateRect.HexVertexOffsets[i];
                     rrNew.PolyLocalPoints.Clear();
@@ -1187,7 +1225,7 @@ namespace BeeInterface
                     rrNew.ActiveVertexIndex = rotateRect.ActiveVertexIndex;
                     rrNew.AutoExpandBounds = rotateRect.AutoExpandBounds;
 
-                    setCurrentRR(rrNew);
+                    Global.rotCurrent = rrNew;
                 }
                 // ====== NHÁNH HIT-TEST (không kéo) ======
                 else
@@ -1195,6 +1233,8 @@ namespace BeeInterface
 
 
                     RectRotate rotateRect = new RectRotate(rrSrc._rect, rrSrc._PosCenter, rrSrc._rectRotation, rrSrc._dragAnchor);
+                    rotateRect.TypeCrop = rrSrc.TypeCrop;
+                    rotateRect.Name = rrSrc.Name;
                     rotateRect.Shape = rrSrc.Shape;
                     if (rrSrc.HexVertexOffsets != null)
                         for (int i = 0; i < 6; i++) rotateRect.HexVertexOffsets[i] = rrSrc.HexVertexOffsets[i];
@@ -1339,7 +1379,7 @@ namespace BeeInterface
                     }
 
                     // Ghi lại anchor & active index về rrSrc
-                    var rrSet = getCurrentRR();
+                    var rrSet = Global.rotCurrent;
                     if (rrSet != null)
                     {
                         rrSet._dragAnchor = rotateRect._dragAnchor;
@@ -1348,8 +1388,8 @@ namespace BeeInterface
                 }
 
                 // ===== Khoá pan/zoom khi có anchor =====
-                var cur = GetCurrentRR();
-               
+                var cur = Global.rotCurrent;
+
                 if (cur != null && cur._dragAnchor != AnchorPoint.None|| IsNewShape||cur._rect.Width==0)
                 {
                     //if (Global.StatusDraw != StatusDraw.Color) Global.StatusDraw = StatusDraw.Edit;
@@ -1380,12 +1420,12 @@ namespace BeeInterface
                 angleCtrl = new AdjustControlMouse();
                 angleCtrl.AngleDeltaChanged += delta =>
                 {
-                  
-                    RectRotate rr = GetCurrentRR();
+
+                    RectRotate rr = Global.rotCurrent;
                     float valueCur = rr._rectRotation;
                     valueCur += delta;
                     rr._rectRotation = valueCur;
-                    SetCurrentRR(rr);
+                    Global.rotCurrent = rr;
                     imgView.Invalidate();
                 };
                 this.imgView.Controls.Add(angleCtrl);
@@ -1422,14 +1462,14 @@ namespace BeeInterface
 
         private void CenterCtrl_CenterDeltaChanged(float arg1, float arg2)
         {
-            RectRotate rr = GetCurrentRR();
+            RectRotate rr = Global.rotCurrent;
             float xCur = rr._PosCenter.X;
             float yCur = rr._PosCenter.Y;
             xCur += arg1;
             yCur += arg2;
             rr._PosCenter=new PointF(xCur, yCur);
 
-            SetCurrentRR(rr);
+            Global.rotCurrent = rr;
             imgView.Invalidate();
         }
 
@@ -1440,8 +1480,11 @@ namespace BeeInterface
             if (centerCtrl != null)
                 centerCtrl.Visible = false;
         }
+       
         private void imgView_MouseUp(object sender, MouseEventArgs e)
-        {
+        {if(_mouseDown)
+            if (Global.IsGetColor)
+                    Global.IsSetColor = true;
             _mouseDown = false;
             _drag = false;
             IsNewShape = false;
@@ -1454,12 +1497,12 @@ namespace BeeInterface
             if (_creatingNew)
             {
                 float minSize = 3f;
-                var rr = GetCurrentRR();
+                var rr = Global.rotCurrent;
                 if (rr != null && rr._rect.Width >= minSize && rr._rect.Height >= minSize)
                 {
                     rr._dragAnchor = AnchorPoint.None;
                     rr.ActiveVertexIndex = -1;
-                    SetCurrentRR(rr);
+                    Global.rotCurrent = rr;
                 }
                 else
                 {
@@ -1478,20 +1521,20 @@ namespace BeeInterface
 
             _drag = false;
 
-            if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop != null)
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop._dragAnchor = AnchorPoint.None;
-
-            ToolMouseUp();
+            //if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.rotCrop != null)
+            //    BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.rotCrop._dragAnchor = AnchorPoint.None;
+          
+            //ToolMouseUp();
 
             try
             {
-                var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
-                if (prop == null) return;
+                //var prop =Global.rotCurrent.Propety2;
+                //if (prop == null) return;
 
-                RectRotate rr = null;
-                if (Global.TypeCrop == TypeCrop.Area) rr = prop.rotArea;
-                else if (Global.TypeCrop == TypeCrop.Mask) rr = prop.rotMask;
-                else rr = prop.rotCrop;
+                RectRotate rr = Global.rotCurrent;
+                //if (Global.TypeCrop == TypeCrop.Area) rr = prop.rotArea;
+                //else if (Global.TypeCrop == TypeCrop.Mask) rr = prop.rotMask;
+                //else rr = prop.rotCrop;
 
                 if (rr != null)
                 {
@@ -1548,11 +1591,11 @@ namespace BeeInterface
      
 
 
-        private TypeCrop IsTypeArea()
-        {
-            return Global.TypeCrop;
+        //private TypeCrop IsTypeArea()
+        //{
+        //    //return Global.TypeCrop;
               
-        }
+        //}
       
         
      
@@ -1636,7 +1679,7 @@ namespace BeeInterface
                     int indexTool = 0;
                     foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
                     {
-                        RectRotate rot = PropetyTool.Control.Propety.rotArea;
+                        RectRotate rot = PropetyTool.Control.Propety2.rotArea;
                     if (rot == null) continue;
                         mat = new Matrix();
                         mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
@@ -1679,7 +1722,7 @@ namespace BeeInterface
                 
                     foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
                     {
-                        if (index != BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.Index )
+                        if (index != BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.Index )
                         {
                             RectRotate rot = PropetyTool.Control.Propety.rotArea;
                         if (rot != null)
@@ -1687,7 +1730,6 @@ namespace BeeInterface
                             mat = new Matrix();
                             mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
                             mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-
                             mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                             mat.Rotate(rot._rectRotation);
                             RectangleF _rect3 = rot._rect;
@@ -1712,12 +1754,10 @@ namespace BeeInterface
             {
                 HideAngleControl();
                 gc.ResetTransform();
-              
-
                 Global.ScaleZoom = (float)(imgView.Zoom / 100.0);
                 Global.pScroll = new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
                 
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.DrawResult(gc);
+                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.DrawResult(gc);
                 Global.EditTool.lbCTTool.Text = Math.Round(BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].CycleTime) + "ms";
                 Global.EditTool.lbRsTool.Text = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Results.ToString();
                 if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Results==Results.OK)
@@ -1731,34 +1771,40 @@ namespace BeeInterface
             }
             else if (Global.StatusDraw == StatusDraw.Edit)
             {
-                switch (Global.TypeCrop)
-                {
-                    case TypeCrop.Crop:
-                        Draws.FillRect(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 20);
-                        Draws.FillRect(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotMask, imgView.AutoScrollPosition, imgView.Zoom, 50);
-                        Draws.RectEdit(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop,  Global.ParaShow.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
+                Draws.RectEdit(gc, TypeCrop.Crop,Global.rotCurrent, Global.ParaShow.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
 
-                        break;
-                    case TypeCrop.Area:
+                //switch (Global.TypeCrop)
+                //{
+                //    case TypeCrop.Crop:
+                //        Draws.FillRect(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 20);
+                //        Draws.FillRect(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotMask, imgView.AutoScrollPosition, imgView.Zoom, 50);
+                //        Draws.RectEdit(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop,  Global.ParaShow.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
 
-                        Draws.FillRect(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop, imgView.AutoScrollPosition, imgView.Zoom, 20);
-                        Draws.FillRect(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotMask, imgView.AutoScrollPosition, imgView.Zoom, 50);
-                        Draws.RectEdit(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotArea, Global.ParaShow.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
-                        break;
-                    case TypeCrop.Mask:
-                        Draws.FillRect(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 20);
-                        Draws.FillRect(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop, imgView.AutoScrollPosition, imgView.Zoom, 50);
-                        Draws.RectEdit(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotMask, Global.ParaShow.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
+                //        break;
+                //    case TypeCrop.Area:
+
+                //        Draws.FillRect(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop, imgView.AutoScrollPosition, imgView.Zoom, 20);
+                //        Draws.FillRect(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotMask, imgView.AutoScrollPosition, imgView.Zoom, 50);
+                //        Draws.RectEdit(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotArea, Global.ParaShow.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
+                //        break;
+                //    case TypeCrop.Mask:
+                //        Draws.FillRect(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 20);
+                //        Draws.FillRect(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop, imgView.AutoScrollPosition, imgView.Zoom, 50);
+                //        Draws.RectEdit(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotMask, Global.ParaShow.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
                      
-                        break;
+                //        break;
 
-                }
+                //}
                 try
                 {
                     gc.ResetTransform();
-                  
-                    List<RectRotate> listMark = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.ListRotMask;
-                    Draws.FillListRectMask(gc, TypeCrop.Mask, listMark, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 50);
+                    if(Global.rotCurrent!=null)
+                  if(Global.rotCurrent.TypeCrop==TypeCrop.Limit)
+                    {
+                        List<RectRotate> listMark = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ListRotMask;
+                        Draws.FillListRectMask(gc, TypeCrop.Limit, listMark, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 30);
+
+                    }
 
                 }
                 catch (Exception ex)
@@ -1779,11 +1825,11 @@ namespace BeeInterface
                    
                 
                
-                    if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.IsGetColor)
+                    if (Global.IsGetColor)
                     {
                     gc.ResetTransform();
 
-                    gc.DrawEllipse(new Pen(clChoose, 5), new Rectangle(new Point(pMove.X - 25, pMove.Y - 25), new Size(50, 50)));
+                    gc.DrawEllipse(new Pen(Global.ColorSample, 5), new Rectangle(new Point(pMove.X - 25, pMove.Y - 25), new Size(50, 50)));
                    
                     }
                 }
@@ -1821,7 +1867,7 @@ namespace BeeInterface
             KeyboardListener.s_KeyEventHandler += KeyboardListener_s_KeyEventHandler1;
             Global.IndexToolChanged += Global_IndexToolChanged;
             Global.StatusDrawChanged += Global_StatusDrawChanged;
-            Global.TypeCropChanged += Global_TypeCropChanged;
+           // Global.TypeCropChanged += Global_TypeCropChanged;
               Global.StatusProcessingChanged += Global_StatusProcessingChanged;
             Global.LiveChanged += Global_LiveChanged;
           
@@ -2677,16 +2723,17 @@ namespace BeeInterface
                     {
                         Global.StepEdit.Enabled = false;
                         btnChangeImg.Visible = true;
-                        Global.OldPropetyTool = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.Clone();
-                        String name = "Tools"+ Global.IndexProgChoose + Global.IndexProgChoose+ BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Name;
+                        Global.OldPropetyTool = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.Clone();
+                        String name = "Tools"+ Global.IndexProgChoose + BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Name;
                         //   if (Score.Enabled||Global.IsRun) return;
-                        Global.TypeCrop = TypeCrop.Area;
+                     //   Global.TypeCrop = TypeCrop.Area;
                        // Global.EditTool.pEditTool.Controls.Clear();
                         BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Control.Enabled = false;
                       
                         //  toolEdit = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Control;
                         //   toolEdit.Enabled = false;
                         tmEnableControl.Enabled = true;
+
                         Global.EditTool.RegisTer(name, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Control);
                         //if (!Global.EditTool.pEditTool.Show(name))
                         //{
@@ -2790,35 +2837,38 @@ namespace BeeInterface
       
         public void CurrentTool()
         {
-            
-          
+
+
         }
+      
         public void ToolMouseUp()
         {
-          
-       
-          if(Global.IndexToolSelected>=0)
-            switch (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeTool)
-            {
+            
+            //if (Global.IndexToolSelected>=0)
+            //switch (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeTool)
+            //{
              
-                case TypeTool.Pattern:
+            //    case TypeTool.Pattern:
                    
-                case TypeTool.Position_Adjustment:
-                    //if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop != null)
-                    //    if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop._rect.Width != 0 && BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop._rect.Height != 0)
-                    //    {
-                    //        BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.LearnPattern(toolEdit.indexTool, toolEdit.matTemp);
+            //    case TypeTool.Position_Adjustment:
+            //        //if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop != null)
+            //        //    if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop._rect.Width != 0 && BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.rotCrop._rect.Height != 0)
+            //        //    {
+            //        //        BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.LearnPattern(toolEdit.indexTool, toolEdit.matTemp);
 
-                    //    }
-                    break;
-                case TypeTool.Color_Area:
+            //        //    }
+            //        break;
+            //    case TypeTool.Color_Area:
 
-                        BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.SetColor();
-                        //Global.StatusDraw = StatusDraw.Check;
-                    break;
-            }
+            //            BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.SetColor();
+            //            //Global.StatusDraw = StatusDraw.Check;
+            //        break;
+            //}
           
         }
+
+       
+
         private void cbView_SelectedIndexChanged(object sender, EventArgs e)
         {
           
@@ -2965,7 +3015,8 @@ namespace BeeInterface
                     
                 }
                 try
-                {
+                {if (Global.Config.POCurrent == null)
+                        Global.Config.POCurrent = "";
                     SqlCommand command = new SqlCommand();
                     command.Connection = Global.cnn;
                     command.CommandText = "INSERT into Report (Date,Prog,PO,Status,Raw,Result) VALUES(@Date,@Prog,@PO,@Status,@Raw,@Result)";
@@ -3778,7 +3829,7 @@ namespace BeeInterface
              
 
             }
-            Global.Comunication.Protocol.IsLight1 = Global.IsLive;
+            Global.Comunication.Protocol.IsOnLight = Global.IsLive;
          Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
         }
         private async void btnSer_Click(object sender, EventArgs e)
@@ -4204,9 +4255,25 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         {
             using (Mat raw = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone())
             {
+                Global.ScaleZoom = (float)(imgView.Zoom / 100.0);
+                Global.pScroll = new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
                 int X = Convert.ToInt32((pMove.X - 10) / (Global.ScaleZoom)) + Global.pScroll.X;
-                int Y = Convert.ToInt32((pMove.Y + 10) / (Global.ScaleZoom )) + Global.pScroll.Y;
-                clChoose = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.GetColor(raw, X, Y);
+                int Y = Convert.ToInt32((pMove.Y + 10) / (Global.ScaleZoom)) + Global.pScroll.Y;
+                if(Global.ColorGp== ColorGp.HSV)
+                {
+                    BeeCore.Common.HSVSample = Colors.GetHSV(raw, X, Y);
+                    if (BeeCore.Common.HSVSample != null)
+                        Global.ColorSample = Colors.GetColor(BeeCore.Common.HSVSample);
+
+                }
+                else
+                {
+                    BeeCore.Common.RGBSample = Colors.GetRGB(raw, X, Y);
+                    if(BeeCore.Common.RGBSample!=null)
+                    Global.ColorSample = Colors.GetColor(BeeCore.Common.RGBSample);
+
+                }
+               // clChoose = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.GetColor(raw, X, Y);
             }    
            
                       
@@ -5055,9 +5122,9 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
         private void newShapeTool_Click(object sender, EventArgs e)
         {
-            NewShape();
-            Global.StatusDraw = StatusDraw.Edit;
-            imgView.Invalidate();
+            //NewShape();
+            //Global.StatusDraw = StatusDraw.Edit;
+            //imgView.Invalidate();
         }
 
         private void btnZoomOut_MouseDown(object sender, MouseEventArgs e)
@@ -5151,19 +5218,19 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
         private void chooseAreaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Global._TypeCrop = TypeCrop.Area;
+          //  Global._TypeCrop = TypeCrop.Area;
             imgView.Invalidate();
         }
 
         private void chooseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Global._TypeCrop = TypeCrop.Crop;
+           // Global._TypeCrop = TypeCrop.Crop;
             imgView.Invalidate();
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            Global._TypeCrop = TypeCrop.Mask;
+           // Global._TypeCrop = TypeCrop.Mask;
             imgView.Invalidate();
         }
         public void ChangeImgShow()
@@ -5265,87 +5332,87 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             Global.ImgShow = ImgShow.History;
         }
 
-        private void NewShape()
-        {
-            // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
-            RectRotate rr = null; 
+        //private void NewShape()
+        //{
+        //    // 1) Chốt shape hiện tại
+        //    var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
+        //    RectRotate rr = null; 
             
-            if (Global.TypeCrop == TypeCrop.Area)
-                rr = prop?.rotArea;
-            else if (Global.TypeCrop == TypeCrop.Mask)
-                rr = prop?.rotMask;
-            else
-                rr = prop?.rotCrop;
-            ShapeType newShape = rr.Shape;
-            if (rr != null)
-            {
-                // Nếu đang drag: chấm dứt
-                rr._dragAnchor = AnchorPoint.None;
-                rr.ActiveVertexIndex = -1;
+        //    //if (Global.TypeCrop == TypeCrop.Area)
+        //    //    rr = prop?.rotArea;
+        //    //else if (Global.TypeCrop == TypeCrop.Mask)
+        //    //    rr = prop?.rotMask;
+        //    //else
+        //    //    rr = prop?.rotCrop;
+        //    ShapeType newShape = rr.Shape;
+        //    if (rr != null)
+        //    {
+        //        // Nếu đang drag: chấm dứt
+        //        rr._dragAnchor = AnchorPoint.None;
+        //        rr.ActiveVertexIndex = -1;
 
-                // Nếu là polygon đang dựng dở
-                if (rr.Shape == ShapeType.Polygon && rr.IsPolygonClosed == false)
-                {
+        //        // Nếu là polygon đang dựng dở
+        //        if (rr.Shape == ShapeType.Polygon && rr.IsPolygonClosed == false)
+        //        {
                     
-                    // (C) Huỷ polygon đang dựng
-                    rr.PolygonClear();
-                }
-            }
+        //            // (C) Huỷ polygon đang dựng
+        //            rr.PolygonClear();
+        //        }
+        //    }
 
 
 
-            // 3) Gán shape mới & chuẩn bị khung
-            if (rr == null)
-            {
-                // tuỳ code lưu trữ của bạn mà tạo mới:
-                rr = new RectRotate();
-                if (Global.TypeCrop == TypeCrop.Area) prop.rotArea = rr;
-                else if (Global.TypeCrop == TypeCrop.Mask) prop.rotMask = rr;
-                else prop.rotCrop = rr;
-            }
+        //    // 3) Gán shape mới & chuẩn bị khung
+        //    if (rr == null)
+        //    {
+        //        // tuỳ code lưu trữ của bạn mà tạo mới:
+        //        rr = new RectRotate();
+        //        if (Global.TypeCrop == TypeCrop.Area) prop.rotArea = rr;
+        //        else if (Global.TypeCrop == TypeCrop.Mask) prop.rotMask = rr;
+        //        else prop.rotCrop = rr;
+        //    }
            
-            rr.Shape = newShape;
+        //    rr.Shape = newShape;
 
-            switch (newShape)
-            {
-                case ShapeType.Polygon:
-                    // Local sạch, xoá điểm cũ: chờ click điểm đầu tiên
-                    rr.ResetFrameForNewPolygonHard();
-                    rr.AutoOrientPolygon = false; // thường tắt lúc dựng, bạn có thể để true nếu quen
-                    break;
+        //    switch (newShape)
+        //    {
+        //        case ShapeType.Polygon:
+        //            // Local sạch, xoá điểm cũ: chờ click điểm đầu tiên
+        //            rr.ResetFrameForNewPolygonHard();
+        //            rr.AutoOrientPolygon = false; // thường tắt lúc dựng, bạn có thể để true nếu quen
+        //            break;
 
-                case ShapeType.Rectangle:
-                case ShapeType.Ellipse:
-                case ShapeType.Hexagon:
-                    // Không cần xoá toàn bộ; chỉ đảm bảo không kéo theo trạng thái cũ
-                    rr._dragAnchor = AnchorPoint.None;
-                    rr.ActiveVertexIndex = -1;
+        //        case ShapeType.Rectangle:
+        //        case ShapeType.Ellipse:
+        //        case ShapeType.Hexagon:
+        //            // Không cần xoá toàn bộ; chỉ đảm bảo không kéo theo trạng thái cũ
+        //            rr._dragAnchor = AnchorPoint.None;
+        //            rr.ActiveVertexIndex = -1;
 
-                    // Option: reset rotation cho phiên mới (tuỳ UX)
-                    // rr._rectRotation = 0f;
+        //            // Option: reset rotation cho phiên mới (tuỳ UX)
+        //            // rr._rectRotation = 0f;
 
-                    // Để trống _rect: user kéo trái→phải để tạo mới theo logic MouseDown/Move của bạn
-                    rr._rect = RectangleF.Empty;
+        //            // Để trống _rect: user kéo trái→phải để tạo mới theo logic MouseDown/Move của bạn
+        //            rr._rect = RectangleF.Empty;
 
-                    // Hexagon: offsets về 0
-                    if (newShape == ShapeType.Hexagon)
-                    {
-                        if (rr.HexVertexOffsets == null || rr.HexVertexOffsets.Length != 6)
-                            rr.HexVertexOffsets = new PointF[6];
-                        for (int i = 0; i < 6; i++) rr.HexVertexOffsets[i] = PointF.Empty;
-                    }
+        //            // Hexagon: offsets về 0
+        //            if (newShape == ShapeType.Hexagon)
+        //            {
+        //                if (rr.HexVertexOffsets == null || rr.HexVertexOffsets.Length != 6)
+        //                    rr.HexVertexOffsets = new PointF[6];
+        //                for (int i = 0; i < 6; i++) rr.HexVertexOffsets[i] = PointF.Empty;
+        //            }
 
-                    break;
-            }
+        //            break;
+        //    }
 
-            // Cập nhật về prop
-            if (Global.TypeCrop == TypeCrop.Area) prop.rotArea = rr;
-            else if (Global.TypeCrop == TypeCrop.Mask) prop.rotMask = rr;
-            else prop.rotCrop = rr;
+        //    // Cập nhật về prop
+        //    if (Global.TypeCrop == TypeCrop.Area) prop.rotArea = rr;
+        //    else if (Global.TypeCrop == TypeCrop.Mask) prop.rotMask = rr;
+        //    else prop.rotCrop = rr;
 
 
-        }
+        //}
 
         private void btnPan_Click(object sender, EventArgs e)
         {

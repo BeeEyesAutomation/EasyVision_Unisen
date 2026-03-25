@@ -186,10 +186,23 @@ namespace BeeCore
 
 
                 ColorPixel = new ColorPixel();
-                rotCrop = null;
+                if (rotArea == null) rotArea = new RectRotate();
+                if (rotCrop == null) rotCrop = new RectRotate();
+                if (rotMask == null) rotMask = new RectRotate();
 
-                if (rotArea == null)
-                    rotArea = new RectRotate();
+                rotCrop.Name = "Area Temp";
+                rotCrop.TypeCrop = TypeCrop.Crop;
+
+
+                rotMask.Name = "Area Mask";
+                rotMask.TypeCrop = TypeCrop.Mask;
+
+                rotArea.Name = "Area Check";
+                rotArea.TypeCrop = TypeCrop.Area;
+                //rotCrop = null;
+
+                //if (rotArea == null)
+                //    rotArea = new RectRotate();
                 if (bmRaw != null)
                 {
                     matTemp = bmRaw.ToMat();

@@ -127,31 +127,31 @@ namespace BeeInterface
             this.btnEnableEditType = new BeeInterface.RJButton();
             this.label19 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.panel8 = new System.Windows.Forms.Panel();
+            this.pProcess = new System.Windows.Forms.Panel();
             this.btnReadProgress = new BeeInterface.RJButton();
             this.txtValueProgress = new System.Windows.Forms.TextBox();
             this.label27 = new System.Windows.Forms.Label();
             this.txtAddProgress = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
-            this.panel7 = new System.Windows.Forms.Panel();
+            this.pQty = new System.Windows.Forms.Panel();
             this.btnReadQty = new BeeInterface.RJButton();
             this.txtValueQty = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
             this.txtAddQty = new System.Windows.Forms.TextBox();
             this.label25 = new System.Windows.Forms.Label();
-            this.panel6 = new System.Windows.Forms.Panel();
+            this.pCountChart = new System.Windows.Forms.Panel();
             this.btnReadCountProg = new BeeInterface.RJButton();
             this.txtValueCountProg = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.txtAddCountProg = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.panel4 = new System.Windows.Forms.Panel();
+            this.pPO = new System.Windows.Forms.Panel();
             this.btnReadPO = new BeeInterface.RJButton();
             this.txtValuePO = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.txtAddPO = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.pProgNo = new System.Windows.Forms.Panel();
             this.btnReadProg = new BeeInterface.RJButton();
             this.txtProg = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -182,11 +182,11 @@ namespace BeeInterface
             this.layOut.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.panel8.SuspendLayout();
-            this.panel7.SuspendLayout();
-            this.panel6.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.panel3.SuspendLayout();
+            this.pProcess.SuspendLayout();
+            this.pQty.SuspendLayout();
+            this.pCountChart.SuspendLayout();
+            this.pPO.SuspendLayout();
+            this.pProgNo.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -3159,11 +3159,11 @@ namespace BeeInterface
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage1.Controls.Add(this.panel8);
-            this.tabPage1.Controls.Add(this.panel7);
-            this.tabPage1.Controls.Add(this.panel6);
-            this.tabPage1.Controls.Add(this.panel4);
-            this.tabPage1.Controls.Add(this.panel3);
+            this.tabPage1.Controls.Add(this.pProcess);
+            this.tabPage1.Controls.Add(this.pQty);
+            this.tabPage1.Controls.Add(this.pCountChart);
+            this.tabPage1.Controls.Add(this.pPO);
+            this.tabPage1.Controls.Add(this.pProgNo);
             this.tabPage1.Location = new System.Drawing.Point(4, 33);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -3171,18 +3171,18 @@ namespace BeeInterface
             this.tabPage1.TabIndex = 3;
             this.tabPage1.Text = "Value";
             // 
-            // panel8
+            // pProcess
             // 
-            this.panel8.Controls.Add(this.btnReadProgress);
-            this.panel8.Controls.Add(this.txtValueProgress);
-            this.panel8.Controls.Add(this.label27);
-            this.panel8.Controls.Add(this.txtAddProgress);
-            this.panel8.Controls.Add(this.label29);
-            this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel8.Location = new System.Drawing.Point(3, 275);
-            this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(561, 68);
-            this.panel8.TabIndex = 28;
+            this.pProcess.Controls.Add(this.btnReadProgress);
+            this.pProcess.Controls.Add(this.txtValueProgress);
+            this.pProcess.Controls.Add(this.label27);
+            this.pProcess.Controls.Add(this.txtAddProgress);
+            this.pProcess.Controls.Add(this.label29);
+            this.pProcess.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pProcess.Location = new System.Drawing.Point(3, 275);
+            this.pProcess.Name = "pProcess";
+            this.pProcess.Size = new System.Drawing.Size(561, 68);
+            this.pProcess.TabIndex = 28;
             // 
             // btnReadProgress
             // 
@@ -3271,18 +3271,18 @@ namespace BeeInterface
             this.label29.TabIndex = 0;
             this.label29.Text = "Add Progress";
             // 
-            // panel7
+            // pQty
             // 
-            this.panel7.Controls.Add(this.btnReadQty);
-            this.panel7.Controls.Add(this.txtValueQty);
-            this.panel7.Controls.Add(this.label23);
-            this.panel7.Controls.Add(this.txtAddQty);
-            this.panel7.Controls.Add(this.label25);
-            this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel7.Location = new System.Drawing.Point(3, 207);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(561, 68);
-            this.panel7.TabIndex = 27;
+            this.pQty.Controls.Add(this.btnReadQty);
+            this.pQty.Controls.Add(this.txtValueQty);
+            this.pQty.Controls.Add(this.label23);
+            this.pQty.Controls.Add(this.txtAddQty);
+            this.pQty.Controls.Add(this.label25);
+            this.pQty.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pQty.Location = new System.Drawing.Point(3, 207);
+            this.pQty.Name = "pQty";
+            this.pQty.Size = new System.Drawing.Size(561, 68);
+            this.pQty.TabIndex = 27;
             // 
             // btnReadQty
             // 
@@ -3371,18 +3371,18 @@ namespace BeeInterface
             this.label25.TabIndex = 0;
             this.label25.Text = "Add Qty";
             // 
-            // panel6
+            // pCountChart
             // 
-            this.panel6.Controls.Add(this.btnReadCountProg);
-            this.panel6.Controls.Add(this.txtValueCountProg);
-            this.panel6.Controls.Add(this.label16);
-            this.panel6.Controls.Add(this.txtAddCountProg);
-            this.panel6.Controls.Add(this.label17);
-            this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel6.Location = new System.Drawing.Point(3, 139);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(561, 68);
-            this.panel6.TabIndex = 26;
+            this.pCountChart.Controls.Add(this.btnReadCountProg);
+            this.pCountChart.Controls.Add(this.txtValueCountProg);
+            this.pCountChart.Controls.Add(this.label16);
+            this.pCountChart.Controls.Add(this.txtAddCountProg);
+            this.pCountChart.Controls.Add(this.label17);
+            this.pCountChart.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pCountChart.Location = new System.Drawing.Point(3, 139);
+            this.pCountChart.Name = "pCountChart";
+            this.pCountChart.Size = new System.Drawing.Size(561, 68);
+            this.pCountChart.TabIndex = 26;
             // 
             // btnReadCountProg
             // 
@@ -3471,18 +3471,18 @@ namespace BeeInterface
             this.label17.TabIndex = 0;
             this.label17.Text = "Add C.Prog";
             // 
-            // panel4
+            // pPO
             // 
-            this.panel4.Controls.Add(this.btnReadPO);
-            this.panel4.Controls.Add(this.txtValuePO);
-            this.panel4.Controls.Add(this.label13);
-            this.panel4.Controls.Add(this.txtAddPO);
-            this.panel4.Controls.Add(this.label15);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(3, 71);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(561, 68);
-            this.panel4.TabIndex = 25;
+            this.pPO.Controls.Add(this.btnReadPO);
+            this.pPO.Controls.Add(this.txtValuePO);
+            this.pPO.Controls.Add(this.label13);
+            this.pPO.Controls.Add(this.txtAddPO);
+            this.pPO.Controls.Add(this.label15);
+            this.pPO.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pPO.Location = new System.Drawing.Point(3, 71);
+            this.pPO.Name = "pPO";
+            this.pPO.Size = new System.Drawing.Size(561, 68);
+            this.pPO.TabIndex = 25;
             // 
             // btnReadPO
             // 
@@ -3571,18 +3571,18 @@ namespace BeeInterface
             this.label15.TabIndex = 0;
             this.label15.Text = "Add PO";
             // 
-            // panel3
+            // pProgNo
             // 
-            this.panel3.Controls.Add(this.btnReadProg);
-            this.panel3.Controls.Add(this.txtProg);
-            this.panel3.Controls.Add(this.label12);
-            this.panel3.Controls.Add(this.txtAddProg);
-            this.panel3.Controls.Add(this.label11);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(3, 3);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(561, 68);
-            this.panel3.TabIndex = 24;
+            this.pProgNo.Controls.Add(this.btnReadProg);
+            this.pProgNo.Controls.Add(this.txtProg);
+            this.pProgNo.Controls.Add(this.label12);
+            this.pProgNo.Controls.Add(this.txtAddProg);
+            this.pProgNo.Controls.Add(this.label11);
+            this.pProgNo.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pProgNo.Location = new System.Drawing.Point(3, 3);
+            this.pProgNo.Name = "pProgNo";
+            this.pProgNo.Size = new System.Drawing.Size(561, 68);
+            this.pProgNo.TabIndex = 24;
             // 
             // btnReadProg
             // 
@@ -3718,16 +3718,16 @@ namespace BeeInterface
             this.layOut.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.panel8.ResumeLayout(false);
-            this.panel8.PerformLayout();
-            this.panel7.ResumeLayout(false);
-            this.panel7.PerformLayout();
-            this.panel6.ResumeLayout(false);
-            this.panel6.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
+            this.pProcess.ResumeLayout(false);
+            this.pProcess.PerformLayout();
+            this.pQty.ResumeLayout(false);
+            this.pQty.PerformLayout();
+            this.pCountChart.ResumeLayout(false);
+            this.pCountChart.PerformLayout();
+            this.pPO.ResumeLayout(false);
+            this.pPO.PerformLayout();
+            this.pProgNo.ResumeLayout(false);
+            this.pProgNo.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3739,17 +3739,17 @@ namespace BeeInterface
         private System.Windows.Forms.TabPage tabPage7;
         private System.Windows.Forms.Timer tmConnect;
         private TabPage tabPage1;
-        private Panel panel3;
+        private Panel pProgNo;
         private TextBox txtAddProg;
         private Label label11;
         private Label label12;
         public TextBox txtProg;
-        private Panel panel4;
+        private Panel pPO;
         public TextBox txtValuePO;
         private Label label13;
         private TextBox txtAddPO;
         private Label label15;
-        private Panel panel6;
+        private Panel pCountChart;
         public TextBox txtValueCountProg;
         private Label label16;
         private TextBox txtAddCountProg;
@@ -3757,13 +3757,13 @@ namespace BeeInterface
         private RJButton btnReadPO;
         private RJButton btnReadProg;
         private RJButton btnReadCountProg;
-        private Panel panel7;
+        private Panel pQty;
         private RJButton btnReadQty;
         public TextBox txtValueQty;
         private Label label23;
         private TextBox txtAddQty;
         private Label label25;
-        private Panel panel8;
+        private Panel pProcess;
         private RJButton btnReadProgress;
         public TextBox txtValueProgress;
         private Label label27;

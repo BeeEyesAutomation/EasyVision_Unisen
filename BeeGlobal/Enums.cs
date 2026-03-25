@@ -205,7 +205,7 @@ namespace BeeGlobal
         Light1,
         Light2,
         Light3,
-        Alive, Dummy, Training, ResetQty
+        Alive, Dummy, Training, ResetQty,EStop
     }
     public enum ValueInput
     {
@@ -396,7 +396,7 @@ Color,Binary}
     
     public enum TypeCrop
     {
-        Crop, Area, Mask, None
+        Crop, Area, Mask,Limit, None
     }
     public enum Mode
     {

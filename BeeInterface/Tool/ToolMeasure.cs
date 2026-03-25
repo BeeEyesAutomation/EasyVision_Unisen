@@ -67,22 +67,22 @@ namespace BeeInterface
                     int index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[0].Item1);
                     PropetyTool propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
                     cb2.DataSource = null;
-                    cb2.DataSource = propetyTool.Propety.listP_Center;
+                    cb2.DataSource = propetyTool.Propety2.listP_Center;
                     index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[1].Item1);
                     propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
                     cb4.DataSource = null;
-                    cb4.DataSource = propetyTool.Propety.listP_Center;
+                    cb4.DataSource = propetyTool.Propety2.listP_Center;
                     index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[2].Item1);
                  
                     if(index>-1)
                         propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
                     cb6.DataSource = null;
-                    cb6.DataSource = propetyTool.Propety.listP_Center;
+                    cb6.DataSource = propetyTool.Propety2.listP_Center;
                     index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[3].Item1);
                     if (index > -1)
                         propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
                     cb8.DataSource = null;
-                    cb8.DataSource = propetyTool.Propety.listP_Center;
+                    cb8.DataSource = propetyTool.Propety2.listP_Center;
                     cb2.SafeSelectIndex(Propety.listPointChoose[0].Item2);
                     cb4.SafeSelectIndex(Propety.listPointChoose[1].Item2);
                     cb6.SafeSelectIndex(Propety.listPointChoose[2].Item2);
@@ -571,7 +571,7 @@ namespace BeeInterface
 
 
             cb2.DataSource = null;
-            cb2.DataSource = propetyTool.Propety.listP_Center;
+            cb2.DataSource = propetyTool.Propety2.listP_Center;
             //dynamic outLine1 = BeeCore.Common.PropetyTools[Propety.IndexThread][BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name ==Properties.CH listPointChoose[0].Item1)].Propety;
 
 
@@ -632,7 +632,7 @@ namespace BeeInterface
 
 
             cb2.DataSource = null;
-            cb2.DataSource = propetyTool.Propety.listP_Center;
+            cb2.DataSource = propetyTool.Propety2.listP_Center;
         }
 
         private void cb2_SelectionChangeCommitted(object sender, EventArgs e)
@@ -649,7 +649,7 @@ namespace BeeInterface
             if (propetyTool == null) return;
             if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width && propetyTool.TypeTool != TypeTool.Edge) return;
             cb4.DataSource = null;
-            cb4.DataSource = propetyTool.Propety.listP_Center;
+            cb4.DataSource = propetyTool.Propety2.listP_Center;
 
         }
 
@@ -663,7 +663,7 @@ namespace BeeInterface
             if (propetyTool == null) return;
             if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width && propetyTool.TypeTool != TypeTool.Edge) return;
             cb6.DataSource = null;
-            cb6.DataSource = propetyTool.Propety.listP_Center;
+            cb6.DataSource = propetyTool.Propety2.listP_Center;
         }
 
         private void cb7_SelectionChangeCommitted(object sender, EventArgs e)
@@ -674,7 +674,7 @@ namespace BeeInterface
             if (propetyTool == null) return;
             if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width && propetyTool.TypeTool != TypeTool.Edge) return;
             cb8.DataSource = null;
-            cb8.DataSource = propetyTool.Propety.listP_Center;
+            cb8.DataSource = propetyTool.Propety2.listP_Center;
             //switch (propetyTool.TypeTool)
         }
 
@@ -709,7 +709,7 @@ namespace BeeInterface
             if (propetyTool == null) return;
             if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width && propetyTool.TypeTool != TypeTool.Edge) return;
             cb4.DataSource = null;
-            cb4.DataSource = propetyTool.Propety.listP_Center;
+            cb4.DataSource = propetyTool.Propety2.listP_Center;
 
             //switch (propetyTool.TypeTool)
             //{
@@ -733,8 +733,8 @@ namespace BeeInterface
         {
             if (cb4.SelectedIndex == -1) return;
           
-            Propety.listLine1Point[1] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2].Propety.listP_Center[cb4.SelectedIndex];
-            Propety.listRot[1] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2].Propety.rectRotates[cb4.SelectedIndex];
+            Propety.listLine1Point[1] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2].Propety2.listP_Center[cb4.SelectedIndex];
+            Propety.listRot[1] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2].Propety2.rectRotates[cb4.SelectedIndex];
             Propety.listPointChoose[1] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2].Name, cb4.SelectedIndex);
 
 
@@ -774,7 +774,7 @@ namespace BeeInterface
             if (propetyTool == null) return;
             if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width && propetyTool.TypeTool != TypeTool.Edge) return;
             cb6.DataSource = null;
-            cb6.DataSource = propetyTool.Propety.listP_Center;
+            cb6.DataSource = propetyTool.Propety2.listP_Center;
 
             //switch (propetyTool.TypeTool)
             //{
@@ -817,8 +817,8 @@ namespace BeeInterface
         private void cb6_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cb6.SelectedIndex == -1) return;
-            Propety.listLine2Point[0] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].Propety.listP_Center[cb6.SelectedIndex];
-            Propety.listRot[2] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].Propety.rectRotates[cb6.SelectedIndex];
+            Propety.listLine2Point[0] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].Propety2.listP_Center[cb6.SelectedIndex];
+            Propety.listRot[2] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].Propety2.rectRotates[cb6.SelectedIndex];
             Propety.listPointChoose[2] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].Name, cb6.SelectedIndex);
 
             //switch (BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].TypeTool)
@@ -845,8 +845,8 @@ namespace BeeInterface
         private void cb8_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cb8.SelectedIndex == -1) return;
-            Propety.listLine2Point[1] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4].Propety.listP_Center[cb8.SelectedIndex];
-            Propety.listRot[3] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4].Propety.rectRotates[cb8.SelectedIndex];
+            Propety.listLine2Point[1] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4].Propety2.listP_Center[cb8.SelectedIndex];
+            Propety.listRot[3] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4].Propety2.rectRotates[cb8.SelectedIndex];
             Propety.listPointChoose[3] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4].Name, cb8.SelectedIndex);
 
 
@@ -884,8 +884,8 @@ namespace BeeInterface
         {
             if (cb2.SelectedIndex == -1) return;
           
-            Propety.listLine1Point[0] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].Propety.listP_Center[cb2.SelectedIndex];
-            Propety.listRot[0] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].Propety.rectRotates[cb2.SelectedIndex];
+            Propety.listLine1Point[0] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].Propety2.listP_Center[cb2.SelectedIndex];
+            Propety.listRot[0] = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].Propety2.rectRotates[cb2.SelectedIndex];
             Propety.listPointChoose[0] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].Name, cb2.SelectedIndex);
 
             //switch (BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].TypeTool)

@@ -534,6 +534,7 @@ namespace BeeCore
             Mat source, RectRotate rot, RectRotate rotMask,
             bool returnMaskOnly = false)
         {
+        
             if (source == null || source.Empty()) return new Mat();
 
             // ==== 1) Xác định tâm neo & kích thước theo shape ====

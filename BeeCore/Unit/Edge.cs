@@ -16,6 +16,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -122,24 +123,39 @@ namespace BeeCore
 
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
-          
-                if (matProcess != null) { matProcess.Dispose(); matProcess = null; }
+            AspectLen = 0.2f;
+            if (matProcess != null) { matProcess.Dispose(); matProcess = null; }
             using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 if (raw.Empty()) return;
-              
+                Mat matMark = new Mat();
                 Mat matCrop = Cropper.CropRotatedRectUltraFast(raw, rotArea);
                 if (matProcess == null) matProcess = new Mat();
                 if (!matProcess.Empty()) matProcess.Dispose();
                 if (matCrop.Type() == MatType.CV_8UC3)
                     Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
+                if(matCrop.Empty()) 
+                    return;
                 switch (MethordEdge)
                 {
                     case MethordEdge.CloseEdges:
                         matProcess = Filters.Edge(matCrop);
                         break;
                     case MethordEdge.StrongEdges:
-                        matProcess = Filters.GetStrongEdgesOnly(matCrop);
+                        //Mat matClear  = Filters.SuppressHighlightOnly(matCrop);
+                        //Cv2.ImWrite("process.png", matClear);
+                         Cv2.Threshold(matCrop, matMark, ThresholdBinary,255, ThresholdTypes.Binary);
+                      //  matMark = Filters.ClearNoise(matMark, SizeClearBig);
+                       
+                        Mat kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(11, 11));
+                        Cv2.Dilate(matMark, matMark, kernel, iterations: 1);
+                      //  Cv2.ImWrite("Dilate.png", matMark);
+                        //  matMark = Filters.ErodeDilate(matBinary, MorphTypes.Open, new Size(11, 11));
+
+                        Cv2.BitwiseNot(matMark, matMark);
+                     Mat Edge= Filters.GetStrongEdgesStable(matCrop);
+                        Cv2.BitwiseAnd(Edge, matMark, matProcess);
+                      //  Cv2.ImWrite("AND.png", matMark);
                         break;
                     case MethordEdge.Binary:
                         matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
@@ -148,16 +164,17 @@ namespace BeeCore
                         matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
                         break;
                 }
-                if (IsClearNoiseSmall)
-                    matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
+               
                 if (IsClose)
                     matProcess = Filters.Morphology(matProcess, MorphTypes.Close, new Size(SizeClose, SizeClose));
                 if (IsOpen)
                     matProcess = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
-                if (IsClearNoiseBig)
-                    matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
+                if (IsClearNoiseSmall)
+                    matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
+                //if (IsClearNoiseBig)
+                //    matProcess = Filters.ClearNoiseBig(matProcess, SizeClearBig*100);
 
-                LineDirectionMode lineDirectionMode = LineDirectionMode.Horizontal;
+                LineDirectionMode lineDirectionMode = LineDirectionMode.Vertical;
               
                 Line2DCli =  RansacLine.FindBestLine(
                     matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
@@ -165,10 +182,11 @@ namespace BeeCore
                     threshold: (float)RansacThreshold,
                     maxPoints: 120000,
                     seed: Index,
-                    mmPerPixel: 1/Scale, AspectLen,(BeeCpp.LineDirectionMode) ((int)lineDirectionMode),LineScanMode.BottomToTop,0,30
+                    mmPerPixel: 1/Scale, AspectLen,(BeeCpp.LineDirectionMode) ((int)lineDirectionMode),LineScanMode.LeftToRight,0,4
 
 
                 );
+            
                 PointF p1 = new PointF(Line2DCli.X1, Line2DCli.Y1);
                 PointF p2 = new PointF(Line2DCli.X2, Line2DCli.Y2);
                 System.Drawing.Point pCenter = new System.Drawing.Point((int)rotArea._PosCenter.X - (int)rotArea._rect.Width / 2 + (int)p1.X, (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)p1.Y);
@@ -270,6 +288,7 @@ namespace BeeCore
             
         
         }
+        public float PerValue;
         public void Complete()
         {
             //switch (SegmentStatType)
@@ -286,30 +305,41 @@ namespace BeeCore
             //}
             if(Line2DCli.Found == true)
             WidthResult = Line2DCli.LengthMm;
-            if (IsCalibs&& Line2DCli.Found==true)
+          
+
+                if (IsCalibs && Line2DCli.Found == true)
             {
                 MinInliers = Line2DCli.Inliers;
                 WidthTemp = WidthResult;
             }
-            Common.PropetyTools[IndexThread][Index].ScoreResult= (int)((Math.Abs(WidthResult - WidthTemp) / (WidthTemp * 1.0))*100);
+            Common.PropetyTools[IndexThread][Index].ScoreResult = WidthResult;// (int)((Math.Abs(WidthResult - WidthTemp) / (WidthTemp * 1.0))*100);
             if (Line2DCli.Found==false)
             {
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
             }
-            else if (Common.PropetyTools[IndexThread][Index].ScoreResult <= Common.PropetyTools[IndexThread][Index].Score)
+            else if (Common.PropetyTools[IndexThread][Index].ScoreResult >= Common.PropetyTools[IndexThread][Index].Score)
             {
                 Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-                if (!Global.IsRun)
-                {
+                //if (!Global.IsRun)
+                //{
 
 
-                    WidthTemp = WidthResult;
-                }
+                //    WidthTemp = WidthResult;
+                //}
             }
             else
             {
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
             }
+            PerValue = (float)(( Line2DCli.LengthPx / Line2DCli.Inliers)*100.0);
+            //if (PerValue > 70)
+            //{
+            //    Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+            //}
+            //else
+            //{
+            //    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+            //}
             //  IsOK = true;
             //switch (Compare)
             //{
@@ -404,7 +434,7 @@ namespace BeeCore
              Draws.DrawTicks(gc, p1,LineOrientation, pen);
             Draws.DrawTicks(gc, p2,LineOrientation, pen);
             gc.DrawLine(pen, p1, p2);
-            gc.DrawString($"{Line2DCli.LengthMm:F2}mm", new Font("Arial", Global.ParaShow.FontSize), new SolidBrush(Global.ParaShow.ColorInfor), p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
+            gc.DrawString($"{Line2DCli.LengthMm:F2}mm +"+PerValue+"%", new Font("Arial", Global.ParaShow.FontSize), new SolidBrush(Global.ParaShow.ColorInfor), p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
             // gc.ResetTransform();
             //mat = new Matrix();
             //if (!Global.IsRun)
@@ -431,7 +461,7 @@ namespace BeeCore
             Common.PropetyTools[IndexThread][Index].StepValue = 0.1f;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
           
-            Common.PropetyTools[IndexThread][Index].MaxValue = 20;
+            Common.PropetyTools[IndexThread][Index].MaxValue = 200;
             Common.PropetyTools[IndexThread][Index]. StatusTool = StatusTool.WaitCheck;
         }
         public float Scale = 1;

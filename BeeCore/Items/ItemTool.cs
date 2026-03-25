@@ -805,7 +805,7 @@ namespace BeeCore
             {
                 Global.IndexToolSelected = IndexTool;
                 BeeCore.Common.PropetyTools[IndexThread][Global.IndexToolSelected].Name = txtEdit.Text.Trim();
-                BeeCore.Common.PropetyTools[IndexThread][Global.IndexToolSelected].Propety.SetModel();
+                BeeCore.Common.PropetyTools[IndexThread][Global.IndexToolSelected].Propety2.SetModel();
               Name= txtEdit.Text.Trim();
                 txtEdit.Visible = false;
                 this.Invalidate();

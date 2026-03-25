@@ -1,5 +1,7 @@
-﻿using System;
+﻿using BeeCore.Core;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,13 +37,23 @@ namespace BeeCore
         public int ValueYMax { get; set; }//HAU
         public int ValueCounter { get; set; }//HAU
                                              // ===== LIST BOX AREA =====
+        public bool IsMinColor { get; set; }
+        public int ValueMinColor { get; set; }
+        public int ValueExternColor { get; set; } // nằm trong MinColor
+        public Color SampleColor { get; set; } = Color.Empty;
+        public bool IsChoosingColor { get; set; }
 
+      
         /// <summary>
         /// Các index box được chọn
         /// </summary>
+        public List<int> ListTempColor { get; set; } = new List<int>();
         public List<int> ListIndexBox { get; set; } = new List<int>();
         [field: NonSerialized]
         public List<int> ListIndexBoxBackup { get; set; } = new List<int>();
+        [NonSerialized]
+        public List<BeeCpp.ColorArea> ListColorArea = new List<BeeCpp.ColorArea>();
+        public HSV HSV { get; set; }
     }
 
 }

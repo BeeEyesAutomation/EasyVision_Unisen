@@ -1,5 +1,6 @@
 ﻿
 using BeeCore.Algorithm;
+using BeeCore.Core;
 using BeeCore.Func;
 using BeeCore.Funtion;
 using BeeCpp;
@@ -8,12 +9,14 @@ using CvPlus;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using OpenCvSharp.Flann;
 using Python.Runtime;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -22,9 +25,11 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using static LibUsbDotNet.Main.UsbTransferQueue;
 using static OpenCvSharp.ML.DTrees;
 using static System.Windows.Forms.MonthCalendar;
@@ -76,9 +81,31 @@ namespace BeeCore
 
         public  void SetModel()
         {
-           
+
+            //if (rArea == null)
+            //    rArea = rotArea;
+            //if (rCrop == null)
+            //    rCrop = rotCrop;
+            //if (rMask == null)
+            //    rMask = rotMask;
+            //if (rLimit == null)
+            //    rLimit = rotLimit;
             if (rotArea == null) rotArea = new RectRotate();
+            if (rotCrop == null) rotCrop = new RectRotate();
             if (rotMask == null) rotMask = new RectRotate();
+            if (rotLimit == null) rotLimit = new RectRotate();
+            rotCrop.Name = "Area Line";
+            rotCrop.TypeCrop = TypeCrop.Crop;
+
+
+            rotMask.Name = "Area Mask";
+            rotMask.TypeCrop = TypeCrop.Mask;
+
+            rotArea.Name = "Area Check";
+            rotArea.TypeCrop = TypeCrop.Area;
+
+            rotLimit.Name = "Area Limit";
+            rotLimit.TypeCrop = TypeCrop.Limit;
             if (listRotScan == null) listRotScan = new List<RectRotate>();
             Common.PropetyTools[IndexThread][Index].StepValue = 1;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
@@ -138,18 +165,21 @@ namespace BeeCore
                             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
                             return;
                         }    
+                 
                     G.objYolo.load_model(Common.PropetyTools[IndexThread][Index].Name, pathFullModel, (int)TypeYolo);
-                    //dynamic mod = Py.Import("Tool.Learning");
-                    //dynamic cls = mod.GetAttr("ObjectDetector"); // class
-                    //dynamic obj = cls.Invoke();              // khởi tạo instance
+               
+                            //dynamic mod = Py.Import("Tool.Learning");
+                            //dynamic cls = mod.GetAttr("ObjectDetector"); // class
+                            //dynamic obj = cls.Invoke();              // khởi tạo instance
 
-                    //if (Common.PropetyTools[IndexThread][Index].Name.Trim() == "")
-                    //{
-                    //    Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
-                    //}
-                    Common.PropetyTools[IndexThread][Index]. StatusTool = StatusTool.WaitCheck;
+                            //if (Common.PropetyTools[IndexThread][Index].Name.Trim() == "")
+                            //{
+                            //    Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                            //}
+                            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
                   
                 }
+                SetListTemp();
             }
                 catch (PythonException pyEx)
                 {
@@ -289,7 +319,12 @@ namespace BeeCore
         public String PathModel = "",PathLabels="",PathDataSet;
         public TypeYolo TypeYolo = TypeYolo.YOLO;
         public TypeTool TypeTool=TypeTool.Learning;
-        public RectRotate rotArea, rotCrop, rotMask;
+        public RectRotate rotArea, rotCrop, rotMask,rotLimit;
+        public RectRotate rArea { get; set; }
+        public RectRotate rCrop { get; set; }
+        public RectRotate rMask { get; set; }
+        public RectRotate rLimit { get; set; }
+
         public RectRotate rotAreaTemp = new RectRotate();
         [NonSerialized]
         public RectRotate rotAreaAdjustment;
@@ -378,8 +413,200 @@ namespace BeeCore
         public int LenRS= 0;
         public float ThresholdLine = 0.5f;
         public float ToleranceLine = 0.1f;
+        public static Mat CropRoiView(Mat src, RectRotate rot)
+        {
+            Rect roi = new Rect(new OpenCvSharp. Point(rot._PosCenter.X - rot._rect.Width / 2, rot._PosCenter.Y - rot._rect.Height / 2), new OpenCvSharp. Size(rot._rect.Width, rot._rect.Height));
+            if (src == null || src.Empty()) return new Mat();
+            return new Mat(src, roi); // view, dùng xong nhớ Dispose
+        }
+       // [NonSerialized]
+        //BeeCpp. ColorArea ColorAreaPP = new BeeCpp.ColorArea();
+        public void SetTemp(BeeCpp.ColorArea ColorAreaPP, HSVCli[] arrHSV,int Extraction)
+        {
+            ColorAreaPP.SetTempHSV(arrHSV, Extraction);
+        }
+        public int SizeClearBig = 50;
+        public int SizeClose = 5;
+        public int CheckColor(BeeCpp.ColorArea ColorAreaPP, ref Mat matProcess,Mat Crop)
+        {
+            int pxRs = 0;
+            using (Mat src = Crop)
+            {
+                if (src.Empty()) return -1;
+                Mat bgr = null;
+                try
+                {
+                    if (src.Type() == MatType.CV_8UC1)
+                    {
+                        bgr = new Mat();
+                        Cv2.CvtColor(src, bgr, ColorConversionCodes.GRAY2BGR);
+                    }
+                    else
+                    {
+                        bgr = src; // reuse
+                    }  
+                    SizeClearBig = 50;
+         SizeClose = 5;
+                   
+                    ColorAreaPP.SetImgeNoCrop(
+                        bgr.Data, bgr.Width, bgr.Height, (int)bgr.Step(), bgr.Channels());
+
+                    GC.KeepAlive(bgr);
+
+                    int w, h, s, c;
+                    IntPtr ptr = ColorAreaPP.Check(out w, out h, out s, out c);
+                    try
+                    {
+                        // Validate trước, nhưng KHÔNG return trước khi FreeBuffer
+                        if (ptr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
+                        {
+                            return 0; // finally phía dưới vẫn chạy để FreeBuffer nếu cần
+                        }
+
+                        MatType mt = (c == 1) ? MatType.CV_8UC1
+                                   : (c == 3) ? MatType.CV_8UC3
+                                              : MatType.CV_8UC4;
+
+                        using (var mNative = new Mat(h, w, mt, ptr, s))
+                        {
+                            matProcess = mNative.Clone(); // bây giờ dữ liệu đã thuộc về OpenCV (managed)
+                        }
+                    }
+                    finally
+                    {
+                        // GIẢI PHÓNG BỘ NHỚ DO native CẤP PHÁT — luôn luôn!
+                        if (ptr != IntPtr.Zero)
+                        {
+                            ColorAreaPP.FreeBuffer(ptr);
+                            ptr = IntPtr.Zero;
+                        }
+                    }
+
+                    // Hậu xử lý:
+                   // if (IsClearNoiseSmall)
+                    //{
+                    //    Mat t = Filters.ClearNoise(matProcess, SizeClearsmall);
+                    //    if (!object.ReferenceEquals(t, matProcess)) { matProcess.Dispose(); matProcess = t; }
+                    //}
+                  ////  if (IsClose)
+                  //  {
+                  //      Mat t = Filters.Morphology(matProcess, MorphTypes.Close, new OpenCvSharp.Size(SizeClose, SizeClose));
+                  //      if (!object.ReferenceEquals(t, matProcess)) { matProcess.Dispose(); matProcess = t; }
+                  //  }
+                  //  //if (IsOpen)
+                  //  //{
+                  //  //    Mat t = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
+                  //  //    if (!object.ReferenceEquals(t, matProcess)) { matProcess.Dispose(); matProcess = t; }
+                  //  //}
+                  ////  if (IsClearNoiseBig)
+                  //  {
+                  //      Mat t = Filters.ClearNoise(matProcess, SizeClearBig);
+                  //      if (!object.ReferenceEquals(t, matProcess)) { matProcess.Dispose(); matProcess = t; }
+                  //  }
+
+                    if (matProcess.Channels() != 1)
+                    {
+                        using (var gray = new Mat())
+                        {
+                            if (matProcess.Channels() == 3)
+                                Cv2.CvtColor(matProcess, gray, ColorConversionCodes.BGR2GRAY);
+                            else
+                                Cv2.CvtColor(matProcess, gray, ColorConversionCodes.BGRA2GRAY);
+
+                            matProcess.Dispose();
+                            matProcess = gray.Clone();
+                        }
+                    }
+                    Random rnd = new Random();
+                    //string fileName = $"Temp\\ img_{DateTime.Now:yyyyMMdd_HHmmss}_{rnd.Next(1000, 9999)}.png";
+
+                    //Cv2.ImWrite(fileName, matProcess);
+                    pxRs = Cv2.CountNonZero(matProcess);
+                    return pxRs;
+                }
+                finally
+                {
+                    if (bgr != null && !object.ReferenceEquals(bgr, src))
+                        bgr.Dispose();
+                }
+            }
+        }
+        
+       public HSV HSV = new HSV();
+        public void SetListTemp()
+        {
+           
+           // using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
+            {
+
+                foreach (LabelItem lb in labelItems)
+                {
+
+                
+                        if (lb.IsUse)
+                        {
+                            if (lb.IsMinColor)
+                            {
+                                if (lb.ListColorArea != null)
+                                
+                                    lb.ListColorArea.Clear();
+                            if (lb.ListColorArea != null)
+                                if (lb.ListColorArea.Count() !=0)
+                                    lb.ListColorArea.Clear();
+                                lb.ListColorArea = new List<BeeCpp.ColorArea>();
+                            bool IsIni = false;
+                            if(lb.ListColorArea == null|| lb.ListTempColor.Count()==0)
+                            {
+                                IsIni = true; lb.ListTempColor = new List<int>();
+                            }
+                          
+                            for (int i = 0; i < lb.ListIndexBox.Count; i++)
+                            {
+                               
+                                if (lb.HSV == null) continue;
+                                if (!lb.IsCounter)
+                                {
+                                    lb.ListColorArea.Add(new BeeCpp.ColorArea());
+                                    if(IsIni)
+                                    lb.ListTempColor.Add(0);
+                                    HSVCli[] arrHSV = new HSVCli[1];
+                                    arrHSV[0] = new HSVCli();
+                                    arrHSV[0].H = lb.HSV.H;
+                                    arrHSV[0].S = lb.HSV.S;
+                                    arrHSV[0].V = lb.HSV.V;
+                                    SetTemp(lb.ListColorArea[lb.ListColorArea.Count - 1], arrHSV, lb.ValueExternColor);
+
+                                }
+                                else
+                                {
+                                    for (int j = 0; j < lb.ValueCounter; j++)
+                                    {
+                                        lb.ListColorArea.Add(new BeeCpp.ColorArea());
+                                        if (IsIni )
+                                            lb.ListTempColor.Add(0);
+                                        HSVCli[] arrHSV = new HSVCli[1];
+                                        arrHSV[0] = new HSVCli();
+                                        arrHSV[0].H = lb.HSV.H;
+                                        arrHSV[0].S = lb.HSV.S;
+                                        arrHSV[0].V = lb.HSV.V;
+                                        SetTemp(lb.ListColorArea[lb.ListColorArea.Count - 1], arrHSV, lb.ValueExternColor);
+
+                                    }
+                                }
+
+                            }
+
+                            }
+                        }
+                    
+                }
+            }    
+        }
+     
+      
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
+            
             if (!Global.IsIntialPython) return;
             if (!Global.IsRun) 
                 rotCropAdjustment = rotCrop;
@@ -434,35 +661,114 @@ namespace BeeCore
             switch (TypeYolo)
             {
                 case TypeYolo.Onnx:
-                    using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
+                    if (IsCropSingle)
                     {
-                        float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+                        using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
+                        {
+                          
+                            if (matCrop.Empty()) return;
 
-                        if (matCrop.Type() == MatType.CV_8UC1)
-                            Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
-                        int countDetect = NativeOnnx.Detect(
-                        matCrop.Data,
-                        matCrop.Width,
-                        matCrop.Height,
-                        (int)matCrop.Step(),
-                        conf,
-                        0.9f,false,
-                        OnnxBoxes);
-                        foreach(NativeYolo.YoloBox box in  OnnxBoxes)
-                        {if (box.score == 0) continue;
-                            string name = "";
-                            if (ListNameOnnx == null)
-                                name = "unknown";
-                            else
-                             name = ListNameOnnx.TryGetValue(box.classId, out var s) ? s : "unknown";
-                            resultTemp.Add(new BeeCore.ResultItem((name)));
-                            resultTemp[resultTemp.Count - 1].rot = NativeYolo.YoloBoxToRectRotate(box);
-                            resultTemp[resultTemp.Count - 1].Score =(box.score) * 100f;
-                            resultTemp[resultTemp.Count - 1].IsOK = true;
+                            if (matCrop.Type().Depth != MatType.CV_8U)
+                            {
+                                using (var tmp8u = new Mat())
+                                {
+                                    Cv2.ConvertScaleAbs(matCrop, tmp8u); // 16U/32F -> 8U
+                                    matCrop.AssignTo(tmp8u);             // ghi đè dữ liệu (OpenCvSharp: AssignTo giữ shape/type mới)
+                                }
+                            }
+                            // 2) đảm bảo đúng số kênh
+                            if (matCrop.Channels() == 1)
+                            {
+                                Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                            }
+                            else if (matCrop.Channels() == 4)
+                            {
+                                Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGRA2BGR);
+                            }
+                            for (int i = 0; i < ListRotMask.Count; i++)
+                            {
                             
-                        }    
-                      
-                     }
+                            using (Mat matTemp = Cropper.CropRotatedRect(matCrop, ListRotMask[i], null))
+                            {
+                                float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+                                int countDetect = NativeOnnx.Detect(
+                                  matTemp.Data,
+                                  matTemp.Width,
+                                  matTemp.Height,
+                                  (int)matTemp.Step(),
+                                  conf,
+                                  0.9f, true,
+                                  OnnxBoxes);
+                                countDetect = 0;
+                                foreach (NativeYolo.YoloBox box in OnnxBoxes)
+                                {
+                                    if (box.score == 0) continue;
+                                    countDetect++;
+
+                                }
+                                if (countDetect > 0)
+                                {
+                                    string name = "";
+                                    if (ListNameOnnx == null)
+                                        name = "unknown";
+                                    else
+                                        name = ListNameOnnx.TryGetValue(OnnxBoxes[0].classId, out var s) ? s : "unknown";
+
+                                    resultTemp.Add(new BeeCore.ResultItem((name)));
+                                    resultTemp[resultTemp.Count - 1].rot = ListRotMask[i];
+                                    resultTemp[resultTemp.Count - 1].Score = (OnnxBoxes[0].score) * 100f;
+                                    resultTemp[resultTemp.Count - 1].IsOK = true;
+
+                                }
+                                else
+                                {
+
+                                    resultTemp.Add(new BeeCore.ResultItem("NG"));
+                                    resultTemp[resultTemp.Count - 1].rot = ListRotMask[i];
+                                    resultTemp[resultTemp.Count - 1].IsOK = false;
+                                    resultTemp[resultTemp.Count - 1].Score = 0;
+
+                                }
+
+                            }
+
+                        };
+                        }
+                    }
+                    else
+                    {
+                        using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
+                        {
+                          
+                            float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+
+                            if (matCrop.Type() == MatType.CV_8UC1)
+                                Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                            int countDetect = NativeOnnx.Detect(
+                            matCrop.Data,
+                            matCrop.Width,
+                            matCrop.Height,
+                            (int)matCrop.Step(),
+                            conf,
+                            0.9f, false,
+                            OnnxBoxes);
+                            foreach (NativeYolo.YoloBox box in OnnxBoxes)
+                            {
+                                if (box.score == 0) continue;
+                                string name = "";
+                                if (ListNameOnnx == null)
+                                    name = "unknown";
+                                else
+                                    name = ListNameOnnx.TryGetValue(box.classId, out var s) ? s : "unknown";
+                                resultTemp.Add(new BeeCore.ResultItem((name)));
+                                resultTemp[resultTemp.Count - 1].rot = NativeYolo.YoloBoxToRectRotate(box);
+                                resultTemp[resultTemp.Count - 1].Score = (box.score) * 100f;
+                                resultTemp[resultTemp.Count - 1].IsOK = true;
+
+                            }
+
+                        }
+                    }
                     break;
                 case TypeYolo.YOLO:
                     using (Py.GIL())
@@ -479,68 +785,264 @@ namespace BeeCore
                             CropOffSetY = (rotArea._PosCenter.Y - rotArea._rect.Height / 2);
                             CropOffSetX = (CropOffSetX > 0) ? 0 : -CropOffSetX;
                             CropOffSetY = (CropOffSetY > 0) ? 0 : -CropOffSetY;
-                            if (IsCropSingle&& labelItems.Count>0)
-                            {
-                                using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
-                                {
+                            //        if (IsCropSingle&& labelItems.Count>0)
+                            //        {
+                            //            using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
+                            //            {
 
+                            //                if (matCrop.Empty()) return;
+
+                            //                if (matCrop.Type().Depth != MatType.CV_8U)
+                            //                {
+                            //                    using (var tmp8u = new Mat())
+                            //                    {
+                            //                        Cv2.ConvertScaleAbs(matCrop, tmp8u); // 16U/32F -> 8U
+                            //                        matCrop.AssignTo(tmp8u);             // ghi đè dữ liệu (OpenCvSharp: AssignTo giữ shape/type mới)
+                            //                    }
+                            //                }
+                            //                // 2) đảm bảo đúng số kênh
+                            //                if (matCrop.Channels() == 1)
+                            //                {
+                            //                    Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                            //                }
+                            //                else if (matCrop.Channels() == 4)
+                            //                {
+                            //                    Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGRA2BGR);
+                            //                }
+                            //                try{ 
+                            //                for (int i = 0; i < ListRotMask.Count; i++)
+                            //                //   Parallel.For(0, ListRotMask.Count,
+                            //                //new ParallelOptions { MaxDegreeOfParallelism = Math.Min(300, Environment.ProcessorCount) },
+                            //                //i =>
+                            //                {
+                            //                    using (Mat matTemp = CropRoiView(matCrop, ListRotMask[i]))
+                            //                    {
+
+                            //                        int h = matTemp.Rows;
+                            //                        int w = matTemp.Cols;
+                            //                        int ch = matTemp.Channels(); // 3
+                            //                        int stride = (int)matTemp.Step(); // bytes/row (có thể > w*ch)
+                            //                        IntPtr p = matTemp.Data;
+                            //                        float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+                            //                        string toolName = Common.PropetyTools[IndexThread][Index].Name ?? "default";
+                            //                        dynamic dyn = G.objYolo;
+                            //                        if (dyn == null)
+                            //                        {
+                            //                            Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "Loi Khoi Tao Yolo"));
+
+                            //                        }
+                            //                        result = dyn.predict((long)p, h, w, ch, stride, conf, toolName);
+                            //                        boxes = (PyObject)result[0];
+                            //                        scores = (PyObject)result[1];
+                            //                        labels = (PyObject)result[2];
+
+                            //                            int n = (int)boxes.Length();
+                            //                        if (n > 0)
+                            //                        {
+                            //                                var b = boxes[0];   // PyObject
+                            //                                float x1 = (float)b[0].As<double>();
+                            //                                float y1 = (float)b[1].As<double>();
+                            //                                float x2 = (float)b[2].As<double>();
+                            //                                float y2 = (float)b[3].As<double>();
+
+                            //                                float bw = x2 - x1;
+                            //                                float bh = y2 - y1;
+                            //                                float cx = x1 + bw * 0.5f;
+                            //                                float cy = y1 + bh * 0.5f;
+                            //                                  Point pCenter =new System.Drawing.Point(
+                            //                   (int)(ListRotMask[i]._PosCenter.X - ListRotMask[i]._rect.Width / 2f + cx),
+                            //                   (int)(ListRotMask[i]._PosCenter.Y - ListRotMask[i]._rect.Height / 2f + cy));
+
+                            //                                var rt = new RectRotate(
+                            //                                    new System.Drawing.RectangleF(-bw / 2f, -bh / 2f, bw, bh),
+                            //                                    new System.Drawing.PointF(pCenter.X, pCenter.Y),
+                            //                                    0f, AnchorPoint.None);
+                            //                                resultTemp.Add(new BeeCore.ResultItem(((PyObject)labels[0]).ToString()));
+                            //                            resultTemp[resultTemp.Count - 1].rot = rt;
+                            //                            resultTemp[resultTemp.Count - 1].IsOK = true;
+                            //                            resultTemp[resultTemp.Count - 1].Score = (float)((PyObject)scores[0]).As<double>() * 100f;
+                            //                        }
+                            //                        else
+                            //                        {
+
+                            //                            resultTemp.Add(new BeeCore.ResultItem("NG"));
+                            //                            resultTemp[resultTemp.Count - 1].rot = ListRotMask[i];
+                            //                            resultTemp[resultTemp.Count - 1].IsOK = false;
+                            //                            resultTemp[resultTemp.Count - 1].Score = 0;
+
+                            //                        }
+
+                            //                    }
+                            //                };
+                            //            }
+                            //                 catch (Exception ex)
+                            //            {
+                            //                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
+                            //            }
+                            //}
+                            //        }
+                            if (IsCropSingle && labelItems.Count > 0)
+                            {
+                                using (Mat matCrop = Cropper.CropRotatedRect(
+                                    BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
+                                {
                                     if (matCrop.Empty()) return;
 
+                                    // ===== 1) Convert về 8U =====
                                     if (matCrop.Type().Depth != MatType.CV_8U)
                                     {
                                         using (var tmp8u = new Mat())
                                         {
-                                            Cv2.ConvertScaleAbs(matCrop, tmp8u); // 16U/32F -> 8U
-                                            matCrop.AssignTo(tmp8u);             // ghi đè dữ liệu (OpenCvSharp: AssignTo giữ shape/type mới)
+                                            Cv2.ConvertScaleAbs(matCrop, tmp8u);
+                                            tmp8u.CopyTo(matCrop);
                                         }
                                     }
-                                    // 2) đảm bảo đúng số kênh
+
+                                    // ===== 2) đảm bảo BGR =====
                                     if (matCrop.Channels() == 1)
-                                    {
                                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
-                                    }
                                     else if (matCrop.Channels() == 4)
-                                    {
                                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGRA2BGR);
+
+                                    try
+                                    {
+                                        dynamic dyn = G.objYolo;
+                                        if (dyn == null)
+                                        {
+                                            Global.LogsDashboard?.AddLog(
+                                                new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "Loi Khoi Tao Yolo"));
+                                            return;
+                                        }
+
+                                        float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+                                        string toolName = Common.PropetyTools[IndexThread][Index].Name ?? "default";
+
+                                        // ===== 3) Build batch =====
+                                        var matTemps = new List<Mat>();
+                                        var roiList = new List<RectRotate>();
+
+                                        foreach (var rot in ListRotMask)
+                                        {
+                                            Mat matTemp = CropRoiView(matCrop, rot);
+
+                                            if (matTemp.Empty())
+                                            {
+                                                matTemps.Add(null);
+                                                roiList.Add(rot);
+                                                continue;
+                                            }
+
+                                            matTemps.Add(matTemp);
+                                            roiList.Add(rot);
+                                        }
+
+                                        // ===== 4) Convert sang PyList =====
+                                        using (Py.GIL())
+                                        {
+                                            PyList pyImages = new PyList();
+
+                                            foreach (var m in matTemps)
+                                            {
+                                                if (m == null)
+                                                {
+                                                    pyImages.Append(new PyTuple(new PyObject[0]));
+                                                    continue;
+                                                }
+
+                                                int h = m.Rows;
+                                                int w = m.Cols;
+                                                int ch = m.Channels();
+                                                int stride = (int)m.Step();
+                                                long addr = (long)m.Data;
+
+                                                var tuple = new PyTuple(new PyObject[]
+                                                {
+                                        new PyInt(addr),
+                                        new PyInt(h),
+                                        new PyInt(w),
+                                        new PyInt(ch),
+                                        new PyInt(stride)
+                                                });
+
+                                                pyImages.Append(tuple);
+                                            }
+
+                                            // ===== 5) CALL BATCH =====
+                                            dynamic results = dyn.predict_batch(pyImages, conf, toolName);
+
+                                            // ===== 6) Parse kết quả =====
+                                            for (int i = 0; i < roiList.Count; i++)
+                                            {
+                                                var roi = roiList[i];
+
+                                                var rs = results[i];
+                                                 boxes = rs["boxes"];
+                                                 scores = rs["scores"];
+                                                 labels = rs["labels"];
+
+                                                int n = (int)boxes.Length();
+
+                                                if (n > 0)
+                                                {
+                                                    var b = boxes[0];
+
+                                                    float x1 = (float)b[0].As<double>();
+                                                    float y1 = (float)b[1].As<double>();
+                                                    float x2 = (float)b[2].As<double>();
+                                                    float y2 = (float)b[3].As<double>();
+
+                                                    float bw = x2 - x1;
+                                                    float bh = y2 - y1;
+                                                    float cx = x1 + bw * 0.5f;
+                                                    float cy = y1 + bh * 0.5f;
+
+                                                    Point pCenter = new Point(
+                                                        (int)(roi._PosCenter.X - roi._rect.Width / 2f + cx),
+                                                        (int)(roi._PosCenter.Y - roi._rect.Height / 2f + cy)
+                                                    );
+
+                                                    var rt = new RectRotate(
+                                                        new RectangleF(-bw / 2f, -bh / 2f, bw, bh),
+                                                        new PointF(pCenter.X, pCenter.Y),
+                                                        0f, AnchorPoint.None);
+
+                                                    var item = new BeeCore.ResultItem(labels[0].ToString());
+                                                    item.rot = rt;
+                                                    item.IsOK = true;
+                                                    item.Score = (float)scores[0].As<double>() * 100f;
+
+                                                    resultTemp.Add(item);
+                                                }
+                                                else
+                                                {
+                                                    var item = new BeeCore.ResultItem("NG");
+                                                    item.rot = roi;
+                                                    item.IsOK = false;
+                                                    item.Score = 0;
+
+                                                    resultTemp.Add(item);
+                                                }
+                                            }
+                                        }
+
+                                        // ===== 7) Dispose sau khi Python xong =====
+                                        foreach (var m in matTemps)
+                                            m?.Dispose();
                                     }
-                                    Parallel.For(0, listRotScan.Count,
-                                 new ParallelOptions { MaxDegreeOfParallelism = Math.Min(300, Environment.ProcessorCount) },
-                                 i =>
-                                 {
-                                     using (Mat matTemp = Cropper.CropRotatedRect(matCrop, listRotScan[i], null))
-                                     {
-
-                                         int h = matCrop.Rows;
-                                         int w = matCrop.Cols;
-                                         int ch = matCrop.Channels(); // 3
-                                         int stride = (int)matCrop.Step(); // bytes/row (có thể > w*ch)
-                                         IntPtr p = matCrop.Data;
-                                         float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
-                                         string toolName = Common.PropetyTools[IndexThread][Index].Name ?? "default";
-                                         dynamic dyn = G.objYolo;
-                                         if (dyn == null)
-                                         {
-                                             Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "Loi Khoi Tao Yolo"));
-
-                                         }
-                                         result = dyn.predict((long)p, h, w, ch, stride, conf, toolName);
-
-                                        if(result.Length()>0)
-                                         {
-                                             resultTemp.Add(new BeeCore.ResultItem((labelItems[0].Name).ToString()));
-                                             resultTemp[resultTemp.Count - 1].rot = listRotScan[i];
-                                             resultTemp[resultTemp.Count - 1].Score = (float)((PyObject)result[1][0]).As<double>() * 100f;
-                                         }
-                                     }
-                                 });
+                                    catch (Exception ex)
+                                    {
+                                        Global.LogsDashboard?.AddLog(
+                                            new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
+                                    }
                                 }
                             }
                             else
                             {
+                               
                                 // === Crop ROI ===
                                 using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
                                 {
-
+                                 
                                     if (matCrop.Empty()) return;
 
                                     if (matCrop.Type().Depth != MatType.CV_8U)
@@ -561,7 +1063,7 @@ namespace BeeCore
                                     {
                                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGRA2BGR);
                                     }
-
+                                   
                                     if (matCropTemp == null) matCropTemp = new Mat();
                                     if (!matCropTemp.Empty()) matCropTemp.Dispose();
                                     matCropTemp = matCrop.Clone();
@@ -636,11 +1138,37 @@ namespace BeeCore
                                             resultTemp = ResultFilter.FilterRectRotate(resultTemp, ThreshOverlap);
                                             break;
                                     }
+                                    //foreach (var r in resultTemp)
+                                    //{
 
-                                    //  resultTemp = ResultFilter.FilterRectRotate(resultTemp,0.8f);// = FilterRect.RemoveInnerRectRotates(boxList, 0.6f);
-                                    // đảm bảo matCrop còn sống trong suốt thời gian Python dùng p
+                                    //    int index = labelItems.FindIndex(x =>
+                                    //    string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
+                                    //    if (index >= 0)
+                                    //    {
+                                    //        LabelItem lb = labelItems[index];
+                                    //        Parallel.For(0, lb.ListIndexBox.Count, new ParallelOptions { MaxDegreeOfParallelism = Math.Min(300, Environment.ProcessorCount) },
+                                    //        j =>
+                                    //        //for (int j = 0; j < lb.ListIndexBox.Count; j++)
+                                    //        {
+                                    //            HSVCli[] arrHSV = new HSVCli[1];
+                                    //            arrHSV[0] = new HSVCli();
+                                    //            arrHSV[0].H = lb.HSV.H;
+                                    //            arrHSV[0].S = lb.HSV.S;
+                                    //            arrHSV[0].V = lb.HSV.V;
+                                    //          //  SetTemp(lb.ListColorArea[j], arrHSV, lb.ValueExternColor);
+                                    //            using (Mat matCrop2 = CropRoiView(matCrop, r.rot))
+                                    //            {
+                                    //                r.matProcess = new Mat();
+                                    //                r.ValueColor = CheckColor(lb.ListColorArea[j], ref r.matProcess, matCrop2);
+                                    //                if (!Global.IsRun)
+                                    //                    lb.ListTempColor[j] = r.ValueColor;
+                                    //            }
+                                    //        });
+                                    //    }
+                                    //}
                                     GC.KeepAlive(matCrop);
                                 }
+                               
                             }
                         
                             }
@@ -843,370 +1371,7 @@ namespace BeeCore
 
             return area;
         }
-        //public void Complete()
-        //{
-        //    if (Global.IsIntialPython)
-        //    {
-        //        try
-        //        {
 
-
-        //            try
-        //            {
-        //                ResultItem = new List<ResultItem>();
-        //                rectRotates = new List<RectRotate>();
-        //                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-        //                int i = 0;
-        //                numOK = 0; numNG = 0;
-        //                int scoreRS = 0;
-        //                List<String> _listLabelCompare = new List<String>();
-        //                if (labelItems == null)
-        //                {
-        //                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //                    return;
-        //                }
-        //                Content = "";
-
-        //                foreach (ResultItem rs in resultTemp)
-        //                {
-        //                    ResultItem.Add(new ResultItem(rs.Name));
-        //                    ResultItem[i].rot = rs.rot;
-        //                    ResultItem[i].Score = rs.Score;
-        //                    int index = labelItems.FindIndex(item => string.Equals(item.Name, rs.Name, StringComparison.OrdinalIgnoreCase));
-        //                    if (index > -1)
-        //                    {
-        //                        LabelItem item = labelItems[index];
-        //                        if (!item.IsUse)
-        //                        { i++; continue; }
-        //                        bool IsOK = false;
-        //                        if (item.IsX)
-        //                            if (IntersectX(rs.rot, item.ValueX))
-        //                                IsOK = true;
-        //                             else
-        //                            { i++; continue; }
-        //                        if (item.IsY)
-        //                              if (IntersectY(rs.rot, item.ValueY))
-        //                                    IsOK = true;
-        //                                else
-        //                            { i++; continue; }
-        //                        if (item.IsXMax)
-        //                            if (IntersectXMax(rs.rot, item.ValueXMax))
-        //                                IsOK = true;
-        //                            else
-        //                            { i++; continue; }
-        //                        if (item.IsYMax)
-        //                            if (IntersectYMax(rs.rot, item.ValueYMax))
-        //                                IsOK = true;
-        //                            else
-        //                            { i++; continue; }
-        //                        if (item.IsHeight)
-        //                        {
-        //                            IsOK = false;
-        //                            if (rs.rot._rect.Height >= item.ValueHeight)
-        //                                IsOK = true;
-
-        //                        }    
-
-        //                        if (item.IsWidth)
-        //                        {
-        //                            IsOK = false;
-        //                            if (rs.rot._rect.Width >= item.ValueWidth)
-        //                                IsOK = true;
-        //                        }
-        //                        if (IsLine)
-        //                        {
-
-        //                            if (item.IsDistance)
-        //                            {
-        //                                if (LineVerital != null)
-        //                                {
-        //                                    PointF point = new PointF();
-        //                                    ResultItem[i].Distance = (float)Cal.DistanceLine2D_RectRotate(LineVerital, rs.rot, out point);
-        //                                    if (ResultItem[i].Distance <= item.ValueDistance)
-        //                                        IsOK = true;
-
-        //                                    ResultItem[i].point = point;
-
-        //                                }
-        //                                if(!Line2D.Found)
-        //                                    IsOK = true;
-
-        //                            }
-        //                        }
-        //                            double Area = 0;
-        //                        if (item.IsArea)
-        //                        {
-        //                            IsOK = false;
-        //                            if (item.Name=="T_CHI")
-        //                            {
-
-        //                                Rect rect=  new Rect((int)rs.rot._PosCenter.X+(int)rs.rot._rect.X, (int)rs.rot._PosCenter.Y + (int)rs.rot._rect.Y, (int)rs.rot._rect.Width, (int)rs.rot._rect.Height);
-        //                                if (ResultItem[i].matProcess == null) ResultItem[i].matProcess = new Mat();
-        //                                if (!ResultItem[i].matProcess.Empty()) ResultItem[i].matProcess.Dispose();
-        //                                ResultItem[i].matProcess = matCropTemp.Clone();
-        //                                percent =  CalcMissingPercent_AutoMinMax(ref ResultItem[i].matProcess, rect);
-        //                                Area = percent * rs.rot._rect.Size.Width * rs.rot._rect.Size.Height / 100;
-        //                                if (Area >= item.ValueArea * 100)
-        //                                    IsOK = true;
-
-        //                            }
-        //                            else
-        //                            {
-        //                                if (item.Name == "B_CHI")
-        //                                {
-        //                                    Area = rs.rot._rect.Size.Width * rs.rot._rect.Size.Height;
-        //                                    if (Area >= item.ValueArea * 100)
-        //                                    {
-        //                                        IsOK = true;
-        //                                    }    
-        //                                    else
-        //                                    {
-        //                                        if (item.IsCounter)
-        //                                        {
-        //                                            int count = resultTemp.Count(it => it.Name == rs.Name); ;// labelList.Count(l => l == label);
-        //                                            if (count >= item.ValueCounter)
-        //                                                IsOK = true;
-        //                                            else
-        //                                                IsOK = false;
-        //                                        }
-
-        //                                    }    
-        //                                }
-        //                                else
-        //                                {
-        //                                    Area = rs.rot._rect.Size.Width * rs.rot._rect.Size.Height;
-        //                                    if (Area >= item.ValueArea * 100)
-        //                                        IsOK = true;
-        //                                }    
-
-
-        //                            }
-
-        //                        }
-
-        //                        if (item.Name != "B_CHI")
-        //                            if (item.IsCounter)
-        //                        {
-        //                            int count = resultTemp.Count(it => it.Name == rs.Name); ;//  labelList.Count(l => l == label);
-        //                                if (count >= item.ValueCounter)
-        //                                IsOK = true;
-        //                            else
-        //                                IsOK = false;
-        //                        }
-        //                        if (!item.IsHeight && !item.IsWidth && !item.IsArea && !item.IsX && !item.IsY && !item.IsXMax && !item.IsYMax && !item.IsDistance && !item.IsCounter)
-        //                            IsOK = true;
-        //                        ResultItem[i].IsOK = IsOK;
-
-        //                        ResultItem[i].Area =(float) Area;
-        //                        ResultItem[i].Percent = (float)percent;
-
-        //                        if (IsOK)
-        //                        {
-        //                            //listOK.Add(true);
-        //                            //rectRotates.Add(rs.rot);
-        //                            //listLabel.Add(label);
-        //                            //scoreRS += (int)scoreList[i];
-        //                            //listScore.Add(scoreList[i]);
-        //                            numOK++;
-        //                        }
-        //                        //else
-        //                        //{
-        //                        //    listOK.Add(false);
-        //                        //    rectRotates.Add(rs.rot);
-        //                        //    listLabel.Add(label);
-        //                        //    scoreRS += (int)scoreList[i];
-        //                        //    listScore.Add(scoreList[i]);
-
-        //                        //}
-        //                        //if (IsCheckLine)
-        //                        //{
-        //                        //    switch (CompareLine)
-        //                        //    {
-        //                        //        case Compares.More:
-
-        //                        //            break;
-        //                        //        case Compares.Less:
-        //                        //            if (rs.rot._rect.Height <= yLine)
-        //                        //            {
-        //                        //                listOK.Add(true);
-        //                        //                rectRotates.Add(rs.rot);
-        //                        //                listLabel.Add(label);
-        //                        //                scoreRS += (int)scoreList[i];
-        //                        //                listScore.Add(scoreList[i]);
-        //                        //                numOK++;
-        //                        //            }
-        //                        //            else
-        //                        //            {
-        //                        //                listOK.Add(false);
-        //                        //                rectRotates.Add(rs.rot);
-        //                        //                listLabel.Add(label);
-        //                        //                scoreRS += (int)scoreList[i];
-        //                        //                listScore.Add(scoreList[i]);
-
-        //                        //            }
-        //                        //            break;
-        //                        //    }
-
-
-        //                        //}
-        //                        //else if (IsCheckArea)
-        //                        //{
-        //                        //    switch (CompareArea)
-        //                        //    {
-        //                        //        case Compares.More:
-        //                        //            if (rs.rot._rect.Size.Width * rs.rot._rect.Size.Height >= LimitArea*100)
-        //                        //            {
-        //                        //                listOK.Add(true);
-        //                        //                rectRotates.Add(rs.rot);
-        //                        //                listLabel.Add(label);
-        //                        //                scoreRS += (int)scoreList[i];
-        //                        //                listScore.Add(scoreList[i]);
-        //                        //                numOK++;
-        //                        //            }
-        //                        //            else
-        //                        //            {
-        //                        //                listOK.Add(false);
-        //                        //                rectRotates.Add(rs.rot);
-        //                        //                listLabel.Add(label);
-        //                        //                scoreRS += (int)scoreList[i];
-        //                        //                listScore.Add(scoreList[i]);
-
-        //                        //            }
-        //                        //            break;
-        //                        //        case Compares.Less:
-        //                        //            if (rs.rot._rect.Size.Width * rs.rot._rect.Size.Height <= LimitArea*100)
-        //                        //            {
-        //                        //                listOK.Add(true);
-        //                        //                rectRotates.Add(rs.rot);
-        //                        //                listLabel.Add(label);
-        //                        //                scoreRS += (int)scoreList[i];
-        //                        //                listScore.Add(scoreList[i]);
-        //                        //                numOK++;
-        //                        //            }
-        //                        //            else
-        //                        //            {
-        //                        //                listOK.Add(false);
-        //                        //                rectRotates.Add(rs.rot);
-        //                        //                listLabel.Add(label);
-        //                        //                scoreRS += (int)scoreList[i];
-        //                        //                listScore.Add(scoreList[i]);
-
-        //                        //            }
-        //                        //            break;
-        //                        //    }
-
-
-        //                        //}
-        //                        //else
-        //                        //{
-        //                        //    listOK.Add(true);
-        //                        //    Content += label;
-        //                        //    rectRotates.Add(rs.rot);
-        //                        //    listLabel.Add(label);
-        //                        //    scoreRS += (int)scoreList[i];
-        //                        //    listScore.Add(scoreList[i]); numOK++;
-        //                        //}
-
-        //                    }
-        //                    i++;
-        //                }
-        //                //if (IsArrangeBox)
-        //                //{
-        //                //    List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
-
-        //                //    for (int j = 0; j < rectRotates.Count; j++)
-        //                //    {
-        //                //        combined.Add(new RotatedBoxInfo
-        //                //        {
-        //                //            Box = rectRotates[j],
-        //                //            Label = ResultItem[j].Name,
-        //                //            Score = ResultItem[j].Score
-        //                //        });
-        //                //    }
-        //                //    switch (ArrangeBox)
-        //                //    {
-        //                //        case ArrangeBox.X_Left_Rigth:
-        //                //            // Sort theo X tăng dần (trái → phải)
-        //                //            combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
-        //                //            break;
-        //                //        case ArrangeBox.X_Right_Left:
-        //                //            // Sort theo X giảm dần (phải → trái)
-        //                //            combined = combined.OrderByDescending(b => b.Box._PosCenter.X).ToList();
-
-        //                //            break;
-        //                //        case ArrangeBox.Y_Left_Rigth:
-        //                //            // Sort theo Y tăng dần (trên → dưới)
-        //                //            combined = combined.OrderBy(b => b.Box._PosCenter.Y).ToList();
-        //                //            break;
-        //                //        case ArrangeBox.Y_Right_Left:
-        //                //            combined = combined.OrderByDescending(b => b.Box._PosCenter.Y).ToList();
-        //                //            break;
-        //                //    }
-        //                //    rectRotates = combined.Select(b => b.Box).ToList();
-        //                //    listLabel = combined.Select(b => b.Label).ToList();
-        //                //    listScore = combined.Select(b => b.Score).ToList();
-        //                //    Content = "";
-        //                //    foreach (string s in listLabel)
-        //                //        Content += s;
-        //                //}
-        //                Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(scoreRS / (rectRotates.Count() * 1.0));
-        //                if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
-        //                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-        //                switch (Compare)
-        //                {
-        //                    case Compares.Equal:
-        //                        if (numOK != NumObject)
-        //                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //                        break;
-        //                    case Compares.Less:
-        //                        if (numOK >= NumObject)
-        //                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //                        break;
-        //                    case Compares.More:
-        //                        if (numOK <= NumObject)
-        //                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //                        break;
-        //                }
-        //                if (IsEnContent)
-        //                {
-        //                    if (Matching != Content)
-        //                    {
-        //                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //                    }
-        //                }
-        //                if(IsLine)
-        //                {
-        //                   if(!Line2D.Found)
-        //                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //                }    
-        //                G.IsChecked = true;
-        //                // MessageBox.Show($"Predict xong: {boxes.len()} boxes");
-        //            }
-        //            catch (Exception ex)
-        //            {
-
-        //                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
-        //                // Global.Ex = "Complete_Learning" + ex.Message;
-        //                // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
-        //            //  Global.Ex = "Complete_Learning" + ex.Message;
-        //            // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
-        //        }
-        //    }
-        //    else
-        //    {
-
-        //        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "No Initial"));
-        //        //  Global.Ex = "No Initial PY";
-        //        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //    }
-
-        //}
         public void Complete()
         {
             if (!Global.IsIntialPython)
@@ -1224,7 +1389,6 @@ namespace BeeCore
 
                 numOK = 0;
                 numNG = 0;
-                int scoreRS = 0;
 
                 if (labelItems == null)
                 {
@@ -1233,41 +1397,55 @@ namespace BeeCore
                 }
 
                 //--------------------------------
+                // PASS 0 : map label (tối ưu)
+                //--------------------------------
+                var labelMap = labelItems
+                    .GroupBy(x => x.Name.ToLower())
+                    .ToDictionary(g => g.Key, g => g.First());
+
+                //--------------------------------
                 // PASS 1 : build ResultItem
                 //--------------------------------
-
+                if(resultTemp!=null)
                 foreach (var rs in resultTemp)
                 {
                     ResultItem.Add(new ResultItem(rs.Name)
-                    {
+                    {matProcess=rs.matProcess,
+                        IsOK = rs.IsOK,
                         rot = rs.rot,
                         Score = rs.Score
                     });
                 }
 
                 //--------------------------------
-                // counter cache
+                // counter global
                 //--------------------------------
-
                 Dictionary<string, int> labelCounter =
                     ResultItem.GroupBy(x => x.Name)
                     .ToDictionary(g => g.Key, g => g.Count());
 
                 //--------------------------------
-                // PASS 2 : compute Area per object
+                // PASS 2 : Area
                 //--------------------------------
-
                 for (int i = 0; i < ResultItem.Count; i++)
                 {
                     var r = ResultItem[i];
 
-                    int index = labelItems.FindIndex(x =>
-                        string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
-
-                    if (index < 0)
+                    if (!labelMap.ContainsKey(r.Name.ToLower()))
                         continue;
 
-                    LabelItem item = labelItems[index];
+                    var item = labelMap[r.Name.ToLower()];
+
+                    if (IsCropSingle)
+                    {if (!item.IsUse)
+                            ResultItem[i].IsOK = false;
+                        else
+                        {
+                            if (r.IsOK)
+                                numOK++;
+                        }
+                        continue;
+                    }
 
                     double percentLocal;
                     double area = CalcArea(r, item, out percentLocal);
@@ -1277,202 +1455,405 @@ namespace BeeCore
                 }
 
                 //--------------------------------
-                // PASS 3 : compute ScanBox Area
+                // PASS 3 : ScanBox Area Cache
                 //--------------------------------
-
                 Dictionary<int, double> scanAreaCache = new Dictionary<int, double>();
 
-                foreach (var r in ResultItem)
+                if (!IsCropSingle)
                 {
-                    int index = labelItems.FindIndex(x =>
-                        string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
-
-                    if (index < 0)
-                        continue;
-
-                    LabelItem item = labelItems[index];
-
-                    if (item.ListIndexBox == null)
-                        continue;
-
-                    foreach (int scanIndex in item.ListIndexBox)
+                    foreach (var r in ResultItem)
                     {
-                        if (!scanAreaCache.ContainsKey(scanIndex))
+                        if (!labelMap.ContainsKey(r.Name.ToLower()))
+                            continue;
+
+                        var item = labelMap[r.Name.ToLower()];
+
+                        if (item.ListIndexBox == null)
+                            continue;
+
+                        foreach (int scanIndex in item.ListIndexBox)
                         {
-                            RectRotate scan = listRotScan[scanIndex];
-
-                            double areaSum = 0;
-
-                            foreach (var rr in ResultItem)
+                            if (!scanAreaCache.ContainsKey(scanIndex))
                             {
-                                if (rr.Name != item.Name)
-                                    continue;
+                                RectRotate scan = listRotScan[scanIndex];
 
-                                if (scan.ContainsPoint(rr.rot._PosCenter))
-                                    areaSum += rr.Area;
+                                double sum = 0;
+
+                                foreach (var rr in ResultItem)
+                                {
+                                    if (rr.Name != item.Name)
+                                        continue;
+
+                                    if (scan.ContainsPoint(rr.rot._PosCenter))
+                                        sum += rr.Area;
+                                }
+
+                                scanAreaCache[scanIndex] = sum;
                             }
-
-                            scanAreaCache[scanIndex] = areaSum;
                         }
                     }
                 }
 
                 //--------------------------------
-                // PASS 4 : evaluate rules
+                // PASS 3.5 : ScanBox Counter (NEW)
                 //--------------------------------
+                Dictionary<int, int> scanCounter = new Dictionary<int, int>();
+                HashSet<int> scanBoxOK = new HashSet<int>();
 
-                for (int i = 0; i < ResultItem.Count; i++)
+                if (!IsCropSingle)
                 {
-                    var r = ResultItem[i];
-
-                    int index = labelItems.FindIndex(x =>
-                        string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
-
-                    if (index < 0)
-                        continue;
-
-                    LabelItem item = labelItems[index];
-                   
-                    bool IsOK = false;
-                    if (!item.IsUse)
+                    foreach (var r in ResultItem)
                     {
-                        r.IsOK = false;
-                        continue;
-                    }    
-                      
-                    //--------------------------------
-                    // X/Y rule
-                    //--------------------------------
-
-                    if (item.IsX)
-                        if(IntersectX(r.rot, item.ValueX))
-                        {
-                            IsOK = true;
-                            r.IsOK = IsOK;
-
-                            if (r.IsOK)
-                                numOK++;
+                        if (!labelMap.ContainsKey(r.Name.ToLower()))
                             continue;
-                        }    
-                          
 
-                    if (item.IsY )
-                        if(IntersectY(r.rot, item.ValueY))
+                        var item = labelMap[r.Name.ToLower()];
+
+                        if (!item.IsCounter || item.ListIndexBox == null || item.ListIndexBox.Count == 0)
+                            continue;
+
+                        int scanIndex = FindScanBox(r, item.Name);
+
+                        if (scanIndex < 0)
                         {
-                            IsOK = true;
-                            r.IsOK = IsOK;
-
-                            if (r.IsOK)
-                                numOK++;
+                            r.rot = null;
+                            r.IsOK = false;
                             continue;
                         }
+                      
 
-                    if (item.IsXMax)
-                        if(IntersectXMax(r.rot, item.ValueXMax))
-                    {
-                        IsOK = true;
-                            r.IsOK = IsOK;
+                        if (!scanCounter.ContainsKey(scanIndex))
+                            scanCounter[scanIndex] = 0;
 
-                            if (r.IsOK)
-                                numOK++;
-                            continue;
+                        scanCounter[scanIndex]++;
                     }
-                   
-                    if (item.IsYMax )
-                        if(IntersectYMax(r.rot, item.ValueYMax))
-                    {
-                        IsOK = true;
-                            r.IsOK = IsOK;
 
-                            if (r.IsOK)
-                                numOK++;
+                    foreach (var kv in scanCounter)
+                    {
+                        int scanIndex = kv.Key;
+                        int count = kv.Value;
+
+                        var item = labelItems.FirstOrDefault(x =>
+                            x.ListIndexBox != null &&
+                            x.ListIndexBox.Contains(scanIndex) &&
+                            x.IsCounter);
+
+                        if (item == null)
                             continue;
-                    }
-                    
-                    //--------------------------------
-                    // ScanBox rule (NEW)
-                    //--------------------------------
-                    int scanIndex = -1;
-                    if (item.ListIndexBox != null && item.ListIndexBox.Count > 0)
-                    {
-                         scanIndex = FindScanBox(r, item.Name);
 
-                        // nằm ngoài toàn bộ scan box → loại luôn
-                        if (scanIndex < 0)
+                        if (count >= item.ValueCounter)
+                            scanBoxOK.Add(scanIndex);
+                    }
+
+                    // set OK cho tất cả object trong box đạt
+                    foreach (var r in ResultItem)
+                    {
+                        if (r.rot == null) continue;
+                        if (!labelMap.ContainsKey(r.Name.ToLower()))
+                            continue;
+
+                        var item = labelMap[r.Name.ToLower()];
+
+                        if (!item.IsCounter || item.ListIndexBox == null)
+                            continue;
+
+                        int scanIndex = FindScanBox(r, item.Name);
+
+                        if (scanIndex >= 0 && scanBoxOK.Contains(scanIndex))
+                            r.IsOK = true;
+                    }
+
+                    // 👉 chỉ cộng theo box
+                    numOK += scanBoxOK.Count;
+                }
+
+               
+                if (!IsCropSingle)
+                {
+                    for (int i = 0; i < ResultItem.Count; i++)
+                    {
+                        var r = ResultItem[i];
+                        if(r.rot==null) continue;
+                        if (!labelMap.ContainsKey(r.Name.ToLower()))
+                            continue;
+
+                        var item = labelMap[r.Name.ToLower()];
+
+                        if (!item.IsUse)
                         {
                             r.IsOK = false;
                             continue;
                         }
-                    }
-                    //--------------------------------
-                    // size rule
-                    //--------------------------------
 
-                    if (item.IsHeight)
-                        IsOK = r.rot._rect.Height >= item.ValueHeight;
+                        // nếu đã OK từ scanbox counter → skip
+                        if (item.IsCounter && item.ListIndexBox != null && r.IsOK && !item.IsMinColor)
+                            continue;
 
-                    if (item.IsWidth)
-                        IsOK = r.rot._rect.Width >= item.ValueWidth;
+                        bool IsOK = false;
 
-                    //--------------------------------
-                    // AREA rule
-                    //--------------------------------
+                        //--------------------------------
+                        // X/Y
+                        //--------------------------------
+                        if (item.IsX && IntersectX(r.rot, item.ValueX))
+                            IsOK = true;
 
-                    if (item.IsArea)
-                    {
-                        double areaCompare = r.Area;
+                        if (item.IsY && IntersectY(r.rot, item.ValueY))
+                            IsOK = true;
 
-                        if (item.ListIndexBox != null && item.ListIndexBox.Count > 0)
+                        if (item.IsXMax && IntersectXMax(r.rot, item.ValueXMax))
+                            IsOK = true;
+
+                        if (item.IsYMax && IntersectYMax(r.rot, item.ValueYMax))
+                            IsOK = true;
+
+                        //--------------------------------
+                        // SIZE
+                        //--------------------------------
+                        if (item.IsHeight)
+                            IsOK = r.rot._rect.Height >= item.ValueHeight;
+
+                        if (item.IsWidth)
+                            IsOK = r.rot._rect.Width >= item.ValueWidth;
+
+                        //--------------------------------
+                        // AREA
+                        //--------------------------------
+                        if (item.IsArea)
                         {
-                          //  int scanIndex = FindScanBox(r,item.Name);
+                            double areaCompare = r.Area;
+
+                            int scanIndex = FindScanBox(r, item.Name);
 
                             if (scanIndex >= 0 && scanAreaCache.ContainsKey(scanIndex))
                                 areaCompare = scanAreaCache[scanIndex];
+
+                            if (areaCompare >= item.ValueArea * 100)
+                                IsOK = true;
+                        }
+                        
+                        //--------------------------------
+                        // 🔥 COLOR (FIX CHUẨN)
+                        //--------------------------------
+                        if (item.IsMinColor||item.IsCounter)
+                        {
+                            int scanIndex = FindScanBox(r, item.Name);
+
+                            if (scanIndex >= 0)
+                            {
+                                int expectedCount = item.IsCounter ? item.ValueCounter : 1;
+                                var listInBox = ResultItem
+                                .Where(x => x.Name == item.Name &&
+                                            x.rot != null &&
+                                            scanIndex >= 0 &&
+                                            scanIndex < listRotScan.Count &&
+                                            listRotScan[scanIndex].ContainsPoint(x.rot._PosCenter))
+                                .OrderBy(x => x.rot._PosCenter.X)
+                                .ToList();
+                                // ❌ nếu r không phải object đầu tiên → skip
+                                if (listInBox.Count > 0 && listInBox[0] != r)
+                                    continue;
+                                //var listInBox = ResultItem
+                                //    .Where(x => x.Name == item.Name &&
+                                //                listRotScan[scanIndex].ContainsPoint(x.rot._PosCenter))
+                                //    .OrderBy(x => x.rot._PosCenter.X)
+                                //    .ToList();
+
+                                // đảm bảo đủ size cho ListRSGroup
+                                int totalGroup = listRotScan != null ? listRotScan.Count : 0;
+                              
+
+                                // mặc định box này fail
+                                listRotScan[scanIndex].IsOK = false;
+
+                                // 1. check đủ số lượng
+                                bool counterOK = listInBox.Count >= expectedCount;
+                                if (counterOK )
+                                {
+                                    listRotScan[scanIndex].IsOK = true;
+                                }
+                                else
+                                {
+                                    listRotScan[scanIndex].IsOK = false;
+                                }
+                                // 2. check màu
+                                bool colorOKAll = true;
+                                if (item.IsMinColor)
+                                {
+                                    for (int j = 0; j < expectedCount; j++)
+                                    {
+                                        if (j >= listInBox.Count)
+                                        {
+                                            colorOKAll = false;
+                                            break;
+                                        }
+
+                                        var rr = listInBox[j];
+                                        int globalIndex = scanIndex * expectedCount + j;
+
+                                        if (globalIndex >= item.ListColorArea.Count 
+                                       )
+                                        {
+                                            colorOKAll = false;
+                                            rr.IsOK = false;
+                                            continue;
+                                        }
+
+                                       
+                                        using (Mat matCrop2 = CropRoiView(matCropTemp, rr.rot))
+                                        {
+                                            if (rr.matProcess == null)
+                                                rr.matProcess = new Mat();
+
+                                            int val = CheckColor(item.ListColorArea[globalIndex], ref rr.matProcess, matCrop2);
+                                            rr.ValueColor = val;
+
+                                            if (!Global.IsRun)
+                                                item.ListTempColor[globalIndex] = val;
+
+                                            int valTemp = item.ListTempColor[globalIndex];
+
+
+
+                                            if (valTemp > 0)
+                                                rr.PercentColor = (float)((Math.Abs(val - valTemp) / (valTemp * 1.0)) * 100.0);
+
+                                            // ValueMinColor = % sai cho phép
+                                            bool colorOK = rr.PercentColor <= item.ValueMinColor;
+
+                                            if (colorOK == false)
+                                            {
+                                                counterOK = false;
+                                                numOK--;
+                                                Console.WriteLine("FAILT");
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("TRUE");
+                                            }
+                                            // AND với logic trước (counter / area / ...)
+                                            rr.IsOK = rr.IsOK && colorOK;
+                                        }
+                                    }
+                                    // 3. boxscan OK khi cả counter và color đều OK
+                                    if (counterOK && colorOKAll)
+                                    {
+                                        listRotScan[scanIndex].IsOK = true;
+                                    }
+                                    else
+                                    {
+                                        listRotScan[scanIndex].IsOK = false;
+                                    }
+                                }
+
+                              
+                                //// số object cần check
+                                //int expectedCount = item.IsCounter ? item.ValueCounter : 1;
+
+                                //// lấy list object trong box
+                                //var listInBox = ResultItem
+                                //    .Where(x => x.Name == item.Name &&
+                                //                listRotScan[scanIndex].ContainsPoint(x.rot._PosCenter))
+                                //    .OrderBy(x => x.rot._PosCenter.X)
+                                //    .ToList();
+                                //int boxStart = scanIndex * expectedCount;
+                                //// ❗ Loop theo TEMPLATE (KHÔNG lệch j)
+                                ////Parallel.For(0, expectedCount, new ParallelOptions { MaxDegreeOfParallelism = Math.Min(item.ListIndexBox.Count, Environment.ProcessorCount) },
+                                //// j =>
+
+                                //for (int j = 0; j < expectedCount; j++)
+                                //{
+                                //    // 👉 index global bắt đầu của box này
+
+
+
+
+
+                                //    int globalIndex = boxStart + j;
+                                //    if (j < listInBox.Count)
+                                //    {
+                                //        var rr = listInBox[j];
+
+                                //        using (Mat matCrop2 = CropRoiView(matCropTemp, rr.rot))
+                                //        {
+                                //            if (rr.matProcess == null) rr.matProcess = new Mat();
+                                //            int val = CheckColor(item.ListColorArea[globalIndex], ref rr.matProcess, matCrop2);
+
+                                //            rr.ValueColor = val;
+                                //            if (!Global.IsRun)
+                                //            {
+                                //                item.ListTempColor[globalIndex] = rr.ValueColor;
+
+                                //            }
+                                //            int valTemp = (item.ListTempColor != null && j < item.ListTempColor.Count)
+                                //                ? item.ListTempColor[globalIndex]
+                                //                : 0;
+
+
+
+                                //            if (valTemp > 0)
+                                //                rr.PercentColor = (float)((Math.Abs(val - valTemp) / (valTemp * 1.0)) * 100.0);
+
+                                //            // ValueMinColor = % sai cho phép
+                                //            bool colorOK = rr.PercentColor <= item.ValueMinColor;
+
+                                //            if (colorOK == false)
+                                //            {
+                                //                numOK--;
+                                //                Console.WriteLine("FAILT");
+                                //            }
+                                //            else
+                                //            {
+                                //                Console.WriteLine("TRUE");
+                                //            }
+                                //            // AND với logic trước (counter / area / ...)
+                                //            rr.IsOK = rr.IsOK && colorOK;
+                                //        }
+                                //    }
+                                //    //});
+                                //}
+                                //// ❗ nếu thiếu object → NG hết
+                                //if (listInBox.Count < expectedCount)
+                                //{
+                                //    foreach (var rr in listInBox)
+                                //        rr.IsOK = false;
+                                //}
+
+                                continue; // skip logic thường
+                            }
                         }
 
-                        if (areaCompare >= item.ValueArea * 100)
-                            IsOK = true;
-
                         //--------------------------------
-                        // B_CHI counter fallback
+                        // Counter thường (không scanbox)
                         //--------------------------------
-
-                        if (item.Name == "B_CHI" && !IsOK && item.IsCounter)
+                        if (item.Name != "B_CHI" && item.IsCounter)
                         {
+                            if (item.ListIndexBox != null && item.ListIndexBox.Count > 0)
+                                continue;
+
                             if (labelCounter.ContainsKey(r.Name) &&
                                 labelCounter[r.Name] >= item.ValueCounter)
                                 IsOK = true;
+                            else
+                                IsOK = false;
                         }
-                    }
 
-                    //--------------------------------
-                    // Counter rule
-                    //--------------------------------
-
-                    if (item.Name != "B_CHI" && item.IsCounter)
-                    {
-                        if (labelCounter.ContainsKey(r.Name) &&
-                            labelCounter[r.Name] >= item.ValueCounter)
+                        //--------------------------------
+                        // default
+                        //--------------------------------
+                        if (!item.IsHeight && !item.IsWidth && !item.IsArea &&
+                            !item.IsX && !item.IsY && !item.IsXMax &&
+                            !item.IsYMax && !item.IsDistance && !item.IsCounter && !item.IsMinColor)
                             IsOK = true;
-                        else
-                            IsOK = false;
-                    }
-                    if (!item.IsHeight && !item.IsWidth && !item.IsArea && !item.IsX && !item.IsY && !item.IsXMax && !item.IsYMax && !item.IsDistance && !item.IsCounter)
-                        IsOK = true;
-                        //--------------------------------
-                        // save result
-                        //--------------------------------
 
                         r.IsOK = IsOK;
 
-                    if (r.IsOK)
-                        numOK++;
+                        if (r.IsOK)
+                            numOK++;
+                    }
                 }
-
                 //--------------------------------
-                // RESULT COMPARE
+                // RESULT
                 //--------------------------------
-
                 Common.PropetyTools[IndexThread][Index].Results = Results.OK;
 
                 switch (Compare)
@@ -1504,8 +1885,314 @@ namespace BeeCore
                     new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
             }
         }
+        //Oldnew
+        //public void Complete()
+        //{
+        //    if (!Global.IsIntialPython)
+        //    {
+        //        Global.LogsDashboard.AddLog(
+        //            new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "No Initial"));
+        //        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //        return;
+        //    }
+
+        //    try
+        //    {
+        //        ResultItem = new List<ResultItem>();
+        //        rectRotates = new List<RectRotate>();
+
+        //        numOK = 0;
+        //        numNG = 0;
+        //        int scoreRS = 0;
+
+        //        if (labelItems == null)
+        //        {
+        //            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //            return;
+        //        }
+
+        //        //--------------------------------
+        //        // PASS 1 : build ResultItem
+        //        //--------------------------------
+
+        //        foreach (var rs in resultTemp)
+        //        {
+        //            ResultItem.Add(new ResultItem(rs.Name)
+        //            {IsOK=rs.IsOK,
+        //                rot = rs.rot,
+        //                Score = rs.Score
+        //            });
+        //        }
+
+        //        //--------------------------------
+        //        // counter cache
+        //        //--------------------------------
+
+        //        Dictionary<string, int> labelCounter =
+        //            ResultItem.GroupBy(x => x.Name)
+        //            .ToDictionary(g => g.Key, g => g.Count());
+
+        //        //--------------------------------
+        //        // PASS 2 : compute Area per object
+        //        //--------------------------------
+
+        //        for (int i = 0; i < ResultItem.Count; i++)
+        //        {
+        //            var r = ResultItem[i];
+
+        //            int index = labelItems.FindIndex(x =>
+        //                string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
+
+        //            if (index < 0)
+        //                continue;
+        //            if (IsCropSingle)
+        //            {
+        //               if( r.IsOK)
+        //                numOK++;
+        //                continue;
+        //            }    
+
+        //            LabelItem item = labelItems[index];
+
+        //            double percentLocal;
+        //            double area = CalcArea(r, item, out percentLocal);
+
+        //            r.Area = (float)area;
+        //            r.Percent = (float)percentLocal;
+        //        }
+
+        //        //--------------------------------
+        //        // PASS 3 : compute ScanBox Area
+        //        //--------------------------------
+
+        //        Dictionary<int, double> scanAreaCache = new Dictionary<int, double>();
+        //        if (!IsCropSingle)
+        //            foreach (var r in ResultItem)
+        //        {
+        //            int index = labelItems.FindIndex(x =>
+        //                string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
+
+        //            if (index < 0)
+        //                continue;
+
+        //            LabelItem item = labelItems[index];
+
+        //            if (item.ListIndexBox == null)
+        //                continue;
+
+        //            foreach (int scanIndex in item.ListIndexBox)
+        //            {
+        //                if (!scanAreaCache.ContainsKey(scanIndex))
+        //                {
+        //                    RectRotate scan = listRotScan[scanIndex];
+
+        //                    double areaSum = 0;
+
+        //                    foreach (var rr in ResultItem)
+        //                    {
+        //                        if (rr.Name != item.Name)
+        //                            continue;
+
+        //                        if (scan.ContainsPoint(rr.rot._PosCenter))
+        //                            areaSum += rr.Area;
+        //                    }
+
+        //                    scanAreaCache[scanIndex] = areaSum;
+        //                }
+        //            }
+        //        }
+
+        //        //--------------------------------
+        //        // PASS 4 : evaluate rules
+        //        //--------------------------------
+        //        if (!IsCropSingle)
+        //            for (int i = 0; i < ResultItem.Count; i++)
+        //        {
+        //            var r = ResultItem[i];
+
+        //            int index = labelItems.FindIndex(x =>
+        //                string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
+
+        //            if (index < 0)
+        //                continue;
+
+        //            LabelItem item = labelItems[index];
+
+        //            bool IsOK = false;
+        //            if (!item.IsUse)
+        //            {
+        //                r.IsOK = false;
+        //                continue;
+        //            }    
+
+        //            //--------------------------------
+        //            // X/Y rule
+        //            //--------------------------------
+
+        //            if (item.IsX)
+        //                if(IntersectX(r.rot, item.ValueX))
+        //                {
+        //                    IsOK = true;
+        //                    r.IsOK = IsOK;
+
+        //                    if (r.IsOK)
+        //                        numOK++;
+        //                    continue;
+        //                }    
+
+
+        //            if (item.IsY )
+        //                if(IntersectY(r.rot, item.ValueY))
+        //                {
+        //                    IsOK = true;
+        //                    r.IsOK = IsOK;
+
+        //                    if (r.IsOK)
+        //                        numOK++;
+        //                    continue;
+        //                }
+
+        //            if (item.IsXMax)
+        //                if(IntersectXMax(r.rot, item.ValueXMax))
+        //            {
+        //                IsOK = true;
+        //                    r.IsOK = IsOK;
+
+        //                    if (r.IsOK)
+        //                        numOK++;
+        //                    continue;
+        //            }
+
+        //            if (item.IsYMax )
+        //                if(IntersectYMax(r.rot, item.ValueYMax))
+        //            {
+        //                IsOK = true;
+        //                    r.IsOK = IsOK;
+
+        //                    if (r.IsOK)
+        //                        numOK++;
+        //                    continue;
+        //            }
+
+        //            //--------------------------------
+        //            // ScanBox rule (NEW)
+        //            //--------------------------------
+        //            int scanIndex = -1;
+        //            if (item.ListIndexBox != null && item.ListIndexBox.Count > 0)
+        //            {
+        //                 scanIndex = FindScanBox(r, item.Name);
+
+        //                // nằm ngoài toàn bộ scan box → loại luôn
+        //                if (scanIndex < 0)
+        //                {
+        //                    r.IsOK = false;
+        //                    continue;
+        //                }
+        //            }
+        //            //--------------------------------
+        //            // size rule
+        //            //--------------------------------
+
+        //            if (item.IsHeight)
+        //                IsOK = r.rot._rect.Height >= item.ValueHeight;
+
+        //            if (item.IsWidth)
+        //                IsOK = r.rot._rect.Width >= item.ValueWidth;
+        //            if(item.ValueCounter)
+        //            //--------------------------------
+        //            // AREA rule
+        //            //--------------------------------
+
+        //            if (item.IsArea)
+        //            {
+        //                double areaCompare = r.Area;
+
+        //                if (item.ListIndexBox != null && item.ListIndexBox.Count > 0)
+        //                {
+        //                  //  int scanIndex = FindScanBox(r,item.Name);
+
+        //                    if (scanIndex >= 0 && scanAreaCache.ContainsKey(scanIndex))
+        //                        areaCompare = scanAreaCache[scanIndex];
+        //                }
+
+        //                if (areaCompare >= item.ValueArea * 100)
+        //                    IsOK = true;
+
+        //                //--------------------------------
+        //                // B_CHI counter fallback
+        //                //--------------------------------
+
+        //                if (item.Name == "B_CHI" && !IsOK && item.IsCounter)
+        //                {
+        //                    if (labelCounter.ContainsKey(r.Name) &&
+        //                        labelCounter[r.Name] >= item.ValueCounter)
+        //                        IsOK = true;
+        //                }
+        //            }
+
+        //            //--------------------------------
+        //            // Counter rule
+        //            //--------------------------------
+
+        //            if (item.Name != "B_CHI" && item.IsCounter)
+        //            {
+        //                if (labelCounter.ContainsKey(r.Name) &&
+        //                    labelCounter[r.Name] >= item.ValueCounter)
+        //                    IsOK = true;
+        //                else
+        //                    IsOK = false;
+        //            }
+        //            if (!item.IsHeight && !item.IsWidth && !item.IsArea && !item.IsX && !item.IsY && !item.IsXMax && !item.IsYMax && !item.IsDistance && !item.IsCounter)
+        //                IsOK = true;
+        //                //--------------------------------
+        //                // save result
+        //                //--------------------------------
+
+        //                r.IsOK = IsOK;
+
+        //            if (r.IsOK)
+        //                numOK++;
+        //        }
+
+        //        //--------------------------------
+        //        // RESULT COMPARE
+        //        //--------------------------------
+
+        //        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+
+        //        switch (Compare)
+        //        {
+        //            case Compares.Equal:
+        //                if (numOK != NumObject)
+        //                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //                break;
+
+        //            case Compares.Less:
+        //                if (numOK >= NumObject)
+        //                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //                break;
+
+        //            case Compares.More:
+        //                if (numOK <= NumObject)
+        //                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //                break;
+        //        }
+
+        //        if (IsLine && !Line2D.Found)
+        //            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+
+        //        G.IsChecked = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Global.LogsDashboard.AddLog(
+        //            new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
+        //    }
+        //}
+        public bool IsColorAllObjLabel = false;
         [NonSerialized]
         public bool IsScan = false;
+        public int IndexProgChoose = 0;
         public Graphics DrawResult(Graphics gc)
         {
             Brush brushText = new SolidBrush(Global.ParaShow.TextColor);
@@ -1519,23 +2206,96 @@ namespace BeeCore
                 Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
                 Color clScan= Color.White;
                
-
+           
                     if (listRotScan != null)
                     foreach (RectRotate rot in listRotScan)
-                    {
-                        if (IsScan)
+                {
+                    String cOK = "OK";
+                    if (Global.StatusDraw==StatusDraw.Scan)
                         {
-                        if (rot.Name != "")
-                            clScan = Global.ParaShow.ColorChoose;
+                        cOK = "";
+                            if (IsCropSingle)
+                            {
+                                if (rot._dragAnchor == AnchorPoint.Center)
+                                    clScan = Global.ParaShow.ColorChoose;
+                                else
+                                    clScan = Color.LightGray;
+                            }
                             else
-                                clScan = Global.ParaShow.ColorNone;
+                        {
+
+                            if (rot._dragAnchor == AnchorPoint.Center&&rot.Name.Trim()!= "Area Limit")
+                                clScan = Global.ParaShow.ColorChoose;
+                            else
+                            {
+                                rot._dragAnchor = AnchorPoint.None;
+                                clScan = Color.LightGray;
+                            }    
+                                
+                            //if (rot.Name != "")
+                            //    {
+
+                            //        clScan = Global.ParaShow.ColorChoose;
+                            //    }
+                            //    else
+                            //        clScan = Global.ParaShow.ColorNone;
+                            }
                         }
                         else
                         {
-                            if (rot.Name !="")
-                                clScan = Global.ParaShow.ColorChoose;
+                        //if (Global.IsRun)
+                        {
+                           
+                            if (!IsCropSingle)
+                            {
+                                int index = labelItems.FindIndex(item => string.Equals(item.Name, rot.Name, StringComparison.OrdinalIgnoreCase));
+
+                                if (index > -1)
+                                {
+                                    LabelItem item = labelItems[index];
+                                    if (rot.IsOK == true)
+                                        clScan = Global.ParaShow.ColorOK;
+                                    else
+                                    {
+                                        cOK = "NG";
+                                        clScan = Global.ParaShow.ColorNG;
+                                    }
+                                }
+                                else
+                                {
+                                    if (rot.Name != "")
+                                        clScan = Global.ParaShow.ColorChoose;
+                                    else
+                                    {
+                                        clScan = Global.ParaShow.ColorNone;
+                                        //  continue;
+                                    }
+                                }
+                            }
                             else
-                                continue;
+                            {
+                                if (rot.Name != "")
+                                    clScan = Global.ParaShow.ColorChoose;
+                                else
+                                {
+                                    clScan = Global.ParaShow.ColorNone;
+                                    //  continue;
+                                }
+                            }
+                        }
+                    
+                        //else
+                        //{
+                        ////    if (rot.Name != "")
+                        ////        clScan = Global.ParaShow.ColorChoose;
+                        ////    else
+                        ////    {
+                        ////        clScan = Global.ParaShow.ColorNone;
+                        ////        //  continue;
+                        ////    }
+                        //}
+                           
+                         
 
                         }    
                            
@@ -1552,36 +2312,44 @@ namespace BeeCore
                         mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
-                        Draws.Box1Label(gc, rot._rect, rot.Name, font, brushText, clScan, Global.ParaShow.ThicknessLine);
+                    int indexArea = i + 1;
+                    if(IsCropSingle)
+                        Draws.Box1Label(gc, rot._rect, indexArea + "." + rot.Name, font, brushText, clScan, Global.ParaShow.ThicknessLine);
+                    else
 
-                      ////  Draws.Box1Label(gc, rotA, rot.Name, "Count: " + numOK, font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
-                      
-                      //      Draws.DrawRectRotate(gc, rot, penScan);
+                        Draws.Box2Label(gc, rot, indexArea + "."+ rot.Name, cOK, font, clScan, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
+
+
+                    ////  Draws.Box1Label(gc, rotA, rot.Name, "Count: " + numOK, font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
+
+                    //      Draws.DrawRectRotate(gc, rot, penScan);
+                    i++;
                         }
                         gc.ResetTransform();
-                
-            //if (Line2D.Found)
-            //{
+            if (Global.StatusDraw == StatusDraw.Scan)
+                return gc;
+                //if (Line2D.Found)
+                //{
 
-            //    if (!Global.IsRun)
-            //    {
-            //        mat.Translate(Global.pScroll.X, Global.pScroll.Y);
-            //        mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
-            //    }
-            //    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-            //    mat.Rotate(rotA._rectRotation);
-            //    mat.Translate(rotA._rect.X, rotA._rect.Y);
-            //    gc.Transform = mat;
+                //    if (!Global.IsRun)
+                //    {
+                //        mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                //        mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                //    }
+                //    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                //    mat.Rotate(rotA._rectRotation);
+                //    mat.Translate(rotA._rect.X, rotA._rect.Y);
+                //    gc.Transform = mat;
 
 
-            //    //PointF p1 = new PointF(LineVerital.X1, LiLineVeritalne2D.Y1);
-            //    //PointF p2 = new PointF(LineVerital.X2, LineVerital.Y2);
-            //  //  Draws.DrawInfiniteLine(gc, new Pen(Global.ParaShow.ColorChoose, Global.ParaShow.ThicknessLine), LineVerital);
+                //    //PointF p1 = new PointF(LineVerital.X1, LiLineVeritalne2D.Y1);
+                //    //PointF p2 = new PointF(LineVerital.X2, LineVerital.Y2);
+                //  //  Draws.DrawInfiniteLine(gc, new Pen(Global.ParaShow.ColorChoose, Global.ParaShow.ThicknessLine), LineVerital);
 
-            //    //   gc.DrawLine(new Pen(new SolidBrush(Global.ParaShow.ColorInfor), Global.ParaShow.ThicknessLine), p1, p2);
-            //    gc.ResetTransform();
-            //}
-            mat = new Matrix();
+                //    //   gc.DrawLine(new Pen(new SolidBrush(Global.ParaShow.ColorInfor), Global.ParaShow.ThicknessLine), p1, p2);
+                //    gc.ResetTransform();
+                //}
+                mat = new Matrix();
             if (rotMaskAdjustment != null)
             {
                 if (!Global.IsRun)
@@ -1712,11 +2480,27 @@ namespace BeeCore
                 return gc;
             foreach (ResultItem rs in ResultItem)
             {
+                if (rs.rot == null) continue;
                 Color clShow = Global.ParaShow.ColorNone;
-                if (rs.IsOK == true)
-                    clShow = cl;
-              
-                mat = new Matrix();
+                if(IsCropSingle)
+                {
+                    if (rs.IsOK == true)
+                        clShow = Global.ParaShow.ColorOK;
+                    else
+                        clShow = Global.ParaShow.ColorNG;
+                }    
+                else
+                {
+                    if (rs.IsOK == true)
+                        if(IsColorAllObjLabel)
+                        clShow = cl;
+                    else
+                        clShow = Global.ParaShow.ColorOK;
+
+                }
+               
+               
+                    mat = new Matrix();
                 if (!Global.IsRun)
                 {
                     mat.Translate(Global.pScroll.X, Global.pScroll.Y);
@@ -1810,6 +2594,7 @@ namespace BeeCore
                         //Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(ResultItem[i].Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 20, Global.ParaShow.IsShowDetail);//("+Math.Round( ResultItem[i].Percent) + "%)
                         gc.ResetTransform();
                     }
+                   
                     else
                     {
                       
@@ -1842,7 +2627,22 @@ namespace BeeCore
                         String valueScore = Math.Round(rs.Score, 1) + "%";
                         if (!Global.ParaShow.IsShowScore) valueScore = "";
                         if (!Global.ParaShow.IsShowLabel) label = "";
-                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area/100) + "px", font, clShow, brushText, 30,Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 1,item.IsArea);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        if(item.IsMinColor)
+                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore,Math.Round( rs.PercentColor) + "%", font, clShow, brushText, 30,Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 1,true);//("+Math.Round( ResultItem[i].Percent) + "%)
+                      else if (item.IsArea)
+                            Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        else
+                            Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
+
+                        //if (rs.matProcess != null)
+                        //    if (!rs.matProcess.IsDisposed)
+                        //        if (!rs.matProcess.Empty())
+                        //        {
+                        //            Bitmap myBitmap = rs.matProcess.ToBitmap();
+                        //            myBitmap.MakeTransparent(Color.Black);
+                        //            myBitmap = General.ChangeToColor(myBitmap, Color.Red, 0.3f);
+                        //            gc.DrawImage(myBitmap, rotA._rect);
+                        //        }
                         gc.ResetTransform();
 
                     }

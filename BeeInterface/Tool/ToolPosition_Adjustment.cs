@@ -34,8 +34,12 @@ namespace BeeInterface
             {
                 imgTemp.Image = Propety.bmRaw;
             }
-          //  if (Propety.rotPositionAdjustment != null)
-              // Propety.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None);
+            EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotCrop, Propety.rotMask };
+            EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
+            EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
+
+            this.VisibleChanged += ToolPosition_Adjustment_VisibleChanged;
+            EditRectRot1.Refresh();
             trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
             trackAngle.Value = (int)Propety.Angle;
             if (Propety.Angle > 360) Propety.Angle = 360;
@@ -127,7 +131,7 @@ namespace BeeInterface
                 btnNormal.IsCLick = true;
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPosition_Adjustment_StatusToolChanged;
-            btnCropArea.IsCLick = true;
+           
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
             btnAutoMean.IsCLick = Propety.AutoMean == true ? true : false;
@@ -143,6 +147,29 @@ namespace BeeInterface
             AdjRANSACIterations.Value = Propety.RansacIterations;
             AdjRANSACThreshold.Value = (float)Propety.RansacThreshold;
 
+        }
+
+        private void EditRectRot1_RotateCurentChanged(RectRotate obj)
+        {
+            switch (obj.TypeCrop)
+            {
+                case TypeCrop.Area:
+                    Propety.rotArea = obj; break;
+                case TypeCrop.Crop:
+                    Propety.rotCrop = obj; break;
+                case TypeCrop.Mask:
+                    Propety.rotMask = obj; break;
+              
+            }
+        }
+
+        private void ToolPosition_Adjustment_VisibleChanged(object sender, EventArgs e)
+        {
+            if (!this.Visible)
+            {
+               
+                EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
+            }
         }
 
         private void ToolPosition_Adjustment_StatusToolChanged(StatusTool obj)
@@ -589,7 +616,7 @@ namespace BeeInterface
 
         private void btn2_Click(object sender, EventArgs e)
         {
-            lay2.Visible=!btn2.IsCLick;
+            EditRectRot1.Visible=!btn2.IsCLick;
         }
 
         private void btn3_Click(object sender, EventArgs e)

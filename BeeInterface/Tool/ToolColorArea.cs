@@ -39,9 +39,11 @@ namespace BeeInterface
       
         public bool IsClear;
         public bool IsIni = false;
+        View view = null;
         public void LoadPara( )
         {
-         
+            Global.SetColorChange -= Global_SetColorChange;
+            Global.SetColorChange += Global_SetColorChange;
             if (Propety.listCLShow==null)
                 Propety.listCLShow = new List<Color>();
             trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
@@ -92,7 +94,19 @@ namespace BeeInterface
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
 
         }
-     
+
+        private void Global_SetColorChange(bool obj)
+        {if (obj)
+            {
+                Propety.hSV = BeeCore.Common.HSVSample;
+                Propety.rGB = BeeCore.Common.RGBSample;
+
+                Propety.AddColor();
+                Propety.SetColor();
+                picColor.Invalidate();
+            }
+        }
+
         private void btnCropRect_Click(object sender, EventArgs e)
         {
             Global.TypeCrop = TypeCrop.Crop;
@@ -188,7 +202,7 @@ namespace BeeInterface
         private void NewShape(ShapeType newShape)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
+            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2;
             RectRotate rr = null;
             if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
             else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;
@@ -593,14 +607,19 @@ namespace BeeInterface
 
             btnDeleteAll.PerformClick();
         }
+       
 
         private void btnGetColor_Click(object sender, EventArgs e)
         {
+            
+          
             Propety.IsGetColor = btnGetColor.IsCLick;
+            Global.IsGetColor = btnGetColor.IsCLick;
+            Global.ColorGp = Propety.TypeColor;
             if (Propety.IsGetColor)
             {
-
-              
+                
+                
                 Global.StatusDraw = StatusDraw.Color;
                
             }
@@ -608,7 +627,8 @@ namespace BeeInterface
                 Global.StatusDraw = StatusDraw.Edit;
         }
 
-      
+     
+
         private void AdjClearNoise_ValueChanged(float obj)
         {
             Propety.SizeClearsmall = (int)AdjClearNoise.Value;

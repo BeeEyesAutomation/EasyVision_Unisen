@@ -79,7 +79,7 @@ namespace BeeInterface
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = Properties.Resources.Warning_1;
+            this.pictureBox1.Image = global::BeeInterface.Properties.Resources.Warning_1;
             this.pictureBox1.Location = new System.Drawing.Point(83, 8);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(52, 50);

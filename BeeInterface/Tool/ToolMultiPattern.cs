@@ -38,7 +38,7 @@ namespace BeeInterface
 
         public void LoadPara()
         {
-            Propety = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety;
+            Propety = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety2;
             AdjOffSetBR.Value = Propety.OffSetBR;
             AdjAspectBox.Value = Propety.AspectBox;
             AdjBinary.Value = Propety.ThresholdBinary;
@@ -247,7 +247,7 @@ namespace BeeInterface
         private void NewShape(ShapeType newShape)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
+            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2;
             RectRotate rr = null;
             if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
             else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;
@@ -420,7 +420,7 @@ namespace BeeInterface
 
         private void btnCalib_Click(object sender, EventArgs e)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety.IsCalibs = true;
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety2.IsCalibs = true;
      //       btnTest.Enabled = false;
             if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
                 Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();

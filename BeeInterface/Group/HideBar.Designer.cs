@@ -33,6 +33,7 @@ namespace BeeUi.Unit
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HideBar));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.rjButton2 = new BeeInterface.RJButton();
             this.btnExit = new BeeInterface.RJButton();
             this.btnShuttdown = new BeeInterface.RJButton();
             this.rjButton1 = new BeeInterface.RJButton();
@@ -41,7 +42,6 @@ namespace BeeUi.Unit
             this.btnShowDashBoard = new BeeInterface.RJButton();
             this.btnShowTop = new BeeInterface.RJButton();
             this.btnfull = new BeeInterface.RJButton();
-            this.rjButton2 = new BeeInterface.RJButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,15 +49,15 @@ namespace BeeUi.Unit
             // 
             this.tableLayoutPanel1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tableLayoutPanel1.ColumnCount = 9;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 72F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 73F));
             this.tableLayoutPanel1.Controls.Add(this.rjButton2, 7, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnExit, 8, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnShuttdown, 6, 0);
@@ -75,6 +75,63 @@ namespace BeeUi.Unit
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(577, 46);
             this.tableLayoutPanel1.TabIndex = 36;
+            // 
+            // rjButton2
+            // 
+            this.rjButton2.AutoFont = true;
+            this.rjButton2.AutoFontHeightRatio = 0.85F;
+            this.rjButton2.AutoFontMax = 100F;
+            this.rjButton2.AutoFontMin = 7F;
+            this.rjButton2.AutoFontWidthRatio = 1F;
+            this.rjButton2.AutoImage = true;
+            this.rjButton2.AutoImageMaxRatio = 1F;
+            this.rjButton2.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.rjButton2.AutoImageTint = true;
+            this.rjButton2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.rjButton2.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.rjButton2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.rjButton2.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.rjButton2.BorderRadius = 5;
+            this.rjButton2.BorderSize = 1;
+            this.rjButton2.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.rjButton2.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.rjButton2.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.rjButton2.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.rjButton2.Corner = BeeGlobal.Corner.Both;
+            this.rjButton2.DebounceResizeMs = 16;
+            this.rjButton2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rjButton2.FlatAppearance.BorderSize = 0;
+            this.rjButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.089844F);
+            this.rjButton2.ForeColor = System.Drawing.Color.Black;
+            this.rjButton2.Image = global::BeeInterface.Properties.Resources.Minus;
+            this.rjButton2.ImageDisabled = null;
+            this.rjButton2.ImageHover = null;
+            this.rjButton2.ImageNormal = null;
+            this.rjButton2.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.rjButton2.ImagePressed = null;
+            this.rjButton2.ImageTextSpacing = 2;
+            this.rjButton2.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.rjButton2.ImageTintHover = System.Drawing.Color.Empty;
+            this.rjButton2.ImageTintNormal = System.Drawing.Color.Empty;
+            this.rjButton2.ImageTintOpacity = 0.5F;
+            this.rjButton2.ImageTintPressed = System.Drawing.Color.Empty;
+            this.rjButton2.IsCLick = false;
+            this.rjButton2.IsNotChange = true;
+            this.rjButton2.IsRect = false;
+            this.rjButton2.IsTouch = false;
+            this.rjButton2.IsUnGroup = true;
+            this.rjButton2.Location = new System.Drawing.Point(427, 2);
+            this.rjButton2.Margin = new System.Windows.Forms.Padding(2);
+            this.rjButton2.Multiline = false;
+            this.rjButton2.Name = "rjButton2";
+            this.rjButton2.Size = new System.Drawing.Size(75, 42);
+            this.rjButton2.TabIndex = 49;
+            this.rjButton2.Text = "Hide";
+            this.rjButton2.TextColor = System.Drawing.Color.Black;
+            this.rjButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.rjButton2.UseVisualStyleBackColor = false;
+            this.rjButton2.Click += new System.EventHandler(this.rjButton2_Click);
             // 
             // btnExit
             // 
@@ -102,9 +159,9 @@ namespace BeeUi.Unit
             this.btnExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnExit.FlatAppearance.BorderSize = 0;
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
+            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.089844F);
             this.btnExit.ForeColor = System.Drawing.Color.Black;
-            this.btnExit.Image = BeeInterface.Properties.Resources.exit;
+            this.btnExit.Image = global::BeeInterface.Properties.Resources.exit;
             this.btnExit.ImageDisabled = null;
             this.btnExit.ImageHover = null;
             this.btnExit.ImageNormal = null;
@@ -162,7 +219,7 @@ namespace BeeUi.Unit
             this.btnShuttdown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShuttdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
             this.btnShuttdown.ForeColor = System.Drawing.Color.Black;
-            this.btnShuttdown.Image = BeeInterface.Properties.Resources.Shutdown;
+            this.btnShuttdown.Image = global::BeeInterface.Properties.Resources.Shutdown;
             this.btnShuttdown.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnShuttdown.ImageDisabled = null;
             this.btnShuttdown.ImageHover = null;
@@ -222,7 +279,7 @@ namespace BeeUi.Unit
             this.rjButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rjButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.rjButton1.ForeColor = System.Drawing.Color.Black;
-            this.rjButton1.Image = BeeInterface.Properties.Resources.Show;
+            this.rjButton1.Image = global::BeeInterface.Properties.Resources.Show;
             this.rjButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.rjButton1.ImageDisabled = null;
             this.rjButton1.ImageHover = null;
@@ -251,6 +308,7 @@ namespace BeeUi.Unit
             this.rjButton1.TextColor = System.Drawing.Color.Black;
             this.rjButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.rjButton1.UseVisualStyleBackColor = false;
+            this.rjButton1.Visible = false;
             // 
             // btnShowToolBar
             // 
@@ -536,63 +594,6 @@ namespace BeeUi.Unit
             this.btnfull.TextColor = System.Drawing.Color.Black;
             this.btnfull.UseVisualStyleBackColor = false;
             this.btnfull.Click += new System.EventHandler(this.btnfull_Click);
-            // 
-            // rjButton2
-            // 
-            this.rjButton2.AutoFont = true;
-            this.rjButton2.AutoFontHeightRatio = 0.85F;
-            this.rjButton2.AutoFontMax = 100F;
-            this.rjButton2.AutoFontMin = 7F;
-            this.rjButton2.AutoFontWidthRatio = 1F;
-            this.rjButton2.AutoImage = true;
-            this.rjButton2.AutoImageMaxRatio = 1F;
-            this.rjButton2.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.rjButton2.AutoImageTint = true;
-            this.rjButton2.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.rjButton2.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.rjButton2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.rjButton2.BorderColor = System.Drawing.Color.WhiteSmoke;
-            this.rjButton2.BorderRadius = 5;
-            this.rjButton2.BorderSize = 1;
-            this.rjButton2.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.rjButton2.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.rjButton2.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
-            this.rjButton2.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.rjButton2.Corner = BeeGlobal.Corner.Both;
-            this.rjButton2.DebounceResizeMs = 16;
-            this.rjButton2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rjButton2.FlatAppearance.BorderSize = 0;
-            this.rjButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.rjButton2.ForeColor = System.Drawing.Color.Black;
-            this.rjButton2.Image = BeeInterface.Properties.Resources.Minus;
-            this.rjButton2.ImageDisabled = null;
-            this.rjButton2.ImageHover = null;
-            this.rjButton2.ImageNormal = null;
-            this.rjButton2.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.rjButton2.ImagePressed = null;
-            this.rjButton2.ImageTextSpacing = 2;
-            this.rjButton2.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.rjButton2.ImageTintHover = System.Drawing.Color.Empty;
-            this.rjButton2.ImageTintNormal = System.Drawing.Color.Empty;
-            this.rjButton2.ImageTintOpacity = 0.5F;
-            this.rjButton2.ImageTintPressed = System.Drawing.Color.Empty;
-            this.rjButton2.IsCLick = false;
-            this.rjButton2.IsNotChange = true;
-            this.rjButton2.IsRect = false;
-            this.rjButton2.IsTouch = false;
-            this.rjButton2.IsUnGroup = true;
-            this.rjButton2.Location = new System.Drawing.Point(427, 2);
-            this.rjButton2.Margin = new System.Windows.Forms.Padding(2);
-            this.rjButton2.Multiline = false;
-            this.rjButton2.Name = "rjButton2";
-            this.rjButton2.Size = new System.Drawing.Size(75, 42);
-            this.rjButton2.TabIndex = 49;
-            this.rjButton2.Text = "Hide";
-            this.rjButton2.TextColor = System.Drawing.Color.Black;
-            this.rjButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.rjButton2.UseVisualStyleBackColor = false;
-            this.rjButton2.Click += new System.EventHandler(this.rjButton2_Click);
             // 
             // HideBar
             // 

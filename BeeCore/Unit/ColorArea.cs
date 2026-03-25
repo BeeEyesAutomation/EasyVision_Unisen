@@ -115,9 +115,9 @@ namespace BeeCore
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
         }
         [NonSerialized]
-        private HSVCli hSV;
+        public HSVCli hSV;
         [NonSerialized]
-       private RGBCli rGB;
+        public RGBCli rGB;
         public System.Drawing.Color GetColor( Mat raw, int x,int y)
         {
             using (Mat mat = raw.Clone())
@@ -181,16 +181,20 @@ namespace BeeCore
                 case ColorGp.HSV:
                     if (HSVs == null)
                         HSVs = new List<HSV>();
-                    if(hSV!=null)
-                    HSVs.Add(new HSV(hSV.H, hSV.S, hSV.V));
-                
+                    if (hSV != null)
+                    {
+                        HSVs.Add(new HSV(hSV.H, hSV.S, hSV.V));
+                        clShow = HsvConvert.FromHsvOpenCv((byte)hSV.H, (byte)hSV.S, (byte)hSV.V);
+                    }
                     break;
                 case ColorGp.RGB:
                     if (RGBs == null)
                         RGBs = new List<RGB>();
                     if (rGB != null)
+                    {
                         RGBs.Add(new RGB(rGB.R, rGB.G, rGB.B));
-                 
+                        clShow = Color.FromArgb(rGB.R, rGB.G, rGB.B);
+                    }
                     break;
             }
             listCLShow.Add(clShow);

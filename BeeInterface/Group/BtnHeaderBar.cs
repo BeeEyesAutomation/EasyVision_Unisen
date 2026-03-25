@@ -155,6 +155,7 @@ namespace BeeInterface
 
         private void BtnHeaderBar_Load(object sender, EventArgs e)
         {
+            if(Global.Config!=null)
           btnQuickSetting.Visible = Global.Config.IsQuickST;
         }
     }

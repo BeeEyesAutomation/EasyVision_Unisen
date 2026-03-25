@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace BeeInterface.PLC
 {
@@ -22,8 +23,10 @@ namespace BeeInterface.PLC
         public ucBitInput(ParaBit paraBit)
         {
             InitializeComponent();
+           
             this.paraBit = paraBit;
             Type.DataSource = Enum.GetValues(typeof(I_O_Input));
+            Type.MaxDropDownItems = 10;
             OldType = this.paraBit.I_O_Input.ToString();
             Type.SelectedIndex= Type.FindStringExact(OldType);
             Type.DataSourceChanged += Type_DataSourceChanged;
@@ -114,6 +117,11 @@ namespace BeeInterface.PLC
         private void ucBitInput_Load(object sender, EventArgs e)
         {
             //this.ActiveControl = null;
+        }
+
+        private void Type_DropDown(object sender, EventArgs e)
+        {
+            Type.MaxDropDownItems = 10;
         }
     }
 }

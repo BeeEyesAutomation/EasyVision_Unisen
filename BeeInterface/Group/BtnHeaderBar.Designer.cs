@@ -45,11 +45,11 @@ namespace BeeInterface
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 5;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.06265F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.81203F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.06265F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.06265F));
             this.tableLayoutPanel1.Controls.Add(this.btnQuickSetting, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.btncheck, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnSetting, 4, 0);
@@ -110,7 +110,7 @@ namespace BeeInterface
             this.btnQuickSetting.IsRect = false;
             this.btnQuickSetting.IsTouch = false;
             this.btnQuickSetting.IsUnGroup = true;
-            this.btnQuickSetting.Location = new System.Drawing.Point(387, 0);
+            this.btnQuickSetting.Location = new System.Drawing.Point(388, 0);
             this.btnQuickSetting.Margin = new System.Windows.Forms.Padding(0);
             this.btnQuickSetting.Multiline = false;
             this.btnQuickSetting.Name = "btnQuickSetting";
@@ -169,11 +169,11 @@ namespace BeeInterface
             this.btncheck.IsRect = false;
             this.btncheck.IsTouch = false;
             this.btncheck.IsUnGroup = true;
-            this.btncheck.Location = new System.Drawing.Point(129, 0);
+            this.btncheck.Location = new System.Drawing.Point(130, 0);
             this.btncheck.Margin = new System.Windows.Forms.Padding(0);
             this.btncheck.Multiline = false;
             this.btncheck.Name = "btncheck";
-            this.btncheck.Size = new System.Drawing.Size(129, 53);
+            this.btncheck.Size = new System.Drawing.Size(128, 53);
             this.btncheck.TabIndex = 39;
             this.btncheck.Text = "Update";
             this.btncheck.TextColor = System.Drawing.Color.Black;
@@ -228,11 +228,11 @@ namespace BeeInterface
             this.btnSetting.IsRect = false;
             this.btnSetting.IsTouch = false;
             this.btnSetting.IsUnGroup = true;
-            this.btnSetting.Location = new System.Drawing.Point(516, 0);
+            this.btnSetting.Location = new System.Drawing.Point(517, 0);
             this.btnSetting.Margin = new System.Windows.Forms.Padding(0);
             this.btnSetting.Multiline = false;
             this.btnSetting.Name = "btnSetting";
-            this.btnSetting.Size = new System.Drawing.Size(132, 53);
+            this.btnSetting.Size = new System.Drawing.Size(131, 53);
             this.btnSetting.TabIndex = 35;
             this.btnSetting.Text = "Settings";
             this.btnSetting.TextColor = System.Drawing.Color.Black;
@@ -267,7 +267,7 @@ namespace BeeInterface
             this.btnReport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnReport.FlatAppearance.BorderSize = 0;
             this.btnReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.05469F);
             this.btnReport.ForeColor = System.Drawing.Color.Black;
             this.btnReport.Image = global::BeeInterface.Properties.Resources.Report;
             this.btnReport.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -291,7 +291,7 @@ namespace BeeInterface
             this.btnReport.Margin = new System.Windows.Forms.Padding(0);
             this.btnReport.Multiline = false;
             this.btnReport.Name = "btnReport";
-            this.btnReport.Size = new System.Drawing.Size(129, 53);
+            this.btnReport.Size = new System.Drawing.Size(130, 53);
             this.btnReport.TabIndex = 34;
             this.btnReport.Text = "Report";
             this.btnReport.TextColor = System.Drawing.Color.Black;
@@ -326,7 +326,7 @@ namespace BeeInterface
             this.btnUser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnUser.FlatAppearance.BorderSize = 0;
             this.btnUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.05469F);
             this.btnUser.ForeColor = System.Drawing.Color.Black;
             this.btnUser.Image = global::BeeInterface.Properties.Resources.User;
             this.btnUser.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -350,7 +350,7 @@ namespace BeeInterface
             this.btnUser.Margin = new System.Windows.Forms.Padding(0);
             this.btnUser.Multiline = false;
             this.btnUser.Name = "btnUser";
-            this.btnUser.Size = new System.Drawing.Size(129, 53);
+            this.btnUser.Size = new System.Drawing.Size(130, 53);
             this.btnUser.TabIndex = 32;
             this.btnUser.Text = "Account";
             this.btnUser.TextColor = System.Drawing.Color.Black;

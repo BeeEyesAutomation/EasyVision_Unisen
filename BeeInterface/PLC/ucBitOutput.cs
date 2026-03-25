@@ -24,6 +24,7 @@ namespace BeeInterface.PLC
             InitializeComponent();
             this.paraBit = paraBit;
             Type.DataSource = Enum.GetValues(typeof(I_O_Output));
+            Type.MaxDropDownItems = 10;
             OldType = this.paraBit.I_O_Output.ToString();
             Type.SelectedIndex= Type.FindStringExact(OldType);
             Type.DataSourceChanged += Type_DataSourceChanged;
@@ -105,6 +106,11 @@ namespace BeeInterface.PLC
           
             OldType = name;
 
+        }
+
+        private void Type_DropDown(object sender, EventArgs e)
+        {
+            Type.MaxDropDownItems = 10;
         }
     }
 }

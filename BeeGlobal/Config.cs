@@ -63,6 +63,8 @@ namespace BeeGlobal
         public bool IsSaveParaShow= true;
         public bool IsSaveParaCam = true;
         public bool IsEnTrain = true;
+        public bool IsEnCountChart = false;
+        public bool IsEnChangeProg = false;
         public bool IsSaveAllPara= true;
         public bool IsShowImgTrig = true;
         public bool IsManual = true;

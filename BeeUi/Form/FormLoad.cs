@@ -159,7 +159,7 @@ namespace BeeUi
         }
         List<String> listCCD;
 
-        private async void TmLoad_Tick(object sender, EventArgs e)
+        private  void TmLoad_Tick(object sender, EventArgs e)
         {
 
       
@@ -274,21 +274,21 @@ namespace BeeUi
 
                 DataTool.BuildProjectUI();
 
-                foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
-                {
-                    if (ListTool == null) continue;
-                    Parallel.For(0, ListTool.Count, i =>
-                    {
-                        PropetyTool propety = ListTool[i];
+                //foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
+                //{
+                //    if (ListTool == null) continue;
+                //    Parallel.For(0, ListTool.Count, i =>
+                //    {
+                //        PropetyTool propety = ListTool[i];
 
-                    X: if (propety.StatusTool == StatusTool.NotInitial)
-                        {
+                //    X: if (propety.StatusTool == StatusTool.NotInitial)
+                //        {
 
-                            goto X;
-                        }
+                //            goto X;
+                //        }
 
-                    });
-                }
+                //    });
+                //}
                 Global.ScanCCD = new ScanCCD();
                 G.IsIniPython = true;
                 lb.Text = "Checking Camera...";

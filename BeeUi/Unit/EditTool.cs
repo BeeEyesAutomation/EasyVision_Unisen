@@ -60,12 +60,34 @@ namespace BeeUi
             if(!pEditTool.Show(name))
              {
                 pEditTool.Register(name, () => toolEdit);
-               
 
             }
             pEditTool.Show(name);
         }
-      
+      public void UnResgisTer()
+        {
+            int IndexProgChoose = 0;
+            if (BeeCore.Common.PropetyTools == null) 
+                return;
+            foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
+            {
+                if (ListTool == null)
+                {     
+                    IndexProgChoose++;
+
+                continue;
+                }
+                int i= 0;
+                foreach (PropetyTool propety in ListTool)
+                {
+                    String name = "Tools" + IndexProgChoose+ Global.IndexProgChoose  + BeeCore.Common.PropetyTools[IndexProgChoose][i].Name;
+
+                    pEditTool.Unregister(name);
+                    i++;
+                }
+                IndexProgChoose++;
+            }
+        }
         public void Acccess(bool IsRun)
 		{
             BtnHeaderBar.btnUser.Text = Global.Config.Users.ToString();
@@ -746,6 +768,7 @@ namespace BeeUi
 
             }
             //  Global.ExChanged += Global_ExChanged;
+            if(BeeCore.Common.listCamera.Count>0)
             if (BeeCore.Common.listCamera[Global.IndexCCCD] != null)
                 BeeCore.Common.listCamera[Global.IndexCCCD].FrameChanged += EditTool_FrameChanged;
             Global.StepModeChanged += Global_StepModeChanged;
@@ -759,9 +782,30 @@ namespace BeeUi
             BeeInterface.G.StatusDashboard.TotalTimes = Global.Config.SumTime;
             BeeInterface.G.StatusDashboard.OkCount = Global.Config.SumOK;
             BeeInterface.G.StatusDashboard.NgCount = Global.Config.SumNG;
+            Global.EStopChanged += Global_EStopChanged;
 
             //
         }
+        FormWarning formWarning;
+        private void Global_EStopChanged(bool obj)
+        {
+            this.Invoke((Action)(() =>
+            {
+                if (obj)
+                {
+                     formWarning = new FormWarning("ESOP", "Nút nhấn ESOP đã được Nhấn !!! " + Global.Ex);
+                    formWarning.btnCancel.Visible = false;
+                    formWarning.TopMost = true;
+                    formWarning.Show();
+                }
+                else
+                {
+                    if(formWarning!=null)
+                    formWarning.Close();
+                }
+            }));
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -1474,6 +1518,11 @@ namespace BeeUi
             {
                 File.WriteAllLines(saveFile.FileName,  BeeInterface.G.Header.listNameProg);
              }
+        }
+
+        private void rjButton2_Click(object sender, EventArgs e)
+        {
+            Global.IsEstop = !Global.IsEstop;
         }
 
         private void btnNew_Click(object sender, EventArgs e)

@@ -50,7 +50,8 @@ namespace BeeInterface
         public static void LoadProjectData(string NameProject)
         {
             try
-            {
+            {if(Global.EditTool!=null)
+                Global.EditTool.UnResgisTer();
                 NameProject = NameProject.Replace(".prog", "");
 
                 // ==== dispose tools cũ ====
@@ -78,26 +79,33 @@ namespace BeeInterface
                 // ==== load camera ====
                 if (!Global.IsIntialProgram || !Global.Config.IsSaveParaCam)
                 {
-                    var paraCameras = LoadData.ParaCamera(NameProject);
-                    Global.listParaCamera = paraCameras;
-
-                    BeeCore.Common.listCamera = new List<Camera>();
-                    int index = 0;
-
-                    foreach (var p in paraCameras)
+                    try
                     {
-                        if (p != null)
-                            BeeCore.Common.listCamera.Add(new Camera(p, index));
-                        else
+                        var paraCameras = LoadData.ParaCamera(NameProject);
+                        Global.listParaCamera = paraCameras;
+
+                        BeeCore.Common.listCamera = new List<Camera>();
+                        int index = 0;
+
+                        foreach (var p in paraCameras)
+                        {
+                            if (p != null)
+                                BeeCore.Common.listCamera.Add(new Camera(p, index));
+                            else
+                                BeeCore.Common.listCamera.Add(null);
+                            index++;
+                        }
+
+                        while (BeeCore.Common.listCamera.Count < 4)
                             BeeCore.Common.listCamera.Add(null);
-                        index++;
+
+                        if (BeeCore.Common.listCamera[0] != null)
+                            Global.Config.SizeCCD = BeeCore.Common.listCamera[0].GetSzCCD();
                     }
-
-                    while (BeeCore.Common.listCamera.Count < 4)
-                        BeeCore.Common.listCamera.Add(null);
-
-                    if (BeeCore.Common.listCamera[0] != null)
-                        Global.Config.SizeCCD = BeeCore.Common.listCamera[0].GetSzCCD();
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 }
 
                 // ==== load tools ====
@@ -113,6 +121,7 @@ namespace BeeInterface
                 new List<PropetyTool>()
             };
                 }
+
                 //if(BeeCore.Common.PropetyTools.Count >= 2)
                 //{
                 //    List<PropetyTool> newList = new List<PropetyTool>();
@@ -130,33 +139,87 @@ namespace BeeInterface
                 //    }
                 //    BeeCore.Common.PropetyTools[3] = newList2;
                 //}
+                bool IsVerNew = false;
+                foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
+                {
+                    if (ListTool == null) continue;
 
+                    foreach (PropetyTool propety in ListTool)
+                    {
+                        if (propety.Propety2 == null && propety.Propety != null)
+                        {
+                            IsVerNew = true;
+
+                        }
+                    }
+                }
+                if (IsVerNew)
+                {
+
+                    String NameBK = Global.Project;
+
+                    SaveData.Program(NameBK, BeeCore.Common.PropetyTools,true);
+                }
+              
+                foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
+                {
+                    if (ListTool == null) continue;
+
+                    foreach (PropetyTool propety in ListTool)
+                    {
+                        if(propety.Propety2 == null && propety.Propety!=null)
+                        {
+                            IsVerNew = true;
+                        
+                            propety.Propety2 = propety.Propety.Clone();
+                            propety.Propety = null;
+                        } 
+                            
+                       
+                      
+                        
+                      }
+                }
+                if (IsVerNew)
+                {
+                 
+                    SaveData.Program(Global.Project, BeeCore.Common.PropetyTools);
                     Global.IsLoadProgFist = true;
+                }
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "LoadProg", ex.Message));
             }
         }
         public static void BuildProjectUI()
         {
-            try
-            {
+            try { 
+          
                 Global.pShowTool.Y = 10;
                 Global.pShowTool.X = 5;
 
                 int indexThread = 0;
 
-                foreach (var list in BeeCore.Common.PropetyTools)
+                for (int t = 0; t < BeeCore.Common.PropetyTools.Count; t++)
                 {
+                    var list = BeeCore.Common.PropetyTools[t];
+                  
                     if (list == null) continue;
 
-                    int i = 0;
+                   
 
-                    foreach (var tool in list)
+                    for (int i = 0; i < list.Count; i++)
                     {
+                        var tool = list[i];
                         try
                         {
+                        if (tool == null)
+                        {
+                          
+                            continue;
+                        }
                             var control = CreateControls(tool, i, indexThread, Global.pShowTool);
                             var item = CreateItemTool(tool, i, indexThread, Global.pShowTool);
 
@@ -170,11 +233,14 @@ namespace BeeInterface
                           //  LoadPropety(control);
 
                             if (tool.TypeTool == TypeTool.OCR)
-                                tool.Propety.SetModelOCR();
+                                tool.Propety2.SetModelOCR();
                         }
-                        catch { }
+                        catch(Exception ex) {
+                            Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "BuildUI2", ex.Message));
+                            Console.WriteLine(ex.Message);
+                        }
 
-                        i++;
+                       
                     }
 
                     if (!Global.Config.IsMultiProg)
@@ -182,7 +248,8 @@ namespace BeeInterface
 
                     indexThread++;
                 }
-
+            try
+            {
                 // ==== set model ====
                 foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
                 {
@@ -190,11 +257,12 @@ namespace BeeInterface
 
                     foreach (PropetyTool propety in ListTool)
                     {
-                        try
+                            
+                            try
                         {
                             if (propety != null)
-                                if (propety.Propety != null)
-                                    propety.Propety.SetModel();
+                                if (propety.Propety2 != null)
+                                    propety.Propety2.SetModel();
                         }
                         catch(Exception ex)
                         {
@@ -210,208 +278,15 @@ namespace BeeInterface
             {
                 Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "BuildUI", ex.Message));
             }
+            }
+            catch (Exception ex)
+            {
+                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "BuildUI 3", ex.Message));
+            }
         }
 
 
-        public static void LoadProject(String NameProject)
-        {
-            try
-            {
-                if(BeeCore.Common.PropetyTools.Count>0)
-                {
-                    foreach(List< PropetyTool> list in BeeCore.Common.PropetyTools)
-                    {
-                        if (list!=null)
-                      
-                        foreach (PropetyTool propetyTool in list)
-                            {
-                                try
-                                {
-                                    propetyTool.Dispose();
-                                  
-
-
-                                }
-                                catch(Exception ex)
-                                {
-                                    Console.WriteLine(ex.Message);
-                                }
-                              
-                             
-                            }    
-                         
-                    }    
-                }    
-                NameProject = NameProject.Replace(".prog", "");
-                if (!Global.IsIntialProgram || !Global.Config.IsSaveProg)
-                    Global.ParaCommon = LoadData.Para(NameProject);
-                if (!Global.IsIntialProgram || !Global.Config.IsSaveCommunication)
-                    Global.Comunication = LoadData.Comunication(NameProject);
-                if (!Global.IsIntialProgram || !Global.Config.IsSaveParaShow)
-                    Global.ParaShow = LoadData.ParaShow(NameProject);
-                if (!Global.IsIntialProgram || !Global.Config.IsSaveListRegister)
-                    Global.listRegsImg = LoadData.listImgRegister(NameProject);
-                if (!Global.IsIntialProgram || !Global.Config.IsSaveParaCam)
-                {
-                    List<ParaCamera> paraCameras = LoadData.ParaCamera(NameProject);
-                    if (paraCameras.Count() > 0)
-                    {
-                        Global.listParaCamera = paraCameras;
-                        BeeCore.Common.listCamera = new List<Camera>();
-                        int indexCCD = 0;
-                        foreach (ParaCamera paraCamera in paraCameras)
-                        {
-                            if (paraCamera != null)
-                                BeeCore.Common.listCamera.Add(new Camera(paraCamera, indexCCD));
-                            else
-                                BeeCore.Common.listCamera.Add(null);
-                            indexCCD++;
-                        }
-                    X: if (BeeCore.Common.listCamera.Count() != 4)
-                        {
-                            BeeCore.Common.listCamera.Add(null);
-                            goto X;
-                        }
-                        if (BeeCore.Common.listCamera.Count() > 0)
-                            if (BeeCore.Common.listCamera[0] != null)
-                                Global.Config.SizeCCD = BeeCore.Common.listCamera[0].GetSzCCD();
-                    }
-                    else
-                    {
-                        BeeCore.Common.listCamera = new List<Camera>();
-                        Global.listParaCamera = new List<ParaCamera> { null, null, null, null };
-                        foreach (ParaCamera paraCamera in Global.listParaCamera)
-                        {
-                            if (paraCamera == null)
-
-                                BeeCore.Common.listCamera.Add(null);
-
-
-                        }
-                    }
-                }
-                BeeCore.Common.PropetyTools = new List<List<PropetyTool>>();
-                BeeCore.Common.PropetyTools = LoadData.Project(NameProject);
-                if (BeeCore.Common.PropetyTools.Count == 0)
-                {
-                    BeeCore.Common.PropetyTools = new List<List<PropetyTool>> { new List<PropetyTool>(), new List<PropetyTool>(), new List<PropetyTool>(), new List<PropetyTool>() };
-
-                }
-                for (int i = 0; i < BeeCore.Common.PropetyTools.Count; i++)
-                    if (i >= Global.Config.NumTrig)
-                    {
-                        BeeCore.Common.PropetyTools[i] = null;
-                        BeeCore.Common.listCamera[i] = null;
-                    }
-
-
-
-                for (int i = 0; i < BeeCore.Common.PropetyTools.Count; i++)
-                {
-                    if (BeeCore.Common.PropetyTools[i] != null)
-                        for (int j = 0; j < BeeCore.Common.PropetyTools[i].Count; j++)
-                        {
-                            TypeTool TypeTool = BeeCore.Common.PropetyTools[i][j].TypeTool;
-                            int ix = Global.itemNews.FindIndex(a => a.TypeTool == TypeTool);
-                            if (ix >= 0)
-                                if (!Global.itemNews[ix].IsEn)
-                                {
-                                    BeeCore.Common.PropetyTools[i].RemoveAt(j);
-                                    j--;
-                                }
-
-                        }
-                }
-                //else
-                //    G.listAlltool = new List<List<Tools>>();
-
-
-                //if (Global.ToolSettings == null)
-                //{
-                //    Global.ToolSettings = new ToolSettings();
-
-                //}
-                Global.pShowTool.Y = 10; Global.pShowTool.X = 5;
-                int indexThread = 0;
-
-                foreach (List<BeeCore.PropetyTool> ListTool in BeeCore.Common.PropetyTools)
-                {
-                    if (ListTool != null)
-                    {
-                        int i = 0;
-                        foreach (PropetyTool PropTool in ListTool)
-                        {
-                            try
-                            {
-                                dynamic control = DataTool.CreateControls(PropTool, i, indexThread, new Point(Global.pShowTool.X, Global.pShowTool.Y));
-                                ItemTool Itemtool = DataTool.CreateItemTool(PropTool, i, indexThread, new Point(Global.pShowTool.X, Global.pShowTool.Y));
-                                Global.pShowTool.Y += Itemtool.Height + 10;
-                                PropTool.ItemTool = Itemtool;
-                                PropTool.Propety.IndexThread = indexThread;
-                                PropTool.Control = null;
-                                PropTool.Control = control;
-                                DataTool.LoadPropety(PropTool.Control);
-                                if (PropTool.TypeTool == TypeTool.OCR)
-                                    PropTool.Propety.SetModelOCR();
-                            }
-                            catch (Exception ex)
-                            {
-                                String s = ex.Message;
-                            }
-                            i++;
-                        }
-
-                    }
-
-                    if (Global.Config.IsMultiProg == false)
-                        break;
-
-                    indexThread++;
-
-                }
-                //foreach (List<Tools> ListTool in G.listAlltool)
-                //{
-                //    if (ListTool == null) continue;
-                //    foreach (Tools Tool in ListTool)
-                //    DataTool.LoadPropety(Tool.tool);
-
-
-                //}
-                //foreach (Tools tool in G.listAlltool)
-                //{
-                //    DataTool.LoadPropety(tool.tool);
-                //   //X: if(tool.tool.Propety.StatusTool != StatusTool.Initialed)
-                //   // {
-                //   //     Task.Delay(10);
-                //   //     goto X;
-                //   // }
-                //   //else
-                //   // {
-                //   //     continue;
-                //   // }
-                //}
-                foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
-                {
-                    if (ListTool == null) continue;
-
-                    foreach (PropetyTool propety in ListTool)
-                    {
-                        if (propety != null)
-                            if (propety.Propety != null)
-                                propety.Propety.SetModel();
-                    }
-                    if (Global.Config.IsMultiProg == false)
-                        break;
-                }
-
-                Global.IsLoadProgFist = true;
-            }
-            catch(Exception ex)
-            {
-                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "LoadProg",ex.Message));
-            }
-
-        }
+   
         public static dynamic New(TypeTool typeTool,bool IsNew=false)
         {
             dynamic control = null;
@@ -531,7 +406,7 @@ namespace BeeInterface
                 itemTool.ClStatus = Color.Gray;
                 itemTool.IndexTool = Index;
                 itemTool.IndexThread = IndexThread;
-                PropetyTool.Propety.Index = Index;
+                PropetyTool.Propety2.Index = Index;
                 itemTool.IconTool = Global.itemNews[Global.itemNews.FindIndex(a => a.TypeTool == TypeTool)].Icon;// (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
                 itemTool.Anchor= AnchorStyles.Top|AnchorStyles.Left|AnchorStyles.Right;
               
@@ -595,7 +470,9 @@ namespace BeeInterface
             {
                 if (control == null) return null;
                 int with = 50, height = 50;
-                control.Propety = PropetyTool.Propety;
+                
+                control.Propety= PropetyTool.Propety2;
+             
                 control.Propety.Index = Index;
                 System.Drawing.Size szImg = Global.Config.SizeCCD;
                

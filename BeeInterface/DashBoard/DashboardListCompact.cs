@@ -35,13 +35,15 @@ namespace BeeInterface
             UpdateScroll();
             Invalidate();
         }
+        public event Action<int, LabelItem> ChooseColorBegin;
+        public event Action<int, LabelItem> ChooseColorEnd;
 
         // ===== Baseline (mốc 300px) =====
         private const int BASE_WIDTH = 300;
         private const float BASE_FONT_PT = 9f;
         private const int BASE_NAME_H = 22;
         private const int BASE_LINE_H = 30;
-        private const int BASE_LINES = 9;
+        private const int BASE_LINES = 10;
         private const int BASE_ROWSPACE = 10;
         private const int BASE_PADX = 8;
         private const int BASE_PADY = 6;
@@ -234,7 +236,12 @@ namespace BeeInterface
                 DrawLine(g, i, 6, baseY, "MinHeight", _items[i], _items[i].IsHeight, _items[i].ValueHeight, Segment.Height, Segment.ValueHeight, w);
                 DrawLine(g, i, 7, baseY, "MinCount", _items[i], _items[i].IsCounter, _items[i].ValueCounter, Segment.Counter, Segment.ValueCounter, w);
                 DrawLine(g, i, 8, baseY, "MinDistance", _items[i], _items[i].IsDistance, _items[i].ValueDistance, Segment.Distance, Segment.ValueDistance, w);
-
+                DrawLine(g, i, 9, baseY, "MinColor", _items[i],
+                _items[i].IsMinColor,
+                _items[i].ValueMinColor,
+                Segment.MinColor,
+                Segment.ValueMinColor,
+                w);
                 using (Pen p = new Pen(Color.FromArgb(230, 230, 230)))
                 {
                     g.DrawLine(p, rectItem.Left, rectItem.Bottom - 1, rectItem.Right, rectItem.Bottom - 1);
@@ -280,6 +287,42 @@ namespace BeeInterface
                     headerRect.Width - 12,
                     headerRect.Height);
             }
+        }
+        private void DrawValueBoxWithLabel(Graphics g, Rectangle rect, string label, int value, bool enabled)
+        {
+            using (Pen pen = new Pen(Color.FromArgb(210, 210, 210)))
+                g.DrawRectangle(pen, rect.X, rect.Y, rect.Width - 1, rect.Height - 1);
+
+            if (!enabled)
+            {
+                using (SolidBrush shade = new SolidBrush(Color.FromArgb(18, 0, 0, 0)))
+                    g.FillRectangle(shade, rect);
+                return;
+            }
+
+            // chia 2 phần: label + value
+            int labelW = (int)(rect.Width * 0.45f);
+
+            Rectangle rLabel = new Rectangle(rect.X + 2, rect.Y, labelW, rect.Height);
+            Rectangle rValue = new Rectangle(rect.X + labelW, rect.Y, rect.Width - labelW - 2, rect.Height);
+
+            // label (Min / Ext)
+            TextRenderer.DrawText(
+                g,
+                label + ":",
+                _scaledFont,
+                rLabel,
+                Color.Gray,
+                TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+
+            // value
+            TextRenderer.DrawText(
+                g,
+                value.ToString(),
+                _scaledFont,
+                rValue,
+                ForeColor,
+                TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
         }
         private void DrawUseButton(Graphics g, int itemIndex, int yTop, LabelItem it, int totalWidth)
         {
@@ -360,7 +403,7 @@ namespace BeeInterface
         //}
 
         private void DrawLine(Graphics g, int itemIndex, int lineIndex, int baseY, string label, LabelItem it,
-                              bool flag, int value, Segment flagSeg, Segment valSeg, int totalWidth)
+                         bool flag, int value, Segment flagSeg, Segment valSeg, int totalWidth)
         {
             int lineY = baseY + _padY + lineIndex * _lineH;
             Rectangle lineRect = new Rectangle(_padX, lineY, totalWidth - _padX * 2, _lineH);
@@ -381,11 +424,14 @@ namespace BeeInterface
 
             bool enabled = it.IsUse;
 
+            // ===== CHECKBOX =====
             Size glyph = CheckBoxRenderer.GetGlyphSize(g, CheckBoxState.UncheckedNormal);
             int cbX = leftRect.X;
             int cbY = leftRect.Y + (leftRect.Height - glyph.Height) / 2;
+
             CheckBoxState cbState = !enabled ? CheckBoxState.UncheckedDisabled
-                                             : (flag ? CheckBoxState.CheckedNormal : CheckBoxState.UncheckedNormal);
+                                            : (flag ? CheckBoxState.CheckedNormal : CheckBoxState.UncheckedNormal);
+
             CheckBoxRenderer.DrawCheckBox(g, new Point(cbX, cbY), cbState);
 
             int textX = cbX + glyph.Width + 4;
@@ -399,6 +445,96 @@ namespace BeeInterface
                 labColor,
                 TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
 
+            // ==========================
+            // 🔥 SPECIAL: MIN COLOR LINE
+            // ==========================
+            if (lineIndex == 9)
+            {
+                // ===== DRAW BUTTON COLOR (PRO VERSION) =====
+
+                // kích thước nút
+                int btnW = (int)(_lineH * 2.2f);
+                int btnH = valRect.Height;
+
+                Rectangle btnRect = new Rectangle(
+                    valRect.Right - btnW,
+                    valRect.Y,
+                    btnW,
+                    btnH/2);
+
+                // màu nền (fallback nếu chưa chọn)
+                Color backRaw = it.SampleColor == Color.Empty ? Color.LightGray : it.SampleColor;
+
+                // ép alpha
+                Color back = Color.FromArgb(255, backRaw.R, backRaw.G, backRaw.B);
+
+                // tắt blending
+                var oldMode = g.CompositingMode;
+                g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+
+                // fill chuẩn
+                using (SolidBrush b = new SolidBrush(back))
+                    g.FillRectangle(b, btnRect);
+
+                // restore
+                g.CompositingMode = oldMode;
+
+                // ===== border =====
+                using (Pen p = new Pen(Color.FromArgb(80, 80, 80)))
+                    g.DrawRectangle(p, btnRect);
+
+                // ===== auto contrast text =====
+                int brightness = (back.R + back.G + back.B) / 3;
+                Color textColor = brightness > 140 ? Color.Black : Color.White;
+
+                // ===== text "Color" =====
+                TextRenderer.DrawText(
+                    g,
+                    "Color",
+                    _scaledFontBold,
+                    btnRect,
+                    textColor,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+
+                // ===== trạng thái đang pick =====
+                if (it.IsChoosingColor)
+                {
+                    using (Pen p = new Pen(Color.Blue, 4))
+                        g.DrawRectangle(p, btnRect);
+                }
+
+                // ===== highlight khi hover (optional nhưng đẹp) =====
+                if (btnRect.Contains(PointToClient(MousePosition)))
+                {
+                    using (Pen p = new Pen(Color.FromArgb(120, 120, 120)))
+                        g.DrawRectangle(p, btnRect);
+                }
+
+                // ===== hiển thị RGB nhỏ bên dưới =====
+                if (it.SampleColor != Color.Empty)
+                {
+                    string txt = $"R:{it.SampleColor.R} G:{it.SampleColor.G} B:{it.SampleColor.B}";
+
+                    Rectangle txtRect = new Rectangle(
+                        btnRect.X,
+                        btnRect.Bottom + 1,
+                        btnRect.Width,
+                        30);
+
+                    TextRenderer.DrawText(
+                        g,
+                        txt,
+                        new Font("Arial",8),
+                        txtRect,
+                        Color.Gray,
+                        TextFormatFlags.HorizontalCenter | TextFormatFlags.Top);
+                }
+
+                return;
+            }
+            // ==========================
+            // NORMAL LINE
+            // ==========================
             using (Pen pen = new Pen(Color.FromArgb(210, 210, 210)))
             {
                 g.DrawRectangle(pen, valRect.X, valRect.Y, valRect.Width - 1, valRect.Height - 1);
@@ -428,7 +564,54 @@ namespace BeeInterface
                 }
             }
         }
+        private void DrawColorButton(Graphics g, int itemIndex, int baseY, int lineIndex, LabelItem it, int totalWidth)
+        {
+            int lineY = baseY + _padY + lineIndex * _lineH;
+            Rectangle lineRect = new Rectangle(_padX, lineY, totalWidth - _padX * 2, _lineH);
 
+            int btnSize = _lineH - 6;
+
+            Rectangle btn = new Rectangle(
+                lineRect.Right - btnSize - 4,
+                lineRect.Y + 3,
+                btnSize,
+                btnSize);
+
+            Color c = it.SampleColor == Color.Empty ? Color.Gray : it.SampleColor;
+
+            using (SolidBrush b = new SolidBrush(c))
+                g.FillRectangle(b, btn);
+
+            using (Pen p = new Pen(Color.Black))
+                g.DrawRectangle(p, btn);
+
+            if (it.IsChoosingColor)
+            {
+                using (Pen p = new Pen(Color.Red, 2))
+                    g.DrawRectangle(p, btn);
+            }
+        }
+        private void DrawValueBox(Graphics g, Rectangle rect, int value, bool enabled)
+        {
+            using (Pen pen = new Pen(Color.FromArgb(210, 210, 210)))
+                g.DrawRectangle(pen, rect.X, rect.Y, rect.Width - 1, rect.Height - 1);
+
+            if (enabled)
+            {
+                TextRenderer.DrawText(
+                    g,
+                    value.ToString(),
+                    _scaledFont,
+                    new Rectangle(rect.X + 4, rect.Y, rect.Width - 8, rect.Height),
+                    ForeColor,
+                    TextFormatFlags.VerticalCenter | TextFormatFlags.Left);
+            }
+            else
+            {
+                using (SolidBrush shade = new SolidBrush(Color.FromArgb(18, 0, 0, 0)))
+                    g.FillRectangle(shade, rect);
+            }
+        }
         // ===== Hit test =====
         private enum Segment
         {
@@ -448,7 +631,11 @@ namespace BeeInterface
             XMax, ValueXMax,
             YMax, ValueYMax,
 
-            Distance, ValueDistance
+            Distance, ValueDistance,
+            MinColor,
+            ValueMinColor,
+            ValueExternColor,
+            PickColor
         }
 
         private bool HitTest(Point pt, out int idx, out Segment seg, out Rectangle targetRect)
@@ -464,19 +651,15 @@ namespace BeeInterface
             int item = pt.Y / _itemHeight;
             idx = _vbar.Value + item;
             if (idx < 0 || idx >= _items.Count) return false;
-            //if (_chooseActiveIndex >= 0 && _chooseActiveIndex != idx )
-            //    return false;
+
             int top = item * _itemHeight;
+
             Rectangle headerRect, nameRect, btnRect;
             bool showButton;
 
-            GetHeaderRects(idx, top, w,
-                out headerRect,
-                out nameRect,
-                out btnRect,
-                out showButton);
+            GetHeaderRects(idx, top, w, out headerRect, out nameRect, out btnRect, out showButton);
 
-            // button trước
+            // ===== HEADER =====
             if (showButton && btnRect.Contains(pt))
             {
                 seg = Segment.ChooseAreaLimit;
@@ -484,46 +667,16 @@ namespace BeeInterface
                 return true;
             }
 
-            // label toggle
             if (nameRect.Contains(pt))
             {
                 seg = Segment.UseToggle;
                 targetRect = nameRect;
                 return true;
             }
-            //Rectangle headerRect = new Rectangle(_padX, top + 2, w - _padX * 2, _nameH - 4);
 
-            //int btnW = (int)(90 * _scale);
-
-            //Rectangle btnRect = new Rectangle(
-            //    headerRect.Right - btnW - 4,
-            //    headerRect.Y + 2,
-            //    btnW,
-            //    headerRect.Height - 4);
-
-            //Rectangle nameRect = new Rectangle(
-            //    headerRect.X,
-            //    headerRect.Y,
-            //    Math.Max(1, headerRect.Width - btnW - 8),
-            //    headerRect.Height);
-
-            //// ưu tiên check nút trước
-            //if (btnRect.Contains(pt))
-            //{
-            //    seg = Segment.ChooseAreaLimit;
-            //    targetRect = btnRect;
-            //    return true;
-            //}
-
-            //// sau đó mới check vùng tên để toggle IsUse
-            //if (nameRect.Contains(pt))
-            //{
-            //    seg = Segment.UseToggle;
-            //    targetRect = nameRect;
-            //    return true;
-            //}
-
+            // ===== BODY =====
             int baseY = top + _nameH;
+
             for (int line = 0; line < BASE_LINES; line++)
             {
                 int lineY = baseY + _padY + line * _lineH;
@@ -543,23 +696,70 @@ namespace BeeInterface
                 Rectangle leftRect = new Rectangle(lineRect.X, lineRect.Y, leftW, lineRect.Height);
                 Rectangle valRect = new Rectangle(valX, lineRect.Y + 2, valW, lineRect.Height - 4);
 
+                // =========================
+                // LEFT CLICK (checkbox)
+                // =========================
                 if (leftRect.Contains(pt))
-                {  
+                {
                     if (line == 0) seg = Segment.X;
                     else if (line == 1) seg = Segment.XMax;
                     else if (line == 2) seg = Segment.Y;
-                    else if (line ==3) seg = Segment.YMax;
+                    else if (line == 3) seg = Segment.YMax;
                     else if (line == 4) seg = Segment.Area;
                     else if (line == 5) seg = Segment.Width;
                     else if (line == 6) seg = Segment.Height;
                     else if (line == 7) seg = Segment.Counter;
                     else if (line == 8) seg = Segment.Distance;
+                    else if (line == 9) seg = Segment.MinColor;
+
                     targetRect = leftRect;
                     return true;
                 }
 
+                // =========================
+                // 🔥 SPECIAL: MIN COLOR
+                // =========================
+                if (line == 9)
+                {
+                    int colColorW = (int)(_lineH * 2.2f);
+                    int colValueW = valRect.Width - colColorW - 6;
+
+                    Rectangle valArea = new Rectangle(valRect.X, valRect.Y, colValueW, valRect.Height);
+                    Rectangle btnRect2 = new Rectangle(valArea.Right + 6, valRect.Y, colColorW - 6, valRect.Height);
+
+                    int half = valArea.Width / 2;
+
+                    Rectangle valRect1 = new Rectangle(valArea.X, valArea.Y, half - 2, valArea.Height);
+                    Rectangle valRect2 = new Rectangle(valArea.X + half + 2, valArea.Y, half - 2, valArea.Height);
+
+                    if (valRect1.Contains(pt))
+                    {
+                        seg = Segment.ValueMinColor;
+                        targetRect = valRect1;
+                        return true;
+                    }
+
+                    if (valRect2.Contains(pt))
+                    {
+                        seg = Segment.ValueExternColor;
+                        targetRect = valRect2;
+                        return true;
+                    }
+
+                    if (btnRect2.Contains(pt))
+                    {
+                        seg = Segment.PickColor;
+                        targetRect = btnRect2;
+                        return true;
+                    }
+                }
+
+                // =========================
+                // NORMAL VALUE
+                // =========================
                 if (valRect.Contains(pt))
-                {   if (line == 0) seg = Segment.ValueX;
+                {
+                    if (line == 0) seg = Segment.ValueX;
                     else if (line == 1) seg = Segment.ValueXMax;
                     else if (line == 2) seg = Segment.ValueY;
                     else if (line == 3) seg = Segment.ValueYMax;
@@ -568,10 +768,12 @@ namespace BeeInterface
                     else if (line == 6) seg = Segment.ValueHeight;
                     else if (line == 7) seg = Segment.ValueCounter;
                     else if (line == 8) seg = Segment.ValueDistance;
+
                     targetRect = valRect;
                     return true;
                 }
             }
+
             return false;
         }
         public event Action<int, LabelItem> ChooseAreaBegin;
@@ -631,7 +833,28 @@ namespace BeeInterface
                 Invalidate();
                 return;
             }
+            if (seg == Segment.PickColor)
+            {
+                if (!it.IsMinColor) return;
 
+                if (!it.IsChoosingColor)
+                {
+                    // 👉 BẮT ĐẦU PICK
+                    it.IsChoosingColor = true;
+
+                    ChooseColorBegin?.Invoke(idx, it);
+                }
+                else
+                {
+                    // 👉 KẾT THÚC PICK
+                    it.IsChoosingColor = false;
+
+                    ChooseColorEnd?.Invoke(idx, it);
+                }
+
+                Invalidate(RowRect(idx));
+                return;
+            }
             if (seg == Segment.UseToggle)
             {
                 it.IsUse = !it.IsUse;
@@ -762,6 +985,25 @@ namespace BeeInterface
                         case Segment.ValueDistance:
                             if (it.IsDistance) BeginEdit(idx, seg, it.ValueDistance, rect);
                             break;
+                        case Segment.MinColor:
+                            it.IsMinColor = !it.IsMinColor;
+                            if (!it.IsMinColor)
+                            {
+                                it.IsChoosingColor = false;
+                                HideEditor();
+                            }
+                            Invalidate(RowRect(idx));
+                            break;
+
+                        case Segment.ValueMinColor:
+                            if (it.IsMinColor)
+                                BeginEdit(idx, seg, it.ValueMinColor, rect);
+                            break;
+
+                        case Segment.ValueExternColor:
+                            if (it.IsMinColor)
+                                BeginEdit(idx, seg, it.ValueExternColor, rect);
+                            break;
                     }
                     break;
             }
@@ -866,6 +1108,11 @@ namespace BeeInterface
                 if (seg == Segment.ValueYMax && it.IsUse && it.IsYMax) it.ValueYMax = iv;
                 if (seg == Segment.ValueCounter && it.IsUse && it.IsCounter) it.ValueCounter = iv;
                 if (seg == Segment.ValueDistance && it.IsUse && it.IsDistance) it.ValueDistance = iv;
+                if (seg == Segment.ValueMinColor && it.IsUse && it.IsMinColor)
+                    it.ValueMinColor = iv;
+
+                if (seg == Segment.ValueExternColor && it.IsUse && it.IsMinColor)
+                    it.ValueExternColor = iv;
                 Invalidate(RowRect(idx));
             };
 
@@ -936,6 +1183,8 @@ namespace BeeInterface
                 case Segment.ValueHeight: line = 6; break;
                 case Segment.ValueCounter: line =7; break;
                 case Segment.ValueDistance: line = 8; break;
+                case Segment.ValueMinColor: line = 9; break;
+                case Segment.ValueExternColor: line = 9; break;
             }
             if (line < 0)
             {
@@ -960,7 +1209,16 @@ namespace BeeInterface
             int valW = Math.Min(desiredValW, maxValW);
 
             Rectangle valRect = new Rectangle(valX, lineRect.Y + 2, valW, lineRect.Height - 4);
+            int half = valRect.Width / 2;
 
+            if (_editing.Item2 == Segment.ValueMinColor)
+            {
+                valRect = new Rectangle(valRect.X, valRect.Y, half - 2, valRect.Height);
+            }
+            else
+            {
+                valRect = new Rectangle(valRect.X + half + 2, valRect.Y, half - 2, valRect.Height);
+            }
             Rectangle inner = new Rectangle(
                 valRect.X + 2,
                 valRect.Y + 1,

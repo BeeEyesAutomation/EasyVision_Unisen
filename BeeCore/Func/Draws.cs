@@ -1477,7 +1477,7 @@ Pen outlinePen)
                     case TypeCrop.Crop:
                         backcolor = new SolidBrush(Color.FromArgb(Opacity, 255, 165, 0));
                         break;
-                    case TypeCrop.Mask:
+                    case TypeCrop.Limit:
                         backcolor = new SolidBrush(Color.FromArgb(Opacity, 255, 0, 0));
                         break;
                 }

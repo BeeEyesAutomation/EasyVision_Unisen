@@ -17,8 +17,118 @@ namespace BeeCore.Algorithm
     /// </summary>
     public static class Filters
     {
+        public static Mat RemoveWhiteNoiseThenEdge(Mat src)
+        {
+            Mat gray = new Mat();
+            if (src.Channels() == 3)
+                Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+            else
+                gray = src.Clone();
 
-        public static Mat BinaryTextAuto(Mat src, int blockSize = 31, int c = 8, int minArea = 20)
+            // 1) Blur nhẹ để đỡ noise lấm tấm
+            Mat blur = new Mat();
+            Cv2.GaussianBlur(gray, blur, new Size(3, 3), 0);
+
+            // 2) Tách phần sáng trắng nhỏ / phản sáng
+            // kernel nhỏ nếu noise nhỏ, tăng lên nếu vệt trắng to hơn
+            Mat kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(5, 5));
+            Mat topHat = new Mat();
+            Cv2.MorphologyEx(blur, topHat, MorphTypes.TopHat, kernel);
+
+            // 3) Trừ phần sáng đó khỏi ảnh gốc
+            Mat noWhite = new Mat();
+            Cv2.Subtract(blur, topHat, noWhite);
+
+            // 4) Làm mượt thêm chút trước khi bắt cạnh
+            Mat smooth = new Mat();
+            Cv2.GaussianBlur(noWhite, smooth, new Size(5, 5), 1.0);
+            return smooth;
+        }
+        public static Mat RemoveVerticalGlare(Mat src)
+        {
+            Mat gray = new Mat();
+            if (src.Channels() == 3)
+                Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+            else
+                gray = src.Clone();
+
+            // lấy riêng các cấu trúc sáng mảnh theo chiều dọc
+            Mat kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 17));
+            Mat topHat = new Mat();
+            Cv2.MorphologyEx(gray, topHat, MorphTypes.TopHat, kernel);
+
+            // chỉ lấy phần topHat đủ mạnh mới coi là glare
+            Mat glareMask = new Mat();
+            Cv2.Threshold(topHat, glareMask, 25, 255, ThresholdTypes.Binary);
+
+            Mat repaired = new Mat();
+            Cv2.Inpaint(gray, glareMask, repaired, 3, InpaintMethod.Telea);
+
+            kernel.Dispose();
+            topHat.Dispose();
+            glareMask.Dispose();
+            gray.Dispose();
+
+            return repaired;
+        }
+
+        public static Mat SuppressHighlightOnly(Mat src)
+        {
+            Mat gray = new Mat();
+            if (src.Channels() == 3)
+                Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+            else
+                gray = src.Clone();
+
+            Mat mask = new Mat();
+            Cv2.Threshold(gray, mask, 180, 255, ThresholdTypes.Binary);
+
+            Mat result = gray.Clone();
+
+            // vùng sáng chói bị hạ xuống 180
+            result.SetTo(new Scalar(80), mask);
+
+            mask.Dispose();
+            gray.Dispose();
+
+            return result;
+        }
+
+        public static Mat SuppressHighlight(Mat src, int blurSize = 51, int delta = 18)
+    {
+        Mat gray = new Mat();
+        if (src.Channels() == 3)
+            Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+        else
+            gray = src.Clone();
+
+        // blur lớn để lấy nền sáng chậm, không phải để blur ảnh output
+        Mat bg = new Mat();
+        Cv2.GaussianBlur(gray, bg, new Size(blurSize, blurSize), 0);
+
+        Mat result = gray.Clone();
+
+        int rows = gray.Rows;
+        int cols = gray.Cols;
+
+        for (int y = 0; y < rows; y++)
+        {
+            for (int x = 0; x < cols; x++)
+            {
+                byte g = gray.At<byte>(y, x);
+                byte b = bg.At<byte>(y, x);
+
+                int limit = b + delta; // sáng hơn nền quá delta thì hạ xuống
+                if (g > limit)
+                    result.Set(y, x, (byte)limit);
+            }
+        }
+
+        bg.Dispose();
+        gray.Dispose();
+        return result;
+    }
+    public static Mat BinaryTextAuto(Mat src, int blockSize = 31, int c = 8, int minArea = 20)
         {
             Mat gray = new Mat();
 
@@ -859,6 +969,41 @@ namespace BeeCore.Algorithm
            
         }
 
+        public static Mat ClearNoiseBig(Mat edges, int minCompArea = 1000)
+        {
+            Mat labels = new Mat(), stats = new Mat(), centroids = new Mat();
+            try
+            {
+                // 4) Xóa nhiễu bằng Connected Components (trên ảnh nhị phân edge)
+
+                int num = Cv2.ConnectedComponentsWithStats(edges, labels, stats, centroids, PixelConnectivity.Connectivity8, MatType.CV_32S);
+                var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
+                Mat clean = Mat.Zeros(edges.Size(), MatType.CV_8U);
+                for (int i = 1; i < num; i++)
+                {
+                    int area = stats.At<int>(i, (int)ConnectedComponentsTypes.Area);
+                    if (area < minCompArea)
+                    {
+                        using (Mat mask = new Mat())
+                        {
+                            Cv2.InRange(labels, i, i, mask); // giữ lại đúng nhãn i
+                            clean.SetTo(255, mask);
+                        }
+                    }
+                }
+                return clean;
+            }
+            finally
+            {
+                // Giải phóng bộ nhớ trung gian
+                labels.Dispose();
+                stats.Dispose();
+                centroids.Dispose();
+            }
+            // (Tùy chọn) mở nhẹ để mảnh hơn
+            //Cv2.MorphologyEx(clean, clean, MorphTypes.Open, kernel, iterations: 1);
+
+        }
 
         public static Mat ClearNoise( Mat edges,int minCompArea=1000)
         {

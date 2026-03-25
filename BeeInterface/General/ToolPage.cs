@@ -222,7 +222,7 @@ namespace BeeInterface
                         foreach(PropetyTool propety in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
                         {
                             propety.ItemTool.IndexTool = i;
-                            propety.Propety.Index = i;i++;
+                            propety.Propety2.Index = i;i++;
                         }    
                         propetyTool2.worker = new System.ComponentModel.BackgroundWorker();
                         propetyTool2.timer = new System.Diagnostics.Stopwatch();
@@ -259,7 +259,7 @@ namespace BeeInterface
                         {
                             propetyTool2.Complete();
                         };
-                        propetyTool2.Propety.SetModel();
+                        propetyTool2.Propety2.SetModel();
 
                         DataTool.LoadPropety(control2);
                         ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexProgChoose]);
@@ -314,8 +314,8 @@ namespace BeeInterface
                 {
                     propetyTool.Complete();
                 };
-            propetyTool.Propety.IsNew = true;
-                propetyTool.Propety.SetModel();
+            propetyTool.Propety2.IsNew = true;
+                propetyTool.Propety2.SetModel();
             
                 DataTool.LoadPropety(control);
             ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexProgChoose]);

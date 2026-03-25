@@ -57,17 +57,17 @@ namespace BeeInterface
             foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
             {
                 if (propetyTool.IndexLogics[0] == true)
-                    Global.ParaCommon.indexLogic1.Add(propetyTool.Propety.Index);
+                    Global.ParaCommon.indexLogic1.Add(propetyTool.Propety2.Index);
                 if (propetyTool.IndexLogics[1] == true)
-                    Global.ParaCommon.indexLogic2.Add(propetyTool.Propety.Index);
+                    Global.ParaCommon.indexLogic2.Add(propetyTool.Propety2.Index);
                 if (propetyTool.IndexLogics[2] == true)
-                    Global.ParaCommon.indexLogic3.Add(propetyTool.Propety.Index);
+                    Global.ParaCommon.indexLogic3.Add(propetyTool.Propety2.Index);
                 if (propetyTool.IndexLogics[3] == true)
-                    Global.ParaCommon.indexLogic4.Add(propetyTool.Propety.Index);
+                    Global.ParaCommon.indexLogic4.Add(propetyTool.Propety2.Index);
                 if (propetyTool.IndexLogics[4] == true)
-                    Global.ParaCommon.indexLogic5.Add(propetyTool.Propety.Index);
+                    Global.ParaCommon.indexLogic5.Add(propetyTool.Propety2.Index);
                 if (propetyTool.IndexLogics[5] == true)
-                    Global.ParaCommon.indexLogic6.Add(propetyTool.Propety.Index);
+                    Global.ParaCommon.indexLogic6.Add(propetyTool.Propety2.Index);
 
             }
         }
