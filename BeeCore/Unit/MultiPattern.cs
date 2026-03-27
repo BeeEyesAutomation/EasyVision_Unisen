@@ -2163,7 +2163,7 @@ namespace BeeCore
                 String valueScore = Math.Round(rs.Score, 1) + "%";
                 if (!Global.ParaShow.IsShowScore) valueScore = "";
                 if (!Global.ParaShow.IsShowLabel) label = "";
-                Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
+                Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
                 gc.ResetTransform();
 
             }

@@ -15,6 +15,7 @@ namespace BeeCore
         public LabelItem(String Name) { this.Name = Name; }
         public string Name { get; set; }
         public bool IsArea { get; set; }
+        public bool IsRight{ get; set; }
         public bool IsUse { get; set; }
         public bool IsWidth { get; set; }
         public bool IsHeight { get; set; }

@@ -576,9 +576,13 @@ namespace BeeCore
                 graphics.DrawString(rightText, currentFont, textBrush, textX, textY);
             }
         }
-        public static void Box3Label(Graphics graphics, RectangleF baseRect, string leftText, string rightText, string Area , Font baseFont, Color baseBackColor, Brush textBrush, int opacity = 128, int thiness = 4, int minFontSize = 10, int padding = 1, bool ShowArea = false)
+        public static void Box3Label(Graphics graphics, RectangleF baseRect, string leftText, string rightText, string Area , Font baseFont, Color baseBackColor, Brush textBrush, int opacity = 128, int thiness = 4,bool IsFill=false, int minFontSize = 10, int padding = 1, bool ShowArea = false)
         {
-            graphics.DrawRectangle(new Pen(baseBackColor, thiness), new Rectangle((int)baseRect.X, (int)baseRect.Y, (int)baseRect.Width, (int)baseRect.Height));
+            Color transparentColor1 = Color.FromArgb((int)(opacity * 1.1f), baseBackColor.R, baseBackColor.G, baseBackColor.B);
+            if (IsFill)
+                graphics.FillRectangle(new SolidBrush(transparentColor1), new Rectangle((int)baseRect.X, (int)baseRect.Y, (int)baseRect.Width, (int)baseRect.Height));
+            else
+                graphics.DrawRectangle(new Pen(baseBackColor, thiness), new Rectangle((int)baseRect.X, (int)baseRect.Y, (int)baseRect.Width, (int)baseRect.Height));
 
             float fontSize = baseFont.Size;
 
@@ -637,9 +641,15 @@ namespace BeeCore
             }
         }
 
-        public static void Box2Label(Graphics graphics, RectRotate baseRect, string leftText, string rightText, Font baseFont, Color baseBackColor, Brush textBrush, int opacity = 128, int thiness = 4, int minFontSize = 10, int padding = 1, bool ShowArea = false)
+        public static void Box2Label(Graphics graphics, RectRotate baseRect, string leftText, string rightText, Font baseFont, Color baseBackColor, Brush textBrush, int opacity = 128, int thiness = 4,bool Isfill=false, int minFontSize = 10, int padding = 1, bool ShowArea = false)
         {
-            DrawRectRotate(graphics, baseRect, new Pen(baseBackColor, thiness));
+            Color transparentColor1 = Color.FromArgb((int)(opacity * 1.1f), baseBackColor.R, baseBackColor.G, baseBackColor.B);
+            if (Isfill)
+                graphics.FillRectangle(new SolidBrush(transparentColor1), new Rectangle((int)baseRect._rect.X, (int)baseRect._rect.Y, (int)baseRect._rect.Width, (int)baseRect._rect.Height));
+
+          //  FillRectRotate(graphics, baseRect, new SolidBrush(transparentColor1));
+            else
+                DrawRectRotate(graphics, baseRect, new Pen(baseBackColor, thiness));
             float fontSize = baseFont.Size;
 
             Font currentFont;
@@ -669,7 +679,7 @@ namespace BeeCore
                 double Area = Math.Round(baseRect._rect.Width * baseRect._rect.Height / 100);
                 graphics.DrawString(Area + "px", currentFont, new SolidBrush(Color.Gray), baseRect._rect.X, (int)baseRect._rect.Y + (int)baseRect._rect.Height - labelHeight - 5);
             }
-
+          
             using (SolidBrush leftBgBrush = new SolidBrush(baseBackColor))
             {
                 graphics.FillRectangle(leftBgBrush, leftRect);
@@ -981,6 +991,7 @@ Pen outlinePen)
 
       
         }
+       
         static GraphicsPath BuildLocalPath(RectRotate rr)
         {
             var p = new GraphicsPath();
@@ -1459,15 +1470,19 @@ Pen outlinePen)
                 _rect = RectDraw._rect;
                 Brush backcolor = new SolidBrush(Color.FromArgb(0, 0, 0, 255));
                 Matrix mat = new Matrix();
+
+                // screen
                 mat.Translate(posAutoScroll.X, posAutoScroll.Y);
-                mat.Scale((float)(zoom / 100.0), (float)(zoom / 100.0));
+                mat.Scale(zoom / 100f, zoom / 100f);
+
+                // world của rotArea
                 mat.Translate(rotArea._PosCenter.X, rotArea._PosCenter.Y);
-                mat.Translate(rotArea._rect.X, rotArea._rect.Y);
                 mat.Rotate(rotArea._rectRotation);
-              
-              
+                mat.Translate(rotArea._rect.X, rotArea._rect.Y);
+                // local của rect con
                 mat.Translate(RectDraw._PosCenter.X, RectDraw._PosCenter.Y);
                 mat.Rotate(RectDraw._rectRotation);
+
                 gc.Transform = mat;
                 switch (TypeCrop)
                 {

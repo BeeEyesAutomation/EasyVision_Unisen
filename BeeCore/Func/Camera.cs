@@ -741,6 +741,8 @@ namespace BeeCore
                     if(Para.TypeCamera== TypeCamera.MVS)
                     {
                         await SetAutoWb();
+                        await SetReverseX();
+                        await SetReverseY();
                         if (!Para.IsWB)
                         {
                             await SetR_WB();
@@ -971,6 +973,164 @@ namespace BeeCore
             }
             IsSetPara = false;
             return true;
+        }
+        public async Task<bool> SetReverseX()
+        {
+            try
+            {
+
+                IsSetPara = true;
+
+                await TimingUtils.DelayAccurateAsync(5);
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.Pylon:
+                        //  Para.Exposure.Value = PylonCam.SetExposure(Para.Exposure.Value);
+                        break;
+                    case TypeCamera.MVS:
+                        cancel = new CancellationTokenSource(2000);
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+
+                                //  Para.Exposure.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "ExposureTimeRaw", Para.Exposure.Value), cancel.Token);
+
+                                break;
+                            case 1://Hik
+                            
+                                await Task.Run(() => CCDPlus.SetBool(IndexCCD, "ReverseX", Para.IsReverseX), cancel.Token);
+                                break;
+                        }
+
+                        break;
+                    case TypeCamera.USB:
+                        //   CCDPlus.SetExposure(-(int)Para.Exposure.Value);
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Err += ex.Message;
+                return false;// ex.Message;
+            }
+            IsSetPara = false;
+            return true;
+        }
+        public async Task<bool> SetReverseY()
+        {
+            try
+            {
+
+                IsSetPara = true;
+
+                await TimingUtils.DelayAccurateAsync(5);
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.Pylon:
+                        //  Para.Exposure.Value = PylonCam.SetExposure(Para.Exposure.Value);
+                        break;
+                    case TypeCamera.MVS:
+                        cancel = new CancellationTokenSource(2000);
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+
+                                //  Para.Exposure.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "ExposureTimeRaw", Para.Exposure.Value), cancel.Token);
+
+                                break;
+                            case 1://Hik
+
+                                await Task.Run(() => CCDPlus.SetBool(IndexCCD, "ReverseY", Para.IsReverseY), cancel.Token);
+                                break;
+                        }
+
+                        break;
+                    case TypeCamera.USB:
+                        //   CCDPlus.SetExposure(-(int)Para.Exposure.Value);
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Err += ex.Message;
+                return false;// ex.Message;
+            }
+            IsSetPara = false;
+            return true;
+        }
+        public async Task<bool> GetReverseX()
+        {
+            try
+            {
+
+                cancel = new CancellationTokenSource(2000);
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.Pylon:
+                        Err = PylonCam.LastError;
+                        return true;
+                        break;
+                    case TypeCamera.MVS:
+
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+
+                                break;
+                            case 1://Hik
+                               Para.IsReverseX= await Task.Run(() => CCDPlus.GetBool(IndexCCD, "ReverseX"), cancel.Token);
+                             
+                                break;
+                        }
+
+                        break;
+                    case TypeCamera.USB:
+                        break;
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+            return false;
+        }
+        public async Task<bool> GetReverseY()
+        {
+            try
+            {
+                cancel = new CancellationTokenSource(2000);
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.Pylon:
+                        Err = PylonCam.LastError;
+                        return true;
+                        break;
+                    case TypeCamera.MVS:
+
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+                                break;
+                            case 1://Hik
+                                Para.IsReverseY = await Task.Run(() => CCDPlus.GetBool(IndexCCD, "ReverseY"), cancel.Token);
+                                break;
+                        }
+                        break;
+                    case TypeCamera.USB:
+                        break;
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+            return false;
         }
         public async Task<bool> SetAutoWb()
         {

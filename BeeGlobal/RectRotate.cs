@@ -8,6 +8,24 @@ namespace BeeGlobal
     [Serializable()]
     public class RectRotate
     {
+        public RectangleF GetBoundingRect()
+        {
+            // Rectangle local luôn là (-w/2, -h/2, w, h)
+            PointF[] pts = new PointF[]
+            {
+        LocalToWorld(new PointF(_rect.Left,  _rect.Top)),
+        LocalToWorld(new PointF(_rect.Right, _rect.Top)),
+        LocalToWorld(new PointF(_rect.Right, _rect.Bottom)),
+        LocalToWorld(new PointF(_rect.Left,  _rect.Bottom))
+            };
+
+            float minX = pts.Min(p => p.X);
+            float minY = pts.Min(p => p.Y);
+            float maxX = pts.Max(p => p.X);
+            float maxY = pts.Max(p => p.Y);
+
+            return new RectangleF(minX, minY, maxX - minX, maxY - minY);
+        }
         public bool ContainsPointRect(PointF pWorld, float eps = 1e-4f)
         {
             // World -> local (center origin)
@@ -145,6 +163,7 @@ namespace BeeGlobal
         public PointF[] HexVertexOffsets { get;  set; }   // offsets from default hex (local)
         public List<PointF> PolyLocalPoints { get;  set; } // polygon points (local)
         public bool IsPolygonClosed { get; set; }
+        public bool IsRight = false;
         public int ActiveVertexIndex { get; set; }
         [NonSerialized]
         public int NumInside = 0;

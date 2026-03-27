@@ -19,7 +19,8 @@ namespace BeeGlobal
         public float CenterX;
         public float CenterY;
         public bool IsWB = false;
-
+        public bool IsReverseX = false;
+        public bool IsReverseY = false;
         public String Ex;
         public float Fps;
         public TypeCamera TypeCamera = TypeCamera.USB;

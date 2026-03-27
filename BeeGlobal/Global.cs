@@ -382,7 +382,7 @@ namespace BeeGlobal
                 }
             }
         }
-     
+        public static bool IsRight = false;
         public static Rectangle ClientRectangleMain;
      
         public static OpenCvSharp.Point pOrigin = new OpenCvSharp.Point();

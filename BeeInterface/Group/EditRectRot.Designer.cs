@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.layRange = new System.Windows.Forms.TableLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
             this.lay23 = new System.Windows.Forms.TableLayoutPanel();
             this.layLimit = new System.Windows.Forms.TableLayoutPanel();
             this.label20 = new System.Windows.Forms.Label();
@@ -38,8 +40,6 @@
             this.label15 = new System.Windows.Forms.Label();
             this.lay22 = new System.Windows.Forms.Label();
             this.layType = new System.Windows.Forms.TableLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.layRange = new System.Windows.Forms.TableLayoutPanel();
             this.btnCropFull = new BeeInterface.RJButton();
             this.btnCropHalt = new BeeInterface.RJButton();
             this.btnPolygon = new BeeInterface.RJButton();
@@ -57,11 +57,11 @@
             this.numW = new BeeInterface.CustomNumericEx();
             this.btnNewShape = new BeeInterface.RJButton();
             this.tableLayoutPanel1.SuspendLayout();
+            this.layRange.SuspendLayout();
             this.lay23.SuspendLayout();
             this.layLimit.SuspendLayout();
             this.lay2Mask.SuspendLayout();
             this.lay24.SuspendLayout();
-            this.layRange.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -90,8 +90,41 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(412, 364);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(412, 340);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // layRange
+            // 
+            this.layRange.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.layRange.ColumnCount = 2;
+            this.layRange.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layRange.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layRange.Controls.Add(this.btnCropFull, 1, 0);
+            this.layRange.Controls.Add(this.btnCropHalt, 0, 0);
+            this.layRange.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layRange.Enabled = false;
+            this.layRange.Location = new System.Drawing.Point(5, 81);
+            this.layRange.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.layRange.Name = "layRange";
+            this.layRange.Padding = new System.Windows.Forms.Padding(2);
+            this.layRange.RowCount = 1;
+            this.layRange.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.layRange.Size = new System.Drawing.Size(402, 45);
+            this.layRange.TabIndex = 117;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.White;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(5, 57);
+            this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(402, 24);
+            this.label1.TabIndex = 116;
+            this.label1.Text = "Search Range";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lay23
             // 
@@ -260,39 +293,6 @@
             this.layType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layType.Size = new System.Drawing.Size(402, 57);
             this.layType.TabIndex = 101;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.White;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(5, 57);
-            this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(402, 24);
-            this.label1.TabIndex = 116;
-            this.label1.Text = "Search Range";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // layRange
-            // 
-            this.layRange.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.layRange.ColumnCount = 2;
-            this.layRange.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.layRange.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.layRange.Controls.Add(this.btnCropFull, 1, 0);
-            this.layRange.Controls.Add(this.btnCropHalt, 0, 0);
-            this.layRange.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layRange.Enabled = false;
-            this.layRange.Location = new System.Drawing.Point(5, 81);
-            this.layRange.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.layRange.Name = "layRange";
-            this.layRange.Padding = new System.Windows.Forms.Padding(2);
-            this.layRange.RowCount = 1;
-            this.layRange.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layRange.Size = new System.Drawing.Size(402, 45);
-            this.layRange.TabIndex = 117;
             // 
             // btnCropFull
             // 
@@ -1170,11 +1170,12 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.DoubleBuffered = true;
             this.Name = "EditRectRot";
-            this.Size = new System.Drawing.Size(412, 364);
+            this.Size = new System.Drawing.Size(412, 340);
             this.Load += new System.EventHandler(this.EditRectRot_Load);
             this.VisibleChanged += new System.EventHandler(this.EditRectRot_VisibleChanged);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.layRange.ResumeLayout(false);
             this.lay23.ResumeLayout(false);
             this.layLimit.ResumeLayout(false);
             this.layLimit.PerformLayout();
@@ -1182,7 +1183,6 @@
             this.lay2Mask.PerformLayout();
             this.lay24.ResumeLayout(false);
             this.lay24.PerformLayout();
-            this.layRange.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

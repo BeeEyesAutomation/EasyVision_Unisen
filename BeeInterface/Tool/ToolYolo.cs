@@ -213,7 +213,7 @@ namespace BeeInterface
         }
 
         private void EditRectRot1_ChooseEditEnd(int obj)
-        {
+        {if (obj == -1) return;
             if (Propety.rotLimit != null)
             {
              
@@ -1177,7 +1177,7 @@ namespace BeeInterface
         }
         private void tabYolo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(tabYolo.SelectedIndex ==2)
+            if(t.SelectedIndex ==2)
             {
                 cbLabels.DataSource = new List<string>();
               
@@ -1978,6 +1978,11 @@ namespace BeeInterface
             {
                 Global.ListIndexChoose = new List<int>();
                 Propety.listRotScan = Propety.ListRotMask;
+                foreach (RectRotate rot in Propety.listRotScan)
+                {
+                    rot._dragAnchor = AnchorPoint.None;
+                 
+                }
                 Propety.ModeCheck = ModeCheck.Multi;
                 Propety.NameChoose = arg2.Name;
                 Global.StatusDraw = StatusDraw.Scan;
@@ -2123,6 +2128,27 @@ namespace BeeInterface
         private void btn3_Click_1(object sender, EventArgs e)
         {
             trackScore.Visible = !btn3.IsCLick;
+        }
+
+        private void btn22_Click(object sender, EventArgs e)
+        {
+            dashboardLabel.Visible = !btn22.IsCLick;
+        }
+
+        private void btn23_Click(object sender, EventArgs e)
+        {
+            Lay2.Visible = !btn23.IsCLick;
+            lay32.Visible = !btn23.IsCLick;
+        }
+
+        private void btnLeft_Click(object sender, EventArgs e)
+        {
+           Global.IsRight=!btnLeft.IsCLick;
+        }
+
+        private void btnRight_Click(object sender, EventArgs e)
+        {
+            Global.IsRight = btnRight.IsCLick;
         }
     }
 }

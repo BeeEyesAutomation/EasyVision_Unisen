@@ -54,6 +54,8 @@ namespace CvPlus {
 	public:float SetPara(int indexCCD, System::String^ Namepara, float Value);
 	public:int GetEnum(int indexCCD, System::String^ namePara);
 	public: bool SetEnum(int indexCCD, System::String^ namePara, int Focus);
+	public:bool GetBool(int indexCCD, System::String^ namePara);
+	public: bool SetBool(int indexCCD, System::String^ namePara, bool Value);
 	public:bool GetPara(int indexCCD, System::String^ Namepara, float% min,  float% max,  float% step,  float% current);
 	//public:bool GetParaFloat(int indexCCD, System::String^ Namepara, float% min, float% max, float% step, float% current);
 	public:int GetTypeCCD(int indexCCD);

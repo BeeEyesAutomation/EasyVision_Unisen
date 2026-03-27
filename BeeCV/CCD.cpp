@@ -735,6 +735,37 @@ int CCD::GetEnum(int indexCCD, System::String^ namePara)
 	return (int)stEnumValue.nCurValue;
 
 }
+bool  CCD::SetBool(int indexCCD, System::String^ namePara, bool Value)
+{
+
+	string key = marshal_as<string>(namePara);
+	if (indexCCD < 0 || indexCCD >= (int)m_pcMyCamera.size() || m_pcMyCamera[indexCCD] == nullptr) {
+		std::cerr << "❌ Camera index invalid/null" << std::endl;
+		return false;
+	}
+
+	using msclr::interop::marshal_as;
+	GrabPause guard(m_pcMyCamera[indexCCD]);
+	m_pcMyCamera[indexCCD]->SetBoolValue(key.c_str(), Value);
+
+	return true;
+}
+bool CCD::GetBool(int indexCCD, System::String^ namePara)
+{
+	string key = marshal_as<string>(namePara);
+	if (indexCCD < 0 || indexCCD >= (int)m_pcMyCamera.size() || m_pcMyCamera[indexCCD] == nullptr) {
+		std::cerr << "❌ Camera index invalid/null" << std::endl;
+		return -1;
+	}
+	bool IsValue = false;
+
+	int nRet = m_pcMyCamera[indexCCD]->GetBoolValue(key.c_str(), &IsValue);
+	if (nRet != MV_OK)
+		return -1;
+
+	return IsValue;
+
+}
 void CCD::SetFocus(int Focus)
 {
 	camUSB.set(CAP_PROP_AUTOFOCUS, 0);

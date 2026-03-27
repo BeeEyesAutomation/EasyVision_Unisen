@@ -1111,7 +1111,7 @@ namespace BeeInterface
             this.EditRectRot1.Location = new System.Drawing.Point(4, 138);
             this.EditRectRot1.Name = "EditRectRot1";
             this.EditRectRot1.rotCurrent = null;
-            this.EditRectRot1.Size = new System.Drawing.Size(475, 330);
+            this.EditRectRot1.Size = new System.Drawing.Size(481, 330);
             this.EditRectRot1.TabIndex = 129;
             // 
             // lbPattern
@@ -1164,7 +1164,7 @@ namespace BeeInterface
             this.lbPattern.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.lbPattern.Multiline = false;
             this.lbPattern.Name = "lbPattern";
-            this.lbPattern.Size = new System.Drawing.Size(471, 35);
+            this.lbPattern.Size = new System.Drawing.Size(477, 35);
             this.lbPattern.TabIndex = 103;
             this.lbPattern.Text = "5. Score Detect Object";
             this.lbPattern.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1222,7 +1222,7 @@ namespace BeeInterface
             this.btn4.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.btn4.Multiline = false;
             this.btn4.Name = "btn4";
-            this.btn4.Size = new System.Drawing.Size(471, 35);
+            this.btn4.Size = new System.Drawing.Size(477, 35);
             this.btn4.TabIndex = 102;
             this.btn4.Text = "4.Set Sample";
             this.btn4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1280,7 +1280,7 @@ namespace BeeInterface
             this.lbAngle.Margin = new System.Windows.Forms.Padding(15, 10, 5, 0);
             this.lbAngle.Multiline = false;
             this.lbAngle.Name = "lbAngle";
-            this.lbAngle.Size = new System.Drawing.Size(461, 35);
+            this.lbAngle.Size = new System.Drawing.Size(467, 35);
             this.lbAngle.TabIndex = 101;
             this.lbAngle.Text = "Angle Range";
             this.lbAngle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1338,7 +1338,7 @@ namespace BeeInterface
             this.lbEdge.Margin = new System.Windows.Forms.Padding(15, 5, 5, 0);
             this.lbEdge.Multiline = false;
             this.lbEdge.Name = "lbEdge";
-            this.lbEdge.Size = new System.Drawing.Size(461, 35);
+            this.lbEdge.Size = new System.Drawing.Size(467, 35);
             this.lbEdge.TabIndex = 100;
             this.lbEdge.Text = "Extract Edge";
             this.lbEdge.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1395,7 +1395,7 @@ namespace BeeInterface
             this.btn3.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.btn3.Multiline = false;
             this.btn3.Name = "btn3";
-            this.btn3.Size = new System.Drawing.Size(471, 35);
+            this.btn3.Size = new System.Drawing.Size(477, 35);
             this.btn3.TabIndex = 99;
             this.btn3.Text = "3.Methord Detect";
             this.btn3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1453,7 +1453,7 @@ namespace BeeInterface
             this.btn2.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.btn2.Multiline = false;
             this.btn2.Name = "btn2";
-            this.btn2.Size = new System.Drawing.Size(471, 35);
+            this.btn2.Size = new System.Drawing.Size(477, 35);
             this.btn2.TabIndex = 98;
             this.btn2.Text = "2.Choose Area";
             this.btn2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1511,7 +1511,7 @@ namespace BeeInterface
             this.btn1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.btn1.Multiline = false;
             this.btn1.Name = "btn1";
-            this.btn1.Size = new System.Drawing.Size(471, 35);
+            this.btn1.Size = new System.Drawing.Size(477, 35);
             this.btn1.TabIndex = 97;
             this.btn1.Text = "1.Search Range";
             this.btn1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1536,7 +1536,7 @@ namespace BeeInterface
             this.layThreshod.RowCount = 1;
             this.layThreshod.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layThreshod.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.layThreshod.Size = new System.Drawing.Size(461, 50);
+            this.layThreshod.Size = new System.Drawing.Size(467, 50);
             this.layThreshod.TabIndex = 94;
             // 
             // label16
@@ -1598,7 +1598,7 @@ namespace BeeInterface
             this.AdjThreshod.Name = "AdjThreshod";
             this.AdjThreshod.Radius = 8;
             this.AdjThreshod.ShowValueOnThumb = true;
-            this.AdjThreshod.Size = new System.Drawing.Size(356, 40);
+            this.AdjThreshod.Size = new System.Drawing.Size(362, 40);
             this.AdjThreshod.SnapToStep = true;
             this.AdjThreshod.StartWithTextboxHidden = true;
             this.AdjThreshod.Step = 1F;
@@ -1637,7 +1637,7 @@ namespace BeeInterface
             this.layEdge.Padding = new System.Windows.Forms.Padding(5);
             this.layEdge.RowCount = 1;
             this.layEdge.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layEdge.Size = new System.Drawing.Size(461, 54);
+            this.layEdge.Size = new System.Drawing.Size(467, 54);
             this.layEdge.TabIndex = 93;
             // 
             // btnInvert
@@ -1685,7 +1685,7 @@ namespace BeeInterface
             this.btnInvert.IsRect = false;
             this.btnInvert.IsTouch = false;
             this.btnInvert.IsUnGroup = false;
-            this.btnInvert.Location = new System.Drawing.Point(341, 5);
+            this.btnInvert.Location = new System.Drawing.Point(347, 5);
             this.btnInvert.Margin = new System.Windows.Forms.Padding(0);
             this.btnInvert.Multiline = false;
             this.btnInvert.Name = "btnInvert";
@@ -1742,11 +1742,11 @@ namespace BeeInterface
             this.btnBinary.IsRect = false;
             this.btnBinary.IsTouch = false;
             this.btnBinary.IsUnGroup = false;
-            this.btnBinary.Location = new System.Drawing.Point(229, 5);
+            this.btnBinary.Location = new System.Drawing.Point(233, 5);
             this.btnBinary.Margin = new System.Windows.Forms.Padding(0);
             this.btnBinary.Multiline = false;
             this.btnBinary.Name = "btnBinary";
-            this.btnBinary.Size = new System.Drawing.Size(112, 44);
+            this.btnBinary.Size = new System.Drawing.Size(114, 44);
             this.btnBinary.TabIndex = 4;
             this.btnBinary.Text = "Binay";
             this.btnBinary.TextColor = System.Drawing.Color.Black;
@@ -1799,11 +1799,11 @@ namespace BeeInterface
             this.btnStrongEdge.IsRect = false;
             this.btnStrongEdge.IsTouch = false;
             this.btnStrongEdge.IsUnGroup = false;
-            this.btnStrongEdge.Location = new System.Drawing.Point(117, 5);
+            this.btnStrongEdge.Location = new System.Drawing.Point(119, 5);
             this.btnStrongEdge.Margin = new System.Windows.Forms.Padding(0);
             this.btnStrongEdge.Multiline = false;
             this.btnStrongEdge.Name = "btnStrongEdge";
-            this.btnStrongEdge.Size = new System.Drawing.Size(112, 44);
+            this.btnStrongEdge.Size = new System.Drawing.Size(114, 44);
             this.btnStrongEdge.TabIndex = 3;
             this.btnStrongEdge.Text = "Strong";
             this.btnStrongEdge.TextColor = System.Drawing.Color.Black;
@@ -1861,7 +1861,7 @@ namespace BeeInterface
             this.btnCloseEdge.Margin = new System.Windows.Forms.Padding(0);
             this.btnCloseEdge.Multiline = false;
             this.btnCloseEdge.Name = "btnCloseEdge";
-            this.btnCloseEdge.Size = new System.Drawing.Size(112, 44);
+            this.btnCloseEdge.Size = new System.Drawing.Size(114, 44);
             this.btnCloseEdge.TabIndex = 2;
             this.btnCloseEdge.Text = "Close";
             this.btnCloseEdge.TextColor = System.Drawing.Color.Black;
@@ -1886,7 +1886,7 @@ namespace BeeInterface
             this.lay3.Padding = new System.Windows.Forms.Padding(5);
             this.lay3.RowCount = 1;
             this.lay3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay3.Size = new System.Drawing.Size(471, 55);
+            this.lay3.Size = new System.Drawing.Size(477, 55);
             this.lay3.TabIndex = 77;
             // 
             // btnEdge
@@ -1935,11 +1935,11 @@ namespace BeeInterface
             this.btnEdge.IsRect = false;
             this.btnEdge.IsTouch = false;
             this.btnEdge.IsUnGroup = false;
-            this.btnEdge.Location = new System.Drawing.Point(311, 5);
+            this.btnEdge.Location = new System.Drawing.Point(315, 5);
             this.btnEdge.Margin = new System.Windows.Forms.Padding(0);
             this.btnEdge.Multiline = false;
             this.btnEdge.Name = "btnEdge";
-            this.btnEdge.Size = new System.Drawing.Size(155, 45);
+            this.btnEdge.Size = new System.Drawing.Size(157, 45);
             this.btnEdge.TabIndex = 4;
             this.btnEdge.Text = "Edge";
             this.btnEdge.TextColor = System.Drawing.Color.Black;
@@ -1998,7 +1998,7 @@ namespace BeeInterface
             this.btnPattern.Margin = new System.Windows.Forms.Padding(0);
             this.btnPattern.Multiline = false;
             this.btnPattern.Name = "btnPattern";
-            this.btnPattern.Size = new System.Drawing.Size(153, 45);
+            this.btnPattern.Size = new System.Drawing.Size(155, 45);
             this.btnPattern.TabIndex = 2;
             this.btnPattern.Text = "Pattern";
             this.btnPattern.TextColor = System.Drawing.Color.Black;
@@ -2052,11 +2052,11 @@ namespace BeeInterface
             this.btnCorner.IsRect = false;
             this.btnCorner.IsTouch = false;
             this.btnCorner.IsUnGroup = false;
-            this.btnCorner.Location = new System.Drawing.Point(158, 5);
+            this.btnCorner.Location = new System.Drawing.Point(160, 5);
             this.btnCorner.Margin = new System.Windows.Forms.Padding(0);
             this.btnCorner.Multiline = false;
             this.btnCorner.Name = "btnCorner";
-            this.btnCorner.Size = new System.Drawing.Size(153, 45);
+            this.btnCorner.Size = new System.Drawing.Size(155, 45);
             this.btnCorner.TabIndex = 3;
             this.btnCorner.Text = "Corner";
             this.btnCorner.TextColor = System.Drawing.Color.Black;
@@ -2109,7 +2109,7 @@ namespace BeeInterface
             this.trackAngle.Name = "trackAngle";
             this.trackAngle.Radius = 8;
             this.trackAngle.ShowValueOnThumb = true;
-            this.trackAngle.Size = new System.Drawing.Size(461, 50);
+            this.trackAngle.Size = new System.Drawing.Size(467, 50);
             this.trackAngle.SnapToStep = true;
             this.trackAngle.StartWithTextboxHidden = true;
             this.trackAngle.Step = 1F;
@@ -2174,7 +2174,7 @@ namespace BeeInterface
             this.trackScore.Name = "trackScore";
             this.trackScore.Radius = 8;
             this.trackScore.ShowValueOnThumb = true;
-            this.trackScore.Size = new System.Drawing.Size(471, 49);
+            this.trackScore.Size = new System.Drawing.Size(477, 49);
             this.trackScore.SnapToStep = true;
             this.trackScore.StartWithTextboxHidden = true;
             this.trackScore.Step = 1F;
@@ -2208,7 +2208,7 @@ namespace BeeInterface
             this.lay1.Name = "lay1";
             this.lay1.RowCount = 1;
             this.lay1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay1.Size = new System.Drawing.Size(471, 55);
+            this.lay1.Size = new System.Drawing.Size(477, 55);
             this.lay1.TabIndex = 39;
             this.lay1.Visible = false;
             // 
@@ -2257,11 +2257,11 @@ namespace BeeInterface
             this.btnCropFull.IsRect = false;
             this.btnCropFull.IsTouch = false;
             this.btnCropFull.IsUnGroup = false;
-            this.btnCropFull.Location = new System.Drawing.Point(235, 5);
+            this.btnCropFull.Location = new System.Drawing.Point(238, 5);
             this.btnCropFull.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
             this.btnCropFull.Multiline = false;
             this.btnCropFull.Name = "btnCropFull";
-            this.btnCropFull.Size = new System.Drawing.Size(231, 45);
+            this.btnCropFull.Size = new System.Drawing.Size(234, 45);
             this.btnCropFull.TabIndex = 3;
             this.btnCropFull.Text = "Partial";
             this.btnCropFull.TextColor = System.Drawing.Color.Black;
@@ -2319,7 +2319,7 @@ namespace BeeInterface
             this.btnCropHalt.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
             this.btnCropHalt.Multiline = false;
             this.btnCropHalt.Name = "btnCropHalt";
-            this.btnCropHalt.Size = new System.Drawing.Size(230, 45);
+            this.btnCropHalt.Size = new System.Drawing.Size(233, 45);
             this.btnCropHalt.TabIndex = 2;
             this.btnCropHalt.Text = "Entire";
             this.btnCropHalt.TextColor = System.Drawing.Color.Black;
@@ -2342,7 +2342,7 @@ namespace BeeInterface
             this.layPattern.Padding = new System.Windows.Forms.Padding(5);
             this.layPattern.RowCount = 1;
             this.layPattern.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layPattern.Size = new System.Drawing.Size(471, 200);
+            this.layPattern.Size = new System.Drawing.Size(477, 200);
             this.layPattern.TabIndex = 43;
             // 
             // imgTemp
@@ -2352,7 +2352,7 @@ namespace BeeInterface
             this.imgTemp.Location = new System.Drawing.Point(10, 10);
             this.imgTemp.Margin = new System.Windows.Forms.Padding(5);
             this.imgTemp.Name = "imgTemp";
-            this.imgTemp.Size = new System.Drawing.Size(286, 180);
+            this.imgTemp.Size = new System.Drawing.Size(290, 180);
             this.imgTemp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imgTemp.TabIndex = 31;
             this.imgTemp.TabStop = false;
@@ -2402,11 +2402,11 @@ namespace BeeInterface
             this.btnLearning.IsRect = false;
             this.btnLearning.IsTouch = false;
             this.btnLearning.IsUnGroup = true;
-            this.btnLearning.Location = new System.Drawing.Point(311, 15);
+            this.btnLearning.Location = new System.Drawing.Point(315, 15);
             this.btnLearning.Margin = new System.Windows.Forms.Padding(10);
             this.btnLearning.Multiline = false;
             this.btnLearning.Name = "btnLearning";
-            this.btnLearning.Size = new System.Drawing.Size(145, 170);
+            this.btnLearning.Size = new System.Drawing.Size(147, 170);
             this.btnLearning.TabIndex = 5;
             this.btnLearning.Text = "Teach Sample";
             this.btnLearning.TextColor = System.Drawing.Color.Black;

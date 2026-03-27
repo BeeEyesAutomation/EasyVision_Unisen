@@ -245,12 +245,15 @@ namespace BeeInterface
                 await BeeCore.Common.listCamera[Global.IndexCCCD].GetHeight();
                 await BeeCore.Common.listCamera[Global.IndexCCCD].GetOffSetX();
                 await BeeCore.Common.listCamera[Global.IndexCCCD].GetOffSetY();
+
                 if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera == TypeCamera.MVS)
                 {
                     await BeeCore.Common.listCamera[Global.IndexCCCD].GetAutoWb();
                     await BeeCore.Common.listCamera[Global.IndexCCCD].GetR_WB();
                     await BeeCore.Common.listCamera[Global.IndexCCCD].GetG_WB();
                     await BeeCore.Common.listCamera[Global.IndexCCCD].GetB_WB();
+                    await BeeCore.Common.listCamera[Global.IndexCCCD].GetReverseX();
+                    await BeeCore.Common.listCamera[Global.IndexCCCD].GetReverseY();
                 }
                     //await BeeCore.Common.listCamera[Global.IndexCCCD].GetCenterX();
                     //await BeeCore.Common.listCamera[Global.IndexCCCD].GetCenterY();
@@ -324,6 +327,8 @@ namespace BeeInterface
                 AdjB_WB.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Max;
                 AdjB_WB.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Step;
                 AdjB_WB.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.B_WB.Value;
+                btnReverseX.IsCLick = BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsReverseX;
+                btnReverseY.IsCLick = BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsReverseY;
             }
             //  btnCenterX.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterX);
             //  btnCenterY.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterY);
@@ -546,13 +551,15 @@ namespace BeeInterface
             AdDelayTrig.Value = Global.Comunication.Protocol.DelayTrigger;
             btnOnWB.IsCLick = BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsWB;
             btnOffWB.IsCLick=!BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsWB;
+            btnReverseX.IsCLick = BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsReverseX;
+            btnReverseY.IsCLick = BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsReverseY;
             if (AdDelayTrig.Max > Global.Config.LimitDelayTrigger)
             {
                 AdDelayTrig.Max = Global.Config.LimitDelayTrigger;
             }
             AdDelayOutput.IsInital = true;
             Global.Comunication.Protocol.IsOnLight = false;
-
+           
             AdDelayOutput.Value = Global.Comunication.Protocol.DelayOutput;
             btnLight1.IsCLick = Global.Comunication.Protocol.IsLight1;
             btnLight2.IsCLick = Global.Comunication.Protocol.IsLight2;
@@ -606,6 +613,7 @@ namespace BeeInterface
                 AdjZoom.Enabled = false;
 
             }
+
             trackExposure.IsInital = true;
             trackExposure.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Min;
             trackExposure.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Max;
@@ -1195,6 +1203,27 @@ namespace BeeInterface
             {
                 btnOutput4.IsCLick = !btnOutput4.IsCLick;
             }
+        }
+
+        private async void btnReverseX_Click(object sender, EventArgs e)
+        {
+            BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsReverseX = btnReverseX.IsCLick;
+            BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = true;
+
+          await  BeeCore.Common.listCamera[Global.IndexCCCD].SetReverseX();
+           
+            BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = false;
+            btnReverseX.IsCLick = BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsReverseX;
+        }
+
+        private async void btnReverseY_Click(object sender, EventArgs e)
+        {
+            BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsReverseY = btnReverseY.IsCLick;
+            BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = true;
+
+            await BeeCore.Common.listCamera[Global.IndexCCCD].SetReverseY();
+            BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = false;
+            btnReverseY.IsCLick = BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsReverseY;
         }
     }
 }

@@ -33,6 +33,9 @@ namespace BeeInterface
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingStep1));
             this.tableLayout1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnReverseY = new BeeInterface.RJButton();
+            this.btnReverseX = new BeeInterface.RJButton();
             this.AdjB_WB = new BeeInterface.AdjustBarEx();
             this.btn13 = new BeeInterface.RJButton();
             this.AdjG_WB = new BeeInterface.AdjustBarEx();
@@ -116,6 +119,7 @@ namespace BeeInterface
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnSaveCamera = new BeeInterface.RJButton();
             this.tableLayout1.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             this.layWB.SuspendLayout();
             this.tableLayoutPanel22.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -142,14 +146,15 @@ namespace BeeInterface
             this.tableLayout1.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayout1.ColumnCount = 1;
             this.tableLayout1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayout1.Controls.Add(this.AdjB_WB, 0, 28);
-            this.tableLayout1.Controls.Add(this.btn13, 0, 27);
-            this.tableLayout1.Controls.Add(this.AdjG_WB, 0, 26);
-            this.tableLayout1.Controls.Add(this.btn12, 0, 25);
-            this.tableLayout1.Controls.Add(this.AdjR_WB, 0, 24);
-            this.tableLayout1.Controls.Add(this.btn11, 0, 23);
-            this.tableLayout1.Controls.Add(this.layWB, 0, 22);
-            this.tableLayout1.Controls.Add(this.btn10, 0, 21);
+            this.tableLayout1.Controls.Add(this.tableLayoutPanel4, 0, 20);
+            this.tableLayout1.Controls.Add(this.AdjB_WB, 0, 29);
+            this.tableLayout1.Controls.Add(this.btn13, 0, 28);
+            this.tableLayout1.Controls.Add(this.AdjG_WB, 0, 27);
+            this.tableLayout1.Controls.Add(this.btn12, 0, 26);
+            this.tableLayout1.Controls.Add(this.AdjR_WB, 0, 25);
+            this.tableLayout1.Controls.Add(this.btn11, 0, 24);
+            this.tableLayout1.Controls.Add(this.layWB, 0, 23);
+            this.tableLayout1.Controls.Add(this.btn10, 0, 22);
             this.tableLayout1.Controls.Add(this.tableLayoutPanel22, 0, 1);
             this.tableLayout1.Controls.Add(this.btn9, 0, 18);
             this.tableLayout1.Controls.Add(this.btn8, 0, 16);
@@ -169,7 +174,7 @@ namespace BeeInterface
             this.tableLayout1.Controls.Add(this.trackShift, 0, 11);
             this.tableLayout1.Controls.Add(this.trackGain, 0, 9);
             this.tableLayout1.Controls.Add(this.trackExposure, 0, 7);
-            this.tableLayout1.Controls.Add(this.tableLayoutPanel5, 0, 20);
+            this.tableLayout1.Controls.Add(this.tableLayoutPanel5, 0, 21);
             this.tableLayout1.Controls.Add(this.lay2, 0, 5);
             this.tableLayout1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayout1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -177,7 +182,8 @@ namespace BeeInterface
             this.tableLayout1.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.tableLayout1.Name = "tableLayout1";
             this.tableLayout1.Padding = new System.Windows.Forms.Padding(0, 0, 8, 0);
-            this.tableLayout1.RowCount = 32;
+            this.tableLayout1.RowCount = 33;
+            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -214,6 +220,136 @@ namespace BeeInterface
             this.tableLayout1.TabIndex = 52;
             this.tableLayout1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayout1_Paint);
             // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.Controls.Add(this.btnReverseY, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.btnReverseX, 0, 0);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(20, 958);
+            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(432, 60);
+            this.tableLayoutPanel4.TabIndex = 128;
+            // 
+            // btnReverseY
+            // 
+            this.btnReverseY.AutoFont = true;
+            this.btnReverseY.AutoFontHeightRatio = 0.75F;
+            this.btnReverseY.AutoFontMax = 100F;
+            this.btnReverseY.AutoFontMin = 6F;
+            this.btnReverseY.AutoFontWidthRatio = 0.92F;
+            this.btnReverseY.AutoImage = true;
+            this.btnReverseY.AutoImageMaxRatio = 0.75F;
+            this.btnReverseY.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnReverseY.AutoImageTint = true;
+            this.btnReverseY.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnReverseY.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnReverseY.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnReverseY.BackgroundImage")));
+            this.btnReverseY.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.btnReverseY.BorderRadius = 5;
+            this.btnReverseY.BorderSize = 1;
+            this.btnReverseY.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnReverseY.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnReverseY.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnReverseY.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnReverseY.Corner = BeeGlobal.Corner.Both;
+            this.btnReverseY.DebounceResizeMs = 16;
+            this.btnReverseY.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnReverseY.FlatAppearance.BorderSize = 0;
+            this.btnReverseY.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReverseY.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.95313F);
+            this.btnReverseY.ForeColor = System.Drawing.Color.Black;
+            this.btnReverseY.Image = null;
+            this.btnReverseY.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnReverseY.ImageDisabled = null;
+            this.btnReverseY.ImageHover = null;
+            this.btnReverseY.ImageNormal = null;
+            this.btnReverseY.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnReverseY.ImagePressed = null;
+            this.btnReverseY.ImageTextSpacing = 6;
+            this.btnReverseY.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnReverseY.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnReverseY.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnReverseY.ImageTintOpacity = 0.5F;
+            this.btnReverseY.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnReverseY.IsCLick = false;
+            this.btnReverseY.IsNotChange = false;
+            this.btnReverseY.IsRect = false;
+            this.btnReverseY.IsTouch = false;
+            this.btnReverseY.IsUnGroup = true;
+            this.btnReverseY.Location = new System.Drawing.Point(219, 3);
+            this.btnReverseY.Multiline = false;
+            this.btnReverseY.Name = "btnReverseY";
+            this.btnReverseY.Size = new System.Drawing.Size(210, 54);
+            this.btnReverseY.TabIndex = 60;
+            this.btnReverseY.Text = "Reverse Y";
+            this.btnReverseY.TextColor = System.Drawing.Color.Black;
+            this.btnReverseY.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnReverseY.UseVisualStyleBackColor = false;
+            this.btnReverseY.Click += new System.EventHandler(this.btnReverseY_Click);
+            // 
+            // btnReverseX
+            // 
+            this.btnReverseX.AutoFont = true;
+            this.btnReverseX.AutoFontHeightRatio = 0.75F;
+            this.btnReverseX.AutoFontMax = 100F;
+            this.btnReverseX.AutoFontMin = 6F;
+            this.btnReverseX.AutoFontWidthRatio = 0.92F;
+            this.btnReverseX.AutoImage = true;
+            this.btnReverseX.AutoImageMaxRatio = 0.75F;
+            this.btnReverseX.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnReverseX.AutoImageTint = true;
+            this.btnReverseX.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnReverseX.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnReverseX.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnReverseX.BackgroundImage")));
+            this.btnReverseX.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.btnReverseX.BorderRadius = 5;
+            this.btnReverseX.BorderSize = 1;
+            this.btnReverseX.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnReverseX.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnReverseX.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnReverseX.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnReverseX.Corner = BeeGlobal.Corner.Both;
+            this.btnReverseX.DebounceResizeMs = 16;
+            this.btnReverseX.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnReverseX.FlatAppearance.BorderSize = 0;
+            this.btnReverseX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReverseX.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.95313F);
+            this.btnReverseX.ForeColor = System.Drawing.Color.Black;
+            this.btnReverseX.Image = null;
+            this.btnReverseX.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnReverseX.ImageDisabled = null;
+            this.btnReverseX.ImageHover = null;
+            this.btnReverseX.ImageNormal = null;
+            this.btnReverseX.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnReverseX.ImagePressed = null;
+            this.btnReverseX.ImageTextSpacing = 6;
+            this.btnReverseX.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnReverseX.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnReverseX.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnReverseX.ImageTintOpacity = 0.5F;
+            this.btnReverseX.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnReverseX.IsCLick = false;
+            this.btnReverseX.IsNotChange = false;
+            this.btnReverseX.IsRect = false;
+            this.btnReverseX.IsTouch = false;
+            this.btnReverseX.IsUnGroup = true;
+            this.btnReverseX.Location = new System.Drawing.Point(3, 3);
+            this.btnReverseX.Multiline = false;
+            this.btnReverseX.Name = "btnReverseX";
+            this.btnReverseX.Size = new System.Drawing.Size(210, 54);
+            this.btnReverseX.TabIndex = 59;
+            this.btnReverseX.Text = "Reverse X";
+            this.btnReverseX.TextColor = System.Drawing.Color.Black;
+            this.btnReverseX.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnReverseX.UseVisualStyleBackColor = false;
+            this.btnReverseX.Click += new System.EventHandler(this.btnReverseX_Click);
+            // 
             // AdjB_WB
             // 
             this.AdjB_WB.AutoRepeatAccelDeltaMs = -5;
@@ -243,7 +379,7 @@ namespace BeeInterface
             this.AdjB_WB.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjB_WB.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjB_WB.KeyboardStep = 1F;
-            this.AdjB_WB.Location = new System.Drawing.Point(5, 1354);
+            this.AdjB_WB.Location = new System.Drawing.Point(5, 1420);
             this.AdjB_WB.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjB_WB.MatchTextboxFontToThumb = true;
             this.AdjB_WB.Max = 2000F;
@@ -328,7 +464,7 @@ namespace BeeInterface
             this.btn13.IsRect = false;
             this.btn13.IsTouch = true;
             this.btn13.IsUnGroup = true;
-            this.btn13.Location = new System.Drawing.Point(5, 1324);
+            this.btn13.Location = new System.Drawing.Point(5, 1390);
             this.btn13.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.btn13.Multiline = false;
             this.btn13.Name = "btn13";
@@ -369,7 +505,7 @@ namespace BeeInterface
             this.AdjG_WB.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjG_WB.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjG_WB.KeyboardStep = 1F;
-            this.AdjG_WB.Location = new System.Drawing.Point(5, 1265);
+            this.AdjG_WB.Location = new System.Drawing.Point(5, 1331);
             this.AdjG_WB.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjG_WB.MatchTextboxFontToThumb = true;
             this.AdjG_WB.Max = 2000F;
@@ -454,7 +590,7 @@ namespace BeeInterface
             this.btn12.IsRect = false;
             this.btn12.IsTouch = true;
             this.btn12.IsUnGroup = true;
-            this.btn12.Location = new System.Drawing.Point(5, 1230);
+            this.btn12.Location = new System.Drawing.Point(5, 1296);
             this.btn12.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.btn12.Multiline = false;
             this.btn12.Name = "btn12";
@@ -495,7 +631,7 @@ namespace BeeInterface
             this.AdjR_WB.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjR_WB.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjR_WB.KeyboardStep = 1F;
-            this.AdjR_WB.Location = new System.Drawing.Point(5, 1171);
+            this.AdjR_WB.Location = new System.Drawing.Point(5, 1237);
             this.AdjR_WB.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjR_WB.MatchTextboxFontToThumb = true;
             this.AdjR_WB.Max = 2000F;
@@ -580,7 +716,7 @@ namespace BeeInterface
             this.btn11.IsRect = false;
             this.btn11.IsTouch = true;
             this.btn11.IsUnGroup = true;
-            this.btn11.Location = new System.Drawing.Point(5, 1136);
+            this.btn11.Location = new System.Drawing.Point(5, 1202);
             this.btn11.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.btn11.Multiline = false;
             this.btn11.Name = "btn11";
@@ -603,7 +739,7 @@ namespace BeeInterface
             this.layWB.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.layWB.Controls.Add(this.btnOffWB, 1, 0);
             this.layWB.Controls.Add(this.btnOnWB, 0, 0);
-            this.layWB.Location = new System.Drawing.Point(10, 1066);
+            this.layWB.Location = new System.Drawing.Point(10, 1132);
             this.layWB.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.layWB.Name = "layWB";
             this.layWB.RowCount = 1;
@@ -772,7 +908,7 @@ namespace BeeInterface
             this.btn10.IsRect = false;
             this.btn10.IsTouch = true;
             this.btn10.IsUnGroup = true;
-            this.btn10.Location = new System.Drawing.Point(5, 1031);
+            this.btn10.Location = new System.Drawing.Point(5, 1097);
             this.btn10.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.btn10.Multiline = false;
             this.btn10.Name = "btn10";
@@ -2046,15 +2182,13 @@ namespace BeeInterface
             // 
             // tableLayoutPanel5
             // 
-            this.tableLayoutPanel5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel5.ColumnCount = 2;
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.Controls.Add(this.btnCenterY, 1, 0);
             this.tableLayoutPanel5.Controls.Add(this.btnCenterX, 0, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(20, 958);
+            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(20, 1024);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
@@ -4097,6 +4231,7 @@ namespace BeeInterface
             this.Load += new System.EventHandler(this.SettingStep1_Load);
             this.VisibleChanged += new System.EventHandler(this.SettingStep1_VisibleChanged);
             this.tableLayout1.ResumeLayout(false);
+            this.tableLayoutPanel4.ResumeLayout(false);
             this.layWB.ResumeLayout(false);
             this.tableLayoutPanel22.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -4207,5 +4342,8 @@ namespace BeeInterface
         private RJButton btnOutput4;
         private RJButton btnOutput1;
         private RJButton btnOutput3;
+        private TableLayoutPanel tableLayoutPanel4;
+        private RJButton btnReverseY;
+        private RJButton btnReverseX;
     }
 }

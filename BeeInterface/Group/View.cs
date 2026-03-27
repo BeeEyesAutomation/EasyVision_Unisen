@@ -592,15 +592,23 @@ namespace BeeInterface
                                 //BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.SetTemp(rot);
                                 if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeTool == TypeTool.Learning)
                                 {
-                               
-                                    RectRotate rot2 = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ListRotMask[Global.IndexRotChoose].Clone();
-                                    PointF pCenter = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.rotArea.LocalToWorld(rot2._PosCenter);
+                                    RectRotate rot2 = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected]
+         .Propety2.ListRotMask[Global.IndexRotChoose].Clone();
+
+                                    RectRotate rotArea = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected]
+                                        .Propety2.rotArea;
+
+                                    // local -> world
+                                    rot2._PosCenter = rotArea.LocalToWorld(rot2._PosCenter);
+                                    rot2._rectRotation = rotArea._rectRotation + rot2._rectRotation;
+
+
+                                    rot2.IsRight = Global.IsRight;
                                     rot2.TypeCrop = Global.rotCurrent.TypeCrop;
-                                    rot2._PosCenter = pCenter;
                                     Global.rotCurrent = rot2;
-                                    
+
                                     // Propety.rotMask.Name = Propety.ListRotMask[IndexRotChoose].Name;
-                                 //   Global.TypeCrop = TypeCrop.Mask;
+                                    //   Global.TypeCrop = TypeCrop.Mask;
                                     Global.StatusDraw = StatusDraw.Edit;
                                     
                                 }
@@ -626,6 +634,7 @@ namespace BeeInterface
                             
                         else
                         {
+                            rot.IsRight = Global.IsRight;
                             rot._dragAnchor = AnchorPoint.Center;
                             rot.Name = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.NameChoose;
                         }
@@ -999,53 +1008,144 @@ namespace BeeInterface
                         switch (rotateRect._dragAnchor)
                         {
                             case AnchorPoint.TopLeft:
-                                {
-                                    var clamped = new PointF(Math.Min(0f, point.X), Math.Min(0f, point.Y));
-                                    deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
-                                    rotateRect._rect = new RectangleF(
-                                        _dragRect.Left + deltaSize.Width / 2f,
-                                        _dragRect.Top + deltaSize.Height / 2f,
-                                        _dragRect.Width - deltaSize.Width,
-                                        _dragRect.Height - deltaSize.Height);
-                                    deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
-                                    break;
-                                }
                             case AnchorPoint.TopRight:
-                                {
-                                    var clamped = new PointF(Math.Max(0f, point.X), Math.Min(0f, point.Y));
-                                    deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
-                                    rotateRect._rect = new RectangleF(
-                                        _dragRect.Left - deltaSize.Width / 2f,
-                                        _dragRect.Top + deltaSize.Height / 2f,
-                                        _dragRect.Width + deltaSize.Width,
-                                        _dragRect.Height - deltaSize.Height);
-                                    deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
-                                    break;
-                                }
                             case AnchorPoint.BottomLeft:
-                                {
-                                    var clamped = new PointF(Math.Min(0f, point.X), Math.Max(0f, point.Y));
-                                    deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
-                                    rotateRect._rect = new RectangleF(
-                                        _dragRect.Left + deltaSize.Width / 2f,
-                                        _dragRect.Top - deltaSize.Height / 2f,
-                                        _dragRect.Width - deltaSize.Width,
-                                        _dragRect.Height + deltaSize.Height);
-                                    deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
-                                    break;
-                                }
                             case AnchorPoint.BottomRight:
                                 {
-                                    var clamped = new PointF(Math.Max(0f, point.X), Math.Max(0f, point.Y));
-                                    deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+                                    // point = tọa độ local hiện tại của chuột
+                                    // _dragStart = tọa độ local lúc bắt đầu kéo
+                                    // _dragRect  = rect local lúc bắt đầu kéo
+                                    // _dragCenter = center world lúc bắt đầu kéo
+                                    // _dragRot = góc cố định của phiên drag
+
+                                    float dx = point.X - _dragStart.X;
+                                    float dy = point.Y - _dragStart.Y;
+
+                                    float left = _dragRect.Left;
+                                    float top = _dragRect.Top;
+                                    float right = _dragRect.Right;
+                                    float bottom = _dragRect.Bottom;
+
+                                    switch (rotateRect._dragAnchor)
+                                    {
+                                        case AnchorPoint.TopLeft:
+                                            left += dx;
+                                            top += dy;
+                                            break;
+
+                                        case AnchorPoint.TopRight:
+                                            right += dx;
+                                            top += dy;
+                                            break;
+
+                                        case AnchorPoint.BottomLeft:
+                                            left += dx;
+                                            bottom += dy;
+                                            break;
+
+                                        case AnchorPoint.BottomRight:
+                                            right += dx;
+                                            bottom += dy;
+                                            break;
+                                    }
+
+                                    // chống âm size / lật shape
+                                    float minSize = 2f;
+
+                                    if (right - left < minSize)
+                                    {
+                                        if (rotateRect._dragAnchor == AnchorPoint.TopLeft ||
+                                            rotateRect._dragAnchor == AnchorPoint.BottomLeft)
+                                            left = right - minSize;
+                                        else
+                                            right = left + minSize;
+                                    }
+
+                                    if (bottom - top < minSize)
+                                    {
+                                        if (rotateRect._dragAnchor == AnchorPoint.TopLeft ||
+                                            rotateRect._dragAnchor == AnchorPoint.TopRight)
+                                            top = bottom - minSize;
+                                        else
+                                            bottom = top + minSize;
+                                    }
+
+                                    float newW = right - left;
+                                    float newH = bottom - top;
+
+                                    // tâm local mới của rect sau resize
+                                    float localCenterX = (left + right) * 0.5f;
+                                    float localCenterY = (top + bottom) * 0.5f;
+
+                                    // rect local chuẩn luôn centered quanh (0,0)
                                     rotateRect._rect = new RectangleF(
-                                        _dragRect.Left - deltaSize.Width / 2f,
-                                        _dragRect.Top - deltaSize.Height / 2f,
-                                        _dragRect.Width + deltaSize.Width,
-                                        _dragRect.Height + deltaSize.Height);
-                                    deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
+                                        -newW / 2f,
+                                        -newH / 2f,
+                                        newW,
+                                        newH
+                                    );
+
+                                    // đổi offset local center -> world delta theo góc cố định lúc bắt đầu drag
+                                    PointF worldDelta = RectRotate.Rotate(
+                                        new PointF(localCenterX, localCenterY),
+                                        _dragRot
+                                    );
+
+                                    rotateRect._PosCenter = new PointF(
+                                        _dragCenter.X + worldDelta.X,
+                                        _dragCenter.Y + worldDelta.Y
+                                    );
+
                                     break;
                                 }
+                            //case AnchorPoint.TopLeft:
+                            //    {
+                            //        var clamped = new PointF(Math.Min(0f, point.X), Math.Min(0f, point.Y));
+                            //        deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+                            //        rotateRect._rect = new RectangleF(
+                            //            _dragRect.Left + deltaSize.Width / 2f,
+                            //            _dragRect.Top + deltaSize.Height / 2f,
+                            //            _dragRect.Width - deltaSize.Width,
+                            //            _dragRect.Height - deltaSize.Height);
+                            //        deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
+                            //        break;
+                            //    }
+                            //case AnchorPoint.TopRight:
+                            //    {
+                            //        var clamped = new PointF(Math.Max(0f, point.X), Math.Min(0f, point.Y));
+                            //        deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+                            //        rotateRect._rect = new RectangleF(
+                            //            _dragRect.Left - deltaSize.Width / 2f,
+                            //            _dragRect.Top + deltaSize.Height / 2f,
+                            //            _dragRect.Width + deltaSize.Width,
+                            //            _dragRect.Height - deltaSize.Height);
+                            //        deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
+                            //        break;
+                            //    }
+                            //case AnchorPoint.BottomLeft:
+                            //    {
+                            //        var clamped = new PointF(Math.Min(0f, point.X), Math.Max(0f, point.Y));
+                            //        deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+                            //        rotateRect._rect = new RectangleF(
+                            //            _dragRect.Left + deltaSize.Width / 2f,
+                            //            _dragRect.Top - deltaSize.Height / 2f,
+                            //            _dragRect.Width - deltaSize.Width,
+                            //            _dragRect.Height + deltaSize.Height);
+                            //        deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
+                            //        break;
+                            //    }
+                            //case AnchorPoint.BottomRight:
+                            //    {
+                            //        var clamped = new PointF(Math.Max(0f, point.X), Math.Max(0f, point.Y));
+                            //        deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+                            //        rotateRect._rect = new RectangleF(
+                            //            _dragRect.Left - deltaSize.Width / 2f,
+                            //            _dragRect.Top - deltaSize.Height / 2f,
+                            //            _dragRect.Width + deltaSize.Width,
+                            //            _dragRect.Height + deltaSize.Height);
+                            //        deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
+                            //        break;
+                            //    }
 
                             case AnchorPoint.Rotation:
                                 {
@@ -1177,37 +1277,117 @@ namespace BeeInterface
                                 }
                         }
                     }
+                    bool resizedByCorner =
+    rotateRect._dragAnchor == AnchorPoint.TopLeft ||
+    rotateRect._dragAnchor == AnchorPoint.TopRight ||
+    rotateRect._dragAnchor == AnchorPoint.BottomLeft ||
+    rotateRect._dragAnchor == AnchorPoint.BottomRight;
 
-                    // Sau resize 4 góc: cập nhật tâm theo delta đã xoay
-                    if (rotateRect._dragAnchor != AnchorPoint.None &&
+                    // block resize góc mới đã tự set _PosCenter rồi
+                    if (!resizedByCorner &&
+                        rotateRect._dragAnchor != AnchorPoint.None &&
                         rotateRect._dragAnchor != AnchorPoint.Center &&
                         rotateRect._dragAnchor != AnchorPoint.Rotation &&
                         rotateRect._dragAnchor < AnchorPoint.V0)
                     {
                         if (deltaX != 0f || deltaY != 0f)
                         {
-                            var pDelta = RectRotate.Rotate(new PointF(deltaX, deltaY), _dragRot); // dùng _dragRot
+                            var pDelta = RectRotate.Rotate(new PointF(deltaX, deltaY), _dragRot);
                             rotateRect._PosCenter = new PointF(_dragCenter.X + pDelta.X, _dragCenter.Y + pDelta.Y);
                             IsDone = false;
                         }
                     }
+                    //// Sau resize 4 góc: cập nhật tâm theo delta đã xoay
+                    //if (rotateRect._dragAnchor != AnchorPoint.None &&
+                    //    rotateRect._dragAnchor != AnchorPoint.Center &&
+                    //    rotateRect._dragAnchor != AnchorPoint.Rotation &&
+                    //    rotateRect._dragAnchor < AnchorPoint.V0)
+                    //{
+                    //    if (deltaX != 0f || deltaY != 0f)
+                    //    {
+                    //        var pDelta = RectRotate.Rotate(new PointF(deltaX, deltaY), _dragRot); // dùng _dragRot
+                    //        rotateRect._PosCenter = new PointF(_dragCenter.X + pDelta.X, _dragCenter.Y + pDelta.Y);
+                    //        IsDone = false;
+                    //    }
+                    //}
 
                     // Clamp theo ảnh cho Area (trừ polygon)
                     //Global.TypeCrop == TypeCrop.Area &&
-                    if ( rotateRect.Shape != ShapeType.Polygon)
+                    //if ( rotateRect.Shape != ShapeType.Polygon)
+                    //{
+                    //    float x = rotateRect._PosCenter.X - rotateRect._rect.Width / 2f;
+                    //    float y = rotateRect._PosCenter.Y - rotateRect._rect.Height / 2f;
+                    //    float w = rotateRect._rect.Width, h = rotateRect._rect.Height;
+                    //    int maxW = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Width;
+                    //    int maxH = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Height;
+
+                    //    if (x < 0f) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - x, rotateRect._PosCenter.Y);
+                    //    else if (x + w > maxW) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - (x + w - maxW), rotateRect._PosCenter.Y);
+                    //    if (y < 0f) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - y);
+                    //    else if (y + h > maxH) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - (y + h - maxH));
+                    //}
+                    // xác định đang resize góc
+                    //bool isCornerResize =
+                    //    rotateRect._dragAnchor == AnchorPoint.TopLeft ||
+                    //    rotateRect._dragAnchor == AnchorPoint.TopRight ||
+                    //    rotateRect._dragAnchor == AnchorPoint.BottomLeft ||
+                    //    rotateRect._dragAnchor == AnchorPoint.BottomRight;
+
+                    //// chỉ clamp khi KHÔNG phải resize góc và KHÔNG phải rotate
+                    //bool allowClamp =
+                    //    !isCornerResize &&
+                    //    rotateRect._dragAnchor != AnchorPoint.Rotation;
+
+                    // Clamp theo ảnh (trừ polygon)
+                    if (rotateRect._dragAnchor == AnchorPoint.Center &&
+      rotateRect.Shape != ShapeType.Polygon)
                     {
-                        float x = rotateRect._PosCenter.X - rotateRect._rect.Width / 2f;
-                        float y = rotateRect._PosCenter.Y - rotateRect._rect.Height / 2f;
-                        float w = rotateRect._rect.Width, h = rotateRect._rect.Height;
                         int maxW = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Width;
                         int maxH = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Height;
 
-                        if (x < 0f) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - x, rotateRect._PosCenter.Y);
-                        else if (x + w > maxW) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - (x + w - maxW), rotateRect._PosCenter.Y);
-                        if (y < 0f) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - y);
-                        else if (y + h > maxH) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - (y + h - maxH));
-                    }
+                        float hw = rotateRect._rect.Width / 2f;
+                        float hh = rotateRect._rect.Height / 2f;
 
+                        PointF[] corners = new PointF[]
+                        {
+        new PointF(-hw, -hh),
+        new PointF(hw, -hh),
+        new PointF(hw, hh),
+        new PointF(-hw, hh)
+                        };
+
+                        float minX = float.MaxValue;
+                        float minY = float.MaxValue;
+                        float maxXc = float.MinValue;
+                        float maxYc = float.MinValue;
+
+                        foreach (var p in corners)
+                        {
+                            PointF r = RectRotate.Rotate(p, rotateRect._rectRotation);
+
+                            float wx = rotateRect._PosCenter.X + r.X;
+                            float wy = rotateRect._PosCenter.Y + r.Y;
+
+                            if (wx < minX) minX = wx;
+                            if (wy < minY) minY = wy;
+                            if (wx > maxXc) maxXc = wx;
+                            if (wy > maxYc) maxYc = wy;
+                        }
+
+                        float shiftX = 0f;
+                        float shiftY = 0f;
+
+                        if (minX < 0) shiftX += -minX;
+                        if (maxXc > maxW) shiftX += maxW - maxXc;
+
+                        if (minY < 0) shiftY += -minY;
+                        if (maxYc > maxH) shiftY += maxH - maxYc;
+
+                        rotateRect._PosCenter = new PointF(
+                            rotateRect._PosCenter.X + shiftX,
+                            rotateRect._PosCenter.Y + shiftY
+                        );
+                    }
                     // Ghi về Propety
                     var rrNew = new RectRotate(
                         new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height),
@@ -1799,7 +1979,7 @@ namespace BeeInterface
                 {
                     gc.ResetTransform();
                     if(Global.rotCurrent!=null)
-                  if(Global.rotCurrent.TypeCrop==TypeCrop.Limit)
+              //    if(Global.rotCurrent.TypeCrop==TypeCrop.Limit)
                     {
                         List<RectRotate> listMark = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ListRotMask;
                         Draws.FillListRectMask(gc, TypeCrop.Limit, listMark, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 30);

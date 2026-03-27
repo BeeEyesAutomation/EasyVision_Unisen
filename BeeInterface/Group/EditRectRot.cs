@@ -406,6 +406,7 @@ namespace BeeInterface.Group
             }
             else
             {
+              
                 btnEdit.Text = "Edit"; Global.StatusDraw = StatusDraw.Edit;
                 ChooseEditEnd?.Invoke(Global.IndexRotChoose); // Gọi event
                
@@ -417,20 +418,35 @@ namespace BeeInterface.Group
         {
             RectRotate rot = rotCurrent.Clone();
             RectRotate rotArea = null;
-            foreach(RectRotate rot1 in Rot)
-                if(rot1.TypeCrop==TypeCrop.Area)
-                    rotArea=rot1.Clone();
+
+            foreach (RectRotate rot1 in Rot)
+            {
+                if (rot1.TypeCrop == TypeCrop.Area)
+                {
+                    rotArea = rot1.Clone();
+                    break;
+                }
+            }
+
             if (rotArea != null)
             {
-                PointF pCenter = rotArea.WorldToLocal(rot._PosCenter);
+                // 1) đổi tâm từ world -> local của rotArea
+                rot._PosCenter = rotArea.WorldToLocal(rot._PosCenter);
 
-                rot._PosCenter = pCenter;
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ListRotMask.Add(rot);
-               Global.StatusDraw = StatusDraw.None;
+                // 2) đổi góc từ world -> local của rotArea
+                rot._rectRotation = rot._rectRotation - rotArea._rectRotation;
+
+                // 3) chuẩn hóa góc về [-180, 180] nếu muốn
+                //while (rot._rectRotation > 180f) rot._rectRotation -= 360f;
+                //while (rot._rectRotation < -180f) rot._rectRotation += 360f;
+
+                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected]
+                    .Propety2.ListRotMask.Add(rot);
+
+                Global.StatusDraw = StatusDraw.None;
                 Global.StatusDraw = StatusDraw.Edit;
-               
-            }    
-         
+            }
+
         }
 
         private void btnUnoMask_Click(object sender, EventArgs e)

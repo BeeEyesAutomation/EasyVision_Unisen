@@ -34,19 +34,20 @@ namespace BeeInterface
         }
         public void LoadPara()
         {
-         
 
+            AdjHeightBot.Value = Propety.OffSetBoxLineBot;
             txtModel.Text = Propety.pathChipOnnx;
             AdjLimitLeft.Value = Propety.LimitXSub;
             AdjOffSetBox.Value = Propety.OffSetBoxLine;
             AdjOffSetBR.Value = Propety.OffSetBR;
             AdjAspectBox.Value = Propety.AspectBox;
             AdjBinary.Value = Propety.ThresholdBinary;
-            AdjBinary.Visible= Propety.MethordEdge == MethordEdge.Binary ? true : false;
+            
             btnLineBot.IsCLick = Propety.CornerAdj == CornerAdj.Bottom ? true : false;
             btnLineRight.IsCLick = Propety.CornerAdj == CornerAdj.Right ? true : false;
             btnLineMid.IsCLick = Propety.CornerAdj == CornerAdj.MidBotRight ? true : false;
-            AdThreshStrong.Visible = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
+            layBinary.Visible = Propety.MethordEdge == MethordEdge.Binary ? true : false;
+            layStrong.Visible = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
             AdThreshStrong.Value = Propety.ThreshStrongRight;
             btnEdgeNormal.IsCLick = Propety.MethordEdge == MethordEdge.CloseEdges ?true: false;
             btnEdgeStrong.IsCLick = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
@@ -72,7 +73,6 @@ namespace BeeInterface
             Propety.TypeCrop = Global.TypeCrop;
 
           
-            AdjScoreLearning.Value = Propety.ScoreYolo;
 
             AdjScale.Value = Propety.Scale;
          
@@ -86,6 +86,8 @@ namespace BeeInterface
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolMultiPattern_StatusToolChanged;
     
         }
+
+    
 
         private void ToolMultiPattern_StatusToolChanged(StatusTool obj)
         {
@@ -280,15 +282,12 @@ namespace BeeInterface
 
         }
 
-        private void btn6_Click(object sender, EventArgs e)
-        {
-            trackScore.Visible = !btn6.IsCLick;
-        }
-
+      
         private void btn7_Click(object sender, EventArgs e)
         {
+            AdjScale.Visible = !btn7.IsCLick;
             //layLimitCouter.Visible = !btn9.IsCLick;
-            AdjLimitY.Visible = !btn9.IsCLick;
+          
         }
 
         private void btnZeroAdj_Click(object sender, EventArgs e)
@@ -428,11 +427,7 @@ namespace BeeInterface
        
         }
 
-        private void AdjScoreLearning_ValueChanged(float obj)
-        {
-            Propety.ScoreYolo=(int)AdjScoreLearning.Value;
-        }
-
+     
        
 
         private void AdjScale_ValueChanged(float obj)
@@ -495,15 +490,15 @@ namespace BeeInterface
         private void btnEdgeNormal_Click(object sender, EventArgs e)
         {
             Propety.MethordEdge = MethordEdge.CloseEdges;
-            AdjBinary.Visible = Propety.MethordEdge == MethordEdge.Binary ? true : false;
-            AdThreshStrong.Visible = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
+            layBinary.Visible = Propety.MethordEdge == MethordEdge.Binary ? true : false;
+            layStrong.Visible = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
         }
 
         private void btnEdgeStrong_Click(object sender, EventArgs e)
         {
             Propety.MethordEdge = MethordEdge.StrongEdges;
-            AdjBinary.Visible = Propety.MethordEdge == MethordEdge.Binary ? true : false;
-            AdThreshStrong.Visible = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
+            layBinary.Visible = Propety.MethordEdge == MethordEdge.Binary ? true : false;
+            layStrong.Visible = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
         }
 
         private void AdThreshStrong_ValueChanged(float obj)
@@ -514,8 +509,8 @@ namespace BeeInterface
         private void btnBinary_Click(object sender, EventArgs e)
         {
             Propety.MethordEdge = MethordEdge.Binary;
-            AdjBinary.Visible = Propety.MethordEdge == MethordEdge.Binary ? true : false;
-            AdThreshStrong.Visible = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
+            layBinary.Visible = Propety.MethordEdge == MethordEdge.Binary ? true : false;
+            layStrong.Visible = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
         }
 
         private void AdjBinary_ValueChanged(float obj)
@@ -566,6 +561,122 @@ namespace BeeInterface
         private void AdjLimitLeft_ValueChanged(float obj)
         {
             Propety.LimitXSub = (int)AdjLimitLeft.Value;
+        }
+
+        private void tableLayoutPanel6_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn1_Click(object sender, EventArgs e)
+        {
+            layBoxes.Visible =! btn1.IsCLick;
+        }
+
+        private void rjButton6_Click(object sender, EventArgs e)
+        {
+            layM1.Visible =! btnBox1.IsCLick;
+            layM2.Visible =! btnBox1.IsCLick;
+            layM3.Visible=!btnBox1.IsCLick;
+ 
+           
+            if (!btnBox2.IsCLick)
+                btnBox2.IsCLick = true;
+            if (!btnBox3.IsCLick)
+                btnBox3.IsCLick = true; 
+            if (!btnBox4.IsCLick)
+                btnBox4.IsCLick = true;
+            layM1.Visible = !btnBox1.IsCLick;
+            layM2.Visible = !btnBox1.IsCLick;
+            layM3.Visible = !btnBox1.IsCLick;
+            trackScore.Visible = !btnBox2.IsCLick;
+            AdjArea.Visible = !btnBox3.IsCLick;
+            AdjAspectBox.Visible = !btnBox4.IsCLick;
+
+        }
+
+        private void btnHScore_Click(object sender, EventArgs e)
+        {
+            trackScore.Visible = !btnBox2.IsCLick;
+            if (!btnBox1.IsCLick)
+                btnBox1.IsCLick = true;
+            if (!btnBox3.IsCLick)
+                btnBox3.IsCLick = true;
+            if (!btnBox4.IsCLick)
+                btnBox4.IsCLick = true;
+            layM1.Visible = !btnBox1.IsCLick;
+            layM2.Visible = !btnBox1.IsCLick;
+            layM3.Visible = !btnBox1.IsCLick;
+            trackScore.Visible = !btnBox2.IsCLick;
+            AdjArea.Visible = !btnBox3.IsCLick;
+            AdjAspectBox.Visible = !btnBox4.IsCLick;
+        }
+
+        private void btnMinArea_Click(object sender, EventArgs e)
+        {
+            AdjArea.Visible = !btnBox3.IsCLick;
+            if (!btnBox1.IsCLick)
+                btnBox1.IsCLick = true;
+            if (!btnBox2.IsCLick)
+                btnBox2.IsCLick = true;
+            if (!btnBox4.IsCLick)
+                btnBox4.IsCLick = true;
+            layM1.Visible = !btnBox1.IsCLick;
+            layM2.Visible = !btnBox1.IsCLick;
+            layM3.Visible = !btnBox1.IsCLick;
+            trackScore.Visible = !btnBox2.IsCLick;
+            AdjArea.Visible = !btnBox3.IsCLick;
+            AdjAspectBox.Visible = !btnBox4.IsCLick;
+        }
+
+        private void btnHAspect_Click(object sender, EventArgs e)
+        {
+            AdjAspectBox.Visible=!btnBox4.IsCLick;
+            if (!btnBox1.IsCLick)
+                btnBox1.IsCLick = true;
+            if (!btnBox3.IsCLick)
+                btnBox3.IsCLick = true;
+            if (!btnBox2.IsCLick)
+                btnBox2.IsCLick = true;
+            layM1.Visible = !btnBox1.IsCLick;
+            layM2.Visible = !btnBox1.IsCLick;
+            layM3.Visible = !btnBox1.IsCLick;
+            trackScore.Visible = !btnBox2.IsCLick;
+            AdjArea.Visible = !btnBox3.IsCLick;
+            AdjAspectBox.Visible = !btnBox4.IsCLick;
+        }
+
+        private void btnDelectDot_Click(object sender, EventArgs e)
+        {
+            layDot1.Visible =! btnDelectDot.IsCLick;
+            layDot2.Visible=!btnDelectDot.IsCLick;
+        }
+
+        private void btnLL_Click(object sender, EventArgs e)
+        {
+            AdjLimitLeft.Visible = !btnLL.IsCLick;
+        }
+
+        private void btn8_Click(object sender, EventArgs e)
+        {
+            AdjLimitXRight.Visible=!btn8.IsCLick;
+        }
+
+        private void AdjHeightBot_ValueChanged(float obj)
+        {
+            Propety.OffSetBoxLineBot = (int)AdjHeightBot.Value;
+        
+    }
+
+        private void btncheckThresh_Click(object sender, EventArgs e)
+        {
+            Propety.ThresholdBinary =(int) Propety.GetAutoBrightSeed();
+            AdjBinary.Value= Propety.ThresholdBinary;
         }
     }
 }

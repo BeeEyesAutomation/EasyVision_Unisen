@@ -419,7 +419,37 @@ namespace BeeCore
             if (src == null || src.Empty()) return new Mat();
             return new Mat(src, roi); // view, dùng xong nhớ Dispose
         }
-       // [NonSerialized]
+        public static Mat CropRoiViewAuto(Mat src, RectRotate rot)
+        {
+            if (src == null || src.Empty() || rot == null)
+                return new Mat();
+
+            // Tính ROI axis-aligned từ center + width/height
+            int x = (int)Math.Round(rot._PosCenter.X - rot._rect.Width / 2.0);
+            int y = (int)Math.Round(rot._PosCenter.Y - rot._rect.Height / 2.0);
+            int w = (int)Math.Round(rot._rect.Width);
+            int h = (int)Math.Round(rot._rect.Height);
+
+            if (w <= 0 || h <= 0)
+                return new Mat();
+
+            // Clamp vào trong ảnh
+            int x1 = Math.Max(0, x);
+            int y1 = Math.Max(0, y);
+            int x2 = Math.Min(src.Width, x + w);
+            int y2 = Math.Min(src.Height, y + h);
+
+            int cw = x2 - x1;
+            int ch = y2 - y1;
+
+            // Nếu hoàn toàn nằm ngoài ảnh
+            if (cw <= 0 || ch <= 0)
+                return new Mat();
+
+            Rect roi = new Rect(x1, y1, cw, ch);
+            return new Mat(src, roi); // view, dùng xong nhớ Dispose
+        }
+        // [NonSerialized]
         //BeeCpp. ColorArea ColorAreaPP = new BeeCpp.ColorArea();
         public void SetTemp(BeeCpp.ColorArea ColorAreaPP, HSVCli[] arrHSV,int Extraction)
         {
@@ -947,7 +977,7 @@ namespace BeeCore
                                 // === Crop ROI ===
                                 using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
                                 {
-                                 
+                                
                                     if (matCrop.Empty()) return;
 
                                     if (matCrop.Type().Depth != MatType.CV_8U)
@@ -1276,6 +1306,67 @@ namespace BeeCore
 
             return area;
         }
+        public static RectRotate IntersectInsideScan(RectRotate obj, RectRotate scan)
+        {
+            if (obj == null || scan == null)
+                return null;
+
+            RectangleF rObj = obj.GetBoundingRect();
+            RectangleF rScan = scan.GetBoundingRect();
+
+            // clamp vào scan
+            float left = Math.Max(rObj.Left, rScan.Left);
+            float top = Math.Max(rObj.Top, rScan.Top);
+            float right = Math.Min(rObj.Right, rScan.Right);
+            float bottom = Math.Min(rObj.Bottom, rScan.Bottom);
+
+            // thực sự không còn vùng giao
+            if (right <= left || bottom <= top)
+                return null;
+
+            float w = right - left;
+            float h = bottom - top;
+
+            PointF center = new PointF(
+                (left + right) * 0.5f,
+                (top + bottom) * 0.5f
+            );
+
+            RectangleF localRect = new RectangleF(
+                -w * 0.5f,
+                -h * 0.5f,
+                w,
+                h
+            );
+
+            return new RectRotate(localRect, center, 0, AnchorPoint.None);
+        }
+        bool CheckRightRule(RectRotate scan, RectRotate obj, bool isRight)
+        {
+            if (scan == null || obj == null) return false;
+
+            PointF pLocal = scan.WorldToLocal(obj._PosCenter);
+
+            float halfW = scan._rect.Width / 2f;
+
+            // clamp tránh lỗi âm
+            float x =pLocal.X;
+            if(!isRight)
+            {
+                if(x<halfW) return true;
+                else return false;
+
+            }  
+            else
+            {
+                if (x > halfW) return true;
+                else return false;
+            }    
+            //float distLeft = x ;
+            //float distRight = halfW - x;
+
+            //return isRight ? (distRight < distLeft) : (distLeft < distRight);
+        }
         public void Complete()
         {
             if (!Global.IsIntialPython)
@@ -1369,7 +1460,7 @@ namespace BeeCore
                     else
                         return scan.ContainsPoint(r._PosCenter);
                 }
-                
+
                 //--------------------------------
                 // SCANBOX (FIX CHUẨN)
                 //--------------------------------
@@ -1379,174 +1470,189 @@ namespace BeeCore
                     {
                         var scan = listRotScan[scanIndex];
 
-    
+                        bool boxOK = true;
+                        bool hasRule = false;
 
-                                bool boxOK = true;
-                                bool hasRule = false;
+                        foreach (var item in labelItems)
+                        {
+                            if (item == null || !item.IsUse)
+                                continue;
 
-                                foreach (var item in labelItems)
+                            if (item.ListIndexBox == null || !item.ListIndexBox.Contains(scanIndex))
+                                continue;
+
+                            hasRule = true;
+
+                            //--------------------------------
+                            // GET OBJECTS
+                            //--------------------------------
+                            List<ResultItem> objs;
+
+                            if (IsCropSingle)
+                            {
+                                objs = new List<ResultItem>();
+
+                                if (scanIndex < ResultItem.Count)
                                 {
-                                    if (item == null || !item.IsUse)
-                                        continue;
-
-                                    if (item.ListIndexBox == null || !item.ListIndexBox.Contains(scanIndex))
-                                        continue;
-
-                                    hasRule = true;
-
-                                    //--------------------------------
-                                    // GET OBJECTS IN BOX
-                                    //--------------------------------
-                                    List<ResultItem> objs;
-
-                                    if (IsCropSingle)
-                                    {
-                                        objs = new List<ResultItem>();
-
-                                        if (scanIndex < ResultItem.Count)
-                                        {
-                                            var r = ResultItem[scanIndex];
+                                    var r = ResultItem[scanIndex];
 
                                     if (r.rot != null &&
                                         r.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase))
-                                    {
                                         objs.Add(r);
-                                    }
                                     else
                                         r.IsOK = false;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        objs = ResultItem
-                                            .Where(x =>
-                                                x.rot != null &&
-                                                x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase) &&
-                                                scan.ContainsPoint(x.rot._PosCenter))
-                                            .OrderBy(x => x.rot._PosCenter.X)
-                                            .ToList();
-                                    }
-                            scan.NumInside = objs.Count;
+                                }
+                            }
+                            else
+                            {
+                                objs = ResultItem
+                                    .Where(x =>
+                                        x.rot != null &&
+                                        x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase) &&
+                                        IsInside(scan, x.rot))
+                                    .OrderBy(x => x.rot._PosCenter.X)
+                                    .ToList();
+                            }
+
+                            //--------------------------------
+                            // FILTER IsRight
+                            //--------------------------------
+                            List<ResultItem> objsValid = new List<ResultItem>();
+
+                            foreach (var r in objs)
+                            {
+                                bool passSide = true;
+                                item.IsRight = true;
+                                if (!IsCropSingle && item.IsRight && r.rot != null)
+                                    passSide = CheckRightRule(scan, r.rot, scan.IsRight);
+
+                                if (!passSide)
+                                {
+                                    r.IsOK = false;
+                                    continue;
+                                }
+
+                                objsValid.Add(r);
+                            }
+
+                            scan.NumInside = objsValid.Count;
+
                             //--------------------------------
                             // NO OBJECT
                             //--------------------------------
-                            if (objs.Count == 0)
-                                    {
-                                        boxOK = false;
-                                        continue;
-                                    }
-                           
+                            if (objsValid.Count == 0)
+                            {
+                                boxOK = false;
+                                continue;
+                            }
+
                             //--------------------------------
                             // COUNTER
                             //--------------------------------
                             if (item.IsCounter)
-                                    {
-                                        if (objs.Count < item.ValueCounter)
-                                        {
-                                            foreach (var rr in objs)
-                                                rr.IsOK = false;
-                                 
-                                            boxOK = false;
-                                            continue;
-                                        }
-                                    }
-
-                                    //--------------------------------
-                                    // LOOP OBJECT
-                                    //--------------------------------
-                                    for (int j = 0; j < objs.Count; j++)
-                                    {
-                                        var r = objs[j];
-                                        bool ok = true;
-
-                                        //--------------------------------
-                                        // SIZE
-                                        //--------------------------------
-                                        if (item.IsWidth)
-                                            ok &= r.rot._rect.Width >= item.ValueWidth;
-
-                                        if (item.IsHeight)
-                                            ok &= r.rot._rect.Height >= item.ValueHeight;
-
-                                        //--------------------------------
-                                        // POSITION
-                                        //--------------------------------
-                                        if (item.IsX)
-                                            ok &= IntersectX(r.rot, item.ValueX);
-
-                                        if (item.IsY)
-                                            ok &= IntersectY(r.rot, item.ValueY);
-
-                                        if (item.IsXMax)
-                                            ok &= IntersectXMax(r.rot, item.ValueXMax);
-
-                                        if (item.IsYMax)
-                                            ok &= IntersectYMax(r.rot, item.ValueYMax);
-
-                                        //--------------------------------
-                                        // AREA (SCANBOX LEVEL)
-                                        //--------------------------------
-                                        if (item.IsArea)
-                                        {
-                                            double sumArea = objs.Sum(x => x.Area);
-                                            ok &= sumArea >= item.ValueArea * 100;
-                                        }
-
-                                        //--------------------------------
-                                        // COLOR
-                                        //--------------------------------
-                                        if (item.IsMinColor)
-                                        {
-                                            if (j >= item.ListColorArea.Count || j >= item.ListTempColor.Count)
-                                            {
-                                                ok = false;
-                                            }
-                                            else
-                                            {
-                                                using (Mat matCrop2 = CropRoiView(matCropTemp, r.rot))
-                                                {
-                                                    if (r.matProcess == null)
-                                                        r.matProcess = new Mat();
-
-                                                    int val = CheckColor(item.ListColorArea[scanIndex * item.ValueCounter + j], ref r.matProcess, matCrop2);
-
-                                                    if (!Global.IsRun)
-                                                        item.ListTempColor[scanIndex*item.ValueCounter+ j] = val;
-
-                                                    int valTemp = item.ListTempColor[scanIndex * item.ValueCounter + j];
-
-                                                  r.PercentColor = (float)((Math.Abs(val - valTemp) / (valTemp*1.0)) * 100.0);
-
-                                                    ok &= r.PercentColor <= item.ValueMinColor;
-                                                }
-                                            }
-                                        }
-
-                                        r.IsOK = ok;
-
-                                        if (!ok)
-                                            boxOK = false;
-                                        
-                                    }
-                                }
-
-                                //--------------------------------
-                                // NO RULE → OK
-                                //--------------------------------
-                                if (!hasRule)
+                            {
+                                if (objsValid.Count < item.ValueCounter)
                                 {
-                                    scan.IsOK = true;
-                                    numOK++;
+                                    foreach (var rr in objs)
+                                        rr.IsOK = false;
+
+                                    boxOK = false;
                                     continue;
                                 }
+                            }
 
-                                scan.IsOK = boxOK;
+                            //--------------------------------
+                            // LOOP OBJECT
+                            //--------------------------------
+                            for (int j = 0; j < objsValid.Count; j++)
+                            {
+                                var r = objsValid[j];
+                                bool ok = true;
 
-                                if (boxOK)
-                                    numOK++;
-                            
+                                if (item.IsWidth)
+                                    ok &= r.rot._rect.Width >= item.ValueWidth;
+
+                                if (item.IsHeight)
+                                    ok &= r.rot._rect.Height >= item.ValueHeight;
+
+                                if (item.IsX)
+                                    ok &= IntersectX(r.rot, item.ValueX);
+
+                                if (item.IsY)
+                                    ok &= IntersectY(r.rot, item.ValueY);
+
+                                if (item.IsXMax)
+                                    ok &= IntersectXMax(r.rot, item.ValueXMax);
+
+                                if (item.IsYMax)
+                                    ok &= IntersectYMax(r.rot, item.ValueYMax);
+
+                                if (item.IsArea)
+                                {
+                                    double sumArea = objsValid.Sum(x => x.Area);
+                                    ok &= sumArea >= item.ValueArea * 100;
+                                }
+
+                                //--------------------------------
+                                // COLOR
+                                //--------------------------------
+                                if (item.IsMinColor)
+                                {
+                                    int idx = scanIndex * item.ValueCounter + j;
+
+                                    if (idx >= item.ListColorArea.Count || idx >= item.ListTempColor.Count)
+                                    {
+                                        ok = false;
+                                        scan.NumInside--;
+                                        boxOK = false;
+                                    }
+                                    else
+                                    {
+                                        using (Mat matCrop2 = CropRoiView(matCropTemp, r.rot))
+                                        {
+                                            if (r.matProcess == null)
+                                                r.matProcess = new Mat();
+
+                                            int val = CheckColor(item.ListColorArea[idx], ref r.matProcess, matCrop2);
+
+                                            if (!Global.IsRun)
+                                                item.ListTempColor[idx] = val;
+
+                                            int valTemp = item.ListTempColor[idx];
+
+                                            r.PercentColor = (float)(Math.Abs(val - valTemp) / (valTemp * 1.0) * 100.0);
+
+                                            if (r.PercentColor > item.ValueMinColor)
+                                            {
+                                                ok = false;
+                                                scan.NumInside--;
+                                                boxOK = false;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                r.IsOK = ok;
+                            }
                         }
+
+                        //--------------------------------
+                        // NO RULE
+                        //--------------------------------
+                        if (!hasRule)
+                        {
+                            scan.IsOK = true;
+                            numOK++;
+                            continue;
+                        }
+
+                        scan.IsOK = boxOK;
+
+                        if (boxOK)
+                            numOK++;
+                    }
                 }
+
                 else
                 {
                     foreach (var item in labelItems)
@@ -1635,6 +1741,7 @@ namespace BeeCore
                                 }
                                 else
                                 {
+
                                     using (Mat matCrop2 = CropRoiView(matCropTemp, r.rot))
                                     {
                                         if (r.matProcess == null)
@@ -1693,6 +1800,7 @@ namespace BeeCore
                 Global.LogsDashboard.AddLog(
                     new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
             }
+            Common.PropetyTools[IndexThread][Index].ScoreResult = numOK;
         }
         //public void Complete()
         //{
@@ -1934,32 +2042,46 @@ namespace BeeCore
                     if (Global.StatusDraw==StatusDraw.Scan)
                         {
                         cOK = "";
-                            if (IsCropSingle)
-                            {
-                                if (rot._dragAnchor == AnchorPoint.Center)
-                                    clScan = Global.ParaShow.ColorChoose;
-                                else
-                                    clScan = Color.LightGray;
-                            }
-                            else
+                        if (rot.IsRight)
+                            cOK += "-R";
+                        else
+                            cOK += "-L";
+                        if (rot.Name == null)
+                            rot.Name = "Area Limit";
+                        if (rot._dragAnchor == AnchorPoint.Center && rot.Name.Trim() != "Area Limit")
+                            
+                            clScan = Global.ParaShow.ColorChoose;
+                        else
                         {
+                            rot._dragAnchor = AnchorPoint.None;
+                            clScan = Color.LightGray;
+                        }
+                        //if (IsCropSingle)
+                        //    {
+                        //        if (rot._dragAnchor == AnchorPoint.Center)
+                        //            clScan = Global.ParaShow.ColorChoose;
+                        //        else
+                        //            clScan = Color.LightGray;
+                        //    }
+                        //    else
+                        //{
 
-                            if (rot._dragAnchor == AnchorPoint.Center&&rot.Name.Trim()!= "Area Limit")
-                                clScan = Global.ParaShow.ColorChoose;
-                            else
-                            {
-                                rot._dragAnchor = AnchorPoint.None;
-                                clScan = Color.LightGray;
-                            }    
+                        //    if (rot._dragAnchor == AnchorPoint.Center&&rot.Name.Trim()!= "Area Limit")
+                        //        clScan = Global.ParaShow.ColorChoose;
+                        //    else
+                        //    {
+                        //        rot._dragAnchor = AnchorPoint.None;
+                        //        clScan = Color.LightGray;
+                        //    }    
                                 
-                            //if (rot.Name != "")
-                            //    {
+                        //    //if (rot.Name != "")
+                        //    //    {
 
-                            //        clScan = Global.ParaShow.ColorChoose;
-                            //    }
-                            //    else
-                            //        clScan = Global.ParaShow.ColorNone;
-                            }
+                        //    //        clScan = Global.ParaShow.ColorChoose;
+                        //    //    }
+                        //    //    else
+                        //    //        clScan = Global.ParaShow.ColorNone;
+                        //    }
                         }
                         else
                         {
@@ -1991,6 +2113,10 @@ namespace BeeCore
                                         //  continue;
                                     }
                                 }
+                                if (rot.IsRight)
+                                    cOK += "-R";
+                                else
+                                    cOK += "-L";
                             }
                             //else
                             //{
@@ -2034,7 +2160,7 @@ namespace BeeCore
                         gc.Transform = mat;
                     int indexArea = i + 1;
                    
-                        Draws.Box2Label(gc, rot, indexArea + "."+ rot.Name, cOK, font, clScan, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
+                        Draws.Box2Label(gc, rot, indexArea + "."+ rot.Name, cOK, font, clScan, brushText, Global.ParaShow.Opacity, Global.ParaShow.ThicknessLine,true);
 
 
                     ////  Draws.Box1Label(gc, rotA, rot.Name, "Count: " + numOK, font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
@@ -2203,6 +2329,11 @@ namespace BeeCore
                     i++;
                     continue;
                 }
+                if (rs.Score == 0)
+                {
+                    i++;
+                    continue;
+                }
                 Color clShow = Global.ParaShow.ColorNone;
 
                 if(IsCropSingle)
@@ -2359,22 +2490,13 @@ namespace BeeCore
                         String valueScore = Math.Round(rs.Score, 1) + "%";
                         if (!Global.ParaShow.IsShowScore) valueScore = "";
                         if (!Global.ParaShow.IsShowLabel) label = "";
-                        if(item.IsMinColor)
-                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore,Math.Round( rs.PercentColor) + "%", font, clShow, brushText, 30,Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 1,true);//("+Math.Round( ResultItem[i].Percent) + "%)
-                      else if (item.IsArea)
-                            Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
-                        else
-                            Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
 
-                        //if (rs.matProcess != null)
-                        //    if (!rs.matProcess.IsDisposed)
-                        //        if (!rs.matProcess.Empty())
-                        //        {
-                        //            Bitmap myBitmap = rs.matProcess.ToBitmap();
-                        //            myBitmap.MakeTransparent(Color.Black);
-                        //            myBitmap = General.ChangeToColor(myBitmap, Color.Red, 0.3f);
-                        //            gc.DrawImage(myBitmap, rotA._rect);
-                        //        }
+                        if(item.IsMinColor)
+                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore,Math.Round( rs.PercentColor) + "%", font, clShow, brushText, 30,Global.ParaShow.ThicknessLine,false, Global.ParaShow.FontSize, 1,true);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        else if (item.IsArea)
+                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        else
+                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
                         gc.ResetTransform();
 
                     }
@@ -2418,7 +2540,7 @@ namespace BeeCore
                     String valueScore = Math.Round(rs.Score, 1) + "%";
                     if (!Global.ParaShow.IsShowScore) valueScore = "";
                     if (!Global.ParaShow.IsShowLabel) label = "";
-                    Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
+                    Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine,false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
                     gc.ResetTransform();
 
 

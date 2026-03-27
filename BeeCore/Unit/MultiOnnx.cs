@@ -174,21 +174,118 @@ namespace BeeCore
         {
             if (dict == null || dict.Count == 0)
                 return Array.Empty<string>();
-
             int max = dict.Keys.Max();
-
             string[] arr = new string[max + 1];
-
             foreach (var kv in dict)
                 arr[kv.Key] = kv.Value;
-
             return arr;
         }
+        public  double GetAutoBrightSeed()
+        {
+            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            {
+                int W = raw.Width;
+                int H = raw.Height;
 
+                RectRotate rotRigth = new RectRotate(new RectangleF(-W / 4f, -WidthDetectBoxBR / 2f, W / 2f, WidthDetectBoxBR), new PointF(3 * W / 4f, H / 2), 0, AnchorPoint.None);
+                using (Mat crop = Cropper.CropRotatedRect(raw, rotRigth, null))
+                {
+                    Mat gray = new Mat();
+                    if (crop.Channels() == 3)
+                        Cv2.CvtColor(crop, gray, ColorConversionCodes.BGR2GRAY);
+                    else
+                        gray = crop.Clone();
+                    using (Mat hist = new Mat())
+                    {
+                        Cv2.CalcHist(
+                            new[] { gray },
+                            new[] { 0 },
+                            null,
+                            hist,
+                            1,
+                            new[] { 256 },
+                            new[] { new Rangef(0, 256) });
+                        int peakBright = 180;
+                        float maxVal = 0;
+                        for (int i = 170; i < 256; i++)
+                        {
+                            float v = hist.At<float>(i);
+                            if (v > maxVal)
+                            {
+                                maxVal = v;
+                                peakBright = i;
+                            }
+                        }
+
+                        return peakBright * 0.85;
+                    }
+                }
+            }
+        }
+        //public double GetThresholdPaper()
+        //{
+        //    using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+        //    {
+        //        int W = raw.Width;
+        //        int H = raw.Height;
+
+        //        RectRotate rotRigth = new RectRotate(new RectangleF(-W / 4f, -WidthDetectBoxBR / 2f, W / 2f, WidthDetectBoxBR), new PointF(3 * W / 4f, H / 2), 0, AnchorPoint.None);
+        //        using (Mat crop = Cropper.CropRotatedRect(raw, rotRigth, null))
+        //        {
+        //            Mat gray = new Mat();
+        //            if (crop.Channels() == 3)
+        //                Cv2.CvtColor(crop, gray, ColorConversionCodes.BGR2GRAY);
+        //            else
+        //                gray = crop.Clone();
+
+        //            // tính histogram
+        //            Mat hist = new Mat();
+        //            int[] histSize = { 256 };
+        //            Rangef[] ranges = { new Rangef(0, 256) };
+
+        //            Cv2.CalcHist(
+        //                new Mat[] { gray },
+        //                new int[] { 0 },
+        //                null,
+        //                hist,
+        //                1,
+        //                histSize,
+        //                ranges
+        //            );
+
+        //            // convert sang array
+                    
+        //            float[] histData = new float[256];
+        //            for (int i = 0; i < 256; i++)
+        //            {
+        //                histData[i] = hist.At<float>(i, 0); // hist thường là 256x1
+        //            }
+
+        //            // tìm peak sáng (bên phải)
+        //            int peakBright = 255;
+        //            float maxVal = 0;
+
+        //            for (int i = 180; i < 256; i++) // chỉ xét vùng sáng
+        //            {
+        //                if (histData[i] > maxVal)
+        //                {
+        //                    maxVal = histData[i];
+        //                    peakBright = i;
+        //                }
+        //            }
+
+        //            // threshold = thấp hơn peak 1 chút
+        //            double threshold = peakBright - 20;
+
+        //            return threshold;
+        //        }
+        //    } 
+        //}
         public void SetModel()
         {
             if (Scale == 0) Scale = 1;
             if (OffSetBoxLine == 0) OffSetBoxLine = 100;
+            if (OffSetBoxLineBot == 0) OffSetBoxLineBot = 100;
             if (rotCrop == null) rotCrop = new RectRotate();
             if (rotArea == null) rotArea = new RectRotate();
             
@@ -319,7 +416,6 @@ namespace BeeCore
                 return new string[0];
         }
         public List<RectRotate> rectRotates = new List<RectRotate>();
-
         public List<float> list_AngleCenter = new List<float>();
         public ZeroPos ZeroPos = ZeroPos.Zero;
         public float Scale = 1;
@@ -374,6 +470,7 @@ namespace BeeCore
             return raw;
         }
         public int OffSetBoxLine=50;
+        public int OffSetBoxLineBot = 50;
         public CornerAdj CornerAdj;
         public int OffSetBR = 1;
         // public int space = 500;
@@ -469,8 +566,8 @@ namespace BeeCore
             line2 = new Line2D(LineBot.Vx, LineBot.Vy, LineBot.X0, LineBot.Y0);
             line3 = new Line2D(LineLeft.Vx, LineLeft.Vy, LineLeft.X0, LineLeft.Y0);
             line4 = new Line2D(LineRight.Vx, LineRight.Vy, LineRight.X0, LineRight.Y0);
-                rotBotCalib = ShrinkRectByLine(rotBot, LineBot, OffSetBoxLine, true);
-                rotRightCalib = ShrinkRectByLine(rotRigth, LineRight, OffSetBoxLine*2);
+                rotBotCalib = ShrinkRectByLine(rotBot, LineBot, OffSetBoxLineBot, true);
+                rotRightCalib = ShrinkRectByLine(rotRigth, LineRight, OffSetBoxLine);
                 rotBotCalib = FitRectInsideImageVer(rotBotCalib, new Size(W, H));
                 rotRightCalib = FitRectInsideImageVer(rotRightCalib, new Size(W, H));
                 rectPage = InsertLine.CreateRectRotate_BotAxis(line1, line2, line3, line4);
@@ -1686,7 +1783,7 @@ namespace BeeCore
                 String valueScore = Math.Round(rs.Score) + "%";
                 if (!Global.ParaShow.IsShowScore) valueScore = "";
                 if (!Global.ParaShow.IsShowLabel) label = "";
-                Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
+                Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
                 gc.ResetTransform();
 
             }
