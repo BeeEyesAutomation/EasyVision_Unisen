@@ -1518,7 +1518,7 @@ namespace BeeCore
                             // FILTER IsRight
                             //--------------------------------
                             List<ResultItem> objsValid = new List<ResultItem>();
-
+                            bool iNG1 = false;
                             foreach (var r in objs)
                             {
                                 bool passSide = true;
@@ -1528,6 +1528,7 @@ namespace BeeCore
 
                                 if (!passSide)
                                 {
+                                    iNG1 = true;
                                     r.IsOK = false;
                                     continue;
                                 }
@@ -1540,11 +1541,7 @@ namespace BeeCore
                             //--------------------------------
                             // NO OBJECT
                             //--------------------------------
-                            if (objsValid.Count == 0)
-                            {
-                                boxOK = false;
-                                continue;
-                            }
+                           
 
                             //--------------------------------
                             // COUNTER
@@ -1553,87 +1550,99 @@ namespace BeeCore
                             {
                                 if (objsValid.Count < item.ValueCounter)
                                 {
-                                    foreach (var rr in objs)
+                                    if(!iNG1)
+                                    foreach (var rr in objsValid)
                                         rr.IsOK = false;
-
+                                    scan.IsOK = boxOK;
                                     boxOK = false;
                                     continue;
                                 }
                             }
+                            else
+                            {
+                                if (objsValid.Count == 0)
+                                {
+                                    boxOK = false;
+                                    continue;
+                                }
+
+                            }
+                             
 
                             //--------------------------------
                             // LOOP OBJECT
                             //--------------------------------
                             for (int j = 0; j < objsValid.Count; j++)
-                            {
-                                var r = objsValid[j];
-                                bool ok = true;
-
-                                if (item.IsWidth)
-                                    ok &= r.rot._rect.Width >= item.ValueWidth;
-
-                                if (item.IsHeight)
-                                    ok &= r.rot._rect.Height >= item.ValueHeight;
-
-                                if (item.IsX)
-                                    ok &= IntersectX(r.rot, item.ValueX);
-
-                                if (item.IsY)
-                                    ok &= IntersectY(r.rot, item.ValueY);
-
-                                if (item.IsXMax)
-                                    ok &= IntersectXMax(r.rot, item.ValueXMax);
-
-                                if (item.IsYMax)
-                                    ok &= IntersectYMax(r.rot, item.ValueYMax);
-
-                                if (item.IsArea)
                                 {
-                                    double sumArea = objsValid.Sum(x => x.Area);
-                                    ok &= sumArea >= item.ValueArea * 100;
-                                }
+                                    var r = objsValid[j];
+                                    bool ok = true;
 
-                                //--------------------------------
-                                // COLOR
-                                //--------------------------------
-                                if (item.IsMinColor)
-                                {
-                                    int idx = scanIndex * item.ValueCounter + j;
+                                    if (item.IsWidth)
+                                        ok &= r.rot._rect.Width >= item.ValueWidth;
 
-                                    if (idx >= item.ListColorArea.Count || idx >= item.ListTempColor.Count)
+                                    if (item.IsHeight)
+                                        ok &= r.rot._rect.Height >= item.ValueHeight;
+
+                                    if (item.IsX)
+                                        ok &= IntersectX(r.rot, item.ValueX);
+
+                                    if (item.IsY)
+                                        ok &= IntersectY(r.rot, item.ValueY);
+
+                                    if (item.IsXMax)
+                                        ok &= IntersectXMax(r.rot, item.ValueXMax);
+
+                                    if (item.IsYMax)
+                                        ok &= IntersectYMax(r.rot, item.ValueYMax);
+
+                                    if (item.IsArea)
                                     {
-                                        ok = false;
-                                        scan.NumInside--;
-                                        boxOK = false;
+                                        double sumArea = objsValid.Sum(x => x.Area);
+                                        ok &= sumArea >= item.ValueArea * 100;
                                     }
-                                    else
+
+                                    //--------------------------------
+                                    // COLOR
+                                    //--------------------------------
+
+                                    if (item.IsMinColor)
                                     {
-                                        using (Mat matCrop2 = CropRoiView(matCropTemp, r.rot))
+                                        int idx = scanIndex * item.ValueCounter + j;
+
+                                        if (idx >= item.ListColorArea.Count || idx >= item.ListTempColor.Count)
                                         {
-                                            if (r.matProcess == null)
-                                                r.matProcess = new Mat();
-
-                                            int val = CheckColor(item.ListColorArea[idx], ref r.matProcess, matCrop2);
-
-                                            if (!Global.IsRun)
-                                                item.ListTempColor[idx] = val;
-
-                                            int valTemp = item.ListTempColor[idx];
-
-                                            r.PercentColor = (float)(Math.Abs(val - valTemp) / (valTemp * 1.0) * 100.0);
-
-                                            if (r.PercentColor > item.ValueMinColor)
+                                            ok = false;
+                                            scan.NumInside--;
+                                            boxOK = false;
+                                        }
+                                        else
+                                        {
+                                            using (Mat matCrop2 = CropRoiView(matCropTemp, r.rot))
                                             {
-                                                ok = false;
-                                                scan.NumInside--;
-                                                boxOK = false;
+                                                if (r.matProcess == null)
+                                                    r.matProcess = new Mat();
+
+                                                int val = CheckColor(item.ListColorArea[idx], ref r.matProcess, matCrop2);
+
+                                                if (!Global.IsRun)
+                                                    item.ListTempColor[idx] = val;
+
+                                                int valTemp = item.ListTempColor[idx];
+
+                                                r.PercentColor = (float)(Math.Abs(val - valTemp) / (valTemp * 1.0) * 100.0);
+
+                                                if (r.PercentColor > item.ValueMinColor)
+                                                {
+                                                    ok = false;
+                                                    scan.NumInside--;
+                                                    boxOK = false;
+                                                }
                                             }
                                         }
                                     }
-                                }
 
-                                r.IsOK = ok;
-                            }
+                                    r.IsOK = ok;
+                                }
                         }
 
                         //--------------------------------
