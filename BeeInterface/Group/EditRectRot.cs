@@ -26,6 +26,23 @@ namespace BeeInterface.Group
             InitializeComponent();
           
         }
+        public bool _IsHide = false;
+       
+        public bool IsHide
+        {
+            get => _IsHide;
+            set
+            {
+                if (_IsHide != value)
+                {
+                    _IsHide = value;
+                  if(_IsHide)
+                    {
+                        Global.RotateCurentChanged -= Global_RotateCurentChanged;
+                    }    
+                }
+            }
+        }
         int index = 0;
         public  RectRotate _rotCurrent { get; set; }
       
@@ -308,6 +325,7 @@ namespace BeeInterface.Group
              
                 for (int i = 0; i < CountType; i++)
                 {
+                    if (!Rot[i].IsVisible) continue;
                     RJButton btn = new RJButton();
                     btn.AutoFont = true;
                     btn.AutoFontHeightRatio = 0.75F;
@@ -380,10 +398,10 @@ namespace BeeInterface.Group
 
         private void EditRectRot_VisibleChanged(object sender, EventArgs e)
         {
-          
-            if(!this.Visible)
+        
+        
            
-                Global.RotateCurentChanged -= Global_RotateCurentChanged;
+           
              
         }
         public event Action<bool> ChooseEditBegin;
@@ -413,7 +431,10 @@ namespace BeeInterface.Group
             }
 
         }
-
+        public  event Action<RectRotate> AddRotEvent;
+        public  event Action<bool> UnoRotEvent;
+        public  event Action<bool> DeleteEvent;
+        public  event Action<bool> ClearAllEvent;
         private void btnAddToList_Click(object sender, EventArgs e)
         {
             RectRotate rot = rotCurrent.Clone();
@@ -439,21 +460,18 @@ namespace BeeInterface.Group
                 // 3) chuẩn hóa góc về [-180, 180] nếu muốn
                 //while (rot._rectRotation > 180f) rot._rectRotation -= 360f;
                 //while (rot._rectRotation < -180f) rot._rectRotation += 360f;
+                AddRotEvent?.Invoke(rot.Clone()); // Gọi event
+         
 
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected]
-                    .Propety2.ListRotMask.Add(rot);
-
-                Global.StatusDraw = StatusDraw.None;
-                Global.StatusDraw = StatusDraw.Edit;
+             
             }
 
         }
 
         private void btnUnoMask_Click(object sender, EventArgs e)
         {
-            if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ListRotMask.Count > 0)
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ListRotMask.RemoveAt(BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ListRotMask.Count - 1);
-            Global.StatusDraw = StatusDraw.None;
+            UnoRotEvent?.Invoke(true); // Gọi event
+              Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
         }
 
@@ -488,11 +506,8 @@ namespace BeeInterface.Group
 
         private void btnClearAllMask_Click(object sender, EventArgs e)
         {
-
-            if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ListRotMask.Count> 0)
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ListRotMask.Clear(); Global.StatusDraw = StatusDraw.None;
-            Global.StatusDraw = StatusDraw.None;
-            Global.StatusDraw = StatusDraw.Edit;
+            ClearAllEvent?.Invoke(true); // Gọi event
+          
           
         }
     }

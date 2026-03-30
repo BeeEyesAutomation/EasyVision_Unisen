@@ -1,4 +1,5 @@
 ﻿using BeeCore.Core;
+using BeeGlobal;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -49,11 +50,11 @@ namespace BeeCore
         /// Các index box được chọn
         /// </summary>
         public List<int> ListTempColor { get; set; } = new List<int>();
-        public List<int> ListIndexBox { get; set; } = new List<int>();
+        public List<RectRotate> ListInsideBox { get; set; } = new List<RectRotate>();
         [field: NonSerialized]
         public List<int> ListIndexBoxBackup { get; set; } = new List<int>();
-        [NonSerialized]
-        public List<BeeCpp.ColorArea> ListColorArea = new List<BeeCpp.ColorArea>();
+        [field: NonSerialized]
+        public List<BeeCpp.ColorArea> ListColorArea  { get; set; } = new List<BeeCpp.ColorArea>();
         public HSV HSV { get; set; }
     }
 

@@ -139,11 +139,11 @@ namespace BeeInterface
         private readonly TableLayoutPanel _row2Flow = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink };
         private readonly TableLayoutPanel _row3Flow = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink };
 
-        private readonly Label _lblFrom = new Label { Text = "From", AutoSize = true, Font = new Font("Arial", 14), Margin = new Padding(2, 6, 2, 2) };
-        private readonly Label _lbDate = new Label { Text = "Date", AutoSize = true, Font = new Font("Arial", 14), Margin = new Padding(2, 6, 2, 2) };
-        private readonly DateTimePicker _dtFrom = new DateTimePicker { Format = DateTimePickerFormat.Time, ShowUpDown = true, Font = new Font("Arial", 14), Width = 130, Dock = DockStyle.Fill };
-        private readonly Label _lblTo = new Label { Text = "To", AutoSize = true, Font = new Font("Arial", 14), Margin = new Padding(2, 6, 2, 2) };
-        private readonly DateTimePicker _dtTo = new DateTimePicker { Format = DateTimePickerFormat.Time, ShowUpDown = true, Font = new Font("Arial", 14), Width = 130, Dock = DockStyle.Fill };
+        private readonly Label _lblFrom = new Label { Text = "Fr", AutoSize = true, Font = new Font("Arial", 10), Margin = new Padding(2, 6, 2, 2) };
+        private readonly Label _lbDate = new Label { Text = "Date", AutoSize = true, Font = new Font("Arial", 10), Margin = new Padding(2, 6, 2, 2) };
+        private readonly DateTimePicker _dtFrom = new DateTimePicker { Format = DateTimePickerFormat.Time, ShowUpDown = false, Font = new Font("Arial", 10), Width = 100, Dock = DockStyle.Fill };
+        private readonly Label _lblTo = new Label { Text = "To", AutoSize = true, Font = new Font("Arial", 12), Margin = new Padding(2, 6, 2, 2) };
+        private readonly DateTimePicker _dtTo = new DateTimePicker { Format = DateTimePickerFormat.Time, ShowUpDown = false, Font = new Font("Arial", 10), Width = 100, Dock = DockStyle.Fill };
 
         private readonly TextBox _tbSearch = new TextBox { BorderStyle = BorderStyle.FixedSingle, Font = new Font("Arial", 14), Dock = DockStyle.Fill };
         private readonly Timer _searchTimer = new Timer { Interval = 300 };

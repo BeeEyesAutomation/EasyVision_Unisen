@@ -96,7 +96,7 @@ namespace BeeInterface
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(450, 1005);
+            this.tabControl1.Size = new System.Drawing.Size(450, 1166);
             this.tabControl1.TabIndex = 18;
             // 
             // tabP1
@@ -108,7 +108,7 @@ namespace BeeInterface
             this.tabP1.Location = new System.Drawing.Point(4, 34);
             this.tabP1.Name = "tabP1";
             this.tabP1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabP1.Size = new System.Drawing.Size(442, 967);
+            this.tabP1.Size = new System.Drawing.Size(442, 1128);
             this.tabP1.TabIndex = 0;
             this.tabP1.Text = "Basic";
             // 
@@ -154,7 +154,7 @@ namespace BeeInterface
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(436, 961);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(436, 1122);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // EditRectRot1
@@ -162,6 +162,7 @@ namespace BeeInterface
             this.EditRectRot1._rotCurrent = null;
             this.EditRectRot1.BackColor = System.Drawing.SystemColors.Control;
             this.EditRectRot1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EditRectRot1.IsHide = false;
             this.EditRectRot1.Location = new System.Drawing.Point(3, 48);
             this.EditRectRot1.Name = "EditRectRot1";
             this.EditRectRot1.rotCurrent = null;
@@ -939,7 +940,7 @@ namespace BeeInterface
             this.tabPage4.Location = new System.Drawing.Point(4, 34);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(442, 967);
+            this.tabPage4.Size = new System.Drawing.Size(442, 1128);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Extension";
             // 
@@ -966,7 +967,7 @@ namespace BeeInterface
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 107F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(436, 961);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(436, 1122);
             this.tableLayoutPanel8.TabIndex = 0;
             this.tableLayoutPanel8.Visible = false;
             // 
@@ -1208,7 +1209,7 @@ namespace BeeInterface
             // 
             this.pInspect.Controls.Add(this.btnTest);
             this.pInspect.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pInspect.Location = new System.Drawing.Point(0, 848);
+            this.pInspect.Location = new System.Drawing.Point(0, 1009);
             this.pInspect.Name = "pInspect";
             this.pInspect.Padding = new System.Windows.Forms.Padding(10);
             this.pInspect.Size = new System.Drawing.Size(450, 100);
@@ -1275,7 +1276,7 @@ namespace BeeInterface
             // 
             this.oK_Cancel1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.oK_Cancel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.oK_Cancel1.Location = new System.Drawing.Point(0, 948);
+            this.oK_Cancel1.Location = new System.Drawing.Point(0, 1109);
             this.oK_Cancel1.Name = "oK_Cancel1";
             this.oK_Cancel1.Size = new System.Drawing.Size(450, 57);
             this.oK_Cancel1.TabIndex = 20;
@@ -1289,7 +1290,7 @@ namespace BeeInterface
             this.Controls.Add(this.tabControl1);
             this.DoubleBuffered = true;
             this.Name = "ToolOCR";
-            this.Size = new System.Drawing.Size(450, 1005);
+            this.Size = new System.Drawing.Size(450, 1166);
             this.tabControl1.ResumeLayout(false);
             this.tabP1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);

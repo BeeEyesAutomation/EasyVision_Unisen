@@ -102,6 +102,7 @@ namespace BeeGlobal
             // center world của src chính là src._PosCenter
             return dst.WorldToLocal(src._PosCenter);
         }
+        public bool IsVisible {get;set;}
         public  bool ContainsPoint(PointF pWorld, float eps = 1e-4f)
         {
             // 1) World -> Local (local gốc tại rr._PosCenter, trục local quay theo rr._rectRotation)
@@ -163,7 +164,7 @@ namespace BeeGlobal
         public PointF[] HexVertexOffsets { get;  set; }   // offsets from default hex (local)
         public List<PointF> PolyLocalPoints { get;  set; } // polygon points (local)
         public bool IsPolygonClosed { get; set; }
-        public bool IsRight = false;
+        public Dir Dir = Dir.None;
         public int ActiveVertexIndex { get; set; }
         [NonSerialized]
         public int NumInside = 0;

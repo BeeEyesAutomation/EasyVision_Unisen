@@ -22,6 +22,9 @@ namespace BeeCore
        
         public float Distance { get; set; }
         public PointF point { get; set; }
+        [NonSerialized]
+        public bool IsArea = false;
+
         public bool IsOK { get; set; }
         public Mat matProcess = null;
         public float PercentColor = 0;

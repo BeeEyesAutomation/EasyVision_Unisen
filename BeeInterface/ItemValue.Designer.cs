@@ -78,13 +78,16 @@
             // 
             // lbValue
             // 
-            this.lbValue.AutoFont = false;
-            this.lbValue.AutoSize = true;
+            this.lbValue.AutoFont = true;
             this.lbValue.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.47559F);
-            this.lbValue.Location = new System.Drawing.Point(318, 16);
+            this.lbValue.EnableHorizontalScroll = false;
+            this.lbValue.EnableVerticalScroll = false;
+            this.lbValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.19922F);
+            this.lbValue.Location = new System.Drawing.Point(318, 19);
+            this.lbValue.MaxFontSize = 200F;
+            this.lbValue.MinFontSize = 6F;
             this.lbValue.Name = "lbValue";
-            this.lbValue.Size = new System.Drawing.Size(99, 29);
+            this.lbValue.Size = new System.Drawing.Size(99, 23);
             this.lbValue.TabIndex = 18;
             this.lbValue.Text = "---";
             this.lbValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -93,10 +96,14 @@
             // 
             this.autoFontLabel4.AutoFont = true;
             this.autoFontLabel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.autoFontLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.467773F);
-            this.autoFontLabel4.Location = new System.Drawing.Point(318, 0);
+            this.autoFontLabel4.EnableHorizontalScroll = false;
+            this.autoFontLabel4.EnableVerticalScroll = false;
+            this.autoFontLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.autoFontLabel4.Location = new System.Drawing.Point(318, 3);
+            this.autoFontLabel4.MaxFontSize = 200F;
+            this.autoFontLabel4.MinFontSize = 6F;
             this.autoFontLabel4.Name = "autoFontLabel4";
-            this.autoFontLabel4.Size = new System.Drawing.Size(99, 16);
+            this.autoFontLabel4.Size = new System.Drawing.Size(99, 10);
             this.autoFontLabel4.TabIndex = 17;
             this.autoFontLabel4.Text = "Value";
             this.autoFontLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -105,10 +112,14 @@
             // 
             this.autoFontLabel3.AutoFont = true;
             this.autoFontLabel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.autoFontLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.467773F);
-            this.autoFontLabel3.Location = new System.Drawing.Point(213, 0);
+            this.autoFontLabel3.EnableHorizontalScroll = false;
+            this.autoFontLabel3.EnableVerticalScroll = false;
+            this.autoFontLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.autoFontLabel3.Location = new System.Drawing.Point(213, 3);
+            this.autoFontLabel3.MaxFontSize = 200F;
+            this.autoFontLabel3.MinFontSize = 6F;
             this.autoFontLabel3.Name = "autoFontLabel3";
-            this.autoFontLabel3.Size = new System.Drawing.Size(99, 16);
+            this.autoFontLabel3.Size = new System.Drawing.Size(99, 10);
             this.autoFontLabel3.TabIndex = 16;
             this.autoFontLabel3.Text = "Address";
             this.autoFontLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -117,10 +128,14 @@
             // 
             this.autoFontLabel2.AutoFont = true;
             this.autoFontLabel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.autoFontLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.467773F);
-            this.autoFontLabel2.Location = new System.Drawing.Point(108, 0);
+            this.autoFontLabel2.EnableHorizontalScroll = false;
+            this.autoFontLabel2.EnableVerticalScroll = false;
+            this.autoFontLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.autoFontLabel2.Location = new System.Drawing.Point(108, 3);
+            this.autoFontLabel2.MaxFontSize = 200F;
+            this.autoFontLabel2.MinFontSize = 6F;
             this.autoFontLabel2.Name = "autoFontLabel2";
-            this.autoFontLabel2.Size = new System.Drawing.Size(99, 16);
+            this.autoFontLabel2.Size = new System.Drawing.Size(99, 10);
             this.autoFontLabel2.TabIndex = 15;
             this.autoFontLabel2.Text = "Tools";
             this.autoFontLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -129,10 +144,14 @@
             // 
             this.autoFontLabel1.AutoFont = true;
             this.autoFontLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.467773F);
-            this.autoFontLabel1.Location = new System.Drawing.Point(3, 0);
+            this.autoFontLabel1.EnableHorizontalScroll = false;
+            this.autoFontLabel1.EnableVerticalScroll = false;
+            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.autoFontLabel1.Location = new System.Drawing.Point(3, 3);
+            this.autoFontLabel1.MaxFontSize = 200F;
+            this.autoFontLabel1.MinFontSize = 6F;
             this.autoFontLabel1.Name = "autoFontLabel1";
-            this.autoFontLabel1.Size = new System.Drawing.Size(99, 16);
+            this.autoFontLabel1.Size = new System.Drawing.Size(99, 10);
             this.autoFontLabel1.TabIndex = 14;
             this.autoFontLabel1.Text = "Type";
             this.autoFontLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

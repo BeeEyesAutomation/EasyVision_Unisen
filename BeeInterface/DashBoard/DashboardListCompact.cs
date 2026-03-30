@@ -821,7 +821,7 @@ namespace BeeInterface
                 if (_chooseActiveIndex != idx)
                 {
                     _chooseActiveIndex = idx;
-                    it.ListIndexBox.Clear();
+                    
                     ChooseAreaBegin?.Invoke(idx, it);
                 }
                 else

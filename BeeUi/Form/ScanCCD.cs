@@ -388,6 +388,8 @@ namespace BeeUi
             TypeCameraNew = TypeCamera.USB;
             //label1.Text = "Resolution";
             cbReSolution.Enabled = true;
+            if (Global.listParaCamera.Count() == 0)
+                Global.listParaCamera.Add(new ParaCamera());
             if (Global.listParaCamera[Global.IndexProgChoose] == null)
             {
                Global.listParaCamera[Global.IndexProgChoose] = new ParaCamera();

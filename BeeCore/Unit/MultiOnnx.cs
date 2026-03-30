@@ -64,6 +64,7 @@ namespace BeeCore
         public RectRotate rotPositionAdjustment;
         public MethordEdge MethordEdge = MethordEdge.CloseEdges;
         public int ThresholdBinary;
+        public int HeightMax = 100;
         public double RansacThreshold = 2.0; // px
         public int RansacIterations = 200;
         public bool IsClose = false;
@@ -580,7 +581,8 @@ namespace BeeCore
 
                 pInsert = InsertLine.pInsert;
                 RectRotate rtReturn = rectPage.Clone();
-            //rtReturn.OffsetPixels(-ExpandPage,- ExpandPage);
+            //rtReturn.OffsetPixels(-Exp
+            //andPage,- ExpandPage);
 
             return rtReturn;
             }
@@ -588,11 +590,41 @@ namespace BeeCore
                 {
                 return new RectRotate(); }
         }
-      
+        public static RectRotate ToLocalRect(RectRotate child, RectRotate parent)
+        {
+            if (child == null || parent == null) return null;
+
+            // đổi tâm từ world sang local của parent
+            PointF localCenter = parent.WorldToLocal(child._PosCenter);
+
+            // góc tương đối
+            float localAngle = child._rectRotation - parent._rectRotation;
+
+            RectRotate rr = child.Clone();
+            rr.Score = child.Score;
+            rr._PosCenter = localCenter;
+            rr._rectRotation = localAngle;
+
+            return rr;
+        }
+        public static List<RectRotate> ToLocalRects(List<RectRotate> listChild, RectRotate parent)
+        {
+            List<RectRotate> result = new List<RectRotate>();
+            if (listChild == null || parent == null) return result;
+
+            foreach (var rr in listChild)
+            {
+               
+                if (rr == null) continue;
+                result.Add(ToLocalRect(rr, parent));
+            }
+
+            return result;
+        }
         public bool IsHardNoise;
         public int ScoreYolo = 10;
         public RectRotate rotOrigin = new RectRotate();
-        public List<ResultItem> CheckBoxOnnx( Mat raw,float Conf )
+        public List<ResultItem> CheckBoxOnnx( Mat raw,float Conf,RectRotate rotCrop)
         {
             List<ResultItem> resultTemp = new List<ResultItem>();
             if(NativeOnnx2==null)
@@ -610,24 +642,51 @@ namespace BeeCore
                 Conf,
                 0.9f,true,
                 OnnxBoxes2);
+                List<RectRotate> rects = new List<RectRotate>();
+                string name = "";
                 foreach (NativeYolo.YoloBox box in OnnxBoxes2)
                 {
                     if (box.score == 0) continue;
-                    string name = "";
+                   
                     if (ListNameOnnx == null)
                         name = "unknown";
                     else
                         name = ListNameOnnx.TryGetValue(box.classId, out var s) ? s : "unknown";
-                    
-                    resultTemp.Add(new BeeCore.ResultItem((name)));
                     RectRotate rot = NativeYolo.YoloBoxToRectRotate(box);
+                    if (rot._rect.Width * rot._rect.Height < minArea)
+                        continue;
+                    if (rot._rect.Height > HeightMax)
+                        continue;
+                    rot.Score= box.score;
+                    rects.Add(rot);
+           
+                    
+                 
+                  
+                    
+                      
+                }
+                List<RectRotate> listRS = ToLocalRects( rects,rotCrop);
+                foreach (RectRotate rot in listRS)
+                {
+
+                    resultTemp.Add(new BeeCore.ResultItem((name)));
                     resultTemp[resultTemp.Count - 1].rot = rot;
-                    resultTemp[resultTemp.Count - 1].Score = (box.score) * 100f;
+                    resultTemp[resultTemp.Count - 1].Score = (rot.Score) * 100f;
                     resultTemp[resultTemp.Count - 1].IsOK = true;
                     resultTemp[resultTemp.Count - 1].Area = rot._rect.Width * rot._rect.Height;
+
                 }
 
             }
+            foreach(ResultItem resultItem in resultTemp)
+            {
+                if (resultItem.Area < minArea)
+                {
+                    resultItem.IsArea = true;
+                } 
+                    
+            }    
             resultTemp.RemoveAll(item => item.Area < minArea);
       //      resultTemp = ResultFilter.FilterRectRotate(resultTemp, 0.6f);
             resultTemp = ResultItemHelper.SortByCenterXY(resultTemp);
@@ -699,7 +758,7 @@ namespace BeeCore
                         // Cv2.ImWrite("Gray.png", matCheckCip);
                     }
                     float conf = (float)((Common.PropetyTools[IndexThread][Index].Score*0.8) / 100.0);
-                    ResultItemChips = CheckBoxOnnx(matCheckCip, conf);
+                    ResultItemChips = CheckBoxOnnx(matCheckCip, conf, rotArea);
 
                    
                   
@@ -1204,10 +1263,13 @@ namespace BeeCore
                                 using (Mat crop1 = CropRoiView(raw, rotRightCalib))
                                 using (Mat Edge = Processing(crop1, MethordEdge, ThreshStrongRight))
                                 {
-
-
+                                    int W1 = Edge.Width;
+                                    int H1 = Edge.Height*2/3;
+                                  //  Cv2.ImWrite("Raw.png", Edge);
+                                    Mat matClear=Filters.ClearNoiseLengh(Edge, H1);
+                                  //  Cv2.ImWrite("Noise.png", matClear);
                                     LineRight = RansacLine.FindBestLine(
-                                        Edge.Data, Edge.Width, Edge.Height, (int)Edge.Step(),
+                                        matClear.Data, matClear.Width, matClear.Height, (int)matClear.Step(),
                                         iterations: RansacIterations,
                                         threshold: (float)RansacThreshold,
                                         maxPoints: 120000,
@@ -1249,7 +1311,7 @@ namespace BeeCore
                     }
                     ResultItemChips = new List<ResultItem>();
 
-                    using (Mat matBlack = Cropper.CropRotatedRect(raw, rectRotate,null))
+                    using (Mat matBlack = CropRoiView(raw, rectRotate))
                     {
 
                         ResultItems = new List<ResultItem>();
@@ -1261,7 +1323,7 @@ namespace BeeCore
 
                             Cv2.CvtColor(matBlack, matBlack, ColorConversionCodes.GRAY2BGR);
                         }
-                        Mat matChip = matBlack.Clone();
+                        Mat matChip = raw.Clone();
                        
                         bool IsBlack = false;
                         Parallel.Invoke(
@@ -1310,7 +1372,8 @@ namespace BeeCore
                                 {
                                     float conf = (float)((Common.PropetyTools[IndexThread][Index].Score ) / 100.0);
                                  
-                                    ResultItemChips = CheckBoxOnnx(matChip, conf);
+                                    ResultItemChips = CheckBoxOnnx(matChip, conf, rectRotate);
+
 
                                     if (ResultMulti.Count() == ResultItemChips.Count())
                                     {
@@ -1398,7 +1461,81 @@ namespace BeeCore
         public String pathChipOnnx = "";
 
         public ModeCalibVisualMatch ModeCalibVisualMatch = ModeCalibVisualMatch.Normal;
+      //  public static List<RectRotate> DrawResultRects_Fast(
+      //Size sz,
+      //List<RectRotate> listRS,
+      //RectRotate rectCrop)
+      //  {
+      //      List<RectRotate> result = new List<RectRotate>();
 
+      //      if (listRS == null || listRS.Count == 0)
+      //          return result;
+
+      //      // 🔥 1. tạo mask
+      //       Mat mat = new Mat(sz.Height, sz.Width, MatType.CV_8UC1, Scalar.Black);
+
+      //      foreach (var rr in listRS)
+      //      {
+      //          if (rr == null) continue;
+
+      //          int x = (int)(rr._PosCenter.X - rr._rect.Width / 2f);
+      //          int y = (int)(rr._PosCenter.Y - rr._rect.Height / 2f);
+      //          int w = (int)rr._rect.Width;
+      //          int h = (int)rr._rect.Height;
+
+      //          if (w <= 0 || h <= 0) continue;
+
+      //          Rect rc = new Rect(x, y, w, h);
+
+      //          // clamp nhanh
+      //          if (rc.X < 0) { rc.Width += rc.X; rc.X = 0; }
+      //          if (rc.Y < 0) { rc.Height += rc.Y; rc.Y = 0; }
+      //          if (rc.Right > sz.Width) rc.Width = sz.Width - rc.X;
+      //          if (rc.Bottom > sz.Height) rc.Height = sz.Height - rc.Y;
+
+      //          if (rc.Width > 0 && rc.Height > 0)
+      //              mat[rc].SetTo(255);   // 🔥 nhanh hơn Rectangle
+      //      }
+
+      //      // 🔥 2. crop
+      //       Mat matCrop = Cropper.CropRotatedRect(mat, rectCrop, null);
+      //      Cv2.ImWrite("Draw.png", matCrop);
+      //      // 🔥 3. connected components (nhanh hơn contour)
+      //       Mat labels = new Mat();
+      //       Mat stats = new Mat();
+      //       Mat centroids = new Mat();
+
+      //      int n = Cv2.ConnectedComponentsWithStats(
+      //          matCrop, labels, stats, centroids,
+      //          PixelConnectivity.Connectivity8,
+      //          MatType.CV_32S);
+
+      //      for (int i = 1; i < n; i++) // bỏ background = 0
+      //      {
+      //          int area = stats.At<int>(i, (int)ConnectedComponentsTypes.Area);
+      //          if (area < 50) continue;
+
+      //          int x = stats.At<int>(i, (int)ConnectedComponentsTypes.Left);
+      //          int y = stats.At<int>(i, (int)ConnectedComponentsTypes.Top);
+      //          int w = stats.At<int>(i, (int)ConnectedComponentsTypes.Width);
+      //          int h = stats.At<int>(i, (int)ConnectedComponentsTypes.Height);
+
+      //          // 👉 center
+      //          float cx = x + w / 2f;
+      //          float cy = y + h / 2f;
+
+      //          RectRotate rr = new RectRotate(
+      //              new RectangleF(-w / 2f, -h / 2f, w, h),
+      //              new PointF(cx, cy),
+      //              0, // ⚠️ CC không có rotation → nhanh hơn nhiều
+      //              AnchorPoint.Center
+      //          );
+
+      //          result.Add(rr);
+      //      }
+
+      //      return result;
+      //  }
         public void DoWork(RectRotate rectRotate, RectRotate rotMask)
         {
             if (Global.IsAutoTemp)

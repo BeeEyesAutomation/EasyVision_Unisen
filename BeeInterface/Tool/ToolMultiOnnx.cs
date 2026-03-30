@@ -678,5 +678,10 @@ namespace BeeInterface
             Propety.ThresholdBinary =(int) Propety.GetAutoBrightSeed();
             AdjBinary.Value= Propety.ThresholdBinary;
         }
+
+        private void AdjH_ValueChanged(float obj)
+        {
+            Propety.HeightMax =(int) AdjH.Value;
+        }
     }
 }

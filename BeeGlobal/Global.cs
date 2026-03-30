@@ -15,7 +15,21 @@ namespace BeeGlobal
 {
     public class Global
     {
-        public static int IndexRotChoose = -1;
+        public static int _IndexRotChoose = -1;
+        public static event Action<int> ChooseRotChage;
+        public static int IndexRotChoose
+        {
+            get => _IndexRotChoose;
+            set
+            {
+                if (_IndexRotChoose != value)
+                {
+                    _IndexRotChoose = value;
+                    ChooseRotChage?.Invoke(_IndexRotChoose); // Gọi event
+                }
+            }
+        }
+
         public static ColorGp ColorGp = ColorGp.HSV;
         public static Color _ColorSample;
         public static event Action<Color> ColorSampleChange;
@@ -62,7 +76,7 @@ namespace BeeGlobal
         //}
         public static event Action<bool> GetColor;
         public static bool IsShutDown;
-        public static List<int> ListIndexChoose=new List<int>();    
+      
         public static dynamic Main=null;
         public static bool _IsDummy = false;
         public static event Action<bool> ChangeDummy;
@@ -382,7 +396,7 @@ namespace BeeGlobal
                 }
             }
         }
-        public static bool IsRight = false;
+        public static Dir Dir = Dir.None;
         public static Rectangle ClientRectangleMain;
      
         public static OpenCvSharp.Point pOrigin = new OpenCvSharp.Point();

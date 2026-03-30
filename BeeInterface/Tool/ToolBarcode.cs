@@ -48,7 +48,7 @@ namespace BeeInterface
                 EditRectRot1.Refresh();
                 EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
                 EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
-
+                EditRectRot1.IsHide = false;
                 this.VisibleChanged += ToolBarcode_VisibleChanged;
                 btnOnSendResult.IsCLick = Propety.IsSendResult;
                 btnOffSendResult.IsCLick =! Propety.IsSendResult;
@@ -87,7 +87,7 @@ namespace BeeInterface
         {
             if (!this.Visible)
             {
-
+                EditRectRot1.IsHide = true;
                 EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             }
         }

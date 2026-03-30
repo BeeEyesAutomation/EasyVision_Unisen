@@ -45,7 +45,7 @@ namespace BeeInterface
             EditRectRot1.Refresh();
             EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
-
+            EditRectRot1.IsHide = false;
             this.VisibleChanged += ToolVisualMatch_VisibleChanged;
             imgTemp.Cursor = Cursors.Hand;
             imgTemp.AllowClickZoom = true;
@@ -112,7 +112,7 @@ namespace BeeInterface
         {
             if (!this.Visible)
             {
-
+                EditRectRot1.IsHide = true;
                 EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             }
         }

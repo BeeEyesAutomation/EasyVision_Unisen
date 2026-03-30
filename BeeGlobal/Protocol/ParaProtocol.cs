@@ -566,7 +566,8 @@ namespace BeeGlobal
 
                                     if (Global.StatusProcessing == StatusProcessing.None)
                                     {
-                                        if (AddProgress != null)
+                                        
+                                            if (AddProgress != null)
                                             if (AddProgress != "")
                                                 ValueProgress = PlcClient.ReadInt(AddProgress);
                                         if (GetInPut(I_O_Input.Live) == true && !IsPressLive)
@@ -623,6 +624,18 @@ namespace BeeGlobal
 
                                             WriteInput(I_O_Input.ResetQty, false);
                                             Global.Config.SumOK = 0;
+                                            Global.Config.SumNG = 0;
+                                            Global.Config.SumTime = 0;
+                                            ValueQty = 0;
+
+
+                                        }
+                                        if (GetInPut(I_O_Input.ResetImg) == true)
+                                        {
+
+
+                                            WriteInput(I_O_Input.ResetImg, false);
+                                            Global.StatusProcessing = StatusProcessing.ResetImg;
                                             Global.Config.SumNG = 0;
                                             Global.Config.SumTime = 0;
                                             ValueQty = 0;

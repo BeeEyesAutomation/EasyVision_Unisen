@@ -34,6 +34,7 @@ namespace BeeInterface
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BtnHeaderBar));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnHelp = new BeeInterface.RJButton();
             this.btnQuickSetting = new BeeInterface.RJButton();
             this.btncheck = new BeeInterface.RJButton();
             this.btnSetting = new BeeInterface.RJButton();
@@ -44,12 +45,14 @@ namespace BeeInterface
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 5;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.06265F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.81203F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.06265F));
+            this.tableLayoutPanel1.ColumnCount = 6;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.06265F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.btnHelp, 5, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnQuickSetting, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.btncheck, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnSetting, 4, 0);
@@ -63,6 +66,64 @@ namespace BeeInterface
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(648, 53);
             this.tableLayoutPanel1.TabIndex = 36;
+            // 
+            // btnHelp
+            // 
+            this.btnHelp.AutoFont = true;
+            this.btnHelp.AutoFontHeightRatio = 0.85F;
+            this.btnHelp.AutoFontMax = 100F;
+            this.btnHelp.AutoFontMin = 10F;
+            this.btnHelp.AutoFontWidthRatio = 1F;
+            this.btnHelp.AutoImage = true;
+            this.btnHelp.AutoImageMaxRatio = 0.85F;
+            this.btnHelp.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnHelp.AutoImageTint = true;
+            this.btnHelp.BackColor = System.Drawing.Color.White;
+            this.btnHelp.BackgroundColor = System.Drawing.Color.White;
+            this.btnHelp.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnHelp.BackgroundImage")));
+            this.btnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnHelp.BorderColor = System.Drawing.Color.White;
+            this.btnHelp.BorderRadius = 5;
+            this.btnHelp.BorderSize = 1;
+            this.btnHelp.ClickBotColor = System.Drawing.Color.White;
+            this.btnHelp.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnHelp.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnHelp.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnHelp.Corner = BeeGlobal.Corner.None;
+            this.btnHelp.DebounceResizeMs = 16;
+            this.btnHelp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnHelp.FlatAppearance.BorderSize = 0;
+            this.btnHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnHelp.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnHelp.ForeColor = System.Drawing.Color.Black;
+            this.btnHelp.Image = global::BeeInterface.Properties.Resources.Help;
+            this.btnHelp.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnHelp.ImageDisabled = null;
+            this.btnHelp.ImageHover = null;
+            this.btnHelp.ImageNormal = null;
+            this.btnHelp.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnHelp.ImagePressed = null;
+            this.btnHelp.ImageTextSpacing = 2;
+            this.btnHelp.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnHelp.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnHelp.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnHelp.ImageTintOpacity = 0.5F;
+            this.btnHelp.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnHelp.IsCLick = false;
+            this.btnHelp.IsNotChange = true;
+            this.btnHelp.IsRect = false;
+            this.btnHelp.IsTouch = false;
+            this.btnHelp.IsUnGroup = true;
+            this.btnHelp.Location = new System.Drawing.Point(581, 0);
+            this.btnHelp.Margin = new System.Windows.Forms.Padding(0);
+            this.btnHelp.Multiline = false;
+            this.btnHelp.Name = "btnHelp";
+            this.btnHelp.Size = new System.Drawing.Size(67, 53);
+            this.btnHelp.TabIndex = 41;
+            this.btnHelp.TextColor = System.Drawing.Color.Black;
+            this.btnHelp.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnHelp.UseVisualStyleBackColor = false;
+            this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
             // 
             // btnQuickSetting
             // 
@@ -110,7 +171,7 @@ namespace BeeInterface
             this.btnQuickSetting.IsRect = false;
             this.btnQuickSetting.IsTouch = false;
             this.btnQuickSetting.IsUnGroup = true;
-            this.btnQuickSetting.Location = new System.Drawing.Point(388, 0);
+            this.btnQuickSetting.Location = new System.Drawing.Point(339, 0);
             this.btnQuickSetting.Margin = new System.Windows.Forms.Padding(0);
             this.btnQuickSetting.Multiline = false;
             this.btnQuickSetting.Name = "btnQuickSetting";
@@ -169,11 +230,11 @@ namespace BeeInterface
             this.btncheck.IsRect = false;
             this.btncheck.IsTouch = false;
             this.btncheck.IsUnGroup = true;
-            this.btncheck.Location = new System.Drawing.Point(130, 0);
+            this.btncheck.Location = new System.Drawing.Point(113, 0);
             this.btncheck.Margin = new System.Windows.Forms.Padding(0);
             this.btncheck.Multiline = false;
             this.btncheck.Name = "btncheck";
-            this.btncheck.Size = new System.Drawing.Size(128, 53);
+            this.btncheck.Size = new System.Drawing.Size(113, 53);
             this.btncheck.TabIndex = 39;
             this.btncheck.Text = "Update";
             this.btncheck.TextColor = System.Drawing.Color.Black;
@@ -208,7 +269,7 @@ namespace BeeInterface
             this.btnSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSetting.FlatAppearance.BorderSize = 0;
             this.btnSetting.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.35156F);
             this.btnSetting.ForeColor = System.Drawing.Color.Black;
             this.btnSetting.Image = global::BeeInterface.Properties.Resources.Support;
             this.btnSetting.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -228,11 +289,11 @@ namespace BeeInterface
             this.btnSetting.IsRect = false;
             this.btnSetting.IsTouch = false;
             this.btnSetting.IsUnGroup = true;
-            this.btnSetting.Location = new System.Drawing.Point(517, 0);
+            this.btnSetting.Location = new System.Drawing.Point(468, 0);
             this.btnSetting.Margin = new System.Windows.Forms.Padding(0);
             this.btnSetting.Multiline = false;
             this.btnSetting.Name = "btnSetting";
-            this.btnSetting.Size = new System.Drawing.Size(131, 53);
+            this.btnSetting.Size = new System.Drawing.Size(113, 53);
             this.btnSetting.TabIndex = 35;
             this.btnSetting.Text = "Settings";
             this.btnSetting.TextColor = System.Drawing.Color.Black;
@@ -267,7 +328,7 @@ namespace BeeInterface
             this.btnReport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnReport.FlatAppearance.BorderSize = 0;
             this.btnReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.05469F);
+            this.btnReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.35156F);
             this.btnReport.ForeColor = System.Drawing.Color.Black;
             this.btnReport.Image = global::BeeInterface.Properties.Resources.Report;
             this.btnReport.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -287,11 +348,11 @@ namespace BeeInterface
             this.btnReport.IsRect = false;
             this.btnReport.IsTouch = false;
             this.btnReport.IsUnGroup = true;
-            this.btnReport.Location = new System.Drawing.Point(258, 0);
+            this.btnReport.Location = new System.Drawing.Point(226, 0);
             this.btnReport.Margin = new System.Windows.Forms.Padding(0);
             this.btnReport.Multiline = false;
             this.btnReport.Name = "btnReport";
-            this.btnReport.Size = new System.Drawing.Size(130, 53);
+            this.btnReport.Size = new System.Drawing.Size(113, 53);
             this.btnReport.TabIndex = 34;
             this.btnReport.Text = "Report";
             this.btnReport.TextColor = System.Drawing.Color.Black;
@@ -326,7 +387,7 @@ namespace BeeInterface
             this.btnUser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnUser.FlatAppearance.BorderSize = 0;
             this.btnUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.05469F);
+            this.btnUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.35156F);
             this.btnUser.ForeColor = System.Drawing.Color.Black;
             this.btnUser.Image = global::BeeInterface.Properties.Resources.User;
             this.btnUser.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -350,7 +411,7 @@ namespace BeeInterface
             this.btnUser.Margin = new System.Windows.Forms.Padding(0);
             this.btnUser.Multiline = false;
             this.btnUser.Name = "btnUser";
-            this.btnUser.Size = new System.Drawing.Size(130, 53);
+            this.btnUser.Size = new System.Drawing.Size(113, 53);
             this.btnUser.TabIndex = 32;
             this.btnUser.Text = "Account";
             this.btnUser.TextColor = System.Drawing.Color.Black;
@@ -380,5 +441,6 @@ namespace BeeInterface
         public RJButton btnReport;
         public RJButton btncheck;
         public RJButton btnQuickSetting;
+        public RJButton btnHelp;
     }
 }

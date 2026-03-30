@@ -1,6 +1,7 @@
 ﻿using BeeCore;
 using BeeGlobal;
 using BeeInterface;
+using BeeInterface.Group;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using OpenCvSharp.Flann;
@@ -34,6 +35,7 @@ namespace BeeInterface
             {
                 imgTemp.Image = Propety.bmRaw;
             }
+            EditRectRot1.IsHide = false;
             EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotCrop, Propety.rotMask };
             EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
@@ -167,7 +169,7 @@ namespace BeeInterface
         {
             if (!this.Visible)
             {
-               
+                EditRectRot1.IsHide = true;
                 EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             }
         }
@@ -609,10 +611,7 @@ namespace BeeInterface
             Propety.StepAngle = (int)AdjStepAngle.Value;
         }
 
-        private void btn1_Click(object sender, EventArgs e)
-        {
-            lay1.Visible = !btn1.IsCLick;
-        }
+     
 
         private void btn2_Click(object sender, EventArgs e)
         {

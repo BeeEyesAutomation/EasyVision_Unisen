@@ -228,6 +228,10 @@ namespace BeeInterface
                                 Global.pShowTool.Y += item.Height + 10;
 
                                 tool.ItemTool = item;
+                                if (tool.TypeTool == TypeTool.Learning)
+                                {
+                                    tool.ItemTool.NotChange = true;
+                                }
                                 tool.Control = control;
                             }
                           //  LoadPropety(control);

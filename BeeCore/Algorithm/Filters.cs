@@ -1040,6 +1040,95 @@ namespace BeeCore.Algorithm
             //Cv2.MorphologyEx(clean, clean, MorphTypes.Open, kernel, iterations: 1);
             
         }
+        public static Mat ClearNoiseByWidth(Mat edges, int minWidth = 10)
+        {
+            if (edges == null || edges.Empty())
+                return new Mat();
+
+            Mat labels = new Mat();
+            Mat stats = new Mat();
+            Mat centroids = new Mat();
+
+            try
+            {
+                int num = Cv2.ConnectedComponentsWithStats(
+                    edges,
+                    labels,
+                    stats,
+                    centroids,
+                    PixelConnectivity.Connectivity8,
+                    MatType.CV_32S);
+
+                Mat clean = Mat.Zeros(edges.Size(), MatType.CV_8U);
+
+                for (int i = 1; i < num; i++) // bỏ background
+                {
+                    int width = stats.At<int>(i, (int)ConnectedComponentsTypes.Width);
+
+                    if (width >= minWidth)
+                    {
+                        using (Mat mask = new Mat())
+                        {
+                            Cv2.Compare(labels, i, mask, CmpType.EQ);
+                            clean.SetTo(255, mask);
+                        }
+                    }
+                }
+
+                return clean;
+            }
+            finally
+            {
+                labels.Dispose();
+                stats.Dispose();
+                centroids.Dispose();
+            }
+        }
+        public static Mat ClearNoiseLengh(Mat edges, int minCompLength = 50)
+        {
+            if (edges == null || edges.Empty())
+                return new Mat();
+
+            Mat labels = new Mat();
+            Mat stats = new Mat();
+            Mat centroids = new Mat();
+
+            try
+            {
+                int num = Cv2.ConnectedComponentsWithStats(
+                    edges,
+                    labels,
+                    stats,
+                    centroids,
+                    PixelConnectivity.Connectivity8,
+                    MatType.CV_32S);
+
+                Mat clean = Mat.Zeros(edges.Size(), MatType.CV_8U);
+
+                for (int i = 1; i < num; i++) // bỏ background
+                {
+                    int width = stats.At<int>(i, (int)ConnectedComponentsTypes.Width);
+                    int height = stats.At<int>(i, (int)ConnectedComponentsTypes.Height);
+
+                    if (Math.Max(width, height) >= minCompLength)
+                    {
+                        using (Mat mask = new Mat())
+                        {
+                            Cv2.Compare(labels, i, mask, CmpType.EQ); // nhanh hơn InRange
+                            clean.SetTo(255, mask);
+                        }
+                    }
+                }
+
+                return clean;
+            }
+            finally
+            {
+                labels.Dispose();
+                stats.Dispose();
+                centroids.Dispose();
+            }
+        }
         // true = erode, false = dilate
         public static ImageFilter ErodeDilate(bool erode, Size ksize, int iterations = 1) =>
             delegate (Mat src, Mat dst)

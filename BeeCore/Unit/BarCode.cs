@@ -634,10 +634,12 @@ namespace BeeCore
         public async Task SendResult()
         {
             if (IsSendResult)
-            {
-               if( Global.Comunication.Protocol.IsConnected)
+            {if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.OK)
                 {
-                  await  Global.Comunication.Protocol.WriteResultString(AddPLC, ContentQR);
+                    if (Global.Comunication.Protocol.IsConnected)
+                    {
+                        await Global.Comunication.Protocol.WriteResultString(AddPLC, ContentQR);
+                    }
                 }
             }
         }

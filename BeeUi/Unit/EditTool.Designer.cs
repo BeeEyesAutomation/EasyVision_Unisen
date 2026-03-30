@@ -689,7 +689,7 @@ namespace BeeUi
             this.btnRJBtn.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnRJBtn.FlatAppearance.BorderSize = 0;
             this.btnRJBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRJBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.btnRJBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.07813F);
             this.btnRJBtn.ForeColor = System.Drawing.Color.Black;
             this.btnRJBtn.Image = null;
             this.btnRJBtn.ImageDisabled = null;
@@ -708,12 +708,12 @@ namespace BeeUi
             this.btnRJBtn.IsRect = false;
             this.btnRJBtn.IsTouch = false;
             this.btnRJBtn.IsUnGroup = true;
-            this.btnRJBtn.Location = new System.Drawing.Point(1432, 0);
+            this.btnRJBtn.Location = new System.Drawing.Point(1377, 0);
             this.btnRJBtn.Multiline = false;
             this.btnRJBtn.Name = "btnRJBtn";
-            this.btnRJBtn.Size = new System.Drawing.Size(63, 51);
+            this.btnRJBtn.Size = new System.Drawing.Size(118, 51);
             this.btnRJBtn.TabIndex = 15;
-            this.btnRJBtn.Text = "Bàn Phím";
+            this.btnRJBtn.Text = "KeyBoard";
             this.btnRJBtn.TextColor = System.Drawing.Color.Black;
             this.btnRJBtn.UseVisualStyleBackColor = false;
             this.btnRJBtn.Click += new System.EventHandler(this.btnRJBtn_Click);

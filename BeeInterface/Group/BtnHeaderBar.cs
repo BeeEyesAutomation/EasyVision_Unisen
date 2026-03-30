@@ -3,15 +3,19 @@ using BeeCore.Funtion;
 using BeeGlobal;
 using BeeInterface;
 using BeeUi;
+using Google.Apis.Drive.v3.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using File = System.IO.File;
 
 namespace BeeInterface
 {
@@ -157,6 +161,19 @@ namespace BeeInterface
         {
             if(Global.Config!=null)
           btnQuickSetting.Visible = Global.Config.IsQuickST;
+        }
+
+        private void btnHelp_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (File.Exists("doc.pdf"))
+                    Process.Start("doc.pdf");
+            }
+            catch (Exception ex)
+            {
+            }
+          
         }
     }
 }

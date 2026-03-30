@@ -22,6 +22,10 @@ namespace BeeGlobal
         public int Count;
         public List<Point2f> RunPts;
     }
+    public enum Dir
+    {
+        Left,Top,Right,Bottom,None
+    }
     public enum CornerAdj
     {
         Bottom, Left, Right, Top, MidBotRight
@@ -205,7 +209,7 @@ namespace BeeGlobal
         Light1,
         Light2,
         Light3,
-        Alive, Dummy, Training, ResetQty,EStop
+        Alive, Dummy, Training, ResetQty,EStop,ResetImg
     }
     public enum ValueInput
     {
