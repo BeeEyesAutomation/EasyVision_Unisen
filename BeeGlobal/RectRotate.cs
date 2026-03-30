@@ -189,6 +189,7 @@ namespace BeeGlobal
         protected RectRotate(RectRotate clone)
         {   Name=clone.Name;
             TypeCrop = clone.TypeCrop;
+            Dir = clone.Dir;
             _rect = clone._rect;
             _PosCenter = clone._PosCenter;
             _rectRotation = clone._rectRotation;

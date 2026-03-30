@@ -280,7 +280,7 @@ namespace BeeInterface.Group
             Rot[index].IsWhite = !btnBlack.IsCLick;
           
         }
-        public void Refresh()
+        public void Refresh(bool IsIni=false)
         {
             if (Rot == null)
                 return;
@@ -298,7 +298,7 @@ namespace BeeInterface.Group
             btnRect.IsCLick = _rotCurrent.Shape == ShapeType.Rectangle ? true : false;
             btnHexagon.IsCLick = _rotCurrent.Shape == ShapeType.Hexagon ? true : false;
             btnPolygon.IsCLick = _rotCurrent.Shape == ShapeType.Polygon ? true : false;
-            if (this.layType.Controls.Count < CountType)
+            if (this.layType.Controls.Count < CountType|| IsIni)
             {
             
 
@@ -314,7 +314,9 @@ namespace BeeInterface.Group
                 {
                     this.layType.ColumnStyles.RemoveAt(i);
                 }
-
+                if(this.Controls.Count > 0) 
+                this.layType.Controls.Clear();
+               
                 this.layType.ColumnCount = 0;
 
                 this.layType.ResumeLayout();
@@ -325,7 +327,7 @@ namespace BeeInterface.Group
              
                 for (int i = 0; i < CountType; i++)
                 {
-                    if (!Rot[i].IsVisible) continue;
+                   
                     RJButton btn = new RJButton();
                     btn.AutoFont = true;
                     btn.AutoFontHeightRatio = 0.75F;
@@ -351,7 +353,7 @@ namespace BeeInterface.Group
                     // btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                     btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60938F);
                     btn.ForeColor = System.Drawing.Color.Black;
-
+                    btn.Enabled =! Rot[i].IsVisible;
                     btn.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
                     btn.ImageTintHover = System.Drawing.Color.Empty;
                     btn.ImageTintNormal = System.Drawing.Color.Empty;

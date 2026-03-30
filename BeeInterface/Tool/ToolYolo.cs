@@ -61,7 +61,7 @@ namespace BeeInterface
         {
             try
             {
-                Propety.rotCrop.IsVisible = Propety.IsLine;
+                Propety.rotCrop.IsVisible =! Propety.IsLine;
                 EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea , Propety.rotCrop, Propety.rotMask, Propety.rotLimit };
                 EditRectRot1.RotateCurentChanged -= EditRectRot_RotateCurentChanged;
                 EditRectRot1.RotateCurentChanged += EditRectRot_RotateCurentChanged;
@@ -249,7 +249,10 @@ namespace BeeInterface
         {if (obj == -1) return;
             if (Propety.rotLimit != null)
             {
+                Dir Dir= Propety.listRotScan[obj].Dir;
+                Propety.rotLimit.Dir = Dir;
                 RectRotate rot = Propety.rotLimit.Clone();
+
                 PointF pCenter = Propety.rotArea.WorldToLocal(rot._PosCenter);
                 rot._PosCenter = pCenter;
                 if(obj < Propety.listRotScan.Count())
@@ -1921,7 +1924,10 @@ namespace BeeInterface
             laySetLine.Visible = Propety.IsLine;
             laySetLine2.Visible = Propety.IsLine;
             laySetLine3.Visible = Propety.IsLine;
-            EditRectRot1.Refresh();
+            Propety.rotCrop.IsVisible =! Propety.IsLine;
+            if (EditRectRot1.Rot.Count>0)
+            EditRectRot1.Rot[1].IsVisible = Propety.rotCrop.IsVisible;
+            EditRectRot1.Refresh(true);
         }
 
         private void tnOffLine_Click(object sender, EventArgs e)
@@ -1931,7 +1937,10 @@ namespace BeeInterface
             laySetLine.Visible = Propety.IsLine;
             laySetLine2.Visible = Propety.IsLine;
             laySetLine3.Visible = Propety.IsLine;
-            EditRectRot1.Refresh();
+            Propety.rotCrop.IsVisible = !Propety.IsLine;
+            if (EditRectRot1.Rot.Count > 0)
+                EditRectRot1.Rot[1].IsVisible = Propety.rotCrop.IsVisible;
+            EditRectRot1.Refresh(true);
         }
 
         private void btnSetThreshLine_Click(object sender, EventArgs e)

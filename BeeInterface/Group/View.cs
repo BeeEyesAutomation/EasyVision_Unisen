@@ -606,7 +606,7 @@ namespace BeeInterface
                                     rot2._rectRotation = rotArea._rectRotation + rot2._rectRotation;
 
 
-                                    rot2.Dir = Global.Dir;
+                                   // rot2.Dir = Global.Dir;
                                     rot2.TypeCrop = Global.rotCurrent.TypeCrop;
                                     Global.rotCurrent = rot2;
 
@@ -642,10 +642,12 @@ namespace BeeInterface
                             rot._dragAnchor = AnchorPoint.Center;
                             rot.Name = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.NameChoose;
                         }
-                        Global.IndexRotChoose = -1;
-                        Global.IndexRotChoose = IndexRotChoose;
+
+
                         // BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.SetMulTemp();
                     }
+                    Global.IndexRotChoose = -1;
+                    Global.IndexRotChoose = IndexRotChoose;
                     imgView.Invalidate();
                     return;
                 }

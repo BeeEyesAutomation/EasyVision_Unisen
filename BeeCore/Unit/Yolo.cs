@@ -1351,16 +1351,20 @@ namespace BeeCore
             float halfW = scan._rect.Width / 2f;
 
             // clamp tránh lỗi âm
-            float x =pLocal.X;
+            float left = pLocal.X - obj._rect.Width / 2;
+            float right = pLocal.X + obj._rect.Width / 2;
+            int deltaL = (int)left;
+            int deltaR =(int)Math.Abs( scan._rect.Width - right);
             bool IsRS = false;
             switch(Dir)
             {
                 case Dir.Left:
-                    if (x < halfW) IsRS= true;
+                    
+                    if (deltaL < deltaR) IsRS= true;
                     else  IsRS =false;
                     break;
                  case Dir.Right:
-                    if (x > halfW) IsRS= true;
+                    if (deltaL > deltaR) IsRS= true;
                    else IsRS= false;
                     break;
                 default:

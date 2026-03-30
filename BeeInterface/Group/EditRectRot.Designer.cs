@@ -1023,7 +1023,7 @@
             this.numH.TextboxSidePadding = 10;
             this.numH.TextboxWidth = 56;
             this.numH.UnitText = "";
-            this.numH.Value = 10F;
+            this.numH.Value = 0F;
             this.numH.WheelStep = 1F;
             // 
             // numW
@@ -1058,7 +1058,7 @@
             this.numW.TextboxSidePadding = 10;
             this.numW.TextboxWidth = 56;
             this.numW.UnitText = "";
-            this.numW.Value = 10F;
+            this.numW.Value = 0F;
             this.numW.WheelStep = 1F;
             // 
             // label15
