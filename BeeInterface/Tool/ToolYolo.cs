@@ -229,8 +229,13 @@ namespace BeeInterface
         private void EditRectRot1_UnoRotEvent(bool obj)
         {
             if (Propety.listRotScan.Count > 0)
-                Propety.listRotScan.RemoveAt(Propety.listRotScan.Count-1);
+            {
+                Propety.listRotScan.RemoveAt(Propety.listRotScan.Count - 1);
+                if(_currentLabel.ListInsideBox.Count>0)
+                _currentLabel.ListInsideBox.RemoveAt(_currentLabel.ListInsideBox.Count - 1);
 
+            }    
+            
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
           
@@ -240,6 +245,8 @@ namespace BeeInterface
         {
             if (Propety.listRotScan.Count > 0)
                 Propety.listRotScan.Clear();
+         
+            _currentLabel.ListInsideBox.Clear();
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
            
@@ -256,7 +263,21 @@ namespace BeeInterface
                 PointF pCenter = Propety.rotArea.WorldToLocal(rot._PosCenter);
                 rot._PosCenter = pCenter;
                 if(obj < Propety.listRotScan.Count())
-                Propety.listRotScan[obj] = rot;
+                {
+                    Propety.listRotScan[obj] = rot;
+                    foreach (RectRotate rot1 in Propety.listRotScan)
+                    {
+                        rot1.Name = "";
+                    }
+                        foreach (LabelItem labelItem in Propety.labelItems)
+                    {
+                        if (labelItem.ListInsideBox != null)
+                            labelItem.ListInsideBox.Clear();
+                    }    
+                      
+                 
+                }    
+              
                 
 
             }
