@@ -60,7 +60,7 @@ namespace BeeInterface
         public void LoadPara()
         {
             try
-            {
+            {if(Propety.rotCrop!=null)
                 Propety.rotCrop.IsVisible =! Propety.IsLine;
                 EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea , Propety.rotCrop, Propety.rotMask, Propety.rotLimit };
                 EditRectRot1.RotateCurentChanged -= EditRectRot_RotateCurentChanged;
@@ -72,6 +72,8 @@ namespace BeeInterface
                 EditRectRot1.AddRotEvent += EditRectRot1_AddRotEvent;
                 EditRectRot1.IsHide = false;
                 this.VisibleChanged += ToolYolo_VisibleChanged;
+                btnCLAll.IsCLick = Propety.IsColorAllObjLabel;
+                btnClOne.IsCLick=!Propety.IsColorAllObjLabel;
                 EditRectRot1.Refresh();
                 btnNone.IsCLick = Global.Dir == Dir.None ? true : false;
                 btnLeft.IsCLick = Global.Dir == Dir.Left ? true : false;
@@ -2247,6 +2249,16 @@ namespace BeeInterface
         private void btnNone_Click(object sender, EventArgs e)
         {
             Global.Dir=Dir.None;
+        }
+
+        private void btnCLAll_Click(object sender, EventArgs e)
+        {
+            Propety.IsColorAllObjLabel = true;
+        }
+
+        private void lbClOne_Click(object sender, EventArgs e)
+        {
+            Propety.IsColorAllObjLabel = false;
         }
     }
 }

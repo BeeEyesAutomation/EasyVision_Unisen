@@ -775,6 +775,8 @@ namespace BeeCore
 
                             if (matCrop.Type() == MatType.CV_8UC1)
                                 Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                            if (NativeOnnx == null)
+                                return;
                             int countDetect = NativeOnnx.Detect(
                             matCrop.Data,
                             matCrop.Width,
@@ -1483,7 +1485,7 @@ namespace BeeCore
                         //--------------------------------
                         // KHÔNG CÓ SCAN BOX
                         //--------------------------------
-                        if (item.ListInsideBox == null)
+                        if (item.ListInsideBox == null||item.ListInsideBox.Count==0)
                         {
                             var objs = ResultItem
                                 .Where(x => x.rot != null &&

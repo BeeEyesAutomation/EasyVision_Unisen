@@ -42,6 +42,12 @@ private:
         float scale, int padw, int padh,
         int imgW, int imgH,
         std::vector<YoloBox>& out);
+    void DecodeYoloAuto(
+        const ov::Tensor& t,
+        float conf,
+        float scale, int padw, int padh,
+        int imgW, int imgH,
+        std::vector<YoloBox>& out);
     void DecodeDetectionOutput(
         const ov::Tensor& t,
         float conf,

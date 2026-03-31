@@ -461,7 +461,132 @@ void OpenVinoYoloHP::DecodeYolo(
         out.push_back({ x1, y1, x2, y2, score, 0 });
     }
 }
+void OpenVinoYoloHP::DecodeYoloAuto(
+    const ov::Tensor& t,
+    float conf,
+    float scale, int padw, int padh,
+    int imgW, int imgH,
+    std::vector<YoloBox>& out)
+{
+    out.clear();
 
+#pragma warning(push)
+#pragma warning(disable:4996)
+    const float* data = t.data<const float>();
+#pragma warning(pop)
+
+    const auto shape = t.get_shape();
+    if (shape.size() != 3) return;
+
+    // Có thể là [1,C,N] hoặc [1,N,C]
+    int d1 = (int)shape[1];
+    int d2 = (int)shape[2];
+
+    bool is_C_N = (d1 >= 5 && d1 <= 512 && d2 > d1); // ví dụ [1,5,21504]
+    bool is_N_C = (d2 >= 5 && d2 <= 512 && d1 > d2); // ví dụ [1,21504,5]
+
+    auto push_box = [&](float cx, float cy, float bw, float bh, float score, int cls)
+        {
+            if (score < conf) return;
+
+            float x1 = (cx - bw * 0.5f - padw) / scale;
+            float y1 = (cy - bh * 0.5f - padh) / scale;
+            float x2 = (cx + bw * 0.5f - padw) / scale;
+            float y2 = (cy + bh * 0.5f - padh) / scale;
+
+            clamp_box(x1, y1, x2, y2, imgW, imgH);
+            out.push_back({ x1, y1, x2, y2, score, cls });
+        };
+
+    if (is_C_N)
+    {
+        int C = d1;
+        int N = d2;
+
+        if (C < 5) return;
+
+        const float* cx = data + 0 * N;
+        const float* cy = data + 1 * N;
+        const float* w = data + 2 * N;
+        const float* h = data + 3 * N;
+
+        if (C == 5)
+        {
+            // 1 class
+            const float* sc = data + 4 * N;
+            for (int i = 0; i < N; i++)
+                push_box(cx[i], cy[i], w[i], h[i], sc[i], 0);
+        }
+        else
+        {
+            // multi-class: [cx,cy,w,h,obj,cls1,cls2,...]
+            const float* obj = data + 4 * N;
+            int clsCount = C - 5;
+
+            for (int i = 0; i < N; i++)
+            {
+                float bestClsScore = 0.f;
+                int bestCls = 0;
+
+                for (int c = 0; c < clsCount; c++)
+                {
+                    float s = data[(5 + c) * N + i];
+                    if (s > bestClsScore)
+                    {
+                        bestClsScore = s;
+                        bestCls = c;
+                    }
+                }
+
+                float score = obj[i] * bestClsScore;
+                push_box(cx[i], cy[i], w[i], h[i], score, bestCls);
+            }
+        }
+    }
+    else if (is_N_C)
+    {
+        int N = d1;
+        int C = d2;
+
+        if (C < 5) return;
+
+        for (int i = 0; i < N; i++)
+        {
+            const float* p = data + (size_t)i * C;
+
+            float cx = p[0];
+            float cy = p[1];
+            float bw = p[2];
+            float bh = p[3];
+
+            if (C == 5)
+            {
+                push_box(cx, cy, bw, bh, p[4], 0);
+            }
+            else
+            {
+                float obj = p[4];
+                int clsCount = C - 5;
+
+                float bestClsScore = 0.f;
+                int bestCls = 0;
+
+                for (int c = 0; c < clsCount; c++)
+                {
+                    float s = p[5 + c];
+                    if (s > bestClsScore)
+                    {
+                        bestClsScore = s;
+                        bestCls = c;
+                    }
+                }
+
+                float score = obj * bestClsScore;
+                push_box(cx, cy, bw, bh, score, bestCls);
+            }
+        }
+    }
+}
 void OpenVinoYoloHP::Detect(const cv::Mat& bgr, float conf, float iou, bool Is3, std::vector<YoloBox>& out)
 {
     //BeeLog::Timer tAll("Detect");
@@ -509,12 +634,23 @@ void OpenVinoYoloHP::Detect(const cv::Mat& bgr, float conf, float iou, bool Is3,
     //    s += "]";
     //  //  BeeLog::Write(BeeLog::Level::Info, s);
     //}
+    auto shp = outTensor.get_shape();
 
+    if (shp.size() == 3 && shp[2] == 6)
     {
-        if(! Is3)
-        DecodeYolo(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);
-        else
-          DecodeDetectionOutput(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);
+        // DetectionOutput format
+        DecodeDetectionOutput(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);
+    }
+    else
+    {
+        // YOLO raw
+        DecodeYoloAuto(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);
+    }
+    {
+      //  if(! Is3)
+          //  DecodeYoloAuto(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);
+        //else
+      //   DecodeDetectionOutput(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);
 
       //  BeeLog::Timer t5("Decode");
      //   DecodeDetectionOutput(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);

@@ -103,10 +103,19 @@ namespace BeeCore
         public Color clShow;
         public void SetModel()
         {
-           
-            if (rotArea == null) rotArea = new RectRotate();
 
-            rotCrop = null;
+            if (rotArea == null) rotArea = new RectRotate();
+           
+            if (rotMask == null) rotMask = new RectRotate();
+
+          
+
+
+            rotMask.Name = "Area Mask";
+            rotMask.TypeCrop = TypeCrop.Mask;
+
+            rotArea.Name = "Area Check";
+            rotArea.TypeCrop = TypeCrop.Area;
             ColorAreaPP = new BeeCpp.ColorArea();
             SetColor();
             Common.PropetyTools[IndexThread][Index].StepValue = 1f;
