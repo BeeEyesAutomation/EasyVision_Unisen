@@ -18,7 +18,7 @@
     <None Include="$(AppLogoIco)" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="OpenVinoYoloHP.cpp">
+    <ClCompile Include="OpenVinoRCNNHP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="YoloNativeExport.cpp">
@@ -29,7 +29,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="OpenVinoYoloHP.h">
+    <ClInclude Include="OpenVinoRCNNHP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="YoloNativeExport.h">

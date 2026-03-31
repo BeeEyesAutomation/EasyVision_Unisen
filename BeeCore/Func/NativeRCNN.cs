@@ -5,43 +5,53 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+
 namespace BeeCore
 {
-    public class NativeYolo : IDisposable
+    public class NativeRCNN : IDisposable
     {
-        const string DLL = "BeeNativeOnnx.dll";
+        const string DLL = "BeeNativeRCNN.dll";
 
         // =============================
-        // Native struct
+        // Native struct (phải match C++)
         // =============================
         [StructLayout(LayoutKind.Sequential)]
-        public struct YoloBox
+        public struct RCNNBox
         {
             public float x1, y1, x2, y2;
             public float score;
             public int classId;
         }
-        public static RectRotate RCNNBoxToRectRotate(YoloBox b)
+
+        // =============================
+        // Convert sang RectRotate
+        // =============================
+        public static RectRotate RCNNBoxToRectRotate(RCNNBox b)
         {
             float w = b.x2 - b.x1;
             float h = b.y2 - b.y1;
 
             float cx = b.x1 + w * 0.5f;
             float cy = b.y1 + h * 0.5f;
-            
-            // RectRotate thường lưu center + width/height + rotation(deg)
+
             return new RectRotate(
-             new RectangleF(-w/2f,-h/2f,w,h),
-               new PointF(cx, cy),
-               0f,AnchorPoint.None
+                new RectangleF(-w / 2f, -h / 2f, w, h),
+                new PointF(cx, cy),
+                0f,
+                AnchorPoint.None
             );
         }
+
         // =============================
-        // DllImport (PHẢI static)
+        // DLL IMPORT (UPDATED)
         // =============================
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
         private static extern IntPtr YOLO_Create(
-            string modelPath, int inputSize, int numClasses, int numThreads);
+            string modelPath,
+            int inputW,
+            int inputH,
+            int numClasses,
+            int numThreads);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void YOLO_Destroy(IntPtr handle);
@@ -53,8 +63,8 @@ namespace BeeCore
         private static extern int YOLO_Detect(
             IntPtr handle,
             IntPtr bgr, int w, int h, int step,
-            float conf, float iou,bool Is3,
-            [Out] YoloBox[] boxes,
+            float conf, float iou, bool Is3,
+            [Out] RCNNBox[] boxes,
             int maxBoxes);
 
         // =============================
@@ -65,11 +75,16 @@ namespace BeeCore
         public bool IsOpened => _handle != IntPtr.Zero;
 
         // =============================
-        // Constructor
+        // Constructor (UPDATED)
         // =============================
-        public NativeYolo(string modelPath, int inputSize = 0, int numClasses = 0, int threads = 8)
+        public NativeRCNN(
+            string modelPath,
+            int inputW = 0,
+            int inputH = 0,
+            int numClasses = 0,
+            int threads = 8)
         {
-            _handle = YOLO_Create(modelPath, inputSize, numClasses, threads);
+            _handle = YOLO_Create(modelPath, inputW, inputH, numClasses, threads);
 
             if (_handle == IntPtr.Zero)
                 throw new Exception("YOLO_Create failed");
@@ -85,39 +100,93 @@ namespace BeeCore
         }
 
         // =============================
-        // Detect
+        // Detect (low level - pointer)
         // =============================
         public int Detect(
             IntPtr bgr, int w, int h, int step,
-            float conf, float iou,bool Is3,
-            YoloBox[] boxes)
+            float conf, float iou, bool Is3,
+            RCNNBox[] boxes)
         {
             if (_handle == IntPtr.Zero) return 0;
 
             return YOLO_Detect(_handle, bgr, w, h, step, conf, iou, Is3, boxes, boxes.Length);
         }
-        public  Dictionary<int, string> LoadNames(string yamlPath)
+
+        // =============================
+        // Detect (Bitmap tiện dụng)
+        // =============================
+        public List<RectRotate> Detect(Bitmap bmp, float conf = 0.25f, float iou = 0.45f, bool Is3 = false)
+        {
+            var rects = new List<RectRotate>();
+
+            if (_handle == IntPtr.Zero || bmp == null)
+                return rects;
+
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+
+            var data = bmp.LockBits(rect,
+                System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+            try
+            {
+                int maxBoxes = 1000;
+                RCNNBox[] boxes = new RCNNBox[maxBoxes];
+
+                int n = YOLO_Detect(
+                    _handle,
+                    data.Scan0,
+                    bmp.Width,
+                    bmp.Height,
+                    data.Stride,
+                    conf,
+                    iou,
+                    Is3,
+                    boxes,
+                    maxBoxes);
+
+                for (int i = 0; i < n; i++)
+                {
+                    rects.Add(RCNNBoxToRectRotate(boxes[i]));
+                }
+            }
+            finally
+            {
+                bmp.UnlockBits(data);
+            }
+
+            return rects;
+        }
+
+        // =============================
+        // Load class names từ YAML
+        // =============================
+        public Dictionary<int, string> LoadNames(string yamlPath)
         {
             var lines = File.ReadAllLines(yamlPath);
             var dict = new Dictionary<int, string>();
 
             bool inNames = false;
+
             foreach (var raw in lines)
             {
                 var line = raw.Trim();
-                if (line.Length == 0 || line.StartsWith("#")) continue;
+
+                if (line.Length == 0 || line.StartsWith("#"))
+                    continue;
 
                 if (line.StartsWith("names:"))
                 {
                     inNames = true;
 
-                    // names: [a, b, c]
                     var mList = Regex.Match(line, @"^names:\s*\[(.*)\]\s*$");
                     if (mList.Success)
                     {
                         var parts = mList.Groups[1].Value.Split(',');
+
                         for (int i = 0; i < parts.Length; i++)
                             dict[i] = parts[i].Trim().Trim('\'', '"');
+
                         return dict;
                     }
                     continue;
@@ -125,11 +194,11 @@ namespace BeeCore
 
                 if (!inNames) continue;
 
-                // hết block names khi gặp key khác (không thụt dòng)
-                if (!raw.StartsWith(" ") && !raw.StartsWith("\t")) break;
+                if (!raw.StartsWith(" ") && !raw.StartsWith("\t"))
+                    break;
 
-                // "0: screw"
                 var m = Regex.Match(line, @"^(\d+)\s*:\s*(.+)\s*$");
+
                 if (m.Success)
                 {
                     int id = int.Parse(m.Groups[1].Value);
@@ -140,8 +209,9 @@ namespace BeeCore
 
             return dict;
         }
+
         // =============================
-        // Destroy
+        // Dispose
         // =============================
         public void Dispose()
         {
@@ -150,13 +220,13 @@ namespace BeeCore
                 YOLO_Destroy(_handle);
                 _handle = IntPtr.Zero;
             }
+
             GC.SuppressFinalize(this);
         }
 
-        ~NativeYolo()
+        ~NativeRCNN()
         {
             Dispose();
         }
     }
-
 }

@@ -37,7 +37,12 @@ namespace BeeInterface
         public void LoadPara()
         {
 
-
+            EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotCrop, Propety.rotMask };
+            EditRectRot1.Refresh();
+            EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
+            EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
+            EditRectRot1.IsHide = false;
+            this.VisibleChanged += ToolOKNG_VisibleChanged;
 
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             trackResize.Value =(int) Propety.ScaleResize;
@@ -51,6 +56,29 @@ namespace BeeInterface
             btnMulti.IsCLick=Propety.Multi;
             btnSingle.IsCLick=!Propety.Multi;
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
+        }
+
+        private void ToolOKNG_VisibleChanged(object sender, EventArgs e)
+        {
+            if (!this.Visible)
+            {
+                EditRectRot1.IsHide = true;
+                EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
+            }
+        }
+
+        private void EditRectRot1_RotateCurentChanged(RectRotate obj)
+        {
+            switch (obj.TypeCrop)
+            {
+                case TypeCrop.Area:
+                    Propety.rotArea = obj; break;
+                case TypeCrop.Crop:
+                    Propety.rotCrop = obj; break;
+                case TypeCrop.Mask:
+                    Propety.rotMask = obj; break;
+
+            }
         }
 
         private void ToolPattern_StatusToolChanged(StatusTool obj)

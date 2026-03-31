@@ -652,7 +652,7 @@ namespace BeeCore
                         name = "unknown";
                     else
                         name = ListNameOnnx.TryGetValue(box.classId, out var s) ? s : "unknown";
-                    RectRotate rot = NativeYolo.YoloBoxToRectRotate(box);
+                    RectRotate rot = NativeYolo.RCNNBoxToRectRotate(box);
                     if (rot._rect.Width * rot._rect.Height < minArea)
                         continue;
                     if (rot._rect.Height > HeightMax)
@@ -1352,7 +1352,7 @@ namespace BeeCore
 
                                               string name = "blackdot";
                                               var item = new BeeCore.ResultItem(name);
-                                              item.rot = NativeYolo.YoloBoxToRectRotate(box);
+                                              item.rot = NativeYolo.RCNNBoxToRectRotate(box);
                                               item.Score = box.score * 100f;
                                               item.IsOK = true;
 

@@ -37,8 +37,13 @@ namespace BeeInterface
 
         public void LoadPara()
         {
+            EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotCrop, Propety.rotMask };
+            EditRectRot1.Refresh();
+            EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
+            EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
+            EditRectRot1.IsHide = false;
+            this.VisibleChanged += ToolPattern_VisibleChanged;
 
-            
             //if (!workLoadModel.IsBusy)
             //    workLoadModel.RunWorkerAsync();
             if (Propety.bmRaw != null)
@@ -120,6 +125,29 @@ namespace BeeInterface
             btnZeroAdj.IsCLick = Propety.ZeroPos == ZeroPos.ZeroADJ ? true : false;
 
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
+        }
+
+        private void ToolPattern_VisibleChanged(object sender, EventArgs e)
+        {
+            if (!this.Visible)
+            {
+                EditRectRot1.IsHide = true;
+                EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
+            }
+        }
+
+        private void EditRectRot1_RotateCurentChanged(RectRotate obj)
+        {
+            switch (obj.TypeCrop)
+            {
+                case TypeCrop.Area:
+                    Propety.rotArea = obj; break;
+                case TypeCrop.Crop:
+                    Propety.rotCrop = obj; break;
+                case TypeCrop.Mask:
+                    Propety.rotMask = obj; break;
+
+            }
         }
 
         private void ToolPattern_StatusToolChanged(StatusTool obj)
@@ -787,11 +815,7 @@ namespace BeeInterface
             }    
         }
 
-        private void btn1_Click(object sender, EventArgs e)
-        {
-            lay1.Visible =! btn1.IsCLick;
-        }
-
+     
         private void btn2_Click(object sender, EventArgs e)
         {
             lay2.Visible = !btn2.IsCLick;

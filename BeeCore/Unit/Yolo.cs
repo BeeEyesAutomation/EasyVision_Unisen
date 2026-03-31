@@ -75,32 +75,23 @@ namespace BeeCore
         public String pathFullModel = "";
         [NonSerialized]
         private NativeYolo NativeOnnx;
-        [NonSerialized]
-        private NativeYolo.YoloBox[] OnnxBoxes;
+		[NonSerialized]
+		private NativeYolo.YoloBox[] OnnxBoxes;
+		[NonSerialized]
+		private NativeRCNN NativeRCNN;
+		[NonSerialized]
+        private NativeRCNN.RCNNBox[] RCNNBoxes;
         public int NumThreadCPU = 16;
-
         public  void SetModel()
         {
-
-            //if (rArea == null)
-            //    rArea = rotArea;
-            //if (rCrop == null)
-            //    rCrop = rotCrop;
-            //if (rMask == null)
-            //    rMask = rotMask;
-            //if (rLimit == null)
-            //    rLimit = rotLimit;
             if (rotArea == null) rotArea = new RectRotate();
             if (rotCrop == null) rotCrop = new RectRotate();
             if (rotMask == null) rotMask = new RectRotate();
             if (rotLimit == null) rotLimit = new RectRotate();
             rotCrop.Name = "Area Line";
             rotCrop.TypeCrop = TypeCrop.Crop;
-
-
             rotMask.Name = "Area Mask";
             rotMask.TypeCrop = TypeCrop.Mask;
-
             rotArea.Name = "Area Check";
             rotArea.TypeCrop = TypeCrop.Area;
 
@@ -118,69 +109,98 @@ namespace BeeCore
             try
             {
                 Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.NotInitial;
-                if (pathFullModel.Trim().Contains(".pth"))
-                {
-                    TypeYolo = TypeYolo.RCNN;
 
-                }
-                else if (pathFullModel.Trim().Contains(".pt"))
-                {
-                    TypeYolo = TypeYolo.YOLO;
+                //            if (pathFullModel.Trim().Contains(".pth"))
+                //            {
+                //                TypeYolo = TypeYolo.RCNN;
 
-                }
-                else
-                {
-                    try
-                    {
-                        NumThreadCPU = 16;
-                        String pathModel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathFullModel);
-                        pathModel += "\\best.xml";
-                        if (File.Exists(pathModel ))
-                        {
-                            NativeOnnx = new NativeYolo(pathModel, 0, 0, NumThreadCPU);
+                //            }
+                //            else if (pathFullModel.Trim().Contains(".pt"))
+                //            {
+                //                TypeYolo = TypeYolo.YOLO;
 
-                            NativeOnnx.Warmup(10);
-                            OnnxBoxes = new NativeYolo.YoloBox[200];
-                            TypeYolo = TypeYolo.Onnx;
-                        }
-                       
-                            
-                        Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
-                            
-                    }
-                    catch(Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
+                //            }
+                //            else
+                //{
+                //	TypeYolo = TypeYolo.Onnx;
+                //}
+                if (IsIniYolo)
                     return;
-                }
+					switch (TypeYolo)
+					{
+                    case TypeYolo.YOLO:
+						using (Py.GIL())
+						{
+
+							if (!File.Exists(pathFullModel))
+							{
+
+								Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+								return;
+							}
+
+							G.objYolo.load_model(Common.PropetyTools[IndexThread][Index].Name, pathFullModel, (int)TypeYolo);
+							Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+
+						}
+						break;
+					case TypeYolo.Onnx:
+						try
+						{
+							NumThreadCPU = 16;
+							String pathModel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathFullModel);
+							pathModel += "\\best.xml";
+							if (File.Exists(pathModel))
+							{
+								NativeOnnx = new NativeYolo(pathModel, 0, 0, NumThreadCPU);
+
+								NativeOnnx.Warmup(10);
+								OnnxBoxes = new NativeYolo.YoloBox[200];
+								
+							}
+
+
+							Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+
+						}
+						catch (Exception ex)
+						{
+							Console.WriteLine(ex.Message);
+						}
+
+						break;
+					case TypeYolo.RCNN:
+						try
+						{
+							NumThreadCPU = 16;
+							String pathModel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathFullModel);
+							pathModel += "\\best.xml";
+							if (File.Exists(pathModel))
+							{
+								NativeRCNN = new NativeRCNN(pathModel, 1333, 800, 2, NumThreadCPU);
+
+								NativeRCNN.Warmup(10);
+								RCNNBoxes = new NativeRCNN.RCNNBox[200];
+								
+							}
+						Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+
+						}
+						catch (Exception ex)
+						{
+							Console.WriteLine(ex.Message);
+						}
+
+						break;
+				}
+					
+                
 
                 if (Global.IsIntialPython)
-                using (Py.GIL())
-            {
+           
+                SetListTemp(); IsIniYolo = true;
 
-                   if(!File.Exists(pathFullModel))
-                        {
-
-                            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
-                            return;
-                        }    
-                 
-                    G.objYolo.load_model(Common.PropetyTools[IndexThread][Index].Name, pathFullModel, (int)TypeYolo);
-               
-                            //dynamic mod = Py.Import("Tool.Learning");
-                            //dynamic cls = mod.GetAttr("ObjectDetector"); // class
-                            //dynamic obj = cls.Invoke();              // khởi tạo instance
-
-                            //if (Common.PropetyTools[IndexThread][Index].Name.Trim() == "")
-                            //{
-                            //    Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
-                            //}
-                            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
-                  
-                }
-                SetListTemp();
-            }
+			}
                 catch (PythonException pyEx)
                 {
                        MessageBox.Show("Python Error: " + pyEx.Message);
@@ -563,6 +583,8 @@ namespace BeeCore
         }
         
        public HSV HSV = new HSV();
+        [NonSerialized]
+        public bool IsIniYolo = false;
         public void SetListTemp()
         {
            
@@ -794,7 +816,7 @@ namespace BeeCore
                                 else
                                     name = ListNameOnnx.TryGetValue(box.classId, out var s) ? s : "unknown";
                                 resultTemp.Add(new BeeCore.ResultItem((name)));
-                                resultTemp[resultTemp.Count - 1].rot = NativeYolo.YoloBoxToRectRotate(box);
+                                resultTemp[resultTemp.Count - 1].rot = NativeYolo.RCNNBoxToRectRotate(box);
                                 resultTemp[resultTemp.Count - 1].Score = (box.score) * 100f;
                                 resultTemp[resultTemp.Count - 1].IsOK = true;
 
@@ -803,7 +825,54 @@ namespace BeeCore
                         }
                     }
                     break;
-                case TypeYolo.YOLO:
+				case TypeYolo.RCNN:
+					if (IsCropSingle)
+					{
+				   }
+					else
+					{
+                        try
+                        {
+                            using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
+                            {
+
+                                float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+
+                                if (matCrop.Type() == MatType.CV_8UC1)
+                                    Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                                if (NativeRCNN == null)
+                                    return;
+                                int countDetect = NativeRCNN.Detect(
+                                matCrop.Data,
+                                matCrop.Width,
+                                matCrop.Height,
+                                (int)matCrop.Step(),
+                                conf,
+                                0.9f, true,
+                                RCNNBoxes);
+                                foreach (NativeRCNN.RCNNBox box in RCNNBoxes)
+                                {
+                                    if (box.score == 0) continue;
+                                    string name = "";
+                                    if (ListNameOnnx == null)
+                                        name = "unknown";
+                                    else
+                                        name = ListNameOnnx.TryGetValue(box.classId, out var s) ? s : "unknown";
+                                    resultTemp.Add(new BeeCore.ResultItem((name)));
+                                    resultTemp[resultTemp.Count - 1].rot = NativeRCNN.RCNNBoxToRectRotate(box);
+                                    resultTemp[resultTemp.Count - 1].Score = (box.score) * 100f;
+                                    resultTemp[resultTemp.Count - 1].IsOK = true;
+
+                                }
+
+                            }
+                        }catch(Exception e)
+						{
+							Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", e.Message));
+						}
+					}
+					break;
+				case TypeYolo.YOLO:
                     using (Py.GIL())
                     {
                         PyObject result = null;

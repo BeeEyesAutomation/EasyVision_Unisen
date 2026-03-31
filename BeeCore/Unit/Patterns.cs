@@ -452,6 +452,19 @@ namespace BeeCore
 				matTemp = bmRaw.ToMat();
 				LearnPattern(matTemp, true);
 			}
+            if (rotArea == null) rotArea = new RectRotate();
+            if (rotCrop == null) rotCrop = new RectRotate();
+            if (rotMask == null) rotMask = new RectRotate();
+
+            rotCrop.Name = "Area Temp";
+            rotCrop.TypeCrop = TypeCrop.Crop;
+
+
+            rotMask.Name = "Area Mask";
+            rotMask.TypeCrop = TypeCrop.Mask;
+
+            rotArea.Name = "Area Check";
+            rotArea.TypeCrop = TypeCrop.Area;
             if (Scale == 0) Scale = 1;
             if (rotCrop == null) rotCrop = new RectRotate();
             if(rotArea == null) rotArea = new RectRotate();

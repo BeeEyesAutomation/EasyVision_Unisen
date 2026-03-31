@@ -826,7 +826,7 @@ namespace BeeInterface
                     OpenFileDialog.Filter = "Onnx|*.xml|Txt|*.txt";
                     break;
                 case TypeYolo.RCNN:
-                    OpenFileDialog.Filter = "RCNN|*.pth";
+                    OpenFileDialog.Filter = "Onnx|*.xml|Txt|*.txt";
                     break;
         }
             if (OpenFileDialog.ShowDialog() == DialogResult.OK)
@@ -893,6 +893,46 @@ namespace BeeInterface
                         }
                         break;
                     case TypeYolo.RCNN:
+
+                        NameModel = new DirectoryInfo(
+                            Path.GetDirectoryName(OpenFileDialog.FileName)
+                        ).Name;
+                        if (OpenFileDialog.FileName.Contains(".txt"))
+                        {
+                            Propety.ListNameOnnx = new Dictionary<int, string>();
+                            Propety.labelItems = new List<LabelItem>();
+                            String[] SLine = File.ReadAllLines(OpenFileDialog.FileName);
+                            int i =1;
+                            foreach (String s in SLine)
+                            {
+                                if (s.Trim() == "") continue;
+                                else
+                                {
+                                    Propety.ListNameOnnx.Add(i++, s);
+                                          Propety.labelItems.Add(new LabelItem(s));
+                                }    
+                                  
+                            }
+                            RefreshLabels();
+                        }
+                        else
+                        {
+                            //pathModel =Path.GetPathRoot(OpenFileDialog.FileName);
+                            //NameModel = Path.GetDirectoryName(OpenFileDialog.FileName);// Path.GetFileNameWithoutExtension(OpenFileDialog.FileName);
+                            pathModel = "Program\\" + Global.Project + "\\" + NameModel;
+                            if (Propety.listModelOnnx == null) Propety.listModelOnnx = new List<string>();
+                            Batch.CopyAndRename(Path.GetDirectoryName(OpenFileDialog.FileName), pathModel, false);
+
+                            Propety.listModelOnnx.Add(NameModel);
+                            Propety.listModelOnnx = Propety.listModelOnnx.Distinct().ToList();
+                            cbListModel.DataSource = null;
+                            Propety.PathModel = Path.GetFileName(pathModel);
+                            IsReload = true;
+                            if (!workLoadModel.IsBusy)
+                                workLoadModel.RunWorkerAsync();
+                            cbListModel.DataSource = Propety.listModelOnnx.ToArray();
+                            cbListModel.Text = Propety.PathModel;
+                        }
                         break;
                 }
                

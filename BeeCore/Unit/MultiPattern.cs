@@ -1640,7 +1640,7 @@ namespace BeeCore
                                           // : (ListNameOnnx.TryGetValue(box.classId, out var s) ? s : "unknown");
 
                                        var item = new BeeCore.ResultItem(name);
-                                       item.rot = NativeYolo.YoloBoxToRectRotate(box);
+                                       item.rot = NativeYolo.RCNNBoxToRectRotate(box);
                                        item.Score = box.score * 100f;
                                        item.IsOK = true;
 
