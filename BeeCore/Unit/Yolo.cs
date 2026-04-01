@@ -124,8 +124,8 @@ namespace BeeCore
                 //{
                 //	TypeYolo = TypeYolo.Onnx;
                 //}
-                if (IsIniYolo)
-                    return;
+                //if (IsIniYolo)
+                //    return;
 					switch (TypeYolo)
 					{
                     case TypeYolo.YOLO:
@@ -152,7 +152,7 @@ namespace BeeCore
 							pathModel += "\\best.xml";
 							if (File.Exists(pathModel))
 							{
-								NativeOnnx = new NativeYolo(pathModel, 0, 0, NumThreadCPU);
+								NativeOnnx = new NativeYolo(pathModel, 1024, 0, NumThreadCPU);
 
 								NativeOnnx.Warmup(10);
 								OnnxBoxes = new NativeYolo.YoloBox[200];
@@ -177,7 +177,7 @@ namespace BeeCore
 							pathModel += "\\best.xml";
 							if (File.Exists(pathModel))
 							{
-								NativeRCNN = new NativeRCNN(pathModel, 1333, 800, 2, NumThreadCPU);
+								NativeRCNN = new NativeRCNN(pathModel, 1333, 800, 6, NumThreadCPU);
 
 								NativeRCNN.Warmup(10);
 								RCNNBoxes = new NativeRCNN.RCNNBox[200];
