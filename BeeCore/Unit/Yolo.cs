@@ -1136,15 +1136,7 @@ namespace BeeCore
                                         //scoreList.Add((float)((PyObject)scores[j]).As<double>() * 100f);
                                         //labelList.Add(((PyObject)labels[j]).ToString());
                                     }
-                                    switch (FilterBox)
-                                    {
-                                        case FilterBox.Merge:
-                                            resultTemp = ResultFilter.MergeSameNameOverlap(resultTemp, ThreshOverlap);
-                                            break;
-                                        case FilterBox.Remove:
-                                            resultTemp = ResultFilter.FilterRectRotate(resultTemp, ThreshOverlap);
-                                            break;
-                                    }
+                                  
                                     //foreach (var r in resultTemp)
                                     //{
 
@@ -1197,8 +1189,16 @@ namespace BeeCore
                         }
                     }
                     break;
-            }    
-           
+            }
+            switch (FilterBox)
+            {
+                case FilterBox.Merge:
+                    resultTemp = ResultFilter.MergeSameNameOverlap(resultTemp, ThreshOverlap);
+                    break;
+                case FilterBox.Remove:
+                    resultTemp = ResultFilter.FilterRectRotate(resultTemp, ThreshOverlap);
+                    break;
+            }
         }
 
     
@@ -1600,7 +1600,28 @@ namespace BeeCore
 
                                 if (item.IsYMax)
                                     ok &= IntersectYMax(r.rot, item.ValueYMax);
+                                if (IsLine)
+                                {
 
+                                    if (item.IsDistance)
+                                    {
+                                        if (LineVerital != null)
+                                        {
+                                            PointF point = new PointF();
+                                            r.Distance = (float)Cal.DistanceLine2D_RectRotate(LineVerital, r.rot, out point);
+                                            if (r.Distance <= item.ValueDistance)
+                                                r.IsOK = true;
+                                            else
+                                                r.IsOK = false;
+                                            r.point = point;
+
+                                        }
+                                        if (!Line2D.Found)
+                                            r.IsOK = true;
+                                        ok &= r.IsOK;
+
+                                    }
+                                }
                                 //--------------------------------
                                 // AREA
                                 //--------------------------------
@@ -1753,7 +1774,28 @@ namespace BeeCore
 
                                     if (item.IsYMax)
                                         ok &= IntersectYMax(r.rot, item.ValueYMax);
+                                    if (IsLine)
+                                    {
 
+                                        if (item.IsDistance)
+                                        {
+                                            if (LineVerital != null)
+                                            {
+                                                PointF point = new PointF();
+                                               r.Distance = (float)Cal.DistanceLine2D_RectRotate(LineVerital, r.rot, out point);
+                                                if (r.Distance <= item.ValueDistance)
+                                                    r.IsOK = true;
+                                                else
+                                                    r.IsOK = false;
+                                                r.point = point;
+
+                                            }
+                                            if (!Line2D.Found)
+                                                r.IsOK = true;
+                                            ok &= r.IsOK;
+
+                                        }
+                                    }
                                     //--------------------------------
                                     // AREA
                                     //--------------------------------
@@ -2451,13 +2493,18 @@ namespace BeeCore
                     if (item.IsDistance&& LineVerital != null)
                     {
                         Draws.Plus(gc, (int)rs.point.X, (int)rs.point.Y, 10, Color.Red, 2);
+                        SolidBrush clLine = new SolidBrush(Global.ParaShow.ColorInfor);
+                        if(!rs.IsOK)
+                            clLine = new SolidBrush(Global.ParaShow.ColorOK);
+                        else
+                            clLine = new SolidBrush(Global.ParaShow.ColorNG);
                         Draws.DrawPerpendicularWithDistanceText(
-                            gc, pen, rs.point, LineVerital, font,
-                            textBrush:new SolidBrush( Global.ParaShow.TextColor),
-                            textBackBrush: new SolidBrush(Global.ParaShow.ColorInfor),
-                            decimals: 1,
-                            textOffsetPx: 8f
-                        );
+                                gc, pen, rs.point, LineVerital, font,
+                                textBrush: new SolidBrush(Global.ParaShow.TextColor),
+                                textBackBrush: clLine,
+                                decimals: 1,
+                                textOffsetPx: 8f
+                            );
                        
                     }
                     if (item.IsHeight || item.IsWidth)

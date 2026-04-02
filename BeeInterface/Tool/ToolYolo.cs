@@ -1293,42 +1293,42 @@ namespace BeeInterface
         }
         private void tabYolo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(t.SelectedIndex ==2)
-            {
-                cbLabels.DataSource = new List<string>();
+            //if(t.SelectedIndex ==2)
+            //{
+            //    cbLabels.DataSource = new List<string>();
               
-                if (Propety.labelItems != null)
-                {
-                    cbLabels.DataSource = null;  
-                    cbLabels.Items.Clear();      
+            //    if (Propety.labelItems != null)
+            //    {
+            //        cbLabels.DataSource = null;  
+            //        cbLabels.Items.Clear();      
 
-                    foreach (LabelItem item in Propety.labelItems)
-                    {
-                        cbLabels.Items.Add(item.Name); 
-                    }
-                    RefreshLabels();
-                }
-                else
-                {
-                    MessageBox.Show("Please select models fist");
-                }
-               //Global.TypeCrop= TypeCrop.Crop;
-               // Propety.TypeCrop = Global.TypeCrop;
-                if (Propety.rotCrop == null)
-                {
-                    int with = 50, height = 50;
-                    Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Width / 2, BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Height / 2), 0, AnchorPoint.None);
+            //        foreach (LabelItem item in Propety.labelItems)
+            //        {
+            //            cbLabels.Items.Add(item.Name); 
+            //        }
+            //        RefreshLabels();
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("Please select models fist");
+            //    }
+            //   //Global.TypeCrop= TypeCrop.Crop;
+            //   // Propety.TypeCrop = Global.TypeCrop;
+            //    //if (Propety.rotCrop == null)
+            //    //{
+            //    //    int with = 50, height = 50;
+            //    //    Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Width / 2, BeeCore.Common.listCamera[Global. IndexProgChoose].matRaw.Height / 2), 0, AnchorPoint.None);
 
-                }
+            //    //}
              
-            }
-            else
-            {
-                Propety.rotCrop = null;
-               //Global.TypeCrop= TypeCrop.Area;
-               // Propety.TypeCrop = Global.TypeCrop;
+            //}
+            //else
+            //{
+            //    Propety.rotCrop = null;
+            //   //Global.TypeCrop= TypeCrop.Area;
+            //   // Propety.TypeCrop = Global.TypeCrop;
 
-            }
+            //}
         }
 
         private string strImgName = "";//Hau
