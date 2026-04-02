@@ -2062,10 +2062,10 @@ namespace BeeInterface
             btnMenu.PerformClick();
             Global.ScaleZoom = (float)(imgView.Zoom / 100.0);
             Global.pScroll = new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-            Checking1.StatusProcessingChanged += Checking1_StatusProcessingChanged;
-            Checking2.StatusProcessingChanged += Checking2_StatusProcessingChanged;
-            Checking3.StatusProcessingChanged += Checking3_StatusProcessingChanged;
-            Checking4.StatusProcessingChanged += Checking4_StatusProcessingChanged;
+            //Checking1.StatusProcessingChanged += Checking1_StatusProcessingChanged;
+            //Checking2.StatusProcessingChanged += Checking2_StatusProcessingChanged;
+            //Checking3.StatusProcessingChanged += Checking3_StatusProcessingChanged;
+            //Checking4.StatusProcessingChanged += Checking4_StatusProcessingChanged;
             Global.Config.ExternalChange += ParaCommon_ExternalChange;
             Global.StatusProcessing=StatusProcessing.None;
           
@@ -2428,25 +2428,25 @@ namespace BeeInterface
             }
         }
 
-        private void Checking4_StatusProcessingChanged(StatusProcessing obj)
-        {
-			Processing4 = obj;
-		}
+  //      private void Checking4_StatusProcessingChanged(StatusProcessing obj)
+  //      {
+		//	Processing4 = obj;
+		//}
 
-        private void Checking3_StatusProcessingChanged(StatusProcessing obj)
-        {
-			Processing3 = obj;
-		}
+  //      private void Checking3_StatusProcessingChanged(StatusProcessing obj)
+  //      {
+		//	Processing3 = obj;
+		//}
 
-        private void Checking2_StatusProcessingChanged(StatusProcessing obj)
-        {
-			Processing2= obj;
-		}
+  //      private void Checking2_StatusProcessingChanged(StatusProcessing obj)
+  //      {
+		//	Processing2= obj;
+		//}
 
-        private void Checking1_StatusProcessingChanged(StatusProcessing obj)
-        {
-            Processing1 = obj;
-        }
+  //      private void Checking1_StatusProcessingChanged(StatusProcessing obj)
+  //      {
+  //          Processing1 = obj;
+  //      }
         String CTTotol = "";
         private async void Global_StatusProcessingChanged(StatusProcessing obj)
         {
@@ -2796,7 +2796,7 @@ namespace BeeInterface
                     break;
                 case StatusProcessing.Done:
                     {
-                        Global.IsSim = false;
+                  
                         Global.IsDoneTrig = false;
                         if (Global.ImgShow == ImgShow.Result || Global.ImgShow == ImgShow.Raw)
                             this.Invoke((Action)(() =>
@@ -4866,13 +4866,16 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             tmSimulation.Enabled = false;
 
         X: indexFile++;
-                if (indexFile < listMat.Count())
+            if (indexFile >= Global.listSimImg.Count)
+                Global.EditTool.View.indexFile = 0;
+            if (indexFile < Global.listSimImg.Count())
             {
                 Global.TriggerNum = TriggerNum.Trigger1;
 
                 if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty())
                         BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Release();
-                 BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = listMat[indexFile].Clone();
+                ItemRegsImg itemRegsImg = Global.listSimImg[Global.EditTool.View.indexFile];
+                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = itemRegsImg.Image.ToMat();// Cv2.ImRead(Files[indexFile]);
 
                 if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty()) goto X;
                 timer = CycleTimerSplit.Start();
@@ -4999,10 +5002,9 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         {
             await Task.Run(async () =>
             {
-                // simple delay inside loop to avoid 100% CPU spin
                 while (!_cts.Token.IsCancellationRequested)
                 {
-                    switch(index)
+                    switch (index)
                     {
                         case 0:
                             if (Processing1 == StatusProcessing.Done)
@@ -5017,26 +5019,14 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                                 return;
                             break;
                         case 3:
-                            if (Processing4== StatusProcessing.Done)
+                            if (Processing4 == StatusProcessing.Done)
                                 return;
                             break;
                     }
-                   // if (Global.Config.IsMultiProg == false)
-                    {
-                       
-                    }
-                    //else
-                    //{
-                    //    if (Processing1 == StatusProcessing.Done
-                    //     && Processing2 == StatusProcessing.Done
-                    //     && Processing3 == StatusProcessing.Done
-                    //     && Processing4 == StatusProcessing.Done)
-                    //    {
 
-                    //        return;    // exit the Task.Run delegate
-                    //    }
-                    //}
+                    await Task.Delay(1); // 🔥 cực kỳ quan trọng
                 }
+               
             }, _cts.Token);
 
             if(Global.Config.IsAutoTrigger)
@@ -5106,7 +5096,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 Global.StatusProcessing = StatusProcessing.SendResult;
         
         }
-        public async void RunProcessing()
+        public  void RunProcessing()
         {if (Global.Comunication.Protocol.TypeControler == TypeControler.PCI)
             {
                 PropetyTool propetyTool = BeeCore.Common.PropetyTools[0][0];
@@ -5163,51 +5153,61 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             }
             else
             {
-                switch (Global.IndexProgChoose)
-                {
-                    case 0:
-                        if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
-                        {
-                            Checking1.StatusProcessing = StatusProcessing.None;
-                            Checking2.indexThread = 0;
-                            Checking1.Start();
-                        }
-                        else
-                            Processing1 = StatusProcessing.Done;
-                        break;
-                    case 1:
-                        if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
-                        {
-                            Checking2.StatusProcessing = StatusProcessing.None;
-                            Checking2.indexThread = 1;
-                            Checking2.Start();
-                        }
-                        else
-                            Processing2 = StatusProcessing.Done;
-                        break;
-                    case 2:
-                        if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
-                        {
-                            Checking3.StatusProcessing = StatusProcessing.None;
-                            Checking3.indexThread = 2;
-                            Checking3.Start();
-                        }
-                        else
-                            Processing3 = StatusProcessing.Done;
-                        break;
-                    case 3:
-                        if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
-                        {
-                            Checking4.StatusProcessing = StatusProcessing.None;
-                            Checking4.indexThread = 3;
-                            Checking4.Start();
-                        }
-                        else
-                            Processing4 = StatusProcessing.Done;
-                        break;
+                Checking1.StatusProcessing = StatusProcessing.None;
+                Checking1.indexThread = 0;
+                Checking1.Start();
+                Checking1.StatusProcessingChanged -= Checking1_StatusProcessingChanged1;
+                Checking1.StatusProcessingChanged += Checking1_StatusProcessingChanged1;
+                //switch (Global.IndexProgChoose)
+                //{
+                //    case 0:
+                //        if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
+                //        {
+                //            Checking1.StatusProcessing = StatusProcessing.None;
+                //            Checking2.indexThread = 0;
+                //            Checking1.Start();
+                //        }
+                //        else
+                //            Processing1 = StatusProcessing.Done;
+                //        break;
+                //    case 1:
+                //        if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
+                //        {
+                //            Checking2.StatusProcessing = StatusProcessing.None;
+                //            Checking2.indexThread = 1;
+                //            Checking2.Start();
+                //        }
+                //        else
+                //            Processing2 = StatusProcessing.Done;
+                //        break;
+                //    case 2:
+                //        if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
+                //        {
+                //            Checking3.StatusProcessing = StatusProcessing.None;
+                //            Checking3.indexThread = 2;
+                //            Checking3.Start();
+                //        }
+                //        else
+                //            Processing3 = StatusProcessing.Done;
+                //        break;
+                //    case 3:
+                //        if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
+                //        {
+                //            Checking4.StatusProcessing = StatusProcessing.None;
+                //            Checking4.indexThread = 3;
+                //            Checking4.Start();
+                //        }
+                //        else
+                //            Processing4 = StatusProcessing.Done;
+                //        break;
 
-                }
-                await CheckStatus(Global.IndexProgChoose);
+                //}
+                //foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[indexThread])
+                //{
+                //    PropetyTool.StatusToolChanged -= PropetyTool_StatusToolChanged;
+                //    PropetyTool.StatusToolChanged += PropetyTool_StatusToolChanged;
+                //}
+               // await CheckStatus(Global.IndexProgChoose);
             }
             //if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
             //{
@@ -5270,7 +5270,57 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
 
         }
-		private readonly CancellationTokenSource _cts = new CancellationTokenSource
+
+        private void Checking1_StatusProcessingChanged1(StatusProcessing obj)
+        { if (obj != StatusProcessing.Done) return;
+            if (Global.Config.IsAutoTrigger)
+            {
+                if (Global.IndexToolAuto > -1)
+                {
+                    if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolAuto].Results == Results.NG)
+                    {
+                        Global.StatusProcessing = StatusProcessing.Waiting;
+                        return;
+                    }
+                }
+
+            }
+
+
+          
+            Global.ListResult[Global.IndexProgChoose] = BeeCore.Common.listCamera[Global.IndexCCCD].SumResult();
+
+            if (Global.IndexProgChoose != Global.Config.NumTrig - 1)
+            {
+                if (Global.IndexProgChoose + 1 == Global.NumProgFromPLC)
+                {
+                    Global.TotalOK = Global.ListResult[Global.IndexProgChoose];
+                }
+                else
+                    Global.TotalOK = Results.Wait;
+
+            }
+
+            else
+            {
+                Global.TotalOK = Results.OK;
+                foreach (Results results in Global.ListResult)
+                {
+                    if (results == Results.NG)
+                    {
+                        Global.TotalOK = Results.NG;
+                        break;
+                    }
+
+                }
+            }
+            if (Global.IsByPassResult)
+                Global.StatusProcessing = StatusProcessing.Drawing;
+            else
+                Global.StatusProcessing = StatusProcessing.SendResult;
+        }
+
+        private readonly CancellationTokenSource _cts = new CancellationTokenSource
 		  ();
 		private void imgView_Scroll(object sender, ScrollEventArgs e)
         {

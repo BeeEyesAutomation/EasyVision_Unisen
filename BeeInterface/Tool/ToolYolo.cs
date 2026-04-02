@@ -323,9 +323,11 @@ namespace BeeInterface
         }
 
         private void Global_SetColorChange(bool obj)
-        {   try
+        {
+            if (this.Visible)
+                try
             {
-              
+             
                 Invoke(new Action(() =>
                 {
                     if (Global.ColorSample == null)
@@ -695,13 +697,15 @@ namespace BeeInterface
 
         }
 
-        private void btnTest_Click_1(object sender, EventArgs e)
+        private async void btnTest_Click_1(object sender, EventArgs e)
         {
-           btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
-            else
-                btnTest.IsCLick = false;
+            btnTest.Enabled = false;
+             Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+          
+            //if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
+            //    Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            //else
+            //    btnTest.IsCLick = false;
         }
 
         private void label12_Click(object sender, EventArgs e)
@@ -1039,13 +1043,13 @@ namespace BeeInterface
                     case TypeYolo.YOLO:
                         if (File.Exists(Propety.pathFullModel))
                         {
-                            Propety.SetModel();
+                            Propety.SetModel(true);
                         }
                         break;
                     case TypeYolo.Onnx:
                         if (Directory.Exists(Propety.pathFullModel))
                         {
-                            Propety.SetModel();
+                            Propety.SetModel(true);
                         }
                         break;
                 }    
@@ -1647,16 +1651,12 @@ namespace BeeInterface
             ClearImgBox();
         }
         public List<PointF[]> listBoxCorners = new List<PointF[]>();
-        private void btnCheck_Click(object sender, EventArgs e)
+        private  void btnCheck_Click(object sender, EventArgs e)
         {
-            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
-            {
-                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
-            }
-                
-            else
-                btnCheck.IsCLick = false;
-            
+           
+            btnTest.Enabled = false;
+             Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+
         }
 
         private void btnClearLog_Click(object sender, EventArgs e)

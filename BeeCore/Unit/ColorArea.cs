@@ -38,6 +38,8 @@ namespace BeeCore
             return this.MemberwiseClone();
         }
         [NonSerialized]
+        public int MaxThread = 1;
+        [NonSerialized]
         public bool IsNew = false;
         public bool IsClose = false;
         public bool IsOpen = false;

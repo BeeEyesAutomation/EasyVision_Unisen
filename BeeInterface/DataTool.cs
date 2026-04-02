@@ -483,42 +483,42 @@ namespace BeeInterface
                // BeeCore.Common.CreateTemp(TypeTool, IndexThread);
                 if (PropetyTool.Name == null) PropetyTool.Name = "";
                 control.Name = PropetyTool.Name;
-                PropetyTool.worker = new System.ComponentModel.BackgroundWorker();
+               // PropetyTool.worker = new System.ComponentModel.BackgroundWorker();
                 PropetyTool.timer = new System.Diagnostics.Stopwatch();
-                PropetyTool.worker.DoWork += (sender, e) =>
-                {
-                    var bw = (BackgroundWorker)sender;
+                //PropetyTool.worker.DoWork += (sender, e) =>
+                //{
+                //    var bw = (BackgroundWorker)sender;
 
-                    Exception exOut = null;
-                    bool finished = false;
+                //    Exception exOut = null;
+                //    bool finished = false;
 
-                    var t = System.Threading.Tasks.Task.Run(() =>
-                    {
-                        try
-                        {
-                            PropetyTool.DoWork();
-                            finished = true;
-                        }
-                        catch (Exception ex) { exOut = ex; }
+                //    var t = System.Threading.Tasks.Task.Run(() =>
+                //    {
+                //        try
+                //        {
+                //            PropetyTool.DoWork();
+                //            finished = true;
+                //        }
+                //        catch (Exception ex) { exOut = ex; }
 
-                    });
+                //    });
 
-                    if (!t.Wait(Global.Config.TimerOutChecking))
-                    {
-                        PropetyTool.Results = Results.NG;
-                        PropetyTool.StatusTool = StatusTool.Done;
-                        e.Cancel = true; // coi như timeout
-                        return;
-                    }
+                //    if (!t.Wait(Global.Config.TimerOutChecking))
+                //    {
+                //        PropetyTool.Results = Results.NG;
+                //        PropetyTool.StatusTool = StatusTool.Done;
+                //        e.Cancel = true; // coi như timeout
+                //        return;
+                //    }
 
-                    if (exOut != null) throw exOut;
-                    if (!finished) e.Cancel = true;
+                //    if (exOut != null) throw exOut;
+                //    if (!finished) e.Cancel = true;
                   
-                };
-                PropetyTool.worker.RunWorkerCompleted += (sender, e) =>
-                {
-                    PropetyTool.Complete();
-                };
+                //};
+                //PropetyTool.worker.RunWorkerCompleted += (sender, e) =>
+                //{
+                //    PropetyTool.Complete();
+                //};
             }
             catch(Exception ex)
             {

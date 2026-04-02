@@ -32,6 +32,8 @@ namespace BeeCore
     {
         [NonSerialized]
         public Pattern Pattern=new Pattern();
+        [NonSerialized]
+        public int MaxThread = 1;
         public PositionAdj()
         {
 

@@ -45,6 +45,8 @@ namespace BeeCore
             AngleLower = angle - Angle;
             AngleUper = angle + Angle;
         }
+        [NonSerialized]
+        public int MaxThread = 1;
         public bool IsIni = false;
         public int Index = -1;
        

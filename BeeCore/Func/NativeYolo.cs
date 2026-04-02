@@ -67,7 +67,7 @@ namespace BeeCore
         // =============================
         // Constructor
         // =============================
-        public NativeYolo(string modelPath, int inputSize = 0, int numClasses = 0, int threads = 8)
+        public NativeYolo(string modelPath, int inputSize , int numClasses = 0, int threads = 8)
         {
             _handle = YOLO_Create(modelPath, inputSize, numClasses, threads);
 

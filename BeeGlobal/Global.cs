@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Point = System.Drawing.Point;
@@ -15,6 +16,8 @@ namespace BeeGlobal
 {
     public class Global
     {
+        public static readonly Dictionary<string, SemaphoreSlim> _toolSemaphores
+        = new Dictionary<string, SemaphoreSlim>();
         public static int _IndexRotChoose = -1;
         public static event Action<int> ChooseRotChage;
         public static int IndexRotChoose

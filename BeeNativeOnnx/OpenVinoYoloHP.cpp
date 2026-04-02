@@ -38,7 +38,7 @@ OpenVinoYoloHP::OpenVinoYoloHP(
     // You can set performance hints:
     ov::AnyMap config;
     config[ov::hint::performance_mode.name()] = ov::hint::PerformanceMode::LATENCY;
-    
+
     config[ov::inference_num_threads.name()] = numThreads;
     compiled = core.compile_model(model, "CPU", config);
     infer = compiled.create_infer_request();
@@ -60,49 +60,94 @@ void OpenVinoYoloHP::Warmup(int iters)
     out.reserve(128);
 
     for (int i = 0; i < iters; i++)
-        Detect(dummy, 0.25f, 0.45f,false, out);
+        Detect(dummy, 0.25f, 0.45f, false, out);
 }
 
+//void OpenVinoYoloHP::Letterbox(const cv::Mat& src, cv::Mat& dst, float& scale, int& padw, int& padh)
+//{
+//    int w = src.cols, h = src.rows;
+//    scale = std::min((float)S / w, (float)S / h);
+//
+//    int nw = (int)std::round(w * scale);
+//    int nh = (int)std::round(h * scale);
+//
+//    padw = (S - nw) / 2;
+//    padh = (S - nh) / 2;
+//
+//    dst.setTo(cv::Scalar(0, 0, 0));
+//    cv::Mat resized;
+//    cv::resize(src, resized, cv::Size(nw, nh), 0, 0, cv::INTER_LINEAR);
+//    resized.copyTo(dst(cv::Rect(padw, padh, nw, nh)));
+//}
 void OpenVinoYoloHP::Letterbox(const cv::Mat& src, cv::Mat& dst, float& scale, int& padw, int& padh)
 {
-    int w = src.cols, h = src.rows;
-    scale = std::min((float)S / w, (float)S / h);
+    const int w = src.cols;
+    const int h = src.rows;
 
-    int nw = (int)std::round(w * scale);
-    int nh = (int)std::round(h * scale);
+    scale = std::min((float)S / (float)w, (float)S / (float)h);
 
-    padw = (S - nw) / 2;
-    padh = (S - nh) / 2;
+    const int nw = std::max(1, (int)(w * scale + 0.5f));
+    const int nh = std::max(1, (int)(h * scale + 0.5f));
+
+    padw = (S - nw) >> 1;
+    padh = (S - nh) >> 1;
 
     dst.setTo(cv::Scalar(0, 0, 0));
-    cv::Mat resized;
-    cv::resize(src, resized, cv::Size(nw, nh), 0, 0, cv::INTER_LINEAR);
-    resized.copyTo(dst(cv::Rect(padw, padh, nw, nh)));
+    cv::resize(src, dst(cv::Rect(padw, padh, nw, nh)), cv::Size(nw, nh), 0, 0, cv::INTER_LINEAR);
 }
-
+//
+//void OpenVinoYoloHP::BgrToCHWFloat01(const cv::Mat& u8, float* dstCHW)
+//{
+//    // u8: SxS CV_8UC3 BGR
+//    const int HW = S * S;
+//    float* cB = dstCHW;
+//    float* cG = dstCHW + HW;
+//    float* cR = dstCHW + 2 * HW;
+//
+//    for (int y = 0; y < S; y++)
+//    {
+//        const cv::Vec3b* row = u8.ptr<cv::Vec3b>(y);
+//        int base = y * S;
+//        for (int x = 0; x < S; x++)
+//        {
+//            const cv::Vec3b& v = row[x];
+//            int i = base + x;
+//            cB[i] = v[0] / 255.0f;
+//            cG[i] = v[1] / 255.0f;
+//            cR[i] = v[2] / 255.0f;
+//        }
+//    }
+//}
 void OpenVinoYoloHP::BgrToCHWFloat01(const cv::Mat& u8, float* dstCHW)
 {
-    // u8: SxS CV_8UC3 BGR
     const int HW = S * S;
+
     float* cB = dstCHW;
     float* cG = dstCHW + HW;
     float* cR = dstCHW + 2 * HW;
 
+    const float inv255 = 1.0f / 255.0f;
+
     for (int y = 0; y < S; y++)
     {
-        const cv::Vec3b* row = u8.ptr<cv::Vec3b>(y);
-        int base = y * S;
+        const uchar* row = u8.ptr<uchar>(y);
+
+        float* pb = cB + y * S;
+        float* pg = cG + y * S;
+        float* pr = cR + y * S;
+
         for (int x = 0; x < S; x++)
         {
-            const cv::Vec3b& v = row[x];
-            int i = base + x;
-            cB[i] = v[0] / 255.0f;
-            cG[i] = v[1] / 255.0f;
-            cR[i] = v[2] / 255.0f;
+            const uchar b = row[x * 3 + 0];
+            const uchar g = row[x * 3 + 1];
+            const uchar r = row[x * 3 + 2];
+
+            pb[x] = b * inv255;
+            pg[x] = g * inv255;
+            pr[x] = r * inv255;
         }
     }
 }
-
 static inline void clamp_box(float& x1, float& y1, float& x2, float& y2, int w, int h)
 {
     x1 = std::max(0.f, std::min(x1, (float)(w - 1)));
@@ -110,7 +155,7 @@ static inline void clamp_box(float& x1, float& y1, float& x2, float& y2, int w, 
     x2 = std::max(0.f, std::min(x2, (float)(w - 1)));
     y2 = std::max(0.f, std::min(y2, (float)(h - 1)));
 }
-void OpenVinoYoloHP:: DecodeDetectionOutput(
+void OpenVinoYoloHP::DecodeDetectionOutput(
     const ov::Tensor& t,
     float conf,
     float scale, int padw, int padh,
@@ -152,37 +197,37 @@ void OpenVinoYoloHP:: DecodeDetectionOutput(
 
         out.push_back(box);
     }
-  
-//#pragma warning(push)
-//#pragma warning(disable: 4996)
-//    const float* p = t.data<const float>();
-//#pragma warning(pop)
-//    int num = (int)t.get_shape()[1]; // 300
-//
-//    for (int i = 0; i < num; i++)
-//    {
-//        float x1 = p[i * 6 + 0];
-//        float y1 = p[i * 6 + 1];
-//        float x2 = p[i * 6 + 2];
-//        float y2 = p[i * 6 + 3];
-//        float score = p[i * 6 + 4];
-//        int   cls = (int)p[i * 6 + 5];
-//
-//        if (score < conf) continue;
-//
-//        // bỏ pad
-//        x1 = (x1 - padw) / scale;
-//        y1 = (y1 - padh) / scale;
-//        x2 = (x2 - padw) / scale;
-//        y2 = (y2 - padh) / scale;
-//
-//        x1 = std::max(0.f, std::min((float)imgW - 1, x1));
-//        y1 = std::max(0.f, std::min((float)imgH - 1, y1));
-//        x2 = std::max(0.f, std::min((float)imgW - 1, x2));
-//        y2 = std::max(0.f, std::min((float)imgH - 1, y2));
-//
-//        out.push_back({ x1,y1,x2,y2,score,cls });
-//    }
+
+    //#pragma warning(push)
+    //#pragma warning(disable: 4996)
+    //    const float* p = t.data<const float>();
+    //#pragma warning(pop)
+    //    int num = (int)t.get_shape()[1]; // 300
+    //
+    //    for (int i = 0; i < num; i++)
+    //    {
+    //        float x1 = p[i * 6 + 0];
+    //        float y1 = p[i * 6 + 1];
+    //        float x2 = p[i * 6 + 2];
+    //        float y2 = p[i * 6 + 3];
+    //        float score = p[i * 6 + 4];
+    //        int   cls = (int)p[i * 6 + 5];
+    //
+    //        if (score < conf) continue;
+    //
+    //        // bỏ pad
+    //        x1 = (x1 - padw) / scale;
+    //        y1 = (y1 - padh) / scale;
+    //        x2 = (x2 - padw) / scale;
+    //        y2 = (y2 - padh) / scale;
+    //
+    //        x1 = std::max(0.f, std::min((float)imgW - 1, x1));
+    //        y1 = std::max(0.f, std::min((float)imgH - 1, y1));
+    //        x2 = std::max(0.f, std::min((float)imgW - 1, x2));
+    //        y2 = std::max(0.f, std::min((float)imgH - 1, y2));
+    //
+    //        out.push_back({ x1,y1,x2,y2,score,cls });
+    //    }
 }
 
 void OpenVinoYoloHP::DecodeAnyLayout(const ov::Tensor& outTensor,
@@ -733,12 +778,19 @@ static inline float sigmoidf(float x)
 {
     return 1.f / (1.f + std::exp(-x));
 }
+
+static inline float clampf(float v, float lo, float hi)
+{
+    return v < lo ? lo : (v > hi ? hi : v);
+}
+
 void DecodeAuto_Yolo_RTDETR(
     const ov::Tensor& t,
     float conf,
     float iou,
     float scale, int padw, int padh,
     int imgW, int imgH,
+    int S,
     std::vector<YoloBox>& out)
 {
     out.clear();
@@ -749,9 +801,7 @@ void DecodeAuto_Yolo_RTDETR(
 #pragma warning(pop)
 
     auto shp = t.get_shape();
-
-    if (shp.size() != 3)
-        return;
+    if (shp.size() != 3) return;
 
     int N = (int)shp[1];
     int D = (int)shp[2];
@@ -760,11 +810,11 @@ void DecodeAuto_Yolo_RTDETR(
     candidates.reserve(512);
 
     //-----------------------------------------
-    // 🔥 CASE 1: RT-DETR  [1,300,9]
+    // 🔥 CASE 1: RT-DETR
     //-----------------------------------------
     if (N == 300 && D >= 6 && D <= 32)
     {
-        BeeLog::Write(BeeLog::Level::Info, "Decode AUTO: RT-DETR");
+        //BeeLog::Write(BeeLog::Level::Info, "Decode AUTO: RT-DETR");
 
         int numClasses = D - 4;
 
@@ -777,7 +827,18 @@ void DecodeAuto_Yolo_RTDETR(
             float w = p[2];
             float h = p[3];
 
-            // tìm class tốt nhất
+            // 🔥 detect normalized
+            bool isNorm = (cx <= 1.5f && cy <= 1.5f && w <= 1.5f && h <= 1.5f);
+
+            if (isNorm)
+            {
+                cx *= S;
+                cy *= S;
+                w *= S;
+                h *= S;
+            }
+
+            // class
             int bestCls = 0;
             float bestScore = p[4];
 
@@ -790,7 +851,6 @@ void DecodeAuto_Yolo_RTDETR(
                 }
             }
 
-            // sigmoid nếu là logits
             float score = bestScore;
             if (score < 0.f || score > 1.f)
                 score = sigmoidf(score);
@@ -803,34 +863,31 @@ void DecodeAuto_Yolo_RTDETR(
             float x2 = cx + w * 0.5f;
             float y2 = cy + h * 0.5f;
 
-            // bỏ letterbox
+            // remove letterbox
             x1 = (x1 - padw) / scale;
             y1 = (y1 - padh) / scale;
             x2 = (x2 - padw) / scale;
             y2 = (y2 - padh) / scale;
 
-            YoloBox box;
-            box.x1 = x1;
-            box.y1 = y1;
-            box.x2 = x2;
-            box.y2 = y2;
-            box.score = score;
-            box.classId = bestCls;
+            // clamp
+            x1 = clampf(x1, 0, (float)imgW);
+            y1 = clampf(y1, 0, (float)imgH);
+            x2 = clampf(x2, 0, (float)imgW);
+            y2 = clampf(y2, 0, (float)imgH);
 
-            candidates.push_back(box);
+            candidates.push_back({ x1, y1, x2, y2, score, bestCls });
         }
 
-        // RT-DETR thường đã NMS rồi → có thể skip
-        out = candidates;
+        out = candidates; // RT-DETR đã NMS
         return;
     }
 
     //-----------------------------------------
-    // 🔥 CASE 2: YOLO  [1,84,8400] hoặc [1,8400,85]
+    // 🔥 CASE 2: YOLO
     //-----------------------------------------
-    BeeLog::Write(BeeLog::Level::Info, "Decode AUTO: YOLO");
+    //BeeLog::Write(BeeLog::Level::Info, "Decode AUTO: YOLO");
 
-    bool isTranspose = (shp[1] < shp[2]); // detect layout
+    bool isTranspose = (shp[1] < shp[2]);
 
     int numPred = isTranspose ? (int)shp[2] : (int)shp[1];
     int dim = isTranspose ? (int)shp[1] : (int)shp[2];
@@ -839,37 +896,44 @@ void DecodeAuto_Yolo_RTDETR(
 
     for (int i = 0; i < numPred; i++)
     {
-        const float* p;
-
-        if (isTranspose)
-            p = data + i;
-        else
-            p = data + i * dim;
-
         float cx, cy, w, h;
 
         if (isTranspose)
         {
-            cx = p[0 * numPred];
-            cy = p[1 * numPred];
-            w = p[2 * numPred];
-            h = p[3 * numPred];
+            cx = data[0 * numPred + i];
+            cy = data[1 * numPred + i];
+            w = data[2 * numPred + i];
+            h = data[3 * numPred + i];
         }
         else
         {
+            const float* p = data + i * dim;
             cx = p[0];
             cy = p[1];
             w = p[2];
             h = p[3];
         }
 
-        // tìm class tốt nhất
+        // 🔥 detect normalized
+        bool isNorm = (cx <= 1.5f && cy <= 1.5f && w <= 1.5f && h <= 1.5f);
+
+        if (isNorm)
+        {
+            cx *= S;
+            cy *= S;
+            w *= S;
+            h *= S;
+        }
+
         int bestCls = 0;
-        float bestScore = isTranspose ? p[4 * numPred] : p[4];
+        float bestScore = isTranspose ? data[4 * numPred + i] : data[i * dim + 4];
 
         for (int c = 1; c < numClasses; c++)
         {
-            float v = isTranspose ? p[(4 + c) * numPred] : p[4 + c];
+            float v = isTranspose ?
+                data[(4 + c) * numPred + i] :
+                data[i * dim + 4 + c];
+
             if (v > bestScore)
             {
                 bestScore = v;
@@ -894,69 +958,73 @@ void DecodeAuto_Yolo_RTDETR(
         x2 = (x2 - padw) / scale;
         y2 = (y2 - padh) / scale;
 
+        x1 = clampf(x1, 0, (float)imgW);
+        y1 = clampf(y1, 0, (float)imgH);
+        x2 = clampf(x2, 0, (float)imgW);
+        y2 = clampf(y2, 0, (float)imgH);
+
         candidates.push_back({ x1, y1, x2, y2, score, bestCls });
     }
 
-    // YOLO cần NMS
     NmsPerClass2(candidates, iou, out);
 }
 
 void OpenVinoYoloHP::Detect(const cv::Mat& bgr, float conf, float iou, bool Is3, std::vector<YoloBox>& out)
 {
-    BeeLog::Timer tAll("Detect");
+    //BeeLog::Timer tAll("Detect");
 
     if (bgr.empty())
     {
-        BeeLog::Write(BeeLog::Level::Warn, "Detect: input bgr is empty");
+        //BeeLog::Write(BeeLog::Level::Warn, "Detect: input bgr is empty");
         out.clear();
         return;
     }
 
-    BeeLog::Writef(BeeLog::Level::Info,
+    /*BeeLog::Writef(BeeLog::Level::Info,
         "Detect: in=%dx%d step=%d conf=%.3f iou=%.3f S=%d",
-        bgr.cols, bgr.rows, (int)bgr.step, conf, iou, S);
+        bgr.cols, bgr.rows, (int)bgr.step, conf, iou, S);*/
 
     float scale = 1.f;
     int padw = 0, padh = 0;
 
     {
-        BeeLog::Timer t0("Letterbox");
+        //BeeLog::Timer t0("Letterbox");
         Letterbox(bgr, paddedU8, scale, padw, padh);
 
-        BeeLog::Writef(BeeLog::Level::Info,
-            "Letterbox: in=%dx%d -> %dx%d scale=%.6f pad=(%d,%d)",
-            bgr.cols, bgr.rows,
-            paddedU8.cols, paddedU8.rows,
-            scale, padw, padh);
+        //BeeLog::Writef(BeeLog::Level::Info,
+        //    "Letterbox: in=%dx%d -> %dx%d scale=%.6f pad=(%d,%d)",
+        //    bgr.cols, bgr.rows,
+        //    paddedU8.cols, paddedU8.rows,
+        //    scale, padw, padh);
     }
 
     {
-        BeeLog::Timer t1("BgrToCHWFloat01");
+        //BeeLog::Timer t1("BgrToCHWFloat01");
         BgrToCHWFloat01(paddedU8, inputBlob.data());
 
-        BeeLog::Writef(BeeLog::Level::Info,
+        /*BeeLog::Writef(BeeLog::Level::Info,
             "BgrToCHWFloat01: blob size=%zu",
-            inputBlob.size());
+            inputBlob.size());*/
     }
 
     {
-        BeeLog::Timer t2("SetInputTensor");
+        //BeeLog::Timer t2("SetInputTensor");
         ov::Tensor inTensor(ov::element::f32, { 1,3,(size_t)S,(size_t)S }, inputBlob.data());
         infer.set_input_tensor(inTensor);
 
-        BeeLog::Writef(BeeLog::Level::Info,
-            "SetInputTensor: shape=[1,3,%d,%d]",
-            S, S);
+        //BeeLog::Writef(BeeLog::Level::Info,
+        //    "SetInputTensor: shape=[1,3,%d,%d]",
+        //    S, S);
     }
 
     {
-        BeeLog::Timer t3("Infer");
+        //BeeLog::Timer t3("Infer");
         infer.infer();
     }
 
     ov::Tensor outTensor;
     {
-        BeeLog::Timer t4("GetOutput");
+        // BeeLog::Timer t4("GetOutput");
         outTensor = infer.get_output_tensor();
     }
 
@@ -969,7 +1037,7 @@ void OpenVinoYoloHP::Detect(const cv::Mat& bgr, float conf, float iou, bool Is3,
             if (i + 1 < shp.size()) s += ",";
         }
         s += "]";
-        BeeLog::Write(BeeLog::Level::Info, s);
+        //BeeLog::Write(BeeLog::Level::Info, s);
     }
 
     out.clear();
@@ -977,43 +1045,43 @@ void OpenVinoYoloHP::Detect(const cv::Mat& bgr, float conf, float iou, bool Is3,
         outTensor,
         conf, iou,
         scale, padw, padh,
-        bgr.cols, bgr.rows,
+        bgr.cols, bgr.rows, S,
         out);
-   
-  /*  if (shp.size() == 3 && shp[1] == 300 && shp[2] >= 6)
-    {
-        BeeLog::Write(BeeLog::Level::Info, "Decode path: DetectionOutput / RT-DETR");
 
-        {
-            BeeLog::Timer t5("DecodeDetectionOutput");
-            DecodeDetectionOutput(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, out);
-        }
+    /*  if (shp.size() == 3 && shp[1] == 300 && shp[2] >= 6)
+      {
+          BeeLog::Write(BeeLog::Level::Info, "Decode path: DetectionOutput / RT-DETR");
 
-        BeeLog::Writef(BeeLog::Level::Info,
-            "DecodeDetectionOutput: final=%d",
-            (int)out.size());
-    }
-    else
-    {
-        BeeLog::Write(BeeLog::Level::Info, "Decode path: YOLO raw");
+          {
+              BeeLog::Timer t5("DecodeDetectionOutput");
+              DecodeDetectionOutput(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, out);
+          }
 
-        {
-            BeeLog::Timer t5("DecodeYoloAuto");
-            DecodeYoloAuto(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);
-        }
+          BeeLog::Writef(BeeLog::Level::Info,
+              "DecodeDetectionOutput: final=%d",
+              (int)out.size());
+      }
+      else
+      {
+          BeeLog::Write(BeeLog::Level::Info, "Decode path: YOLO raw");
 
-        BeeLog::Writef(BeeLog::Level::Info,
-            "DecodeYoloAuto: candidates=%d",
-            (int)candidates.size());
+          {
+              BeeLog::Timer t5("DecodeYoloAuto");
+              DecodeYoloAuto(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);
+          }
 
-        {
-            BeeLog::Timer t6("NMS");
-            NmsPerClass(candidates, iou, out);
-        }
+          BeeLog::Writef(BeeLog::Level::Info,
+              "DecodeYoloAuto: candidates=%d",
+              (int)candidates.size());
 
-        BeeLog::Writef(BeeLog::Level::Info,
-            "NMS: final=%d",
-            (int)out.size());
-    }
-  */
+          {
+              BeeLog::Timer t6("NMS");
+              NmsPerClass(candidates, iou, out);
+          }
+
+          BeeLog::Writef(BeeLog::Level::Info,
+              "NMS: final=%d",
+              (int)out.size());
+      }
+    */
 }

@@ -137,21 +137,21 @@ namespace BeeUi.Unit
             btnCap.Enabled = !btnContinuous.IsCLick; 
             if (Global.StatusMode == StatusMode.SimContinuous)
             {
-                
-                Global.EditTool.View.listMat = new List<Mat>();
-                foreach (ImgItem img in registerImg._items)
-                {
-                    Global.EditTool.View.listMat.Add(img.Image);
-                }
+
+              //  Global.listSimImg = new List<ItemRegsImg>();
+              //  foreach (ImgItem img in registerImg._items)
+              //  {
+              ////      Global.listSimImg.Add(new ItemRegsImg("", img.Image);
+              //  }
                 btnContinuous.Image = BeeInterface. Properties.Resources.Stop;
-                if (Global.EditTool.View.indexFile >= Global.EditTool.View.listMat.Count) Global.EditTool.View.indexFile = 0;
-                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = Global.EditTool.View.listMat[Global.EditTool.View.indexFile].Clone();// Cv2.ImRead(Files[indexFile]);
+                if (Global.EditTool.View.indexFile >= Global.listSimImg.Count) Global.EditTool.View.indexFile = 0;
+                ItemRegsImg itemRegsImg = Global.listSimImg[Global.EditTool.View.indexFile];
+                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = itemRegsImg.Image.ToMat();// Cv2.ImRead(Files[indexFile]);
                Global.EditTool.View.timer = CycleTimerSplit.Start();
                 Global.TriggerNum = TriggerNum.Trigger1;
                 Global.StatusProcessing = StatusProcessing.Checking;
 
-                if (Global.EditTool.View.indexFile >= Global.EditTool.View.Files.Count)
-                    Global.EditTool.View.indexFile = 0;
+            
             }
             else
                 btnContinuous.Image = BeeInterface.Properties.Resources.Play_2;

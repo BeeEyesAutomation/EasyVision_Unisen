@@ -351,11 +351,9 @@ namespace BeeInterface
 
         private void btnTest_Click(object sender, EventArgs e)
         {
+         
             btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();
-            else
-                btnTest.IsCLick = false;
+            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
         }
         bool IsFullSize = false;
         private void btnCropHalt_Click(object sender, EventArgs e)

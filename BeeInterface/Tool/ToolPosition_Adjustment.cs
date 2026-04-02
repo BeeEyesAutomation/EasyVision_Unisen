@@ -419,18 +419,21 @@ namespace BeeInterface
             
         }
 
-        private void btnTest_Click(object sender, EventArgs e)
+        private async void btnTest_Click(object sender, EventArgs e)
         {
-          
-            if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
-            {
-                btnTest.Enabled = false;
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();
+            btnTest.Enabled = false;
+             Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
 
-            }    
+
+            //if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
+            //{
+            //    btnTest.Enabled = false;
+            //    Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();
+
+            //}    
                
-            else
-                btnTest.IsCLick = false;
+            //else
+            //    btnTest.IsCLick = false;
         }
 
     
