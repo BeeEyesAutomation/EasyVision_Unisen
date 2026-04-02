@@ -514,10 +514,8 @@ namespace BeeInterface
 
         private void btnInspect_Click(object sender, EventArgs e)
         {
-            if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();
-            else
-                btnInspect.IsCLick = false;
+            btnInspect.Enabled = false;
+            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
         }
 
         private void btnRGB_Click(object sender, EventArgs e)
@@ -600,10 +598,8 @@ namespace BeeInterface
         {
             btnCalib.Enabled = false;
             Propety.IsCalib = true;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
-            else
-                btnCalib.IsCLick = false;
+         
+            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
         }
 
         private void AdjValueTemp_ValueChanged(float obj)

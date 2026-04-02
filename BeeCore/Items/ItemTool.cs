@@ -674,6 +674,7 @@ namespace BeeCore
                
                 case StatusTool.NotInitial:
                     break;
+
                 case StatusTool.WaitCheck:
                     valueScore = 0;
                     Score = "---";
@@ -686,7 +687,7 @@ namespace BeeCore
                 case StatusTool.Processing:
                     valueScore = 0;
                     Score = "---" ;
-                    Status = "---";
+                    Status = "WAIT";
                     CT = 0; 
                     ClStatus = Global.ColorNone;
                     ClScore = Global.ColorNone;

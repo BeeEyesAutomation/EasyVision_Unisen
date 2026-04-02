@@ -25,13 +25,13 @@ public:
         int inputSize,
         int numClasses,
         int numThreads = 8);   // 👈 thêm
-    
+
     ~OpenVinoYoloHP() = default;
 
     void Warmup(int iters = 10);
 
     // BGR uint8
-    void Detect(const cv::Mat& bgr, float conf, float iou,bool Is3, std::vector<YoloBox>& out);
+    void Detect(const cv::Mat& bgr, float conf, float iou, bool Is3, std::vector<YoloBox>& out);
 
 private:
     void Letterbox(const cv::Mat& src, cv::Mat& dst, float& scale, int& padw, int& padh);
@@ -62,6 +62,7 @@ private:
 
 private:
     int S = 640;
+
     int C = 80;
 
     ov::Core core;

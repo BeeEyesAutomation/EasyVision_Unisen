@@ -34,6 +34,8 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        [NonSerialized]
+        public int MaxThread = 1;
         public int Index = -1;
         public String PathModel = "";
         public TypeOCR TypeOCR = TypeOCR.CPU;

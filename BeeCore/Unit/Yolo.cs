@@ -48,6 +48,8 @@ namespace BeeCore
         public bool IsNew = false;
         public ModeCheck ModeCheck = ModeCheck.Single;
         public List<RectRotate> listRotScan = new List<RectRotate>();
+        [NonSerialized]
+        public int MaxThread = 5;
         public int Percent
         {
             get => _Percent;
@@ -82,7 +84,7 @@ namespace BeeCore
 		[NonSerialized]
         private NativeRCNN.RCNNBox[] RCNNBoxes;
         public int NumThreadCPU = 16;
-        public  void SetModel()
+        public  void SetModel( bool IsAgain=false)
         {
             if (rotArea == null) rotArea = new RectRotate();
             if (rotCrop == null) rotCrop = new RectRotate();
@@ -124,9 +126,9 @@ namespace BeeCore
                 //{
                 //	TypeYolo = TypeYolo.Onnx;
                 //}
-                //if (IsIniYolo)
-                //    return;
-					switch (TypeYolo)
+                if (IsIniYolo&& !IsAgain)
+                    return;
+                switch (TypeYolo)
 					{
                     case TypeYolo.YOLO:
 						using (Py.GIL())
@@ -152,13 +154,12 @@ namespace BeeCore
 							pathModel += "\\best.xml";
 							if (File.Exists(pathModel))
 							{
-								NativeOnnx = new NativeYolo(pathModel, 1024, 0, NumThreadCPU);
+								NativeOnnx = new NativeYolo(pathModel, 640, 0, NumThreadCPU);
 
 								NativeOnnx.Warmup(10);
 								OnnxBoxes = new NativeYolo.YoloBox[200];
 								
 							}
-
 
 							Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
 
@@ -792,13 +793,17 @@ namespace BeeCore
                     {
                         using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
                         {
-                          
+                           
                             float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
 
                             if (matCrop.Type() == MatType.CV_8UC1)
-                                Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                                Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR); 
                             if (NativeOnnx == null)
                                 return;
+                            if (matCropTemp == null) matCropTemp = new Mat();
+                            if (!matCropTemp.Empty()) matCropTemp.Dispose();
+                            matCropTemp = matCrop.Clone();
+
                             int countDetect = NativeOnnx.Detect(
                             matCrop.Data,
                             matCrop.Width,
@@ -1269,7 +1274,7 @@ namespace BeeCore
 
             return maxY <= valueY;   // cắt đường y = valueY
         }
-        public static double CalcMissingPercent_AutoMinMax(ref Mat src, Rect bbox, double brightRatio = 0.25)
+        public static double CalcMissingPercent_AutoMinMax(ref Mat src, Rect bbox, double brightRatio = 0.4)
         {
             // brightRatio = phần trăm "vùng sáng nhất" muốn lấy (0.2–0.4 thường ok)
             if (brightRatio <= 0) brightRatio = 0.25;
@@ -1322,9 +1327,12 @@ namespace BeeCore
         [NonSerialized]
         public List< ResultItem> ResultItem=new List<ResultItem>() ;
         int numOK = 0, numNG = 0;
-        double CalcArea(ResultItem r, LabelItem item, out double percentOut)
+        double CalcArea(ResultItem r, LabelItem item, out float percentOut)
         {
             percentOut = 0;
+
+            if (item == null)
+                return 0;
 
             if (item.Name == "T_CHI")
             {
@@ -1334,21 +1342,23 @@ namespace BeeCore
                     (int)r.rot._rect.Width,
                     (int)r.rot._rect.Height);
 
+              
                 if (r.matProcess == null)
                     r.matProcess = new Mat();
-
-                if (!r.matProcess.Empty())
-                    r.matProcess.Dispose();
+                if (r.matProcess.Width != 0)
+                    if (!r.matProcess.Empty())
+                        r.matProcess.Dispose();
 
                 r.matProcess = matCropTemp.Clone();
 
-                percentOut = CalcMissingPercent_AutoMinMax(ref r.matProcess, rect);
+                percentOut = (float)CalcMissingPercent_AutoMinMax(ref r.matProcess, rect);
 
                 return percentOut * r.rot._rect.Width * r.rot._rect.Height / 100;
             }
 
             return r.rot._rect.Width * r.rot._rect.Height;
         }
+
         int FindScanBox(ResultItem rs ,String Name)
         {
             for (int k = 0; k < listRotScan.Count; k++)
@@ -1478,8 +1488,10 @@ namespace BeeCore
                 //--------------------------------
                 if (resultTemp != null)
                 {
+
                     foreach (var rs in resultTemp)
                     {
+                        rs.IsOK = false;
                         ResultItem.Add(new ResultItem(rs.Name)
                         {
                             matProcess = rs.matProcess,
@@ -1565,6 +1577,8 @@ namespace BeeCore
                             if (objs.Count == 0)
                                 continue;
 
+                            
+
                             //--------------------------------
                             // COUNTER
                             //--------------------------------
@@ -1581,6 +1595,11 @@ namespace BeeCore
                             for (int j = 0; j < objs.Count; j++)
                             {
                                 var r = objs[j];
+                                float Pecent;
+                                double area = CalcArea(r, item, out Pecent);
+
+                                r.Area = (float)area;
+
                                 bool ok = true;
 
                                 if (item.IsWidth)

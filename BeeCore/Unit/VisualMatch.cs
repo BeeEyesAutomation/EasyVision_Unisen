@@ -34,6 +34,8 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        [NonSerialized]
+        public int MaxThread = 1;
         public bool IsBinary = false;
         public int Border = 0;
         public int IndexCCD = 0;

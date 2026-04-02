@@ -1,12 +1,14 @@
 ﻿using BeeCore.Funtion;
 using BeeGlobal;
 using Newtonsoft.Json.Linq;
+using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.UI;
 
@@ -253,6 +255,65 @@ namespace BeeCore
             }
            
         }
+        public async Task DoWorkAsync()
+        {
+            await Task.Run(() =>
+            {
+                DoWork();
+            });
+
+        }
+        public void RunToolAsync()
+        {
+            var key = this.Name.ToString();
+            if (Propety2.MaxThread == 0) Propety2.MaxThread = 1;
+            lock (Global._toolSemaphores)
+            {
+                if (!Global._toolSemaphores.ContainsKey(key))
+                    Global._toolSemaphores[key] = new SemaphoreSlim(Propety2.MaxThread);
+            }
+
+            var sem = Global._toolSemaphores[key];
+
+            _ = RunInternalAsync(sem);
+        }
+
+        private async Task RunInternalAsync(SemaphoreSlim sem)
+        {
+            bool entered = false;
+
+            try
+            {
+                await sem.WaitAsync();
+                entered = true;
+
+                var workTask = DoWorkAsync();
+
+                var completed = await Task.WhenAny(
+                    workTask,
+                    Task.Delay(Global.Config.TimerOutChecking)
+                );
+
+                if (completed != workTask)
+                {
+                    Results = Results.NG;
+                    return;
+                }
+
+                await workTask;
+            }
+            catch
+            {
+                Results = Results.NG;
+            }
+            finally
+            {
+                if (entered)
+                    sem.Release();
+
+                Complete();
+            }
+        }
         public void Complete()
         {
            
@@ -286,6 +347,52 @@ namespace BeeCore
           StatusTool = StatusTool.Done;
         
         }
+     
+
+        //public void RunToolAsync()
+        //{
+        //    // tạo semaphore theo tool (key có thể là Name hoặc Type)
+        //    var key = this.Name;
+        //    if (Propety2.MaxThread == 0) Propety2.MaxThread = 1;
+        //    lock (Global. _toolSemaphores)
+        //    {
+        //        if (!Global._toolSemaphores.ContainsKey(key))
+        //            Global._toolSemaphores[key] = new SemaphoreSlim(Propety2.MaxThread);
+        //    }
+
+        //    var sem = Global._toolSemaphores[key];
+        //    Task.Run(async () =>
+        //    {
+        //        await sem.WaitAsync();
+
+        //        try
+        //        {
+        //            var workTask = Task.Run(() => DoWork());
+
+        //            var completed = await Task.WhenAny(
+        //                workTask,
+        //                Task.Delay(Global.Config.TimerOutChecking)
+        //            );
+
+        //            if (completed != workTask)
+        //            {
+        //                Results = Results.NG;
+        //                return;
+        //            }
+
+        //            await workTask;
+        //        }
+        //        catch
+        //        {
+        //            Results = Results.NG;
+        //        }
+        //        finally
+        //        {
+        //            Complete();
+        //            sem.Release();
+        //        }
+        //    });
+        //}
         public PropetyTool(dynamic Propety, TypeTool TypeTool,String Name)
         {
             this.Name = Name;
