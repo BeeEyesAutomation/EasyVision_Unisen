@@ -65,11 +65,18 @@ namespace BeeInterface
                 EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea , Propety.rotCrop, Propety.rotMask, Propety.rotLimit };
                 EditRectRot1.RotateCurentChanged -= EditRectRot_RotateCurentChanged;
                 EditRectRot1.RotateCurentChanged += EditRectRot_RotateCurentChanged;
+                EditRectRot1.ChooseEditBegin -= EditRectRot1_ChooseEditBegin;
                 EditRectRot1.ChooseEditBegin += EditRectRot1_ChooseEditBegin;
+                EditRectRot1.ChooseEditEnd -= EditRectRot1_ChooseEditEnd;
                 EditRectRot1.ChooseEditEnd += EditRectRot1_ChooseEditEnd;
+                EditRectRot1.ClearAllEvent -= EditRectRot1_ClearAllEvent;
                 EditRectRot1.ClearAllEvent += EditRectRot1_ClearAllEvent;
+                EditRectRot1.UnoRotEvent -= EditRectRot1_UnoRotEvent;
                 EditRectRot1.UnoRotEvent += EditRectRot1_UnoRotEvent;
+                EditRectRot1.AddRotEvent -= EditRectRot1_AddRotEvent;
                 EditRectRot1.AddRotEvent += EditRectRot1_AddRotEvent;
+                Global.ChooseRotChage -= Global_ChooseRotChage1;
+                Global.ChooseRotChage += Global_ChooseRotChage1;
                 EditRectRot1.IsHide = false;
                 this.VisibleChanged += ToolYolo_VisibleChanged;
                 btnCLAll.IsCLick = Propety.IsColorAllObjLabel;
@@ -220,6 +227,89 @@ namespace BeeInterface
             //Propety.TypeMode = Propety.TypeMode;
 
         }
+        private int IndxOld = -1;
+
+        private void Global_ChooseRotChage1(int obj)
+        {if (obj < 0) return;
+           
+                Propety.IndexProgChoose = obj;
+                List<RectRotate> ListScan=new List<RectRotate>();
+                switch (EditRectRot1.rotCurrent.TypeCrop)
+                {
+                    case TypeCrop.Limit:
+                        ListScan = Propety.listRotScan;
+                        break;
+                    case TypeCrop.Mask:
+                        ListScan = Propety.ListRotMask;
+                        break;
+                }
+            if (obj >= ListScan.Count()) return;
+            if (Propety.ModeCheck == ModeCheck.Single)
+            {
+                int i = 0;
+                foreach (RectRotate rotScan in ListScan)
+                {
+                    if (i == obj)
+                    {
+                        rotScan._dragAnchor = AnchorPoint.Center;
+                        RectRotate rot2 = rotScan.Clone();
+                        // local -> world
+                        rot2._PosCenter = Propety.rotArea.LocalToWorld(rot2._PosCenter);
+                        rot2._rectRotation = Propety.rotArea._rectRotation + rot2._rectRotation;
+                        rot2.TypeCrop = Global.rotCurrent.TypeCrop;
+                        EditRectRot1.rotCurrent = rot2;
+                        Global.rotCurrent = EditRectRot1.rotCurrent.Clone();
+
+                    }
+                    else
+                        rotScan._dragAnchor = AnchorPoint.None;
+                    i++;
+
+                }
+                Global.StatusDraw = StatusDraw.Edit;
+            }
+            else
+            {
+                RectRotate rotMul = ListScan[obj];
+                if (rotMul._dragAnchor == AnchorPoint.Center)
+                {
+                    rotMul._dragAnchor = AnchorPoint.None;
+                    rotMul.Name = "";
+
+                }
+                else
+                {
+                    rotMul.Dir = Global.Dir;
+                    rotMul._dragAnchor = AnchorPoint.Center;
+                    rotMul.Name = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.NameChoose;
+                }
+                Global.StatusDraw = StatusDraw.None;
+                Global.StatusDraw = StatusDraw.Scan;
+            }
+
+            if(EditRectRot1.rotCurrent.TypeCrop==TypeCrop.Limit)
+            {
+               
+                RectRotate rot = Propety.listRotScan[obj];
+                foreach (LabelItem labelItem in Propety.labelItems)
+                {
+                    int index = 0;
+                    if (labelItem.ListInsideBox != null)
+                    {
+                        index = labelItem.ListInsideBox.FindIndex(a => a == rot);
+
+                        if (index >= 0)
+                        {
+                            IndxOld = index;
+                           
+                        }
+                    }
+
+                }
+            }    
+          
+
+        }
 
         private void EditRectRot1_AddRotEvent(RectRotate obj)
         {  
@@ -230,11 +320,32 @@ namespace BeeInterface
 
         private void EditRectRot1_UnoRotEvent(bool obj)
         {
-            if (Propety.listRotScan.Count > 0)
+            List<RectRotate> ListScan = new List<RectRotate>();
+            switch (EditRectRot1.rotCurrent.TypeCrop)
             {
-                Propety.listRotScan.RemoveAt(Propety.listRotScan.Count - 1);
-                if(_currentLabel.ListInsideBox.Count>0)
-                _currentLabel.ListInsideBox.RemoveAt(_currentLabel.ListInsideBox.Count - 1);
+                case TypeCrop.Limit:
+                    ListScan = Propety.listRotScan;
+                    break;
+                case TypeCrop.Mask:
+                    ListScan = Propety.ListRotMask;
+                    break;
+            }
+            if (ListScan.Count > 0)
+            {
+              
+                foreach (LabelItem lb in Propety.labelItems)
+                {
+
+                    if (lb.ListInsideBox == null)
+                        continue;
+                    if(lb.Name== ListScan[ListScan.Count-1].Name)
+                        lb.ListInsideBox.RemoveAt(lb.ListInsideBox.Count - 1);
+
+                }
+                ListScan.RemoveAt(ListScan.Count - 1);
+                //if (_currentLabel != null)
+                //if(_currentLabel.ListInsideBox.Count>0)
+                //_currentLabel.ListInsideBox.RemoveAt(_currentLabel.ListInsideBox.Count - 1);
 
             }    
             
@@ -245,39 +356,74 @@ namespace BeeInterface
 
         private void EditRectRot1_ClearAllEvent(bool obj)
         {
-            if (Propety.listRotScan.Count > 0)
-                Propety.listRotScan.Clear();
-         
-            _currentLabel.ListInsideBox.Clear();
+            List<RectRotate> ListScan = new List<RectRotate>();
+            switch (EditRectRot1.rotCurrent.TypeCrop)
+            {
+                case TypeCrop.Limit:
+                    ListScan = Propety.listRotScan;
+                    break;
+                case TypeCrop.Mask:
+                    ListScan = Propety.ListRotMask;
+                    break;
+            }
+            if (ListScan.Count > 0)
+                ListScan.Clear();
+            foreach (LabelItem lb  in  Propety.labelItems)
+            {
+                
+                if (lb.ListInsideBox == null)
+                    lb.ListInsideBox = new List<RectRotate>();
+                lb.ListInsideBox.Clear();
+             
+            }
+
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
-           
         }
 
         private void EditRectRot1_ChooseEditEnd(int obj)
         {if (obj == -1) return;
-            if (Propety.rotLimit != null)
+            List<RectRotate> ListScan = new List<RectRotate>();
+            switch (EditRectRot1.rotCurrent.TypeCrop)
             {
-                Dir Dir= Propety.listRotScan[obj].Dir;
-                Propety.rotLimit.Dir = Dir;
-                RectRotate rot = Propety.rotLimit.Clone();
+                case TypeCrop.Limit:
+                    ListScan = Propety.listRotScan;
+                    break;
+                case TypeCrop.Mask:
+                    ListScan = Propety.ListRotMask;
+                    break;
+            }
+            if (EditRectRot1.rotCurrent != null)
+            {
+                Dir Dir= ListScan[obj].Dir;
+                EditRectRot1.rotCurrent.Dir = Dir;
+                RectRotate rot = EditRectRot1.rotCurrent.Clone();
 
                 PointF pCenter = Propety.rotArea.WorldToLocal(rot._PosCenter);
                 rot._PosCenter = pCenter;
-                if(obj < Propety.listRotScan.Count())
+                if(obj < ListScan.Count())
                 {
-                    Propety.listRotScan[obj] = rot;
-                    foreach (RectRotate rot1 in Propety.listRotScan)
+                    ListScan[obj] = rot;
+                    foreach (LabelItem labelItem in Propety.labelItems)
                     {
-                        rot1.Name = "";
-                    }
-                        foreach (LabelItem labelItem in Propety.labelItems)
-                    {
+                        int index = 0;
                         if (labelItem.ListInsideBox != null)
-                            labelItem.ListInsideBox.Clear();
-                    }    
-                      
-                 
+                        {
+                            index = labelItem.ListInsideBox.FindIndex(a => a .Name== rot.Name);
+                            if (index >= 0)
+                            {
+                                labelItem.ListInsideBox[IndxOld] = ListScan[obj];
+                                break;
+                            }
+                        }
+
+                    }
+                    //foreach (RectRotate rot1 in Propety.listRotScan)
+                    //{
+                    //    rot1.Name = "";
+                    //}
+
+
                 }    
               
                 
@@ -288,9 +434,19 @@ namespace BeeInterface
 
         private void EditRectRot1_ChooseEditBegin(bool obj)
         {
+            List<RectRotate> ListScan = new List<RectRotate>();
+            switch (EditRectRot1.rotCurrent.TypeCrop)
+            {
+                case TypeCrop.Limit:
+                    ListScan = Propety.listRotScan;
+                    break;
+                case TypeCrop.Mask:
+                    ListScan = Propety.ListRotMask;
+                    break;
+            }
             Propety.ModeCheck = ModeCheck.Single;
         
-            foreach (RectRotate rectRotate in Propety.listRotScan)
+            foreach (RectRotate rectRotate in ListScan)
                 rectRotate._dragAnchor = AnchorPoint.None;
         }
 
@@ -351,7 +507,7 @@ namespace BeeInterface
 
         String Er = "";
 
-        private void ToolYolo_StatusToolChanged(StatusTool obj)
+        private void ToolYolo_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
             if (Propety.Index >= Common.PropetyTools[Global.IndexProgChoose].Count)
@@ -2100,9 +2256,10 @@ namespace BeeInterface
             this.Invoke((Action)(async () =>
             {
                 _currentLabel = arg2;
-             
-               
-                Global.ChooseRotChage += Global_ChooseRotChage;
+                if (_currentLabel.ListInsideBox == null)
+                    _currentLabel.ListInsideBox = new List<RectRotate>();
+
+                        Global.ChooseRotChage += Global_ChooseRotChage;
                 Propety.ModeCheck = ModeCheck.Multi;
                 Propety.NameChoose = arg2.Name;
                 if (_currentLabel.ListInsideBox!=null)
@@ -2132,6 +2289,7 @@ namespace BeeInterface
                 _currentLabel.ListInsideBox = new List<RectRotate>();
             if (_currentLabel.ListInsideBox.FindIndex(a => a == rot) == -1)
             {
+                rot.Name = _currentLabel.Name;
                 rot._dragAnchor = AnchorPoint.Center;
                 _currentLabel.ListInsideBox.Add(rot);
             }    

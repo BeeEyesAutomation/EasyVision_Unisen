@@ -173,12 +173,14 @@ namespace BeeInterface
                         
                             propety.Propety2 = propety.Propety.Clone();
                             propety.Propety = null;
-                        } 
-                            
-                       
-                      
-                        
-                      }
+                        }
+
+
+                        if (propety != null)
+                            if (propety.Propety2 != null)
+                                propety.Propety2.SetModel();
+
+                    }
                 }
                 if (IsVerNew)
                 {
@@ -252,36 +254,36 @@ namespace BeeInterface
 
                     indexThread++;
                 }
-            try
-            {
-                // ==== set model ====
-                foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
-                {
-                    if (ListTool == null) continue;
+            //try
+            //{
+            //    // ==== set model ====
+            //    foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
+            //    {
+            //        if (ListTool == null) continue;
 
-                    foreach (PropetyTool propety in ListTool)
-                    {
+            //        foreach (PropetyTool propety in ListTool)
+            //        {
                             
-                            try
-                        {
-                            if (propety != null)
-                                if (propety.Propety2 != null)
-                                    propety.Propety2.SetModel();
-                        }
-                        catch(Exception ex)
-                        {
-                            Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "BuildUI", ex.Message));
-                            Console.WriteLine(ex.Message);
-                        }
-                    }
+            //                try
+            //            {
+            //                if (propety != null)
+            //                    if (propety.Propety2 != null)
+            //                        propety.Propety2.SetModel();
+            //            }
+            //            catch(Exception ex)
+            //            {
+            //                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "BuildUI", ex.Message));
+            //                Console.WriteLine(ex.Message);
+            //            }
+            //        }
                  
-                }
+            //    }
 
-            }
-            catch (Exception ex)
-            {
-                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "BuildUI", ex.Message));
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "BuildUI", ex.Message));
+            //}
             }
             catch (Exception ex)
             {

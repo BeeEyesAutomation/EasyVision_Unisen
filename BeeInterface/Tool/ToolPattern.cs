@@ -150,7 +150,7 @@ namespace BeeInterface
             }
         }
 
-        private void ToolPattern_StatusToolChanged(StatusTool obj)
+        private void ToolPattern_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
             if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)

@@ -31,6 +31,7 @@ using System.Threading.Tasks;
 
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
+using static Google.Apis.Drive.v3.DriveService;
 using Camera = BeeCore.Camera;
 using Control = System.Windows.Forms.Control;
 using Point = System.Drawing.Point;
@@ -574,81 +575,16 @@ namespace BeeInterface
 
             if (Global.StatusDraw == StatusDraw.Scan)
             {
+                Global.IndexRotChoose = -1;
                 int i = 0;
                 if (IndexRotChoose >= 0)
                 {
-                 
+                  
 
 
-                    if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.ModeCheck == ModeCheck.Single)
-                    {
-                        BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.IndexProgChoose = IndexRotChoose;
-
-                        foreach (RectRotate rot in BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.listRotScan)
-                        {
-                            if (i == IndexRotChoose)
-                            {
-                               
-                                rot._dragAnchor = AnchorPoint.Center;
-                                //if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeTool==TypeTool.BarCode||
-                                //    BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeTool == TypeTool.CraftOCR)
-                                //BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.SetTemp(rot);
-                                if (BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeTool == TypeTool.Learning)
-                                {
-                                    RectRotate rot2 = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected]
-         .Propety2.ListRotMask[IndexRotChoose].Clone();
-
-                                    RectRotate rotArea = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected]
-                                        .Propety2.rotArea;
-
-                                    // local -> world
-                                    rot2._PosCenter = rotArea.LocalToWorld(rot2._PosCenter);
-                                    rot2._rectRotation = rotArea._rectRotation + rot2._rectRotation;
-
-
-                                   // rot2.Dir = Global.Dir;
-                                    rot2.TypeCrop = Global.rotCurrent.TypeCrop;
-                                    Global.rotCurrent = rot2;
-
-                                    // Propety.rotMask.Name = Propety.ListRotMask[IndexRotChoose].Name;
-                                    //   Global.TypeCrop = TypeCrop.Mask;
-                                    Global.StatusDraw = StatusDraw.Edit;
-                                    
-                                }
-                            }
-
-                            else
-                                
-                                rot._dragAnchor = AnchorPoint.None;
-                            i++;
-
-                        }
-
-                    }
-                    else
-                    {
-                        RectRotate rot = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.listRotScan[IndexRotChoose];
-                        if (rot._dragAnchor == AnchorPoint.Center)
-                        {
-                            rot._dragAnchor = AnchorPoint.None;
-                            rot.Name = "";
-                          
-                        }
-                       
-                            
-                        else
-                        {
-                            rot.Dir = Global.Dir;
-                            rot._dragAnchor = AnchorPoint.Center;
-                            rot.Name = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.NameChoose;
-                        }
-
-
-                        // BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.SetMulTemp();
-                    }
-                    Global.IndexRotChoose = -1;
+                    
                     Global.IndexRotChoose = IndexRotChoose;
-                    imgView.Invalidate();
+                    
                     return;
                 }
             }
@@ -2809,7 +2745,6 @@ namespace BeeInterface
                             Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
                          //   BeeInterface.G.Header.btnTraining.Enabled = false;
                             BeeInterface.G.Header.btnTraining.IsCLick = false;
-
                         }
                         Global.Config.SumTime = Global.Config.SumOK + Global.Config.SumNG;
                         G.StatusDashboard.CycleTime = (int)(timer.TT + Cyclyle1) -(int) Global.Comunication.Protocol.DelayTrigger;
@@ -2834,7 +2769,58 @@ namespace BeeInterface
                                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Result4", Global.TotalOK.ToString()));
                                 break;
                         }
-                       
+                        //this.Invoke((Action)(() =>
+                        //{
+                        //    try
+                        //    {
+                        //        foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
+
+                        //        {
+                        //            if (PropetyTool.ItemTool == null)
+                        //                continue;
+                        //            using (var itemTool = PropetyTool.ItemTool)
+                        //            {
+                        //                if (PropetyTool.Results == Results.OK)
+                        //                {
+                        //                    if (PropetyTool.Location != null && PropetyTool.Location != "")
+                        //                        itemTool.Score = PropetyTool.Location;
+                        //                    else
+                        //                    {
+
+                        //                        itemTool.Score = PropetyTool.ScoreResult + "";
+                        //                    }
+
+                        //                    itemTool.Status = PropetyTool.Results.ToString();
+                        //                    itemTool.CT = PropetyTool.CycleTime;
+                        //                    itemTool.colorTrack = Global.ParaShow.ColorOK;
+                        //                    itemTool.ClStatus = Global.ParaShow.ColorOK;
+                        //                    itemTool.ClScore = Global.ParaShow.ColorOK;
+                        //                }
+                        //                else if (PropetyTool.Results == Results.NG)
+                        //                {
+                        //                    if (PropetyTool.Location != "")
+                        //                        itemTool.Score = PropetyTool.Location;
+                        //                    else
+                        //                    {
+
+                        //                        itemTool.Score = PropetyTool.ScoreResult + "";
+                        //                    }
+                        //                    itemTool.Status = PropetyTool.Results.ToString();
+                        //                    itemTool.CT = PropetyTool.CycleTime;
+                        //                    itemTool.colorTrack = Global.ParaShow.ColorNG;
+                        //                    itemTool.ClStatus = Global.ParaShow.ColorNG;
+                        //                    itemTool.ClScore = Global.ParaShow.ColorNG;
+                        //                }
+                        //            }
+
+                        //        }
+                        //    }
+                        //    catch (Exception ex)
+                        //    {
+                        //        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "GC", ex.Message));
+
+                        //    }
+                        //}));
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "CT", CTTotol));
 
                         Global.StatusProcessing = StatusProcessing.None;

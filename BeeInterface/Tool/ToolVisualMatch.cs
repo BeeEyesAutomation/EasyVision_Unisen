@@ -43,10 +43,14 @@ namespace BeeInterface
         {
             EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotMask };
             EditRectRot1.Refresh();
+            EditRectRot1.IsHide = false;
             EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
-            EditRectRot1.IsHide = false;
+            this.VisibleChanged -= ToolVisualMatch_VisibleChanged;
             this.VisibleChanged += ToolVisualMatch_VisibleChanged;
+          
+        
+
             imgTemp.Cursor = Cursors.Hand;
             imgTemp.AllowClickZoom = true;
             imgTemp.AllowDoubleClick = true;
@@ -346,7 +350,7 @@ namespace BeeInterface
 
         }
 
-        private void ToolPattern_StatusToolChanged(StatusTool obj)
+        private void ToolPattern_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
             if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
@@ -444,11 +448,9 @@ namespace BeeInterface
 
         private void btnTest_Click(object sender, EventArgs e)
         {
+            
             btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();
-            else
-                btnTest.IsCLick = false;
+            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
         }
         bool IsFullSize = false;
         private void btnCropHalt_Click(object sender, EventArgs e)

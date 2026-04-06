@@ -120,7 +120,7 @@ namespace BeeInterface
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolYolo_StatusToolChanged;
 
         }
-        private void ToolYolo_StatusToolChanged(StatusTool obj)
+        private void ToolYolo_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
             if (Propety.Index >= Common.PropetyTools[Global.IndexProgChoose].Count)

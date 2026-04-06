@@ -50,7 +50,7 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
-  
+        public int MaxThread = 1;
         public bool IsIni = false;
         public int Index = -1;
         public int ValueCompare = 0;

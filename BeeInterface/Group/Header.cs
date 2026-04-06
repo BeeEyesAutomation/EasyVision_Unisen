@@ -2,6 +2,7 @@
 using BeeCore;
 using BeeGlobal;
 using BeeUi;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -763,13 +764,23 @@ txtQrCode.Focus();
 
         public void StartReadPCI()
         {
-            if (_isRunning) return;
+            try
+            {
+                if (_isRunning) return;
 
-            _cts = new CancellationTokenSource();
-            _isRunning = true;
+                _cts = new CancellationTokenSource();
+                _isRunning = true;
 
-            _readTask = Task.Run(() => ReadLoop(_cts.Token));
-            LogMessage?.Invoke("PCI reader started.");
+                _readTask = Task.Run(() => ReadLoop(_cts.Token));
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", "PCI reader started."));
+
+                LogMessage?.Invoke("PCI reader started.");
+            }
+            catch(Exception ex)
+            {
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", ex.Message));
+
+            }
         }
 
         public void StopReadPCI()
@@ -803,7 +814,7 @@ txtQrCode.Focus();
                     try
                     {
                         ret = DASK.DI_ReadPort((ushort)Global.Comunication.Protocol.PCI_Card1.m_dev, 0, out value);
-                     //   Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", value + ""));
+                       Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "PCI", value + ""));
 
                     }
                     catch (Exception ex)
@@ -913,10 +924,11 @@ txtQrCode.Focus();
                                 Global.Comunication.Protocol.PCI_Card1 = new PCI_Card();
                             if (Global.Comunication.Protocol.PCI_Card1.Connect())
                             {
-                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", "sucess"));
                                 Global.Comunication.Protocol.IsConnected = true;
                                 Global.Comunication.Protocol.PCI_Card1.Write(PCI_Write.LightOFF);
                                 StartReadPCI();
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", "sucess"));
+
                                 Global.PLCStatus = PLCStatus.Ready;
                             }
                         }

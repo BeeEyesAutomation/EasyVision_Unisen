@@ -38,9 +38,10 @@ namespace BeeCore
     [Serializable()]
     public class Barcode
     {
-      
-     
 
+
+        [NonSerialized]
+        public int MaxThread = 5;
         public object Clone()
         {
             return this.MemberwiseClone();

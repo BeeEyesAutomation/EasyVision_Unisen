@@ -154,7 +154,7 @@ namespace BeeCore
 							pathModel += "\\best.xml";
 							if (File.Exists(pathModel))
 							{
-								NativeOnnx = new NativeYolo(pathModel, 640, 0, NumThreadCPU);
+								NativeOnnx = new NativeYolo(pathModel, 0, 0, NumThreadCPU);
 
 								NativeOnnx.Warmup(10);
 								OnnxBoxes = new NativeYolo.YoloBox[200];
@@ -166,7 +166,7 @@ namespace BeeCore
 						}
 						catch (Exception ex)
 						{
-							Console.WriteLine(ex.Message);
+							MessageBox.Show( ex.Message);
 						}
 
 						break;
@@ -666,8 +666,9 @@ namespace BeeCore
                 rotCropAdjustment = rotCrop;
             if(IsLine)
             if (rotCropAdjustment != null)
-            {
-                Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotCropAdjustment,null);
+                {
+                    Line2D = new Line2DCli();
+                    Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotCropAdjustment,null);
                 Mat  matProcess = new Mat();
               
                 if (matCrop.Type() == MatType.CV_8UC3)
@@ -932,8 +933,16 @@ namespace BeeCore
                                         // ===== 3) Build batch =====
                                         var matTemps = new List<Mat>();
                                         var roiList = new List<RectRotate>();
-
-                                        foreach (var rot in ListRotMask)
+                                        var roiScan = new List<RectRotate>();
+                                        foreach (LabelItem lb in  labelItems)
+                                        {
+                                            if(lb.ListInsideBox!=null)
+                                            {
+                                                foreach (RectRotate rot in lb.ListInsideBox)
+                                                    roiScan.Add(rot);
+                                            }    
+                                        }    
+                                        foreach (var rot in roiScan)
                                         {
                                             Mat matTemp = CropRoiView(matCrop, rot);
 
@@ -1094,7 +1103,7 @@ namespace BeeCore
                                     // Ký hiệu: result là tuple-like (3 phần)
                                     dynamic dyn = G.objYolo;
                                     if (dyn == null)
-                                        throw new InvalidOperationException("objYolo chưa được khởi tạo.");
+                                        return;
 
                                     result = dyn.predict((long)p, h, w, ch, stride, conf, toolName);
 
@@ -1105,18 +1114,6 @@ namespace BeeCore
 
                                     int n = (int)boxes.Length();
 
-                                    // === Chuẩn bị danh sách output ===
-                                    //  if (resultTemp == null) resultTemp = new List<ResultItem>(n);
-
-                                    //else { boxList.Clear(); if (boxList.Capacity < n) boxList.Capacity = n; }
-
-                                    //if (scoreList == null) scoreList = new List<float>(n);
-                                    //else { scoreList.Clear(); if (scoreList.Capacity < n) scoreList.Capacity = n; }
-
-                                    //if (labelList == null) labelList = new List<string>(n);
-                                    //else { labelList.Clear(); if (labelList.Capacity < n) labelList.Capacity = n; }
-
-                                    // === Đọc kết quả ===
                                     for (int j = 0; j < n; j++)
                                     {
                                         var b = boxes[j];   // PyObject
@@ -1137,39 +1134,7 @@ namespace BeeCore
                                         resultTemp.Add(new BeeCore.ResultItem(((PyObject)labels[j]).ToString()));
                                         resultTemp[resultTemp.Count - 1].rot = rt;
                                         resultTemp[resultTemp.Count - 1].Score = (float)((PyObject)scores[j]).As<double>() * 100f;
-                                        //boxList.Add(rt);
-                                        //scoreList.Add((float)((PyObject)scores[j]).As<double>() * 100f);
-                                        //labelList.Add(((PyObject)labels[j]).ToString());
                                     }
-                                  
-                                    //foreach (var r in resultTemp)
-                                    //{
-
-                                    //    int index = labelItems.FindIndex(x =>
-                                    //    string.Equals(x.Name, r.Name, StringComparison.OrdinalIgnoreCase));
-                                    //    if (index >= 0)
-                                    //    {
-                                    //        LabelItem lb = labelItems[index];
-                                    //        Parallel.For(0, lb.ListIndexBox.Count, new ParallelOptions { MaxDegreeOfParallelism = Math.Min(300, Environment.ProcessorCount) },
-                                    //        j =>
-                                    //        //for (int j = 0; j < lb.ListIndexBox.Count; j++)
-                                    //        {
-                                    //            HSVCli[] arrHSV = new HSVCli[1];
-                                    //            arrHSV[0] = new HSVCli();
-                                    //            arrHSV[0].H = lb.HSV.H;
-                                    //            arrHSV[0].S = lb.HSV.S;
-                                    //            arrHSV[0].V = lb.HSV.V;
-                                    //          //  SetTemp(lb.ListColorArea[j], arrHSV, lb.ValueExternColor);
-                                    //            using (Mat matCrop2 = CropRoiView(matCrop, r.rot))
-                                    //            {
-                                    //                r.matProcess = new Mat();
-                                    //                r.ValueColor = CheckColor(lb.ListColorArea[j], ref r.matProcess, matCrop2);
-                                    //                if (!Global.IsRun)
-                                    //                    lb.ListTempColor[j] = r.ValueColor;
-                                    //            }
-                                    //        });
-                                    //    }
-                                    //}
                                     GC.KeepAlive(matCrop);
                                 }
                                
@@ -1334,29 +1299,29 @@ namespace BeeCore
             if (item == null)
                 return 0;
 
-            if (item.Name == "T_CHI")
-            {
-                Rect rect = new Rect(
-                    (int)r.rot._PosCenter.X + (int)r.rot._rect.X,
-                    (int)r.rot._PosCenter.Y + (int)r.rot._rect.Y,
-                    (int)r.rot._rect.Width,
-                    (int)r.rot._rect.Height);
+            //if (item.Name == "T_CHI")
+            //{
+            //    Rect rect = new Rect(
+            //        (int)r.rot._PosCenter.X + (int)r.rot._rect.X,
+            //        (int)r.rot._PosCenter.Y + (int)r.rot._rect.Y,
+            //        (int)r.rot._rect.Width,
+            //        (int)r.rot._rect.Height);
 
               
-                if (r.matProcess == null)
-                    r.matProcess = new Mat();
-                if (r.matProcess.Width != 0)
-                    if (!r.matProcess.Empty())
-                        r.matProcess.Dispose();
+            //    if (r.matProcess == null)
+            //        r.matProcess = new Mat();
+            //    if (r.matProcess.Width != 0)
+            //        if (!r.matProcess.Empty())
+            //            r.matProcess.Dispose();
 
-                r.matProcess = matCropTemp.Clone();
+            //    r.matProcess = matCropTemp.Clone();
 
-                percentOut = (float)CalcMissingPercent_AutoMinMax(ref r.matProcess, rect);
+            //    percentOut = (float)CalcMissingPercent_AutoMinMax(ref r.matProcess, rect);
 
-                return percentOut * r.rot._rect.Width * r.rot._rect.Height / 100;
-            }
+            //    return percentOut * r.rot._rect.Width * r.rot._rect.Height / 100;
+            //}
 
-            return r.rot._rect.Width * r.rot._rect.Height;
+            return (int)((r.rot._rect.Width * r.rot._rect.Height)/100.0f);
         }
 
         int FindScanBox(ResultItem rs ,String Name)
@@ -1556,7 +1521,7 @@ namespace BeeCore
                 //--------------------------------
            
                 {
-
+                    int k = 0;
 
                     foreach (var item in labelItems)
                     {
@@ -1566,14 +1531,14 @@ namespace BeeCore
                         //--------------------------------
                         // KHÔNG CÓ SCAN BOX
                         //--------------------------------
-                        if (item.ListInsideBox == null||item.ListInsideBox.Count==0)
+                        if (item.ListInsideBox == null||item.ListInsideBox.Count==0 && IsCropSingle==false)
                         {
                             var objs = ResultItem
                                 .Where(x => x.rot != null &&
                                             x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase))
                                 .OrderBy(x => x.rot._PosCenter.X)
                                 .ToList();
-
+                         
                             if (objs.Count == 0)
                                 continue;
 
@@ -1582,12 +1547,7 @@ namespace BeeCore
                             //--------------------------------
                             // COUNTER
                             //--------------------------------
-                            if (item.IsCounter && objs.Count < item.ValueCounter)
-                            {
-                                foreach (var r in objs)
-                                    r.IsOK = false;
-                                continue;
-                            }
+                          
 
                             //--------------------------------
                             // LOOP OBJECT
@@ -1619,6 +1579,17 @@ namespace BeeCore
 
                                 if (item.IsYMax)
                                     ok &= IntersectYMax(r.rot, item.ValueYMax);
+                                if (item.IsArea)
+                                {
+                             
+                                    ok &= r.Area >= item.ValueArea;
+                                    if(ok==false)
+                                    {
+                                        r.IsOK = ok;
+                                        continue;
+
+                                    }    
+                                }
                                 if (IsLine)
                                 {
 
@@ -1644,41 +1615,51 @@ namespace BeeCore
                                 //--------------------------------
                                 // AREA
                                 //--------------------------------
-                                if (item.IsArea)
-                                {
-                                    double sumArea = objs.Sum(x => x.Area);
-                                    ok &= sumArea >= item.ValueArea * 100;
-                                }
+                               
 
                                 //--------------------------------
                                 // COLOR
                                 //--------------------------------
-                                if (item.IsMinColor &&
-                                    j < item.ListColorArea.Count &&
-                                    j < item.ListTempColor.Count)
+                                if (item.IsMinColor)
                                 {
                                     using (Mat crop = CropRoiView(matCropTemp, r.rot))
                                     {
-                                        if (r.matProcess == null)
+                                    
                                             r.matProcess = new Mat();
-
-                                        int val = CheckColor(item.ListColorArea[j], ref r.matProcess, crop);
-
-                                        if (!Global.IsRun)
-                                            item.ListTempColor[j] = val;
-
-                                        int valTemp = item.ListTempColor[j];
-
-                                        if (valTemp > 0)
+                                        if (item.ListColorArea.Count <= j)
                                         {
-                                            float percent = Math.Abs(val - valTemp) * 100f / valTemp;
-                                            ok &= percent <= item.ValueMinColor;
+                                            item.ListColorArea.Add(new BeeCpp.ColorArea());
+                                            HSVCli[] arrHSV = new HSVCli[1];
+                                            arrHSV[0] = new HSVCli();
+                                            arrHSV[0].H = item.HSV.H;
+                                            arrHSV[0].S = item.HSV.S;
+                                            arrHSV[0].V = item.HSV.V;
+                                            SetTemp(item.ListColorArea[item.ListColorArea.Count - 1], arrHSV, item.ValueExternColor);
+                                        }
+                                        r.ValueColor =(int) (CheckColor(item.ListColorArea[j], ref r.matProcess, crop)/100.0);
+
+                                        //if (!Global.IsRun)
+                                        //    item.ListTempColor[j] = val;
+
+                                      //  int valTemp = item.ListTempColor[j];
+
+                                        if (r.ValueColor > 0)
+                                        {
+                                           // float percent = Math.Abs(val - valTemp) * 100f / valTemp;
+                                            ok &= r.ValueColor >= item.ValueMinColor;
                                         }
                                         else ok = false;
                                     }
                                 }
 
                                 r.IsOK = ok;
+                            }
+                            if (item.IsCounter)
+                            {
+                                if (objs.Count(x => x.IsOK) < item.ValueCounter)
+                                {
+                                    objs.ForEach(rs => rs.IsOK = false);
+                                }
                             }
 
                             numOK += objs.Count(x => x.IsOK);
@@ -1689,7 +1670,7 @@ namespace BeeCore
                         //--------------------------------
                         else
                         {
-                            int k= 0;
+                           
                             foreach (var scan in item.ListInsideBox)
                             {
                                 bool boxOK = true;   // ✅ reset đúng chỗ
@@ -1706,8 +1687,28 @@ namespace BeeCore
                                     .ToList();
                                 if (IsCropSingle)
                                 {
-                                    objs =new List<ResultItem> { ResultItem[k] };
-
+                                    if(k>=ResultItem.Count)
+                                    {
+                                        scan.IsOK = false;
+                                        scan.NumInside = 0;
+                                        k++;
+                                        continue;
+                                    }
+                                    List<ResultItem> objTemp = new List<ResultItem> { ResultItem[k] };
+                                     objs = objTemp
+                                 .Where(x =>
+                                     x.rot != null &&
+                                     x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase) &&
+                                     IsInside(scan, x.rot))
+                                 .OrderBy(x => x.rot._PosCenter.X)
+                                 .ToList();
+                                    if(objs.Count==0)
+                                    {
+                                        scan.IsOK = false;
+                                        scan.NumInside = 0;
+                                        k++;
+                                        continue;
+                                    }
                                 }
                                 //--------------------------------
                                 // FILTER RIGHT
@@ -1744,29 +1745,30 @@ namespace BeeCore
                                 //--------------------------------
                                 // COUNTER
                                 //--------------------------------
-                                if (item.IsCounter)
-                                {
-                                    if (objsValid.Count < item.ValueCounter)
-                                    {
-                                        k++;
-                                        //foreach (var r in objsValid)
-                                        //    r.IsOK = false;
-                                        numOK += objs.Count(x => x.IsOK);
-                                        scan.IsOK = false;
-                                        continue;
-                                    }
-                                }
-                                else
-                                {
+                                //if (item.IsCounter)
+                                //{
+                                //    if (objsValid.Count < item.ValueCounter)
+                                //    {
+                                //        k++;
+                                //        //foreach (var r in objsValid)
+                                //        //    r.IsOK = false;
+                                //        numOK += objs.Count(x => x.IsOK);
+                                //        scan.IsOK = false;
+                                //        continue;
+                                //    }
+                                //}
+                                //else
+                                //{
                                    
-                                    if (objsValid.Count == 0)
-                                    {
-                                        scan.IsOK = false;
-                                        continue;
-                                        k++;
-                                    }
+                                //    if (objsValid.Count == 0)
+                                //    {
+                                       
+                                //        k++;
+                                       
+                                       
+                                //    }
 
-                                }
+                                //}
 
                                 //--------------------------------
                                 // LOOP OBJECT
@@ -1824,62 +1826,110 @@ namespace BeeCore
                                         ok &= sumArea >= item.ValueArea * 100;
                                     }
                                     if (item.IsMinColor)
-                                    {     
-                                  //--------------------------------
-                                  // COLOR (fix index đúng)
-                                  //--------------------------------
-                                  int indexColor = k * item.ValueCounter + j;
-                                    if(item.ListColorArea == null)
                                     {
-                                        item.ListTempColor = new List<int>();
-                                        item.ListColorArea = null;
-                                        SetListTemp();
-                                    }
-                                    if (item.ListColorArea != null)
-                                        if (indexColor>= item.ListColorArea.Count)
-                                    {
-                                        item.ListTempColor = new List<int>();
-                                        item.ListColorArea = null;
-                                        SetListTemp();
-                                    }    
+                                        int indexColor = k * item.ValueCounter + j;
+                                      
+                                        //--------------------------------
+                                        // COLOR (fix index đúng)
+                                        //--------------------------------
+                                       
+                                    //if(item.ListColorArea == null)
+                                    //{
+                                    //    item.ListTempColor = new List<int>();
+                                    //    item.ListColorArea = null;
+                                    //    SetListTemp();
+                                    //}
+                                    //if (item.ListColorArea != null)
+                                    //    if (indexColor>= item.ListColorArea.Count)
+                                    //{
+                                    //    item.ListTempColor = new List<int>();
+                                    //    item.ListColorArea = null;
+                                    //    SetListTemp();
+                                    //}    
                                   
                                       
                                    
                                         using (Mat crop = CropRoiView(matCropTemp, r.rot))
                                         {
-                                            if (r.matProcess == null)
-                                                r.matProcess = new Mat();
-
-                                            int val = CheckColor(item.ListColorArea[indexColor], ref r.matProcess, crop);
-
-                                            if (!Global.IsRun)
-                                                item.ListTempColor[indexColor] = val;
-
-                                            int valTemp = item.ListTempColor[indexColor];
-
-                                            if (valTemp > 0)
+                                            r.matProcess = new Mat();
+                                            if (item.ListColorArea.Count <= indexColor)
                                             {
-                                                float percent = Math.Abs(val - valTemp) * 100f / valTemp;
-                                                r.PercentColor = percent;
-
-                                                if (percent > item.ValueMinColor)
-                                                {
-                                                    ok = false;
-                                                    scan.NumInside--;
-                                                    boxOK = false;
-                                                }
+                                                item.ListColorArea.Add(new BeeCpp.ColorArea());
+                                                HSVCli[] arrHSV = new HSVCli[1];
+                                                arrHSV[0] = new HSVCli();
+                                                arrHSV[0].H = item.HSV.H;
+                                                arrHSV[0].S = item.HSV.S;
+                                                arrHSV[0].V = item.HSV.V;
+                                                SetTemp(item.ListColorArea[item.ListColorArea.Count - 1], arrHSV, item.ValueExternColor);
                                             }
-                                            else ok = false;
+                                            r.ValueColor = (int)(CheckColor(item.ListColorArea[j], ref r.matProcess, crop) / 100.0);
+
+                                            //if (!Global.IsRun)
+                                            //    item.ListTempColor[j] = val;
+
+                                            //  int valTemp = item.ListTempColor[j];
+
+                                            //if (r.ValueColor > 0)
+                                            //{
+                                            //    // float percent = Math.Abs(val - valTemp) * 100f / valTemp;
+                                            //    ok &= r.ValueColor >= item.ValueMinColor;
+                                            //}
+                                            //else ok = false;
+                                            //if (r.matProcess == null)
+                                            //    r.matProcess = new Mat();
+
+                                            //int val = CheckColor(item.ListColorArea[indexColor], ref r.matProcess, crop);
+
+                                            //if (!Global.IsRun)
+                                            //    item.ListTempColor[indexColor] = val;
+
+                                            //int valTemp = item.ListTempColor[indexColor];
+
+                                            //if (valTemp > 0)
+                                            //{
+                                            //    float percent = Math.Abs(val - valTemp) * 100f / valTemp;
+                                            //    r.PercentColor = percent;
+
+                                            //    if (percent > item.ValueMinColor)
+                                            //    {
+                                            //        ok = false;
+                                            //        scan.NumInside--;
+                                            //        boxOK = false;
+                                            //    }
+                                            //}
+                                         //   else ok = false;
                                         }
                                     }
 
                                     r.IsOK = ok;
                                     if (!ok) boxOK = false;
                                 }
+                                if(item.IsMinColor)
+                                {
+                                    double sumArea = objsValid.Sum(x => x.ValueColor);
+                                    boxOK = sumArea >= item.ValueMinColor ;
+                                    objsValid.ForEach(rs => rs.IsOK = boxOK);
 
+                                }
+                                if (item.IsCounter)
+                                {
+                                    if (objsValid.Count(x => x.IsOK) < item.ValueCounter)
+                                    {
+                                        objsValid.ForEach(rs => rs.IsOK = false);
+                                    }
+                                }
+
+                             
                                 scan.IsOK = boxOK;
                                 k++;
-                                numOK += objs.Count(x => x.IsOK);
+                                if (IsCropSingle)
+                                {
+                                    if(objsValid.Count>1)
+                                    {
+                                        numOK = 0;
+                                    }    
+                                }    
+                                    numOK += objsValid.Count(x => x.IsOK);
                             }
                         }
                     }
@@ -2140,8 +2190,17 @@ namespace BeeCore
             if (Global.IsRun) rotA = rotAreaAdjustment;
             var mat = new Matrix();
             int i = 0;
-
-                Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            Color cl = Color.LimeGreen;
+            switch (Common.PropetyTools[Global.IndexProgChoose][Index].Results)
+            {
+                case Results.OK:
+                    cl = Global.ParaShow.ColorOK;
+                    break;
+                case Results.NG:
+                    cl = Global.ParaShow.ColorNG;
+                    break;
+            }
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
                 Color clScan= Color.White;
                
            
@@ -2202,12 +2261,19 @@ namespace BeeCore
                                 if (index > -1)
                                 {
                                     LabelItem item = labelItems[index];
+                                  
                                     if (rot.IsOK == true)
-                                        clScan = Global.ParaShow.ColorOK;
+                                        if (IsColorAllObjLabel)
+                                            clScan = cl;
+                                        else
+                                            clScan = Global.ParaShow.ColorOK;
                                     else
                                     {
                                         cOK = "(" + rot.NumInside + ") NG";
-                                        clScan = Global.ParaShow.ColorNG;
+                                        if (IsColorAllObjLabel)
+                                            clScan = cl;
+                                        else
+                                            clScan = Global.ParaShow.ColorNG;
                                     }
                                 }
                                 else
@@ -2265,7 +2331,8 @@ namespace BeeCore
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
                     int indexArea = i + 1;
-                   
+                    if (IsColorAllObjLabel)
+                        cOK = "";
                         Draws.Box2Label(gc, rot, indexArea + "."+ rot.Name, cOK, font, clScan, brushText, Global.ParaShow.Opacity, Global.ParaShow.ThicknessLine,true);
 
 
@@ -2321,6 +2388,36 @@ namespace BeeCore
                 gc.ResetTransform();
 
             }
+         
+            if (IsLine)
+                if (rotCropAdjustment != null)
+                {
+                    bool IsHasLine = Line2D.Found;
+                    Color clLine = Global.ParaShow.ColorNG;
+                    String sOK = "NG";
+                    if (IsHasLine)
+                    {
+                        clLine = Global.ParaShow.ColorOK;
+                        sOK = "OK";
+
+                    }    
+                     
+                    
+                            mat = new Matrix();
+                    if (!Global.IsRun)
+                    {
+                        mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                        mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                    }
+                    mat.Translate(rotCropAdjustment._PosCenter.X, rotCropAdjustment._PosCenter.Y);
+                    mat.Rotate(rotCropAdjustment._rectRotation);
+                    gc.Transform = mat;
+                    Draws.Box2Label(gc, rotCropAdjustment, "Line", sOK, font, clLine, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
+
+                    //gc.DrawRectangle(new Pen(cl, Global.ParaShow.ThicknessLine), new Rectangle((int)rotCropAdjustment._rect.X, (int)rotCropAdjustment._rect.Y, (int)rotCropAdjustment._rect.Width, (int)rotCropAdjustment._rect.Height));
+                    gc.ResetTransform();
+
+                }
             mat = new Matrix();
             if (!Global.IsRun)
             {
@@ -2331,17 +2428,7 @@ namespace BeeCore
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
 
-          
-            Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[Global.IndexProgChoose][Index].Results)
-            {
-                case Results.OK:
-                    cl =  Global.ParaShow.ColorOK;
-                    break;
-                case Results.NG:
-                    cl = Global.ParaShow.ColorNG;
-                    break;
-            }
+         
             Pen pen = new Pen(Color.Blue, 2);
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
             //Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
@@ -2354,7 +2441,7 @@ namespace BeeCore
                 gc.Transform = mat;
                 Draws.DrawInfiniteLine(gc, new Pen(Global.ParaShow.ColorChoose, Global.ParaShow.ThicknessLine), LineVerital);
                 gc.ResetTransform();
-                    Line2D = new Line2DCli();
+                
 
                 }
 
@@ -2603,11 +2690,11 @@ namespace BeeCore
                         if (!Global.ParaShow.IsShowLabel) label = "";
 
                         if(item.IsMinColor)
-                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore,Math.Round( rs.PercentColor) + "%", font, clShow, brushText, 30,Global.ParaShow.ThicknessLine,false, Global.ParaShow.FontSize, 1,true);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore,rs.ValueColor + "px", font, clShow, brushText, 30,Global.ParaShow.ThicknessLine,false, Global.ParaShow.FontSize, 1,true);//("+Math.Round( ResultItem[i].Percent) + "%)
                         else if (item.IsArea)
-                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area ) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
                         else
-                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area ) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
                         gc.ResetTransform();
 
                     }

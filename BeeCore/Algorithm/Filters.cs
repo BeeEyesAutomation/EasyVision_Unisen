@@ -128,7 +128,200 @@ namespace BeeCore.Algorithm
         gray.Dispose();
         return result;
     }
-    public static Mat BinaryTextAuto(Mat src, int blockSize = 31, int c = 8, int minArea = 20)
+        public static unsafe Mat BinaryTextAutoBlack(Mat src, int minArea = 20, int maxHoleArea = 30)
+        {
+            if (src == null || src.Empty())
+                return new Mat();
+
+            Mat gray = new Mat();
+            Mat bg = new Mat();
+            Mat norm = new Mat();
+            Mat mask = new Mat();
+            Mat maskedGray = new Mat();
+            Mat result = new Mat();
+
+            Mat labels = new Mat();
+            Mat stats = new Mat();
+            Mat centroids = new Mat();
+
+            try
+            {
+                // ===== 1. GRAY =====
+                if (src.Channels() == 3)
+                    Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+                else if (src.Channels() == 4)
+                    Cv2.CvtColor(src, gray, ColorConversionCodes.BGRA2GRAY);
+                else
+                    gray = src.Clone();
+
+                // ===== 2. REMOVE UNEVEN LIGHT =====
+                Cv2.GaussianBlur(gray, bg, new Size(31, 31), 0);
+                Cv2.Absdiff(gray, bg, norm);
+                Cv2.Normalize(norm, norm, 0, 255, NormTypes.MinMax);
+
+                // ===== 3. CREATE MASK =====
+                Cv2.Threshold(norm, mask, 0, 255, ThresholdTypes.Binary | ThresholdTypes.Otsu);
+
+                // fix polarity
+                if (Cv2.Mean(mask).Val0 > 127)
+                    Cv2.BitwiseNot(mask, mask);
+
+                // ===== 4. EXPAND MASK (NHẸ) =====
+                using (Mat kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(2, 2)))
+                    Cv2.Dilate(mask, mask, kernel);
+
+                // ===== 5. AND → GIỮ NÉT GỐC =====
+                Cv2.BitwiseAnd(gray, gray, maskedGray, mask);
+
+                // ===== 6. THRESHOLD LẠI =====
+                Cv2.Threshold(maskedGray, result, 0, 255, ThresholdTypes.Binary | ThresholdTypes.Otsu);
+
+                if (Cv2.Mean(result).Val0 > 127)
+                    Cv2.BitwiseNot(result, result);
+
+                // ===== 7. CONNECTED COMPONENT =====
+                int nLabels = Cv2.ConnectedComponentsWithStats(
+                    result, labels, stats, centroids,
+                    PixelConnectivity.Connectivity8, MatType.CV_32S);
+
+                int rows = result.Rows;
+                int cols = result.Cols;
+
+                int colsStats = stats.Cols;
+                int* pStats = (int*)stats.Data.ToPointer();
+
+                // đánh dấu keep component lớn
+                byte[] keep = new byte[nLabels];
+                keep[0] = 0;
+
+                for (int i = 1; i < nLabels; i++)
+                {
+                    int area = pStats[i * colsStats + (int)ConnectedComponentsTypes.Area];
+                    if (area >= minArea)
+                        keep[i] = 1;
+                }
+
+                // ===== 8. BUILD RESULT (REMOVE SMALL WHITE DOTS) =====
+                Mat clean = new Mat(result.Size(), MatType.CV_8UC1, Scalar.All(0));
+
+                for (int y = 0; y < rows; y++)
+                {
+                    int* pLabel = (int*)labels.Ptr(y).ToPointer();
+                    byte* pDst = (byte*)clean.Ptr(y).ToPointer();
+
+                    for (int x = 0; x < cols; x++)
+                    {
+                        int lb = pLabel[x];
+                        pDst[x] = (lb > 0 && keep[lb] != 0) ? (byte)255 : (byte)0;
+                    }
+                }
+
+                // ===== 9. FILL SMALL HOLES ONLY =====
+                // invert để hole thành object
+                Cv2.BitwiseNot(clean, labels);
+
+                Mat labels2 = new Mat();
+                Mat stats2 = new Mat();
+                Mat centroids2 = new Mat();
+
+                int n2 = Cv2.ConnectedComponentsWithStats(
+                    labels, labels2, stats2, centroids2,
+                    PixelConnectivity.Connectivity8, MatType.CV_32S);
+
+                int* pStats2 = (int*)stats2.Data.ToPointer();
+                int colsStats2 = stats2.Cols;
+
+                for (int y = 0; y < rows; y++)
+                {
+                    int* pLabel = (int*)labels2.Ptr(y).ToPointer();
+                    byte* pDst = (byte*)clean.Ptr(y).ToPointer();
+
+                    for (int x = 0; x < cols; x++)
+                    {
+                        int lb = pLabel[x];
+                        if (lb > 0)
+                        {
+                            int area = pStats2[lb * colsStats2 + (int)ConnectedComponentsTypes.Area];
+
+                            // 🔥 chỉ fill hole nhỏ
+                            if (area <= maxHoleArea)
+                                pDst[x] = 255;
+                        }
+                    }
+                }
+
+                labels2.Dispose();
+                stats2.Dispose();
+                centroids2.Dispose();
+
+                return clean;
+            }
+            finally
+            {
+                gray.Dispose();
+                bg.Dispose();
+                norm.Dispose();
+                mask.Dispose();
+                maskedGray.Dispose();
+                result.Dispose();
+                labels.Dispose();
+                stats.Dispose();
+                centroids.Dispose();
+            }
+        }
+        public static unsafe Mat RemoveSmallWhiteDots(Mat binTextWhite, int minArea)
+        {
+            if (binTextWhite == null || binTextWhite.Empty())
+                return new Mat();
+
+            if (binTextWhite.Type() != MatType.CV_8UC1)
+                throw new ArgumentException("binTextWhite must be CV_8UC1");
+
+            using (Mat labels = new Mat())
+            using (Mat stats = new Mat())
+            using (Mat centroids = new Mat())
+            {
+                // trực tiếp CC trên vùng trắng (255)
+                int nLabels = Cv2.ConnectedComponentsWithStats(
+                    binTextWhite,
+                    labels,
+                    stats,
+                    centroids,
+                    PixelConnectivity.Connectivity8,
+                    MatType.CV_32S
+                );
+
+                byte[] keep = new byte[nLabels];
+                keep[0] = 0; // background
+
+                for (int i = 1; i < nLabels; i++)
+                {
+                    int area = stats.Get<int>(i, (int)ConnectedComponentsTypes.Area);
+                    if (area >= minArea)
+                        keep[i] = 1;
+                }
+
+                Mat result = new Mat(binTextWhite.Size(), MatType.CV_8UC1, Scalar.All(0));
+
+                int rows = labels.Rows;
+                int cols = labels.Cols;
+
+                for (int y = 0; y < rows; y++)
+                {
+                    int* pLabel = (int*)labels.Ptr(y).ToPointer();
+                    byte* pDst = (byte*)result.Ptr(y).ToPointer();
+
+                    for (int x = 0; x < cols; x++)
+                    {
+                        int lb = pLabel[x];
+                        pDst[x] = (lb > 0 && keep[lb] != 0) ? (byte)255 : (byte)0;
+                    }
+                }
+
+                return result;
+            }
+        }
+        public static Mat BinaryTextAuto(Mat src, int blockSize = 31, int c = 8, int minArea = 20)
         {
             Mat gray = new Mat();
 

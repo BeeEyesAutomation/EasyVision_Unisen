@@ -310,7 +310,7 @@ namespace BeeInterface
            trackScore.Value =(float)obj;
         }
 
-        private void ToolColorArea_StatusToolChanged(StatusTool obj)
+        private void ToolColorArea_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
 
             if (Global.IsRun) return;

@@ -85,7 +85,7 @@ namespace BeeInterface
            trackScore.Value = obj;
         }
 
-        private void ToolWidth_StatusToolChanged(StatusTool obj)
+        private void ToolWidth_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {if (Global.IsRun) return;
             btnScan.Enabled = true;
             if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)

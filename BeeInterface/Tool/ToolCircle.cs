@@ -377,7 +377,7 @@ private void ToolCircle_ScoreChanged(float obj)
             trackScore.Value = obj;
         }
 
-        private void ToolCircle_StatusToolChanged(StatusTool obj)
+        private void ToolCircle_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
            if(Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool==StatusTool.Done)
                 if (Propety.IsCalibs)

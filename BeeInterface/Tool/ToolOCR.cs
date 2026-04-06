@@ -83,10 +83,12 @@ namespace BeeInterface
         public void LoadPara()
         {
             EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotMask };
+            EditRectRot1.IsHide = false;
             EditRectRot1.Refresh();
             EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
-            EditRectRot1.IsHide = false;
+        
+            this.VisibleChanged -= ToolOCR_VisibleChanged;
             this.VisibleChanged += ToolOCR_VisibleChanged;
           
             Global.TypeCrop = TypeCrop.Area;
@@ -148,9 +150,16 @@ namespace BeeInterface
             }
         }
 
-        private void ToolOCR_StatusToolChanged(StatusTool obj)
+        private void ToolOCR_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
-
+            if (Global.IsRun) return;
+            if (Propety.Index >= Common.PropetyTools[Global.IndexProgChoose].Count)
+                return;
+            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
+            {
+               
+                btnTest.Enabled = true;
+            }
         }
 
         private void ToolOCR_ScoreChanged(float obj)
@@ -432,10 +441,9 @@ namespace BeeInterface
         private void btnTest_Click_1(object sender, EventArgs e)
         {
 
-            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
-            else
-                btnTest.IsCLick = false;
+            btnTest.Enabled = false;
+            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+
         }
 
         private void label12_Click(object sender, EventArgs e)

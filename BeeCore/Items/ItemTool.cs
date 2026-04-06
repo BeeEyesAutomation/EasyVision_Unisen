@@ -131,11 +131,11 @@ namespace BeeCore
             }
         }
         public PointF pTick;
-        private Color colorTrack = Color.Gray;
+        public Color colorTrack = Color.Gray;
         private Image imgTick = Properties.Resources.Enable;
         public TypeTool TypeTool;
         public Image IconTool;
-        private float valueScore;
+        public float valueScore;
         public bool NotChange = false;
         [Category("Min")]
         private float min;
@@ -287,7 +287,9 @@ namespace BeeCore
 
         private void ItemTool_VisibleChanged(object sender, EventArgs e)
         {
-          //  Value = BeeCore.Common.PropetyTools[IndexThread][IndexTool].Score;
+            Common.PropetyTools[IndexThread][IndexTool].StatusToolChanged -= ItemTool_StatusToolChanged;
+            Common.PropetyTools[IndexThread][IndexTool].StatusToolChanged += ItemTool_StatusToolChanged;
+            //  Value = BeeCore.Common.PropetyTools[IndexThread][IndexTool].Score;
         }
 
         private void ItemTool_MouseUp(object sender, MouseEventArgs e)
@@ -623,6 +625,7 @@ namespace BeeCore
             Min = Common.PropetyTools[IndexThread][IndexTool].MinValue;
             Max = Common.PropetyTools[IndexThread][IndexTool].MaxValue;
             Value = BeeCore.Common.PropetyTools[IndexThread][IndexTool].Score;
+            Common.PropetyTools[IndexThread][IndexTool].StatusToolChanged -= ItemTool_StatusToolChanged;
             Common.PropetyTools[IndexThread][IndexTool].StatusToolChanged += ItemTool_StatusToolChanged;
             Common.PropetyTools[IndexThread][IndexTool].ScoreChanged += ItemTool_ScoreChanged;
             this.Parent.VisibleChanged += Parent_VisibleChanged1;
@@ -665,7 +668,7 @@ namespace BeeCore
             this.Refresh();
         }
 
-        private void ItemTool_StatusToolChanged(StatusTool obj)
+        private void ItemTool_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (TriggerNum != Global.TriggerNum&&!Global.Config.IsMultiProg)
                 return;

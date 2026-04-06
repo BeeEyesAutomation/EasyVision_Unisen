@@ -349,7 +349,7 @@ namespace BeeInterface
            AdjAspectLen.Value = obj;
         }
 
-        private void ToolWidth_StatusToolChanged(StatusTool obj)
+        private void ToolWidth_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {if (Global.IsRun) return;
             if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
             {

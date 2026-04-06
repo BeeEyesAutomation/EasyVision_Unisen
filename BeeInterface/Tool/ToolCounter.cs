@@ -144,7 +144,7 @@ namespace BeeInterface
         }
         String Er = "";
 
-        private void ToolYolo_StatusToolChanged(StatusTool obj)
+        private void ToolYolo_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
             if (Propety.Index >= Common.PropetyTools[Global.IndexProgChoose].Count)

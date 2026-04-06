@@ -44,7 +44,7 @@ namespace BeeInterface
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
         }
 
-        private void ToolPattern_StatusToolChanged(StatusTool obj)
+        private void ToolPattern_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
             if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)

@@ -174,7 +174,7 @@ namespace BeeInterface
             }
         }
 
-        private void ToolPosition_Adjustment_StatusToolChanged(StatusTool obj)
+        private void ToolPosition_Adjustment_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
            

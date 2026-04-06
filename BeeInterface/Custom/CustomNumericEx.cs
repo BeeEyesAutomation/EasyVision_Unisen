@@ -474,13 +474,21 @@ namespace BeeInterface
             }
             protected override void OnMouseUp(MouseEventArgs e)
             {
-                if (_press && e.Button == MouseButtons.Left)
+                if (e.Button == MouseButtons.Left)
                 {
-                    _press = false; Invalidate();
-                    if (ClientRectangle.Contains(e.Location)) OnClick(EventArgs.Empty);
+                    _press = false;
+                    Invalidate();
                 }
+
                 base.OnMouseUp(e);
             }
+            //    if (_press && e.Button == MouseButtons.Left)
+            //    {
+            //        _press = false; Invalidate();
+            //        if (ClientRectangle.Contains(e.Location)) OnClick(EventArgs.Empty);
+            //    }
+            //    base.OnMouseUp(e);
+            //}
 
             protected override void OnPaint(PaintEventArgs e)
             {

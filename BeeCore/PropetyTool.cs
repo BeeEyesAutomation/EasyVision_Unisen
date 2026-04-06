@@ -166,7 +166,9 @@ namespace BeeCore
         public float StepValue = 0;
         private  StatusTool _StatusTool = StatusTool.WaitCheck;
         [field: NonSerialized]
-        public  event Action<StatusTool> StatusToolChanged;
+        public  event Action<PropetyTool, StatusTool> StatusToolChanged;
+        [field: NonSerialized]
+        public event Action<PropetyTool, StatusTool> ToolDoneChanged;
         public  StatusTool StatusTool
         {
             get => _StatusTool;
@@ -177,8 +179,7 @@ namespace BeeCore
                     _StatusTool = value;
                     //if (Global.StatusMode == StatusMode.Continuous && TypeTool == TypeTool.Position_Adjustment && Results == Results.NG)
                     //    return;
-                       
-                    StatusToolChanged?.Invoke(_StatusTool); // Gọi event
+                    StatusToolChanged?.Invoke(this,_StatusTool); // Gọi event
                 }
             }
         }
@@ -234,10 +235,11 @@ namespace BeeCore
 
         public void DoWork()
         {
-            Results=Results.None;
+            Results =Results.None;
             try
             {
                 StatusTool = StatusTool.Processing;
+                ToolDoneChanged?.Invoke(this, _StatusTool); // Gọi event
                 timer.Restart();
                 if (UsedTool == UsedTool.NotUsed && Global.IsRun)
                     return;
@@ -321,6 +323,7 @@ namespace BeeCore
             {
                 Results = Results.None;
                 StatusTool = StatusTool.Done;
+                ToolDoneChanged?.Invoke(this, _StatusTool); // Gọi event
                 return;
             }
             else
@@ -345,7 +348,8 @@ namespace BeeCore
             }    
                 
           StatusTool = StatusTool.Done;
-        
+            ToolDoneChanged?.Invoke(this, _StatusTool); // Gọi event
+
         }
      
 

@@ -21,11 +21,13 @@ namespace BeeCore
 
         }
      
-        public async void Start()
+        public  void Start()
         {
          
             if(StatusProcessing==StatusProcessing.None)
             {
+                doneCount = 0;
+                Global._toolSemaphores = new Dictionary<string, SemaphoreSlim>();
                 if (!Global.Comunication.Protocol.IsConnected && !Global.Comunication.Protocol.IsBypass)
                 {
                     Global.PLCStatus = PLCStatus.ErrorConnect;
@@ -70,12 +72,19 @@ namespace BeeCore
                     //}
                     if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].TypeTool == TypeTool.Position_Adjustment)
                     {
+                    if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].UsedTool != UsedTool.NotUsed)
+                    {
                         StatusProcessing = StatusProcessing.Adjusting;
-      
 
-                    BeeCore.Common.PropetyTools[indexThread][indexToolPosition].StatusToolChanged -= Checking_StatusToolChanged;
-                    BeeCore.Common.PropetyTools[indexThread][indexToolPosition].StatusToolChanged += Checking_StatusToolChanged;
-                     BeeCore.Common.PropetyTools[indexThread][indexToolPosition].RunToolAsync();
+
+                        BeeCore.Common.PropetyTools[indexThread][indexToolPosition].StatusToolChanged -= Checking_StatusToolChanged;
+                        BeeCore.Common.PropetyTools[indexThread][indexToolPosition].StatusToolChanged += Checking_StatusToolChanged;
+                        BeeCore.Common.PropetyTools[indexThread][indexToolPosition].RunToolAsync();
+
+                    }
+                    else
+                        StatusProcessing = StatusProcessing.Checking;
+
                         //if (!BeeCore.Common.PropetyTools[indexThread][indexToolPosition].worker.IsBusy)
                         //    BeeCore.Common.PropetyTools[indexThread][indexToolPosition].worker.RunWorkerAsync();
 
@@ -96,7 +105,7 @@ namespace BeeCore
                 }
         }
 
-        private void Checking_StatusToolChanged(StatusTool obj)
+        private void Checking_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (obj == StatusTool.Done)
             {
@@ -290,9 +299,16 @@ namespace BeeCore
                     
                     break;
                 case StatusProcessing.Checking:
-                    StatusProcessing = StatusProcessing.WaitingDone;
- 
-                    totalTools = BeeCore.Common.PropetyTools[indexThread].Count();
+                    doneCount = 0;
+                    Global._toolSemaphores = new Dictionary<string, SemaphoreSlim>();
+                    StatusProcessing = StatusProcessing.WaitingDone; totalTools = 0;
+                    foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[indexThread])
+                    {
+                        if (PropetyTool.UsedTool != UsedTool.NotUsed)
+                            totalTools++;
+                     
+                    }    
+                      
                     foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[indexThread])
                     {
                         //PropetyTool.ItemTool.Status = "---";
@@ -307,14 +323,15 @@ namespace BeeCore
 
                         if (PropetyTool.TypeTool == TypeTool.Position_Adjustment)
                         {
+                            doneCount++;
                             PropetyTool.StatusTool = StatusTool.Done;
                             continue;
                         }
                         PropetyTool.StatusTool = StatusTool.WaitCheck;
-                      
+                        PropetyTool.Results = Results.None;
 
-                        PropetyTool.StatusToolChanged -= PropetyTool_StatusToolChanged;
-                        PropetyTool.StatusToolChanged += PropetyTool_StatusToolChanged;
+                        PropetyTool.ToolDoneChanged -= PropetyTool_StatusToolChanged;
+                        PropetyTool.ToolDoneChanged += PropetyTool_StatusToolChanged;
                         PropetyTool.RunToolAsync();
 
                         //if (!PropetyTool.worker.IsBusy)
@@ -330,8 +347,9 @@ namespace BeeCore
         }
         private int totalTools = 0;
         private int doneCount = 0;
-        private void PropetyTool_StatusToolChanged(StatusTool obj)
-        {if (obj != StatusTool.Done) return;
+        private void PropetyTool_StatusToolChanged(PropetyTool tool, StatusTool obj)
+        {
+            if (obj != StatusTool.Done) return;
             Interlocked.Increment(ref doneCount);
 
             if (doneCount == totalTools)

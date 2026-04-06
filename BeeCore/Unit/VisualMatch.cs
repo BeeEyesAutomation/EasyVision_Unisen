@@ -115,7 +115,10 @@ namespace BeeCore
                                     Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.BGR2GRAY);
                                 if (IsAutoThreshBinary)
                                 {
-                                    matFilter = Filters.BinaryTextAuto(matFilter, 31, 8, SzClearNoise);
+                                    if(IsBlack)
+                                        matFilter = Filters.BinaryTextAutoBlack(matFilter,  SzClearNoise);
+                                    else
+                                        matFilter = Filters.BinaryTextAuto(matFilter, 31, 8, SzClearNoise);
                                     //  matFilter= Filters.FillInnerHolesOnly(matFilter);
                                 }
                                 else
@@ -260,7 +263,11 @@ namespace BeeCore
                                 Cv2.CvtColor(matFilter, matFilter, ColorConversionCodes.BGR2GRAY);
                             if (IsAutoThreshBinary)
                             {
-                                matFilter = Filters.BinaryTextAuto(img, 31, 8, SzClearNoise);
+                                if (IsBlack)
+                                    matFilter = Filters.BinaryTextAutoBlack(matFilter,  SzClearNoise);
+                                else
+                                    matFilter = Filters.BinaryTextAuto(img, 31, 8, SzClearNoise);
+
                             }
                             else
                             {

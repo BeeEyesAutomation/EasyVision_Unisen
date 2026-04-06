@@ -89,7 +89,7 @@ namespace BeeInterface
 
     
 
-        private void ToolMultiPattern_StatusToolChanged(StatusTool obj)
+        private void ToolMultiPattern_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
             if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
@@ -110,11 +110,9 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
 
-         //   btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();
-            else
-                btnTest.IsCLick = false;
+
+            btnTest.Enabled = false;
+            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
         }
         bool IsFullSize = false;
 
@@ -309,12 +307,10 @@ namespace BeeInterface
 
         private void btnCalib_Click(object sender, EventArgs e)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety2.IsCalibs = true;
-     //       btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();
-            else
-                btnTest.IsCLick = false;
+            Propety.IsCalibs = true;
+
+            btnTest.Enabled = false;
+            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
         }
 
         private void rjButton1_Click_1(object sender, EventArgs e)

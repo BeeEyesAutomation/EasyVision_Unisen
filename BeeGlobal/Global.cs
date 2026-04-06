@@ -16,7 +16,7 @@ namespace BeeGlobal
 {
     public class Global
     {
-        public static readonly Dictionary<string, SemaphoreSlim> _toolSemaphores
+        public static  Dictionary<string, SemaphoreSlim> _toolSemaphores
         = new Dictionary<string, SemaphoreSlim>();
         public static int _IndexRotChoose = -1;
         public static event Action<int> ChooseRotChage;
@@ -296,6 +296,7 @@ namespace BeeGlobal
         }
         public static StatusDraw _StatusDraw = StatusDraw.None;
         public static event Action<StatusDraw> StatusDrawChanged;
+        public static event Action<int > ChooseChanged;
         public static Config Config;
         public static float ZoomMinimum = 0;
         public static int IndexToolAuto = -1;

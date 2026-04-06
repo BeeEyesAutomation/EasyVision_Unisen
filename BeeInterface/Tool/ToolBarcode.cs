@@ -111,7 +111,7 @@ namespace BeeInterface
            trackScore.Value = obj;
         }
         float ScaleW = 0;
-        private void ToolWidth_StatusToolChanged(StatusTool obj)
+        private void ToolWidth_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {if (Global.IsRun) return;
             btnScan.Enabled = true;
             if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
@@ -192,12 +192,10 @@ namespace BeeInterface
             Global.StatusDraw = StatusDraw.Edit;
             Propety.TypeCrop = TypeCrop.Area;
             Global.TypeCrop= TypeCrop.Area;
-           
+
             btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected]. worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
-            else
-                btnTest.IsCLick = false;
+            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+
         }
         bool IsFullSize = false;
         private void btnCropHalt_Click(object sender, EventArgs e)

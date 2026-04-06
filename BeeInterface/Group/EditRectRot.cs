@@ -93,13 +93,21 @@ namespace BeeInterface.Group
 
         private void Global_RotateCurentChanged(RectRotate obj)
         {
-            rotCurrent = obj.Clone();
-            Rot[index] = rotCurrent;
+          
+            if(obj._rect.Width!=0)
+            {
+                rotCurrent = obj.Clone();
+                Rot[index] = rotCurrent;
+            }
+            else
+            {
+                Console.WriteLine("Err");
+            }    
           
         }
 
         ShapeType ShapeType = ShapeType.Rectangle;
-        private void SetShapeFor(TypeCrop which, ShapeType shape)
+        private void SetShapeFor( ShapeType shape)
         {
 
             RectRotate rr = Rot[index];
@@ -111,7 +119,9 @@ namespace BeeInterface.Group
                     NewShape(shape);
                 else
                 {
-                    rr.UpdateFromPolygon(true);
+                    rr._rectRotation = 0;
+                    rr.UpdateFromPolygon(false);
+
                 }
             }
             if (shape == ShapeType.Hexagon)
@@ -120,7 +130,9 @@ namespace BeeInterface.Group
                     NewShape(shape);
             }
 
-
+            _rotCurrent = rr;
+            Rot[index] = rr;
+            Global._rotCurrent = rr.Clone();
             // Global.TypeCrop = which;
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
@@ -230,7 +242,7 @@ namespace BeeInterface.Group
         private void btnRect_Click(object sender, EventArgs e)
         {
             ShapeType = ShapeType.Rectangle;
-            SetShapeFor(Global.TypeCrop, ShapeType);
+            SetShapeFor( ShapeType);
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
         }
@@ -238,7 +250,7 @@ namespace BeeInterface.Group
         private void btnElip_Click(object sender, EventArgs e)
         {
             ShapeType = ShapeType.Ellipse;
-            SetShapeFor(Global.TypeCrop, ShapeType);
+            SetShapeFor(ShapeType);
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
         }
@@ -246,7 +258,7 @@ namespace BeeInterface.Group
         private void btnHexagon_Click(object sender, EventArgs e)
         {
             ShapeType = ShapeType.Hexagon;
-            SetShapeFor(Global.TypeCrop, ShapeType);
+            SetShapeFor( ShapeType);
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
         }
@@ -255,7 +267,7 @@ namespace BeeInterface.Group
         {
             ShapeType = ShapeType.Polygon;
 
-            SetShapeFor(Global.TypeCrop, ShapeType);
+            SetShapeFor( ShapeType);
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
         }
@@ -289,8 +301,9 @@ namespace BeeInterface.Group
                 Rot[index]=new RectRotate();
             this.rotCurrent = Rot[index];
             Global.rotCurrent = this.rotCurrent.Clone();
-       
+            Global.RotateCurentChanged -= Global_RotateCurentChanged;
             Global.RotateCurentChanged += Global_RotateCurentChanged;
+         
             lay2Mask.Enabled = _rotCurrent.TypeCrop == TypeCrop.Mask ? true : false;
             layRange.Enabled = _rotCurrent.TypeCrop == TypeCrop.Area ? true : false;
             layLimit.Enabled = _rotCurrent.TypeCrop == TypeCrop.Limit ? true : false;
@@ -392,6 +405,8 @@ namespace BeeInterface.Group
                 }
             } 
         }
+        public event Action<int> ChooseScanChange;
+  
 
         private void EditRectRot_Load(object sender, EventArgs e)
         {
@@ -410,12 +425,14 @@ namespace BeeInterface.Group
         public event Action<int> ChooseEditEnd;
         private void btnEdit_Click(object sender, EventArgs e)
         {
+           
            // Propety.ModeCheck = ModeCheck.Single;
            
             //Propety.IsScan = btnEdit.IsCLick; ;
 
             if (btnEdit.IsCLick)
             {
+                Global.IndexRotChoose = -1;
                 btnEdit.Text = "OK"; Global.StatusDraw = StatusDraw.Scan;
                 ChooseEditBegin?.Invoke(true); // Gọi event
                 //RectRotate rot = Propety.ListRotMask[(int)numIndexArea.Value];
