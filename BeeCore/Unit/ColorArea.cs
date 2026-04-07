@@ -321,8 +321,9 @@ namespace BeeCore
             }
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[IndexThread][Index].Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
-            
-            Draws.Box2Label(gc, rotA, nameTool, pxRS + " Px", font, cl, brushText, 16, Global.ParaShow.ThicknessLine);
+            Draws.Box3Label(gc, rotA._rect, nameTool, Common.PropetyTools[IndexThread][Index].ScoreResult + "%", pxRS + " Px", font, cl, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
+
+          //  Draws.Box2Label(gc, rotA, nameTool, pxRS + " Px", font, cl, brushText, 16, Global.ParaShow.ThicknessLine);
            if(!Global.IsRun||Global.ParaShow.IsShowDetail)
             if (matProcess != null && !matProcess.Empty())
                 Draws.DrawMatInRectRotate(gc, matProcess, rotA,  Global.ScaleZoom * 100, Global.pScroll, cl,Global.ParaShow.Opacity/100.0f);

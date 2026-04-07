@@ -42,6 +42,51 @@ namespace BeeInterface
         public event Action<int, LabelItem> ChooseColorEnd;
         public event Action<int, LabelItem> ChooseAreaBegin;
         public event Action<int, LabelItem> ChooseAreaEnd;
+      
+        public event Action<int> ExternColorCharge;
+        private void DrawMultiColorButton(Graphics g, Rectangle rect, LabelItem it)
+        {
+            using (Pen p = new Pen(Color.Gray))
+                g.DrawRectangle(p, rect);
+
+            Rectangle fillRect = new Rectangle(rect.X + 1, rect.Y + 1, rect.Width - 2, rect.Height - 2);
+            if (fillRect.Width <= 0 || fillRect.Height <= 0) return;
+
+            if (it.ListColor != null && it.ListColor.Count > 0)
+            {
+                int count = it.ListColor.Count;
+                float partW = (float)fillRect.Width / count;
+
+                for (int i = 0; i < count; i++)
+                {
+                    int x1 = fillRect.X + (int)Math.Round(i * partW);
+                    int x2 = fillRect.X + (int)Math.Round((i + 1) * partW);
+                    Rectangle part = new Rectangle(x1, fillRect.Y, Math.Max(1, x2 - x1), fillRect.Height);
+
+                    using (SolidBrush b = new SolidBrush(it.ListColor[i]))
+                        g.FillRectangle(b, part);
+                }
+            }
+            else
+            {
+                using (SolidBrush b = new SolidBrush(Color.LightGray))
+                    g.FillRectangle(b, fillRect);
+
+                TextRenderer.DrawText(
+                    g,
+                    "Color",
+                    _scaledFontBold,
+                    rect,
+                    Color.Black,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+            }
+
+            if (it.IsChoosingColor)
+            {
+                using (Pen p = new Pen(Color.Blue, 2))
+                    g.DrawRectangle(p, rect);
+            }
+        }
 
         // ===== Baseline (mốc 300px) =====
         private const int BASE_WIDTH = 300;
@@ -404,24 +449,24 @@ namespace BeeInterface
 
                 DrawValueBoxWithLabel(g, rMin, "Min", it.ValueMinColor, it.IsMinColor);
                 DrawValueBoxWithLabel(g, rExt, "Ext", it.ValueExternColor, it.IsMinColor);
+                DrawMultiColorButton(g, btnRect, it);
+                //Color back = it.SampleColor == Color.Empty ? Color.LightGray : it.SampleColor;
 
-                Color back = it.SampleColor == Color.Empty ? Color.LightGray : it.SampleColor;
+                //using (SolidBrush b = new SolidBrush(back))
+                //    g.FillRectangle(b, btnRect);
 
-                using (SolidBrush b = new SolidBrush(back))
-                    g.FillRectangle(b, btnRect);
+                //using (Pen p = new Pen(Color.Gray))
+                //    g.DrawRectangle(p, btnRect);
 
-                using (Pen p = new Pen(Color.Gray))
-                    g.DrawRectangle(p, btnRect);
+                //Color txtColor = ((back.R + back.G + back.B) / 3) > 140 ? Color.Black : Color.White;
+                //TextRenderer.DrawText(g, "Color", _scaledFontBold, btnRect, txtColor,
+                //    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 
-                Color txtColor = ((back.R + back.G + back.B) / 3) > 140 ? Color.Black : Color.White;
-                TextRenderer.DrawText(g, "Color", _scaledFontBold, btnRect, txtColor,
-                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-
-                if (it.IsChoosingColor)
-                {
-                    using (Pen p = new Pen(Color.Blue, 2))
-                        g.DrawRectangle(p, btnRect);
-                }
+                //if (it.IsChoosingColor)
+                //{
+                //    using (Pen p = new Pen(Color.Blue, 2))
+                //        g.DrawRectangle(p, btnRect);
+                //}
 
                 return;
             }
@@ -795,6 +840,9 @@ namespace BeeInterface
                     if (!it.IsMinColor)
                     {
                         it.IsChoosingColor = false;
+
+                     
+                        //  it.SampleColor = Color.Empty; // nếu còn dùng ở nơi khác
                         HideColorEditors();
                     }
                     else
@@ -957,7 +1005,7 @@ namespace BeeInterface
             _numMinColor = CreateNumeric();
             _numExtColor = CreateNumeric();
 
-            _numMinColor.Max = 1000;
+            _numMinColor.Max = 2000;
             _numExtColor.Max = 255;
 
             _numMinColor.ValueChanged += (v) =>
@@ -977,6 +1025,8 @@ namespace BeeInterface
                 if (idx < 0 || idx >= _items.Count) return;
 
                 _items[idx].ValueExternColor = (int)v;
+                ExternColorCharge?.Invoke(_items[idx].ValueExternColor);
+         
                 Invalidate(RowRect(idx));
             };
 
@@ -996,6 +1046,11 @@ namespace BeeInterface
                 Width = 80,
                 Height = _lineH,
                 Visible = false,
+                AutoShowTextbox = false,
+                
+                ButtonMaxSize=22,
+                TextboxFontSize=14,
+                
                 BackColor = Color.White
             };
         }

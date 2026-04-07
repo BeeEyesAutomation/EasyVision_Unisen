@@ -286,7 +286,8 @@ namespace BeeCore
         }
 
         private void ItemTool_VisibleChanged(object sender, EventArgs e)
-        {
+        {if (IndexTool >= Common.PropetyTools[IndexThread].Count)
+                return;
             Common.PropetyTools[IndexThread][IndexTool].StatusToolChanged -= ItemTool_StatusToolChanged;
             Common.PropetyTools[IndexThread][IndexTool].StatusToolChanged += ItemTool_StatusToolChanged;
             //  Value = BeeCore.Common.PropetyTools[IndexThread][IndexTool].Score;

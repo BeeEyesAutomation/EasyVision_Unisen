@@ -316,6 +316,8 @@ namespace BeeInterface
             if (Global.IsRun) return;
             if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
+                btnInspect.Enabled = true;
+
                 if (Propety.IsCalib)
                 {
                     btnCalib.IsCLick = false;
@@ -326,9 +328,8 @@ namespace BeeInterface
                 }
             }
 
-            btnInspect.Enabled = true;
-        }
 
+        }
         public Mat matCrop=new Mat();
         public void GetTemp()
         {

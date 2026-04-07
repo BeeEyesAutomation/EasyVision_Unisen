@@ -54,7 +54,7 @@ namespace BeeGlobal
         public float DelayTrigger = 1;
         public float DelayOutput= 1;
         public bool IsLight1,IsLight2,IsLight3;
-     
+     public bool IsLightAllTime=false;
         public PlcBrand PlcBrand = PlcBrand.Mitsubishi;
         public ConnectionType ConnectionType = ConnectionType.Serial;
         //private  async Task DoWork()
@@ -482,7 +482,9 @@ namespace BeeGlobal
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], false); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
                     SetOutPut(AddressOutPut[(int)I_O_Output.ByPass], false);
-                    SetLight(false);
+                  
+                     SetLight(IsLightAllTime);
+                   
                     await WriteOutPut();
                     IO_Processing = IO_Processing.Reset;
                     if (TypeControler == TypeControler.PLC)
@@ -642,6 +644,20 @@ namespace BeeGlobal
 
 
                                         }
+                                        if (IsLightAllTime)
+                                        {
+                                            if (GetInPut(I_O_Input.Light1) == true && IsOnLight == false)
+                                            {
+                                                IsOnLight = true;
+                                                IO_Processing = IO_Processing.Light;
+                                            }
+                                            else if (GetInPut(I_O_Input.Light1) == false && IsOnLight == true)
+                                            {
+                                                IsOnLight = false;
+                                                IO_Processing = IO_Processing.Light;
+                                            }
+                                        }
+                                      
                                         if (Global.Config.IsEnDummy)
                                         {
                                             if (GetInPut(I_O_Input.Dummy) == true && !Global.IsDummy)
@@ -667,6 +683,7 @@ namespace BeeGlobal
                                             }
                                          
                                         }
+
                                         if (GetInPut(I_O_Input.Shuttdown) == true)
                                         {
                                             WriteInput(I_O_Input.Shuttdown, false);
@@ -1276,6 +1293,7 @@ namespace BeeGlobal
                                 Global.StatusProcessing = StatusProcessing.Read;
                             }
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
+                            if (!IsLightAllTime)
                             SetLight(true);
                            
                          
@@ -1325,7 +1343,8 @@ namespace BeeGlobal
                             }
                            
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], true);//Busy
-                            SetLight(true);
+                            if (!IsLightAllTime)
+                                SetLight(true);
                             //SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
                             //SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], false);//Ready false
@@ -1369,7 +1388,8 @@ namespace BeeGlobal
                             //}
 
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], true);//Busy
-                            SetLight(true);
+                            if (!IsLightAllTime)
+                                SetLight(true);
                             //SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
                             //SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], false);//Ready false
@@ -1394,7 +1414,8 @@ namespace BeeGlobal
                                 Global.StatusProcessing = StatusProcessing.Read;
                             }
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], true);//Busy
-                            SetLight(true);
+                            if (!IsLightAllTime)
+                                SetLight(true);
                             //SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
                             //SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], false);//Ready false
@@ -1449,7 +1470,8 @@ namespace BeeGlobal
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], true);//Ready false
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], true);//Ready false
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], true);//Ready false
-                    SetLight(false);
+                    if (!IsLightAllTime)
+                        SetLight(false);
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], false); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], false); //Busy
@@ -1572,7 +1594,8 @@ namespace BeeGlobal
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], true); //NG
                             break;
                     }
-                            SetLight(false);
+                    if (!IsLightAllTime)
+                        SetLight(false);
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //NG
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], false); //NG
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], false); //NG
@@ -1662,7 +1685,8 @@ namespace BeeGlobal
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], Global.IsRun); //Ready
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], Global.IsRun); //Ready
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], Global.IsRun); //Ready
-                    SetLight(false);
+
+                    SetLight(IsLightAllTime);
 
                    // SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
                     Global.StatusProcessing= StatusProcessing.None;
@@ -1680,8 +1704,7 @@ namespace BeeGlobal
                        
                         break;
                     }
-                  
-                        SetLight(IsOnLight);
+                    SetLight(IsOnLight);
                     await WriteOutPut();
                     break;
                 case IO_Processing.ChangeProg:
@@ -1707,7 +1730,7 @@ namespace BeeGlobal
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], false); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
                     SetOutPut(AddressOutPut[(int)I_O_Output.ByPass], false);
-                    SetLight(false);
+                    SetLight(IsLightAllTime);
                     await WriteOutPut();
                     WriteInput(I_O_Input.ChangeProg, false);
                     WriteInput(I_O_Input.Training, false);

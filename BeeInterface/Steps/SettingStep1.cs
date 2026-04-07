@@ -542,6 +542,8 @@ namespace BeeInterface
         }
         public void RefreshData()
         {
+            btnIsAllTimeLight.IsCLick = Global.Comunication.Protocol.IsLightAllTime;
+            btnIsBlinkLight.IsCLick =! Global.Comunication.Protocol.IsLightAllTime;
             btnSaveCamera.Visible = !Global.Config.IsSaveAllPara;
             AdjZoom.IsInital = true;
             AdjZoom.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Zoom;
@@ -1224,6 +1226,21 @@ namespace BeeInterface
             await BeeCore.Common.listCamera[Global.IndexCCCD].SetReverseY();
             BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = false;
             btnReverseY.IsCLick = BeeCore.Common.listCamera[Global.IndexCCCD].Para.IsReverseY;
+        }
+
+        private void btnIsBlinkLight_Click(object sender, EventArgs e)
+        {
+            Global.Comunication.Protocol.IsLightAllTime=!btnIsBlinkLight.IsCLick;
+        }
+
+        private void tableLayoutPanel6_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnIsAllTimeLight_Click(object sender, EventArgs e)
+        {
+            Global.Comunication.Protocol.IsLightAllTime = btnIsAllTimeLight.IsCLick;
         }
     }
 }

@@ -63,9 +63,6 @@ namespace BeeInterface
             float angle = (Propety.rotCrop._rectRotation) - (Propety.rotArea._rectRotation);
             Propety.AngleLower = angle - Propety.Angle;
             Propety.AngleUper = angle + Propety.Angle;
-
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick =! Propety.rotArea.IsWhite;
             trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
             trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
             trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
@@ -108,16 +105,8 @@ namespace BeeInterface
             AdjClearBig.Enabled = Propety.IsClearNoiseBig;
             AdjOpen.Enabled = Propety.IsOpen;
             AdjMorphology.Enabled = Propety.IsClose;
-            btnArea.IsCLick = true;
-            Global.TypeCrop = TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
+         
 
-            btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotArea.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotArea.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick = !Propety.rotArea.IsWhite;
             txtAddPLC.Text = Propety.AddPLC;
             adjScale.Value = Propety.Scale;
 
@@ -280,24 +269,7 @@ namespace BeeInterface
 
         }
       
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-           Global.TypeCrop= TypeCrop.Mask;
-            Propety.TypeCrop = Global.TypeCrop;
-            if (Propety.rotMask == null)
-            {
-                Propety.rotMask = DataTool.NewRotRect(TypeCrop.Mask); ;
-            }
-            btnElip.IsCLick = Propety.rotMask.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotMask.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotMask.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotMask.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick = !Propety.rotArea.IsWhite;
-
-
-        }
-
+      
         private void btnCancel_Click(object sender, EventArgs e)
         {
           //  G.IsCancel = true;
@@ -657,92 +629,7 @@ namespace BeeInterface
         }
 
    
-        private void btnCropRect_Click(object sender, EventArgs e)
-        {
-            Global.StatusDraw = StatusDraw.Edit;
-            Global.TypeCrop = TypeCrop.Crop;
-            Propety.TypeCrop = Global.TypeCrop;
-            btnElip.IsCLick = Propety.rotCrop.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotCrop.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotCrop.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotCrop.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotCrop.IsWhite;
-            btnBlack.IsCLick = !Propety.rotCrop.IsWhite;
-
-        }
-
-        private void btnCropArea_Click(object sender, EventArgs e)
-        {
-            Global.TypeCrop = TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
-
-            btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotArea.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotArea.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick = !Propety.rotArea.IsWhite;
-        }
-
-        ShapeType ShapeType = ShapeType.Rectangle;
-        private void btnHexagon_Click(object sender, EventArgs e)
-        {
-            ShapeType = ShapeType.Hexagon;
-            SetShapeFor(Global.TypeCrop, ShapeType);
-        }
-
-        private void btnPolygon_Click(object sender, EventArgs e)
-        {
-            ShapeType = ShapeType.Polygon;
-
-            SetShapeFor(Global.TypeCrop, ShapeType);
-        }
-
-        private void btnNewShape_Click(object sender, EventArgs e)
-        {
-            NewShape(ShapeType);
-        }
-        private void btnRect_Click(object sender, EventArgs e)
-        {
-            ShapeType = ShapeType.Rectangle;
-            SetShapeFor(Global.TypeCrop, ShapeType);
-
-        }
-
-        private void btnElip_Click(object sender, EventArgs e)
-        {
-            ShapeType = ShapeType.Ellipse;
-            SetShapeFor(Global.TypeCrop, ShapeType);
-
-        }
-
-        private void btnWhite_Click(object sender, EventArgs e)
-        {
-            switch(Global.TypeCrop)
-            {
-                case TypeCrop.Area:
-                    Propety.rotArea.IsWhite = btnWhite.IsCLick;
-                    break;
-                case TypeCrop.Crop:
-                    Propety.rotCrop.IsWhite = btnWhite.IsCLick;
-                    break;
-            }
-            
-        }
-
-        private void btnBlack_Click(object sender, EventArgs e)
-        {
-            switch (Global.TypeCrop)
-            {
-                case TypeCrop.Area:
-                    Propety.rotArea.IsWhite =! btnBlack.IsCLick;
-                    break;
-                case TypeCrop.Crop:
-                    Propety.rotCrop.IsWhite =! btnBlack.IsCLick;
-                    break;
-            }
-          
-        }
+      
         private void AdjClearNoise_ValueChanged(float obj)
         {
             Propety.SizeClearsmall = (int)AdjClearNoise.Value;
@@ -814,15 +701,7 @@ namespace BeeInterface
         }
 
      
-        private void btn2_Click(object sender, EventArgs e)
-        {
-            lay2.Visible = !btn2.IsCLick;
-            lb2.Visible = !btn2.IsCLick;
-            lay21.Visible=!btn2.IsCLick;
-            lay22.Visible=!btn2.IsCLick;
-            lay23.Visible = !btn2.IsCLick;
-            
-        }
+      
 
         private void btn3_Click(object sender, EventArgs e)
         {
@@ -871,6 +750,11 @@ namespace BeeInterface
         private void btnZero0_Click(object sender, EventArgs e)
         {
             Propety.ZeroPos = ZeroPos.Zero;
+        }
+
+        private void btn1_Click(object sender, EventArgs e)
+        {
+            EditRectRot1.Visible = !btn1.IsCLick;
         }
     }
 }

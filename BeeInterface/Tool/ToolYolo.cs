@@ -493,8 +493,13 @@ namespace BeeInterface
 
                     HSVCli = BeeCore.Common.HSVSample;
                     //  tableLayoutModel.BackColor = Global.ColorSample;
-                    _currentColorItem.SampleColor = Global.ColorSample;
-                    _currentColorItem.HSV = new BeeCore.Core.HSV(BeeCore.Common.HSVSample.H, BeeCore.Common.HSVSample.S, BeeCore.Common.HSVSample.V);
+                    if (_currentColorItem.ListColor == null)
+                        _currentColorItem.ListColor = new List<Color>();
+                    _currentColorItem.ListColor.Add ( Global.ColorSample);
+                    if (_currentColorItem.ListHSV == null)
+                        _currentColorItem.ListHSV = new List<BeeCore.Core.HSV>();
+                    _currentColorItem.ListHSV.Add( new BeeCore.Core.HSV(BeeCore.Common.HSVSample.H, BeeCore.Common.HSVSample.S, BeeCore.Common.HSVSample.V));
+                    _currentColorItem.ListHSV=_currentColorItem.ListHSV.Distinct().ToList();
                     dashboardLabel.Invalidate();
                 }));
             }
@@ -2370,7 +2375,12 @@ namespace BeeInterface
         private void dashboardLabel_ChooseColorBegin(int arg1, LabelItem arg2)
         {
             _currentColorItem = arg2;
-           // arg2.SampleColor = Global.ColorSample;
+            if (_currentColorItem.ListColor != null)
+                _currentColorItem.ListColor.Clear();
+            if (_currentColorItem.ListHSV != null)
+                _currentColorItem.ListHSV.Clear();
+            dashboardLabel.Invalidate();
+            // arg2.SampleColor = Global.ColorSample;
             // bật chế độ pick màu
             Global.IsGetColor = true;
           
@@ -2474,6 +2484,14 @@ namespace BeeInterface
         private void lbClOne_Click(object sender, EventArgs e)
         {
             Propety.IsColorAllObjLabel = false;
+        }
+
+        private void dashboardLabel_ExternColorCharge(int obj)
+        {
+            if (Propety == null)
+                return;
+            Propety.SetListTemp();
+
         }
     }
 }

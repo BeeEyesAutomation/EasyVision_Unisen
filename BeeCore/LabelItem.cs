@@ -42,10 +42,10 @@ namespace BeeCore
         public bool IsMinColor { get; set; }
         public int ValueMinColor { get; set; }
         public int ValueExternColor { get; set; } // nằm trong MinColor
-        public Color SampleColor { get; set; } = Color.Empty;
+      //  public Color SampleColor { get; set; } = Color.Empty;
         public bool IsChoosingColor { get; set; }
-
-      
+        // NEW: list màu hiển thị trên nút Color
+        public List<Color> ListColor { get; set; } = new List<Color>();
         /// <summary>
         /// Các index box được chọn
         /// </summary>
@@ -55,7 +55,7 @@ namespace BeeCore
         public List<int> ListIndexBoxBackup { get; set; } = new List<int>();
         [field: NonSerialized]
         public List<BeeCpp.ColorArea> ListColorArea  { get; set; } = new List<BeeCpp.ColorArea>();
-        public HSV HSV { get; set; }
+        public List<HSV> ListHSV { get; set; }
     }
 
 }
