@@ -1622,16 +1622,42 @@ namespace BeeCore
 
                                 if (item.IsYMax)
                                     ok &= IntersectYMax(r.rot, item.ValueYMax);
+                                if (item.Name.Trim() == "BI")
+                                {
+                                    if (item.IsCounter)
+                                    {
+                                        int numNG = 0;
+                                        foreach(ResultItem rs in objs)
+                                        {
+                                            if (r.Area < item.ValueArea)
+                                                numNG++;
+
+                                        }    
+                                        if(numNG>= item.ValueCounter)
+                                        {
+                                            objs.ForEach(rs => rs.IsOK = true);
+                                          
+                                            continue;
+                                        }    
+                                        //if (objs.Count(x => x.IsOK) < item.ValueCounter)
+                                        //{
+                                        //    objs.ForEach(rs => rs.IsOK = false);
+                                        //}
+                                    }
+                                }    
+                             
                                 if (item.IsArea)
                                 {
                              
                                     ok &= r.Area >= item.ValueArea;
+                                   
                                     if(ok==false)
                                     {
                                         r.IsOK = ok;
                                         continue;
 
-                                    }    
+                                    }
+                                  
                                 }
                                 if (IsLine)
                                 {
@@ -1707,7 +1733,7 @@ namespace BeeCore
                                 r.IsOK = ok;
                             }
                             if (item.IsCounter)
-                            {
+                            {    if ( item.Name.Trim() != "BI")
                                 if (objs.Count(x => x.IsOK) < item.ValueCounter)
                                 {
                                     objs.ForEach(rs => rs.IsOK = false);
@@ -2265,6 +2291,7 @@ namespace BeeCore
                     foreach (RectRotate rot in listRotScan)
                 {
                     String cOK ="("+ rot.NumInside+ ") OK";
+                  
                     if (Global.StatusDraw==StatusDraw.Scan)
                         {
                         cOK += "-" + rot.Dir.ToString();
@@ -2636,7 +2663,12 @@ namespace BeeCore
                 if (index > -1)
                 {
                     LabelItem item = labelItems[index];
-
+                    if (!item.IsUse)
+                    {
+                        i++;
+                        continue;
+                    }    
+                       
                     if (item.IsY)
                     {
                         Point p1 = new Point(0, item.ValueY);

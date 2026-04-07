@@ -30,32 +30,32 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.layRange = new System.Windows.Forms.TableLayoutPanel();
-            this.btnCropFull = new BeeInterface.RJButton();
-            this.btnCropHalt = new BeeInterface.RJButton();
             this.label1 = new System.Windows.Forms.Label();
             this.lay23 = new System.Windows.Forms.TableLayoutPanel();
+            this.layLimit = new System.Windows.Forms.TableLayoutPanel();
+            this.label20 = new System.Windows.Forms.Label();
+            this.lay2Mask = new System.Windows.Forms.TableLayoutPanel();
+            this.label21 = new System.Windows.Forms.Label();
+            this.lay24 = new System.Windows.Forms.TableLayoutPanel();
+            this.label15 = new System.Windows.Forms.Label();
+            this.lay22 = new System.Windows.Forms.Label();
+            this.layType = new System.Windows.Forms.TableLayoutPanel();
+            this.btnCropFull = new BeeInterface.RJButton();
+            this.btnCropHalt = new BeeInterface.RJButton();
             this.btnPolygon = new BeeInterface.RJButton();
             this.btnHexagon = new BeeInterface.RJButton();
             this.btnElip = new BeeInterface.RJButton();
             this.btnRect = new BeeInterface.RJButton();
             this.btnNone = new BeeInterface.RJButton();
-            this.layLimit = new System.Windows.Forms.TableLayoutPanel();
             this.btnEdit = new BeeInterface.RJButton();
-            this.label20 = new System.Windows.Forms.Label();
             this.btnUnoMask = new BeeInterface.RJButton();
             this.btnClearAllMask = new BeeInterface.RJButton();
             this.btnAddToList = new BeeInterface.RJButton();
-            this.lay2Mask = new System.Windows.Forms.TableLayoutPanel();
-            this.label21 = new System.Windows.Forms.Label();
             this.btnBlack = new BeeInterface.RJButton();
             this.btnWhite = new BeeInterface.RJButton();
-            this.lay24 = new System.Windows.Forms.TableLayoutPanel();
             this.numH = new BeeInterface.CustomNumericEx();
             this.numW = new BeeInterface.CustomNumericEx();
-            this.label15 = new System.Windows.Forms.Label();
             this.btnNewShape = new BeeInterface.RJButton();
-            this.lay22 = new System.Windows.Forms.Label();
-            this.layType = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             this.layRange.SuspendLayout();
             this.lay23.SuspendLayout();
@@ -111,6 +111,188 @@
             this.layRange.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layRange.Size = new System.Drawing.Size(402, 45);
             this.layRange.TabIndex = 117;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.White;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(5, 57);
+            this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(402, 24);
+            this.label1.TabIndex = 116;
+            this.label1.Text = "Search Range";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lay23
+            // 
+            this.lay23.BackColor = System.Drawing.Color.White;
+            this.lay23.ColumnCount = 6;
+            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.lay23.Controls.Add(this.btnPolygon, 4, 0);
+            this.lay23.Controls.Add(this.btnHexagon, 3, 0);
+            this.lay23.Controls.Add(this.btnElip, 2, 0);
+            this.lay23.Controls.Add(this.btnRect, 1, 0);
+            this.lay23.Controls.Add(this.btnNone, 5, 0);
+            this.lay23.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lay23.Location = new System.Drawing.Point(5, 150);
+            this.lay23.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lay23.Name = "lay23";
+            this.lay23.Padding = new System.Windows.Forms.Padding(3);
+            this.lay23.RowCount = 1;
+            this.lay23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.lay23.Size = new System.Drawing.Size(402, 50);
+            this.lay23.TabIndex = 115;
+            // 
+            // layLimit
+            // 
+            this.layLimit.BackColor = System.Drawing.Color.White;
+            this.layLimit.ColumnCount = 5;
+            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 86F));
+            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 108F));
+            this.layLimit.Controls.Add(this.btnEdit, 4, 0);
+            this.layLimit.Controls.Add(this.label20, 0, 0);
+            this.layLimit.Controls.Add(this.btnUnoMask, 2, 0);
+            this.layLimit.Controls.Add(this.btnClearAllMask, 1, 0);
+            this.layLimit.Controls.Add(this.btnAddToList, 3, 0);
+            this.layLimit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layLimit.Enabled = false;
+            this.layLimit.Location = new System.Drawing.Point(5, 293);
+            this.layLimit.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.layLimit.Name = "layLimit";
+            this.layLimit.Padding = new System.Windows.Forms.Padding(5);
+            this.layLimit.RowCount = 1;
+            this.layLimit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.layLimit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.layLimit.Size = new System.Drawing.Size(402, 45);
+            this.layLimit.TabIndex = 114;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.BackColor = System.Drawing.Color.Transparent;
+            this.label20.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Location = new System.Drawing.Point(5, 5);
+            this.label20.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(83, 35);
+            this.label20.TabIndex = 60;
+            this.label20.Text = "Area Scan";
+            this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lay2Mask
+            // 
+            this.lay2Mask.BackColor = System.Drawing.Color.White;
+            this.lay2Mask.ColumnCount = 4;
+            this.lay2Mask.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.lay2Mask.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.lay2Mask.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.lay2Mask.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.lay2Mask.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.lay2Mask.Controls.Add(this.label21, 1, 0);
+            this.lay2Mask.Controls.Add(this.btnBlack, 3, 0);
+            this.lay2Mask.Controls.Add(this.btnWhite, 2, 0);
+            this.lay2Mask.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lay2Mask.Enabled = false;
+            this.lay2Mask.Location = new System.Drawing.Point(5, 245);
+            this.lay2Mask.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lay2Mask.Name = "lay2Mask";
+            this.lay2Mask.Padding = new System.Windows.Forms.Padding(5);
+            this.lay2Mask.RowCount = 1;
+            this.lay2Mask.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.lay2Mask.Size = new System.Drawing.Size(402, 48);
+            this.lay2Mask.TabIndex = 105;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.BackColor = System.Drawing.Color.Transparent;
+            this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.Location = new System.Drawing.Point(5, 5);
+            this.label21.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(71, 38);
+            this.label21.TabIndex = 59;
+            this.label21.Text = "Color BG";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lay24
+            // 
+            this.lay24.BackColor = System.Drawing.Color.White;
+            this.lay24.ColumnCount = 4;
+            this.lay24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.lay24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.lay24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.lay24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.lay24.Controls.Add(this.numH, 2, 0);
+            this.lay24.Controls.Add(this.numW, 1, 0);
+            this.lay24.Controls.Add(this.label15, 0, 0);
+            this.lay24.Controls.Add(this.btnNewShape, 3, 0);
+            this.lay24.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lay24.Location = new System.Drawing.Point(5, 200);
+            this.lay24.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lay24.Name = "lay24";
+            this.lay24.Padding = new System.Windows.Forms.Padding(5);
+            this.lay24.RowCount = 1;
+            this.lay24.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.lay24.Size = new System.Drawing.Size(402, 45);
+            this.lay24.TabIndex = 104;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.BackColor = System.Drawing.Color.White;
+            this.label15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(10, 5);
+            this.label15.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(52, 35);
+            this.label15.TabIndex = 102;
+            this.label15.Text = "WxH";
+            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label15.Visible = false;
+            // 
+            // lay22
+            // 
+            this.lay22.AutoSize = true;
+            this.lay22.BackColor = System.Drawing.Color.White;
+            this.lay22.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lay22.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lay22.Location = new System.Drawing.Point(5, 126);
+            this.lay22.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lay22.Name = "lay22";
+            this.lay22.Size = new System.Drawing.Size(402, 24);
+            this.lay22.TabIndex = 102;
+            this.lay22.Text = "Shape";
+            this.lay22.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // layType
+            // 
+            this.layType.BackColor = System.Drawing.Color.White;
+            this.layType.ColumnCount = 1;
+            this.layType.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.layType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layType.Location = new System.Drawing.Point(5, 0);
+            this.layType.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.layType.Name = "layType";
+            this.layType.Padding = new System.Windows.Forms.Padding(5);
+            this.layType.RowCount = 1;
+            this.layType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.layType.Size = new System.Drawing.Size(402, 57);
+            this.layType.TabIndex = 101;
             // 
             // btnCropFull
             // 
@@ -226,45 +408,6 @@
             this.btnCropHalt.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnCropHalt.UseVisualStyleBackColor = false;
             this.btnCropHalt.Click += new System.EventHandler(this.btnCropHalt_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.White;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(5, 57);
-            this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(402, 24);
-            this.label1.TabIndex = 116;
-            this.label1.Text = "Search Range";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lay23
-            // 
-            this.lay23.BackColor = System.Drawing.Color.White;
-            this.lay23.ColumnCount = 6;
-            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.lay23.Controls.Add(this.btnPolygon, 4, 0);
-            this.lay23.Controls.Add(this.btnHexagon, 3, 0);
-            this.lay23.Controls.Add(this.btnElip, 2, 0);
-            this.lay23.Controls.Add(this.btnRect, 1, 0);
-            this.lay23.Controls.Add(this.btnNone, 5, 0);
-            this.lay23.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lay23.Location = new System.Drawing.Point(5, 150);
-            this.lay23.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lay23.Name = "lay23";
-            this.lay23.Padding = new System.Windows.Forms.Padding(3);
-            this.lay23.RowCount = 1;
-            this.lay23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay23.Size = new System.Drawing.Size(402, 50);
-            this.lay23.TabIndex = 115;
             // 
             // btnPolygon
             // 
@@ -552,32 +695,6 @@
             this.btnNone.UseVisualStyleBackColor = false;
             this.btnNone.Click += new System.EventHandler(this.btnNone_Click);
             // 
-            // layLimit
-            // 
-            this.layLimit.BackColor = System.Drawing.Color.White;
-            this.layLimit.ColumnCount = 5;
-            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 86F));
-            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 108F));
-            this.layLimit.Controls.Add(this.btnEdit, 4, 0);
-            this.layLimit.Controls.Add(this.label20, 0, 0);
-            this.layLimit.Controls.Add(this.btnUnoMask, 2, 0);
-            this.layLimit.Controls.Add(this.btnClearAllMask, 1, 0);
-            this.layLimit.Controls.Add(this.btnAddToList, 3, 0);
-            this.layLimit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layLimit.Enabled = false;
-            this.layLimit.Location = new System.Drawing.Point(5, 293);
-            this.layLimit.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.layLimit.Name = "layLimit";
-            this.layLimit.Padding = new System.Windows.Forms.Padding(5);
-            this.layLimit.RowCount = 1;
-            this.layLimit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layLimit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.layLimit.Size = new System.Drawing.Size(402, 45);
-            this.layLimit.TabIndex = 114;
-            // 
             // btnEdit
             // 
             this.btnEdit.AutoFont = true;
@@ -634,20 +751,6 @@
             this.btnEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnEdit.UseVisualStyleBackColor = false;
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.BackColor = System.Drawing.Color.Transparent;
-            this.label20.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label20.Location = new System.Drawing.Point(5, 5);
-            this.label20.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(83, 35);
-            this.label20.TabIndex = 60;
-            this.label20.Text = "Area Scan";
-            this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnUnoMask
             // 
@@ -820,43 +923,6 @@
             this.btnAddToList.UseVisualStyleBackColor = false;
             this.btnAddToList.Click += new System.EventHandler(this.btnAddToList_Click);
             // 
-            // lay2Mask
-            // 
-            this.lay2Mask.BackColor = System.Drawing.Color.White;
-            this.lay2Mask.ColumnCount = 4;
-            this.lay2Mask.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.lay2Mask.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.lay2Mask.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.lay2Mask.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.lay2Mask.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.lay2Mask.Controls.Add(this.label21, 1, 0);
-            this.lay2Mask.Controls.Add(this.btnBlack, 3, 0);
-            this.lay2Mask.Controls.Add(this.btnWhite, 2, 0);
-            this.lay2Mask.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lay2Mask.Enabled = false;
-            this.lay2Mask.Location = new System.Drawing.Point(5, 245);
-            this.lay2Mask.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lay2Mask.Name = "lay2Mask";
-            this.lay2Mask.Padding = new System.Windows.Forms.Padding(5);
-            this.lay2Mask.RowCount = 1;
-            this.lay2Mask.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay2Mask.Size = new System.Drawing.Size(402, 48);
-            this.lay2Mask.TabIndex = 105;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.BackColor = System.Drawing.Color.Transparent;
-            this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(5, 5);
-            this.label21.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(71, 38);
-            this.label21.TabIndex = 59;
-            this.label21.Text = "Color BG";
-            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // btnBlack
             // 
             this.btnBlack.AutoFont = true;
@@ -969,28 +1035,6 @@
             this.btnWhite.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnWhite.UseVisualStyleBackColor = false;
             // 
-            // lay24
-            // 
-            this.lay24.BackColor = System.Drawing.Color.White;
-            this.lay24.ColumnCount = 4;
-            this.lay24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.lay24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.lay24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.lay24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.lay24.Controls.Add(this.numH, 2, 0);
-            this.lay24.Controls.Add(this.numW, 1, 0);
-            this.lay24.Controls.Add(this.label15, 0, 0);
-            this.lay24.Controls.Add(this.btnNewShape, 3, 0);
-            this.lay24.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lay24.Location = new System.Drawing.Point(5, 200);
-            this.lay24.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lay24.Name = "lay24";
-            this.lay24.Padding = new System.Windows.Forms.Padding(5);
-            this.lay24.RowCount = 1;
-            this.lay24.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay24.Size = new System.Drawing.Size(402, 45);
-            this.lay24.TabIndex = 104;
-            // 
             // numH
             // 
             this.numH.AutoShowTextbox = false;
@@ -1061,21 +1105,6 @@
             this.numW.Value = 0F;
             this.numW.WheelStep = 1F;
             // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.BackColor = System.Drawing.Color.White;
-            this.label15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(10, 5);
-            this.label15.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(52, 35);
-            this.label15.TabIndex = 102;
-            this.label15.Text = "WxH";
-            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label15.Visible = false;
-            // 
             // btnNewShape
             // 
             this.btnNewShape.AutoFont = true;
@@ -1132,35 +1161,6 @@
             this.btnNewShape.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnNewShape.UseVisualStyleBackColor = false;
             this.btnNewShape.Click += new System.EventHandler(this.btnNewShape_Click);
-            // 
-            // lay22
-            // 
-            this.lay22.AutoSize = true;
-            this.lay22.BackColor = System.Drawing.Color.White;
-            this.lay22.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lay22.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lay22.Location = new System.Drawing.Point(5, 126);
-            this.lay22.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lay22.Name = "lay22";
-            this.lay22.Size = new System.Drawing.Size(402, 24);
-            this.lay22.TabIndex = 102;
-            this.lay22.Text = "Shape";
-            this.lay22.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // layType
-            // 
-            this.layType.BackColor = System.Drawing.Color.White;
-            this.layType.ColumnCount = 1;
-            this.layType.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layType.Location = new System.Drawing.Point(5, 0);
-            this.layType.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.layType.Name = "layType";
-            this.layType.Padding = new System.Windows.Forms.Padding(5);
-            this.layType.RowCount = 1;
-            this.layType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layType.Size = new System.Drawing.Size(402, 57);
-            this.layType.TabIndex = 101;
             // 
             // EditRectRot
             // 

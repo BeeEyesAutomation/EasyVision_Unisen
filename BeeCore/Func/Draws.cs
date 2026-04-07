@@ -1414,6 +1414,7 @@ Pen outlinePen)
           
             gc.ResetTransform();
         }
+
         public static void FillRect(Graphics gc, TypeCrop TypeCrop, RectRotate RectDraw, System.Drawing. Point posAutoScroll, float zoom, int Opacity =10)
         {
             if (RectDraw == null) return;
@@ -1459,7 +1460,7 @@ Pen outlinePen)
               
             gc.ResetTransform();
         }
-        public static void FillListRectMask(Graphics gc, TypeCrop TypeCrop,List<RectRotate> ListRect,RectRotate rotArea, System.Drawing.Point posAutoScroll, float zoom, int Opacity = 10)
+        public static void FillListRectMask(Graphics gc, Color cl, List<RectRotate> ListRect,RectRotate rotArea, System.Drawing.Point posAutoScroll, float zoom, int Opacity = 10)
         {
             if (ListRect == null) return;
             foreach (RectRotate RectDraw in ListRect)
@@ -1468,7 +1469,7 @@ Pen outlinePen)
 
 
                 _rect = RectDraw._rect;
-                Brush backcolor = new SolidBrush(Color.FromArgb(0, 0, 0, 255));
+                Brush backcolor = new SolidBrush(Color.FromArgb(Opacity, cl.R,cl.G,cl.B));
                 Matrix mat = new Matrix();
 
                 // screen
@@ -1484,18 +1485,18 @@ Pen outlinePen)
                 mat.Rotate(RectDraw._rectRotation);
 
                 gc.Transform = mat;
-                switch (TypeCrop)
-                {
-                    case TypeCrop.Area:
-                        backcolor = new SolidBrush(Color.FromArgb(Opacity, 0, 191, 255));
-                        break;
-                    case TypeCrop.Crop:
-                        backcolor = new SolidBrush(Color.FromArgb(Opacity, 255, 165, 0));
-                        break;
-                    case TypeCrop.Limit:
-                        backcolor = new SolidBrush(Color.FromArgb(Opacity, 255, 0, 0));
-                        break;
-                }
+                //switch (TypeCrop)
+                //{
+                //    case TypeCrop.Area:
+                //        backcolor = new SolidBrush(Color.FromArgb(Opacity, 0, 191, 255));
+                //        break;
+                //    case TypeCrop.Crop:
+                //        backcolor = new SolidBrush(Color.FromArgb(Opacity, 255, 165, 0));
+                //        break;
+                //    case TypeCrop.Limit:
+                //        backcolor = new SolidBrush(Color.FromArgb(Opacity, 255, 0, 0));
+                //        break;
+                //}
                 switch (RectDraw.Shape)
                 {
                     case ShapeType.Ellipse:

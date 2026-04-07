@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.layOut = new System.Windows.Forms.TableLayoutPanel();
-            this.Blink = new BeeInterface.RJButton();
             this.Type = new System.Windows.Forms.ComboBox();
             this.lbName = new System.Windows.Forms.Label();
+            this.Blink = new BeeInterface.RJButton();
             this.Value = new BeeInterface.RJButton();
             this.layOut.SuspendLayout();
             this.SuspendLayout();
@@ -56,6 +56,36 @@
             this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layOut.Size = new System.Drawing.Size(460, 46);
             this.layOut.TabIndex = 57;
+            // 
+            // Type
+            // 
+            this.Type.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Type.DropDownHeight = 140;
+            this.Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Type.DropDownWidth = 140;
+            this.Type.Enabled = false;
+            this.Type.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Type.ForeColor = System.Drawing.Color.Blue;
+            this.Type.FormattingEnabled = true;
+            this.Type.IntegralHeight = false;
+            this.Type.Location = new System.Drawing.Point(68, 3);
+            this.Type.Name = "Type";
+            this.Type.Size = new System.Drawing.Size(141, 37);
+            this.Type.TabIndex = 2;
+            this.Type.DropDown += new System.EventHandler(this.Type_DropDown);
+            this.Type.SelectionChangeCommitted += new System.EventHandler(this.Type_SelectionChangeCommitted);
+            // 
+            // lbName
+            // 
+            this.lbName.AutoSize = true;
+            this.lbName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbName.Location = new System.Drawing.Point(3, 0);
+            this.lbName.Name = "lbName";
+            this.lbName.Size = new System.Drawing.Size(59, 46);
+            this.lbName.TabIndex = 4;
+            this.lbName.Text = "Bit 00";
+            this.lbName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // Blink
             // 
@@ -111,35 +141,6 @@
             this.Blink.TextColor = System.Drawing.Color.Black;
             this.Blink.UseVisualStyleBackColor = false;
             this.Blink.Click += new System.EventHandler(this.Blink_Click);
-            // 
-            // Type
-            // 
-            this.Type.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Type.DropDownHeight = 70;
-            this.Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Type.Enabled = false;
-            this.Type.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Type.ForeColor = System.Drawing.Color.Blue;
-            this.Type.FormattingEnabled = true;
-            this.Type.IntegralHeight = false;
-            this.Type.Location = new System.Drawing.Point(68, 3);
-            this.Type.Name = "Type";
-            this.Type.Size = new System.Drawing.Size(141, 37);
-            this.Type.TabIndex = 2;
-            this.Type.DropDown += new System.EventHandler(this.Type_DropDown);
-            this.Type.SelectionChangeCommitted += new System.EventHandler(this.Type_SelectionChangeCommitted);
-            // 
-            // lbName
-            // 
-            this.lbName.AutoSize = true;
-            this.lbName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbName.Location = new System.Drawing.Point(3, 0);
-            this.lbName.Name = "lbName";
-            this.lbName.Size = new System.Drawing.Size(59, 46);
-            this.lbName.TabIndex = 4;
-            this.lbName.Text = "Bit 00";
-            this.lbName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // Value
             // 

@@ -151,11 +151,13 @@ namespace BeeInterface
         {
 
         }
-
+        Form fr;
         private void ToolPage_Load(object sender, EventArgs e)
         {
          
             LoadGuiAllTool();
+             fr= this.Parent as Form;
+            
         }
 
         private void tabTool_SelectedIndexChanged(object sender, EventArgs e)
@@ -324,14 +326,15 @@ namespace BeeInterface
         }
          private void btnOk_Click(object sender, EventArgs e)
         {
-            this.Parent.Hide();
+           // 
           
             CreateNewTool();
+            fr.Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.Parent.Hide();
+            fr.Close();
         }
     }
 }

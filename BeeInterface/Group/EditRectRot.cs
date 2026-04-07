@@ -64,9 +64,11 @@ namespace BeeInterface.Group
             RJButton btn = sender as RJButton;
             index = Convert.ToInt32( btn.Name);
             rotCurrent = Rot[index];
+            if (rotCurrent == null)
+                rotCurrent = new RectRotate();
             lay2Mask.Enabled = _rotCurrent.TypeCrop == TypeCrop.Mask ? true : false;
             layRange.Enabled = _rotCurrent.TypeCrop == TypeCrop.Area ? true : false;
-            layLimit.Enabled = _rotCurrent.TypeCrop == TypeCrop.Limit ? true : false;
+            layLimit.Enabled = (_rotCurrent.TypeCrop == TypeCrop.Limit || _rotCurrent.TypeCrop == TypeCrop.Mask);
             btnElip.IsCLick = _rotCurrent.Shape == ShapeType.Ellipse ? true : false;
             btnRect.IsCLick = _rotCurrent.Shape == ShapeType.Rectangle ? true : false;
             btnHexagon.IsCLick = _rotCurrent.Shape == ShapeType.Hexagon ? true : false;
@@ -272,24 +274,26 @@ namespace BeeInterface.Group
             Global.StatusDraw = StatusDraw.Edit;
         }
         private void btnNone_Click(object sender, EventArgs e)
-        {
-            if(Rot[index].TypeCrop==TypeCrop.Mask)
-                Rot[index] = null;
-            else
-                Rot[index] = new RectRotate();
+        {TypeCrop typeCrop=rotCurrent.TypeCrop;
+            String Name = rotCurrent.Name;
+            rotCurrent = new RectRotate();
+            rotCurrent.TypeCrop = typeCrop;
+            rotCurrent.Name = Name;
+            Rot[index] = rotCurrent;
+            Global.rotCurrent = rotCurrent;
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
             
         }
         private void btnWhite_Click(object sender, EventArgs e)
         {
-            Rot[index].IsWhite = btnWhite.IsCLick;
+            rotCurrent.IsWhite = btnWhite.IsCLick;
           
         }
 
         private void btnBlack_Click(object sender, EventArgs e)
         {
-            Rot[index].IsWhite = !btnBlack.IsCLick;
+            rotCurrent.IsWhite = !btnBlack.IsCLick;
           
         }
         public void Refresh(bool IsIni=false)

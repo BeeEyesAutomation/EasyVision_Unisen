@@ -297,19 +297,22 @@ namespace BeeCore
                         //========================
                         // 1. Vẽ TEXT (không scale)
                         //========================
-
-                        string triggerText = triggerLocal.ToString();
-                        string resultText = resultLocal == Results.OK ? "OK" : "NG";
-
-                        using (Font fontBig = new Font("Arial", Global.ParaShow.FontSize *4, FontStyle.Bold))
+                        if(Global.Config.IsMultiProg)
                         {
-                            SizeF sz = g.MeasureString(triggerText, fontBig);
+                            string triggerText = triggerLocal.ToString();
+                            string resultText = resultLocal == Results.OK ? "OK" : "NG";
 
-                            g.DrawString(triggerText, fontBig, Brushes.DarkGray, new PointF(100, 50));
+                            using (Font fontBig = new Font("Arial", Global.ParaShow.FontSize * 4, FontStyle.Bold))
+                            {
+                                SizeF sz = g.MeasureString(triggerText, fontBig);
 
-                            Brush brushResult = resultLocal == Results.OK ? Brushes.Green : Brushes.Red;
+                                g.DrawString(triggerText, fontBig, Brushes.DarkGray, new PointF(100, 50));
 
-                            g.DrawString(resultText, fontBig, brushResult, new PointF(100, sz.Height + 50));
+                                Brush brushResult = resultLocal == Results.OK ? Brushes.Green : Brushes.Red;
+
+                                g.DrawString(resultText, fontBig, brushResult, new PointF(100, sz.Height + 50));
+                            }
+
                         }
 
                         //========================

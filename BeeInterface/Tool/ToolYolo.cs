@@ -102,7 +102,9 @@ namespace BeeInterface
                 btnTypeYolo.IsCLick = Propety.TypeYolo == TypeYolo.YOLO ?true:false ;
                 btnTypeOnnx.IsCLick = Propety.TypeYolo == TypeYolo.Onnx ? true : false;
                 btnTypeRCNN.IsCLick = Propety.TypeYolo == TypeYolo.RCNN ? true : false;
-                switch(Propety.TypeYolo)
+                Propety.ListRotMask = null;
+                Propety.ListRotMask = new List<RectRotate>();
+                switch (Propety.TypeYolo)
                 {
                     case TypeYolo.YOLO:
                         if (!File.Exists(Propety.pathFullModel))
@@ -312,8 +314,17 @@ namespace BeeInterface
         }
 
         private void EditRectRot1_AddRotEvent(RectRotate obj)
-        {  
-            Propety.listRotScan.Add(obj);
+        {
+            switch (EditRectRot1.rotCurrent.TypeCrop)
+            {
+                case TypeCrop.Limit:
+                    Propety.listRotScan.Add(obj);
+                    break;
+                case TypeCrop.Mask:
+                    Propety.ListRotMask.Add(obj);
+                    break;
+            }
+          
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Edit;
         }
@@ -325,6 +336,16 @@ namespace BeeInterface
             {
                 case TypeCrop.Limit:
                     ListScan = Propety.listRotScan;
+                    if (ListScan.Count > 0)
+                        foreach (LabelItem lb in Propety.labelItems)
+                    {
+
+                        if (lb.ListInsideBox == null)
+                            continue;
+                        if (lb.Name == ListScan[ListScan.Count - 1].Name)
+                            lb.ListInsideBox.RemoveAt(lb.ListInsideBox.Count - 1);
+
+                    }
                     break;
                 case TypeCrop.Mask:
                     ListScan = Propety.ListRotMask;
@@ -333,15 +354,7 @@ namespace BeeInterface
             if (ListScan.Count > 0)
             {
               
-                foreach (LabelItem lb in Propety.labelItems)
-                {
-
-                    if (lb.ListInsideBox == null)
-                        continue;
-                    if(lb.Name== ListScan[ListScan.Count-1].Name)
-                        lb.ListInsideBox.RemoveAt(lb.ListInsideBox.Count - 1);
-
-                }
+             
                 ListScan.RemoveAt(ListScan.Count - 1);
                 //if (_currentLabel != null)
                 //if(_currentLabel.ListInsideBox.Count>0)
@@ -404,19 +417,22 @@ namespace BeeInterface
                 if(obj < ListScan.Count())
                 {
                     ListScan[obj] = rot;
-                    foreach (LabelItem labelItem in Propety.labelItems)
+                    if (EditRectRot1.rotCurrent.TypeCrop == TypeCrop.Limit)
                     {
-                        int index = 0;
-                        if (labelItem.ListInsideBox != null)
+                        foreach (LabelItem labelItem in Propety.labelItems)
                         {
-                            index = labelItem.ListInsideBox.FindIndex(a => a .Name== rot.Name);
-                            if (index >= 0)
+                            int index = 0;
+                            if (labelItem.ListInsideBox != null)
                             {
-                                labelItem.ListInsideBox[IndxOld] = ListScan[obj];
-                                break;
+                                index = labelItem.ListInsideBox.FindIndex(a => a.Name == rot.Name);
+                                if (index >= 0)
+                                {
+                                    labelItem.ListInsideBox[IndxOld] = ListScan[obj];
+                                    break;
+                                }
                             }
-                        }
 
+                        }
                     }
                     //foreach (RectRotate rot1 in Propety.listRotScan)
                     //{
@@ -2232,21 +2248,50 @@ namespace BeeInterface
             PointF pCenter = Propety.rotArea.WorldToLocal(rot._PosCenter);
 
             rot._PosCenter = pCenter;
-            Propety.ListRotMask.Add(rot);
+            switch(Global.rotCurrent.TypeCrop)
+            {
+                case TypeCrop.Mask:
+                    Propety.ListRotMask.Add(rot);
+                    break;
+                case TypeCrop.Limit:
+                    Propety.listRotScan.Add(rot);
+                    break;
+            }    
+          
             Global.EditTool.View.imgView.Invalidate();
         }
 
         private void btnUnoMask_Click(object sender, EventArgs e)
         {
-            if (Propety.ListRotMask.Count() > 0)
-                Propety.ListRotMask.RemoveAt(Propety.ListRotMask.Count() - 1);
+            switch (Global.rotCurrent.TypeCrop)
+            {
+                case TypeCrop.Mask:
+                    if (Propety.ListRotMask.Count() > 0)
+                        Propety.ListRotMask.RemoveAt(Propety.ListRotMask.Count() - 1);
+                    break;
+                case TypeCrop.Limit:
+                    if (Propety.listRotScan.Count() > 0)
+                        Propety.listRotScan.RemoveAt(Propety.listRotScan.Count() - 1);
+                    break;
+            }
+          
             Global.EditTool.View.imgView.Invalidate();
         }
 
         private void btnClearAllMask_Click(object sender, EventArgs e)
         {
-            if (Propety.ListRotMask.Count() > 0)
-                Propety.ListRotMask.Clear();
+            switch (Global.rotCurrent.TypeCrop)
+            {
+                case TypeCrop.Mask:
+                    if (Propety.ListRotMask.Count() > 0)
+                        Propety.ListRotMask.Clear();
+                    break;
+                case TypeCrop.Limit:
+                    if (Propety.listRotScan.Count() > 0)
+                        Propety.listRotScan.Clear();
+                    break;
+            }
+           
             Global.EditTool.View.imgView.Invalidate();
         }
 
@@ -2341,7 +2386,7 @@ namespace BeeInterface
         private void btnEdit_Click(object sender, EventArgs e)
         {
             Propety.ModeCheck = ModeCheck.Single;
-            Propety.listRotScan = Propety.ListRotMask;
+          //  Propety.listRotScan = Propety.ListRotMask;
             //Propety.IsScan = btnEdit.IsCLick; ;
 
             //if (btnEdit.IsCLick)
