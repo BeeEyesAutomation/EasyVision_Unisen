@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace BeeInterface
@@ -273,6 +274,7 @@ namespace BeeInterface
                     foreach (Control c in Parent.Controls)
                     {
                         if (c is RJButton btn && !ReferenceEquals(btn, this))
+                           if(!btn.IsUnGroup)
                             btn.IsCLick = false;
                     }
                 }

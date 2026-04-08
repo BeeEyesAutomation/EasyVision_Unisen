@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Timer = System.Windows.Forms.Timer;
+using BeeGlobal;
 
 namespace BeeInterface
 {
@@ -1263,7 +1264,8 @@ namespace BeeInterface
                 if (e.Button == MouseButtons.Left)
                 {
                     var img = GetImage(it);
-
+                    Global.PathRS = it.Path;
+                    Global.PathRaw = it.Path.Replace("\\Result", "\\Raw");
                     ImageClicked?.Invoke(
                         this,
                         new ImageClickedEventArgs(
@@ -1272,7 +1274,10 @@ namespace BeeInterface
                             it.OrigSize,
                             it.Caption
                         )
+
                     );
+                 
+                    
                 }
 
                 break;

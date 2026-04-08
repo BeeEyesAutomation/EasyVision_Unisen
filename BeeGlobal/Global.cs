@@ -16,6 +16,8 @@ namespace BeeGlobal
 {
     public class Global
     {
+        public static String PathRaw = "";
+        public static String PathRS = "";
         public static  Dictionary<string, SemaphoreSlim> _toolSemaphores
         = new Dictionary<string, SemaphoreSlim>();
         public static int _IndexRotChoose = -1;

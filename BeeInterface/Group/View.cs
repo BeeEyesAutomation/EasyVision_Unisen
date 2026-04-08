@@ -572,19 +572,19 @@ namespace BeeInterface
             //if (Global.StatusDraw == StatusDraw.Color)
             //    BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.AddColor();
 
-
+          
             if (Global.StatusDraw == StatusDraw.Scan)
             {
                 Global.IndexRotChoose = -1;
                 int i = 0;
                 if (IndexRotChoose >= 0)
                 {
-                  
 
 
-                    
+
+
                     Global.IndexRotChoose = IndexRotChoose;
-                    
+
                     return;
                 }
             }
@@ -689,6 +689,9 @@ namespace BeeInterface
        
         private void imgView_MouseMove(object sender, MouseEventArgs e)
         {
+          
+          
+               
             if (Global.IndexToolSelected == -1)
             {
                 HideAngleControl();
@@ -1593,7 +1596,28 @@ namespace BeeInterface
             centerCtrl.Visible = true;
             centerCtrl.BringToFront();
         }
+        AdjustNumberPad numberPad ;
 
+        void HideKeyPad()
+        {
+            if (numberPad != null)
+                numberPad.Visible = false;
+          
+        }
+        void ShowKeyPad(Point mouseScreenPos)
+        {
+           
+            if (numberPad == null)
+            {
+                numberPad = new AdjustNumberPad();
+                Global.Main.Controls.Add(numberPad);
+            }
+
+
+            numberPad.Location = new Point(mouseScreenPos.X + 10, mouseScreenPos.Y + 10);
+            numberPad.Visible = true;
+            numberPad.BringToFront();
+        }
         private void CenterCtrl_CenterDeltaChanged(float arg1, float arg2)
         {
             RectRotate rr = Global.rotCurrent;
@@ -2436,7 +2460,7 @@ namespace BeeInterface
                         {
                             G.StatusDashboard.StatusText = "---";
                             G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
-                            if (Global.ImgShow == ImgShow.Result || Global.ImgShow == ImgShow.Raw)
+                            if(!IsShowHis)
                                 if (imgView.Image != null)
                                 {
                                     imgView.Text = "Waiting Checking...";
@@ -2456,7 +2480,7 @@ namespace BeeInterface
                     {
                         this.Invoke((Action)(() =>
                         {
-                            if (Global.ImgShow == ImgShow.Result || Global.ImgShow == ImgShow.Raw)
+                            if (!IsShowHis)
                             {
                                 if (imgView.Image != null)
                                 {
@@ -2506,7 +2530,7 @@ namespace BeeInterface
 
                     if (!Global.Config.IsExternal && Global.Config.IsResetImg)
                     {
-                        if (Global.ImgShow == ImgShow.Result || Global.ImgShow == ImgShow.Raw)
+                        if(!IsShowHis)
                             this.Invoke((Action)(() =>
                         {
                             if (imgView.Image != null)
@@ -2603,7 +2627,7 @@ namespace BeeInterface
                         }));
                     break;
                 case StatusProcessing.SendResult:
-                    if (Global.ImgShow == ImgShow.Result || Global.ImgShow == ImgShow.Raw)
+                    if(!IsShowHis)
                         this.Invoke((Action)(() =>
                     {
                         imgView.Text = "Waiting Show Picture ..";
@@ -2744,7 +2768,7 @@ namespace BeeInterface
                     break;
                 case StatusProcessing.Drawing:
                     if(!Global.Config.IsExternal)
-                        if (Global.ImgShow == ImgShow.Result || Global.ImgShow == ImgShow.Raw)
+                        if(!IsShowHis)
                             this.Invoke((Action)(() =>
                     {
                       
@@ -2771,7 +2795,7 @@ namespace BeeInterface
                     {
                   
                         Global.IsDoneTrig = false;
-                        if (Global.ImgShow == ImgShow.Result || Global.ImgShow == ImgShow.Raw)
+                        if(!IsShowHis)
                             this.Invoke((Action)(() =>
                         {
                             imgView.Text = "";
@@ -5579,6 +5603,55 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         }
         public void ChangeImgShow()
         {
+            imgView.Text = "";
+            switch (Global.ImgShow )
+            {
+                case ImgShow.Raw:
+                    if (Global.PathRaw.Trim() != "")
+                    {
+                        if (File.Exists(Global.PathRaw))
+                        {
+
+                            imgView.Image = Bitmap.FromFile(Global.PathRaw);
+                            ShowTool.Full(imgView, imgView.Image.Size);
+                            return;
+                        }
+                        else
+                        {
+                            if (imgView.Image != null)
+                            {
+                                imgView.Text = "No Data Raw";
+                                imgView.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
+                                imgView.Image = null;      // xoá ảnh khỏi control
+                            }
+                            _renderer.ClearImages(); return;
+                        }
+                    }
+                    break;
+                case ImgShow.Result:
+                    if (Global.PathRS.Trim() != "")
+                    {
+                        if (File.Exists(Global.PathRS))
+                        {
+
+                            imgView.Image = Bitmap.FromFile(Global.PathRS);
+                            ShowTool.Full(imgView, imgView.Image.Size);
+                            return;
+                        }
+                        else
+                        {
+                            if (imgView.Image != null)
+                            {
+                                imgView.Text = "No Data Result";
+                                imgView.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
+                                imgView.Image = null;      // xoá ảnh khỏi control
+                            }
+                            _renderer.ClearImages(); return;
+                        }    
+                    }
+                    break;
+            }
+          
             switch (Global.IndexProgChoose)
             {
 
@@ -5654,26 +5727,50 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                     break;
             }
 
-
+         
             Global.Config.SizeCCD = _renderer.szImage;
-            if (Global.Config.IsShowFull)
+         
                 ShowTool.Full(imgView, Global.Config.SizeCCD);
         }
         private void btnShowResult_Click(object sender, EventArgs e)
         {
+          
             Global.ImgShow = ImgShow.Result;
             ChangeImgShow();
         }
 
         private void btnShowRaw_Click(object sender, EventArgs e)
         {
+           
             Global.ImgShow = ImgShow.Raw;
             ChangeImgShow();
+        }
+        bool IsShowHis = false;
+        bool IsShowKeyPad = false;
+        private void btnMenuKeyBoard_Click(object sender, EventArgs e)
+        {
+            IsShowKeyPad = btnMenuKeyBoard.IsCLick;
+            if(IsShowKeyPad)
+            {
+                ShowKeyPad(new Point( Global.SizeScreen.Width/2, Global.SizeScreen.Height/2));
+            }
+            else
+            {
+                HideKeyPad();
+            }
         }
 
         private void btnShowImgHistory_Click(object sender, EventArgs e)
         {
-            Global.ImgShow = ImgShow.History;
+            IsShowHis = btnShowImgHistory.IsCLick;
+            if(!IsShowHis)
+            {
+                Global.PathRS = "";
+                Global.PathRaw = "";
+
+            }
+
+            
         }
 
         //private void NewShape()

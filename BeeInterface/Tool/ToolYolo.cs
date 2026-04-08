@@ -158,24 +158,23 @@ namespace BeeInterface
                 {
                     cbListModel.DataSource = Propety.listModels;
                 }
-
-                if (Propety.PathModel != "")
-                    cbListModel.Text = Propety.PathModel;
-                //txtMatching.Text = Propety.Matching;
-                //btnEnbleContent.IsCLick = Propety.IsEnContent;
-                //if (Propety.PathModel!=null)
-                //   if (File.Exists(Propety.PathModel))
-                //       Propety.SetModel(this.Name, Propety.PathModel, TypeYolo.YOLO);
+                switch(Propety.TypeYolo)
+                {
+                    case TypeYolo.YOLO:
+                        if (Propety.PathModel != "")
+                            cbListModel.Text = Propety.PathModel;
+                        break;
+                    case TypeYolo.Onnx:
+                        if (Propety.pathFullModel != "")
+                            cbListModel.Text = Propety.pathFullModel;
+                        break;
+                }    
+               
                 IsIni = true;
-                String slabel = "";
-
-                //   txtLabel.Text = Propety.PathLabels; ;
+     
                 RefreshLabels();
 
-              //  Global.TypeCrop = TypeCrop.Area;
-              //  CustomGui.RoundRg(tabLbs, 10, Corner.Bottom);
-                //picTemp1.Image = Propety.matTemp;
-                //picTemp2.Image = Propety.matTemp2;
+
 
                 trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
                 trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
@@ -996,6 +995,8 @@ namespace BeeInterface
 
         private void btnAddModel_Click(object sender, EventArgs e)
         {
+            btnAddModel.Enabled = false;
+            btnReload.Enabled = false;
             OpenFileDialog OpenFileDialog = new OpenFileDialog();
 
             switch(Propety.TypeYolo)
@@ -1053,6 +1054,8 @@ namespace BeeInterface
                                     Propety.labelItems.Add(new LabelItem(s));
                             }
                             RefreshLabels();
+                            btnAddModel.Enabled = true;
+                            btnReload.Enabled = true;
                         }
                         else
                         {
@@ -1573,8 +1576,9 @@ namespace BeeInterface
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             cbListModel.Enabled = true;
-           
-          
+            btnAddModel.Enabled = true;
+            btnReload.Enabled = true;
+
         }
 
         private void btnTraining_Click(object sender, EventArgs e)
