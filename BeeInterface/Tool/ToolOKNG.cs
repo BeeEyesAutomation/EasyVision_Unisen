@@ -97,10 +97,10 @@ namespace BeeInterface
 
         }
 
-        public OKNG Propety=new OKNG();
-      
-     
-       
+        public OKNG Propety { get; set; }
+
+
+
         private void rjButton3_Click(object sender, EventArgs e)
         {
 

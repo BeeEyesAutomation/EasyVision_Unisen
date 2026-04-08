@@ -272,7 +272,7 @@ namespace BeeUi
             try
             {
 
-                DataTool.BuildProjectUI();
+                //DataTool.BuildProjectUI();
 
                 //foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
                 //{

@@ -370,10 +370,10 @@ namespace BeeInterface
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score=trackScore.Value;
          }
      
-        public Intersect Propety =new Intersect();
-     
-    
-       
+        public Intersect Propety { get; set; }
+
+
+
         private void rjButton3_Click(object sender, EventArgs e)
         {
 

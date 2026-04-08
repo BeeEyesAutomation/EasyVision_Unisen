@@ -33,10 +33,10 @@ namespace BeeInterface
         }
         public int indexTool;
         
-        public BeeCore. ColorArea Propety=new BeeCore.ColorArea();
-      
-       
-      
+        public BeeCore.ColorArea Propety { get; set; }
+
+
+
         public bool IsClear;
         public bool IsIni = false;
         View view = null;

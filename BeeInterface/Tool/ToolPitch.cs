@@ -347,7 +347,7 @@ namespace BeeInterface
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score=trackScore.Value;
          }
         public bool IsClear = false;
-        public Pitch Propety=new Pitch();
+        public Pitch Propety { get; set; }
         public Mat matTemp = new Mat();
         public Mat matTemp2 = new Mat();
         Mat matClear = new Mat(); Mat matMask = new Mat();

@@ -160,10 +160,14 @@ namespace BeeInterface
 
                     SaveData.Program(NameBK, BeeCore.Common.PropetyTools,true);
                 }
-              
+                int indexThread = 0;
                 foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
                 {
-                    if (ListTool == null) continue;
+                    if (ListTool == null)
+                    {
+                        indexThread ++;
+                        continue;
+                    }
 
                     foreach (PropetyTool propety in ListTool)
                     {
@@ -178,9 +182,14 @@ namespace BeeInterface
 
                         if (propety != null)
                             if (propety.Propety2 != null)
+                            {
+                                propety.Propety2.IndexThread = indexThread;
                                 propety.Propety2.SetModel();
+                            }    
+                                
 
                     }
+                    indexThread++;
                 }
                 if (IsVerNew)
                 {
@@ -206,40 +215,32 @@ namespace BeeInterface
 
                 for (int t = 0; t < BeeCore.Common.PropetyTools.Count; t++)
                 {
-                    var list = BeeCore.Common.PropetyTools[t];
+                    //var list = BeeCore.Common.PropetyTools[t];
                   
-                    if (list == null) continue;
+                    if (BeeCore.Common.PropetyTools[t] == null) continue;
 
                    
 
-                    for (int i = 0; i < list.Count; i++)
+                    for (int i = 0; i < BeeCore.Common.PropetyTools[t].Count; i++)
                     {
-                        var tool = list[i];
+                        
+                       
                         try
                         {
-                        if (tool == null)
+                        if (BeeCore.Common.PropetyTools[t][i] == null)
                         {
                           
                             continue;
                         }
-                            var control = CreateControls(tool, i, indexThread, Global.pShowTool);
-                            var item = CreateItemTool(tool, i, indexThread, Global.pShowTool);
-
-                            if (item != null)
+                            BeeCore.Common.PropetyTools[t][i].ItemTool = CreateItemTool(BeeCore.Common.PropetyTools[t][i], i, indexThread);
+                            if (BeeCore.Common.PropetyTools[t][i].TypeTool == TypeTool.Learning)
                             {
-                                Global.pShowTool.Y += item.Height + 10;
-
-                                tool.ItemTool = item;
-                                if (tool.TypeTool == TypeTool.Learning)
-                                {
-                                    tool.ItemTool.NotChange = true;
-                                }
-                                tool.Control = control;
+                                BeeCore.Common.PropetyTools[t][i].ItemTool.NotChange = true;
                             }
-                          //  LoadPropety(control);
-
-                            if (tool.TypeTool == TypeTool.OCR)
-                                tool.Propety2.SetModelOCR();
+ 
+                            BeeCore.Common.PropetyTools[t][i].Control = CreateControls(BeeCore.Common.PropetyTools[t][i], i, indexThread);
+                         
+                        
                         }
                         catch(Exception ex) {
                             Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "BuildUI2", ex.Message));
@@ -392,7 +393,7 @@ namespace BeeInterface
             }
             return new RectRotate();
         }
-        public static dynamic CreateItemTool(BeeCore.PropetyTool PropetyTool, int Index, int IndexThread, Point pDraw)
+        public static dynamic CreateItemTool(BeeCore.PropetyTool PropetyTool, int Index, int IndexThread)
         {
 
 
@@ -401,7 +402,7 @@ namespace BeeInterface
             try
             {
                 itemTool = new ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(Index - 1),TriggerNum.Trigger1);
-                itemTool.Location = pDraw;
+                //itemTool.Location = pDraw;
                 itemTool.CT = 0;
                 itemTool.Score = "---";
                 itemTool.Status = "---";
@@ -431,7 +432,7 @@ namespace BeeInterface
             }
             return itemTool;
         }
-        public static dynamic NewControl(TypeTool TypeTool, int Index, int IndexThread,String Nametool, Point pDraw)
+        public static dynamic NewControl(TypeTool TypeTool, int Index, int IndexThread,String Nametool)
         {
 
 
@@ -464,7 +465,7 @@ namespace BeeInterface
             return control;
         }
 
-        public static  dynamic CreateControls(BeeCore.PropetyTool PropetyTool,int Index,int IndexThread,Point pDraw)
+        public static  dynamic CreateControls(BeeCore.PropetyTool PropetyTool,int Index,int IndexThread)
         {
            
             

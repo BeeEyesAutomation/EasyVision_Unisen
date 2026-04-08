@@ -163,14 +163,14 @@ namespace BeeInterface
           
         }
 
-        public Yolo Propety=new Yolo();
-  
-  
-      
-     
-     
+        public Yolo Propety { get; set; }
 
-       
+
+
+
+
+
+
         private void rjButton3_Click(object sender, EventArgs e)
         {
 

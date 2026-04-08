@@ -56,13 +56,13 @@ namespace BeeInterface
 
      
 
-        public Crop Propety=new Crop();
-     
-     
-  
-       
+        public Crop Propety { get; set; }
 
-      
+
+
+
+
+
 
         private void btnTest_Click(object sender, EventArgs e)
         {

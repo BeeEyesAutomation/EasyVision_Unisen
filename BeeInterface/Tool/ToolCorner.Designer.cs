@@ -1019,7 +1019,7 @@ namespace BeeInterface
             this.dashboardListCompact1.Location = new System.Drawing.Point(6, 495);
             this.dashboardListCompact1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.dashboardListCompact1.Name = "dashboardListCompact1";
-            this.dashboardListCompact1.Size = new System.Drawing.Size(383, 277);
+            this.dashboardListCompact1.Size = new System.Drawing.Size(383, 429);
             this.dashboardListCompact1.TabIndex = 84;
             this.dashboardListCompact1.Text = "dashboardListCompact1";
             this.dashboardListCompact1.ValueMax = 1000;

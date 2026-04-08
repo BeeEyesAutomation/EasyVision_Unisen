@@ -38,8 +38,7 @@ namespace BeeInterface
 
         public void LoadPara()
         {
-            Propety = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Propety2;
-            AdjOffSetBR.Value = Propety.OffSetBR;
+             AdjOffSetBR.Value = Propety.OffSetBR;
             AdjAspectBox.Value = Propety.AspectBox;
             AdjBinary.Value = Propety.ThresholdBinary;
             AdjBinary.Visible= Propety.MethordEdge == MethordEdge.Binary ? true : false;
@@ -137,15 +136,7 @@ namespace BeeInterface
 
         }
 
-        public MultiPattern Propety = new MultiPattern();
-
-
-
-     
-
-
-
-     
+        public MultiPattern Propety { get; set; }
 
 
 
@@ -153,7 +144,15 @@ namespace BeeInterface
 
 
 
-     
+
+
+
+
+
+
+
+
+
 
         private void btnTest_Click(object sender, EventArgs e)
         {

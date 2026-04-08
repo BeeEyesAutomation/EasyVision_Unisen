@@ -120,11 +120,11 @@ namespace BeeInterface
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score=trackScore.Value;
          }
         public bool IsClear = false;
-        public EdgePixel Propety=new EdgePixel();
-      
+        public EdgePixel Propety { get; set; }
 
-    
-       
+
+
+
         private void rjButton3_Click(object sender, EventArgs e)
         {
 

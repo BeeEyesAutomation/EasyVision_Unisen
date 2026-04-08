@@ -116,8 +116,8 @@ namespace BeeInterface
             int Index = BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count - 1;
            // propety.Propety.Index = Index;
             PropetyTool propetyTools = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Index];
-            propetyTools.ItemTool = DataTool.CreateItemTool(propety, Index, Global.IndexProgChoose,Global.pShowTool);
-            propetyTools.Control = DataTool.CreateControls(propety, Index, Global.IndexProgChoose, Global.pShowTool);
+            propetyTools.ItemTool = DataTool.CreateItemTool(propety, Index, Global.IndexProgChoose);
+            propetyTools.Control = DataTool.CreateControls(propety, Index, Global.IndexProgChoose);
 
            
             DataTool.LoadPropety(propetyTools.Control);

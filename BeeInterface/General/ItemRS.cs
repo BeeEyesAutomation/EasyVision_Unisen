@@ -18,7 +18,7 @@ namespace BeeInterface
         {
             InitializeComponent();
         }
-       public PropetyTool propetyTool;
+       public PropetyTool propetyTool { set; get; }
         private void ckUnused_CheckedChanged(object sender, EventArgs e)
         {
             propetyTool.UsedTool = UsedTool.NotUsed;

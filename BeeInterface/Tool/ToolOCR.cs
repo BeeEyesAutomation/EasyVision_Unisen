@@ -174,7 +174,7 @@ namespace BeeInterface
 
         }
 
-        public OCR Propety = new OCR();
+        public OCR Propety { get; set; }
         public Mat matTemp = new Mat();
         Mat matClear = new Mat(); Mat matMask = new Mat();
 

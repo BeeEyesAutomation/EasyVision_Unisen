@@ -19,7 +19,8 @@ namespace BeeCore
         public float Percent { get; set; }
         public float Area { get; set; }
         public int ValueColor { get; set; }
-       
+        public int IndexScanBox { get; set; }
+
         public float Distance { get; set; }
         public PointF point { get; set; }
         [NonSerialized]

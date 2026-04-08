@@ -212,11 +212,11 @@ namespace BeeInterface
                     if (BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count>0)
                     {
                         int indexName2 = 1;
-                        dynamic control2 = DataTool.NewControl(TypeTool, indexName2 - 1, Global.IndexProgChoose, TypeTool.ToString() + " " + indexName2, new Point(Global.pShowTool.X, Global.pShowTool.Y));
+                        dynamic control2 = DataTool.NewControl(TypeTool, indexName2 - 1, Global.IndexProgChoose, TypeTool.ToString() + " " + indexName2);
                         PropetyTool propetyTool2 = new PropetyTool(control2.Propety, TypeTool, TypeTool.ToString() + " " + indexName2);
                         propetyTool2.UsedTool = UsedTool.Used;
                         BeeCore.Common.PropetyTools[Global.IndexProgChoose].Insert(0,propetyTool2);
-                        ItemTool Itemtool2 = DataTool.CreateItemTool(propetyTool2, indexName2 - 1, Global.IndexProgChoose, new Point(Global.pShowTool.X, Global.pShowTool.Y));
+                        ItemTool Itemtool2 = DataTool.CreateItemTool(propetyTool2, indexName2 - 1, Global.IndexProgChoose);
 
                         BeeCore.Common.PropetyTools[Global.IndexProgChoose][0].ItemTool = Itemtool2;
                         BeeCore.Common.PropetyTools[Global.IndexProgChoose][0].Control = control2;
@@ -272,11 +272,11 @@ namespace BeeInterface
 
             }    
             int indexName = BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count() + 1;
-            dynamic control = DataTool.NewControl(TypeTool, indexName - 1, Global.IndexProgChoose, TypeTool.ToString() + " " + indexName, new Point(Global.pShowTool.X, Global.pShowTool.Y));
+            dynamic control = DataTool.NewControl(TypeTool, indexName - 1, Global.IndexProgChoose, TypeTool.ToString() + " " + indexName);
             PropetyTool propetyTool = new PropetyTool(control.Propety, TypeTool, TypeTool.ToString() + " " + indexName);
             propetyTool.UsedTool = UsedTool.Used;
             BeeCore.Common.PropetyTools[Global.IndexProgChoose].Add(propetyTool);
-            ItemTool Itemtool = DataTool.CreateItemTool(propetyTool ,indexName - 1, Global.IndexProgChoose, new Point(Global.pShowTool.X, Global.pShowTool.Y));
+            ItemTool Itemtool = DataTool.CreateItemTool(propetyTool ,indexName - 1, Global.IndexProgChoose);
           
             BeeCore.Common.PropetyTools[Global.IndexProgChoose][BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count() - 1].ItemTool = Itemtool;
             BeeCore.Common.PropetyTools[Global.IndexProgChoose][BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count() - 1].Control = control;

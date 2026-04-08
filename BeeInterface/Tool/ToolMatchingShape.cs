@@ -29,7 +29,7 @@ namespace BeeInterface
             
         }
        
-        public MatchingShape Propety = new MatchingShape();
+        public MatchingShape Propety { get; set; }
         public BackgroundWorker worker = new BackgroundWorker();
         public void LoadPara()
         {

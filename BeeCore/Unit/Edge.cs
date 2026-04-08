@@ -37,6 +37,7 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        public int MaxThread = 0;
         public int IndexCCD = 0;
         public bool IsIni = false;
         public int Index = -1;
@@ -136,25 +137,27 @@ namespace BeeCore
                     Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
                 if(matCrop.Empty()) 
                     return;
+                Cv2.EqualizeHist(matCrop, matProcess);
                 switch (MethordEdge)
-                {
+                { 
                     case MethordEdge.CloseEdges:
                         matProcess = Filters.Edge(matCrop);
                         break;
                     case MethordEdge.StrongEdges:
+                        matProcess = Filters.GetStrongEdgesStable(matCrop);
                         //Mat matClear  = Filters.SuppressHighlightOnly(matCrop);
                         //Cv2.ImWrite("process.png", matClear);
-                         Cv2.Threshold(matCrop, matMark, ThresholdBinary,255, ThresholdTypes.Binary);
-                      //  matMark = Filters.ClearNoise(matMark, SizeClearBig);
+                     //   Cv2.Threshold(matCrop, matMark, ThresholdBinary,255, ThresholdTypes.Binary);
+                     // //  matMark = Filters.ClearNoise(matMark, SizeClearBig);
                        
-                        Mat kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(11, 11));
-                        Cv2.Dilate(matMark, matMark, kernel, iterations: 1);
-                      //  Cv2.ImWrite("Dilate.png", matMark);
-                        //  matMark = Filters.ErodeDilate(matBinary, MorphTypes.Open, new Size(11, 11));
+                     //   Mat kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(11, 11));
+                     //   Cv2.Dilate(matMark, matMark, kernel, iterations: 1);
+                     // //  Cv2.ImWrite("Dilate.png", matMark);
+                     //   //  matMark = Filters.ErodeDilate(matBinary, MorphTypes.Open, new Size(11, 11));
 
-                        Cv2.BitwiseNot(matMark, matMark);
-                     Mat Edge= Filters.GetStrongEdgesStable(matCrop);
-                        Cv2.BitwiseAnd(Edge, matMark, matProcess);
+                     //   Cv2.BitwiseNot(matMark, matMark);
+                     //Mat Edge= Filters.GetStrongEdgesStable(matCrop);
+                     //   Cv2.BitwiseAnd(Edge, matMark, matProcess);
                       //  Cv2.ImWrite("AND.png", matMark);
                         break;
                     case MethordEdge.Binary:
@@ -182,7 +185,7 @@ namespace BeeCore
                     threshold: (float)RansacThreshold,
                     maxPoints: 120000,
                     seed: Index,
-                    mmPerPixel: 1/Scale, AspectLen,(BeeCpp.LineDirectionMode) ((int)lineDirectionMode),LineScanMode.LeftToRight,0,4
+                    mmPerPixel: 1/Scale, AspectLen,(BeeCpp.LineDirectionMode) ((int)lineDirectionMode),LineScanMode.LeftToRight,0,40
 
 
                 );
@@ -454,7 +457,18 @@ namespace BeeCore
         public void SetModel()
         {
             if (rotArea == null) rotArea = new RectRotate();
-            rotMask = null;
+            if (rotCrop == null) rotCrop = new RectRotate();
+            if (rotMask == null) rotMask = new RectRotate();
+
+            rotCrop.Name = "Area Temp";
+            rotCrop.TypeCrop = TypeCrop.Crop;
+
+
+            rotMask.Name = "Area Mask";
+            rotMask.TypeCrop = TypeCrop.Mask;
+
+            rotArea.Name = "Area Check";
+            rotArea.TypeCrop = TypeCrop.Area;
             if (RansacLine == null) RansacLine = new RansacLine();
             if (FilterCLi == null) FilterCLi = new FilterCLi();
             CropPlus=new CropPlus();

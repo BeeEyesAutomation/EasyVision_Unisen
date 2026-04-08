@@ -134,8 +134,6 @@ namespace BeeInterface
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPosition_Adjustment_StatusToolChanged;
            
-            Global.TypeCrop = TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
             btnAutoMean.IsCLick = Propety.AutoMean == true ? true : false;
             btnFixedMean.IsCLick = Propety.AutoMean == false ? true : false;
             AdjContinuityGapFactor.Value = Propety.ContinuityGapFactor;
@@ -193,9 +191,9 @@ namespace BeeInterface
            
         }
 
-        public PositionAdj Propety=new PositionAdj();
-     
-        
+        public PositionAdj Propety { get; set; }
+
+
         private void btnCropRect_Click(object sender, EventArgs e)
         {
             Global.StatusDraw = StatusDraw.Check;

@@ -396,7 +396,7 @@ private void ToolCircle_ScoreChanged(float obj)
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score =trackScore.Value;
           
         }
-        public Circle Propety=new Circle();
+        public Circle Propety { get; set; }
 
         private void rjButton3_Click(object sender, EventArgs e)
         {

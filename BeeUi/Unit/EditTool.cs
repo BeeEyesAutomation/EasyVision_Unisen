@@ -237,6 +237,7 @@ namespace BeeUi
                         Global.EditTool.View.btnChangeImg.Visible = true;
                         Global.EditTool.View.imgView.AutoCenter = true;
                         View.pMenu.Visible = false;
+                        View.pImageShow.Visible = true;
                         Global.IsAllowReadPLC = true;
                         ShowTool.ShowAllChart(Global.ToolSettings.pAllTool);
                         Global.EditTool.View.btnLive.Enabled = false;
@@ -352,7 +353,7 @@ namespace BeeUi
                         Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
                         break;
                     case Step.Step1:
-
+                        View.pImageShow.Visible = false;
                         foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
                         {
                             if (PropetyTool.ItemTool != null)

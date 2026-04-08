@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeCore.Core;
 using BeeCpp;
 using BeeGlobal;
 using BeeInterface.Group;
@@ -510,12 +511,17 @@ namespace BeeInterface
                     //  tableLayoutModel.BackColor = Global.ColorSample;
                     if (_currentColorItem.ListColor == null)
                         _currentColorItem.ListColor = new List<Color>();
-                    _currentColorItem.ListColor.Add ( Global.ColorSample);
+                  
                     if (_currentColorItem.ListHSV == null)
                         _currentColorItem.ListHSV = new List<BeeCore.Core.HSV>();
-                    _currentColorItem.ListHSV.Add( new BeeCore.Core.HSV(BeeCore.Common.HSVSample.H, BeeCore.Common.HSVSample.S, BeeCore.Common.HSVSample.V));
-                    _currentColorItem.ListHSV=_currentColorItem.ListHSV.Distinct().ToList();
-                    dashboardLabel.Invalidate();
+                    HSV hSV = new BeeCore.Core.HSV(BeeCore.Common.HSVSample.H, BeeCore.Common.HSVSample.S, BeeCore.Common.HSVSample.V);
+
+                    if (!_currentColorItem.ListHSV.Contains(hSV))
+                    {
+                        _currentColorItem.ListHSV.Add(hSV);
+                        _currentColorItem.ListColor.Add(Global.ColorSample);
+                    }
+                   dashboardLabel.Invalidate();
                 }));
             }
             catch(Exception ex)
@@ -546,7 +552,7 @@ namespace BeeInterface
           
         }
 
-        public Yolo Propety=new Yolo();
+        public Yolo  Propety { get; set; }
   
   
       

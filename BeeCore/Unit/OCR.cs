@@ -524,7 +524,7 @@ namespace BeeCore
             sAllow = "0123456789";
          
            // if(!IsNew2)
-           // SetModelOCR();
+           SetModelOCR();
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
             return true;
         }

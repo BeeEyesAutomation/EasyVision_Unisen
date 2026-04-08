@@ -155,7 +155,7 @@ namespace BeeInterface
 
         }
 
-        public Patterns Propety=new Patterns();
+        public Patterns Propety { get; set; }
         public Mat matTemp = new Mat();
         public Mat matTemp2 = new Mat();
         Mat matClear = new Mat(); Mat matMask = new Mat();

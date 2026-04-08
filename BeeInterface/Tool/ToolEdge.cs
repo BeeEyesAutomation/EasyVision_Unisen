@@ -47,7 +47,13 @@ namespace BeeInterface
           
             try
             {
-               
+                EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotMask };
+                EditRectRot1.Refresh();
+                EditRectRot1.IsHide = false;
+                EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
+                EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
+                this.VisibleChanged -= ToolEdge_VisibleChanged;
+                this.VisibleChanged += ToolEdge_VisibleChanged;
                 trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
                 trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
                 trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
@@ -111,6 +117,30 @@ namespace BeeInterface
                 String s = ex.Message;
             }
         }
+
+        private void ToolEdge_VisibleChanged(object sender, EventArgs e)
+        {
+            if (!this.Visible)
+            {
+                EditRectRot1.IsHide = true;
+                EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
+            }
+        }
+
+        private void EditRectRot1_RotateCurentChanged(RectRotate obj)
+        {
+            switch (obj.TypeCrop)
+            {
+                case TypeCrop.Area:
+                    Propety.rotArea = obj; break;
+                case TypeCrop.Crop:
+                    Propety.rotCrop = obj; break;
+                case TypeCrop.Mask:
+                    Propety.rotMask = obj; break;
+
+            }
+        }
+
         private void btnCropRect_Click(object sender, EventArgs e)
         {
             Global.TypeCrop = TypeCrop.Crop;
@@ -381,7 +411,7 @@ namespace BeeInterface
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score=trackScore.Value;
          }
         public bool IsClear = false;
-        public Edge Propety=new Edge();
+        public Edge Propety { get; set; }
         public Mat matTemp = new Mat();
         public Mat matTemp2 = new Mat();
         Mat matClear = new Mat(); Mat matMask = new Mat();
@@ -476,10 +506,9 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected]. worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
-            else
-                btnTest.IsCLick = false;
+            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+
+            //btnTest.IsCLick = false;
         }
         bool IsFullSize = false;
         private void btnCropHalt_Click(object sender, EventArgs e)
@@ -638,12 +667,9 @@ namespace BeeInterface
 
         private void btnCalib_Click(object sender, EventArgs e)
         {
-            btnCalib.Enabled = false;
-            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.IsCalibs = true;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
-            else
-                Propety.IsCalibs = false;
+            //btnCalib.Enabled = false;
+            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+            Propety.IsCalibs = true;
             
         }
 

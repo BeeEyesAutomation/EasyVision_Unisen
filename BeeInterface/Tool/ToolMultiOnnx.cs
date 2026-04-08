@@ -105,7 +105,7 @@ namespace BeeInterface
 
         }
 
-        public MultiOnnx Propety = new MultiOnnx();
+        public MultiOnnx  Propety { get; set; }
 
         private void btnTest_Click(object sender, EventArgs e)
         {

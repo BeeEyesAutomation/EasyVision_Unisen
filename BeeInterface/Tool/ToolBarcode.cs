@@ -144,11 +144,11 @@ namespace BeeInterface
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score=trackScore.Value;
          }
         public bool IsClear = false;
-        public Barcode Propety=new Barcode();
-      
+        public Barcode Propety { get; set; }
 
-    
-       
+
+
+
         private void rjButton3_Click(object sender, EventArgs e)
         {
 

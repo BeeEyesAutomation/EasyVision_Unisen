@@ -269,7 +269,7 @@ namespace BeeInterface
             this.trackAngle.Name = "trackAngle";
             this.trackAngle.Radius = 8;
             this.trackAngle.ShowValueOnThumb = true;
-            this.trackAngle.Size = new System.Drawing.Size(486, 50);
+            this.trackAngle.Size = new System.Drawing.Size(488, 50);
             this.trackAngle.SnapToStep = true;
             this.trackAngle.StartWithTextboxHidden = true;
             this.trackAngle.Step = 1F;
@@ -339,7 +339,7 @@ namespace BeeInterface
             this.btn4.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.btn4.Multiline = false;
             this.btn4.Name = "btn4";
-            this.btn4.Size = new System.Drawing.Size(486, 35);
+            this.btn4.Size = new System.Drawing.Size(488, 35);
             this.btn4.TabIndex = 121;
             this.btn4.Text = "2.Angle Range Object";
             this.btn4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -392,7 +392,7 @@ namespace BeeInterface
             this.AdjScale.Name = "AdjScale";
             this.AdjScale.Radius = 8;
             this.AdjScale.ShowValueOnThumb = true;
-            this.AdjScale.Size = new System.Drawing.Size(486, 45);
+            this.AdjScale.Size = new System.Drawing.Size(488, 45);
             this.AdjScale.SnapToStep = true;
             this.AdjScale.StartWithTextboxHidden = true;
             this.AdjScale.Step = 1F;
@@ -462,7 +462,7 @@ namespace BeeInterface
             this.btn7.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.btn7.Multiline = false;
             this.btn7.Name = "btn7";
-            this.btn7.Size = new System.Drawing.Size(486, 35);
+            this.btn7.Size = new System.Drawing.Size(488, 35);
             this.btn7.TabIndex = 119;
             this.btn7.Text = "4. Scale (Pixel /mm)";
             this.btn7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -515,7 +515,7 @@ namespace BeeInterface
             this.AdjScoreNG.Name = "AdjScoreNG";
             this.AdjScoreNG.Radius = 8;
             this.AdjScoreNG.ShowValueOnThumb = true;
-            this.AdjScoreNG.Size = new System.Drawing.Size(486, 49);
+            this.AdjScoreNG.Size = new System.Drawing.Size(488, 49);
             this.AdjScoreNG.SnapToStep = true;
             this.AdjScoreNG.StartWithTextboxHidden = true;
             this.AdjScoreNG.Step = 1F;
@@ -585,7 +585,7 @@ namespace BeeInterface
             this.rjButton3.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.rjButton3.Multiline = false;
             this.rjButton3.Name = "rjButton3";
-            this.rjButton3.Size = new System.Drawing.Size(486, 35);
+            this.rjButton3.Size = new System.Drawing.Size(488, 35);
             this.rjButton3.TabIndex = 117;
             this.rjButton3.Text = "3. Score AI Detect NG";
             this.rjButton3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -637,7 +637,7 @@ namespace BeeInterface
             this.trackScore.Name = "trackScore";
             this.trackScore.Radius = 8;
             this.trackScore.ShowValueOnThumb = true;
-            this.trackScore.Size = new System.Drawing.Size(486, 49);
+            this.trackScore.Size = new System.Drawing.Size(488, 49);
             this.trackScore.SnapToStep = true;
             this.trackScore.StartWithTextboxHidden = true;
             this.trackScore.Step = 1F;
@@ -707,7 +707,7 @@ namespace BeeInterface
             this.btn6.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.btn6.Multiline = false;
             this.btn6.Name = "btn6";
-            this.btn6.Size = new System.Drawing.Size(486, 35);
+            this.btn6.Size = new System.Drawing.Size(488, 35);
             this.btn6.TabIndex = 115;
             this.btn6.Text = "1. Score Detect Object";
             this.btn6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -760,7 +760,7 @@ namespace BeeInterface
             this.AdjLimitX.Padding = new System.Windows.Forms.Padding(2);
             this.AdjLimitX.Radius = 8;
             this.AdjLimitX.ShowValueOnThumb = true;
-            this.AdjLimitX.Size = new System.Drawing.Size(486, 50);
+            this.AdjLimitX.Size = new System.Drawing.Size(488, 50);
             this.AdjLimitX.SnapToStep = true;
             this.AdjLimitX.StartWithTextboxHidden = true;
             this.AdjLimitX.Step = 1F;
@@ -830,7 +830,7 @@ namespace BeeInterface
             this.btn8.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.btn8.Multiline = false;
             this.btn8.Name = "btn8";
-            this.btn8.Size = new System.Drawing.Size(486, 35);
+            this.btn8.Size = new System.Drawing.Size(488, 35);
             this.btn8.TabIndex = 113;
             this.btn8.Text = "5.Limit X";
             this.btn8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -883,7 +883,7 @@ namespace BeeInterface
             this.AdjLimitY.Padding = new System.Windows.Forms.Padding(2);
             this.AdjLimitY.Radius = 8;
             this.AdjLimitY.ShowValueOnThumb = true;
-            this.AdjLimitY.Size = new System.Drawing.Size(486, 50);
+            this.AdjLimitY.Size = new System.Drawing.Size(488, 50);
             this.AdjLimitY.SnapToStep = true;
             this.AdjLimitY.StartWithTextboxHidden = true;
             this.AdjLimitY.Step = 1F;
@@ -953,7 +953,7 @@ namespace BeeInterface
             this.btn9.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.btn9.Multiline = false;
             this.btn9.Name = "btn9";
-            this.btn9.Size = new System.Drawing.Size(486, 35);
+            this.btn9.Size = new System.Drawing.Size(488, 35);
             this.btn9.TabIndex = 104;
             this.btn9.Text = "6.Limit Y";
             this.btn9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2329,7 +2329,7 @@ namespace BeeInterface
             this.AdjOffSetBR.Name = "AdjOffSetBR";
             this.AdjOffSetBR.Radius = 8;
             this.AdjOffSetBR.ShowValueOnThumb = true;
-            this.AdjOffSetBR.Size = new System.Drawing.Size(490, 53);
+            this.AdjOffSetBR.Size = new System.Drawing.Size(492, 53);
             this.AdjOffSetBR.SnapToStep = true;
             this.AdjOffSetBR.StartWithTextboxHidden = true;
             this.AdjOffSetBR.Step = 1F;
@@ -2399,7 +2399,7 @@ namespace BeeInterface
             this.rjButton5.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.rjButton5.Multiline = false;
             this.rjButton5.Name = "rjButton5";
-            this.rjButton5.Size = new System.Drawing.Size(490, 35);
+            this.rjButton5.Size = new System.Drawing.Size(492, 35);
             this.rjButton5.TabIndex = 123;
             this.rjButton5.Text = "Offset Box Rigth Bottom";
             this.rjButton5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2451,7 +2451,7 @@ namespace BeeInterface
             this.AdjAspectBox.Name = "AdjAspectBox";
             this.AdjAspectBox.Radius = 8;
             this.AdjAspectBox.ShowValueOnThumb = true;
-            this.AdjAspectBox.Size = new System.Drawing.Size(490, 53);
+            this.AdjAspectBox.Size = new System.Drawing.Size(492, 53);
             this.AdjAspectBox.SnapToStep = true;
             this.AdjAspectBox.StartWithTextboxHidden = true;
             this.AdjAspectBox.Step = 0.1F;
@@ -2521,7 +2521,7 @@ namespace BeeInterface
             this.rjButton4.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.rjButton4.Multiline = false;
             this.rjButton4.Name = "rjButton4";
-            this.rjButton4.Size = new System.Drawing.Size(490, 35);
+            this.rjButton4.Size = new System.Drawing.Size(492, 35);
             this.rjButton4.TabIndex = 121;
             this.rjButton4.Text = "Aspect Width Box";
             this.rjButton4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2573,7 +2573,7 @@ namespace BeeInterface
             this.AdjWidthDetect.Name = "AdjWidthDetect";
             this.AdjWidthDetect.Radius = 8;
             this.AdjWidthDetect.ShowValueOnThumb = true;
-            this.AdjWidthDetect.Size = new System.Drawing.Size(490, 53);
+            this.AdjWidthDetect.Size = new System.Drawing.Size(492, 53);
             this.AdjWidthDetect.SnapToStep = true;
             this.AdjWidthDetect.StartWithTextboxHidden = true;
             this.AdjWidthDetect.Step = 1F;
@@ -2638,7 +2638,7 @@ namespace BeeInterface
             this.AdjWidthBoxBR.Name = "AdjWidthBoxBR";
             this.AdjWidthBoxBR.Radius = 8;
             this.AdjWidthBoxBR.ShowValueOnThumb = true;
-            this.AdjWidthBoxBR.Size = new System.Drawing.Size(490, 53);
+            this.AdjWidthBoxBR.Size = new System.Drawing.Size(492, 53);
             this.AdjWidthBoxBR.SnapToStep = true;
             this.AdjWidthBoxBR.StartWithTextboxHidden = true;
             this.AdjWidthBoxBR.Step = 1F;
@@ -2703,7 +2703,7 @@ namespace BeeInterface
             this.AdjSample.Name = "AdjSample";
             this.AdjSample.Radius = 8;
             this.AdjSample.ShowValueOnThumb = true;
-            this.AdjSample.Size = new System.Drawing.Size(490, 53);
+            this.AdjSample.Size = new System.Drawing.Size(492, 53);
             this.AdjSample.SnapToStep = true;
             this.AdjSample.StartWithTextboxHidden = true;
             this.AdjSample.Step = 1F;
@@ -2768,7 +2768,7 @@ namespace BeeInterface
             this.adjOffsetY.Name = "adjOffsetY";
             this.adjOffsetY.Radius = 8;
             this.adjOffsetY.ShowValueOnThumb = true;
-            this.adjOffsetY.Size = new System.Drawing.Size(490, 53);
+            this.adjOffsetY.Size = new System.Drawing.Size(492, 53);
             this.adjOffsetY.SnapToStep = true;
             this.adjOffsetY.StartWithTextboxHidden = true;
             this.adjOffsetY.Step = 1F;
@@ -2833,7 +2833,7 @@ namespace BeeInterface
             this.adjOffsetX.Name = "adjOffsetX";
             this.adjOffsetX.Radius = 8;
             this.adjOffsetX.ShowValueOnThumb = true;
-            this.adjOffsetX.Size = new System.Drawing.Size(490, 53);
+            this.adjOffsetX.Size = new System.Drawing.Size(492, 53);
             this.adjOffsetX.SnapToStep = true;
             this.adjOffsetX.StartWithTextboxHidden = true;
             this.adjOffsetX.Step = 1F;
@@ -2903,7 +2903,7 @@ namespace BeeInterface
             this.rjButton15.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.rjButton15.Multiline = false;
             this.rjButton15.Name = "rjButton15";
-            this.rjButton15.Size = new System.Drawing.Size(490, 35);
+            this.rjButton15.Size = new System.Drawing.Size(492, 35);
             this.rjButton15.TabIndex = 113;
             this.rjButton15.Text = "ListModel";
             this.rjButton15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2960,7 +2960,7 @@ namespace BeeInterface
             this.rjButton13.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.rjButton13.Multiline = false;
             this.rjButton13.Name = "rjButton13";
-            this.rjButton13.Size = new System.Drawing.Size(490, 35);
+            this.rjButton13.Size = new System.Drawing.Size(492, 35);
             this.rjButton13.TabIndex = 111;
             this.rjButton13.Text = "Width Box Detect Page";
             this.rjButton13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3017,7 +3017,7 @@ namespace BeeInterface
             this.rjButton11.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.rjButton11.Multiline = false;
             this.rjButton11.Name = "rjButton11";
-            this.rjButton11.Size = new System.Drawing.Size(490, 35);
+            this.rjButton11.Size = new System.Drawing.Size(492, 35);
             this.rjButton11.TabIndex = 109;
             this.rjButton11.Text = "Width Box Detect Corner";
             this.rjButton11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3074,7 +3074,7 @@ namespace BeeInterface
             this.rjButton9.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.rjButton9.Multiline = false;
             this.rjButton9.Name = "rjButton9";
-            this.rjButton9.Size = new System.Drawing.Size(490, 35);
+            this.rjButton9.Size = new System.Drawing.Size(492, 35);
             this.rjButton9.TabIndex = 107;
             this.rjButton9.Text = "Offset Chip Y";
             this.rjButton9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3131,7 +3131,7 @@ namespace BeeInterface
             this.rjButton6.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.rjButton6.Multiline = false;
             this.rjButton6.Name = "rjButton6";
-            this.rjButton6.Size = new System.Drawing.Size(490, 35);
+            this.rjButton6.Size = new System.Drawing.Size(492, 35);
             this.rjButton6.TabIndex = 105;
             this.rjButton6.Text = "Offset Chip X";
             this.rjButton6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3188,7 +3188,7 @@ namespace BeeInterface
             this.rjButton1.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.rjButton1.Multiline = false;
             this.rjButton1.Name = "rjButton1";
-            this.rjButton1.Size = new System.Drawing.Size(490, 35);
+            this.rjButton1.Size = new System.Drawing.Size(492, 35);
             this.rjButton1.TabIndex = 103;
             this.rjButton1.Text = "OffSet Sample";
             this.rjButton1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3210,7 +3210,7 @@ namespace BeeInterface
             this.lay32.Padding = new System.Windows.Forms.Padding(0, 0, 0, 10);
             this.lay32.RowCount = 1;
             this.lay32.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay32.Size = new System.Drawing.Size(490, 50);
+            this.lay32.Size = new System.Drawing.Size(492, 50);
             this.lay32.TabIndex = 93;
             // 
             // label9
@@ -3272,7 +3272,7 @@ namespace BeeInterface
             this.AdjOverLap.Name = "AdjOverLap";
             this.AdjOverLap.Radius = 8;
             this.AdjOverLap.ShowValueOnThumb = true;
-            this.AdjOverLap.Size = new System.Drawing.Size(385, 40);
+            this.AdjOverLap.Size = new System.Drawing.Size(387, 40);
             this.AdjOverLap.SnapToStep = true;
             this.AdjOverLap.StartWithTextboxHidden = true;
             this.AdjOverLap.Step = 0.1F;
@@ -3310,7 +3310,7 @@ namespace BeeInterface
             this.tableLayoutPanel18.RowCount = 1;
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel18.Size = new System.Drawing.Size(490, 55);
+            this.tableLayoutPanel18.Size = new System.Drawing.Size(492, 55);
             this.tableLayoutPanel18.TabIndex = 92;
             // 
             // btnNoneBox
@@ -3359,11 +3359,11 @@ namespace BeeInterface
             this.btnNoneBox.IsRect = false;
             this.btnNoneBox.IsTouch = false;
             this.btnNoneBox.IsUnGroup = false;
-            this.btnNoneBox.Location = new System.Drawing.Point(329, 5);
+            this.btnNoneBox.Location = new System.Drawing.Point(330, 5);
             this.btnNoneBox.Margin = new System.Windows.Forms.Padding(0);
             this.btnNoneBox.Multiline = false;
             this.btnNoneBox.Name = "btnNoneBox";
-            this.btnNoneBox.Size = new System.Drawing.Size(156, 45);
+            this.btnNoneBox.Size = new System.Drawing.Size(157, 45);
             this.btnNoneBox.TabIndex = 4;
             this.btnNoneBox.Text = "None";
             this.btnNoneBox.TextColor = System.Drawing.Color.Black;
@@ -3480,7 +3480,7 @@ namespace BeeInterface
             this.btnRemoveBox.Margin = new System.Windows.Forms.Padding(0);
             this.btnRemoveBox.Multiline = false;
             this.btnRemoveBox.Name = "btnRemoveBox";
-            this.btnRemoveBox.Size = new System.Drawing.Size(169, 45);
+            this.btnRemoveBox.Size = new System.Drawing.Size(170, 45);
             this.btnRemoveBox.TabIndex = 3;
             this.btnRemoveBox.Text = "Remove Box";
             this.btnRemoveBox.TextColor = System.Drawing.Color.Black;
@@ -3497,7 +3497,7 @@ namespace BeeInterface
             this.label10.Location = new System.Drawing.Point(6, 1383);
             this.label10.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(490, 32);
+            this.label10.Size = new System.Drawing.Size(492, 32);
             this.label10.TabIndex = 76;
             this.label10.Text = "Boxes";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3511,7 +3511,7 @@ namespace BeeInterface
             this.label12.Location = new System.Drawing.Point(6, 1540);
             this.label12.Margin = new System.Windows.Forms.Padding(5, 20, 5, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(490, 32);
+            this.label12.Size = new System.Drawing.Size(492, 32);
             this.label12.TabIndex = 75;
             this.label12.Text = "Score";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3525,7 +3525,7 @@ namespace BeeInterface
             this.label20.Location = new System.Drawing.Point(6, 697);
             this.label20.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(490, 32);
+            this.label20.Size = new System.Drawing.Size(492, 32);
             this.label20.TabIndex = 73;
             this.label20.Text = "Set Model";
             this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3575,7 +3575,7 @@ namespace BeeInterface
             this.AdjScoreLearning.Name = "AdjScoreLearning";
             this.AdjScoreLearning.Radius = 8;
             this.AdjScoreLearning.ShowValueOnThumb = true;
-            this.AdjScoreLearning.Size = new System.Drawing.Size(490, 49);
+            this.AdjScoreLearning.Size = new System.Drawing.Size(492, 49);
             this.AdjScoreLearning.SnapToStep = true;
             this.AdjScoreLearning.StartWithTextboxHidden = true;
             this.AdjScoreLearning.Step = 1F;
@@ -3605,7 +3605,7 @@ namespace BeeInterface
             this.DashLabels.Location = new System.Drawing.Point(6, 829);
             this.DashLabels.Margin = new System.Windows.Forms.Padding(5, 0, 5, 3);
             this.DashLabels.Name = "DashLabels";
-            this.DashLabels.Size = new System.Drawing.Size(490, 541);
+            this.DashLabels.Size = new System.Drawing.Size(492, 541);
             this.DashLabels.TabIndex = 0;
             this.DashLabels.ValueMax = 10000;
             this.DashLabels.ValueMin = 0;
@@ -3630,7 +3630,7 @@ namespace BeeInterface
             this.layoutSetLearning.Padding = new System.Windows.Forms.Padding(5);
             this.layoutSetLearning.RowCount = 1;
             this.layoutSetLearning.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layoutSetLearning.Size = new System.Drawing.Size(490, 55);
+            this.layoutSetLearning.Size = new System.Drawing.Size(492, 55);
             this.layoutSetLearning.TabIndex = 50;
             // 
             // btnReload
@@ -3679,7 +3679,7 @@ namespace BeeInterface
             this.btnReload.IsRect = false;
             this.btnReload.IsTouch = false;
             this.btnReload.IsUnGroup = true;
-            this.btnReload.Location = new System.Drawing.Point(427, 7);
+            this.btnReload.Location = new System.Drawing.Point(429, 7);
             this.btnReload.Margin = new System.Windows.Forms.Padding(2);
             this.btnReload.Multiline = false;
             this.btnReload.Name = "btnReload";
@@ -3737,7 +3737,7 @@ namespace BeeInterface
             this.btnRemoveModel.IsRect = false;
             this.btnRemoveModel.IsTouch = false;
             this.btnRemoveModel.IsUnGroup = true;
-            this.btnRemoveModel.Location = new System.Drawing.Point(367, 7);
+            this.btnRemoveModel.Location = new System.Drawing.Point(369, 7);
             this.btnRemoveModel.Margin = new System.Windows.Forms.Padding(2);
             this.btnRemoveModel.Multiline = false;
             this.btnRemoveModel.Name = "btnRemoveModel";
@@ -3795,7 +3795,7 @@ namespace BeeInterface
             this.btnAddModel.IsRect = false;
             this.btnAddModel.IsTouch = false;
             this.btnAddModel.IsUnGroup = true;
-            this.btnAddModel.Location = new System.Drawing.Point(307, 7);
+            this.btnAddModel.Location = new System.Drawing.Point(309, 7);
             this.btnAddModel.Margin = new System.Windows.Forms.Padding(2);
             this.btnAddModel.Multiline = false;
             this.btnAddModel.Name = "btnAddModel";
@@ -3817,7 +3817,7 @@ namespace BeeInterface
             this.cbListModel.Location = new System.Drawing.Point(7, 7);
             this.cbListModel.Margin = new System.Windows.Forms.Padding(2);
             this.cbListModel.Name = "cbListModel";
-            this.cbListModel.Size = new System.Drawing.Size(296, 41);
+            this.cbListModel.Size = new System.Drawing.Size(298, 41);
             this.cbListModel.TabIndex = 36;
             this.cbListModel.SelectionChangeCommitted += new System.EventHandler(this.cbListModel_SelectionChangeCommitted);
             // 

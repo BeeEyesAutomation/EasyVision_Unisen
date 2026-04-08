@@ -557,6 +557,7 @@ namespace BeeInterface
         // ====== MouseDown ======
         private void imgView_MouseDown(object sender, MouseEventArgs e)
         {
+            if (IsWaitShowTool) return;
             if (Global.IndexToolSelected == -1) return;
               
             if (Global.IsRun) return;
@@ -689,9 +690,9 @@ namespace BeeInterface
        
         private void imgView_MouseMove(object sender, MouseEventArgs e)
         {
-          
-          
-               
+
+
+            if (IsWaitShowTool) return;
             if (Global.IndexToolSelected == -1)
             {
                 HideAngleControl();
@@ -1640,7 +1641,9 @@ namespace BeeInterface
         }
        
         private void imgView_MouseUp(object sender, MouseEventArgs e)
-        {if(_mouseDown)
+        {
+            if (IsWaitShowTool) return;
+            if (_mouseDown)
             if (Global.IsGetColor)
                     Global.IsSetColor = true;
             _mouseDown = false;
@@ -2886,9 +2889,9 @@ namespace BeeInterface
 
                         Global.StatusProcessing = StatusProcessing.None;
                         Checking1.StatusProcessing = StatusProcessing.None;
-                        Checking2.StatusProcessing = StatusProcessing.None;
-                        Checking3.StatusProcessing = StatusProcessing.None;
-                        Checking4.StatusProcessing = StatusProcessing.None;
+                        //Checking2.StatusProcessing = StatusProcessing.None;
+                        //Checking3.StatusProcessing = StatusProcessing.None;
+                        //Checking4.StatusProcessing = StatusProcessing.None;
                         switch (Global.Config.NumTrig)
                         {
                             case 1:
@@ -2959,6 +2962,7 @@ namespace BeeInterface
                     if (!Global.IsEditTool) return;
                     if (Global.IndexToolSelected == -1) return;
                     Global.IsEditTool = false;
+                    Global.IsGetColor = false;
                     if (Global.StatusDraw == StatusDraw.Edit)
                     {
                         Global.StepEdit.Enabled = false;
@@ -2973,7 +2977,7 @@ namespace BeeInterface
                         //  toolEdit = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Control;
                         //   toolEdit.Enabled = false;
                         tmEnableControl.Enabled = true;
-
+                        IsWaitShowTool = true;
                         Global.EditTool.RegisTer(name, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Control);
                         //if (!Global.EditTool.pEditTool.Show(name))
                         //{
@@ -2994,7 +2998,7 @@ namespace BeeInterface
                         Global.EditTool.lbTool.Text = TypeTool.ToString();
                         Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
                        // BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Control.Propety = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
-                        BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Control.LoadPara();
+                        BeeCore.Common.PropetyTools[Global.IndexProgChoose][obj].Control.LoadPara();
                         Global.EditTool.View.imgView.Invalidate();
                         Global.EditTool.View.imgView.Update();
 
@@ -3421,7 +3425,7 @@ namespace BeeInterface
             g.DrawImage(bmp, new Rectangle(posX, posY, newWidth, newHeight));
         }
         private CollageRenderer _renderer;
-     
+  
         public async void ShowResultTotal()
         {
             try
@@ -4517,25 +4521,31 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         {
             using (Mat raw = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone())
             {
-                Global.ScaleZoom = (float)(imgView.Zoom / 100.0);
-                Global.pScroll = new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-                int X = Convert.ToInt32((pMove.X - 10) / (Global.ScaleZoom)) + Global.pScroll.X;
-                int Y = Convert.ToInt32((pMove.Y + 10) / (Global.ScaleZoom)) + Global.pScroll.Y;
-                if(Global.ColorGp== ColorGp.HSV)
+                Global.ScaleZoom = (float)(imgView.Zoom / 100.0f);
+
+                int scrollX = -imgView.AutoScrollPosition.X;
+                int scrollY = -imgView.AutoScrollPosition.Y;
+
+                int X = (int)((pMove.X + scrollX) / Global.ScaleZoom);
+                int Y = (int)((pMove.Y + scrollY) / Global.ScaleZoom);
+
+                // clamp tránh out range
+                X = Math.Max(0, Math.Min(X, raw.Width - 1));
+                Y = Math.Max(0, Math.Min(Y, raw.Height - 1));
+
+                if (Global.ColorGp == ColorGp.HSV)
                 {
                     BeeCore.Common.HSVSample = Colors.GetHSV(raw, X, Y);
                     if (BeeCore.Common.HSVSample != null)
                         Global.ColorSample = Colors.GetColor(BeeCore.Common.HSVSample);
-
                 }
                 else
                 {
                     BeeCore.Common.RGBSample = Colors.GetRGB(raw, X, Y);
-                    if(BeeCore.Common.RGBSample!=null)
-                    Global.ColorSample = Colors.GetColor(BeeCore.Common.RGBSample);
-
+                    if (BeeCore.Common.RGBSample != null)
+                        Global.ColorSample = Colors.GetColor(BeeCore.Common.RGBSample);
                 }
-               // clChoose = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.GetColor(raw, X, Y);
+                // clChoose = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety.GetColor(raw, X, Y);
             }    
            
                       
@@ -5141,7 +5151,23 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 Global.StatusProcessing = StatusProcessing.Drawing;
             else
                 Global.StatusProcessing = StatusProcessing.SendResult;
-        
+
+        }
+        public void ResetShowFlowChart()
+        {
+            foreach (dynamic lb in Global.ToolSettings.Labels)
+            {
+                lb.BackColor = Color.LightGray;
+                lb.Results = Results.None;
+            }
+            foreach (List<PropetyTool> propetyTools in BeeCore.Common.PropetyTools)
+            {
+                foreach (PropetyTool tool in propetyTools)
+                {
+                    tool.StatusTool = StatusTool.WaitCheck;
+                    tool.Results = Results.None;
+                }
+            }
         }
         public  void RunProcessing()
         {if (Global.Comunication.Protocol.TypeControler == TypeControler.PCI)
@@ -5201,7 +5227,11 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             else
             {
                 Checking1.StatusProcessing = StatusProcessing.None;
-                Checking1.indexThread = 0;
+                Checking1.indexThread = Global.IndexProgChoose;
+                if(Global.IndexProgChoose==0)
+                {
+                    ResetShowFlowChart();
+                }    
                 Checking1.Start();
                 Checking1.StatusProcessingChanged -= Checking1_StatusProcessingChanged1;
                 Checking1.StatusProcessingChanged += Checking1_StatusProcessingChanged1;
@@ -5320,6 +5350,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
         private void Checking1_StatusProcessingChanged1(StatusProcessing obj)
         { if (obj != StatusProcessing.Done) return;
+            if (!Global.IsRun) return;
             if (Global.Config.IsAutoTrigger)
             {
                 if (Global.IndexToolAuto > -1)
@@ -5389,13 +5420,13 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 Global.EditTool.toolStripPort.Image = BeeInterface.Properties.Resources.PortNotConnect;
 
         }
-
+        bool IsWaitShowTool = false;
         private void tmEnableControl_Tick(object sender, EventArgs e)
         {
             this.Invoke((Action)(() =>
             {
                 BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Control.Enabled = true;
-                tmEnableControl.Enabled = false;
+                tmEnableControl.Enabled = false; IsWaitShowTool = false;
             }));
         }
 
@@ -5602,7 +5633,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             imgView.Invalidate();
         }
         public void ChangeImgShow()
-        {
+        {if (!Global.IsRun) return;
             imgView.Text = "";
             switch (Global.ImgShow )
             {

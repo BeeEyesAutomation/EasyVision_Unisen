@@ -35,7 +35,7 @@ namespace BeeInterface
             InitializeComponent();
 
         }
-        public MeasureCorner Propety = new MeasureCorner();
+        public MeasureCorner Propety { get; set; }
         Stopwatch timer = new Stopwatch();
         public BackgroundWorker worker = new BackgroundWorker();
         int ThresholdValue = 100;

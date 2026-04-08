@@ -1025,7 +1025,6 @@ namespace BeeCore
 
                                                     pyImages.Append(tuple);
                                                 }
-
                                                 // ===== 5) CALL BATCH =====
                                                 dynamic results = dyn.predict_batch(pyImages, conf, toolName);
 
@@ -1033,44 +1032,47 @@ namespace BeeCore
                                                 for (int i = 0; i < roiList.Count; i++)
                                                 {
                                                     var roi = roiList[i];
+                                                    dynamic dets = results[i];   // list detection của riêng hình i
 
-                                                    var rs = results[i];
-                                                    boxes = rs["boxes"];
-                                                    scores = rs["scores"];
-                                                    labels = rs["labels"];
-
-                                                    int n = (int)boxes.Length();
+                                                    int n = (int)dets.Length();
 
                                                     if (n > 0)
                                                     {
-                                                        var b = boxes[0];
+                                                        for (int k = 0; k < n; k++)
+                                                        {
+                                                            dynamic det = dets[k];
 
-                                                        float x1 = (float)b[0].As<double>();
-                                                        float y1 = (float)b[1].As<double>();
-                                                        float x2 = (float)b[2].As<double>();
-                                                        float y2 = (float)b[3].As<double>();
+                                                            dynamic box = det["box"];
+                                                            float x1 = (float)box[0].As<double>();
+                                                            float y1 = (float)box[1].As<double>();
+                                                            float x2 = (float)box[2].As<double>();
+                                                            float y2 = (float)box[3].As<double>();
 
-                                                        float bw = x2 - x1;
-                                                        float bh = y2 - y1;
-                                                        float cx = x1 + bw * 0.5f;
-                                                        float cy = y1 + bh * 0.5f;
+                                                            float bw = x2 - x1;
+                                                            float bh = y2 - y1;
+                                                            float cx = x1 + bw * 0.5f;
+                                                            float cy = y1 + bh * 0.5f;
 
-                                                        Point pCenter = new Point(
-                                                            (int)(cx),
-                                                            (int)(cy)
-                                                        );
+                                                            Point pCenter = new Point(
+                                                                (int)cx,
+                                                                (int)cy
+                                                            );
 
-                                                        var rt = new RectRotate(
-                                                            new RectangleF(-bw / 2f, -bh / 2f, bw, bh),
-                                                            new PointF(pCenter.X, pCenter.Y),
-                                                            0f, AnchorPoint.None);
+                                                            var rt = new RectRotate(
+                                                                new RectangleF(-bw / 2f, -bh / 2f, bw, bh),
+                                                                new PointF(pCenter.X, pCenter.Y),
+                                                                0f,
+                                                                AnchorPoint.None
+                                                            );
 
-                                                        var item = new BeeCore.ResultItem(labels[0].ToString());
-                                                        item.rot = rt;
-                                                        item.IsOK = true;
-                                                        item.Score = (float)scores[0].As<double>() * 100f;
+                                                            var item = new BeeCore.ResultItem(det["label"].ToString());
+                                                            item.rot = rt;
+                                                            item.IsOK = true;
+                                                            item.Score = (float)det["score"].As<double>() * 100f;
 
-                                                        resultTemp.Add(item);
+                                                            resultTemp.Add(item);
+                                                            resultTemp[resultTemp.Count - 1].IndexScanBox = i;
+                                                        }
                                                     }
                                                     else
                                                     {
@@ -1078,10 +1080,66 @@ namespace BeeCore
                                                         item.rot = roi;
                                                         item.IsOK = false;
                                                         item.Score = 0;
-
                                                         resultTemp.Add(item);
+                                                        resultTemp[resultTemp.Count - 1].IndexScanBox = i;
                                                     }
                                                 }
+                                                //// ===== 5) CALL BATCH =====
+                                                //dynamic results = dyn.predict_batch(pyImages, conf, toolName);
+
+                                                //// ===== 6) Parse kết quả =====
+                                                //for (int i = 0; i < roiList.Count; i++)
+                                                //{
+                                                //    var roi = roiList[i];
+
+                                                //    var rs = results[i];
+                                                //    boxes = rs["boxes"];
+                                                //    scores = rs["scores"];
+                                                //    labels = rs["labels"];
+
+                                                //    int n = (int)boxes.Length();
+
+                                                //    if (n > 0)
+                                                //    {
+                                                //        var b = boxes[0];
+
+                                                //        float x1 = (float)b[0].As<double>();
+                                                //        float y1 = (float)b[1].As<double>();
+                                                //        float x2 = (float)b[2].As<double>();
+                                                //        float y2 = (float)b[3].As<double>();
+
+                                                //        float bw = x2 - x1;
+                                                //        float bh = y2 - y1;
+                                                //        float cx = x1 + bw * 0.5f;
+                                                //        float cy = y1 + bh * 0.5f;
+
+                                                //        Point pCenter = new Point(
+                                                //            (int)(cx),
+                                                //            (int)(cy)
+                                                //        );
+
+                                                //        var rt = new RectRotate(
+                                                //            new RectangleF(-bw / 2f, -bh / 2f, bw, bh),
+                                                //            new PointF(pCenter.X, pCenter.Y),
+                                                //            0f, AnchorPoint.None);
+
+                                                //        var item = new BeeCore.ResultItem(labels[0].ToString());
+                                                //        item.rot = rt;
+                                                //        item.IsOK = true;
+                                                //        item.Score = (float)scores[0].As<double>() * 100f;
+
+                                                //        resultTemp.Add(item);
+                                                //    }
+                                                //    else
+                                                //    {
+                                                //        var item = new BeeCore.ResultItem("NG");
+                                                //        item.rot = roi;
+                                                //        item.IsOK = false;
+                                                //        item.Score = 0;
+
+                                                //        resultTemp.Add(item);
+                                                //    }
+                                                //}
                                             }
 
                                             // ===== 7) Dispose sau khi Python xong =====
@@ -1198,6 +1256,7 @@ namespace BeeCore
                         }
                         break;
                 }
+                if(!IsCropSingle)
                 switch (FilterBox)
                 {
                     case FilterBox.Merge:
@@ -1505,6 +1564,7 @@ namespace BeeCore
                             matProcess = rs.matProcess,
                             IsOK = rs.IsOK,
                             rot = rs.rot,
+                            IndexScanBox = rs.IndexScanBox,
                             Score = rs.Score
                         });
                     }
@@ -1756,13 +1816,8 @@ namespace BeeCore
                                 //--------------------------------
                                 // GET OBJECT TRONG BOX
                                 //--------------------------------
-                                var objs = ResultItem
-                                    .Where(x =>
-                                        x.rot != null &&
-                                        x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase) &&
-                                        IsInside(scan, x.rot))
-                                    .OrderBy(x => x.rot._PosCenter.X)
-                                    .ToList();
+                                List<ResultItem> objs = new List<ResultItem>();
+                             
                                 if (IsCropSingle)
                                 {
                                     if(k>=ResultItem.Count)
@@ -1772,8 +1827,10 @@ namespace BeeCore
                                         k++;
                                         continue;
                                     }
-                                    List<ResultItem> objTemp = new List<ResultItem> { ResultItem[k] };
-                                     objs = objTemp
+                                    List<ResultItem> objTemp = ResultItem
+                             .Where(x => x.IndexScanBox == k)
+                             .ToList();
+                                    objs = objTemp
                                  .Where(x =>
                                      x.rot != null &&
                                      x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase) &&
@@ -1787,11 +1844,21 @@ namespace BeeCore
                                         k++;
                                         continue;
                                     }
-                                }
-                                //--------------------------------
-                                // FILTER RIGHT
-                                //--------------------------------
-                                var objsValid = new List<ResultItem>();
+                                }else
+                                {
+                                    objs = ResultItem
+                                    .Where(x =>
+                                        x.rot != null &&
+                                        x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase) &&
+                                        IsInside(scan, x.rot))
+                                    .OrderBy(x => x.rot._PosCenter.X)
+                                    .ToList();
+
+                                }    
+                                    //--------------------------------
+                                    // FILTER RIGHT
+                                    //--------------------------------
+                                    var objsValid = new List<ResultItem>();
                                  
                                     foreach (var r in objs)
                                 {
@@ -1998,6 +2065,7 @@ namespace BeeCore
                                 {
                                     if (objsValid.Count(x => x.IsOK) < item.ValueCounter)
                                     {
+                                        boxOK = false;
                                         objsValid.ForEach(rs => rs.IsOK = false);
                                     }
                                 }
@@ -2005,13 +2073,13 @@ namespace BeeCore
                              
                                 scan.IsOK = boxOK;
                                 k++;
-                                if (IsCropSingle)
-                                {
-                                    if(objsValid.Count>1)
-                                    {
-                                        numOK = 0;
-                                    }    
-                                }    
+                                //if (IsCropSingle)
+                                //{
+                                //    if(objsValid.Count>1)
+                                //    {
+                                //        numOK = 0;
+                                //    }    
+                                //}    
                                     numOK += objsValid.Count(x => x.IsOK);
                             }
                         }
@@ -2751,11 +2819,11 @@ namespace BeeCore
                         //mat = new Matrix();
                         if(IsCropSingle)
                         {
-                        
-                           
-                            mat.Translate(listRotScan[i]._PosCenter.X, listRotScan[i]._PosCenter.Y);
-                            mat.Translate(listRotScan[i]._rect.X, listRotScan[i]._rect.Y);
-                            mat.Rotate(listRotScan[i]._rectRotation);
+
+                            RectRotate rectRotate = item.ListInsideBox[rs.IndexScanBox];
+                            mat.Translate(rectRotate._PosCenter.X, rectRotate._PosCenter.Y);
+                            mat.Translate(rectRotate._rect.X, rectRotate._rect.Y);
+                            mat.Rotate(rectRotate._rectRotation);
                             gc.Transform = mat;
                         }    
                         mat.Translate(rs.rot._PosCenter.X, rs.rot._PosCenter.Y);

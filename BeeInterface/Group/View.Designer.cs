@@ -1640,9 +1640,9 @@ namespace BeeInterface
         public System.Windows.Forms.Splitter splitter2;
         private RJButton btnMenuKeyBoard;
         public System.Windows.Forms.Splitter splitter3;
-        private System.Windows.Forms.TableLayoutPanel pImageShow;
         private RJButton btnShowResult;
         private RJButton btnShowImgHistory;
         private RJButton btnShowRaw;
+        public System.Windows.Forms.TableLayoutPanel pImageShow;
     }
 }
