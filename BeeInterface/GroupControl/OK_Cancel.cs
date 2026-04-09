@@ -45,9 +45,12 @@ namespace BeeInterface.GroupControl
             {
                 Global.StepEdit.Enabled = true;
                 BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2 = Global.OldPropetyTool.Clone();
+                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Control.Propety = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2;
+
+
             }
-           // Global.IndexToolSelected = -1;
-           
+            // Global.IndexToolSelected = -1;
+
         }
     }
 }

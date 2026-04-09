@@ -2997,7 +2997,7 @@ namespace BeeInterface
                         Global.EditTool.iconTool.BackgroundImage = Global.itemNews[Global.itemNews.FindIndex(a => a.TypeTool == TypeTool)].Icon;// (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
                         Global.EditTool.lbTool.Text = TypeTool.ToString();
                         Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
-                       // BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Control.Propety = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety;
+                       BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Control.Propety = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2;
                         BeeCore.Common.PropetyTools[Global.IndexProgChoose][obj].Control.LoadPara();
                         Global.EditTool.View.imgView.Invalidate();
                         Global.EditTool.View.imgView.Update();
