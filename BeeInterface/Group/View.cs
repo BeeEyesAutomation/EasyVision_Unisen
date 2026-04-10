@@ -2892,35 +2892,52 @@ namespace BeeInterface
                         //Checking2.StatusProcessing = StatusProcessing.None;
                         //Checking3.StatusProcessing = StatusProcessing.None;
                         //Checking4.StatusProcessing = StatusProcessing.None;
-                        switch (Global.Config.NumTrig)
+                        switch (Global.NumProgFromPLC)
                         {
                             case 1:
                                 if (Global.TriggerNum == TriggerNum.Trigger1)
+                                {
                                     Global.TriggerNum = TriggerNum.Trigger0;
+                                    Global.IndexProgChoose = 0;
+                                }    
+                                   
                                 break;
                             case 2:
                                 if (Global.TriggerNum == TriggerNum.Trigger2)
+                                {
                                     Global.TriggerNum = TriggerNum.Trigger0;
+                                    Global.IndexProgChoose = 0;
+                                }    
+                                   
                                 break;
                             case 3:
                                 if (Global.TriggerNum == TriggerNum.Trigger3)
+                                {
                                     Global.TriggerNum = TriggerNum.Trigger0;
+                                    Global.IndexProgChoose = 0;
+                                }    
+                                   
                                 break;
                             case 4:
                                 if (Global.TriggerNum == TriggerNum.Trigger4)
+                                {
                                     Global.TriggerNum = TriggerNum.Trigger0;
+                                    Global.IndexProgChoose = 0;
+                                }    
+                                    
                                 break;
                         }
-                        if (Global.Config.NumTrig <2)
+                        if (Global.NumProgFromPLC < 2)
                         {
                             Global.IndexProgChoose = 0;
                             Global.TriggerNum = TriggerNum.Trigger0;
                         }
-                        if (Global.Config.NumTrig>Global.NumProgFromPLC)
-                        {
-                            Global.IndexProgChoose = 0;
-                            Global.TriggerNum = TriggerNum.Trigger0;
-                        }    
+
+                        //if (Global.Config.NumTrig > Global.NumProgFromPLC)
+                        //{
+                        //    Global.IndexProgChoose = 0;
+                        //    Global.TriggerNum = TriggerNum.Trigger0;
+                        //}
                         break;
                     }
             }
@@ -5161,7 +5178,8 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 lb.Results = Results.None;
             }
             foreach (List<PropetyTool> propetyTools in BeeCore.Common.PropetyTools)
-            {
+            {if (propetyTools == null)
+                    continue;
                 foreach (PropetyTool tool in propetyTools)
                 {
                     tool.StatusTool = StatusTool.WaitCheck;
@@ -5228,123 +5246,19 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             {
                 Checking1.StatusProcessing = StatusProcessing.None;
                 Checking1.indexThread = Global.IndexProgChoose;
-                if(Global.IndexProgChoose==0)
+
+              
+                if (Global.IndexProgChoose==0)
                 {
                     ResetShowFlowChart();
-                }    
+                }
+               
                 Checking1.Start();
                 Checking1.StatusProcessingChanged -= Checking1_StatusProcessingChanged1;
                 Checking1.StatusProcessingChanged += Checking1_StatusProcessingChanged1;
-                //switch (Global.IndexProgChoose)
-                //{
-                //    case 0:
-                //        if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
-                //        {
-                //            Checking1.StatusProcessing = StatusProcessing.None;
-                //            Checking2.indexThread = 0;
-                //            Checking1.Start();
-                //        }
-                //        else
-                //            Processing1 = StatusProcessing.Done;
-                //        break;
-                //    case 1:
-                //        if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
-                //        {
-                //            Checking2.StatusProcessing = StatusProcessing.None;
-                //            Checking2.indexThread = 1;
-                //            Checking2.Start();
-                //        }
-                //        else
-                //            Processing2 = StatusProcessing.Done;
-                //        break;
-                //    case 2:
-                //        if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
-                //        {
-                //            Checking3.StatusProcessing = StatusProcessing.None;
-                //            Checking3.indexThread = 2;
-                //            Checking3.Start();
-                //        }
-                //        else
-                //            Processing3 = StatusProcessing.Done;
-                //        break;
-                //    case 3:
-                //        if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
-                //        {
-                //            Checking4.StatusProcessing = StatusProcessing.None;
-                //            Checking4.indexThread = 3;
-                //            Checking4.Start();
-                //        }
-                //        else
-                //            Processing4 = StatusProcessing.Done;
-                //        break;
-
-                //}
-                //foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[indexThread])
-                //{
-                //    PropetyTool.StatusToolChanged -= PropetyTool_StatusToolChanged;
-                //    PropetyTool.StatusToolChanged += PropetyTool_StatusToolChanged;
-                //}
-               // await CheckStatus(Global.IndexProgChoose);
+               
             }
-            //if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] != null)
-            //{
-            //    Checking1.StatusProcessing = StatusProcessing.None;
-            //    Checking1.Start();
-            //}
-            //else
-            //    Processing1 = StatusProcessing.Done;
-
-            //if (Global.Config.IsMultiProg)
-            //{
-            //    if (BeeCore.Common.PropetyTools[0] != null)
-            //    {
-            //        Checking1.StatusProcessing = StatusProcessing.None;
-            //        Checking1.Start();
-            //    }
-            //    else
-            //        Processing1 = StatusProcessing.Done;
-
-            //    if (Global.Config.IsMultiProg == false)
-            //    {
-            //        await CheckStatus();
-            //        return;
-            //    }
-            //    if (BeeCore.Common.PropetyTools[1] != null)
-            //    {
-            //        Checking2.StatusProcessing = StatusProcessing.None;
-            //        Checking2.Start();
-            //    }
-            //    else
-            //        Processing2 = StatusProcessing.Done;
-
-            //    if (BeeCore.Common.PropetyTools[2] != null)
-            //    {
-            //        Checking3.StatusProcessing = StatusProcessing.None;
-            //        Checking3.Start();
-            //    }
-            //    else
-            //        Processing3 = StatusProcessing.Done;
-            //    if (BeeCore.Common.PropetyTools[3] != null)
-            //    {
-            //        Checking4.StatusProcessing = StatusProcessing.None;
-            //        Checking4.Start();
-            //    }
-            //    else
-            //        Processing4 = StatusProcessing.Done;
-            //}
-            //else
-            //{
-            //    if (BeeCore.Common.listCamera[0] != null)
-            //    {
-            //        Checking1.StatusProcessing = StatusProcessing.None;
-            //        Checking1.Start();
-            //    }
-            //    else
-            //        Processing1 = StatusProcessing.Done;
-
-            //}
-            //    await CheckStatus();
-
+       
 
         }
 

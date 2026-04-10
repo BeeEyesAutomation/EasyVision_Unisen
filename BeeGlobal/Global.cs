@@ -375,7 +375,7 @@ namespace BeeGlobal
         public static string _pathSqlMaster;
         public static SqlConnection cnn = new SqlConnection();
         public static ImgShow ImgShow = ImgShow.Result;
-        public static int NumProgFromPLC = 4;
+        public static int NumProgFromPLC = 1;
         public static TypeCamera TypeCamera;
         public static Model Model = new Model();
         public static ParaCommon ParaCommon = new ParaCommon();

@@ -44,8 +44,10 @@ namespace BeeInterface
         public ToolYolo( )
         {
             InitializeComponent();
-           // tabLbs.SizeChanged += TabLbs_SizeChanged;
-            
+            if (Propety == null)
+                Propety = new Yolo();
+            // tabLbs.SizeChanged += TabLbs_SizeChanged;
+
         }
 
         private void TabLbs_SizeChanged(object sender, EventArgs e)
@@ -78,6 +80,17 @@ namespace BeeInterface
                 EditRectRot1.AddRotEvent += EditRectRot1_AddRotEvent;
                 Global.ChooseRotChage -= Global_ChooseRotChage1;
                 Global.ChooseRotChage += Global_ChooseRotChage1;
+                this.dashboardLabel.ChooseColorBegin -= new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseColorBegin);
+                this.dashboardLabel.ChooseColorEnd -= new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseColorEnd);
+                this.dashboardLabel.ChooseAreaBegin -= new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseAreaBegin);
+                this.dashboardLabel.ChooseAreaEnd -= new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseAreaEnd);
+                this.dashboardLabel.ExternColorCharge -= new System.Action<int>(this.dashboardLabel_ExternColorCharge);
+
+                this.dashboardLabel.ChooseColorBegin += new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseColorBegin);
+                this.dashboardLabel.ChooseColorEnd += new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseColorEnd);
+                this.dashboardLabel.ChooseAreaBegin += new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseAreaBegin);
+                this.dashboardLabel.ChooseAreaEnd += new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseAreaEnd);
+                this.dashboardLabel.ExternColorCharge += new System.Action<int>(this.dashboardLabel_ExternColorCharge);
                 EditRectRot1.IsHide = false;
                 this.VisibleChanged += ToolYolo_VisibleChanged;
                 btnCLAll.IsCLick = Propety.IsColorAllObjLabel;
@@ -232,7 +245,10 @@ namespace BeeInterface
         private int IndxOld = -1;
 
         private void Global_ChooseRotChage1(int obj)
-        {if (obj < 0) return;
+        {
+            if (obj == -1) return;
+           
+            if (obj < 0) return;
            
                 Propety.IndexProgChoose = obj;
                 List<RectRotate> ListScan=new List<RectRotate>();
@@ -246,6 +262,7 @@ namespace BeeInterface
                         break;
                 }
             if (obj >= ListScan.Count()) return;
+            if (obj >= Propety.listRotScan.Count()) return;
             if (Propety.ModeCheck == ModeCheck.Single)
             {
                 int i = 0;
@@ -289,9 +306,9 @@ namespace BeeInterface
                 Global.StatusDraw = StatusDraw.Scan;
             }
 
-            if(EditRectRot1.rotCurrent.TypeCrop==TypeCrop.Limit)
+            if (EditRectRot1.rotCurrent.TypeCrop == TypeCrop.Limit)
             {
-               
+
                 RectRotate rot = Propety.listRotScan[obj];
                 foreach (LabelItem labelItem in Propety.labelItems)
                 {
@@ -303,12 +320,39 @@ namespace BeeInterface
                         if (index >= 0)
                         {
                             IndxOld = index;
-                           
+
                         }
                     }
 
                 }
-            }    
+            }
+            if (IsChooseAreaLabel)
+            {
+                RectRotate rotEdit = ListScan[Global.IndexRotChoose];
+
+                if (_currentLabel.ListInsideBox == null)
+                    _currentLabel.ListInsideBox = new List<RectRotate>();
+                int index = _currentLabel.ListInsideBox.FindIndex(a => a == rotEdit);
+                if (index == -1)
+                {
+
+                    rotEdit.Name = _currentLabel.Name;
+                    rotEdit._dragAnchor = AnchorPoint.Center;
+                    ListScan[obj] = rotEdit;
+                    _currentLabel.ListInsideBox.Add(rotEdit);
+                   
+                }
+
+                else
+                {
+                    rotEdit.Name = "";
+                    
+                    rotEdit._dragAnchor = AnchorPoint.None;
+                    ListScan[obj] = rotEdit;
+                    _currentLabel.ListInsideBox.RemoveAt(index);
+                }
+            }
+           
           
 
         }
@@ -470,6 +514,12 @@ namespace BeeInterface
         {
             if (!this.Visible)
             {
+                this.dashboardLabel.ChooseColorBegin -= new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseColorBegin);
+                this.dashboardLabel.ChooseColorEnd -= new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseColorEnd);
+                this.dashboardLabel.ChooseAreaBegin -= new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseAreaBegin);
+                this.dashboardLabel.ChooseAreaEnd -= new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseAreaEnd);
+                this.dashboardLabel.ExternColorCharge -= new System.Action<int>(this.dashboardLabel_ExternColorCharge);
+                Global.ChooseRotChage -= Global_ChooseRotChage1;
                 EditRectRot1.IsHide = true;
                 EditRectRot1.ChooseEditBegin -= EditRectRot1_ChooseEditBegin;
                 EditRectRot1.ChooseEditEnd -= EditRectRot1_ChooseEditEnd;
@@ -2310,16 +2360,19 @@ namespace BeeInterface
             // ví dụ lấy box từ vision engine
 
         }
-
+        RectRotate rotOld = new RectRotate();
+        bool IsChooseAreaLabel = false;
         private void dashboardLabel_ChooseAreaBegin(int arg1, LabelItem arg2)
         {
+            IsChooseAreaLabel = true;
             this.Invoke((Action)(async () =>
             {
                 _currentLabel = arg2;
                 if (_currentLabel.ListInsideBox == null)
                     _currentLabel.ListInsideBox = new List<RectRotate>();
-
-                        Global.ChooseRotChage += Global_ChooseRotChage;
+                rotOld = Global.rotCurrent.Clone();
+                Global.rotCurrent = Propety.rotLimit;
+                       
                 Propety.ModeCheck = ModeCheck.Multi;
                 Propety.NameChoose = arg2.Name;
                 if (_currentLabel.ListInsideBox!=null)
@@ -2327,7 +2380,11 @@ namespace BeeInterface
                 foreach (RectRotate rot in Propety.listRotScan)
                 {
                     if(_currentLabel.ListInsideBox.FindIndex(a=>a==rot) < 0)
+                        {
+                           // rot.Name = "";
                             rot._dragAnchor = AnchorPoint.None;
+                        }    
+                            
                     else
                         rot._dragAnchor = AnchorPoint.Center;
 
@@ -2341,33 +2398,17 @@ namespace BeeInterface
         }
 
         private void Global_ChooseRotChage(int obj)
-        {if (obj ==-1) return;
-        if (obj>=Propety.listRotScan.Count()) return;
-            RectRotate rot= Propety.listRotScan[Global.IndexRotChoose];
-     
-            if (_currentLabel.ListInsideBox == null)
-                _currentLabel.ListInsideBox = new List<RectRotate>();
-            if (_currentLabel.ListInsideBox.FindIndex(a => a == rot) == -1)
-            {
-                rot.Name = _currentLabel.Name;
-                rot._dragAnchor = AnchorPoint.Center;
-                _currentLabel.ListInsideBox.Add(rot);
-            }    
-              
-            else
-            {
-                rot.Name = "";
-                rot._dragAnchor = AnchorPoint.None;
-                _currentLabel.ListInsideBox.Remove(rot);
-            }    
+        { 
               
         }
         LabelItem _currentLabel;
         private void dashboardLabel_ChooseAreaEnd(int arg1, LabelItem arg2)
         {
+            IsChooseAreaLabel = true;
             this.Invoke((Action)(async () =>
             {
-                Global.ChooseRotChage -= Global_ChooseRotChage;
+              Global.rotCurrent= rotOld.Clone();
+             
                 Global.StatusDraw = StatusDraw.Edit;
                 Global.EditTool.View.imgView.Invalidate();
                 Propety.IsScan = false;

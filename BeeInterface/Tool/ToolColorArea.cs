@@ -30,6 +30,8 @@ namespace BeeInterface
         public ToolColorArea( )
         {
             InitializeComponent();
+            if (Propety == null)
+                Propety = new BeeCore.ColorArea();
         }
         public int indexTool;
         

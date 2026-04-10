@@ -35,7 +35,8 @@ namespace BeeInterface
         public ToolBarcode( )
         {
             InitializeComponent();
-        
+            if (Propety == null)
+                Propety = new Barcode();
         }
         
         public void LoadPara()

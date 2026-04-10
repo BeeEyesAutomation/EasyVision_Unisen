@@ -302,6 +302,7 @@ namespace BeeInterface
                
                 case TypeTool.Color_Area:
                     control = new ToolColorArea();
+                    control.Propety = new ColorArea();
                     break;
                 case TypeTool.Pattern:
                     control = new ToolPattern();

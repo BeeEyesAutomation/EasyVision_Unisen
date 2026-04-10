@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeCpp;
 using BeeGlobal;
 using BeeInterface;
 using Cyotek.Windows.Forms;
@@ -20,6 +21,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ShapeType = BeeGlobal.ShapeType;
 
 namespace BeeInterface
 {
@@ -30,8 +32,9 @@ namespace BeeInterface
         public ToolPattern( )
         {
             InitializeComponent();
-           
-           
+
+            if (Propety == null)
+                Propety = new Patterns();
         }
         
 

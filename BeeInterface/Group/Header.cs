@@ -272,7 +272,7 @@ namespace BeeInterface
             spTrain.Visible = Global.Config.IsEnTrain;
             pPO.Visible=Global.Config.IsEnPO;
             
-        
+            Global.NumProgFromPLC = Global.Config.NumTrig;
           ///  RefreshListPJ();
             //    this.Controls.Add(btnHide);
 

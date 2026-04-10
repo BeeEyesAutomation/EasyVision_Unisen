@@ -34,8 +34,9 @@ namespace BeeInterface
         public ToolVisualMatch( )
         {
             InitializeComponent();
-           
-           
+            if (Propety == null)
+                Propety = new  VisualMatch();
+
         }
         
 

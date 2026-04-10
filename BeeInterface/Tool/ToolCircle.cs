@@ -33,6 +33,9 @@ namespace BeeInterface
         public ToolCircle( )
         {
             InitializeComponent();
+            if (Propety == null)
+                Propety = new Circle();
+
         }
         Stopwatch timer = new Stopwatch();
         public BackgroundWorker worker = new BackgroundWorker();

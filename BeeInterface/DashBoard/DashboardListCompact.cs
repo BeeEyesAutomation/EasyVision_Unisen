@@ -42,7 +42,7 @@ namespace BeeInterface
         public event Action<int, LabelItem> ChooseColorEnd;
         public event Action<int, LabelItem> ChooseAreaBegin;
         public event Action<int, LabelItem> ChooseAreaEnd;
-      
+   
         public event Action<int> ExternColorCharge;
         private void DrawMultiColorButton(Graphics g, Rectangle rect, LabelItem it)
         {

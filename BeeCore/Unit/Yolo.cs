@@ -594,9 +594,10 @@ namespace BeeCore
 
                 foreach (LabelItem lb in labelItems)
                 {
+                    if (lb.ListHSV == null)
+                        lb.ListHSV = new List<HSV>();
 
-                
-                        if (lb.IsUse)
+                    if (lb.IsUse)
                         {
                             if (lb.IsMinColor)
                             {
@@ -666,6 +667,7 @@ namespace BeeCore
                           else
                             {
                                 lb.ListColorArea.Add(new BeeCpp.ColorArea());
+                               
                                 HSVCli[] arrHSV = new HSVCli[lb.ListHSV.Count];
                                 int h = 0;
                                 foreach (HSV hSV in lb.ListHSV)
@@ -971,7 +973,9 @@ namespace BeeCore
                                             // ===== 3) Build batch =====
                                             var matTemps = new List<Mat>();
                                             var roiList = new List<RectRotate>();
+                                            //  var roiScan = new List<RectRotate>();
                                             var roiScan = new List<RectRotate>();
+
                                             foreach (LabelItem lb in labelItems)
                                             {
                                                 if (lb.ListInsideBox != null)
@@ -980,9 +984,35 @@ namespace BeeCore
                                                         roiScan.Add(rot);
                                                 }
                                             }
+                                            var nameOrder = roiScan
+                                            .Select((x, i) => new { x.Name, Index = i })
+                                            .GroupBy(x => x.Name ?? "")
+                                            .OrderBy(g => g.Min(v => v.Index))
+                                            .Select((g, order) => new { Name = g.Key, Order = order })
+                                            .ToDictionary(x => x.Name, x => x.Order);
+
+                                            roiScan = roiScan
+                                                .OrderBy(r => nameOrder[r.Name ?? ""])
+                                                .ToList();
+                                            //foreach (LabelItem lb in labelItems)
+                                            //{
+                                            //    if (lb.ListInsideBox != null)
+                                            //    {
+                                            //        foreach (RectRotate rot in lb.ListInsideBox)
+                                            //            roiScan.Add(rot);
+                                            //    }
+                                            //}
+
+
+                                            //roiScan = roiScan
+                                            //    .OrderBy(r => nameOrder[r.Name ?? ""])
+                                            //    .ToList();
+                                            //roiScan = roiScan
+                                            //.OrderBy(r => r.Name ?? "")
+                                            //.ToList();
                                             foreach (var rot in roiScan)
                                             {
-                                                Mat matTemp = CropRoiView(matCrop, rot);
+                                                Mat matTemp =Cropper.CropRotatedRect(matCrop, rot,null);
 
                                                 if (matTemp.Empty())
                                                 {
@@ -1027,17 +1057,27 @@ namespace BeeCore
                                                 }
                                                 // ===== 5) CALL BATCH =====
                                                 dynamic results = dyn.predict_batch(pyImages, conf, toolName);
-
+                                                int IndexScanBox = 0;
+                                                String Old = "";
+                                             
                                                 // ===== 6) Parse kết quả =====
                                                 for (int i = 0; i < roiList.Count; i++)
                                                 {
                                                     var roi = roiList[i];
+
+                                                  if(roi.Name!= Old)
+                                                    {
+                                                        Old=roi.Name;
+                                                        IndexScanBox = 0;
+                                                    }    
                                                     dynamic dets = results[i];   // list detection của riêng hình i
+                                                                                 // Console.WriteLine(dets);
 
+              
                                                     int n = (int)dets.Length();
-
                                                     if (n > 0)
                                                     {
+                                                       var listRect=new List<ResultItem>();
                                                         for (int k = 0; k < n; k++)
                                                         {
                                                             dynamic det = dets[k];
@@ -1069,10 +1109,22 @@ namespace BeeCore
                                                             item.rot = rt;
                                                             item.IsOK = true;
                                                             item.Score = (float)det["score"].As<double>() * 100f;
+                                                            item.IndexScanBox = IndexScanBox;
+                                                            listRect.Add(item);
 
-                                                            resultTemp.Add(item);
-                                                            resultTemp[resultTemp.Count - 1].IndexScanBox = i;
+                                                            //  resultTemp[resultTemp.Count - 1].IndexScanBox = IndexScanBox;
                                                         }
+                                                        switch (FilterBox)
+                                                        {
+                                                            case FilterBox.Merge:
+                                                                listRect = ResultFilter.MergeSameNameOverlap(listRect, ThreshOverlap);
+                                                                break;
+                                                            case FilterBox.Remove:
+                                                                listRect = ResultFilter.FilterRectRotate(listRect, ThreshOverlap);
+                                                                break;
+                                                        }
+                                                        foreach(var item in listRect)
+                                                        resultTemp.Add(item);
                                                     }
                                                     else
                                                     {
@@ -1080,9 +1132,14 @@ namespace BeeCore
                                                         item.rot = roi;
                                                         item.IsOK = false;
                                                         item.Score = 0;
+                                                        item.IndexScanBox = IndexScanBox;
+                                                        
                                                         resultTemp.Add(item);
-                                                        resultTemp[resultTemp.Count - 1].IndexScanBox = i;
+                                                       
+                                                        //resultTemp[resultTemp.Count - 1].IndexScanBox = IndexScanBox;
                                                     }
+                                                   
+                                                    IndexScanBox++;
                                                 }
                                                 //// ===== 5) CALL BATCH =====
                                                 //dynamic results = dyn.predict_batch(pyImages, conf, toolName);
@@ -1624,7 +1681,7 @@ namespace BeeCore
                 //--------------------------------
            
                 {
-                    int k = 0;
+                
 
                     foreach (var item in labelItems)
                     {
@@ -1808,7 +1865,7 @@ namespace BeeCore
                         //--------------------------------
                         else
                         {
-                           
+                            int k = 0;
                             foreach (var scan in item.ListInsideBox)
                             {
                                 bool boxOK = true;   // ✅ reset đúng chỗ
@@ -1828,8 +1885,12 @@ namespace BeeCore
                                         continue;
                                     }
                                     List<ResultItem> objTemp = ResultItem
-                             .Where(x => x.IndexScanBox == k)
-                             .ToList();
+    .Where(x => x.IndexScanBox == k)
+    .ToList();
+                    //                List<ResultItem> objTemp = ResultItem
+                    //.Where(x => x.IndexScanBox == k
+                    //         && x.Name == item.Name)
+                    //.ToList();
                                     objs = objTemp
                                  .Where(x =>
                                      x.rot != null &&
@@ -2052,7 +2113,8 @@ namespace BeeCore
                                     }
 
                                     r.IsOK = ok;
-                                    if (!ok) boxOK = false;
+                                    if (!ok)
+                                        boxOK = false;
                                 }
                                 if(item.IsMinColor)
                                 {
@@ -2819,12 +2881,15 @@ namespace BeeCore
                         //mat = new Matrix();
                         if(IsCropSingle)
                         {
+                            if(rs.IndexScanBox < item.ListInsideBox.Count())
+                            {
+                                RectRotate rectRotate = item.ListInsideBox[rs.IndexScanBox];
+                                mat.Translate(rectRotate._PosCenter.X, rectRotate._PosCenter.Y);
+                                mat.Rotate(rectRotate._rectRotation);
+                                mat.Translate(rectRotate._rect.X, rectRotate._rect.Y);
+                                gc.Transform = mat;
+                            }
 
-                            RectRotate rectRotate = item.ListInsideBox[rs.IndexScanBox];
-                            mat.Translate(rectRotate._PosCenter.X, rectRotate._PosCenter.Y);
-                            mat.Translate(rectRotate._rect.X, rectRotate._rect.Y);
-                            mat.Rotate(rectRotate._rectRotation);
-                            gc.Transform = mat;
                         }    
                         mat.Translate(rs.rot._PosCenter.X, rs.rot._PosCenter.Y);
                         mat.Rotate(rs.rot._rectRotation);
@@ -2849,7 +2914,7 @@ namespace BeeCore
 
                             }
                         font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
-                        String label = rs.Name;
+                        String label =  rs.Name;
                         String valueScore = Math.Round(rs.Score, 1) + "%";
                         if (!Global.ParaShow.IsShowScore) valueScore = "";
                         if (!Global.ParaShow.IsShowLabel) label = "";
@@ -2869,13 +2934,13 @@ namespace BeeCore
                 }
                 else
                 {
-                    if (IsCropSingle)
-                    {
-                        mat.Translate(listRotScan[i]._PosCenter.X, listRotScan[i]._PosCenter.Y);
-                        mat.Translate(listRotScan[i]._rect.X, listRotScan[i]._rect.Y);
-                        mat.Rotate(listRotScan[i]._rectRotation);
-                        gc.Transform = mat;
-                    }
+                    //if (IsCropSingle)
+                    //{
+                    //    mat.Translate(listRotScan[i]._PosCenter.X, listRotScan[i]._PosCenter.Y);
+                    //    mat.Translate(listRotScan[i]._rect.X, listRotScan[i]._rect.Y);
+                    //    mat.Rotate(listRotScan[i]._rectRotation);
+                    //    gc.Transform = mat;
+                    //}
                     mat.Translate(rs.rot._PosCenter.X, rs.rot._PosCenter.Y);
                     mat.Rotate(rs.rot._rectRotation);
                     gc.Transform = mat;

@@ -4,6 +4,7 @@ using BeeGlobal;
 using BeeInterface;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp.Dnn;
+using OpenCvSharp.Flann;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -275,9 +276,11 @@ namespace BeeInterface
             dynamic control = DataTool.NewControl(TypeTool, indexName - 1, Global.IndexProgChoose, TypeTool.ToString() + " " + indexName);
             PropetyTool propetyTool = new PropetyTool(control.Propety, TypeTool, TypeTool.ToString() + " " + indexName);
             propetyTool.UsedTool = UsedTool.Used;
+
             BeeCore.Common.PropetyTools[Global.IndexProgChoose].Add(propetyTool);
             ItemTool Itemtool = DataTool.CreateItemTool(propetyTool ,indexName - 1, Global.IndexProgChoose);
           
+
             BeeCore.Common.PropetyTools[Global.IndexProgChoose][BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count() - 1].ItemTool = Itemtool;
             BeeCore.Common.PropetyTools[Global.IndexProgChoose][BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count() - 1].Control = control;
             

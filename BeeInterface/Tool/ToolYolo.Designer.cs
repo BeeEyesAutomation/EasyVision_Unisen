@@ -3737,11 +3737,7 @@ namespace BeeInterface
             this.dashboardLabel.ValueMin = 0;
             this.dashboardLabel.ValueWidthRatio = 0.6F;
             this.dashboardLabel.Visible = false;
-            this.dashboardLabel.ChooseColorBegin += new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseColorBegin);
-            this.dashboardLabel.ChooseColorEnd += new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseColorEnd);
-            this.dashboardLabel.ChooseAreaBegin += new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseAreaBegin);
-            this.dashboardLabel.ChooseAreaEnd += new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseAreaEnd);
-            this.dashboardLabel.ExternColorCharge += new System.Action<int>(this.dashboardLabel_ExternColorCharge);
+
             // 
             // btn22
             // 

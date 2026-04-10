@@ -42,7 +42,9 @@ namespace BeeInterface
           
             try
             {
-               
+                if (Propety == null)
+                    Propety = new CraftOCR();
+
                 trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
                 trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
                 trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;

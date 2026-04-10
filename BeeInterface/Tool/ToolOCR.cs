@@ -30,7 +30,8 @@ namespace BeeInterface
         {
             InitializeComponent();
             this.IsNew = IsNew;
-
+            if (Propety == null)
+                Propety = new OCR();
 
         }
         bool IsNew = false;

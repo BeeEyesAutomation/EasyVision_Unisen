@@ -26,7 +26,8 @@ namespace BeeInterface
         public ToolPosition_Adjustment( )
         {
             InitializeComponent();
-          
+            if(Propety==null)
+            Propety = new PositionAdj();
         }
         public void LoadPara()
         {

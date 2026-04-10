@@ -32,7 +32,9 @@ namespace BeeInterface
         public ToolIntersect( )
         {
             InitializeComponent();
-        
+            if (Propety == null)
+                Propety = new Intersect();
+
         }
         Stopwatch timer = new Stopwatch();
         public BackgroundWorker worker = new BackgroundWorker();

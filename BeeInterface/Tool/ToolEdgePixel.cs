@@ -32,9 +32,11 @@ namespace BeeInterface
         public ToolEdgePixel( )
         {
             InitializeComponent();
-        
+            if (Propety == null)
+                Propety = new EdgePixel();
+
         }
-        
+
         public void LoadPara()
         {
 

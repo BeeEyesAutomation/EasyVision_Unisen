@@ -240,6 +240,8 @@ namespace BeeCore
             {
                 StatusTool = StatusTool.Processing;
                 ToolDoneChanged?.Invoke(this, _StatusTool); // Gọi event
+                if(timer==null)
+                    timer = new Stopwatch();
                 timer.Restart();
                 if (UsedTool == UsedTool.NotUsed && Global.IsRun)
                     return;

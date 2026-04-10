@@ -60,7 +60,7 @@ namespace BeeCore
                     if (indexToolPosition == -1)
                     {
                         StatusProcessing = StatusProcessing.Checking;
-
+                    return;
                     }
                     //if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].TypeTool == TypeTool.Position_Adjustment)
                     //{
