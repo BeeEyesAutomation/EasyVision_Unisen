@@ -31,11 +31,11 @@ namespace BeeGlobal
         Bottom, Left, Right, Top, MidBotRight
 
     }
-    public enum ValuePLC {
+    public enum TypeValuePLC {
         TotalOK,
         TotalNG,
         Total,
-        Cycle
+        Cycle,Tool
 
 
     }
@@ -165,6 +165,10 @@ namespace BeeGlobal
     {
         Any, Horizontal, Vertical
     }
+    public enum LineDir
+    {
+        Any, Horizontal, Vertical
+    }
     public enum TriggerNum
     {
         Trigger0,
@@ -276,7 +280,7 @@ namespace BeeGlobal
     {
         StrongEdges,
         CloseEdges,
-        Binary, InvertBinary, None
+        Binary, InvertBinary, None, Stable
     }
     public enum TypeMeasure
     {
@@ -356,7 +360,7 @@ Color,Binary}
         Edge=22,
         CraftOCR = 23,
 
-        Intersect = 24,Systems=25, MultiPattern = 26,AutoTrig=27,MultiLearning=28
+        Intersect = 24,Systems=25, MultiPattern = 26,AutoTrig=27,MultiLearning=28,CheckMissing=29
 
 
     }
@@ -437,7 +441,10 @@ Color,Binary}
     }
     public enum StatusMode
     {
-        None, SimOne, SimContinuous, Once, Continuous
+        None, SimOne, SimContinuous, Once, Continuous,SimCam
+    }
+    public enum LineDirScan {
+     None,  LeftRight,RightLeft,TopBot,BotTop
     }
     public enum Step
     {

@@ -65,6 +65,7 @@ namespace BeeGlobal
         public bool IsEnTrain = true;
         public bool IsEnCountChart = false;
         public bool IsEnChangeProg = false;
+        public bool IsEnClock= false;
         public bool IsSaveAllPara= true;
         public bool IsShowImgTrig = true;
         public bool IsManual = true;
@@ -82,6 +83,7 @@ namespace BeeGlobal
         public int AlphaBackground = 40;
         public int AlphaText = 20;
         public int RoundRad = 10;
+        public float Scale = 0.1f;
         public bool IsByPass;
         public int DelayOutput = 100;
         public  int delayTrigger = 100;

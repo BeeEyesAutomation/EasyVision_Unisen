@@ -141,7 +141,6 @@
     <ClInclude Include="FiltersCli.h" />
     <ClInclude Include="FiltersCore.hpp" />
     <ClInclude Include="Global.h" />
-    <ClInclude Include="Pattern.h" />
     <ClInclude Include="Pattern2.h" />
     <ClInclude Include="PitchCli.h" />
     <ClInclude Include="PitchCore.h" />
@@ -162,7 +161,6 @@
     <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="FiltersCli.cpp" />
     <ClCompile Include="Global.cpp" />
-    <ClCompile Include="Pattern.cpp" />
     <ClCompile Include="Pattern2.cpp" />
     <ClCompile Include="PitchCli.cpp" />
     <ClCompile Include="PitchCore.cpp" />

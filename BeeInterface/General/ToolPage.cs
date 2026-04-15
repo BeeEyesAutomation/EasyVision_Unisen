@@ -319,7 +319,7 @@ namespace BeeInterface
                 {
                     propetyTool.Complete();
                 };
-            propetyTool.Propety2.IsNew = true;
+            
                 propetyTool.Propety2.SetModel();
             
                 DataTool.LoadPropety(control);

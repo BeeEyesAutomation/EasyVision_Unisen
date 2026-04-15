@@ -26,15 +26,15 @@ using ShapeType = BeeGlobal.ShapeType;
 namespace BeeInterface
 {
     [Serializable()]
-    public partial class ToolPattern : UserControl
+    public partial class ToolCheckMissing : UserControl
     {
         
-        public ToolPattern( )
+        public ToolCheckMissing( )
         {
             InitializeComponent();
 
             if (Propety == null)
-                Propety = new Patterns();
+                Propety = new CheckMissing();
         }
         
 
@@ -66,10 +66,13 @@ namespace BeeInterface
             float angle = (Propety.rotCrop._rectRotation) - (Propety.rotArea._rectRotation);
             Propety.AngleLower = angle - Propety.Angle;
             Propety.AngleUper = angle + Propety.Angle;
-            trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
-            trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
-            trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
-            trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+            btnHorizontal.IsCLick=Propety.LineOrientation==LineOrientation.Horizontal?true:false;
+            btnVer.IsCLick = Propety.LineOrientation == LineOrientation.Vertical ? true : false;
+            AdjTolorenceDis.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
+            AdjTolorenceDis.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
+            AdjTolorenceDis.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
+            AdjTolorenceDis.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+            trackScore.Value = Propety.ScorePattern;
             if (Propety.MaxObject == 0) Propety.MaxObject = 1;
             AdjMaximumObj.Value = Propety.MaxObject;
             AdjStepAngle.Value = Propety.StepAngle;
@@ -79,18 +82,7 @@ namespace BeeInterface
             ckBitwiseNot.IsCLick = Propety.ckBitwiseNot;
             ckSIMD.IsCLick = Propety.ckSIMD;
             ckSubPixel.IsCLick = Propety.ckSubPixel;
-          switch(Propety.Compare)
-            {
-                case Compares.Equal:
-                    btnEqual.IsCLick = true;
-                    break;
-                case Compares.Less:
-                    btnLess.IsCLick = true;
-                    break;
-                case Compares.More:
-                    btnMore.IsCLick = true;
-                    break;
-            }    
+         
             if (Propety.IsHighSpeed)
                 btnHighSpeed.IsCLick = true;
             else
@@ -111,11 +103,8 @@ namespace BeeInterface
          
 
             txtAddPLC.Text = Propety.AddPLC;
-            adjScale.Value = Propety.Scale;
-
-            btnZero0.IsCLick=Propety.ZeroPos==ZeroPos.Zero?true:false;
-            btnZeroAdj.IsCLick = Propety.ZeroPos == ZeroPos.ZeroADJ ? true : false;
-
+          
+         
             Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
         }
 
@@ -153,12 +142,12 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (float)trackScore.Value;
+          Propety.ScorePattern = (int)trackScore.Value;
            
 
         }
 
-        public Patterns Propety { get; set; }
+        public CheckMissing Propety { get; set; }
         public Mat matTemp = new Mat();
         public Mat matTemp2 = new Mat();
         Mat matClear = new Mat(); Mat matMask = new Mat();
@@ -729,36 +718,26 @@ namespace BeeInterface
             trackScore.Visible = !btn6.IsCLick;
         }
 
-        private void btn7_Click(object sender, EventArgs e)
-        {
-            layLimitCouter.Visible = !btn8.IsCLick;
-            AdjLimitCounter.Visible = !btn8.IsCLick;
-        }
-
-        private void btnZeroAdj_Click(object sender, EventArgs e)
-        {
-            Propety.ZeroPos = ZeroPos.ZeroADJ;
-        }
-
-        private void adjScale_ValueChanged(float obj)
-        {
-            Propety.Scale =(float)adjScale.Value;
-        }
-
-        private void btn7_Click_1(object sender, EventArgs e)
-        {
-            lay71.Visible = !btn7.IsCLick;
-            lay72.Visible = !btn7.IsCLick;
-        }
-
-        private void btnZero0_Click(object sender, EventArgs e)
-        {
-            Propety.ZeroPos = ZeroPos.Zero;
-        }
+      
 
         private void btn1_Click(object sender, EventArgs e)
         {
             EditRectRot1.Visible = !btn1.IsCLick;
+        }
+
+        private void AdjTolorenceDis_ValueChanged(float obj)
+        {
+            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (float)AdjTolorenceDis.Value;
+
+        }
+
+        private void btnVer_Click(object sender, EventArgs e)
+        {
+            Propety.LineOrientation = LineOrientation.Horizontal;
+        }
+        private void btnHorizontal_Click(object sender, EventArgs e)
+        {
+            Propety.LineOrientation = LineOrientation.Horizontal;
         }
     }
 }

@@ -83,7 +83,6 @@
     <Compile Include="ItemRegsImg.cs" />
     <Compile Include="ParaShow.cs" />
     <Compile Include="PCI_Card.cs" />
-    <Compile Include="PLCResult.cs" />
     <Compile Include="ProgNo.cs" />
     <Compile Include="Protocol\ParaBit.cs" />
     <Compile Include="Protocol\ParaProtocol.cs" />

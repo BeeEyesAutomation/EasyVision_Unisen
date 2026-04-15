@@ -352,7 +352,38 @@ namespace BeeInterface
             BtnWriteOutPLC((RJButton)sender);
         }
 
+        public void RefreshLayValueOutput()
+        {
+            this.layValueOutput.SuspendLayout();
+            this.layValueOutput.Controls.Clear();
+            for (int i = this.layValueOutput.RowStyles.Count - 1; i >= 0; i--)
+            {
+                
+                this.layValueOutput.RowStyles.RemoveAt(i);
+            }
 
+            this.layValueOutput.RowCount = 0;
+
+            this.layValueOutput.ResumeLayout();
+
+
+            foreach (ParaValue paraValue in Global.Comunication.Protocol.ListParaValueOut)
+            {
+
+
+                ucValueOutput ucValueOutput = new ucValueOutput(paraValue);
+                ucValueOutput.Height = 48;
+                ucValueOutput.Dock = DockStyle.Fill;
+                ucValueOutput.TabStop = false;
+                this.layValueOutput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+                this.layValueOutput.Controls.Add(ucValueOutput);
+
+            }
+            this.layValueOutput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize, 30f));
+
+            this.layValueOutput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30f));
+            this.layValueOutput.Controls.Add(new Control());
+        }
         private void SettingPLC_Load(object sender, EventArgs e)
         {// 1) Khởi tạo và bind:
             try
@@ -394,6 +425,7 @@ namespace BeeInterface
                         Global.Comunication.Protocol.ParaBits.Add(paraIO);
                     }
                 }
+                numBlinkOut.Value=Global.Comunication.Protocol.DelayOutput;
                 Global.Comunication.Protocol.ParaBits.Sort((a, b) => a.Adddress.CompareTo(b.Adddress));
                 this.layInput.SuspendLayout();
 
@@ -406,16 +438,7 @@ namespace BeeInterface
 
                 this.layInput.ResumeLayout();
 
-                this.layOutput.SuspendLayout();
-
-                for (int i = this.layOutput.RowStyles.Count - 1; i >= 0; i--)
-                {
-                    this.layOutput.RowStyles.RemoveAt(i);
-                }
-
-                this.layOutput.RowCount = 0;
-
-                this.layOutput.ResumeLayout();
+             
                 for (int i = 0; i < 16; i++)
                 {
                     int index = Global.Comunication.Protocol.ParaBits.FindIndex(a => a.Adddress == i && a.TypeIO == TypeIO.Input);
@@ -435,6 +458,17 @@ namespace BeeInterface
                 this.layInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30f));
                 this.layInput.Controls.Add(new Control());
 
+
+                this.layOutput.SuspendLayout();
+
+                for (int i = this.layOutput.RowStyles.Count - 1; i >= 0; i--)
+                {
+                    this.layOutput.RowStyles.RemoveAt(i);
+                }
+
+                this.layOutput.RowCount = 0;
+
+                this.layOutput.ResumeLayout();
                 for (int i=0;i<16;i++)
                 {
                     int index= Global.Comunication.Protocol.ParaBits.FindIndex(a=>a.Adddress==i&&a.TypeIO==TypeIO.Output);
@@ -457,27 +491,7 @@ namespace BeeInterface
                         this.layOutput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
                             this.layOutput.Controls.Add(ucBitOutput);
                         }
-                    ////ParaBit paraIO = Global.Comunication.Protocol.ParaBits[index];
-                    //if (paraIO.Adddress == i && paraIO.TypeIO == TypeIO.Output)
-                    //{
-                    //    ucBitOutput ucBitOutput = new ucBitOutput(paraIO);
-                    //    ucBitOutput.Height = 48;
-                    //    ucBitOutput.Dock = DockStyle.Fill;
-                    //    this.layOutput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
-                    //    this.layOutput.Controls.Add(ucBitOutput);
-
-                    //}
-                    //else
-                    //{
-                    //    paraIO = new ParaBit(TypeIO.Output, I_O_Output.None, i);
-                    //    ucBitOutput ucBitOutput = new ucBitOutput(paraIO);
-                    //    ucBitOutput.Height = 48;
-                    //    ucBitOutput.Dock = DockStyle.Fill;
-                    //    this.layOutput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
-                    //    this.layOutput.Controls.Add(ucBitOutput);
-
-
-                    //}
+   
 
 
                 }
@@ -485,15 +499,13 @@ namespace BeeInterface
 
                 this.layOutput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute,30f));
                 this.layOutput.Controls.Add(new Control());
-                //foreach (ParaBit paraIO in Global.Comunication.Protocol.ParaBits)
-                //{if (paraIO.TypeIO == TypeIO.Input) continue;
-                //   ucBitOutput ucBitOutput=new ucBitOutput(paraIO);
-                //    ucBitOutput.Height = 48;
-                //    ucBitOutput.Dock = DockStyle.Fill;
-                //    this.layOutput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
-                //    this.layOutput.Controls.Add(ucBitOutput);
 
-                //}
+
+                // Out Value
+                RefreshLayValueOutput();
+
+
+
                 btnBypass.IsCLick = Global.Comunication.Protocol.IsBypass;
                 btnDtrEnable.IsCLick = Global.Comunication.Protocol.DtrEnable;
                 btnRtsEnable.IsCLick = Global.Comunication.Protocol.RtsEnable;
@@ -504,45 +516,13 @@ namespace BeeInterface
                 pProcess.Visible = Global.Config.IsShowProgressingPLC;
                 pProgNo.Visible = Global.Config.IsEnChangeProg;
                 pCountChart.Visible = Global.Config.IsEnCountChart;
-                
+                btnOnAlive.IsCLick = Global.Comunication.Protocol.IsOnAlive;
+                numAlive.Value = Global.Comunication.Protocol.DelayAlive;
+                numAlive.Enabled= Global.Comunication.Protocol.IsOnAlive;
+                btnOnAlive.Text = Global.Comunication.Protocol.IsOnAlive == true ? "ON" : "OFF";
                 btnIO.IsCLick = Global.Comunication.Protocol.TypeControler == TypeControler.IO ? true : false;
                 btnIsPLC.IsCLick = Global.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
-                //cbO0.Text = nameOut[0];
-                //cbO1.Text = nameOut[1];
-                //cbO2.Text = nameOut[2];
-                //cbO3.Text = nameOut[3];
-                //cbO4.Text = nameOut[4];
-                //cbO5.Text = nameOut[5];
-                //cbO6.Text = nameOut[6];
-                //cbO7.Text = nameOut[7];
-                //cbO8.Text = nameOut[8];
-                //cbO9.Text = nameOut[9];
-                //cbO10.Text = nameOut[10];
-                //cbO11.Text = nameOut[11];
-                //cbO12.Text = nameOut[12];
-                //cbO13.Text = nameOut[13];
-                //cbO14.Text = nameOut[14];
-                //cbO15.Text = nameOut[15];
-
-
-
-
-                //cbIn0.Text = nameInput[0];
-                //cbIn1.Text = nameInput[1];
-                //cbIn2.Text = nameInput[2];
-                //cbIn3.Text = nameInput[3];
-                //cbIn4.Text = nameInput[4];
-                //cbIn5.Text = nameInput[5];
-                //cbIn6.Text = nameInput[6];
-                //cbIn7.Text = nameInput[7];
-                //cbIn8.Text = nameInput[8];
-                //cbIn9.Text = nameInput[9];
-                //cbIn10.Text = nameInput[10];
-                //cbIn11.Text = nameInput[11];
-                //cbIn12.Text = nameInput[12];
-                //cbIn13.Text = nameInput[13];
-                //cbIn14.Text = nameInput[14];
-                //cbIn15.Text = nameInput[15];
+               
                 tmOut.Value = Global.Comunication.Protocol.timeOut;
                 timerRead.Value = Global.Comunication.Protocol.timeRead;
                 cbBaurate.Text = Global.Comunication.Protocol.Baurate + "";
@@ -556,23 +536,7 @@ namespace BeeInterface
                 txtProg.Text = "No" + Global.Comunication.Protocol.NoProg;
                 txtAddPO.Text = Global.Comunication.Protocol.AddPO;
                 txtAddProgress.Text = Global.Comunication.Protocol.AddProgress;
-                //listLabelsIn = new List<RJButton> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7, DI8, DI9, DI10, DI11, DI12, DI13, DI14, DI15 };
-                //listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7, DO8, DO9, DO10, DO11, DO12, DO13, DO14, DO15 };
-                ////foreach (ParaBit paraIO in Global.Comunication.Protocol.ParaBits)
-                //{
-                //    if (paraIO.TypeIO == TypeIO.Input)
-                //    {
-                //        listLabelsIn[paraIO.Adddress].IsCLick = Convert.ToBoolean(paraIO.Value);// + "";
-                //        listLabelsIn[paraIO.Adddress].Text = paraIO.Value + "";
-                //        listLabelsIn[paraIO.Adddress].Refresh();
-                //    }
-                //    else
-                //    {
-                //        listLabelsOut[paraIO.Adddress].Text = paraIO.Value + "";
-                //        listLabelsOut[paraIO.Adddress].IsCLick = Convert.ToBoolean(paraIO.Value);// + "";
-                //        listLabelsOut[paraIO.Adddress].Refresh();
-                //    }
-                //}
+              
                 if (Global.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Keyence)
                     btnKeyence.IsCLick = true;
                 if (Global.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Mitsubishi)
@@ -627,38 +591,28 @@ namespace BeeInterface
                 MessageBox.Show(ex.Message);
             }
 
-            //foreach (ParaBit paraIO in Global.Comunication.Protocol.ParaBits)
-            //{
-            //    paraIO.ValueChanged += ParaIO_ValueChanged;
-
-
-            //}
-
+           
             btnBypass.IsCLick = Global.Comunication.Protocol.IsBypass;
             Global.StatusIOChanged += Global_StatusIOChanged;
 
             if (Global.Comunication.Protocol.IsConnected)
             {
-                //  pComIO.Enabled = false;
                 btnConectIO.IsCLick = true;
                 btnConectIO.Enabled = false;
-                // btnBypass.Enabled = true;
             }
             else
             {
-                //   pComIO.Enabled = true;
                 btnConectIO.IsCLick = false;
                 btnConectIO.Enabled = true;
-                //   btnBypass.Enabled = false;
             }
-            
+            Global.Comunication.Protocol.ValuePOChanged -= Protocol_ValuePOChanged;
+            Global.Comunication.Protocol.ValueProgChanged -= Protocol_ValueProgChanged1;
+            Global.Comunication.Protocol.ValueCountProgChanged -= Protocol_ValueCountProgChanged;
+            Global.Comunication.Protocol.QtyChanged -= Protocol_QtyChanged;
             Global.Comunication.Protocol.ValuePOChanged += Protocol_ValuePOChanged;
             Global.Comunication.Protocol.ValueProgChanged += Protocol_ValueProgChanged1;
             Global.Comunication.Protocol.ValueCountProgChanged += Protocol_ValueCountProgChanged;
-            Global.Comunication.Protocol.QtyChanged += Protocol_QtyChanged;
-            //   Global.Comunication.Protocol.numReadChanged += IO_numReadChanged;
-            //  Global.Comunication.Protocol.numWriteChanged += IO_numWriteChanged;
-        }
+            Global.Comunication.Protocol.QtyChanged += Protocol_QtyChanged; }
 
         private void Protocol_QtyChanged(int obj)
         {
@@ -1427,6 +1381,58 @@ namespace BeeInterface
         private void btnMisu3_Click(object sender, EventArgs e)
         {
             Global.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Mitsubishi3;
+        }
+
+        private void numBlinkOut_ValueChanged(float obj)
+        {
+            Global.Comunication.Protocol.DelayOutput=numBlinkOut.Value;
+        }
+
+        private void btnOnAlive_Click(object sender, EventArgs e)
+        {
+            Global.Comunication.Protocol.IsOnAlive = btnOnAlive.IsCLick;
+            numAlive.Enabled = Global.Comunication.Protocol.IsOnAlive;
+            btnOnAlive.Text = Global.Comunication.Protocol.IsOnAlive == true ? "ON" : "OFF";
+
+        }
+
+        private void btnNew_Click(object sender, EventArgs e)
+        {
+            Global.Comunication.Protocol.ListParaValueOut.Add(new ParaValue(TypeValuePLC.TotalNG, TypeVar.Int, TypeIO.Output, ""));
+            RefreshLayValueOutput();
+        }
+
+        private void rjButton3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnONEditValOutput_Click(object sender, EventArgs e)
+        {
+            foreach (Control control in this.layValueOutput.Controls)
+            {
+                try
+                {
+                    if (control is ucValueOutput ucValueOutput)
+                    {
+                        ucValueOutput.TabStop = false;
+                        ucValueOutput.Type.Enabled = btnONEditValOutput.IsCLick;
+                        ucValueOutput.Bit.Enabled = btnONEditValOutput.IsCLick;
+                        ucValueOutput.Blink.Enabled = btnONEditValOutput.IsCLick;
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+            this.btnONEditValOutput.Text = this.btnONEditValOutput.IsCLick == true ? "ON" : "OFF";
+
+        }
+
+        private void numAlive_ValueChanged(float obj)
+        {
+            Global.Comunication.Protocol.DelayAlive = (int)numAlive.Value;
         }
     }
 }

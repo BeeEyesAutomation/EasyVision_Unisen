@@ -9,30 +9,30 @@ namespace BeeGlobal
     [Serializable()]
     public class ParaValue
     {
-        public TypeIO TypeIO;
+        public TypeValuePLC TypeValuePLC;
         public TypeVar TypeVar;
-        public ValueInput ValueInput;
-        public ValueOutput ValueOutput;
-        public int Adddress = 0;
-        private int _Value = 0;
-        private string _ValueString = "";
+        public TypeIO TypeIO;
+        public bool IsBlink = false;
+        public String Adddress = "";
+        private dynamic _Value = 0;
+        //private string _ValueString = "";
+        //[field: NonSerialized]
+        //public event Action<object, string> StringChanged;
+        //public string ValueString
+        //{
+        //    get => _ValueString;
+        //    set
+        //    {
+        //        if (_ValueString != value)
+        //        {
+        //            _ValueString = value;
+        //            StringChanged?.Invoke(this, _ValueString); // Gọi event
+        //        }
+        //    }
+        //}
         [field: NonSerialized]
-        public event Action<object, string> StringChanged;
-        public string ValueString
-        {
-            get => _ValueString;
-            set
-            {
-                if (_ValueString != value)
-                {
-                    _ValueString = value;
-                    StringChanged?.Invoke(this, _ValueString); // Gọi event
-                }
-            }
-        }
-        [field: NonSerialized]
-        public event Action<object, int> ValueChanged;
-        public int Value
+        public event Action<object, dynamic> ValueChanged;
+        public dynamic Value
         {
             get => _Value;
             set
@@ -49,19 +49,14 @@ namespace BeeGlobal
 
         }
      
-        public ParaValue(TypeIO TypeIO, ValueInput ValueInput, TypeVar TypeVar, int Adddress)
+        public ParaValue(TypeValuePLC TypeValuePLC,TypeVar TypeVar, TypeIO TypeIO, String Adddress)
         {
             this.TypeVar = TypeVar;
-            this.ValueInput = ValueInput;
+            this.TypeValuePLC = TypeValuePLC;
             this.TypeIO = TypeIO;
             this.Adddress = Adddress;
         }
-        public ParaValue(TypeIO TypeIO, ValueOutput ValueOutput, TypeVar TypeVar, int Adddress)
-        {   this.TypeVar = TypeVar;
-            this.ValueOutput = ValueOutput;
-            this.TypeIO = TypeIO;
-            this.Adddress = Adddress;
-        }
+   
        
     }
 }

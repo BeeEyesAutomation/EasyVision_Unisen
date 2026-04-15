@@ -254,17 +254,7 @@ namespace BeeCore
         public string AddPLC = "";
         public TypeSendPLC TypeSendPLC = TypeSendPLC.Float;
         public bool IsSendResult;
-        public async Task SendResult()
-        {
-            //if (IsSendResult)
-            //{
-            //    if (Global.Comunication.Protocol.IsConnected)
-            //    {
-                   
-            //        await Global.Comunication.Protocol.WriteResultFloat(AddPLC, WidthResult);
-            //    }
-            //}
-        }
+
         public Graphics DrawResult(Graphics gc)
         {
 

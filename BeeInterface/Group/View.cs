@@ -1611,11 +1611,15 @@ namespace BeeInterface
             if (numberPad == null)
             {
                 numberPad = new AdjustNumberPad();
+               
                 Global.Main.Controls.Add(numberPad);
+                numberPad.KeepSquareLayout = false;   // muốn vuông
+                numberPad.AllowResizePad = true;     // cho kéo resize góc phải dưới
+                numberPad.SaveLayoutOnDisk = true;   // tự lưu size + vị trí
+             //   numberPad.Location = new Point(mouseScreenPos.X + 10, mouseScreenPos.Y + 10);
             }
 
-
-            numberPad.Location = new Point(mouseScreenPos.X + 10, mouseScreenPos.Y + 10);
+           
             numberPad.Visible = true;
             numberPad.BringToFront();
         }
@@ -2552,9 +2556,39 @@ namespace BeeInterface
                         G.StatusDashboard.StatusText = obj.ToString();
                         G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     }
-                    if (!workReadCCD.IsBusy)
-                        workReadCCD.RunWorkerAsync();
+                    if (Global.StatusMode == StatusMode.SimCam)
+                    {
+                    X: indexFile++;
+                        if (indexFile >= Global.listSimImg.Count)
+                            indexFile = 0;
+                        if (indexFile < Global.listSimImg.Count())
+                        {
+                           
+                            if (BeeCore.Common.listCamera[Global.IndexCCCD] == null)
+                                BeeCore.Common.listCamera[Global.IndexCCCD] = new Camera(new ParaCamera(), Global.IndexCCCD);
+                            BeeCore.Common.listCamera[Global.IndexCCCD].IsConnected = true;
 
+                            if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty())
+                                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Release();
+                            ItemRegsImg itemRegsImg = Global.listSimImg[indexFile];
+                            BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = itemRegsImg.Image.ToMat();
+                            if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty()) goto X;
+                            Global.StatusProcessing = StatusProcessing.Checking;
+                        }
+                        else
+                        {
+
+                            indexFile = 0;
+                            goto X;
+
+
+                        }
+                    }
+                    else
+                    {
+                        if (!workReadCCD.IsBusy)
+                            workReadCCD.RunWorkerAsync();
+                    }
 
                     break;
                 case StatusProcessing.Checking:
@@ -2630,7 +2664,7 @@ namespace BeeInterface
                         }));
                     break;
                 case StatusProcessing.SendResult:
-                    if(!IsShowHis)
+                    if(!IsShowHis && Global.Config.IsResetImg)
                         this.Invoke((Action)(() =>
                     {
                         imgView.Text = "Waiting Show Picture ..";
@@ -2771,7 +2805,7 @@ namespace BeeInterface
                     break;
                 case StatusProcessing.Drawing:
                     if(!Global.Config.IsExternal)
-                        if(!IsShowHis)
+                        if(!IsShowHis && Global.Config.IsResetImg)
                             this.Invoke((Action)(() =>
                     {
                       
@@ -2892,6 +2926,10 @@ namespace BeeInterface
                         //Checking2.StatusProcessing = StatusProcessing.None;
                         //Checking3.StatusProcessing = StatusProcessing.None;
                         //Checking4.StatusProcessing = StatusProcessing.None;
+                        if (!Global.Config.IsMultiProg)
+                        {
+                            Global.NumProgFromPLC = 1;
+                        }
                         switch (Global.NumProgFromPLC)
                         {
                             case 1:
@@ -2932,6 +2970,7 @@ namespace BeeInterface
                             Global.IndexProgChoose = 0;
                             Global.TriggerNum = TriggerNum.Trigger0;
                         }
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Trig", Global.NumProgFromPLC+ Global.TriggerNum.ToString()));
 
                         //if (Global.Config.NumTrig > Global.NumProgFromPLC)
                         //{

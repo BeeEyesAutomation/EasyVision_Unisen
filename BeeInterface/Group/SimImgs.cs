@@ -161,5 +161,10 @@ namespace BeeUi.Unit
         {
             Global.EditTool.View.tmSimulation.Interval =(int) numDelay.Value;
         }
+
+        private void rjButton1_Click(object sender, EventArgs e)
+        {
+            Global.StatusMode = btnSimCam.IsCLick ? StatusMode.SimCam : StatusMode.None;
+        }
     }
 }

@@ -8,7 +8,6 @@
     <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="FiltersCli.cpp" />
     <ClCompile Include="Global.cpp" />
-    <ClCompile Include="Pattern.cpp" />
     <ClCompile Include="PitchCli.cpp" />
     <ClCompile Include="PitchCore.cpp" />
     <ClCompile Include="RansacLineCli.cpp" />
@@ -27,7 +26,6 @@
     <ClInclude Include="FiltersCli.h" />
     <ClInclude Include="FiltersCore.hpp" />
     <ClInclude Include="Global.h" />
-    <ClInclude Include="Pattern.h" />
     <ClInclude Include="PitchCli.h" />
     <ClInclude Include="PitchCore.h" />
     <ClInclude Include="RansacLineCli.h" />
@@ -50,6 +48,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(AppLogoIco)" />
     <None Include="$(AppLogoIco)" />
     <None Include="$(AppLogoIco)" />
     <None Include="$(AppLogoIco)" />

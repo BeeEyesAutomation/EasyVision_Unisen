@@ -116,7 +116,7 @@
     </Compile>
     <Compile Include="ControlStylePersistence.cs" />
     <Compile Include="Custom\AdjustNumberPad.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Custom\AutoLabel.cs">
       <SubType>Component</SubType>
@@ -358,6 +358,12 @@
     <Compile Include="PLC\ucBitInput.Designer.cs">
       <DependentUpon>ucBitInput.cs</DependentUpon>
     </Compile>
+    <Compile Include="PLC\ucValueOutput.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PLC\ucValueOutput.Designer.cs">
+      <DependentUpon>ucValueOutput.cs</DependentUpon>
+    </Compile>
     <Compile Include="PLC\ucBitOutput.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -503,6 +509,12 @@
     </Compile>
     <Compile Include="Tool\ToolCorner.Designer.cs">
       <DependentUpon>ToolCorner.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolCheckMissing.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolCheckMissing.Designer.cs">
+      <DependentUpon>ToolCheckMissing.cs</DependentUpon>
     </Compile>
     <Compile Include="Tool\ToolVisualMatch.cs">
       <SubType>UserControl</SubType>
@@ -670,6 +682,9 @@
     <EmbeddedResource Include="PLC\ucBitInput.resx">
       <DependentUpon>ucBitInput.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PLC\ucValueOutput.resx">
+      <DependentUpon>ucValueOutput.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PLC\ucBitOutput.resx">
       <DependentUpon>ucBitOutput.cs</DependentUpon>
     </EmbeddedResource>
@@ -740,6 +755,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolCorner.resx">
       <DependentUpon>ToolCorner.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolCheckMissing.resx">
+      <DependentUpon>ToolCheckMissing.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolVisualMatch.resx">
       <DependentUpon>ToolVisualMatch.cs</DependentUpon>

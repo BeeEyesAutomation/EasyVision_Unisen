@@ -326,9 +326,9 @@ namespace BeeCore
         private int delayTrig;
         public List<System.Drawing.Point> listP_Center = new List<System.Drawing.Point>();
         [NonSerialized]
-        public BeeCpp.Pattern Pattern = new BeeCpp.Pattern();
+        public BeeCpp.Pattern2 Pattern = new BeeCpp.Pattern2();
         [NonSerialized]//note
-        public List<BeeCpp.Pattern> list_Patterns = new List<BeeCpp.Pattern>();
+        public List<BeeCpp.Pattern2> list_Patterns = new List<BeeCpp.Pattern2>();
         [NonSerialized]//note
         public List<BeeCpp.ColorPixel> list_ColorPixel = new List<BeeCpp.ColorPixel>();
 
@@ -405,7 +405,7 @@ namespace BeeCore
                     if (TypeMode == Mode.Edge)
                     {
                         Pattern.SetImgeSampleNoCrop(img.Data, img.Width, img.Height, (int)img.Step(), img.Channels());
-                        Pattern.LearnPattern();
+                        Pattern.LearnPatternStable();
                     }
                     else
                     {
@@ -419,7 +419,7 @@ namespace BeeCore
 
                         if (intpr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
                             return mat; // trả Mat rỗng
-                        Pattern.LearnPattern();
+                        Pattern.LearnPatternStable();
                         // Map kênh trả về
                         MatType mt = c == 1 ? MatType.CV_8UC1
                                     : c == 3 ? MatType.CV_8UC3
@@ -503,7 +503,7 @@ namespace BeeCore
             if (rotArea == null) rotArea = new RectRotate();
             if (Pattern == null)
             {
-                Pattern = new BeeCpp.Pattern();
+                Pattern = new BeeCpp.Pattern2();
 
             }
             if (ExpandX == 0) ExpandX = 50;
@@ -516,12 +516,12 @@ namespace BeeCore
             if (Common.PropetyTools[IndexThread][Index].Score == 0)
                 Common.PropetyTools[IndexThread][Index].Score = 80;
             list_ColorPixel = new List<ColorPixel>();
-            list_Patterns = new List<Pattern>();
+            list_Patterns = new List<Pattern2>();
             if (ResultMulti == null)
                 ResultMulti = new List<ResultMulti>();
             for (int i = 0; i < ResultMulti.Count; i++)
             {
-                list_Patterns.Add(new Pattern());
+                list_Patterns.Add(new Pattern2());
 
             }
             for (int i = 0; i < ResultMulti.Count; i++)
@@ -636,7 +636,7 @@ namespace BeeCore
 
                                                  );
 
-                                               list_Patterns[i].LearnPattern();
+                                               list_Patterns[i].LearnPatternStable();
                                                Mat mat1 = new Mat();
                                                if (mat.Type() == MatType.CV_8UC1)
                                                    Cv2.CvtColor(mat, mat1, ColorConversionCodes.GRAY2BGR);
@@ -1060,7 +1060,7 @@ namespace BeeCore
             if (ResultItems != null)
                 ResultItems.Clear();
             Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
-            list_Patterns = new List<BeeCpp.Pattern>();
+            list_Patterns = new List<BeeCpp.Pattern2>();
             rectRotates = new List<RectRotate>();
            
             listScore = new List<double>();
@@ -1136,7 +1136,7 @@ namespace BeeCore
                     List<ResultItem> itChip=  CheckBoxYolo(gray);
                 
                     if (list_Patterns == null)
-                        list_Patterns = new List<BeeCpp.Pattern>();
+                        list_Patterns = new List<BeeCpp.Pattern2>();
 
                     float scoreSum = 0f;
 
@@ -1144,7 +1144,7 @@ namespace BeeCore
                     int i = 0;
                     int count = itChip.Count();
 
-                    list_Patterns = new List<BeeCpp.Pattern>(count);
+                    list_Patterns = new List<BeeCpp.Pattern2>(count);
                   
 
                  
@@ -1156,12 +1156,12 @@ namespace BeeCore
                       
                     }
                     i = 0;
-                    list_Patterns = new List<Pattern>();
+                    list_Patterns = new List<Pattern2>();
                    
                     foreach (RectRotate rot in rectRotates)
                     {
                        
-                        list_Patterns.Add(new BeeCpp.Pattern());
+                        list_Patterns.Add(new BeeCpp.Pattern2());
                         RectRotateCli? rrMaskCli2 =
                             (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
                         RectRotate rotTemp = rot.Clone();
@@ -1186,7 +1186,7 @@ namespace BeeCore
                               out w, out h, out s, out c
 
                           );
-                        list_Patterns[i].LearnPattern();
+                        list_Patterns[i].LearnPatternStable();
                         
                         rot.ExpandPixels(ExpandX, ExpandY);
                         MatType mt = c == 1 ? MatType.CV_8UC1

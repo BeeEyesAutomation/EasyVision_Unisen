@@ -434,6 +434,7 @@ namespace BeeCore
         public int LenRS= 0;
         public float ThresholdLine = 0.5f;
         public float ToleranceLine = 0.1f;
+        public LineDirScan LineDirScan { set; get; }
         public static Mat CropRoiView(Mat src, RectRotate rot)
         {
             Rect roi = new Rect(new OpenCvSharp. Point(rot._PosCenter.X - rot._rect.Width / 2, rot._PosCenter.Y - rot._rect.Height / 2), new OpenCvSharp. Size(rot._rect.Width, rot._rect.Height));
@@ -1337,13 +1338,66 @@ namespace BeeCore
         public ArrangeBox ArrangeBox=new ArrangeBox();
         public bool IsArrangeBox = false;
         public bool IsCropSingle = false;
+        [NonSerialized]
+        public String StringSend = "";
+        public bool IsEnSendPos = false;
+        public String AddPLCPos = "";
+        public String AddPLCCountPoint = "";
         public async Task SendResult()
         {
             if (IsSendResult)
             {
-               if( Global.Comunication.Protocol.IsConnected)
+                int i = 0; BitsResult = new bool[16];
+                StringSend = "";
+                foreach (LabelItem item in labelItems)
                 {
-                  await  Global.Comunication.Protocol.WriteResultBits(AddPLC, BitsResult);
+                    if (i >= 16)
+                        continue;
+                    BitsResult[i] = item.IsOK;
+                    if (item.IsOK)
+                        StringSend += item.Name + ",";
+                    i++;
+                }
+                if (Global.Comunication.Protocol.IsConnected)
+                {
+                    if (AddPLC != "")
+                    {
+                        switch (TypeSendPLC)
+                        {
+                            case TypeSendPLC.Bits:
+                                await Global.Comunication.Protocol.WriteResultBits(AddPLC, BitsResult);
+                                break;
+                            case TypeSendPLC.String:
+                                await Global.Comunication.Protocol.WriteResultString(AddPLC, StringSend);
+                                break;
+                        }
+                    }
+
+                }
+            }
+            if (IsEnSendPos&& valueRobots.Count()>0)
+            {
+                if (Global.Comunication.Protocol.IsConnected)
+                {
+                    int numAdd = Convert2.NumberFromString(AddPLCPos);
+                    String AddDefault = AddPLCPos.Replace(numAdd + "", "");
+                    String Add = AddDefault + numAdd;
+                    await Global.Comunication.Protocol.WriteResultInt(AddPLCCountPoint, valueRobots.Count());
+                    foreach (ValueRobot value in valueRobots)
+                    {
+
+                        int[] arr = new int[6];
+                        arr[0] = value.Val1;
+                        arr[1] = value.Val2;
+                        arr[2] = value.Val3;
+                        arr[3] = value.Val4;
+                        arr[4] = value.Val5;
+                        arr[5] = value.Val6;
+                        await Global.Comunication.Protocol.WriteResultIntArr(Add, arr);
+
+                        numAdd += 12;
+                        Add = AddDefault + numAdd;
+                    }
                 }
             }
         }
@@ -1579,7 +1633,10 @@ namespace BeeCore
           return IsRS;
           
         }
-        public void Complete()
+        [NonSerialized] 
+        private List<ValueRobot> valueRobots = new List<ValueRobot>();
+   
+        public async void Complete()
         {
             if (!Global.IsIntialPython)
             {
@@ -1685,6 +1742,7 @@ namespace BeeCore
 
                     foreach (var item in labelItems)
                     {
+                        item.IsOK = false;
                         if (item == null || !item.IsUse)
                             continue;
 
@@ -1856,8 +1914,13 @@ namespace BeeCore
                                     objs.ForEach(rs => rs.IsOK = false);
                                 }
                             }
-
+                            if (objs.Count(x => x.IsOK) >0)
+                                item.IsOK = true;
+                            else
+                               
+                                item.IsOK = false;
                             numOK += objs.Count(x => x.IsOK);
+
                         }
 
                         //--------------------------------
@@ -1869,7 +1932,7 @@ namespace BeeCore
                             foreach (var scan in item.ListInsideBox)
                             {
                                 bool boxOK = true;   // ✅ reset đúng chỗ
-
+                               
                                 //--------------------------------
                                 // GET OBJECT TRONG BOX
                                 //--------------------------------
@@ -1914,7 +1977,21 @@ namespace BeeCore
                                         IsInside(scan, x.rot))
                                     .OrderBy(x => x.rot._PosCenter.X)
                                     .ToList();
+                                 
+                                        var ObjOK = ResultItem.Where(x =>
+                                        x.rot != null &&
+                                        x.Name.Equals("OK", StringComparison.OrdinalIgnoreCase) &&
+                                        IsInside(scan, x.rot))
+                                    .OrderBy(x => x.rot._PosCenter.X)
+                                    .ToList();
+                                        if(ObjOK.Count()>0)
+                                        {
+                                            scan.NumInside = 0;
+                                            scan.IsOK = false;
+                                            continue;
 
+                                        }    
+                                    
                                 }    
                                     //--------------------------------
                                     // FILTER RIGHT
@@ -2143,11 +2220,27 @@ namespace BeeCore
                                 //    }    
                                 //}    
                                     numOK += objsValid.Count(x => x.IsOK);
+                                if (objsValid.Count(x => x.IsOK) > 0)
+                                    item.IsOK = true;
+                                else
+
+                                    item.IsOK = false;
                             }
                         }
                     }
                 }
-
+                valueRobots = new List<ValueRobot>();
+                foreach (ResultItem rs in ResultItem)
+                {
+                    if (rs.IsOK)
+                    {
+                        int X = (int)((rs.rot._PosCenter.X/Global.Config.Scale)*1.0);
+                        int Y = (int)((rs.rot._PosCenter.Y /Global.Config.Scale )* 1.0);
+                        int A = (int)(rs.rot._rectRotation);
+     
+                        valueRobots.Add(new ValueRobot(X,Y,A, Convert.ToInt32(rs.IsOK), 0,0));
+                    }
+                }
                
                     //--------------------------------
                     // RESULT
@@ -2174,6 +2267,7 @@ namespace BeeCore
                     new LogEntry(DateTime.Now, LeveLLog.ERROR, "Complete-" + Common.PropetyTools[IndexThread][Index].Name, ex.Message));
             }
             Common.PropetyTools[IndexThread][Index].ScoreResult = numOK;
+          await  SendResult();
         }
         //public void Complete()
         //{

@@ -1,4 +1,4 @@
-﻿using BeeCore;
+﻿
 using BeeGlobal;
 using System;
 using System.Collections.Generic;
@@ -15,15 +15,15 @@ namespace BeeInterface
         private CustomNumericEx _numExtColor;
 
         // ===== Data =====
-        private BindingList<LabelItem> _items = new BindingList<LabelItem>();
+        private BindingList<BeeCore.LabelItem> _items = new BindingList<BeeCore.LabelItem>();
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        public BindingList<LabelItem> Items
+        public BindingList<BeeCore.LabelItem> Items
         {
             get { return _items; }
             set
             {
                 if (_items != null) _items.ListChanged -= Items_ListChanged;
-                _items = value ?? new BindingList<LabelItem>();
+                _items = value ?? new BindingList<BeeCore.LabelItem>();
                 _items.ListChanged += Items_ListChanged;
                 RecomputeScale();
                 UpdateScroll();
@@ -38,13 +38,13 @@ namespace BeeInterface
             Invalidate();
         }
 
-        public event Action<int, LabelItem> ChooseColorBegin;
-        public event Action<int, LabelItem> ChooseColorEnd;
-        public event Action<int, LabelItem> ChooseAreaBegin;
-        public event Action<int, LabelItem> ChooseAreaEnd;
+        public event Action<int, BeeCore.LabelItem> ChooseColorBegin;
+        public event Action<int, BeeCore.LabelItem> ChooseColorEnd;
+        public event Action<int, BeeCore.LabelItem> ChooseAreaBegin;
+        public event Action<int, BeeCore.LabelItem> ChooseAreaEnd;
    
         public event Action<int> ExternColorCharge;
-        private void DrawMultiColorButton(Graphics g, Rectangle rect, LabelItem it)
+        private void DrawMultiColorButton(Graphics g, Rectangle rect, BeeCore.LabelItem it)
         {
             using (Pen p = new Pen(Color.Gray))
                 g.DrawRectangle(p, rect);
@@ -308,7 +308,7 @@ namespace BeeInterface
             headerRect = new Rectangle(_padX, yTop + 2, totalWidth - _padX * 2, _nameH - 4);
 
             int btnW = (int)(100 * _scale);
-            LabelItem it = _items[itemIndex];
+            BeeCore.LabelItem it = _items[itemIndex];
 
             showButton = it.IsUse && (_chooseActiveIndex < 0 || _chooseActiveIndex == itemIndex);
 
@@ -348,7 +348,7 @@ namespace BeeInterface
                 TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
         }
 
-        private void DrawUseButton(Graphics g, int itemIndex, int yTop, LabelItem it, int totalWidth)
+        private void DrawUseButton(Graphics g, int itemIndex, int yTop, BeeCore.LabelItem it, int totalWidth)
         {
             Rectangle headerRect, nameRect, btnRect;
             bool showButton;
@@ -392,7 +392,7 @@ namespace BeeInterface
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
 
-        private void DrawLine(Graphics g, int itemIndex, int lineIndex, int baseY, string label, LabelItem it,
+        private void DrawLine(Graphics g, int itemIndex, int lineIndex, int baseY, string label, BeeCore.LabelItem it,
             bool flag, int value, Segment flagSeg, Segment valSeg, int totalWidth)
         {
             int lineY = baseY + _padY + lineIndex * _lineH;
@@ -663,7 +663,7 @@ namespace BeeInterface
             if (_chooseActiveIndex >= 0 && _chooseActiveIndex != idx && seg != Segment.UseToggle)
                 return;
 
-            LabelItem it = _items[idx];
+            BeeCore.LabelItem it = _items[idx];
 
             if (seg == Segment.ChooseAreaLimit)
             {
@@ -730,7 +730,7 @@ namespace BeeInterface
                 return;
             }
 
-            LabelItem it = _items[idx];
+            BeeCore.LabelItem it = _items[idx];
 
             if (!it.IsUse) return;
 
@@ -946,7 +946,7 @@ namespace BeeInterface
                 int idx = _editing.Item1;
                 Segment seg = _editing.Item2;
                 if (idx < 0 || idx >= _items.Count) return;
-                LabelItem it = _items[idx];
+                BeeCore.LabelItem it = _items[idx];
 
                 int iv = (int)Math.Round(v);
                 if (seg == Segment.ValueArea && it.IsUse && it.IsArea) it.ValueArea = iv;

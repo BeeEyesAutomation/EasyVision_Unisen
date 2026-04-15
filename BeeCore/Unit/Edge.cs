@@ -83,6 +83,7 @@ namespace BeeCore
         public int SizeClearsmall = 1;
         public int SizeClearBig = 1;
         public int SizeClose = 1;
+        public int AngleRange { set; get; }
         public int SizeOpen = 1;
         public void Default()
         {
@@ -118,7 +119,7 @@ namespace BeeCore
         }
         [NonSerialized]
         private CropPlus CropPlus = new CropPlus();
-
+        public LineDirScan LineDirScan { set; get; }
 
         public float AspectLen=0.6f;
 
@@ -145,20 +146,9 @@ namespace BeeCore
                         break;
                     case MethordEdge.StrongEdges:
                         matProcess = Filters.GetStrongEdgesStable(matCrop);
-                        //Mat matClear  = Filters.SuppressHighlightOnly(matCrop);
-                        //Cv2.ImWrite("process.png", matClear);
-                     //   Cv2.Threshold(matCrop, matMark, ThresholdBinary,255, ThresholdTypes.Binary);
-                     // //  matMark = Filters.ClearNoise(matMark, SizeClearBig);
-                       
-                     //   Mat kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(11, 11));
-                     //   Cv2.Dilate(matMark, matMark, kernel, iterations: 1);
-                     // //  Cv2.ImWrite("Dilate.png", matMark);
-                     //   //  matMark = Filters.ErodeDilate(matBinary, MorphTypes.Open, new Size(11, 11));
-
-                     //   Cv2.BitwiseNot(matMark, matMark);
-                     //Mat Edge= Filters.GetStrongEdgesStable(matCrop);
-                     //   Cv2.BitwiseAnd(Edge, matMark, matProcess);
-                      //  Cv2.ImWrite("AND.png", matMark);
+                        break;
+                    case MethordEdge.Stable:
+                        matProcess = Filters.GetStrongEdgesStable(matCrop);
                         break;
                     case MethordEdge.Binary:
                         matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
@@ -177,17 +167,14 @@ namespace BeeCore
                 //if (IsClearNoiseBig)
                 //    matProcess = Filters.ClearNoiseBig(matProcess, SizeClearBig*100);
 
-                LineDirectionMode lineDirectionMode = LineDirectionMode.Vertical;
-              
+             
                 Line2DCli =  RansacLine.FindBestLine(
                     matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
                     iterations: RansacIterations,
                     threshold: (float)RansacThreshold,
                     maxPoints: 120000,
                     seed: Index,
-                    mmPerPixel: 1/Scale, AspectLen,(BeeCpp.LineDirectionMode) ((int)lineDirectionMode),LineScanMode.LeftToRight,0,40
-
-
+                    mmPerPixel: 1/Scale, AspectLen, (LineDirectionMode)((int)LineOrientation), (BeeCpp.LineScanMode)((int)LineDirScan),0, AngleRange
                 );
             
                 PointF p1 = new PointF(Line2DCli.X1, Line2DCli.Y1);
@@ -315,12 +302,12 @@ namespace BeeCore
                 MinInliers = Line2DCli.Inliers;
                 WidthTemp = WidthResult;
             }
-            Common.PropetyTools[IndexThread][Index].ScoreResult = WidthResult;// (int)((Math.Abs(WidthResult - WidthTemp) / (WidthTemp * 1.0))*100);
+            Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(Math.Abs(WidthResult - WidthTemp));
             if (Line2DCli.Found==false)
             {
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
             }
-            else if (Common.PropetyTools[IndexThread][Index].ScoreResult >= Common.PropetyTools[IndexThread][Index].Score)
+            else if (Common.PropetyTools[IndexThread][Index].ScoreResult <= Common.PropetyTools[IndexThread][Index].Score)
             {
                 Common.PropetyTools[IndexThread][Index].Results = Results.OK;
                 //if (!Global.IsRun)

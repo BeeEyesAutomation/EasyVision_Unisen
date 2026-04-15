@@ -65,6 +65,7 @@ namespace BeeInterface
             try
             {if(Propety.rotCrop!=null)
                 Propety.rotCrop.IsVisible =! Propety.IsLine;
+
                 EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea , Propety.rotCrop, Propety.rotMask, Propety.rotLimit };
                 EditRectRot1.RotateCurentChanged -= EditRectRot_RotateCurentChanged;
                 EditRectRot1.RotateCurentChanged += EditRectRot_RotateCurentChanged;
@@ -80,6 +81,13 @@ namespace BeeInterface
                 EditRectRot1.AddRotEvent += EditRectRot1_AddRotEvent;
                 Global.ChooseRotChage -= Global_ChooseRotChage1;
                 Global.ChooseRotChage += Global_ChooseRotChage1;
+                btnEnableResult.IsCLick = Propety.IsSendResult ;
+                btnEnableResult.Text = Propety.IsSendResult == true ? "ON" : "OFF";
+                btnEnSendPoint.Text = Propety.IsEnSendPos == true ? "ON" : "OFF";
+                txtAddCount.Text = Propety.AddPLCCountPoint;
+                txtAddStartPoints.Text = Propety.AddPLCPos;
+                btnEnSendPoint.IsCLick= Propety.IsEnSendPos ;
+              
                 this.dashboardLabel.ChooseColorBegin -= new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseColorBegin);
                 this.dashboardLabel.ChooseColorEnd -= new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseColorEnd);
                 this.dashboardLabel.ChooseAreaBegin -= new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseAreaBegin);
@@ -92,6 +100,7 @@ namespace BeeInterface
                 this.dashboardLabel.ChooseAreaEnd += new System.Action<int, BeeCore.LabelItem>(this.dashboardLabel_ChooseAreaEnd);
                 this.dashboardLabel.ExternColorCharge += new System.Action<int>(this.dashboardLabel_ExternColorCharge);
                 EditRectRot1.IsHide = false;
+                txtAddPLC.Text = Propety.AddPLC;
                 this.VisibleChanged += ToolYolo_VisibleChanged;
                 btnCLAll.IsCLick = Propety.IsColorAllObjLabel;
                 btnClOne.IsCLick=!Propety.IsColorAllObjLabel;
@@ -105,6 +114,8 @@ namespace BeeInterface
                 btnCropMask.IsCLick = Propety.IsCropSingle;
                 if (Propety.listModels == null) Propety.listModels = new List<string>();
                 Propety.listModels = Propety.listModels.Distinct().ToList();
+                btnBits.IsCLick = Propety.TypeSendPLC == TypeSendPLC.Bits ? true : false;
+                btnString.IsCLick=Propety.TypeSendPLC==TypeSendPLC.String?true : false;
                 Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
                 lbLen.Text = Propety.LenTemp.ToString();
                 laySetLine.Visible = Propety.IsLine;
@@ -1880,8 +1891,6 @@ namespace BeeInterface
                 BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = Cv2.ImRead(openFile.FileName);
               
               Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
-
-
                 strImgName =Path.GetFileNameWithoutExtension( openFile.FileName);
             }
 
@@ -1903,7 +1912,7 @@ namespace BeeInterface
 
         private void btnEnable_Click(object sender, EventArgs e)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].IsSendResult = btnEnable.IsCLick;
+           Propety.IsSendResult = btnEnableResult.IsCLick;
 
         }
 
@@ -1914,12 +1923,15 @@ namespace BeeInterface
 
         private void btnBits_Click(object sender, EventArgs e)
         {
+            Propety.TypeSendPLC = TypeSendPLC.Bits;
+
            // Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.Bits;
         }
 
         private void btnString_Click(object sender, EventArgs e)
         {
-           // Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.String;
+            Propety.TypeSendPLC = TypeSendPLC.String;
+            // Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.String;
         }
 
         private void btnMergeBox_Click(object sender, EventArgs e)
@@ -2588,6 +2600,29 @@ namespace BeeInterface
                 return;
             Propety.SetListTemp();
 
+        }
+
+        private void btnEnSendPoint_Click(object sender, EventArgs e)
+        {
+            Propety.IsEnSendPos = btnEnSendPoint.IsCLick;
+            btnEnSendPoint.Text = Propety.IsEnSendPos == true ? "ON" : "OFF";
+        }
+
+        private void txtAddCount_TextChanged(object sender, EventArgs e)
+        {
+            Propety.AddPLCCountPoint = txtAddCount.Text.Trim();
+        }
+
+        private void txtAddStartPoints_TextChanged(object sender, EventArgs e)
+        {
+            Propety.AddPLCPos = txtAddStartPoints.Text.Trim();
+        }
+
+        private void btnEnable_Click_1(object sender, EventArgs e)
+        {
+            Propety.IsSendResult = btnEnableResult.IsCLick;
+            btnEnableResult.Text = Propety.IsSendResult == true ? "ON" : "OFF";
+           
         }
     }
 }

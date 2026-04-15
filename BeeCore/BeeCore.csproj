@@ -274,6 +274,7 @@
     <Compile Include="Algorithm\RansacFitLine.cs" />
     <Compile Include="BitmapExtensions.cs" />
     <Compile Include="Checking.cs" />
+    <Compile Include="Converts.cs" />
     <Compile Include="Core\HelpMouseView.cs" />
     <Compile Include="Core\HsvConvert.cs" />
     <Compile Include="Core\RGB.cs" />
@@ -302,6 +303,7 @@
     <Compile Include="Func\NativeRCNN.cs" />
     <Compile Include="Func\NativeYolo.cs" />
     <Compile Include="Func\PolyOffset.cs" />
+    <Compile Include="Func\RectRotateGapChecker.cs" />
     <Compile Include="Func\ResultFilter.cs" />
     <Compile Include="Func\ResultItem.cs" />
     <Compile Include="Func\ResultItemHelper.cs" />
@@ -336,6 +338,7 @@
     <Compile Include="Unit\OKNG.cs" />
     <Compile Include="Unit\MeasureCorner.cs" />
     <Compile Include="Unit\PaperEnhance.cs" />
+    <Compile Include="Unit\CheckMissing.cs" />
     <Compile Include="Unit\PitchGdiPainter.cs" />
     <Compile Include="Unit\VisualMatch.cs" />
     <Compile Include="Unit\Pitch.cs" />
@@ -385,6 +388,7 @@
     <Compile Include="Unit\CraftOCR.cs" />
     <Compile Include="Unit\Counter.cs" />
     <Compile Include="Unit\Yolo.cs" />
+    <Compile Include="ValueRobot.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

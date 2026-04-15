@@ -607,11 +607,11 @@ namespace BeeUi
         }
       
         public async void DesTroy()
-        { 
-            
-            
-            
-            clock.Stop();
+        {
+
+
+            if (Global.Config.IsEnClock)
+                clock.Stop();
         SaveData.Config(Global.Config);
             View.tmContinuous.Enabled = false;
             if(Global.LogsDashboard!=null)
@@ -810,12 +810,15 @@ namespace BeeUi
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            clock.Width = 200;
-            clock.Dock = DockStyle.Left;
-            pTop.Controls.Add(clock);
-            clock.BackColor = pTop.BackColor;
-            clock.BringToFront();
-            clock.Start();
+            if (Global.Config.IsEnClock)
+            {
+                clock.Width = 200;
+                clock.Dock = DockStyle.Left;
+                pTop.Controls.Add(clock);
+                clock.BackColor = pTop.BackColor;
+                clock.BringToFront();
+                clock.Start();
+            }
         }
 
 

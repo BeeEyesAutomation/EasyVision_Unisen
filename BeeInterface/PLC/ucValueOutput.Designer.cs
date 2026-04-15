@@ -1,6 +1,6 @@
 ﻿namespace BeeInterface.PLC
 {
-    partial class ucBitInput
+    partial class ucValueOutput
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,33 +29,66 @@
         private void InitializeComponent()
         {
             this.layOut = new System.Windows.Forms.TableLayoutPanel();
+            this.lbName = new System.Windows.Forms.Label();
+            this.Bit = new System.Windows.Forms.ComboBox();
             this.Blink = new BeeInterface.RJButton();
             this.Type = new System.Windows.Forms.ComboBox();
-            this.lbName = new System.Windows.Forms.Label();
             this.Value = new BeeInterface.RJButton();
+            this.txtAdd = new BeeInterface.TextBoxAuto();
             this.layOut.SuspendLayout();
             this.SuspendLayout();
             // 
             // layOut
             // 
-            this.layOut.AutoScroll = true;
             this.layOut.BackColor = System.Drawing.SystemColors.Control;
-            this.layOut.ColumnCount = 4;
+            this.layOut.ColumnCount = 6;
+            this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65F));
             this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.28326F));
+            this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40.67265F));
-            this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.0441F));
-            this.layOut.Controls.Add(this.Blink, 3, 0);
-            this.layOut.Controls.Add(this.Type, 1, 0);
+            this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.04409F));
             this.layOut.Controls.Add(this.lbName, 0, 0);
-            this.layOut.Controls.Add(this.Value, 2, 0);
+            this.layOut.Controls.Add(this.Bit, 1, 0);
+            this.layOut.Controls.Add(this.Blink, 5, 0);
+            this.layOut.Controls.Add(this.Type, 2, 0);
+            this.layOut.Controls.Add(this.Value, 4, 0);
+            this.layOut.Controls.Add(this.txtAdd, 3, 0);
             this.layOut.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layOut.Location = new System.Drawing.Point(0, 0);
             this.layOut.Name = "layOut";
             this.layOut.RowCount = 1;
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.Size = new System.Drawing.Size(460, 46);
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.layOut.Size = new System.Drawing.Size(460, 43);
             this.layOut.TabIndex = 57;
+            // 
+            // lbName
+            // 
+            this.lbName.AutoSize = true;
+            this.lbName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbName.Location = new System.Drawing.Point(3, 0);
+            this.lbName.Name = "lbName";
+            this.lbName.Size = new System.Drawing.Size(50, 43);
+            this.lbName.TabIndex = 60;
+            this.lbName.Text = "Bit 00";
+            this.lbName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // Bit
+            // 
+            this.Bit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Bit.DropDownHeight = 140;
+            this.Bit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Bit.Enabled = false;
+            this.Bit.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Bit.ForeColor = System.Drawing.Color.Blue;
+            this.Bit.FormattingEnabled = true;
+            this.Bit.IntegralHeight = false;
+            this.Bit.Location = new System.Drawing.Point(59, 3);
+            this.Bit.Name = "Bit";
+            this.Bit.Size = new System.Drawing.Size(59, 37);
+            this.Bit.TabIndex = 59;
+            this.Bit.SelectionChangeCommitted += new System.EventHandler(this.Bit_SelectionChangeCommitted);
             // 
             // Blink
             // 
@@ -80,9 +113,10 @@
             this.Blink.Corner = BeeGlobal.Corner.Both;
             this.Blink.DebounceResizeMs = 16;
             this.Blink.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Blink.Enabled = false;
             this.Blink.FlatAppearance.BorderSize = 0;
             this.Blink.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Blink.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60938F);
+            this.Blink.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.734375F);
             this.Blink.ForeColor = System.Drawing.Color.Black;
             this.Blink.Image = null;
             this.Blink.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -102,10 +136,10 @@
             this.Blink.IsRect = false;
             this.Blink.IsTouch = false;
             this.Blink.IsUnGroup = true;
-            this.Blink.Location = new System.Drawing.Point(375, 3);
+            this.Blink.Location = new System.Drawing.Point(414, 3);
             this.Blink.Multiline = false;
             this.Blink.Name = "Blink";
-            this.Blink.Size = new System.Drawing.Size(82, 40);
+            this.Blink.Size = new System.Drawing.Size(43, 37);
             this.Blink.TabIndex = 58;
             this.Blink.Text = "OFF";
             this.Blink.TextColor = System.Drawing.Color.Black;
@@ -117,30 +151,17 @@
             this.Type.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Type.DropDownHeight = 140;
             this.Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Type.DropDownWidth = 140;
             this.Type.Enabled = false;
             this.Type.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Type.ForeColor = System.Drawing.Color.Blue;
             this.Type.FormattingEnabled = true;
             this.Type.IntegralHeight = false;
-            this.Type.Location = new System.Drawing.Point(68, 3);
+            this.Type.Location = new System.Drawing.Point(124, 3);
             this.Type.Name = "Type";
-            this.Type.Size = new System.Drawing.Size(141, 37);
+            this.Type.Size = new System.Drawing.Size(76, 37);
             this.Type.TabIndex = 2;
             this.Type.DropDown += new System.EventHandler(this.Type_DropDown);
             this.Type.SelectionChangeCommitted += new System.EventHandler(this.Type_SelectionChangeCommitted);
-            // 
-            // lbName
-            // 
-            this.lbName.AutoSize = true;
-            this.lbName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbName.Location = new System.Drawing.Point(3, 0);
-            this.lbName.Name = "lbName";
-            this.lbName.Size = new System.Drawing.Size(59, 46);
-            this.lbName.TabIndex = 4;
-            this.lbName.Text = "Bit 00";
-            this.lbName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // Value
             // 
@@ -167,7 +188,7 @@
             this.Value.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Value.FlatAppearance.BorderSize = 0;
             this.Value.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Value.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60938F);
+            this.Value.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.14063F);
             this.Value.ForeColor = System.Drawing.Color.Black;
             this.Value.Image = null;
             this.Value.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -187,25 +208,34 @@
             this.Value.IsRect = false;
             this.Value.IsTouch = false;
             this.Value.IsUnGroup = true;
-            this.Value.Location = new System.Drawing.Point(215, 3);
+            this.Value.Location = new System.Drawing.Point(325, 3);
             this.Value.Multiline = false;
             this.Value.Name = "Value";
-            this.Value.Size = new System.Drawing.Size(154, 40);
+            this.Value.Size = new System.Drawing.Size(83, 37);
             this.Value.TabIndex = 26;
             this.Value.Text = "0";
             this.Value.TextColor = System.Drawing.Color.Black;
             this.Value.UseVisualStyleBackColor = false;
             this.Value.Click += new System.EventHandler(this.Value_Click);
             // 
-            // ucBitInput
+            // txtAdd
+            // 
+            this.txtAdd.AutoFont = true;
+            this.txtAdd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.txtAdd.Location = new System.Drawing.Point(206, 3);
+            this.txtAdd.Name = "txtAdd";
+            this.txtAdd.Size = new System.Drawing.Size(113, 37);
+            this.txtAdd.TabIndex = 61;
+            // 
+            // ucValueOutput
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.layOut);
             this.DoubleBuffered = true;
-            this.Name = "ucBitInput";
-            this.Size = new System.Drawing.Size(460, 46);
-            this.Load += new System.EventHandler(this.ucBitInput_Load);
+            this.Name = "ucValueOutput";
+            this.Size = new System.Drawing.Size(460, 43);
             this.layOut.ResumeLayout(false);
             this.layOut.PerformLayout();
             this.ResumeLayout(false);
@@ -215,9 +245,11 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel layOut;
-        private System.Windows.Forms.Label lbName;
         private RJButton Value;
         public RJButton Blink;
         public System.Windows.Forms.ComboBox Type;
+        public System.Windows.Forms.ComboBox Bit;
+        private System.Windows.Forms.Label lbName;
+        private TextBoxAuto txtAdd;
     }
 }

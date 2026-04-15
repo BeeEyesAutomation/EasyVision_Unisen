@@ -65,7 +65,7 @@ namespace BeeCore
         [NonSerialized]
         public Mat matTemp;
         [NonSerialized]
-        public Pattern Pattern;
+        public Pattern2 Pattern;
              public Mat LearnPattern(Mat raw, bool IsNoCrop)
         {
 
@@ -81,7 +81,7 @@ namespace BeeCore
                 else
                     mat = img;
                 Pattern.SetImgeSampleNoCrop(mat.Data, mat.Width, mat.Height, (int)mat.Step(), mat.Channels());
-                Pattern.LearnPattern();
+                Pattern.LearnPatternStable();
                 return mat;
 
         
@@ -298,7 +298,7 @@ namespace BeeCore
           
             if (Pattern == null)
             {
-                Pattern = new BeeCpp.Pattern();
+                Pattern = new BeeCpp.Pattern2();
 
             }
             if (bmRaw != null)

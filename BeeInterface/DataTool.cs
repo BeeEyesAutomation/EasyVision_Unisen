@@ -302,72 +302,117 @@ namespace BeeInterface
                
                 case TypeTool.Color_Area:
                     control = new ToolColorArea();
-                    control.Propety = new ColorArea();
+                    if (IsNew)
+                        control.Propety = new ColorArea();
                     break;
                 case TypeTool.Pattern:
                     control = new ToolPattern();
+                    if(IsNew)
+                    control.Propety = new Patterns();
                     break;
                 case TypeTool.Position_Adjustment:
                     control = new ToolPosition_Adjustment();
+                    if (IsNew)
+                        control.Propety = new PositionAdj();
                     break;
               
                 case TypeTool.MatchingShape:
                     control = new ToolMatchingShape();
+                    if (IsNew)
+                        control.Propety = new MatchingShape();
                     break;
                 case TypeTool.Learning:
                     control = new ToolYolo();
+                    if (IsNew)
+                        control.Propety = new Yolo();
                     break;
                 case TypeTool.OCR:
                     control = new ToolOCR(IsNew);
+                    if (IsNew)
+                        control.Propety = new OCR();
                     break;
                 case TypeTool.BarCode:
                     control = new ToolBarcode();
+                    control.Propety = new Barcode();
                     break;
                
                 case TypeTool.Measure:
                     control = new ToolMeasure();
+                    if (IsNew)
+                        control.Propety = new Measure();
                     break;
                 case TypeTool.Circle:
                     control = new ToolCircle();
+                    if (IsNew)
+                        control.Propety = new Circle();
                     break;
                 case TypeTool.Width:
                     control = new ToolWidth();
+                    if (IsNew)
+                        control.Propety = new Width();
                     break;
                 case TypeTool.OKNG:
                     control = new ToolOKNG();
+                    if (IsNew)
+                        control.Propety = new OKNG();
                     break;
                 case TypeTool.Crop:
                     control = new ToolCrop();
+                    if (IsNew)
+                        control.Propety = new Crop();
                     break;
                 case TypeTool.Corner:
                     control = new ToolCorner();
+                    control.Propety = new Corner();
                     break;
                 case TypeTool.VisualMatch:
                     control = new ToolVisualMatch();
+                    if (IsNew)
+                        control.Propety = new VisualMatch();
                     break;
                 case TypeTool.Pitch:
                     control = new ToolPitch();
+                    if (IsNew)
+                        control.Propety = new Pitch();
                     break;
                 case TypeTool.EdgePixel:
                     control = new ToolEdgePixel();
+                    control.Propety = new EdgePixel();
                     break;
                 case TypeTool.Edge:
                     control = new ToolEdge();
+                    if (IsNew)
+                        control.Propety = new Edge();
                     break;
                 case TypeTool.CraftOCR:
                     control = new ToolCraftOCR();
+                    if (IsNew)
+                        control.Propety = new CraftOCR();
                     break;
                 case TypeTool.Intersect:
                     control = new ToolIntersect();
+                    if (IsNew)
+                        control.Propety = new Intersect();
                     break;
                 case TypeTool.MultiPattern:
                     control = new ToolMultiPattern();
+                    if (IsNew)
+                        control.Propety = new MultiPattern();
                     break;
                 case TypeTool.AutoTrig:
                     control = new ToolAutoTrig();
+                    if (IsNew)
+                        control.Propety = new AutoTrig();
                     break;
                 case TypeTool.MultiLearning:
                     control = new ToolMultiOnnx();
+                    if (IsNew)
+                        control.Propety = new MultiOnnx();
+                    break;
+                case TypeTool.CheckMissing:
+                    control = new ToolCheckMissing();
+                    if (IsNew)
+                        control.Propety = new CheckMissing();
                     break;
                 default:
                     return null;

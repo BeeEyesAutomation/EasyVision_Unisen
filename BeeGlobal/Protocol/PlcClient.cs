@@ -580,6 +580,58 @@ namespace PlcLib
             }, "WriteFloat");
         }
         public void WriteFloat(string startAddr, float value) => WriteFloatAsync(startAddr, value).GetAwaiter().GetResult();
+        public async Task WriteIntArrayAsync(string startAddr, int[] values)
+        {
+            if (values == null || values.Length == 0) return;
+
+            await WithRetryAsync(() =>
+            {
+                lock (_commLock)
+                {
+                    EnsureConnected();
+                    dynamic d = _plc;
+
+                    // One-shot write nếu driver hỗ trợ
+                    OperateResult w = d.Write(startAddr, values);
+
+                    if (!w.IsSuccess)
+                    {
+                        Global.LogsDashboard.AddLog(
+                            new LogEntry(DateTime.Now, LeveLLog.ERROR,
+                            "WriteIntArray_OneShot", $"{startAddr} (N={values.Length}): {w.Message}"));
+                    }
+                    else IsConnect = true;
+                }
+            }, "WriteIntArray_OneShot");
+        }
+
+        public void WriteIntArray(string startAddr, int[] values)
+            => WriteIntArrayAsync(startAddr, values).GetAwaiter().GetResult();
+
+        public async Task WriteIntAsync(string startAddr, int value)
+        {
+            await WithRetryAsync(() =>
+            {
+                lock (_commLock)
+                {
+                    EnsureConnected();
+                    dynamic d = _plc;
+
+                    OperateResult w = d.Write(startAddr, value);
+
+                    if (!w.IsSuccess)
+                    {
+                        Global.LogsDashboard.AddLog(
+                            new LogEntry(DateTime.Now, LeveLLog.ERROR,
+                            "WriteInt", $"{startAddr}: {w.Message}"));
+                    }
+                    else IsConnect = true;
+                }
+            }, "WriteInt");
+        }
+
+        public void WriteInt(string startAddr, int value)
+            => WriteIntAsync(startAddr, value).GetAwaiter().GetResult();
         public async Task WriteStringAsync(string startAddr, string text, int maxLength)
         {
             await WithRetryAsync(() =>

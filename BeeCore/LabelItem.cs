@@ -21,6 +21,7 @@ namespace BeeCore
         public bool IsWidth { get; set; }
         public bool IsHeight { get; set; }
         public bool IsCounter { get; set; }
+        public bool IsOK = false;
         //public bool IsLine { get; set; }
 
         public bool IsX { get; set; }//HAU
@@ -54,7 +55,7 @@ namespace BeeCore
         [field: NonSerialized]
         public List<int> ListIndexBoxBackup { get; set; } = new List<int>();
         [field: NonSerialized]
-        public List<BeeCpp.ColorArea> ListColorArea  { get; set; } = new List<BeeCpp.ColorArea>();
+        public List<BeeCpp.ColorArea> ListColorArea  { get; set; }
         public List<HSV> ListHSV { get; set; }
     }
 

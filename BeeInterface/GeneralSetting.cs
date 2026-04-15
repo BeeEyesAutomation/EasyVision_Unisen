@@ -1,6 +1,7 @@
 ﻿using BeeCore;
 using BeeCore.Funtion;
 using BeeGlobal;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,6 +31,8 @@ namespace BeeInterface
         //  BeeCore.Config ConfigPrev;
         private void IOSetting_Load(object sender, EventArgs e)
         {
+            btnEnClock.IsCLick = Global.Config.IsEnClock;
+            btnEnClock.Text = Global.Config.IsEnClock == true ? "ON" : "OFF";
             if (btnEnQuickST.IsCLick) btnEnQuickST.Text = "ON";
             else btnEnQuickST.Text = "OFF";
            btnEnChangeProg.IsCLick = Global.Config.IsEnChangeProg ;
@@ -130,7 +133,7 @@ namespace BeeInterface
                 Global.EditTool.lbBypass.Visible = false;
 
             }
-            btnResetReady.IsCLick = Global.Config.IsResetReady;
+         
             numRetryCam.Value = Global.Config.NumRetryCamera;
             numRetryPLC.Value = Global.Config.NumRetryPLC;
          
@@ -416,12 +419,6 @@ namespace BeeInterface
         {
             Global.Config.NumRetryPLC = (int)numRetryPLC.Value;
         }
-
-        private void btnResetReady_Click(object sender, EventArgs e)
-        {
-            Global.Config.IsResetReady = btnResetReady.IsCLick;
-        }
-
         private void btnShowLabel_Click(object sender, EventArgs e)
         {
             Global.ParaShow.IsShowLabel = btnShowLabel.IsCLick;
@@ -754,6 +751,12 @@ namespace BeeInterface
         private void rjButton8_Click(object sender, EventArgs e)
         {
             Global.Config.IsEnChangeProg=btnEnChangeProg.IsCLick;
+        }
+
+        private void btnEnClock_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsEnClock=btnEnClock.IsCLick;
+            btnEnClock.Text = Global.Config.IsEnClock == true ? "ON" : "OFF";
         }
     }
 }

@@ -34,14 +34,17 @@
             this.numDelay = new BeeInterface.CustomNumericEx();
             this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
             this.registerImg = new BeeInterface.RegisterImgDashboard();
+            this.btnSimCam = new BeeInterface.RJButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 116F));
+            this.tableLayoutPanel1.Controls.Add(this.btnSimCam, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnContinuous, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnCap, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.numDelay, 1, 1);
@@ -82,7 +85,7 @@
             this.btnContinuous.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnContinuous.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnContinuous.ForeColor = System.Drawing.Color.Black;
-            this.btnContinuous.Image = BeeInterface.Properties.Resources.Play_2;
+            this.btnContinuous.Image = global::BeeInterface.Properties.Resources.Play_2;
             this.btnContinuous.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnContinuous.ImageDisabled = null;
             this.btnContinuous.ImageHover = null;
@@ -100,11 +103,11 @@
             this.btnContinuous.IsRect = false;
             this.btnContinuous.IsTouch = false;
             this.btnContinuous.IsUnGroup = true;
-            this.btnContinuous.Location = new System.Drawing.Point(203, 5);
+            this.btnContinuous.Location = new System.Drawing.Point(145, 5);
             this.btnContinuous.Margin = new System.Windows.Forms.Padding(5);
             this.btnContinuous.Multiline = false;
             this.btnContinuous.Name = "btnContinuous";
-            this.btnContinuous.Size = new System.Drawing.Size(189, 28);
+            this.btnContinuous.Size = new System.Drawing.Size(130, 28);
             this.btnContinuous.TabIndex = 11;
             this.btnContinuous.Text = "Continuous";
             this.btnContinuous.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -140,7 +143,7 @@
             this.btnCap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCap.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnCap.ForeColor = System.Drawing.Color.Black;
-            this.btnCap.Image = BeeInterface.Properties.Resources.Natural_User_Interface_2;
+            this.btnCap.Image = global::BeeInterface.Properties.Resources.Natural_User_Interface_2;
             this.btnCap.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCap.ImageDisabled = null;
             this.btnCap.ImageHover = null;
@@ -162,7 +165,7 @@
             this.btnCap.Margin = new System.Windows.Forms.Padding(5);
             this.btnCap.Multiline = false;
             this.btnCap.Name = "btnCap";
-            this.btnCap.Size = new System.Drawing.Size(188, 28);
+            this.btnCap.Size = new System.Drawing.Size(130, 28);
             this.btnCap.TabIndex = 10;
             this.btnCap.Text = "Single Trigger";
             this.btnCap.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -187,14 +190,14 @@
             this.numDelay.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.numDelay.InnerPadding = new System.Windows.Forms.Padding(6);
             this.numDelay.KeyboardStep = 1F;
-            this.numDelay.Location = new System.Drawing.Point(201, 41);
+            this.numDelay.Location = new System.Drawing.Point(143, 41);
             this.numDelay.Max = 10000F;
             this.numDelay.MaxTextboxWidth = 0;
             this.numDelay.Min = 100F;
             this.numDelay.MinimumSize = new System.Drawing.Size(120, 32);
             this.numDelay.MinTextboxWidth = 16;
             this.numDelay.Name = "numDelay";
-            this.numDelay.Size = new System.Drawing.Size(193, 32);
+            this.numDelay.Size = new System.Drawing.Size(134, 32);
             this.numDelay.SnapToStep = true;
             this.numDelay.StartWithTextboxHidden = false;
             this.numDelay.Step = 1F;
@@ -213,11 +216,15 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.autoFontLabel1.AutoFont = true;
-            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.47559F);
+            this.autoFontLabel1.EnableHorizontalScroll = false;
+            this.autoFontLabel1.EnableVerticalScroll = false;
+            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.71484F);
             this.autoFontLabel1.Location = new System.Drawing.Point(5, 43);
             this.autoFontLabel1.Margin = new System.Windows.Forms.Padding(5);
+            this.autoFontLabel1.MaxFontSize = 200F;
+            this.autoFontLabel1.MinFontSize = 6F;
             this.autoFontLabel1.Name = "autoFontLabel1";
-            this.autoFontLabel1.Size = new System.Drawing.Size(188, 28);
+            this.autoFontLabel1.Size = new System.Drawing.Size(130, 28);
             this.autoFontLabel1.TabIndex = 13;
             this.autoFontLabel1.Text = "Delay Check";
             // 
@@ -237,6 +244,64 @@
             this.registerImg.TabIndex = 2;
             this.registerImg.UpdateGlobal = false;
             this.registerImg.SelectedItemChanged += new System.EventHandler<BeeInterface.RegisterImgSelectionChangedEventArgs>(this.registerImg_SelectedItemChanged);
+            // 
+            // btnSimCam
+            // 
+            this.btnSimCam.AutoFont = true;
+            this.btnSimCam.AutoFontHeightRatio = 0.75F;
+            this.btnSimCam.AutoFontMax = 100F;
+            this.btnSimCam.AutoFontMin = 8F;
+            this.btnSimCam.AutoFontWidthRatio = 0.92F;
+            this.btnSimCam.AutoImage = true;
+            this.btnSimCam.AutoImageMaxRatio = 0.75F;
+            this.btnSimCam.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnSimCam.AutoImageTint = true;
+            this.btnSimCam.BackColor = System.Drawing.Color.Silver;
+            this.btnSimCam.BackgroundColor = System.Drawing.Color.Silver;
+            this.btnSimCam.BorderColor = System.Drawing.Color.Silver;
+            this.btnSimCam.BorderRadius = 5;
+            this.btnSimCam.BorderSize = 1;
+            this.btnSimCam.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnSimCam.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnSimCam.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnSimCam.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnSimCam.Corner = BeeGlobal.Corner.Both;
+            this.btnSimCam.DebounceResizeMs = 16;
+            this.btnSimCam.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSimCam.FlatAppearance.BorderSize = 0;
+            this.btnSimCam.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSimCam.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.btnSimCam.ForeColor = System.Drawing.Color.Black;
+            this.btnSimCam.Image = global::BeeInterface.Properties.Resources.Play_2;
+            this.btnSimCam.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSimCam.ImageDisabled = null;
+            this.btnSimCam.ImageHover = null;
+            this.btnSimCam.ImageNormal = null;
+            this.btnSimCam.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnSimCam.ImagePressed = null;
+            this.btnSimCam.ImageTextSpacing = 0;
+            this.btnSimCam.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnSimCam.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnSimCam.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnSimCam.ImageTintOpacity = 0.5F;
+            this.btnSimCam.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnSimCam.IsCLick = false;
+            this.btnSimCam.IsNotChange = false;
+            this.btnSimCam.IsRect = false;
+            this.btnSimCam.IsTouch = false;
+            this.btnSimCam.IsUnGroup = true;
+            this.btnSimCam.Location = new System.Drawing.Point(285, 5);
+            this.btnSimCam.Margin = new System.Windows.Forms.Padding(5);
+            this.btnSimCam.Multiline = false;
+            this.btnSimCam.Name = "btnSimCam";
+            this.btnSimCam.Size = new System.Drawing.Size(107, 28);
+            this.btnSimCam.TabIndex = 14;
+            this.btnSimCam.Text = "Camera";
+            this.btnSimCam.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSimCam.TextColor = System.Drawing.Color.Black;
+            this.btnSimCam.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnSimCam.UseVisualStyleBackColor = false;
+            this.btnSimCam.Click += new System.EventHandler(this.rjButton1_Click);
             // 
             // SimImgs
             // 
@@ -263,5 +328,6 @@
         public BeeInterface.RJButton btnContinuous;
         private BeeInterface.CustomNumericEx numDelay;
         private BeeInterface.AutoFontLabel autoFontLabel1;
+        public BeeInterface.RJButton btnSimCam;
     }
 }

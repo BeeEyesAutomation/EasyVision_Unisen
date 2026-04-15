@@ -542,6 +542,7 @@ namespace BeeInterface
         }
         public void RefreshData()
         {
+            AdjScale.Value = Global.Config.Scale;
             btnIsAllTimeLight.IsCLick = Global.Comunication.Protocol.IsLightAllTime;
             btnIsBlinkLight.IsCLick =! Global.Comunication.Protocol.IsLightAllTime;
             btnSaveCamera.Visible = !Global.Config.IsSaveAllPara;
@@ -560,7 +561,7 @@ namespace BeeInterface
                 AdDelayTrig.Max = Global.Config.LimitDelayTrigger;
             }
             AdDelayOutput.IsInital = true;
-            Global.Comunication.Protocol.IsOnLight = false;
+        //    Global.Comunication.Protocol.IsOnLight = false;
            
             AdDelayOutput.Value = Global.Comunication.Protocol.DelayOutput;
             btnLight1.IsCLick = Global.Comunication.Protocol.IsLight1;
@@ -1241,6 +1242,16 @@ namespace BeeInterface
         private void btnIsAllTimeLight_Click(object sender, EventArgs e)
         {
             Global.Comunication.Protocol.IsLightAllTime = btnIsAllTimeLight.IsCLick;
+        }
+
+        private void AdjScale_ValueChanged(float obj)
+        {
+            Global.Config.Scale=(float)AdjScale.Value;
+        }
+
+        private void btnScale_Click(object sender, EventArgs e)
+        {
+            layScale.Visible = !btnScale.IsCLick;
         }
     }
 }

@@ -31,7 +31,7 @@ namespace BeeCore
     public class PositionAdj
     {
         [NonSerialized]
-        public Pattern Pattern=new Pattern();
+        public Pattern2 Pattern=new Pattern2();
         [NonSerialized]
         public int MaxThread = 1;
         public PositionAdj()
@@ -47,7 +47,7 @@ namespace BeeCore
             {
                 if (Pattern == null)
                 {
-                    Pattern = new Pattern();
+                    Pattern = new Pattern2();
 
                 }
                 if (rotArea == null) rotArea = new RectRotate();
@@ -63,12 +63,27 @@ namespace BeeCore
 
                 rotArea.Name = "Area Check";
                 rotArea.TypeCrop = TypeCrop.Area;
+                cfg = new Pattern2StableConfig(true);
+                cfg.AngleStartDeg = AngleLower;
+                cfg.AngleEndDeg = AngleUper;
+                cfg.AngleStepDeg = StepAngle;      // auto
+                cfg.MinAcceptScore = Common.PropetyTools[IndexThread][Index].Score / 100.0;
+                cfg.MaxPos = MaxObject;
+                cfg.MaxOverlap = OverLap;
+                cfg.BitwiseNot = ckBitwiseNot;
+                cfg.SubPixel = ckSubPixel;
+                cfg.EnableScaleSearch = false;
+                cfg.EnableAutoThreshold = true;
 
-              
+                cfg.DebugLog = false;
+                cfg.DebugLogPath = "E:\\pattern2_debug.txt";
+
+
                 if (bmRaw != null)
                 {
                     matTemp = bmRaw.ToMat();
                     LearnPattern(matTemp, true);
+                  
                 }
                //if(rotOriginAdj != null)
                // {
@@ -328,7 +343,7 @@ namespace BeeCore
         public Mat LearnPattern(Mat raw, bool IsNoCrop)
         {
 
-            using (Mat img = raw.Clone())
+            using (Mat img = raw)
             {
                 // Chuẩn hóa góc
                 //if (rotCrop._rectRotation < 0)
@@ -339,12 +354,9 @@ namespace BeeCore
                     Cv2.CvtColor(img, img, ColorConversionCodes.BGR2GRAY);
                 else if (img.Channels() == 4)
                     Cv2.CvtColor(img, img, ColorConversionCodes.BGRA2GRAY);
-
                 int w = 0, h = 0, s = 0, c = 0;
                 IntPtr intpr = IntPtr.Zero;
                 Mat mat = new Mat();
-              
-
                 try
                 {
                    
@@ -352,30 +364,34 @@ namespace BeeCore
 
                        var rrCli = Converts.ToCli(rotCrop); // như ở reply trước
                         RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
-                    //if (Pattern == null)
-                    //    Pattern = new Pattern();
-                    intpr = Pattern.SetImgeSample(img.Data, img.Width, img.Height, (int)img.Step(), img.Channels(), rrCli, rrMaskCli, IsNoCrop,
-                                out w, out h, out s, out c);
-
+                if(IsNoCrop)
+                    {
+                       Pattern.SetImgeSampleNoCrop(img.Data, img.Width, img.Height, (int)img.Step(), img.Channels());
+                    }
+                    else
+                    {
+                        intpr = Pattern.SetImgeSample(img.Data, img.Width, img.Height, (int)img.Step(), img.Channels(), rrCli, rrMaskCli, IsNoCrop,
+                             out w, out h, out s, out c);
                         if (intpr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
                             return mat; // trả Mat rỗng
-                    
-                        Pattern.LearnPattern();
-                        // Map kênh trả về
+                         // Map kênh trả về
                         MatType mt = c == 1 ? MatType.CV_8UC1
                                     : c == 3 ? MatType.CV_8UC3
                                     : MatType.CV_8UC4;
-
                         // Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
                         using (var m = new Mat(h, w, mt, intpr, s))
                         {
                             // CopyTo hoặc Clone đều OK; Clone gọn hơn:
                             mat = m.Clone();
                         }
+                    }
 
-                        // Giữ sống input đến sau khi native xong
-                        GC.KeepAlive(img);
-                    
+
+
+                    Pattern.LearnPatternStable(cfg);
+
+                    // Giữ sống input đến sau khi native xong
+                    GC.KeepAlive(img);
 
                 }
                 finally
@@ -461,6 +477,8 @@ namespace BeeCore
         private Line2DCli LineCliHorial, LineCliVertical;
         public PointF pInsert = new PointF();
         public float AspectLen = 0.6f;
+        [NonSerialized]
+        private Pattern2StableConfig cfg;
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             IsDone = false;
@@ -501,12 +519,25 @@ namespace BeeCore
                                 RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
                                 Pattern.SetImgeRaw(gray.Data, gray.Width, gray.Height, (int)gray.Step(), gray.Channels(), rrCli, rrMaskCli);
 
-                                var listRS = Pattern.Match(
-                                    IsHighSpeed, StepAngle,
-                                    AngleLower, AngleUper,
-                                    Common.PropetyTools[IndexThread][Index].Score / 100.0,
-                                    ckSIMD, ckBitwiseNot, ckSubPixel,
-                                    MaxObject, OverLap, false, -1);
+                                 cfg = new Pattern2StableConfig(true);
+                                cfg.AngleStartDeg = AngleLower;
+                                cfg.AngleEndDeg = AngleUper;
+                                cfg.AngleStepDeg = StepAngle;      // auto
+                                cfg.MinAcceptScore = Common.PropetyTools[IndexThread][Index].Score / 100.0;
+                                cfg.MaxPos = MaxObject;
+                                cfg.MaxOverlap = OverLap;
+                                cfg.BitwiseNot = ckBitwiseNot;
+                                cfg.SubPixel = ckSubPixel;
+                                cfg.EnableScaleSearch = false;
+                                cfg.EnableAutoThreshold = true;
+
+                                cfg.DebugLog = false;
+                                cfg.DebugLogPath = "E:\\pattern2_debug.txt";
+
+
+                                var listRS = Pattern.MatchStable(
+                                 cfg
+                                );
                                 float ScoreMax = 0;
                                 if (listRS.Count > 0)
                                 {
