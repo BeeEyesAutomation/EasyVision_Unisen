@@ -2331,6 +2331,7 @@ namespace BeeCore
                         }
                         else
                         {
+                          await  SetFullPara();
                             numTry = 0;
                             Global.CameraStatus = CameraStatus.Ready;
                             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Success"));
@@ -2339,6 +2340,7 @@ namespace BeeCore
                     }
                     else
                     {
+                        await SetFullPara();
                         numTry = 0;
                         Global.CameraStatus = CameraStatus.Ready;
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Success"));

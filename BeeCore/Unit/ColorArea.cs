@@ -122,7 +122,7 @@ namespace BeeCore
             SetColor();
             Common.PropetyTools[IndexThread][Index].StepValue = 1f;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
-            Common.PropetyTools[IndexThread][Index].MaxValue = 100;
+            Common.PropetyTools[IndexThread][Index].MaxValue = 2000;
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
         }
         [NonSerialized]
@@ -280,16 +280,12 @@ namespace BeeCore
         {
             if(IsCalib) 
                 PxTemp = pxRS;
-            Common.PropetyTools[IndexThread][Index].ScoreResult = (float)((pxRS / (PxTemp * 1.0)) * 100);
-            if (Common.PropetyTools[IndexThread][Index].ScoreResult > 100)
-                Common.PropetyTools[IndexThread][Index].ScoreResult = 100;
-            if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0)
-                Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
-            Common.PropetyTools[IndexThread][Index].ScoreResult = (float)Math.Round(Common.PropetyTools[IndexThread][Index].ScoreResult);
+            Common.PropetyTools[IndexThread][Index].ScoreResult =Math.Abs( pxRS-PxTemp)/100;
+           
             if (Common.PropetyTools[IndexThread][Index].ScoreResult > Common.PropetyTools[IndexThread][Index].Score)
-                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-            else
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+            else
+                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
         }
         public Graphics DrawResult(Graphics gc)
         {

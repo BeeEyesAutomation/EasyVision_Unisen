@@ -530,7 +530,9 @@ namespace BeeCore
                                 cfg.SubPixel = ckSubPixel;
                                 cfg.EnableScaleSearch = false;
                                 cfg.EnableAutoThreshold = true;
-
+                                cfg.EnableKeepFilter = true;
+                                cfg.EnableNms = true;
+                                cfg.EnableKeepFilter = true;
                                 cfg.DebugLog = false;
                                 cfg.DebugLogPath = "E:\\pattern2_debug.txt";
 
@@ -544,14 +546,25 @@ namespace BeeCore
                                     rectRotates.Add(new RectRotate());
                                     listScore.Add(0);
                                     listP_Center.Add(new System.Drawing.Point());
+                                    Rotaterectangle rectBest = new Rotaterectangle();
+                                    double ScoreBest = 0;
                                     foreach (Rotaterectangle rot in listRS)
+                                    {if(rot.Score> ScoreBest)
+                                        {
+                                            ScoreBest = rot.Score;
+                                            rectBest = rot;
+                                        }    
+                                       
+                                    }
+                                    if (rectBest.Width!=0)
                                     {
-                                        var pCenter = new System.Drawing.PointF((float)rot.Cx, (float)rot.Cy);
-                                        float angle = (float)rot.AngleDeg;
 
-                                        float width = (float)rot.Width;
-                                        float height = (float)rot.Height;
-                                        float score = (float)rot.Score;
+                                        var pCenter = new System.Drawing.PointF((float)rectBest.Cx, (float)rectBest.Cy);
+                                        float angle = (float)rectBest.AngleDeg;
+
+                                        float width = (float)rectBest.Width;
+                                        float height = (float)rectBest.Height;
+                                        float score = (float)rectBest.Score;
                                         if (score > ScoreMax)
                                         {
                                             ScoreMax = score;
@@ -561,13 +574,14 @@ namespace BeeCore
                                                 pCenter, angle, AnchorPoint.None);
 
                                             listScore[0] = Math.Round(score, 1);
-                                            list_AngleCenter.Add(rotArea._rectRotation +angle);
+                                            list_AngleCenter.Add(rotArea._rectRotation + angle);
                                             listP_Center[0] = new System.Drawing.Point(
                                                 (int)(rotArea._PosCenter.X - rotArea._rect.Width / 2f + pCenter.X),
                                                 (int)(rotArea._PosCenter.Y - rotArea._rect.Height / 2f + pCenter.Y));
                                         }
+
+                                        scoreSum = ScoreMax;
                                     }
-                                    scoreSum = ScoreMax;
                                 }
                                 break;
                             }

@@ -1189,18 +1189,23 @@ namespace BeeInterface
                
              
             }
-            switch (StepEdit)
+            else
             {
-                case StepSetModel.SetModel:
-                   
-
-                    break;
-                case StepSetModel.SetLabels:
-
-                   
-                    
-                    break;
+                btnAddModel.Enabled = true;
+                btnReload.Enabled = true;
             }    
+                switch (StepEdit)
+                {
+                    case StepSetModel.SetModel:
+
+
+                        break;
+                    case StepSetModel.SetLabels:
+
+
+
+                        break;
+                }    
            
         }
         bool IsReload = false;

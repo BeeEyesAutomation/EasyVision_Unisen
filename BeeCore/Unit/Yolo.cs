@@ -1932,15 +1932,15 @@ namespace BeeCore
                             foreach (var scan in item.ListInsideBox)
                             {
                                 bool boxOK = true;   // ✅ reset đúng chỗ
-                               
+
                                 //--------------------------------
                                 // GET OBJECT TRONG BOX
                                 //--------------------------------
                                 List<ResultItem> objs = new List<ResultItem>();
-                             
+                                bool IsNGBox = false;
                                 if (IsCropSingle)
                                 {
-                                    if(k>=ResultItem.Count)
+                                    if (k >= ResultItem.Count)
                                     {
                                         scan.IsOK = false;
                                         scan.NumInside = 0;
@@ -1950,10 +1950,10 @@ namespace BeeCore
                                     List<ResultItem> objTemp = ResultItem
     .Where(x => x.IndexScanBox == k)
     .ToList();
-                    //                List<ResultItem> objTemp = ResultItem
-                    //.Where(x => x.IndexScanBox == k
-                    //         && x.Name == item.Name)
-                    //.ToList();
+                                    //                List<ResultItem> objTemp = ResultItem
+                                    //.Where(x => x.IndexScanBox == k
+                                    //         && x.Name == item.Name)
+                                    //.ToList();
                                     objs = objTemp
                                  .Where(x =>
                                      x.rot != null &&
@@ -1961,14 +1961,15 @@ namespace BeeCore
                                      IsInside(scan, x.rot))
                                  .OrderBy(x => x.rot._PosCenter.X)
                                  .ToList();
-                                    if(objs.Count==0)
+                                    if (objs.Count == 0)
                                     {
                                         scan.IsOK = false;
                                         scan.NumInside = 0;
                                         k++;
                                         continue;
                                     }
-                                }else
+                                }
+                                else
                                 {
                                     objs = ResultItem
                                     .Where(x =>
@@ -1977,28 +1978,32 @@ namespace BeeCore
                                         IsInside(scan, x.rot))
                                     .OrderBy(x => x.rot._PosCenter.X)
                                     .ToList();
-                                 
-                                        var ObjOK = ResultItem.Where(x =>
-                                        x.rot != null &&
-                                        x.Name.Equals("OK", StringComparison.OrdinalIgnoreCase) &&
-                                        IsInside(scan, x.rot))
-                                    .OrderBy(x => x.rot._PosCenter.X)
-                                    .ToList();
-                                        if(ObjOK.Count()>0)
-                                        {
-                                            scan.NumInside = 0;
-                                            scan.IsOK = false;
-                                            continue;
 
-                                        }    
-                                    
-                                }    
-                                    //--------------------------------
-                                    // FILTER RIGHT
-                                    //--------------------------------
-                                    var objsValid = new List<ResultItem>();
-                                 
-                                    foreach (var r in objs)
+                                    var ObjOK = ResultItem.Where(x =>
+                                    x.rot != null &&
+                                    x.Name.Equals("OK", StringComparison.OrdinalIgnoreCase) &&
+                                    IsInside(scan, x.rot))
+                                .OrderBy(x => x.rot._PosCenter.X)
+                                .ToList();
+                                    if (ObjOK.Count() > 0)
+                                    {
+                                        scan.NumInside = 0;
+                                        scan.IsOK = false;
+                                        continue;
+
+                                    }
+                                    else
+                                    {
+                                        IsNGBox = true;
+                                    }
+
+                                }
+                                //--------------------------------
+                                // FILTER RIGHT
+                                //--------------------------------
+                                var objsValid = new List<ResultItem>();
+
+                                foreach (var r in objs)
                                 {
                                     bool pass = true;
 
@@ -2020,7 +2025,7 @@ namespace BeeCore
                                             objsValid.Add(r);
                                         }
                                     }
-                                       
+
                                 }
 
                                 scan.NumInside = objsValid.Count;
@@ -2042,13 +2047,13 @@ namespace BeeCore
                                 //}
                                 //else
                                 //{
-                                   
+
                                 //    if (objsValid.Count == 0)
                                 //    {
-                                       
+
                                 //        k++;
-                                       
-                                       
+
+
                                 //    }
 
                                 //}
@@ -2086,7 +2091,7 @@ namespace BeeCore
                                             if (LineVerital != null)
                                             {
                                                 PointF point = new PointF();
-                                               r.Distance = (float)Cal.DistanceLine2D_RectRotate(LineVerital, r.rot, out point);
+                                                r.Distance = (float)Cal.DistanceLine2D_RectRotate(LineVerital, r.rot, out point);
                                                 if (r.Distance <= item.ValueDistance)
                                                     r.IsOK = true;
                                                 else
@@ -2111,27 +2116,27 @@ namespace BeeCore
                                     if (item.IsMinColor)
                                     {
                                         int indexColor = k * item.ValueCounter + j;
-                                      
+
                                         //--------------------------------
                                         // COLOR (fix index đúng)
                                         //--------------------------------
-                                       
-                                    //if(item.ListColorArea == null)
-                                    //{
-                                    //    item.ListTempColor = new List<int>();
-                                    //    item.ListColorArea = null;
-                                    //    SetListTemp();
-                                    //}
-                                    //if (item.ListColorArea != null)
-                                    //    if (indexColor>= item.ListColorArea.Count)
-                                    //{
-                                    //    item.ListTempColor = new List<int>();
-                                    //    item.ListColorArea = null;
-                                    //    SetListTemp();
-                                    //}    
-                                  
-                                      
-                                   
+
+                                        //if(item.ListColorArea == null)
+                                        //{
+                                        //    item.ListTempColor = new List<int>();
+                                        //    item.ListColorArea = null;
+                                        //    SetListTemp();
+                                        //}
+                                        //if (item.ListColorArea != null)
+                                        //    if (indexColor>= item.ListColorArea.Count)
+                                        //{
+                                        //    item.ListTempColor = new List<int>();
+                                        //    item.ListColorArea = null;
+                                        //    SetListTemp();
+                                        //}    
+
+
+
                                         using (Mat crop = CropRoiView(matCropTemp, r.rot))
                                         {
                                             r.matProcess = new Mat();
@@ -2185,7 +2190,7 @@ namespace BeeCore
                                             //        boxOK = false;
                                             //    }
                                             //}
-                                         //   else ok = false;
+                                            //   else ok = false;
                                         }
                                     }
 
@@ -2193,10 +2198,10 @@ namespace BeeCore
                                     if (!ok)
                                         boxOK = false;
                                 }
-                                if(item.IsMinColor)
+                                if (item.IsMinColor)
                                 {
                                     double sumArea = objsValid.Sum(x => x.ValueColor);
-                                    boxOK = sumArea >= item.ValueMinColor ;
+                                    boxOK = sumArea >= item.ValueMinColor;
                                     objsValid.ForEach(rs => rs.IsOK = boxOK);
 
                                 }
@@ -2209,22 +2214,28 @@ namespace BeeCore
                                     }
                                 }
 
-                             
+                                if (IsNGBox)
+                                {
+                                    numOK += 1;
+                                    scan.IsOK = true;
+                                    item.IsOK = true;
+                                    k++;
+                                }
+
+                                else
+                                {
+
+                                
                                 scan.IsOK = boxOK;
                                 k++;
-                                //if (IsCropSingle)
-                                //{
-                                //    if(objsValid.Count>1)
-                                //    {
-                                //        numOK = 0;
-                                //    }    
-                                //}    
-                                    numOK += objsValid.Count(x => x.IsOK);
+                           
+                                numOK += objsValid.Count(x => x.IsOK);
                                 if (objsValid.Count(x => x.IsOK) > 0)
                                     item.IsOK = true;
                                 else
 
                                     item.IsOK = false;
+                            }
                             }
                         }
                     }

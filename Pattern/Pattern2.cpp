@@ -1810,7 +1810,7 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 		if (sb != nullptr)
 			sb->AppendLine(System::String::Format(CultureInfo::InvariantCulture, "coarseCount={0}", coarse->Count));
 
-		for each (Rotaterectangle rr in coarse)
+		for each(Rotaterectangle rr in coarse)
 		{
 			const int w = std::max(1, (int)std::round(rr.Width));
 			const int h = std::max(1, (int)std::round(rr.Height));

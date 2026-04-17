@@ -99,6 +99,7 @@ namespace BeeInterface
         {
             if (!this.Visible)
             {
+                Global.SetColorChange -= Global_SetColorChange;
                 EditRectRot1.IsHide = true;
                 EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             }
