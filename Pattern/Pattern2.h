@@ -376,7 +376,12 @@ namespace BeeCpp
 	public value struct Rotaterectangle {
 		double Cx, Cy, AngleDeg, Width, Height, Score;
 	};
-
+	public enum class Pattern2DifficultyLevel
+	{
+		Normal = 0, // giữ hành vi hiện tại
+		Easy = 1,   // dễ hơn
+		Hard = 2    // khó hơn
+	};
 
 	public value struct Pattern2StableConfig
 	{
@@ -407,7 +412,7 @@ namespace BeeCpp
 
 		// Coarse stage score for calling Match()
 		double RelaxedRawScore;      // 0..1
-
+		Pattern2DifficultyLevel Difficulty;
 		Pattern2StableConfig(bool init)
 		{
 			AngleStartDeg = -10.0;
@@ -431,7 +436,7 @@ namespace BeeCpp
 			ScaleMin = 0.95;
 			ScaleMax = 1.05;
 			ScaleStep = 0.02;
-
+			Difficulty = Pattern2DifficultyLevel::Normal;
 			RelaxedRawScore = 0.18;
 		}
 	};

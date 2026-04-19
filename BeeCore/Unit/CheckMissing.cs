@@ -533,6 +533,8 @@ namespace BeeCore
                             scoreSum += score;
                             if (angle < AngleLower || angle > AngleUper)
                                 continue;
+                            if (rot.Score < ScorePattern )
+                                continue;
                             rectRotates.Add(new RectRotate(
                                 new System.Drawing.RectangleF(-w / 2f, -h / 2f, w, h),
                                 pCenter, angle, AnchorPoint.None));

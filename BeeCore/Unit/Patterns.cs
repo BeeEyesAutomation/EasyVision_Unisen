@@ -4,6 +4,7 @@ using BeeCore.Funtion;
 using BeeCpp;
 using BeeGlobal;
 using CvPlus;
+using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using OpenCvSharp.Flann;
@@ -15,6 +16,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -22,6 +24,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 using static BeeCore.Cropper;
+using static LibUsbDotNet.Main.UsbTransferQueue;
 using Point = OpenCvSharp.Point;
 using Size = OpenCvSharp.Size;
 
@@ -49,7 +52,7 @@ namespace BeeCore
         public int MaxThread = 1;
         public bool IsIni = false;
         public int Index = -1;
-       
+        public SearchPattern SearchPattern = SearchPattern.BestObj;
         public RectRotate rotArea,rotCheck, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
         [NonSerialized]
@@ -76,7 +79,7 @@ namespace BeeCore
         public Mat matTemp;
         public List<Point> Postion=new List<Point>();
        private Mode _TypeMode=Mode.Pattern;
-        public List<double> listScore = new List<double>();
+
 
         public Mode TypeMode
         {
@@ -137,7 +140,7 @@ namespace BeeCore
                     foreach (System.Drawing.Point point in listP_Center)
                     {
                         String Address = sAdd + Add;
-                        float[] floats = new float[4] { point.X, point.Y, list_AngleCenter[i],(float) listScore[i] };
+                        float[] floats = new float[4] { point.X, point.Y, list_AngleCenter[i],0 };
                         await Global.Comunication.Protocol.WriteResultFloatArr(AddPLC, floats);
                         Add += 8;
                          i++;
@@ -405,13 +408,21 @@ namespace BeeCore
         public int NumOK { get => numOK; set => numOK = value; }
         public int DelayTrig { get => delayTrig; set => delayTrig = value; }
       
-        public void SetModel()
+        public void SetModel( bool IsCopy=false)
         {
 			if (Pattern == null)
 			{
 				Pattern = new BeeCpp.Pattern2();
 
 			}
+            if(IsCopy)
+            {
+                Pattern = new BeeCpp.Pattern2();
+                if (bmRaw != null)
+                    bmRaw = null;
+                matTemp = new Mat();
+
+            }
             if (bmRaw != null)
             {
 				matTemp = bmRaw.ToMat();
@@ -449,12 +460,24 @@ namespace BeeCore
         public ZeroPos ZeroPos=ZeroPos.Zero;
         public float Scale = 1;
         public bool IsLimitCouter = true;
+        public DifficultyPattern DifficultyPattern;
+        public bool EnableNms = true;
+        public bool EnableKeepFilter = false;
+        public bool EnableValidator = false;
+        public bool EnableScaleSearch = false;
+        public int ScalePattern = 0;
+        public int ScaleStep = 0;
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
+
+            float DeltaAngle = (rotCrop._rectRotation) - (rotArea._rectRotation);
+            AngleLower = DeltaAngle - Angle;
+           AngleUper = DeltaAngle + Angle;
             Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
+            Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
             // 5) Gom kết quả
             rectRotates = new List<RectRotate>();
-            listScore = new List<double>();
+          
             listP_Center = new List<System.Drawing.Point>();
             list_AngleCenter = new List<float>();
             using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
@@ -547,64 +570,104 @@ namespace BeeCore
                     cfg.MaxOverlap = OverLap;
                     cfg.BitwiseNot = ckBitwiseNot;
                     cfg.SubPixel = ckSubPixel;
+                    cfg.Difficulty = (Pattern2DifficultyLevel)(int)(DifficultyPattern);
                     // threshold cuối
                     //cfg.MinAcceptScore = 0.0; // <=0 => auto theo mẫu
 
                     // bật tắt các lớp lọc
-                    cfg.EnableValidator = true;
-                    cfg.EnableKeepFilter = true;
-                    cfg.EnableNms = true;
+                    cfg.EnableValidator = EnableValidator;
+                    cfg.EnableKeepFilter = EnableKeepFilter;
+                    cfg.EnableNms = EnableNms;
                     cfg.EnableAutoThreshold = true;
 
+                    float ScaleMin =(float) ((100 - ScalePattern)/100.0);
+                    float ScaleMax = (float)((100 +ScalePattern) / 100.0);
                     // scale mẫu
-                    cfg.EnableScaleSearch = false;
-                    cfg.DebugLog = true;
-                    cfg.ScaleMin = 0.90;
-                    cfg.ScaleMax = 1.10;
-                    cfg.ScaleStep = 0.1;
-                    cfg.DebugLogPath = "E:\\pattern2_debug.txt";
+                    cfg.EnableScaleSearch = EnableScaleSearch;
+                    cfg.DebugLog = false;
+                    cfg.ScaleMin = ScaleMin;
+                    cfg.ScaleMax = ScaleMax;
+                    cfg.ScaleStep = ScaleStep/100.0;
+                   // cfg.DebugLogPath = "E:\\pattern2_debug.txt";
                     var listRS = Pattern.MatchStable(
                      cfg
                     );
                     float scoreSum = 0f;
                     if (listRS != null)
-                    {
-                        foreach (Rotaterectangle rot in listRS)
+                        if (listRS.Count>0)
                         {
-                            float w = (float)rot.Width;
-                            float h = (float)rot.Height;
-                            var pCenter = new System.Drawing.PointF((float)rot.Cx, (float)rot.Cy);
-                            float angle = (float)rot.AngleDeg;
-                            float score = (float)rot.Score;
-                            scoreSum += score;
-                            if (angle < AngleLower || angle > AngleUper)
-                                continue;
-                            rectRotates.Add(new RectRotate(
-                                new System.Drawing.RectangleF(-w / 2f, -h / 2f, w, h),
-                                pCenter, angle, AnchorPoint.None));
+                        if(SearchPattern==SearchPattern.BestObj)
+                        {
+                            Rotaterectangle rotBest = listRS[0];
+                            foreach (Rotaterectangle rot in listRS)
+                            {
+                                if (rot.AngleDeg < AngleLower || rot.AngleDeg > AngleUper)
+                                    continue;
+                                if (rot.Score < Common.PropetyTools[IndexThread][Index].Score)
 
-                            listScore.Add(Math.Round(score, 1));
-                            int xCenter = (int)(rotArea._PosCenter.X - rotArea._rect.Width / 2f + pCenter.X);
-                            int yCenter = (int)(rotArea._PosCenter.Y - rotArea._rect.Height / 2f + pCenter.Y);
-                            float angleCenter = rotArea._rectRotation + angle;
-                            
-                            if (ZeroPos==ZeroPos.Zero)
-                            {
-                                list_AngleCenter.Add(angleCenter);
-                                listP_Center.Add(new System.Drawing.Point(
-                                 (int) (xCenter/Scale), (int)(yCenter/Scale)));
+                                    if (rot.Score > rotBest.Score)
+                                    {
+                                        rotBest = rot;
+                                    }
+                                continue;
                             }
-                            else
+                                if (rotBest.AngleDeg >= AngleLower && rotBest.AngleDeg <= AngleUper)
+
+                                    if (rotBest.Score >= Common.PropetyTools[IndexThread][Index].Score)
+                                    {
+                                        float w = (float)rotBest.Width;
+                                        float h = (float)rotBest.Height;
+                                        var pCenter = new System.Drawing.PointF((float)rotBest.Cx, (float)rotBest.Cy);
+                                        float angle = (float)rotBest.AngleDeg;
+                                        float score = (float)rotBest.Score;
+                                        rectRotates.Add(new RectRotate(
+                                           new System.Drawing.RectangleF(-w / 2f, -h / 2f, w, h),
+                                           pCenter, angle, AnchorPoint.None));
+                                        rectRotates[rectRotates.Count - 1].Score = score;
+                                    }
+                            }
+                        else
+                        {
+                            foreach (Rotaterectangle rot in listRS)
                             {
-                                //angleCenter = angleCenter - Global.rotOriginAdj._rectRotation;
-                                //xCenter = xCenter-(int) Global.rotOriginAdj._PosCenter.X;
-                                //yCenter = yCenter - (int)Global.rotOriginAdj._PosCenter.Y;
-                                //list_AngleCenter.Add(angleCenter);
-                                //listP_Center.Add(new System.Drawing.Point(
-                                // (int)(xCenter / Scale), (int)(yCenter / Scale)));
-                            }    
-                          
+                                float w = (float)rot.Width;
+                                float h = (float)rot.Height;
+                                var pCenter = new System.Drawing.PointF((float)rot.Cx, (float)rot.Cy);
+                                float angle = (float)rot.AngleDeg;
+                                float score = (float)rot.Score;
+                                scoreSum += score;
+                                if (angle < AngleLower || angle > AngleUper)
+                                    continue;
+                                if (score < Common.PropetyTools[IndexThread][Index].Score)
+                                    continue;
+                                rectRotates.Add(new RectRotate(
+                                    new System.Drawing.RectangleF(-w / 2f, -h / 2f, w, h),
+                                    pCenter, angle, AnchorPoint.None));
+                                    rectRotates[rectRotates.Count - 1].Score = score;
+                               // listScore.Add(Math.Round(score, 1));
+                                int xCenter = (int)(rotArea._PosCenter.X - rotArea._rect.Width / 2f + pCenter.X);
+                                int yCenter = (int)(rotArea._PosCenter.Y - rotArea._rect.Height / 2f + pCenter.Y);
+                                float angleCenter = rotArea._rectRotation + angle;
+
+                                if (ZeroPos == ZeroPos.Zero)
+                                {
+                                    list_AngleCenter.Add(angleCenter);
+                                    listP_Center.Add(new System.Drawing.Point(
+                                     (int)(xCenter / Scale), (int)(yCenter / Scale)));
+                                }
+                                else
+                                {
+                                    //angleCenter = angleCenter - Global.rotOriginAdj._rectRotation;
+                                    //xCenter = xCenter-(int) Global.rotOriginAdj._PosCenter.X;
+                                    //yCenter = yCenter - (int)Global.rotOriginAdj._PosCenter.Y;
+                                    //list_AngleCenter.Add(angleCenter);
+                                    //listP_Center.Add(new System.Drawing.Point(
+                                    // (int)(xCenter / Scale), (int)(yCenter / Scale)));
+                                }
+
+                            }
                         }
+                        
                     }
 
                     if (scoreSum != 0 && rectRotates.Count > 0)
@@ -718,7 +781,7 @@ namespace BeeCore
             if (Global.ParaShow.IsShowBox)
 				Draws.Box1Label(gc,rotA, nameTool, font, brushText, cl, Global.ParaShow.ThicknessLine);
 			gc.ResetTransform();
-			if (listScore == null) return gc;
+			
 			if (rectRotates.Count > 0)
 			{
                 // === Tính offset (như cũ) ===
@@ -759,7 +822,7 @@ namespace BeeCore
                         gc.DrawString(sPos, font, new SolidBrush(Global.ParaShow.ColorInfor), new PointF(5, 5));
 
                     }
-                    Draws.Box2Label(gc, rot._rect, i + "", Math.Round(listScore[i - 1], 1) +"%", font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
+                    Draws.Box2Label(gc, rot._rect, i + "", Math.Round(rot.Score, 1) +"%", font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
 
 
 					gc.ResetTransform();

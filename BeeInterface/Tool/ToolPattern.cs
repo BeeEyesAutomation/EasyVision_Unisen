@@ -46,9 +46,8 @@ namespace BeeInterface
             EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
             EditRectRot1.IsHide = false;
             this.VisibleChanged += ToolPattern_VisibleChanged;
-
-            //if (!workLoadModel.IsBusy)
-            //    workLoadModel.RunWorkerAsync();
+            btnBestObj.IsCLick = Propety.SearchPattern == SearchPattern.BestObj?true:false;
+            btnAllObj.IsCLick = Propety.SearchPattern == SearchPattern.AllObj ? true : false;
             if (Propety.bmRaw != null)
             {
                 imgTemp.Image = Propety.bmRaw;
@@ -63,6 +62,18 @@ namespace BeeInterface
             {
                 Propety.Angle = 1;
             }
+            btnHard.IsCLick=Propety.DifficultyPattern==DifficultyPattern.Hard?true:false;
+            btnNormal.IsCLick=Propety.DifficultyPattern==DifficultyPattern.Normal?true:false;
+            btnEasy.IsCLick=Propety.DifficultyPattern==DifficultyPattern.Easy?true:false;
+            btnEnScale.IsCLick= Propety.EnableScaleSearch  ;
+            btnEnScale.Text = Propety.EnableScaleSearch == true ? "ON" : "OFF";
+            numAdjScale.Enabled = Propety.EnableScaleSearch;
+            numAdjScale.Value = Propety.ScalePattern;
+            numAdjStepScale.Value = Propety.ScaleStep;
+            btnEnableKeepFilter.IsCLick = Propety.EnableKeepFilter;
+            btnEnableOverLap.IsCLick = Propety.EnableNms;
+            btnEnableValidator.IsCLick = Propety.EnableValidator;
+            btnEnScale.IsCLick = Propety.EnableScaleSearch;
             float angle = (Propety.rotCrop._rectRotation) - (Propety.rotArea._rectRotation);
             Propety.AngleLower = angle - Propety.Angle;
             Propety.AngleUper = angle + Propety.Angle;
@@ -91,10 +102,7 @@ namespace BeeInterface
                     btnMore.IsCLick = true;
                     break;
             }    
-            if (Propety.IsHighSpeed)
-                btnHighSpeed.IsCLick = true;
-            else
-                btnNormal.IsCLick = true;
+         
             AdjMorphology.Value = Propety.SizeClose;
             AdjOpen.Value = Propety.SizeOpen;
             AdjClearNoise.Value = Propety.SizeClearsmall;
@@ -284,7 +292,7 @@ namespace BeeInterface
 
         private void btnNormal_Click(object sender, EventArgs e)
         {
-            Propety.IsHighSpeed = false;
+          
         }
 
         private void btnHighSpeed_Click(object sender, EventArgs e)
@@ -759,6 +767,64 @@ namespace BeeInterface
         private void btn1_Click(object sender, EventArgs e)
         {
             EditRectRot1.Visible = !btn1.IsCLick;
+        }
+
+        private void btnBestObj_Click(object sender, EventArgs e)
+        {
+            Propety.SearchPattern = SearchPattern.BestObj;
+        }
+
+        private void btnAllObj_Click(object sender, EventArgs e)
+        {
+            Propety.SearchPattern = SearchPattern.AllObj;
+        }
+
+        private void btnEasy_Click(object sender, EventArgs e)
+        {
+            Propety.DifficultyPattern= DifficultyPattern.Easy;
+        }
+
+        private void btnNormal_Click_1(object sender, EventArgs e)
+        {
+            Propety.DifficultyPattern = DifficultyPattern.Normal;
+        }
+
+        private void btnHard_Click(object sender, EventArgs e)
+        {
+            Propety.DifficultyPattern = DifficultyPattern.Hard;
+        }
+
+        private void btnEnScale_Click(object sender, EventArgs e)
+        {
+            Propety.EnableScaleSearch = btnEnScale.IsCLick;
+            btnEnScale.Text = Propety.EnableScaleSearch == true ? "ON" : "OFF";
+            numAdjScale.Enabled = Propety.EnableScaleSearch;
+
+        }
+
+        private void numAdjScale_ValueChanged(float obj)
+        {
+            Propety.ScalePattern =(int) numAdjScale.Value;
+        }
+
+        private void numAdjStepScale_ValueChanged(float obj)
+        {
+            Propety.ScaleStep = (int)numAdjStepScale.Value;
+        }
+
+        private void btnEnableValidator_Click(object sender, EventArgs e)
+        {Propety.EnableValidator = btnEnableValidator.IsCLick;
+
+        }
+
+        private void btnEnableKeepFilter_Click(object sender, EventArgs e)
+        {
+            Propety.EnableKeepFilter = btnEnableKeepFilter.IsCLick;
+        }
+
+        private void btnEnableOverLap_Click(object sender, EventArgs e)
+        {
+            Propety.EnableNms=btnEnableOverLap.IsCLick;
         }
     }
 }

@@ -404,24 +404,6 @@ namespace BeeCore
             this.Name = Name;
             this.TypeTool = TypeTool;
             this.Propety2 = Propety;
-            //worker = new BackgroundWorker();
-            //worker.DoWork += (sender, e) =>
-            //{
-            //    StatusTool = StatusTool.Processing;
-            //    timer.Restart();
-            //    if (!Global.IsRun)
-            //        Propety.rotAreaAdjustment = Propety.rotArea;
-            //    Propety.DoWork(Propety.rotAreaAdjustment);
-            //};
-            //worker.RunWorkerCompleted += (sender, e) =>
-            //{
-            //    Propety.Complete();
-            //    if (!Global.IsRun)
-            //        Global.StatusDraw = StatusDraw.Check;
-            //    StatusTool = StatusTool.Done;
-            //    timer.Stop();
-            //    CycleTime = (int)timer.Elapsed.TotalMilliseconds;
-            //};
 
         }
       

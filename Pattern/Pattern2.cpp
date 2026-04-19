@@ -940,7 +940,126 @@ namespace
 
 		return scales;
 	}
+	struct DifficultyTune
+	{
+		double finalAdd;
+		double strongAdd;
 
+		double softIouMul;
+		double softRatioAdd;
+
+		double hardIouMul;
+		double hardRatioAdd;
+
+		double nmsOverlapMul;
+
+		double rescueBaseDelta;
+		double rescueFinalMargin;
+		double rescueIouMul;
+		double rescueRatioMul;
+	};
+
+	static DifficultyTune GetDifficultyTune(int difficulty)
+	{
+		DifficultyTune t{};
+
+		switch (difficulty)
+		{
+		case 1: // Easy
+			t.finalAdd = -0.02;
+			t.strongAdd = -0.01;
+
+			t.softIouMul = 0.90;
+			t.softRatioAdd = -0.03;
+
+			t.hardIouMul = 0.92;
+			t.hardRatioAdd = -0.03;
+
+			t.nmsOverlapMul = 1.20; // dễ hơn => cho overlap lớn hơn
+
+			t.rescueBaseDelta = 0.28;
+			t.rescueFinalMargin = 0.03;
+			t.rescueIouMul = 0.65;
+			t.rescueRatioMul = 0.50;
+			break;
+
+		case 2: // Hard
+			t.finalAdd = +0.04;
+			t.strongAdd = +0.03;
+
+			t.softIouMul = 1.25;
+			t.softRatioAdd = +0.05;
+
+			t.hardIouMul = 1.25;
+			t.hardRatioAdd = +0.06;
+
+			t.nmsOverlapMul = 0.75; // khó hơn => NMS chặt hơn
+
+			t.rescueBaseDelta = 0.18;
+			t.rescueFinalMargin = 0.08;
+			t.rescueIouMul = 0.85;
+			t.rescueRatioMul = 0.70;
+			break;
+
+		default: // Normal
+			t.finalAdd = 0.0;
+			t.strongAdd = 0.0;
+
+			t.softIouMul = 1.0;
+			t.softRatioAdd = 0.0;
+
+			t.hardIouMul = 1.0;
+			t.hardRatioAdd = 0.0;
+
+			t.nmsOverlapMul = 1.0;
+
+			t.rescueBaseDelta = 0.25;
+			t.rescueFinalMargin = 0.05;
+			t.rescueIouMul = 0.70;
+			t.rescueRatioMul = 0.55;
+			break;
+		}
+
+		return t;
+	}
+
+	static void ApplyDifficultyToScaleTemplate(
+		s_StableScaleTemplate& item,
+		int difficulty,
+		bool lockFinalThreshold)
+	{
+		const DifficultyTune t = GetDifficultyTune(difficulty);
+
+		// Nếu user set MinAcceptScore thủ công thì giữ nguyên thresholdFinal
+		if (!lockFinalThreshold)
+			item.thresholdFinal = Clamp01(item.thresholdFinal + t.finalAdd);
+
+		item.strongBase = Clamp01(item.strongBase + t.strongAdd);
+
+		item.softEdgeIou = Clamp01(item.softEdgeIou * t.softIouMul);
+		item.softEdgeRatio = Clamp01(item.softEdgeRatio + t.softRatioAdd);
+
+		item.hardEdgeIou = Clamp01(item.hardEdgeIou * t.hardIouMul);
+		item.hardEdgeRatio = Clamp01(item.hardEdgeRatio + t.hardRatioAdd);
+
+		// đảm bảo hard >= soft
+		if (item.hardEdgeIou < item.softEdgeIou)
+			item.hardEdgeIou = item.softEdgeIou;
+
+		if (item.hardEdgeRatio < item.softEdgeRatio)
+			item.hardEdgeRatio = item.softEdgeRatio;
+
+		// strongBase không nên thấp hơn final threshold
+		if (item.strongBase < item.thresholdFinal)
+			item.strongBase = std::min(0.98, std::max(item.strongBase, item.thresholdFinal));
+	}
+
+	static double GetEffectiveNmsOverlap(double baseOverlap, int difficulty)
+	{
+		const DifficultyTune t = GetDifficultyTune(difficulty);
+		const double v = baseOverlap * t.nmsOverlapMul;
+		return std::max(0.02, std::min(0.90, v));
+	}
 	static void BuildStableTemplDataFromGray(
 		const cv::Mat& gray,
 		int minReduceArea,
@@ -1272,7 +1391,10 @@ void Pattern2::LearnPatternStable(Pattern2StableConfig cfg)
 			cfg.EnableAutoThreshold ? item.templData.autoWEdgeIou : 0.10;
 		item.wEdgeRatio =
 			cfg.EnableAutoThreshold ? item.templData.autoWEdgeRatio : 0.04;
-
+		ApplyDifficultyToScaleTemplate(
+			item,
+			(int)cfg.Difficulty,
+			cfg.MinAcceptScore > 0.0);
 		img->stableScaleBank.push_back(std::move(item));
 
 		const double d = std::abs(scale - 1.0);
@@ -1718,7 +1840,9 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 
 	const cv::Mat originalSample = img->matSample.clone();
 	const s_TemplData originalTemplData = img->m_TemplData;
-
+	const DifficultyTune diffTune = GetDifficultyTune((int)cfg.Difficulty);
+	const double effectiveNmsOverlap =
+		GetEffectiveNmsOverlap(maxOverlap, (int)cfg.Difficulty);
 	cv::Mat srcGray = ToGray8U(img->matRaw);
 	if (cfg.BitwiseNot) cv::bitwise_not(srcGray, srcGray);
 
@@ -1903,13 +2027,18 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 					passScore &&
 					passHardEdge;
 
-				keepRescue =
+				/*keepRescue =
 					passScore &&
 					(coarseScore >= std::max(0.45, strongBase - 0.25)) &&
 					(finalScore >= thresholdFinal + 0.05) &&
 					((edgeIou >= hardEdgeIou * 0.70) ||
-						(edgeRatio >= hardEdgeRatio * 0.55));
-
+						(edgeRatio >= hardEdgeRatio * 0.55));*/
+				keepRescue =
+					passScore &&
+					(coarseScore >= std::max(0.45, strongBase - diffTune.rescueBaseDelta)) &&
+					(finalScore >= thresholdFinal + diffTune.rescueFinalMargin) &&
+					((edgeIou >= hardEdgeIou * diffTune.rescueIouMul) ||
+						(edgeRatio >= hardEdgeRatio * diffTune.rescueRatioMul));
 				if (cfg.EnableKeepFilter)
 				{
 					if (keepStrong) reason = "keepStrong";
@@ -1968,9 +2097,10 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 	img->matSample = originalSample;
 	img->m_TemplData = originalTemplData;
 
+	//if (cfg.EnableNms)
+	//	img->FilterWithRotatedRect(&acceptedAll, CV_TM_CCOEFF_NORMED, maxOverlap);
 	if (cfg.EnableNms)
-		img->FilterWithRotatedRect(&acceptedAll, CV_TM_CCOEFF_NORMED, maxOverlap);
-
+		img->FilterWithRotatedRect(&acceptedAll, CV_TM_CCOEFF_NORMED, effectiveNmsOverlap);
 	std::sort(acceptedAll.begin(), acceptedAll.end(), compareScoreBig2Small);
 
 	if (sb != nullptr)

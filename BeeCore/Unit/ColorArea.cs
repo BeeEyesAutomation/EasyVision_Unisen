@@ -103,13 +103,17 @@ namespace BeeCore
         }
         public List<Color> listCLShow = new List<Color>();
         public Color clShow;
-        public void SetModel()
+        public void SetModel( bool IsCopy=false)
         {
 
             if (rotArea == null) rotArea = new RectRotate();
            
             if (rotMask == null) rotMask = new RectRotate();
+            if(IsCopy)
+            {
+               // ColorAreaPP = new BeeCpp.ColorArea();
 
+            }    
           
 
 
@@ -280,7 +284,7 @@ namespace BeeCore
         {
             if(IsCalib) 
                 PxTemp = pxRS;
-            Common.PropetyTools[IndexThread][Index].ScoreResult =Math.Abs( pxRS-PxTemp)/100;
+            Common.PropetyTools[IndexThread][Index].ScoreResult =Math.Abs( pxRS-PxTemp)/10;
            
             if (Common.PropetyTools[IndexThread][Index].ScoreResult > Common.PropetyTools[IndexThread][Index].Score)
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;

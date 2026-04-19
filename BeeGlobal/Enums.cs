@@ -13,6 +13,13 @@ namespace BeeGlobal
         ForceHorizontal,
         ForceVertical
     }
+    public enum SearchPattern{
+        BestObj,AllObj
+        }
+    public enum DifficultyPattern
+    {
+        Easy, Normal,Hard
+    }
     public struct Seg
     {
         public Line2D Line;

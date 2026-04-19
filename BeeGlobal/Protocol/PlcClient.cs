@@ -810,7 +810,7 @@ namespace PlcLib
                 {
                 X: try
                     {
-                        if (Global.IsAllowReadPLC)
+                      //  if (Global.IsAllowReadPLC)
                         {
                             var values = await ReadWordAsBitsAsync(addresses);
                             if (IsReadErr)

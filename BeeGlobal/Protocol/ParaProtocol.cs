@@ -386,6 +386,7 @@ namespace BeeGlobal
                 valueInput[ix] = Convert.ToBoolean(value);
             }
         }
+        private bool IsTrig = false;
         public async Task<bool> Connect(  )
         {
            
@@ -577,7 +578,12 @@ namespace BeeGlobal
                             {
                                 if (Global.Config.IsExternal)
                                 {
-                                  //  Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Trig", Global.NumProgFromPLC + Global.TriggerNum.ToString()));
+                                    if (GetInPut(I_O_Input.Trigger) == false && IsTrig)
+                                    {
+                                        IsTrig = false;
+
+                                    }
+                                    //  Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Trig", Global.NumProgFromPLC + Global.TriggerNum.ToString()));
 
                                     if (Global.StatusProcessing == StatusProcessing.None)
                                     {
@@ -822,8 +828,9 @@ namespace BeeGlobal
                                                 }
                                                 break;
                                             case TriggerNum.Trigger0:
-                                                if (GetInPut(I_O_Input.Trigger) == true)
+                                                if (GetInPut(I_O_Input.Trigger) == true&&! IsTrig)
                                                 {
+                                                    IsTrig = true;
 
                                                     Global.IndexProgChoose = 0;
                                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
@@ -851,7 +858,12 @@ namespace BeeGlobal
                                                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Read PO", ex.Message));
                                                     }
                                                 }
-                                                break;
+                                                else if (GetInPut(I_O_Input.Trigger) == false && IsTrig)
+                                                {
+                                                    IsTrig = false;
+
+                                                }    
+                                                    break;
                                         }
                                     }
                                 }

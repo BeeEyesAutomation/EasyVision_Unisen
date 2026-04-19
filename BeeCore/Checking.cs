@@ -115,7 +115,12 @@ namespace BeeCore
 
 
                 if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Results == Results.OK)
-                {
+                {if(BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety2.rotOriginAdj==null)
+                    {
+                        BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Results = Results.NG;
+                        StatusProcessing = StatusProcessing.Checking;
+                        return;
+                    }
                     if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety2.rotOriginAdj == null)  StatusProcessing=StatusProcessing.Done;
                     float AngAdj = 0, X_Adj = 0, Y_Adj = 0;
                     X_Adj = Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rectRotates[0]._PosCenter.X - BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety2.rotOriginAdj._PosCenter.X;

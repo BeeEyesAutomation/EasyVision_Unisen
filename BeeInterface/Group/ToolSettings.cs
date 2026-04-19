@@ -114,7 +114,7 @@ namespace BeeInterface
             BeeCore.Common.PropetyTools[Global.IndexProgChoose].Add(propety);
            
             int Index = BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count - 1;
-           // propety.Propety.Index = Index;
+         
             PropetyTool propetyTools = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Index];
             propetyTools.ItemTool = DataTool.CreateItemTool(propety, Index, Global.IndexProgChoose);
             propetyTools.Control = DataTool.CreateControls(propety, Index, Global.IndexProgChoose);
@@ -122,15 +122,8 @@ namespace BeeInterface
            
             DataTool.LoadPropety(propetyTools.Control);
             propetyTools.UsedTool = UsedTool.Used;
-            propetyTools.worker.DoWork += (senders, es) =>
-            {
-                propetyTools.DoWork();
-            };
-            propetyTools.worker.RunWorkerCompleted += (senders, es) =>
-            {
-                propetyTools.Complete();
-            };
-            propetyTools.Propety2.SetModel();
+          
+            propetyTools.Propety2.SetModel(true);
             BeeInterface.Load.ArrangeLogic();
             ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexProgChoose]);
 

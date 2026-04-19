@@ -41,10 +41,18 @@ namespace BeeCore
         }
         [NonSerialized]
         public bool IsNew = false;
-        public void SetModel()
+        public void SetModel(bool IsCopy=false)
         {
             try
             {
+                if (IsCopy)
+                {
+                    Pattern = new BeeCpp.Pattern2();
+                    if (bmRaw != null)
+                        bmRaw = null;
+
+                }
+
                 if (Pattern == null)
                 {
                     Pattern = new Pattern2();
@@ -481,6 +489,10 @@ namespace BeeCore
         private Pattern2StableConfig cfg;
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
+            Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
+            float DeltaAngle = (rotCrop._rectRotation) - (rotArea._rectRotation);
+            AngleLower = DeltaAngle - Angle;
+            AngleUper = DeltaAngle + Angle;
             IsDone = false;
             rotArea = rotArea; // <-- gán này không tác dụng ra ngoài, bỏ đi
 
@@ -530,10 +542,12 @@ namespace BeeCore
                                 cfg.SubPixel = ckSubPixel;
                                 cfg.EnableScaleSearch = false;
                                 cfg.EnableAutoThreshold = true;
-                                cfg.EnableKeepFilter = true;
-                                cfg.EnableNms = true;
-                                cfg.EnableKeepFilter = true;
+                                cfg.EnableKeepFilter = false;
+                                cfg.EnableValidator = false;
+                                cfg.EnableNms = false;
+                             
                                 cfg.DebugLog = false;
+                                cfg.Difficulty = Pattern2DifficultyLevel.Hard;
                                 cfg.DebugLogPath = "E:\\pattern2_debug.txt";
 
 

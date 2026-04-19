@@ -5227,7 +5227,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             }
         }
         public  void RunProcessing()
-        {if (Global.Comunication.Protocol.TypeControler == TypeControler.PCI)
+        {if (Global.Comunication.Protocol.TypeControler == TypeControler.IO)
             {
                 PropetyTool propetyTool = BeeCore.Common.PropetyTools[0][0];
                 propetyTool.Results = Results.None;
