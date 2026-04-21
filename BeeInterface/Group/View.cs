@@ -2586,8 +2586,23 @@ namespace BeeInterface
                     }
                     else
                     {
-                        if (!workReadCCD.IsBusy)
-                            workReadCCD.RunWorkerAsync();
+                        foreach (Camera camera in BeeCore.Common.listCamera)
+                        {
+                            if (camera == null) continue;
+                            camera.Read();
+
+                            if (camera.Para.TypeCamera == TypeCamera.USB)
+                                camera.Read();
+                        }
+                        if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
+                        {
+                            Global.StatusProcessing = StatusProcessing.Checking;
+
+                            if (Global.IsByPassResult)
+                                Global.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
+                        }
+                        //if (!workReadCCD.IsBusy)
+                        //    workReadCCD.RunWorkerAsync();
                     }
 
                     break;

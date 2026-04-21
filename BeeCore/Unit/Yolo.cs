@@ -1979,23 +1979,23 @@ namespace BeeCore
                                     .OrderBy(x => x.rot._PosCenter.X)
                                     .ToList();
 
-                                //    var ObjOK = ResultItem.Where(x =>
-                                //    x.rot != null &&
-                                //    x.Name.Equals("OK", StringComparison.OrdinalIgnoreCase) &&
-                                //    IsInside(scan, x.rot))
-                                //.OrderBy(x => x.rot._PosCenter.X)
-                                //.ToList();
-                                //    if (ObjOK.Count() > 0)
-                                //    {
-                                //        scan.NumInside = 0;
-                                //        scan.IsOK = false;
-                                //        continue;
+                                    var ObjOK = ResultItem.Where(x =>
+                                    x.rot != null &&
+                                    x.Name.Equals("OK", StringComparison.OrdinalIgnoreCase) &&
+                                    IsInside(scan, x.rot))
+                                .OrderBy(x => x.rot._PosCenter.X)
+                                .ToList();
+                                    if (ObjOK.Count() > 0)
+                                    {
+                                        scan.NumInside = 0;
+                                        scan.IsOK = false;
+                                        continue;
 
-                                //    }
-                                //    else
-                                //    {
-                                //        IsNGBox = true;
-                                //    }
+                                    }
+                                    //    else
+                                    //    {
+                                    //        IsNGBox = true;
+                                    //    }
 
                                 }
                                 //--------------------------------

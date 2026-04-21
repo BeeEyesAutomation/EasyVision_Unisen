@@ -537,14 +537,13 @@ static inline float clampf(float v, float lo, float hi)
 {
     return v < lo ? lo : (v > hi ? hi : v);
 }
-
 void DecodeAuto_Yolo_RTDETR(
     const ov::Tensor& t,
     float conf,
     float iou,
     float scale, int padw, int padh,
     int imgW, int imgH,
-    int S,
+    int S, int numClasses,
     std::vector<YoloBox>& out)
 {
     out.clear();
@@ -563,69 +562,48 @@ void DecodeAuto_Yolo_RTDETR(
     std::vector<YoloBox> candidates;
     candidates.reserve(512);
 
-    // CASE 1: RT-DETR
-    if (N == 300 && D >= 6 && D <= 32)
-    {
-        int numClasses = D - 4;
+    // Xác định RT-DETR hay YOLO
+  // RT-DETR: shape [1, N_query, numClasses+4]  → D nhỏ, N lớn
+  // YOLO:    shape [1, numClasses+4, 8400]     → D lớn, N nhỏ
+    bool isRTDETR = (D == numClasses + 4) && (N > D);
 
+    if (isRTDETR)
+    {
         for (int i = 0; i < N; i++)
         {
             const float* p = data + i * D;
 
-            float cx = p[0];
-            float cy = p[1];
-            float w = p[2];
-            float h = p[3];
+            // RT-DETR Ultralytics export: normalized [0,1]
+            float cx = p[0] * S;
+            float cy = p[1] * S;
+            float w = p[2] * S;
+            float h = p[3] * S;
 
-            bool isNorm = (cx <= 1.5f && cy <= 1.5f && w <= 1.5f && h <= 1.5f);
-            if (isNorm)
-            {
-                cx *= S;
-                cy *= S;
-                w *= S;
-                h *= S;
-            }
-
+            // Tìm class tốt nhất
             int bestCls = 0;
-            float bestScore = p[4];
-
+            float bestRaw = p[4];
             for (int c = 1; c < numClasses; c++)
             {
-                if (p[4 + c] > bestScore)
-                {
-                    bestScore = p[4 + c];
-                    bestCls = c;
-                }
+                if (p[4 + c] > bestRaw) { bestRaw = p[4 + c]; bestCls = c; }
             }
 
-            float score = bestScore;
-            if (score < 0.f || score > 1.f)
-                score = sigmoidf(score);
+            // ← LUÔN sigmoid, không điều kiện
+            float score = 1.f / (1.f + std::exp(-bestRaw));
+            if (score < conf) continue;
 
-            if (score < conf)
-                continue;
-
-            float x1 = cx - w * 0.5f;
-            float y1 = cy - h * 0.5f;
-            float x2 = cx + w * 0.5f;
-            float y2 = cy + h * 0.5f;
-
-            x1 = (x1 - padw) / scale;
-            y1 = (y1 - padh) / scale;
-            x2 = (x2 - padw) / scale;
-            y2 = (y2 - padh) / scale;
-
-            x1 = clampf(x1, 0, (float)imgW);
-            y1 = clampf(y1, 0, (float)imgH);
-            x2 = clampf(x2, 0, (float)imgW);
-            y2 = clampf(y2, 0, (float)imgH);
+            float x1 = clampf((cx - w * 0.5f - padw) / scale, 0, (float)imgW);
+            float y1 = clampf((cy - h * 0.5f - padh) / scale, 0, (float)imgH);
+            float x2 = clampf((cx + w * 0.5f - padw) / scale, 0, (float)imgW);
+            float y2 = clampf((cy + h * 0.5f - padh) / scale, 0, (float)imgH);
 
             candidates.push_back({ x1, y1, x2, y2, score, bestCls });
         }
 
-        out = candidates; // RT-DETR đã NMS
+        // RT-DETR đã NMS trong model → không gọi NmsPerClass2
+        out = candidates;
         return;
     }
+
 
     // CASE 2: YOLO
     bool isTranspose = (shp[1] < shp[2]);
@@ -633,7 +611,7 @@ void DecodeAuto_Yolo_RTDETR(
     int numPred = isTranspose ? (int)shp[2] : (int)shp[1];
     int dim = isTranspose ? (int)shp[1] : (int)shp[2];
 
-    int numClasses = dim - 4;
+    int numClasses2 = dim - 4;
 
     for (int i = 0; i < numPred; i++)
     {
@@ -667,7 +645,7 @@ void DecodeAuto_Yolo_RTDETR(
         int bestCls = 0;
         float bestScore = isTranspose ? data[4 * numPred + i] : data[i * dim + 4];
 
-        for (int c = 1; c < numClasses; c++)
+        for (int c = 1; c < numClasses2; c++)
         {
             float v = isTranspose ?
                 data[(4 + c) * numPred + i] :
@@ -746,8 +724,221 @@ void OpenVinoYoloHP::Detect(const cv::Mat& bgr, float conf, float iou, bool Is3,
         outTensor,
         conf, iou,
         scale, padw, padh,
-        bgr.cols, bgr.rows, S,
+        bgr.cols, bgr.rows, S, C,
         out);
 
     (void)Is3;
 }
+//void DecodeAuto_Yolo_RTDETR(
+//    const ov::Tensor& t,
+//    float conf,
+//    float iou,
+//    float scale, int padw, int padh,
+//    int imgW, int imgH,
+//    int S,
+//    std::vector<YoloBox>& out)
+//{
+//    out.clear();
+//
+//#pragma warning(push)
+//#pragma warning(disable: 4996)
+//    const float* data = t.data<const float>();
+//#pragma warning(pop)
+//
+//    auto shp = t.get_shape();
+//    if (shp.size() != 3) return;
+//
+//    int N = (int)shp[1];
+//    int D = (int)shp[2];
+//
+//    std::vector<YoloBox> candidates;
+//    candidates.reserve(512);
+//
+//    // CASE 1: RT-DETR
+//    if (N == 300 && D >= 6 && D <= 32)
+//    {
+//        int numClasses = D - 4;
+//
+//        for (int i = 0; i < N; i++)
+//        {
+//            const float* p = data + i * D;
+//
+//            float cx = p[0];
+//            float cy = p[1];
+//            float w = p[2];
+//            float h = p[3];
+//
+//            bool isNorm = (cx <= 1.5f && cy <= 1.5f && w <= 1.5f && h <= 1.5f);
+//            if (isNorm)
+//            {
+//                cx *= S;
+//                cy *= S;
+//                w *= S;
+//                h *= S;
+//            }
+//
+//            int bestCls = 0;
+//            float bestScore = p[4];
+//
+//            for (int c = 1; c < numClasses; c++)
+//            {
+//                if (p[4 + c] > bestScore)
+//                {
+//                    bestScore = p[4 + c];
+//                    bestCls = c;
+//                }
+//            }
+//
+//            float score = bestScore;
+//            if (score < 0.f || score > 1.f)
+//                score = sigmoidf(score);
+//
+//            if (score < conf)
+//                continue;
+//
+//            float x1 = cx - w * 0.5f;
+//            float y1 = cy - h * 0.5f;
+//            float x2 = cx + w * 0.5f;
+//            float y2 = cy + h * 0.5f;
+//
+//            x1 = (x1 - padw) / scale;
+//            y1 = (y1 - padh) / scale;
+//            x2 = (x2 - padw) / scale;
+//            y2 = (y2 - padh) / scale;
+//
+//            x1 = clampf(x1, 0, (float)imgW);
+//            y1 = clampf(y1, 0, (float)imgH);
+//            x2 = clampf(x2, 0, (float)imgW);
+//            y2 = clampf(y2, 0, (float)imgH);
+//
+//            candidates.push_back({ x1, y1, x2, y2, score, bestCls });
+//        }
+//
+//        out = candidates; // RT-DETR đã NMS
+//        return;
+//    }
+//
+//    // CASE 2: YOLO
+//    bool isTranspose = (shp[1] < shp[2]);
+//
+//    int numPred = isTranspose ? (int)shp[2] : (int)shp[1];
+//    int dim = isTranspose ? (int)shp[1] : (int)shp[2];
+//
+//    int numClasses = dim - 4;
+//
+//    for (int i = 0; i < numPred; i++)
+//    {
+//        float cx, cy, w, h;
+//
+//        if (isTranspose)
+//        {
+//            cx = data[0 * numPred + i];
+//            cy = data[1 * numPred + i];
+//            w = data[2 * numPred + i];
+//            h = data[3 * numPred + i];
+//        }
+//        else
+//        {
+//            const float* p = data + i * dim;
+//            cx = p[0];
+//            cy = p[1];
+//            w = p[2];
+//            h = p[3];
+//        }
+//
+//        bool isNorm = (cx <= 1.5f && cy <= 1.5f && w <= 1.5f && h <= 1.5f);
+//        if (isNorm)
+//        {
+//            cx *= S;
+//            cy *= S;
+//            w *= S;
+//            h *= S;
+//        }
+//
+//        int bestCls = 0;
+//        float bestScore = isTranspose ? data[4 * numPred + i] : data[i * dim + 4];
+//
+//        for (int c = 1; c < numClasses; c++)
+//        {
+//            float v = isTranspose ?
+//                data[(4 + c) * numPred + i] :
+//                data[i * dim + 4 + c];
+//
+//            if (v > bestScore)
+//            {
+//                bestScore = v;
+//                bestCls = c;
+//            }
+//        }
+//
+//        float score = bestScore;
+//        if (score < 0.f || score > 1.f)
+//            score = sigmoidf(score);
+//
+//        if (score < conf)
+//            continue;
+//
+//        float x1 = cx - w * 0.5f;
+//        float y1 = cy - h * 0.5f;
+//        float x2 = cx + w * 0.5f;
+//        float y2 = cy + h * 0.5f;
+//
+//        x1 = (x1 - padw) / scale;
+//        y1 = (y1 - padh) / scale;
+//        x2 = (x2 - padw) / scale;
+//        y2 = (y2 - padh) / scale;
+//
+//        x1 = clampf(x1, 0, (float)imgW);
+//        y1 = clampf(y1, 0, (float)imgH);
+//        x2 = clampf(x2, 0, (float)imgW);
+//        y2 = clampf(y2, 0, (float)imgH);
+//
+//        candidates.push_back({ x1, y1, x2, y2, score, bestCls });
+//    }
+//
+//    NmsPerClass2(candidates, iou, out);
+//}
+//
+//void OpenVinoYoloHP::Detect(const cv::Mat& bgr, float conf, float iou, bool Is3, std::vector<YoloBox>& out)
+//{
+//    if (bgr.empty())
+//    {
+//        out.clear();
+//        return;
+//    }
+//
+//    float scale = 1.f;
+//    int padw = 0, padh = 0;
+//
+//    Letterbox(bgr, paddedU8, scale, padw, padh);
+//    BgrToCHWFloat01(paddedU8, inputBlob.data());
+//
+//    ov::Tensor inTensor(ov::element::f32, { 1,3,(size_t)S,(size_t)S }, inputBlob.data());
+//    infer.set_input_tensor(inTensor);
+//    infer.infer();
+//
+//    ov::Tensor outTensor = infer.get_output_tensor();
+//
+//    auto shp = outTensor.get_shape();
+//    {
+//        std::string s = "Output shape=[";
+//        for (size_t i = 0; i < shp.size(); i++)
+//        {
+//            s += std::to_string(shp[i]);
+//            if (i + 1 < shp.size()) s += ",";
+//        }
+//        s += "]";
+//        // BeeLog::Write(BeeLog::Level::Info, s);
+//    }
+//
+//    out.clear();
+//
+//    DecodeAuto_Yolo_RTDETR(
+//        outTensor,
+//        conf, iou,
+//        scale, padw, padh,
+//        bgr.cols, bgr.rows, S,
+//        out);
+//
+//    (void)Is3;
+//}
