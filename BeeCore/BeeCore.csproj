@@ -384,6 +384,7 @@
     <Compile Include="Unit\Patterns.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropetyTool.cs" />
+    <Compile Include="ToolState.cs" />
     <Compile Include="Unit\OCR.cs" />
     <Compile Include="Unit\CraftOCR.cs" />
     <Compile Include="Unit\Counter.cs" />

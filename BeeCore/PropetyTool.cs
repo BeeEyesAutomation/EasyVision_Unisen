@@ -1,24 +1,24 @@
-﻿using BeeCore.Funtion;
+using BeeCore.Funtion;
 using BeeGlobal;
-using Newtonsoft.Json.Linq;
-using OpenCvSharp;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.UI;
 
 namespace BeeCore
 {
     [Serializable()]
-    public  class PropetyTool :  ICloneable, IDisposable
+    public class PropetyTool : ICloneable, IDisposable, ISerializable
     {
         private bool _disposed;
-        private static void TryDisposeObject(object obj)
+
+        public dynamic Propety;
+        public dynamic Propety2 { get; set; }
+        public ToolState State = new ToolState();
+
+        internal static void TryDisposeObject(object obj)
         {
             if (obj == null) return;
             try
@@ -28,44 +28,7 @@ namespace BeeCore
             catch { }
         }
 
-        public void Dispose()
-        {
-            if (_disposed) return;
-            _disposed = true;
-
-            try
-            {
-                // ====== stop timer/worker ======
-                try { timer?.Stop(); } catch { }
-                TryDisposeObject(worker); // BackgroundWorker implements IDisposable
-                worker = null;
-                timer = null;
-
-                // ====== UI control (phải UI thread) ======
-                SafeRemoveAndDisposeControl(Control);
-                Control = null;
-
-                // ====== Dispose các NonSerialized ItemTool ======
-                TryDisposeObject(ItemTool);
-                TryDisposeObject(ItemTool2);
-                TryDisposeObject(ItemTool3);
-                TryDisposeObject(ItemTool4);
-                ItemTool = ItemTool2 = ItemTool3 = ItemTool4 = null;
-
-                // ====== Dispose Propety (dynamic) nếu có IDisposable ======
-                // (Nếu Propety giữ Mat/Bitmap/Timer/... mà có Dispose thì sẽ được gọi)
-                TryDisposeObject((object)Propety);
-                Propety = null;
-
-                // ====== clear event để cắt reference ======
-                ScoreChanged = null;
-                PercentChange = null;
-                StatusToolChanged = null;
-            }
-            catch { }
-        }
-
-        private static void SafeRemoveAndDisposeControl(object ctlObj)
+        internal static void SafeRemoveAndDisposeControl(object ctlObj)
         {
             if (ctlObj == null) return;
 
@@ -102,93 +65,179 @@ namespace BeeCore
             }
             catch { }
         }
+
         public PropetyTool()
         {
-
+            AttachStateOwner();
         }
-        public int IndexCamera = 0;
-        public String Name = "";
-        public dynamic Propety;
-        public dynamic Propety2 { get; set; }
-        public TypeTool TypeTool;
-        public bool[] IndexLogics = new bool[6];
-        public UsedTool UsedTool=UsedTool.NotUsed;
-        [NonSerialized]
-        public ItemTool ItemTool;
-        [NonSerialized]
-        public ItemTool ItemTool2;
-        [NonSerialized]
-        public ItemTool ItemTool3;
-        [NonSerialized]
-        public ItemTool ItemTool4;
-        [NonSerialized]
-        public dynamic Control;
-        public bool IsSendResult = false;
-        public int IndexImgRegis=0;
-        private float _Score = 0;
-        [field: NonSerialized]
-        public event Action<float> ScoreChanged;
-        public float Score
+
+        protected PropetyTool(SerializationInfo info, StreamingContext context)
         {
-            get => _Score;
-            set
+            State = new ToolState();
+            AttachStateOwner();
+
+            _disposed = GetValueOrDefault(info, "_disposed", false);
+            Propety = GetObjectOrDefault(info, "Propety", null);
+            Propety2 = GetObjectOrDefault(info, "<Propety2>k__BackingField", GetObjectOrDefault(info, "Propety2", null));
+
+            State.IndexCamera = GetValueOrDefault(info, "IndexCamera", State.IndexCamera);
+            State.Name = GetValueOrDefault(info, "Name", State.Name);
+            State.TypeTool = GetValueOrDefault(info, "TypeTool", State.TypeTool);
+            State.IndexLogics = GetValueOrDefault(info, "IndexLogics", State.IndexLogics);
+            State.UsedTool = GetValueOrDefault(info, "UsedTool", State.UsedTool);
+            State.IsSendResult = GetValueOrDefault(info, "IsSendResult", State.IsSendResult);
+            State.IndexImgRegis = GetValueOrDefault(info, "IndexImgRegis", State.IndexImgRegis);
+            State.RestoreScore(GetValueOrDefault(info, "_Score", 0f));
+            State.RestorePercent(GetValueOrDefault(info, "_Percent", 0));
+            State.Location = GetValueOrDefault(info, "Location", State.Location);
+            State.CycleTime = GetValueOrDefault(info, "CycleTime", State.CycleTime);
+            State.ScoreResult = GetValueOrDefault(info, "ScoreResult", State.ScoreResult);
+            State.MinValue = GetValueOrDefault(info, "MinValue", State.MinValue);
+            State.MaxValue = GetValueOrDefault(info, "MaxValue", State.MaxValue);
+            State.StepValue = GetValueOrDefault(info, "StepValue", State.StepValue);
+            State.RestoreStatusTool(GetValueOrDefault(info, "_StatusTool", BeeGlobal.StatusTool.WaitCheck));
+            State.Results = GetValueOrDefault(info, "Results", State.Results);
+            State.EnsureRuntimeFields();
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("_disposed", _disposed);
+            info.AddValue("Propety", (object)Propety);
+            info.AddValue("<Propety2>k__BackingField", (object)Propety2);
+            info.AddValue("IndexCamera", IndexCamera);
+            info.AddValue("Name", Name);
+            info.AddValue("TypeTool", TypeTool);
+            info.AddValue("IndexLogics", IndexLogics);
+            info.AddValue("UsedTool", UsedTool);
+            info.AddValue("IsSendResult", IsSendResult);
+            info.AddValue("IndexImgRegis", IndexImgRegis);
+            info.AddValue("_Score", Score);
+            info.AddValue("_Percent", Percent);
+            info.AddValue("Location", Location);
+            info.AddValue("CycleTime", CycleTime);
+            info.AddValue("ScoreResult", ScoreResult);
+            info.AddValue("MinValue", MinValue);
+            info.AddValue("MaxValue", MaxValue);
+            info.AddValue("StepValue", StepValue);
+            info.AddValue("_StatusTool", StatusTool);
+            info.AddValue("Results", Results);
+        }
+
+        private static T GetValueOrDefault<T>(SerializationInfo info, string name, T defaultValue)
+        {
+            try
             {
-                if (_Score != value)
-                {
-                    _Score = value;
-                    ScoreChanged?.Invoke(_Score); // Gọi event
-                }
+                object value = info.GetValue(name, typeof(T));
+                if (value == null)
+                    return defaultValue;
+                return (T)value;
+            }
+            catch (SerializationException)
+            {
+                return defaultValue;
+            }
+            catch (InvalidCastException)
+            {
+                return defaultValue;
             }
         }
 
-        public int _Percent = 0;//note
-        [field: NonSerialized]
-        public event Action<int> PercentChange;
-
-        public  int Percent
+        private static object GetObjectOrDefault(SerializationInfo info, string name, object defaultValue)
         {
-            get => _Percent;
-            set
+            try
             {
-                if (_Percent != value)
-                {
-                    _Percent = value;
-                    PercentChange?.Invoke(_Percent);
-                }
+                return info.GetValue(name, typeof(object)) ?? defaultValue;
+            }
+            catch (SerializationException)
+            {
+                return defaultValue;
             }
         }
 
-        public String Location = "";
-        public float CycleTime = 0;
-        public float ScoreResult = 0;
-        public float MinValue = 0;
-        public float MaxValue = 0;
-        public float StepValue = 0;
-        private  StatusTool _StatusTool = StatusTool.WaitCheck;
-        [field: NonSerialized]
-        public  event Action<PropetyTool, StatusTool> StatusToolChanged;
-        [field: NonSerialized]
-        public event Action<PropetyTool, StatusTool> ToolDoneChanged;
-        public  StatusTool StatusTool
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
         {
-            get => _StatusTool;
-            set
-            {
-                if (_StatusTool != value)
-                {
-                    _StatusTool = value;
-                    //if (Global.StatusMode == StatusMode.Continuous && TypeTool == TypeTool.Position_Adjustment && Results == Results.NG)
-                    //    return;
-                    StatusToolChanged?.Invoke(this,_StatusTool); // Gọi event
-                }
-            }
+            AttachStateOwner();
         }
-        public Results Results = Results.None;
 
-        [NonSerialized]
-        public Stopwatch timer = new Stopwatch();
-        [NonSerialized]
-        public BackgroundWorker worker = new BackgroundWorker();
+        private ToolState EnsureState()
+        {
+            if (State == null)
+                State = new ToolState();
+            AttachStateOwner();
+            State.EnsureRuntimeFields();
+            return State;
+        }
+
+        private void AttachStateOwner()
+        {
+            if (State != null)
+                State.Owner = this;
+        }
+
+        public System.Int32 IndexCamera { get => EnsureState().IndexCamera; set => EnsureState().IndexCamera = value; }
+        public System.String Name { get => EnsureState().Name; set => EnsureState().Name = value; }
+        public TypeTool TypeTool { get => EnsureState().TypeTool; set => EnsureState().TypeTool = value; }
+        public bool[] IndexLogics { get => EnsureState().IndexLogics; set => EnsureState().IndexLogics = value; }
+        public UsedTool UsedTool { get => EnsureState().UsedTool; set => EnsureState().UsedTool = value; }
+        public ItemTool ItemTool { get => EnsureState().ItemTool; set => EnsureState().ItemTool = value; }
+        public ItemTool ItemTool2 { get => EnsureState().ItemTool2; set => EnsureState().ItemTool2 = value; }
+        public ItemTool ItemTool3 { get => EnsureState().ItemTool3; set => EnsureState().ItemTool3 = value; }
+        public ItemTool ItemTool4 { get => EnsureState().ItemTool4; set => EnsureState().ItemTool4 = value; }
+        public dynamic Control { get => EnsureState().Control; set => EnsureState().Control = value; }
+        public bool IsSendResult { get => EnsureState().IsSendResult; set => EnsureState().IsSendResult = value; }
+        public int IndexImgRegis { get => EnsureState().IndexImgRegis; set => EnsureState().IndexImgRegis = value; }
+        public float Score { get => EnsureState().Score; set => EnsureState().Score = value; }
+        public event Action<float> ScoreChanged
+        {
+            add => EnsureState().ScoreChanged += value;
+            remove => EnsureState().ScoreChanged -= value;
+        }
+        public int Percent { get => EnsureState().Percent; set => EnsureState().Percent = value; }
+        public event Action<int> PercentChange
+        {
+            add => EnsureState().PercentChange += value;
+            remove => EnsureState().PercentChange -= value;
+        }
+        public string Location { get => EnsureState().Location; set => EnsureState().Location = value; }
+        public float CycleTime { get => EnsureState().CycleTime; set => EnsureState().CycleTime = value; }
+        public float ScoreResult { get => EnsureState().ScoreResult; set => EnsureState().ScoreResult = value; }
+        public float MinValue { get => EnsureState().MinValue; set => EnsureState().MinValue = value; }
+        public float MaxValue { get => EnsureState().MaxValue; set => EnsureState().MaxValue = value; }
+        public float StepValue { get => EnsureState().StepValue; set => EnsureState().StepValue = value; }
+        public StatusTool StatusTool { get => EnsureState().StatusTool; set => EnsureState().StatusTool = value; }
+        public event Action<PropetyTool, StatusTool> StatusToolChanged
+        {
+            add => EnsureState().StatusToolChanged += value;
+            remove => EnsureState().StatusToolChanged -= value;
+        }
+        public event Action<PropetyTool, StatusTool> ToolDoneChanged
+        {
+            add => EnsureState().ToolDoneChanged += value;
+            remove => EnsureState().ToolDoneChanged -= value;
+        }
+        public Results Results { get => EnsureState().Results; set => EnsureState().Results = value; }
+        public System.Diagnostics.Stopwatch timer { get => EnsureState().timer; set => EnsureState().timer = value; }
+        public BackgroundWorker worker { get => EnsureState().worker; set => EnsureState().worker = value; }
+
+        public void Dispose()
+        {
+            if (_disposed) return;
+            _disposed = true;
+
+            try
+            {
+                State?.Dispose();
+
+                // ====== Dispose Propety (dynamic) nếu có IDisposable ======
+                // (Nếu Propety giữ Mat/Bitmap/Timer/... mà có Dispose thì sẽ được gọi)
+                TryDisposeObject((object)Propety);
+                Propety = null;
+            }
+            catch { }
+        }
+
         //public async Task RunToolAsync()
         //{
         //    Exception exOut = null;
@@ -235,12 +284,12 @@ namespace BeeCore
 
         public void DoWork()
         {
-            Results =Results.None;
+            Results = Results.None;
             try
             {
                 StatusTool = StatusTool.Processing;
-                ToolDoneChanged?.Invoke(this, _StatusTool); // Gọi event
-                if(timer==null)
+                State.NotifyToolDone(); // Gọi event
+                if (timer == null)
                     timer = new Stopwatch();
                 timer.Restart();
                 if (UsedTool == UsedTool.NotUsed && Global.IsRun)
@@ -257,7 +306,7 @@ namespace BeeCore
             {
                 Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Name, ex.Message));
             }
-           
+
         }
         public async Task DoWorkAsync()
         {
@@ -320,12 +369,12 @@ namespace BeeCore
         }
         public void Complete()
         {
-           
-            if (UsedTool==UsedTool.NotUsed && Global.IsRun)
+
+            if (UsedTool == UsedTool.NotUsed && Global.IsRun)
             {
                 Results = Results.None;
                 StatusTool = StatusTool.Done;
-                ToolDoneChanged?.Invoke(this, _StatusTool); // Gọi event
+                State.NotifyToolDone(); // Gọi event
                 return;
             }
             else
@@ -341,19 +390,19 @@ namespace BeeCore
                     if (Results == Results.OK) Results = Results.NG;
                     else Results = Results.OK;
                     break;
-               
+
             }
             if (!Global.IsRun)
             {
                 Global.StatusDraw = StatusDraw.None;
                 Global.StatusDraw = StatusDraw.Check;
-            }    
-                
-          StatusTool = StatusTool.Done;
-            ToolDoneChanged?.Invoke(this, _StatusTool); // Gọi event
+            }
+
+            StatusTool = StatusTool.Done;
+            State.NotifyToolDone(); // Gọi event
 
         }
-     
+
 
         //public void RunToolAsync()
         //{
@@ -399,14 +448,15 @@ namespace BeeCore
         //        }
         //    });
         //}
-        public PropetyTool(dynamic Propety, TypeTool TypeTool,String Name)
+        public PropetyTool(dynamic Propety, TypeTool TypeTool, String Name)
         {
+            AttachStateOwner();
             this.Name = Name;
             this.TypeTool = TypeTool;
             this.Propety2 = Propety;
 
         }
-      
+
 
         public object Clone()
         {
