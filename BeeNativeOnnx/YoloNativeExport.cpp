@@ -54,19 +54,19 @@ extern "C"
     {
         if (!modelPath) return nullptr;
 
-        // 1) auto input size if needed
-        int S = inputSize;
-        if (S <= 0)
-            S = InferInputSizeFromModel(modelPath);
+        //// 1) auto input size if needed
+        //int S = inputSize;
+        //if (S <= 0)
+        //    S = InferInputSizeFromModel(modelPath);
 
-        // 2) auto numClasses if needed (may be -1)
-        int nc = numClasses;
-        if (nc <= 0)
-            nc = InferNumClassesFromOutput(modelPath);
+        //// 2) auto numClasses if needed (may be -1)
+        //int nc = numClasses;
+        //if (nc <= 0)
+        //    nc = InferNumClassesFromOutput(modelPath);
 
         // 3) create engine
         // NOTE: OpenVinoYoloHP should accept nc=-1 too if your output is [1,300,6].
-        return new OpenVinoYoloHP(modelPath, S, nc, numThreads);
+        return new OpenVinoYoloHP(modelPath, inputSize, numClasses, numThreads);
        // return new OpenVinoYoloHP(modelPath, inputSize, numClasses, numThreads);
     }
 
