@@ -34,38 +34,12 @@ namespace BeeCpp
 #ifndef MATCH_CANDIDATE_NUM
 #define MATCH_CANDIDATE_NUM 32
 #endif
-	public value struct PatternMatchOptions
-	{
-		bool EnableScoreStability;
-		// master switch
-		bool EnableValidate;
-		// soft anti-text (entropy penalty)
-		bool EnableSoftAntiText;
-		double EntropyWeight;   // 0..1+ (0 disables effect)
-		// min-edge validation (estimated strong edges)
-		bool EnableMinEdge;
-		double MinEdgeRatio;    // 0..1 (e.g. 0.6)
-		// multi-scale consistency (compare coarse vs final score)
-		bool EnableMultiScaleCheck;
-		double MaxScaleScoreDiff; // in score unit 0..1 (e.g. 0.12)
-
-		PatternMatchOptions(bool init)
-		{
-			EnableScoreStability = true;
-			EnableValidate = true;
-			EnableSoftAntiText = false;
-			EntropyWeight = 0.5;
-			EnableMinEdge = false;
-			MinEdgeRatio = 0.6;
-			EnableMultiScaleCheck = false;
-			MaxScaleScoreDiff = 0.12;
-		}
-	};
 	// ===== Struct native =====
 	// ===== Struct native =====
 	public struct s_TemplData
 	{
 		vector<Mat> vecPyramid;
+		vector<cv::UMat> vecPyramidGpu;
 		vector<Scalar> vecTemplMean;
 		vector<double> vecTemplNorm;
 		vector<double> vecInvArea;
@@ -90,9 +64,36 @@ namespace BeeCpp
 		double autoWGrad = 0.05;
 		double autoWEdgeIou = 0.10;
 		double autoWEdgeRatio = 0.05;
+
+		// Preprocess snapshot learned with the template.
+		bool   ppEnableBitwiseNot = false;
+		bool   ppEnableIlluminationFix = false;
+		int    ppIllumKernel = 0;
+		bool   ppEnableCLAHE = false;
+		double ppClaheClip = 2.0;
+		int    ppClaheTile = 8;
+		bool   ppEnableGamma = false;
+		double ppGamma = 1.0;
+		int    ppDenoiseMethod = 0;
+		int    ppDenoiseKernel = 3;
+		int    ppDomain = 0;
+		int    ppEdgeMethod = 2;
+		int    ppEdgeKernel = 3;
+		double ppCannyLow = 0.0;
+		double ppCannyHigh = 0.0;
+		bool   ppEdgeKeepMagnitude = true;
+		int    ppEdgeDilatePx = 1;
+		bool   ppEnableEdgeLengthFilter = false;
+		int    ppMinEdgeSegmentLen = 6;
+		double ppFuseGrayWeight = 0.5;
+
+		cv::Mat tplPreprocessedGray;
+		cv::Mat tplEdgeMagnitude;
+		cv::Mat tplEdgeBinary;
 		void clear()
 		{
 			vector<Mat>().swap(vecPyramid);
+			vector<cv::UMat>().swap(vecPyramidGpu);
 			vector<double>().swap(vecTemplNorm);
 			vector<double>().swap(vecInvArea);
 			vector<Scalar>().swap(vecTemplMean);
@@ -112,6 +113,29 @@ namespace BeeCpp
 			autoWGrad = 0.05;
 			autoWEdgeIou = 0.10;
 			autoWEdgeRatio = 0.05;
+			ppEnableBitwiseNot = false;
+			ppEnableIlluminationFix = false;
+			ppIllumKernel = 0;
+			ppEnableCLAHE = false;
+			ppClaheClip = 2.0;
+			ppClaheTile = 8;
+			ppEnableGamma = false;
+			ppGamma = 1.0;
+			ppDenoiseMethod = 0;
+			ppDenoiseKernel = 3;
+			ppDomain = 0;
+			ppEdgeMethod = 2;
+			ppEdgeKernel = 3;
+			ppCannyLow = 0.0;
+			ppCannyHigh = 0.0;
+			ppEdgeKeepMagnitude = true;
+			ppEdgeDilatePx = 1;
+			ppEnableEdgeLengthFilter = false;
+			ppMinEdgeSegmentLen = 6;
+			ppFuseGrayWeight = 0.5;
+			tplPreprocessedGray.release();
+			tplEdgeMagnitude.release();
+			tplEdgeBinary.release();
 		}
 		void resize(int iSize)
 		{
@@ -134,6 +158,7 @@ namespace BeeCpp
 		cv::Mat tplNorm;
 		cv::Mat tplGrad;
 		cv::Mat tplEdge;
+		cv::Mat tplEdgeMagnitude;
 		int tplEdgeCount = 0;
 
 		s_TemplData templData;
@@ -348,6 +373,7 @@ namespace BeeCpp
 		s_TemplData m_TemplData;
 		std::vector<s_StableScaleTemplate> stableScaleBank;
 		int         m_iMinReduceArea = 256;
+		bool        m_EnableGpu = false;
 		//cv::Mat EnhanceForPatternStrong(const cv::Mat& src);
 
 		void ClearStableScaleBank()
@@ -359,7 +385,9 @@ namespace BeeCpp
 		void BuildTemplatePyramid();
 	public:int GetTopLayer(Mat* matTempl, int iMinDstLength);
 		  void MatchTemplate(cv::Mat& matSrc, s_TemplData* pTemplData, cv::Mat& matResult, int iLayer, bool bUseSIMD, bool m_ckSIMD);
+		  void MatchTemplateGpu(cv::UMat& matSrc, s_TemplData* pTemplData, cv::UMat& matResult, int iLayer);
 		  void GetRotatedROI(Mat& matSrc, cv::Size size, Point2f ptLT, double dAngle, Mat& matROI);
+		  void GetRotatedROIGpu(cv::UMat& matSrc, cv::Size size, Point2f ptLT, double dAngle, cv::UMat& matROI);
 		  void CCOEFF_Denominator(cv::Mat& matSrc, s_TemplData* pTemplData, cv::Mat& matResult, int iLayer);
 		  cv::Size  GetBestRotationSize(cv::Size sizeSrc, cv::Size sizeDst, double dRAngle);
 		  Point2f ptRotatePt2f(Point2f ptInput, Point2f ptOrg, double dAngle);
@@ -381,6 +409,83 @@ namespace BeeCpp
 		Normal = 0, // giữ hành vi hiện tại
 		Easy = 1,   // dễ hơn
 		Hard = 2    // khó hơn
+	};
+
+	public enum class Pattern2FeatureDomain
+	{
+		Gray = 0,
+		Edge = 1,
+		GrayPlusEdge = 2
+	};
+
+	public enum class Pattern2EdgeMethod
+	{
+		SobelMag = 0,
+		ScharrMag = 1,
+		Canny = 2,
+		Laplacian = 3
+	};
+
+	public enum class Pattern2DenoiseMethod
+	{
+		None = 0,
+		Gaussian = 1,
+		Median = 2,
+		Bilateral = 3
+	};
+
+	public value struct Pattern2PreprocessConfig
+	{
+		bool   EnableBitwiseNot;
+		bool   EnableIlluminationFix;
+		int    IllumKernel;
+		bool   EnableCLAHE;
+		double ClaheClip;
+		int    ClaheTile;
+		bool   EnableGammaCorrection;
+		double Gamma;
+
+		Pattern2DenoiseMethod DenoiseMethod;
+		int    DenoiseKernel;
+
+		Pattern2FeatureDomain Domain;
+
+		Pattern2EdgeMethod EdgeMethod;
+		int    EdgeKernel;
+		double CannyLow;
+		double CannyHigh;
+		bool   EdgeKeepMagnitude;
+		int    EdgeDilatePx;
+		bool   EnableEdgeLengthFilter;
+		int    MinEdgeSegmentLen;
+
+		double FuseGrayWeight;
+		bool   AutoPickDomain;
+
+		Pattern2PreprocessConfig(bool init)
+		{
+			EnableBitwiseNot = false;
+			EnableIlluminationFix = false;
+			IllumKernel = 0;
+			EnableCLAHE = false;
+			ClaheClip = 2.0;
+			ClaheTile = 8;
+			EnableGammaCorrection = false;
+			Gamma = 1.0;
+			DenoiseMethod = Pattern2DenoiseMethod::None;
+			DenoiseKernel = 3;
+			Domain = Pattern2FeatureDomain::Gray;
+			EdgeMethod = Pattern2EdgeMethod::Canny;
+			EdgeKernel = 3;
+			CannyLow = 0.0;
+			CannyHigh = 0.0;
+			EdgeKeepMagnitude = true;
+			EdgeDilatePx = 1;
+			EnableEdgeLengthFilter = false;
+			MinEdgeSegmentLen = 6;
+			FuseGrayWeight = 0.5;
+			AutoPickDomain = false;
+		}
 	};
 
 	public value struct Pattern2StableConfig
@@ -413,6 +518,10 @@ namespace BeeCpp
 		// Coarse stage score for calling Match()
 		double RelaxedRawScore;      // 0..1
 		Pattern2DifficultyLevel Difficulty;
+		Pattern2PreprocessConfig Preprocess;
+		bool EnableGpu;             // OpenCL/UMat acceleration for matchTemplate, CPU fallback if unavailable
+		bool EnableCpuMultiThread;  // CPU-only angle scan parallelism; ignored when EnableGpu is active
+		int CpuThreads;             // <=0 => auto hardware_concurrency
 		Pattern2StableConfig(bool init)
 		{
 			AngleStartDeg = -10.0;
@@ -438,6 +547,10 @@ namespace BeeCpp
 			ScaleStep = 0.02;
 			Difficulty = Pattern2DifficultyLevel::Normal;
 			RelaxedRawScore = 0.18;
+			Preprocess = Pattern2PreprocessConfig(true);
+			EnableGpu = false;
+			EnableCpuMultiThread = false;
+			CpuThreads = 0;
 		}
 	};
 
@@ -461,6 +574,21 @@ namespace BeeCpp
 		void LearnPatternStable();
 		void LearnPatternStable(Pattern2StableConfig cfg);
 		void FreeBuffer(System::IntPtr p);
+		void SetGpuEnabled(bool enable);
+		static bool IsGpuAvailable();
+		System::IntPtr PreviewPreprocessed(
+			IntPtr data, int w, int h, int stride, int ch,
+			Pattern2PreprocessConfig cfg,
+			int outputKind,
+			[System::Runtime::InteropServices::Out] int% outW,
+			[System::Runtime::InteropServices::Out] int% outH,
+			[System::Runtime::InteropServices::Out] int% outStride,
+			[System::Runtime::InteropServices::Out] int% outChannels);
+		static Pattern2PreprocessConfig PresetGeneralGray();
+		static Pattern2PreprocessConfig PresetUnevenLighting();
+		static Pattern2PreprocessConfig PresetMetalShiny();
+		static Pattern2PreprocessConfig PresetPCBOrText();
+		static Pattern2PreprocessConfig PresetLowContrast();
 		List<Rotaterectangle>^ Match(
 			bool m_bStopLayer1,
 			double m_dToleranceAngle,

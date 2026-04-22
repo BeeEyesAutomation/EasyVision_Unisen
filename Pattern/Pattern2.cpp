@@ -1,6 +1,8 @@
 ﻿#include "Pattern2.h"
 
 #include <opencv2/imgproc/imgproc_c.h>
+#include <opencv2/core/ocl.hpp>
+#include <cstring>
 
 using namespace cv;
 using namespace BeeCpp;
@@ -54,7 +56,12 @@ bool compareMatchResultByPos(const s_SingleTargetMatch& lhs, const s_SingleTarge
 bool compareMatchResultByScore(const s_SingleTargetMatch& lhs, const s_SingleTargetMatch& rhs) { return lhs.dMatchScore > rhs.dMatchScore; }
 bool compareMatchResultByPosX(const s_SingleTargetMatch& lhs, const s_SingleTargetMatch& rhs) { return lhs.ptCenter.x < rhs.ptCenter.x; }
 
-
+namespace
+{
+	static bool CanUseGpu(bool enable);
+	static void BuildGpuPyramidCache(s_TemplData& data);
+	static void BuildSourceGpuPyramid(const cv::Mat& src, std::vector<cv::UMat>& out, int topLayer);
+}
 
 // ===== Img implement =====
 void Img::BuildTemplatePyramid()
@@ -117,6 +124,7 @@ void Img::BuildTemplatePyramid()
 
 	m_TemplData.bIsPatternLearned = true;
 	m_TemplData.iBorderColor = 0;
+	BuildGpuPyramidCache(m_TemplData);
 }
 
 bool Img::SubPixEsimation(vector<s_MatchParameter>* vec, double* dNewX, double* dNewY, double* dNewAngle, double dAngleStep, int iMaxScoreIndex)
@@ -241,6 +249,14 @@ void Img::MatchTemplate(cv::Mat& matSrc, s_TemplData* pTemplData, cv::Mat& matRe
 	minMaxLoc(diff, 0, &dMaxValue, 0,0);*/
 	CCOEFF_Denominator(matSrc, pTemplData, matResult, iLayer);
 }
+
+void Img::MatchTemplateGpu(cv::UMat& matSrc, s_TemplData* pTemplData, cv::UMat& matResult, int iLayer)
+{
+	if (pTemplData->vecPyramidGpu.size() <= (size_t)iLayer || pTemplData->vecPyramidGpu[(size_t)iLayer].empty())
+		BuildGpuPyramidCache(*pTemplData);
+
+	cv::matchTemplate(matSrc, pTemplData->vecPyramidGpu[(size_t)iLayer], matResult, cv::TM_CCOEFF_NORMED);
+}
 void Img::GetRotatedROI(Mat& matSrc, cv::Size size, Point2f ptLT, double dAngle, Mat& matROI)
 {
 	double dAngle_radian = dAngle * D2R;
@@ -256,6 +272,19 @@ void Img::GetRotatedROI(Mat& matSrc, cv::Size size, Point2f ptLT, double dAngle,
 	//Debug
 
 	//Debug
+	warpAffine(matSrc, matROI, rMat, sizePadding);
+}
+
+void Img::GetRotatedROIGpu(cv::UMat& matSrc, cv::Size size, Point2f ptLT, double dAngle, cv::UMat& matROI)
+{
+	double dAngle_radian = dAngle * D2R;
+	Point2f ptC((matSrc.cols - 1) / 2.0f, (matSrc.rows - 1) / 2.0f);
+	Point2f ptLT_rotate = ptRotatePt2f(ptLT, ptC, dAngle_radian);
+	cv::Size sizePadding(size.width + 6, size.height + 6);
+
+	Mat rMat = getRotationMatrix2D(ptC, dAngle, 1);
+	rMat.at<double>(0, 2) -= ptLT_rotate.x - 3;
+	rMat.at<double>(1, 2) -= ptLT_rotate.y - 3;
 	warpAffine(matSrc, matROI, rMat, sizePadding);
 }
 void Img::CCOEFF_Denominator(cv::Mat& matSrc, s_TemplData* pTemplData, cv::Mat& matResult, int iLayer)
@@ -718,6 +747,34 @@ namespace
 		return (v < 0.0) ? 0.0 : (v > 1.0 ? 1.0 : v);
 	}
 
+	static bool CanUseGpu(bool enable)
+	{
+		if (!enable) return false;
+		return cv::ocl::haveOpenCL();
+	}
+
+	static void BuildGpuPyramidCache(s_TemplData& data)
+	{
+		std::vector<cv::UMat>().swap(data.vecPyramidGpu);
+		data.vecPyramidGpu.resize(data.vecPyramid.size());
+		for (size_t i = 0; i < data.vecPyramid.size(); ++i)
+		{
+			if (!data.vecPyramid[i].empty())
+				data.vecPyramid[i].copyTo(data.vecPyramidGpu[i]);
+		}
+	}
+
+	static void BuildSourceGpuPyramid(const cv::Mat& src, std::vector<cv::UMat>& out, int topLayer)
+	{
+		std::vector<cv::UMat>().swap(out);
+		if (src.empty()) return;
+
+		out.resize((size_t)topLayer + 1);
+		src.copyTo(out[0]);
+		for (int i = 1; i <= topLayer; ++i)
+			cv::pyrDown(out[(size_t)i - 1], out[(size_t)i]);
+	}
+
 	static cv::Mat ToGray8U(const cv::Mat& src)
 	{
 		if (src.empty()) return cv::Mat();
@@ -775,6 +832,488 @@ namespace
 			bin, bin, cv::MORPH_CLOSE,
 			cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3)));
 		return bin;
+	}
+
+	static int MakeOddKernel(int k, int fallback)
+	{
+		if (k <= 0) k = fallback;
+		if ((k & 1) == 0) ++k;
+		if (k < 3) k = 3;
+		return k;
+	}
+
+	static double Median8U(const cv::Mat& gray8)
+	{
+		if (gray8.empty() || gray8.type() != CV_8UC1) return 0.0;
+
+		int hist[256] = { 0 };
+		for (int y = 0; y < gray8.rows; ++y)
+		{
+			const uchar* p = gray8.ptr<uchar>(y);
+			for (int x = 0; x < gray8.cols; ++x) hist[p[x]]++;
+		}
+
+		const int half = (int)((gray8.total() + 1) / 2);
+		int acc = 0;
+		for (int i = 0; i < 256; ++i)
+		{
+			acc += hist[i];
+			if (acc >= half) return (double)i;
+		}
+		return 0.0;
+	}
+
+	static cv::Mat FilterEdgeByLength(const cv::Mat& edgeBin, int minLen)
+	{
+		if (edgeBin.empty()) return cv::Mat();
+		if (minLen <= 1) return edgeBin.clone();
+
+		cv::Mat bin;
+		if (edgeBin.type() != CV_8UC1)
+			edgeBin.convertTo(bin, CV_8UC1);
+		else
+			bin = edgeBin;
+
+		cv::Mat labels, stats, centroids;
+		const int n = cv::connectedComponentsWithStats(bin, labels, stats, centroids, 8, CV_32S);
+		cv::Mat out = cv::Mat::zeros(bin.size(), CV_8UC1);
+
+		for (int i = 1; i < n; ++i)
+		{
+			const int area = stats.at<int>(i, cv::CC_STAT_AREA);
+			if (area < minLen) continue;
+			out.setTo(255, labels == i);
+		}
+
+		return out;
+	}
+
+	static cv::Mat ApplyGrayPipeline(const cv::Mat& src, const Pattern2PreprocessConfig& cfg)
+	{
+		cv::Mat gray = ToGray8U(src);
+		if (gray.empty()) return gray;
+
+		// BitwiseNot cũ chỉ có ý nghĩa trong miền gray. Edge/GrayPlusEdge bỏ qua để tránh lệch polarity.
+		if (cfg.EnableBitwiseNot && cfg.Domain == Pattern2FeatureDomain::Gray)
+			cv::bitwise_not(gray, gray);
+
+		if (cfg.EnableIlluminationFix)
+		{
+			const int autoK = (std::min(gray.cols, gray.rows) / 8) | 1;
+			const int k = MakeOddKernel(cfg.IllumKernel, std::max(3, autoK));
+			cv::Mat blur, tmp;
+			cv::GaussianBlur(gray, blur, cv::Size(k, k), 0);
+			gray.convertTo(tmp, CV_16S);
+			cv::Mat blur16;
+			blur.convertTo(blur16, CV_16S);
+			tmp = tmp - blur16 + 128;
+			tmp.convertTo(gray, CV_8U);
+		}
+
+		const int denoiseK = MakeOddKernel(cfg.DenoiseKernel, 3);
+		switch ((int)cfg.DenoiseMethod)
+		{
+		case 1:
+			cv::GaussianBlur(gray, gray, cv::Size(denoiseK, denoiseK), 0);
+			break;
+		case 2:
+			cv::medianBlur(gray, gray, denoiseK);
+			break;
+		case 3:
+		{
+			cv::Mat tmp;
+			cv::bilateralFilter(gray, tmp, denoiseK, 50, 50);
+			gray = tmp;
+			break;
+		}
+		default:
+			break;
+		}
+
+		if (cfg.EnableCLAHE)
+		{
+			const double clip = std::max(1.0, std::min(8.0, cfg.ClaheClip));
+			const int tile = std::max(2, cfg.ClaheTile);
+			cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(clip, cv::Size(tile, tile));
+			clahe->apply(gray, gray);
+		}
+
+		if (cfg.EnableGammaCorrection)
+		{
+			const double gamma = std::max(0.1, std::min(5.0, cfg.Gamma));
+			if (std::abs(gamma - 1.0) > 1e-6)
+			{
+				uchar lut[256];
+				for (int i = 0; i < 256; ++i)
+					lut[i] = cv::saturate_cast<uchar>(std::pow(i / 255.0, gamma) * 255.0);
+				cv::LUT(gray, cv::Mat(1, 256, CV_8U, lut), gray);
+			}
+		}
+
+		return gray;
+	}
+
+	static cv::Mat ComputeEdgeMagnitude(const cv::Mat& grayPre, const Pattern2PreprocessConfig& cfg)
+	{
+		if (grayPre.empty()) return cv::Mat();
+
+		const int k = ((cfg.EdgeKernel == 5) ? 5 : 3);
+		cv::Mat mag32, out;
+
+		if (cfg.EdgeMethod == Pattern2EdgeMethod::ScharrMag)
+		{
+			cv::Mat gx, gy;
+			cv::Scharr(grayPre, gx, CV_32F, 1, 0);
+			cv::Scharr(grayPre, gy, CV_32F, 0, 1);
+			cv::magnitude(gx, gy, mag32);
+		}
+		else if (cfg.EdgeMethod == Pattern2EdgeMethod::Laplacian)
+		{
+			cv::Mat lap;
+			cv::Laplacian(grayPre, lap, CV_32F, k);
+			mag32 = cv::abs(lap);
+		}
+		else
+		{
+			cv::Mat gx, gy;
+			cv::Sobel(grayPre, gx, CV_32F, 1, 0, k);
+			cv::Sobel(grayPre, gy, CV_32F, 0, 1, k);
+			cv::magnitude(gx, gy, mag32);
+		}
+
+		double maxv = 0.0;
+		cv::minMaxLoc(mag32, nullptr, &maxv, nullptr, nullptr);
+		if (maxv <= 1e-6)
+			out = cv::Mat::zeros(grayPre.size(), CV_8UC1);
+		else
+			mag32.convertTo(out, CV_8UC1, 255.0 / maxv);
+
+		if (cfg.EdgeMethod == Pattern2EdgeMethod::Canny)
+		{
+			double low = cfg.CannyLow;
+			double high = cfg.CannyHigh;
+			if (low <= 0.0 || high <= 0.0)
+			{
+				const double v = Median8U(grayPre);
+				low = std::max(0.0, 0.66 * v);
+				high = std::min(255.0, 1.33 * v);
+				if (high <= low + 1.0)
+				{
+					cv::Mat otsuTmp;
+					high = cv::threshold(out, otsuTmp, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+					low = high * 0.5;
+				}
+			}
+
+			cv::Mat cannyBin;
+			cv::Canny(grayPre, cannyBin, low, high, k);
+
+			cv::Mat inv, dist, soft;
+			cv::bitwise_not(cannyBin, inv);
+			cv::distanceTransform(inv, dist, cv::DIST_L2, 3);
+			dist = dist * 32.0;
+			cv::threshold(dist, dist, 255.0, 255.0, cv::THRESH_TRUNC);
+			dist = 255.0 - dist;
+			dist.convertTo(soft, CV_8UC1);
+			soft.setTo(255, cannyBin);
+			return soft;
+		}
+
+		return out;
+	}
+
+	static cv::Mat ComputeEdgeBinary(const cv::Mat& edgeMag, const Pattern2PreprocessConfig& cfg)
+	{
+		if (edgeMag.empty()) return cv::Mat();
+
+		cv::Mat bin;
+		cv::threshold(edgeMag, bin, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+
+		const int dilatePx = std::max(0, std::min(3, cfg.EdgeDilatePx));
+		if (dilatePx > 0)
+		{
+			const int k = dilatePx * 2 + 1;
+			cv::dilate(bin, bin, cv::getStructuringElement(cv::MORPH_RECT, cv::Size(k, k)));
+		}
+
+		if (cfg.EnableEdgeLengthFilter)
+			bin = FilterEdgeByLength(bin, std::max(1, cfg.MinEdgeSegmentLen));
+
+		return bin;
+	}
+
+	static cv::Mat ApplyFullPreprocess(
+		const cv::Mat& src,
+		const Pattern2PreprocessConfig& cfg,
+		cv::Mat* outGrayPre,
+		cv::Mat* outEdgeMag,
+		cv::Mat* outEdgeBin)
+	{
+		cv::Mat grayPre = ApplyGrayPipeline(src, cfg);
+		cv::Mat edgeMag = ComputeEdgeMagnitude(grayPre, cfg);
+		cv::Mat edgeBin = ComputeEdgeBinary(edgeMag, cfg);
+
+		if (outGrayPre != nullptr) *outGrayPre = grayPre.clone();
+		if (outEdgeMag != nullptr) *outEdgeMag = edgeMag.clone();
+		if (outEdgeBin != nullptr) *outEdgeBin = edgeBin.clone();
+
+		if (cfg.Domain == Pattern2FeatureDomain::Edge)
+			return cfg.EdgeKeepMagnitude ? edgeMag : edgeBin;
+		return grayPre;
+	}
+
+	static void SnapshotPreprocess(const Pattern2PreprocessConfig& cfg, s_TemplData& data)
+	{
+		data.ppEnableBitwiseNot = cfg.EnableBitwiseNot;
+		data.ppEnableIlluminationFix = cfg.EnableIlluminationFix;
+		data.ppIllumKernel = cfg.IllumKernel;
+		data.ppEnableCLAHE = cfg.EnableCLAHE;
+		data.ppClaheClip = cfg.ClaheClip;
+		data.ppClaheTile = cfg.ClaheTile;
+		data.ppEnableGamma = cfg.EnableGammaCorrection;
+		data.ppGamma = cfg.Gamma;
+		data.ppDenoiseMethod = (int)cfg.DenoiseMethod;
+		data.ppDenoiseKernel = cfg.DenoiseKernel;
+		data.ppDomain = (int)cfg.Domain;
+		data.ppEdgeMethod = (int)cfg.EdgeMethod;
+		data.ppEdgeKernel = cfg.EdgeKernel;
+		data.ppCannyLow = cfg.CannyLow;
+		data.ppCannyHigh = cfg.CannyHigh;
+		data.ppEdgeKeepMagnitude = cfg.EdgeKeepMagnitude;
+		data.ppEdgeDilatePx = cfg.EdgeDilatePx;
+		data.ppEnableEdgeLengthFilter = cfg.EnableEdgeLengthFilter;
+		data.ppMinEdgeSegmentLen = cfg.MinEdgeSegmentLen;
+		data.ppFuseGrayWeight = cfg.FuseGrayWeight;
+	}
+
+	static Pattern2PreprocessConfig LoadPreprocess(const s_TemplData& data)
+	{
+		Pattern2PreprocessConfig cfg(true);
+		cfg.EnableBitwiseNot = data.ppEnableBitwiseNot;
+		cfg.EnableIlluminationFix = data.ppEnableIlluminationFix;
+		cfg.IllumKernel = data.ppIllumKernel;
+		cfg.EnableCLAHE = data.ppEnableCLAHE;
+		cfg.ClaheClip = data.ppClaheClip;
+		cfg.ClaheTile = data.ppClaheTile;
+		cfg.EnableGammaCorrection = data.ppEnableGamma;
+		cfg.Gamma = data.ppGamma;
+		cfg.DenoiseMethod = (Pattern2DenoiseMethod)data.ppDenoiseMethod;
+		cfg.DenoiseKernel = data.ppDenoiseKernel;
+		cfg.Domain = (Pattern2FeatureDomain)data.ppDomain;
+		cfg.EdgeMethod = (Pattern2EdgeMethod)data.ppEdgeMethod;
+		cfg.EdgeKernel = data.ppEdgeKernel;
+		cfg.CannyLow = data.ppCannyLow;
+		cfg.CannyHigh = data.ppCannyHigh;
+		cfg.EdgeKeepMagnitude = data.ppEdgeKeepMagnitude;
+		cfg.EdgeDilatePx = data.ppEdgeDilatePx;
+		cfg.EnableEdgeLengthFilter = data.ppEnableEdgeLengthFilter;
+		cfg.MinEdgeSegmentLen = data.ppMinEdgeSegmentLen;
+		cfg.FuseGrayWeight = data.ppFuseGrayWeight;
+		cfg.AutoPickDomain = false;
+		return cfg;
+	}
+
+	static bool IsPreprocessActive(const s_TemplData& data)
+	{
+		return data.ppDomain != 0 ||
+			data.ppEnableBitwiseNot ||
+			data.ppEnableIlluminationFix ||
+			data.ppEnableCLAHE ||
+			data.ppEnableGamma ||
+			data.ppDenoiseMethod != 0;
+	}
+
+	static void DisablePreprocessReplay(s_TemplData& data)
+	{
+		data.ppEnableBitwiseNot = false;
+		data.ppEnableIlluminationFix = false;
+		data.ppEnableCLAHE = false;
+		data.ppEnableGamma = false;
+		data.ppDenoiseMethod = 0;
+		data.ppDomain = 0;
+	}
+
+	static const char* DomainName(Pattern2FeatureDomain domain)
+	{
+		switch (domain)
+		{
+		case Pattern2FeatureDomain::Edge: return "Edge";
+		case Pattern2FeatureDomain::GrayPlusEdge: return "GrayPlusEdge";
+		default: return "Gray";
+		}
+	}
+
+	struct ScopedTemplSwap
+	{
+		Img* img;
+		cv::Mat raw;
+		cv::Mat sample;
+		s_TemplData templData;
+		bool enableGpu;
+
+		ScopedTemplSwap(Img* p) : img(p), enableGpu(false)
+		{
+			if (img != nullptr)
+			{
+				raw = img->matRaw.clone();
+				sample = img->matSample.clone();
+				templData = img->m_TemplData;
+				enableGpu = img->m_EnableGpu;
+			}
+		}
+
+		~ScopedTemplSwap()
+		{
+			if (img != nullptr)
+			{
+				img->matRaw = raw;
+				img->matSample = sample;
+				img->m_TemplData = templData;
+				img->m_EnableGpu = enableGpu;
+			}
+		}
+	};
+
+	struct ScopedCvThreadLimit
+	{
+		int oldThreads;
+		bool active;
+
+		ScopedCvThreadLimit(bool enable) : oldThreads(0), active(enable)
+		{
+			if (active)
+			{
+				oldThreads = cv::getNumThreads();
+				cv::setNumThreads(1);
+			}
+		}
+
+		~ScopedCvThreadLimit()
+		{
+			if (active)
+				cv::setNumThreads(oldThreads);
+		}
+	};
+
+	struct MatchTopLayerContext
+	{
+		Img* img;
+		s_TemplData* templData;
+		const std::vector<double>* angles;
+		const std::vector<cv::Mat>* srcPyr;
+		const std::vector<cv::UMat>* srcPyrGpu;
+		const std::vector<double>* layerScore;
+		bool useGpuMatch;
+		bool calMaxByBlock;
+		bool ckSIMD;
+		int topLayer;
+		int maxPos;
+		int maxNextMax;
+		double maxOverlap;
+		cv::Point2f ptCenter;
+		cv::Size sizePatTop;
+	};
+
+	static void ScanTopLayerAngleRange(
+		const MatchTopLayerContext* ctx,
+		size_t begin,
+		size_t end,
+		std::vector<s_MatchParameter>* out)
+	{
+		if (ctx == nullptr || out == nullptr) return;
+
+		out->reserve((end - begin) * (size_t)std::min(ctx->maxPos + MATCH_CANDIDATE_NUM, 64));
+
+		for (size_t ai = begin; ai < end; ++ai)
+		{
+			try {
+				const double angDeg = (*ctx->angles)[ai];
+				cv::Mat matR = cv::getRotationMatrix2D(ctx->ptCenter, angDeg, 1.0);
+				const cv::Size topSrcSize = ctx->useGpuMatch
+					? cv::Size((*ctx->srcPyrGpu)[(size_t)ctx->topLayer].cols, (*ctx->srcPyrGpu)[(size_t)ctx->topLayer].rows)
+					: (*ctx->srcPyr)[(size_t)ctx->topLayer].size();
+				const cv::Size sizeBest = ctx->img->GetBestRotationSize(
+					topSrcSize,
+					ctx->templData->vecPyramid[(size_t)ctx->topLayer].size(),
+					angDeg);
+
+				const float fTx = (sizeBest.width - 1) * 0.5f - ctx->ptCenter.x;
+				const float fTy = (sizeBest.height - 1) * 0.5f - ctx->ptCenter.y;
+				matR.at<double>(0, 2) += fTx;
+				matR.at<double>(1, 2) += fTy;
+
+				cv::Mat matResult;
+				if (ctx->useGpuMatch)
+				{
+					cv::UMat matRotatedSrcGpu, matResultGpu;
+					cv::warpAffine((*ctx->srcPyrGpu)[(size_t)ctx->topLayer], matRotatedSrcGpu, matR, sizeBest,
+						cv::INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(ctx->templData->iBorderColor));
+					ctx->img->MatchTemplateGpu(matRotatedSrcGpu, ctx->templData, matResultGpu, ctx->topLayer);
+					matResultGpu.copyTo(matResult);
+				}
+				else
+				{
+					cv::Mat matRotatedSrc;
+					cv::warpAffine((*ctx->srcPyr)[(size_t)ctx->topLayer], matRotatedSrc, matR, sizeBest,
+						cv::INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(ctx->templData->iBorderColor));
+					ctx->img->MatchTemplate(matRotatedSrc, ctx->templData, matResult, ctx->topLayer, false, ctx->ckSIMD);
+				}
+				if (matResult.type() != CV_32F) matResult.convertTo(matResult, CV_32F);
+
+				const double layerThresh = (*ctx->layerScore)[(size_t)ctx->topLayer];
+				const int want = std::min(ctx->maxPos + MATCH_CANDIDATE_NUM - 1, ctx->maxNextMax);
+
+				if (ctx->calMaxByBlock) {
+					s_BlockMax blockMax(matResult, ctx->templData->vecPyramid[(size_t)ctx->topLayer].size());
+
+					double dMaxVal = -1.0;
+					cv::Point ptMaxLoc;
+					blockMax.GetMaxValueLoc(dMaxVal, ptMaxLoc);
+
+					if (dMaxVal >= layerThresh) {
+						out->emplace_back(cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy), dMaxVal, angDeg);
+
+						for (int k = 0; k < want; ++k) {
+							double valueF = -1.f;
+							const double overlapF = (float)ctx->maxOverlap;
+
+							ptMaxLoc = ctx->img->GetNextMaxLoc(matResult, ptMaxLoc,
+								cv::Size(ctx->sizePatTop.width, ctx->sizePatTop.height),
+								valueF, overlapF, blockMax);
+
+							if ((double)valueF < layerThresh) break;
+							out->emplace_back(
+								cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy),
+								(double)valueF, angDeg);
+						}
+					}
+				}
+				else {
+					double dMaxVal = -1.0;
+					cv::Point ptMaxLoc;
+					cv::minMaxLoc(matResult, nullptr, &dMaxVal, nullptr, &ptMaxLoc);
+
+					if (dMaxVal >= layerThresh) {
+						out->emplace_back(cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy), dMaxVal, angDeg);
+
+						for (int k = 0; k < want; ++k) {
+							double valueF = -1.f;
+							const double overlapF = (float)ctx->maxOverlap;
+
+							ptMaxLoc = ctx->img->GetNextMaxLoc(matResult, ptMaxLoc,
+								cv::Size(ctx->sizePatTop.width, ctx->sizePatTop.height),
+								valueF, overlapF);
+
+							if ((double)valueF < layerThresh) break;
+							out->emplace_back(
+								cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy),
+								(double)valueF, angDeg);
+						}
+					}
+				}
+			}
+			catch (const std::exception&) { /* có thể log nếu cần */ }
+		}
 	}
 
 	static double ScoreSameSizeNCC(const cv::Mat& templ, const cv::Mat& roi)
@@ -1126,6 +1665,7 @@ namespace
 
 		outData.iBorderColor = cv::mean(gray).val[0] < 128 ? 255 : 0;
 		outData.bIsPatternLearned = true;
+		BuildGpuPyramidCache(outData);
 	}
 
 }
@@ -1306,6 +1846,7 @@ void Pattern2::LearnPattern()
 		templData->vecTemplNorm[i] = templNorm;
 	}
 	templData->bIsPatternLearned = true;
+	BuildGpuPyramidCache(*templData);
 	img->ClearStableScaleBank();
 }
 
@@ -1331,6 +1872,33 @@ void Pattern2::LearnPatternStable(Pattern2StableConfig cfg)
 	if (originalGray.empty())
 		return;
 
+	Pattern2PreprocessConfig pp = cfg.Preprocess;
+	// Tương thích ngược: BitwiseNot cũ vẫn hoạt động; nếu field mới bật thì OR vào snapshot learn-time.
+	pp.EnableBitwiseNot = pp.EnableBitwiseNot || cfg.BitwiseNot;
+
+	cv::Mat baseGrayPre, baseEdgeMag, baseEdgeBin;
+	cv::Mat baseFeature = ApplyFullPreprocess(originalGray, pp, &baseGrayPre, &baseEdgeMag, &baseEdgeBin);
+	if (baseGrayPre.empty())
+		return;
+
+	if (pp.AutoPickDomain)
+	{
+		const int edgeCnt = cv::countNonZero(baseEdgeBin);
+		const double edgeDensity = (double)edgeCnt / std::max(1, baseEdgeBin.rows * baseEdgeBin.cols);
+		const double entropy = Entropy8U(baseGrayPre);
+
+		if (edgeDensity >= 0.15 && entropy >= 6.5)
+			pp.Domain = Pattern2FeatureDomain::GrayPlusEdge;
+		else if (edgeDensity < 0.05)
+			pp.Domain = Pattern2FeatureDomain::Gray;
+		else
+			pp.Domain = Pattern2FeatureDomain::GrayPlusEdge;
+
+		baseFeature = (pp.Domain == Pattern2FeatureDomain::Edge)
+			? (pp.EdgeKeepMagnitude ? baseEdgeMag : baseEdgeBin)
+			: baseGrayPre;
+	}
+
 	const std::vector<double> scales =
 		BuildScaleList(cfg.EnableScaleSearch, cfg.ScaleMin, cfg.ScaleMax, cfg.ScaleStep);
 
@@ -1339,31 +1907,45 @@ void Pattern2::LearnPatternStable(Pattern2StableConfig cfg)
 
 	for (double scale : scales)
 	{
-		cv::Mat scaledGray;
+		cv::Mat scaledGrayPre;
 		if (std::abs(scale - 1.0) <= 1e-9)
 		{
-			scaledGray = originalGray.clone();
+			scaledGrayPre = baseGrayPre.clone();
 		}
 		else
 		{
-			const int sw = std::max(8, (int)std::round(originalGray.cols * scale));
-			const int sh = std::max(8, (int)std::round(originalGray.rows * scale));
-			cv::resize(originalGray, scaledGray, cv::Size(sw, sh), 0, 0,
+			const int sw = std::max(8, (int)std::round(baseGrayPre.cols * scale));
+			const int sh = std::max(8, (int)std::round(baseGrayPre.rows * scale));
+			cv::resize(baseGrayPre, scaledGrayPre, cv::Size(sw, sh), 0, 0,
 				(scale >= 1.0) ? cv::INTER_LINEAR : cv::INTER_AREA);
 		}
 
-		if (scaledGray.cols < 8 || scaledGray.rows < 8)
+		if (scaledGrayPre.cols < 8 || scaledGrayPre.rows < 8)
 			continue;
+
+		// Edge pyramid/cache is always recomputed from scaled gray-pre, not resized from a binary map.
+		cv::Mat scaledEdgeMag = ComputeEdgeMagnitude(scaledGrayPre, pp);
+		cv::Mat scaledEdgeBin = ComputeEdgeBinary(scaledEdgeMag, pp);
+		cv::Mat scaledFeature = (pp.Domain == Pattern2FeatureDomain::Edge)
+			? (pp.EdgeKeepMagnitude ? scaledEdgeMag : scaledEdgeBin)
+			: scaledGrayPre;
 
 		s_StableScaleTemplate item;
 		item.scale = scale;
-		item.tplGray = scaledGray;
+		item.tplGray = scaledFeature;
 		item.tplNorm = NormalizeForCompare(item.tplGray);
 		item.tplGrad = GradientMag8(item.tplNorm);
-		item.tplEdge = EdgeMaskFromGrad(item.tplGrad);
+		item.tplEdge = (pp.Domain == Pattern2FeatureDomain::Gray || scaledEdgeBin.empty())
+			? EdgeMaskFromGrad(item.tplGrad)
+			: scaledEdgeBin;
+		item.tplEdgeMagnitude = scaledEdgeMag;
 		item.tplEdgeCount = std::max(1, cv::countNonZero(item.tplEdge));
 
 		BuildStableTemplDataFromGray(item.tplGray, img->m_iMinReduceArea, item.templData);
+		SnapshotPreprocess(pp, item.templData);
+		item.templData.tplPreprocessedGray = scaledGrayPre.clone();
+		item.templData.tplEdgeMagnitude = scaledEdgeMag.clone();
+		item.templData.tplEdgeBinary = scaledEdgeBin.clone();
 
 		item.thresholdFinal =
 			(cfg.MinAcceptScore > 0.0)
@@ -1412,13 +1994,146 @@ void Pattern2::LearnPatternStable(Pattern2StableConfig cfg)
 
 	img->m_TemplData = img->stableScaleBank[(size_t)bestBaseIdx].templData;
 	img->m_TemplData.bIsPatternLearned = true;
-	img->matSample = originalGray.clone();
+	img->matSample = img->stableScaleBank[(size_t)bestBaseIdx].tplGray.clone();
 }
 
 void Pattern2::FreeBuffer(System::IntPtr p)
 {
 	if (p != System::IntPtr::Zero)
 		System::Runtime::InteropServices::Marshal::FreeHGlobal(p);
+}
+
+void Pattern2::SetGpuEnabled(bool enable)
+{
+	if (img != nullptr)
+		img->m_EnableGpu = enable && CanUseGpu(true);
+}
+
+bool Pattern2::IsGpuAvailable()
+{
+	return CanUseGpu(true);
+}
+
+System::IntPtr Pattern2::PreviewPreprocessed(
+	IntPtr data, int w, int h, int stride, int ch,
+	Pattern2PreprocessConfig cfg,
+	int outputKind,
+	[System::Runtime::InteropServices::Out] int% outW,
+	[System::Runtime::InteropServices::Out] int% outH,
+	[System::Runtime::InteropServices::Out] int% outStride,
+	[System::Runtime::InteropServices::Out] int% outChannels)
+{
+	outW = 0;
+	outH = 0;
+	outStride = 0;
+	outChannels = 0;
+
+	if (data == IntPtr::Zero || w <= 0 || h <= 0 || stride <= 0)
+		return System::IntPtr::Zero;
+
+	int type = 0;
+	switch (ch)
+	{
+	case 1: type = CV_8UC1; break;
+	case 3: type = CV_8UC3; break;
+	case 4: type = CV_8UC4; break;
+	default:
+		return System::IntPtr::Zero;
+	}
+
+	cv::Mat src(h, w, type, data.ToPointer(), (size_t)stride);
+	cv::Mat grayPre, edgeMag, edgeBin;
+	ApplyFullPreprocess(src, cfg, &grayPre, &edgeMag, &edgeBin);
+
+	cv::Mat out;
+	if (outputKind == 1)
+		out = edgeMag;
+	else if (outputKind == 2)
+		out = edgeBin;
+	else
+		out = grayPre;
+
+	if (out.empty())
+		return System::IntPtr::Zero;
+
+	if (out.type() != CV_8UC1)
+		out.convertTo(out, CV_8UC1);
+	if (!out.isContinuous())
+		out = out.clone();
+
+	const int bytes = (int)out.total();
+	System::IntPtr p = System::Runtime::InteropServices::Marshal::AllocHGlobal(bytes);
+	std::memcpy(p.ToPointer(), out.data, (size_t)bytes);
+
+	outW = out.cols;
+	outH = out.rows;
+	outStride = out.cols;
+	outChannels = 1;
+	return p;
+}
+
+Pattern2PreprocessConfig Pattern2::PresetGeneralGray()
+{
+	Pattern2PreprocessConfig cfg(true);
+	cfg.EnableCLAHE = true;
+	cfg.ClaheClip = 2.0;
+	cfg.ClaheTile = 8;
+	cfg.Domain = Pattern2FeatureDomain::Gray;
+	return cfg;
+}
+
+Pattern2PreprocessConfig Pattern2::PresetUnevenLighting()
+{
+	Pattern2PreprocessConfig cfg(true);
+	cfg.EnableIlluminationFix = true;
+	cfg.EnableCLAHE = true;
+	cfg.ClaheClip = 3.0;
+	cfg.ClaheTile = 8;
+	cfg.Domain = Pattern2FeatureDomain::Gray;
+	return cfg;
+}
+
+Pattern2PreprocessConfig Pattern2::PresetMetalShiny()
+{
+	Pattern2PreprocessConfig cfg(true);
+	cfg.EnableCLAHE = true;
+	cfg.ClaheClip = 2.0;
+	cfg.ClaheTile = 8;
+	cfg.DenoiseMethod = Pattern2DenoiseMethod::Bilateral;
+	cfg.DenoiseKernel = 5;
+	cfg.Domain = Pattern2FeatureDomain::GrayPlusEdge;
+	cfg.FuseGrayWeight = 0.5;
+	return cfg;
+}
+
+Pattern2PreprocessConfig Pattern2::PresetPCBOrText()
+{
+	Pattern2PreprocessConfig cfg(true);
+	cfg.EnableCLAHE = true;
+	cfg.ClaheClip = 2.0;
+	cfg.ClaheTile = 8;
+	cfg.EdgeMethod = Pattern2EdgeMethod::Canny;
+	cfg.CannyLow = 0.0;
+	cfg.CannyHigh = 0.0;
+	cfg.EdgeDilatePx = 1;
+	cfg.EnableEdgeLengthFilter = true;
+	cfg.MinEdgeSegmentLen = 8;
+	cfg.Domain = Pattern2FeatureDomain::Edge;
+	cfg.EdgeKeepMagnitude = true;
+	return cfg;
+}
+
+Pattern2PreprocessConfig Pattern2::PresetLowContrast()
+{
+	Pattern2PreprocessConfig cfg(true);
+	cfg.EnableGammaCorrection = true;
+	cfg.Gamma = 0.7;
+	cfg.EnableCLAHE = true;
+	cfg.ClaheClip = 4.0;
+	cfg.ClaheTile = 8;
+	cfg.Domain = Pattern2FeatureDomain::GrayPlusEdge;
+	cfg.FuseGrayWeight = 0.4;
+	return cfg;
 }
 
 List<Rotaterectangle>^ Pattern2::Match(
@@ -1457,23 +2172,34 @@ List<Rotaterectangle>^ Pattern2::Match(
 	//  Chuẩn hoá nguồn về GRAY 8U 
 	cv::Mat srcForPyr;
 	{
-		cv::Mat src = img->matRaw;
+		if (IsPreprocessActive(img->m_TemplData))
+		{
+			Pattern2PreprocessConfig pp = LoadPreprocess(img->m_TemplData);
+			pp.EnableBitwiseNot = pp.EnableBitwiseNot || m_ckBitwiseNot;
+			cv::Mat grayPre, edgeMag, edgeBin;
+			srcForPyr = ApplyFullPreprocess(img->matRaw, pp, &grayPre, &edgeMag, &edgeBin);
+		}
+		else
+		{
+			cv::Mat src = img->matRaw;
 
-		if (src.channels() == 3) {
-			cv::cvtColor(src, srcForPyr, cv::COLOR_BGR2GRAY);
+			if (src.channels() == 3) {
+				cv::cvtColor(src, srcForPyr, cv::COLOR_BGR2GRAY);
+			}
+			else if (src.channels() == 1) {
+				srcForPyr = src;
+			}
+			else {
+				cv::Mat tmp; cv::convertScaleAbs(src, tmp);
+				if (tmp.channels() == 3) cv::cvtColor(tmp, srcForPyr, cv::COLOR_BGR2GRAY);
+				else if (tmp.channels() == 1) srcForPyr = tmp;
+				else cv::cvtColor(tmp, srcForPyr, cv::COLOR_BGR2GRAY);
+			}
+			if (srcForPyr.depth() != CV_8U) cv::convertScaleAbs(srcForPyr, srcForPyr);
+			if (m_ckBitwiseNot) cv::bitwise_not(srcForPyr, srcForPyr);
 		}
-		else if (src.channels() == 1) {
-			srcForPyr = src;
-		}
-		else {
-			cv::Mat tmp; cv::convertScaleAbs(src, tmp);
-			if (tmp.channels() == 3) cv::cvtColor(tmp, srcForPyr, cv::COLOR_BGR2GRAY);
-			else if (tmp.channels() == 1) srcForPyr = tmp;
-			else cv::cvtColor(tmp, srcForPyr, cv::COLOR_BGR2GRAY);
-		}
-		if (srcForPyr.depth() != CV_8U) cv::convertScaleAbs(srcForPyr, srcForPyr);
-		if (m_ckBitwiseNot) cv::bitwise_not(srcForPyr, srcForPyr);
 	}
+	if (srcForPyr.empty()) return results;
 
 	//  Xác định top layer với “ngân sách” 
 	int iTopLayer = img->GetTopLayer(&img->matSample, (int)std::sqrt((double)img->m_iMinReduceArea));
@@ -1487,10 +2213,22 @@ List<Rotaterectangle>^ Pattern2::Match(
 		}
 	}
 
+	const bool useGpuMatch = img->m_EnableGpu && CanUseGpu(true);
+	if (useGpuMatch)
+		cv::ocl::setUseOpenCL(true);
+
 	//  Pyramid nguồn 
 	std::vector<cv::Mat> vecMatSrcPyr;
-	vecMatSrcPyr.reserve((size_t)iTopLayer + 1);
-	cv::buildPyramid(srcForPyr, vecMatSrcPyr, iTopLayer);
+	std::vector<cv::UMat> vecMatSrcPyrGpu;
+	if (useGpuMatch)
+	{
+		BuildSourceGpuPyramid(srcForPyr, vecMatSrcPyrGpu, iTopLayer);
+	}
+	else
+	{
+		vecMatSrcPyr.reserve((size_t)iTopLayer + 1);
+		cv::buildPyramid(srcForPyr, vecMatSrcPyr, iTopLayer);
+	}
 
 	s_TemplData* pTemplData = &img->m_TemplData;
 	if ((int)pTemplData->vecPyramid.size() <= iTopLayer) return results;
@@ -1529,95 +2267,74 @@ List<Rotaterectangle>^ Pattern2::Match(
 	for (int l = 1; l <= iTopLayer; ++l)
 		vecLayerScore[(size_t)l] = vecLayerScore[(size_t)l - 1] * 0.90;
 
-	const int iTopSrcW = vecMatSrcPyr[(size_t)iTopLayer].cols;
-	const int iTopSrcH = vecMatSrcPyr[(size_t)iTopLayer].rows;
+	const int iTopSrcW = useGpuMatch ? vecMatSrcPyrGpu[(size_t)iTopLayer].cols : vecMatSrcPyr[(size_t)iTopLayer].cols;
+	const int iTopSrcH = useGpuMatch ? vecMatSrcPyrGpu[(size_t)iTopLayer].rows : vecMatSrcPyr[(size_t)iTopLayer].rows;
 	cv::Point2f ptCenter((iTopSrcW - 1) * 0.5f, (iTopSrcH - 1) * 0.5f);
 
 	cv::Size sizePatTop = pTemplData->vecPyramid[(size_t)iTopLayer].size();
 	const bool bCalMaxByBlock =
-		(vecMatSrcPyr[(size_t)iTopLayer].size().area() / std::max(1, sizePatTop.area()) > 500) &&
+		((useGpuMatch ? cv::Size(vecMatSrcPyrGpu[(size_t)iTopLayer].cols, vecMatSrcPyrGpu[(size_t)iTopLayer].rows) : vecMatSrcPyr[(size_t)iTopLayer].size()).area() / std::max(1, sizePatTop.area()) > 500) &&
 		(m_iMaxPos > 10);
 
 	//  Tìm cực đại sơ bộ ở top layer cho mỗi góc 
 	std::vector<s_MatchParameter> vecMatchParameter;
 	vecMatchParameter.reserve(vecAngles.size() * (size_t)std::min(m_iMaxPos + MATCH_CANDIDATE_NUM, 64));
 
-	for (size_t ai = 0; ai < vecAngles.size(); ++ai)
+	MatchTopLayerContext topCtx;
+	topCtx.img = img;
+	topCtx.templData = pTemplData;
+	topCtx.angles = &vecAngles;
+	topCtx.srcPyr = &vecMatSrcPyr;
+	topCtx.srcPyrGpu = &vecMatSrcPyrGpu;
+	topCtx.layerScore = &vecLayerScore;
+	topCtx.useGpuMatch = useGpuMatch;
+	topCtx.calMaxByBlock = bCalMaxByBlock;
+	topCtx.ckSIMD = m_ckSIMD;
+	topCtx.topLayer = iTopLayer;
+	topCtx.maxPos = m_iMaxPos;
+	topCtx.maxNextMax = MAX_NEXT_MAX;
+	topCtx.maxOverlap = m_dMaxOverlap;
+	topCtx.ptCenter = ptCenter;
+	topCtx.sizePatTop = sizePatTop;
+
+	int cpuThreadCount = 1;
+	if (!useGpuMatch && useMultiThread && vecAngles.size() > 1)
 	{
-		try {
-			const double angDeg = vecAngles[ai];
-			cv::Mat matR = cv::getRotationMatrix2D(ptCenter, angDeg, 1.0);
-			const cv::Size sizeBest = img->GetBestRotationSize(
-				vecMatSrcPyr[(size_t)iTopLayer].size(),
-				pTemplData->vecPyramid[(size_t)iTopLayer].size(),
-				angDeg);
+		cpuThreadCount = numThreads;
+		if (cpuThreadCount <= 0)
+			cpuThreadCount = (int)std::thread::hardware_concurrency();
+		if (cpuThreadCount <= 0)
+			cpuThreadCount = 2;
+		cpuThreadCount = std::max(1, std::min(cpuThreadCount, (int)vecAngles.size()));
+		cpuThreadCount = std::min(cpuThreadCount, 32);
+	}
 
-			const float fTx = (sizeBest.width - 1) * 0.5f - ptCenter.x;
-			const float fTy = (sizeBest.height - 1) * 0.5f - ptCenter.y;
-			matR.at<double>(0, 2) += fTx;
-			matR.at<double>(1, 2) += fTy;
+	if (cpuThreadCount <= 1)
+	{
+		ScanTopLayerAngleRange(&topCtx, 0, vecAngles.size(), &vecMatchParameter);
+	}
+	else
+	{
+		ScopedCvThreadLimit cvThreadLimit(true);
+		std::vector<std::vector<s_MatchParameter>> buckets((size_t)cpuThreadCount);
+		std::vector<std::thread> workers;
+		workers.reserve((size_t)cpuThreadCount);
 
-			cv::Mat matRotatedSrc;
-			cv::warpAffine(vecMatSrcPyr[(size_t)iTopLayer], matRotatedSrc, matR, sizeBest,
-				cv::INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(pTemplData->iBorderColor));
-
-			cv::Mat matResult;
-			img->MatchTemplate(matRotatedSrc, pTemplData, matResult, iTopLayer, false, m_ckSIMD);
-			if (matResult.type() != CV_32F) matResult.convertTo(matResult, CV_32F);
-
-			const double layerThresh = vecLayerScore[(size_t)iTopLayer];
-			const int want = std::min(m_iMaxPos + MATCH_CANDIDATE_NUM - 1, MAX_NEXT_MAX);
-
-			if (bCalMaxByBlock) {
-				s_BlockMax blockMax(matResult, pTemplData->vecPyramid[(size_t)iTopLayer].size());
-
-				double dMaxVal = -1.0;
-				cv::Point ptMaxLoc;
-				blockMax.GetMaxValueLoc(dMaxVal, ptMaxLoc);
-
-				if (dMaxVal >= layerThresh) {
-					vecMatchParameter.emplace_back(cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy), dMaxVal, angDeg);
-
-					for (int k = 0; k < want; ++k) {
-						double valueF = -1.f;
-						const double overlapF = (float)m_dMaxOverlap;
-
-						ptMaxLoc = img->GetNextMaxLoc(matResult, ptMaxLoc,
-							cv::Size(sizePatTop.width, sizePatTop.height),
-							valueF, overlapF, blockMax);
-
-						if ((double)valueF < layerThresh) break;
-						vecMatchParameter.emplace_back(
-							cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy),
-							(double)valueF, angDeg);
-					}
-				}
-			}
-			else {
-				double dMaxVal = -1.0;
-				cv::Point ptMaxLoc;
-				cv::minMaxLoc(matResult, nullptr, &dMaxVal, nullptr, &ptMaxLoc);
-
-				if (dMaxVal >= layerThresh) {
-					vecMatchParameter.emplace_back(cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy), dMaxVal, angDeg);
-
-					for (int k = 0; k < want; ++k) {
-						double valueF = -1.f;
-						const double overlapF = (float)m_dMaxOverlap;
-
-						ptMaxLoc = img->GetNextMaxLoc(matResult, ptMaxLoc,
-							cv::Size(sizePatTop.width, sizePatTop.height),
-							valueF, overlapF);
-
-						if ((double)valueF < layerThresh) break;
-						vecMatchParameter.emplace_back(
-							cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy),
-							(double)valueF, angDeg);
-					}
-				}
-			}
+		const size_t total = vecAngles.size();
+		const size_t chunk = (total + (size_t)cpuThreadCount - 1) / (size_t)cpuThreadCount;
+		for (int ti = 0; ti < cpuThreadCount; ++ti)
+		{
+			const size_t begin = (size_t)ti * chunk;
+			const size_t end = std::min(total, begin + chunk);
+			if (begin >= end) break;
+			workers.emplace_back(ScanTopLayerAngleRange, &topCtx, begin, end, &buckets[(size_t)ti]);
 		}
-		catch (const std::exception&) { /* có thể log nếu cần */ }
+
+		for (size_t i = 0; i < workers.size(); ++i)
+			workers[i].join();
+
+		for (size_t i = 0; i < buckets.size(); ++i)
+			vecMatchParameter.insert(vecMatchParameter.end(), buckets[i].begin(), buckets[i].end());
 	}
 
 	std::sort(vecMatchParameter.begin(), vecMatchParameter.end(), compareScoreBig2Small);
@@ -1666,8 +2383,9 @@ List<Rotaterectangle>^ Pattern2::Match(
 					dMatchedAngle + localAngleStep
 				};
 
-				cv::Point2f ptSrcCenter((vecMatSrcPyr[(size_t)iLayer].cols - 1) * 0.5f,
-					(vecMatSrcPyr[(size_t)iLayer].rows - 1) * 0.5f);
+				cv::Point2f ptSrcCenter(
+					((useGpuMatch ? vecMatSrcPyrGpu[(size_t)iLayer].cols : vecMatSrcPyr[(size_t)iLayer].cols) - 1) * 0.5f,
+					((useGpuMatch ? vecMatSrcPyrGpu[(size_t)iLayer].rows : vecMatSrcPyr[(size_t)iLayer].rows) - 1) * 0.5f);
 
 				s_MatchParameter vecNew[3];
 
@@ -1676,12 +2394,24 @@ List<Rotaterectangle>^ Pattern2::Match(
 
 				for (int j = 0; j < 3; ++j)
 				{
-					cv::Mat matRotatedSrc, matResult;
-					img->GetRotatedROI(vecMatSrcPyr[(size_t)iLayer],
-						pTemplData->vecPyramid[(size_t)iLayer].size(),
-						ptLT * 2, localAngles[j], matRotatedSrc);
-
-					img->MatchTemplate(matRotatedSrc, pTemplData, matResult, iLayer, true, m_ckSIMD);
+					cv::Mat matResult;
+					if (useGpuMatch)
+					{
+						cv::UMat matRotatedSrcGpu, matResultGpu;
+						img->GetRotatedROIGpu(vecMatSrcPyrGpu[(size_t)iLayer],
+							pTemplData->vecPyramid[(size_t)iLayer].size(),
+							ptLT * 2, localAngles[j], matRotatedSrcGpu);
+						img->MatchTemplateGpu(matRotatedSrcGpu, pTemplData, matResultGpu, iLayer);
+						matResultGpu.copyTo(matResult);
+					}
+					else
+					{
+						cv::Mat matRotatedSrc;
+						img->GetRotatedROI(vecMatSrcPyr[(size_t)iLayer],
+							pTemplData->vecPyramid[(size_t)iLayer].size(),
+							ptLT * 2, localAngles[j], matRotatedSrc);
+						img->MatchTemplate(matRotatedSrc, pTemplData, matResult, iLayer, true, m_ckSIMD);
+					}
 					if (matResult.type() != CV_32F) matResult.convertTo(matResult, CV_32F);
 
 					double dMaxValue = -1.0;
@@ -1838,13 +2568,20 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 	const double maxOverlap = std::max(0.0, std::min(cfg.MaxOverlap, 0.90));
 	const double relaxedRawScore = Clamp01(cfg.RelaxedRawScore);
 
-	const cv::Mat originalSample = img->matSample.clone();
-	const s_TemplData originalTemplData = img->m_TemplData;
+	ScopedTemplSwap restore(img);
+	img->m_EnableGpu = cfg.EnableGpu && CanUseGpu(true);
 	const DifficultyTune diffTune = GetDifficultyTune((int)cfg.Difficulty);
 	const double effectiveNmsOverlap =
 		GetEffectiveNmsOverlap(maxOverlap, (int)cfg.Difficulty);
-	cv::Mat srcGray = ToGray8U(img->matRaw);
-	if (cfg.BitwiseNot) cv::bitwise_not(srcGray, srcGray);
+
+	Pattern2PreprocessConfig learnedPreprocess = LoadPreprocess(img->m_TemplData);
+	cv::Mat srcGrayPre, srcEdgeMag, srcEdgeBin;
+	cv::Mat srcFeature = ApplyFullPreprocess(img->matRaw, learnedPreprocess, &srcGrayPre, &srcEdgeMag, &srcEdgeBin);
+	if (srcFeature.empty()) return results;
+
+	cv::Mat srcValidatorGray = (learnedPreprocess.Domain == Pattern2FeatureDomain::Edge)
+		? srcFeature
+		: srcGrayPre;
 
 	StringBuilder^ sb = nullptr;
 	if (cfg.DebugLog)
@@ -1862,6 +2599,29 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 			cfg.EnableNms ? 1 : 0,
 			cfg.EnableAutoThreshold ? 1 : 0,
 			(int)img->stableScaleBank.size()));
+		sb->AppendLine(System::String::Format(
+			CultureInfo::InvariantCulture,
+			"gpu: requested={0}, active={1}, openclAvailable={2}",
+			cfg.EnableGpu ? 1 : 0,
+			img->m_EnableGpu ? 1 : 0,
+			CanUseGpu(true) ? 1 : 0));
+		sb->AppendLine(System::String::Format(
+			CultureInfo::InvariantCulture,
+			"cpuThread: requested={0}, threads={1}, active={2}",
+			cfg.EnableCpuMultiThread ? 1 : 0,
+			cfg.CpuThreads,
+			(!img->m_EnableGpu && cfg.EnableCpuMultiThread) ? 1 : 0));
+		sb->AppendLine(System::String::Format(
+			CultureInfo::InvariantCulture,
+			"preprocess: domain={0}, illum={1}, clahe={2}, denoise={3}, edgeMethod={4}, autoPickedDomain={5}",
+			gcnew System::String(DomainName(learnedPreprocess.Domain)),
+			learnedPreprocess.EnableIlluminationFix ? 1 : 0,
+			learnedPreprocess.EnableCLAHE ? 1 : 0,
+			(int)learnedPreprocess.DenoiseMethod,
+			(int)learnedPreprocess.EdgeMethod,
+			cfg.Preprocess.AutoPickDomain ? 1 : 0));
+		if (learnedPreprocess.EnableBitwiseNot && learnedPreprocess.Domain != Pattern2FeatureDomain::Gray)
+			sb->AppendLine("preprocess warning: EnableBitwiseNot ignored because domain is not Gray");
 	}
 
 	std::vector<s_MatchParameter> acceptedAll;
@@ -1874,6 +2634,7 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 		const cv::Mat& tplNorm = item.tplNorm;
 		const cv::Mat& tplGrad = item.tplGrad;
 		const cv::Mat& tplEdge = item.tplEdge;
+		const cv::Mat& tplEdgeMag = item.tplEdgeMagnitude;
 		const int tplEdgeCount = std::max(1, item.tplEdgeCount);
 
 		const double thresholdFinal = item.thresholdFinal;
@@ -1888,8 +2649,10 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 		const double wEdgeIou = item.wEdgeIou;
 		const double wEdgeRatio = item.wEdgeRatio;
 
+		img->matRaw = srcFeature;
 		img->matSample = tplGray;
 		img->m_TemplData = item.templData;
+		DisablePreprocessReplay(img->m_TemplData); // source is already preprocessed for this stable pass.
 
 		if (sb != nullptr)
 		{
@@ -1918,12 +2681,12 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 			cfg.AngleEndDeg,
 			relaxedRawScore,
 			false,
-			cfg.BitwiseNot,
+			false,
 			cfg.SubPixel,
 			std::max(32, maxPos * 8),
 			std::max(0.01, std::min(maxOverlap, 0.60)),
-			false,
-			0);
+			cfg.EnableCpuMultiThread,
+			cfg.CpuThreads);
 
 		if (coarse == nullptr || coarse->Count == 0)
 		{
@@ -1958,6 +2721,7 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 			const double coarseScore = Clamp01(rr.Score / 100.0);
 
 			double rawNcc = 0.0;
+			double rawNccEdge = 0.0;
 			double gradNcc = 0.0;
 			double edgeIou = 0.0;
 			double edgeRatio = 0.0;
@@ -1971,7 +2735,7 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 			if (cfg.EnableValidator)
 			{
 				cv::Mat roiPad;
-				img->GetRotatedROI(srcGray, cv::Size(w, h), ptLT, angDeg, roiPad);
+				img->GetRotatedROI(srcValidatorGray, cv::Size(w, h), ptLT, angDeg, roiPad);
 
 				if (roiPad.empty() || roiPad.cols < w + 6 || roiPad.rows < h + 6)
 				{
@@ -1998,15 +2762,42 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 				edgeIou = EdgeIoU(tplEdge, roiEdge);
 				edgeRatio = RatioSimilarity(tplEdgeCount, cv::countNonZero(roiEdge));
 
+				if (learnedPreprocess.Domain == Pattern2FeatureDomain::GrayPlusEdge && !tplEdgeMag.empty())
+				{
+					cv::Mat roiEdgePad;
+					img->GetRotatedROI(srcEdgeMag, cv::Size(w, h), ptLT, angDeg, roiEdgePad);
+					if (!roiEdgePad.empty() && roiEdgePad.cols >= w + 6 && roiEdgePad.rows >= h + 6)
+					{
+						cv::Mat roiEdgeMag = roiEdgePad(cv::Rect(3, 3, w, h)).clone();
+						if (roiEdgeMag.size() != tplEdgeMag.size())
+							cv::resize(roiEdgeMag, roiEdgeMag, tplEdgeMag.size(), 0, 0, cv::INTER_LINEAR);
+						rawNccEdge = ScoreSameSizeNCC(tplEdgeMag, roiEdgeMag);
+					}
+				}
+
 				const double rawPos = std::max(0.0, rawNcc);
+				const double rawEdgePos = std::max(0.0, rawNccEdge);
 				const double gradPos = std::max(0.0, gradNcc);
 
-				finalScore = Clamp01(
-					wBase * coarseScore +
-					wRaw * rawPos +
-					wGrad * gradPos +
-					wEdgeIou * edgeIou +
-					wEdgeRatio * edgeRatio);
+				if (learnedPreprocess.Domain == Pattern2FeatureDomain::GrayPlusEdge)
+				{
+					const double fuseGray = Clamp01(learnedPreprocess.FuseGrayWeight);
+					const double wRawEdge = 0.15;
+					const double grayNorm = std::max(1e-9, wBase + wRaw);
+					const double edgeNorm = std::max(1e-9, wGrad + wEdgeIou + wEdgeRatio + wRawEdge);
+					const double grayBlock = (wBase * coarseScore + wRaw * rawPos) / grayNorm;
+					const double edgeBlock = (wGrad * gradPos + wEdgeIou * edgeIou + wEdgeRatio * edgeRatio + wRawEdge * rawEdgePos) / edgeNorm;
+					finalScore = Clamp01(fuseGray * grayBlock + (1.0 - fuseGray) * edgeBlock);
+				}
+				else
+				{
+					finalScore = Clamp01(
+						wBase * coarseScore +
+						wRaw * rawPos +
+						wGrad * gradPos +
+						wEdgeIou * edgeIou +
+						wEdgeRatio * edgeRatio);
+				}
 
 				passScore = finalScore >= thresholdFinal;
 
@@ -2067,9 +2858,9 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 			{
 				sb->AppendLine(System::String::Format(
 					CultureInfo::InvariantCulture,
-					"cx={0:F2}, cy={1:F2}, ang={2:F2}, scale={3:F3}, coarse={4:F3}, raw={5:F3}, grad={6:F3}, edgeIoU={7:F3}, edgeRatio={8:F3}, final={9:F3}, keepStrong={10}, keepNormal={11}, keepRescue={12}, keep={13}, reason={14}",
+					"cx={0:F2}, cy={1:F2}, ang={2:F2}, scale={3:F3}, coarse={4:F3}, raw={5:F3}, rawEdge={6:F3}, grad={7:F3}, edgeIoU={8:F3}, edgeRatio={9:F3}, final={10:F3}, keepStrong={11}, keepNormal={12}, keepRescue={13}, keep={14}, reason={15}",
 					rr.Cx, rr.Cy, rr.AngleDeg, scale,
-					coarseScore, rawNcc, gradNcc, edgeIou, edgeRatio, finalScore,
+					coarseScore, rawNcc, rawNccEdge, gradNcc, edgeIou, edgeRatio, finalScore,
 					keepStrong ? 1 : 0,
 					keepNormal ? 1 : 0,
 					keepRescue ? 1 : 0,
@@ -2093,9 +2884,6 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 			acceptedAll.push_back(mp);
 		}
 	}
-
-	img->matSample = originalSample;
-	img->m_TemplData = originalTemplData;
 
 	//if (cfg.EnableNms)
 	//	img->FilterWithRotatedRect(&acceptedAll, CV_TM_CCOEFF_NORMED, maxOverlap);
