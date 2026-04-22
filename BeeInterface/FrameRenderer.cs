@@ -19,6 +19,7 @@ namespace BeeInterface
     public sealed class FrameRenderer : IDisposable
     {
         private readonly Cyotek.Windows.Forms.ImageBox _imgView;
+        private readonly System.Reflection.PropertyInfo _zoomProperty;
 
         // Locks
         private readonly object _bmLock = new object(); // bảo vệ bmResult
@@ -40,7 +41,13 @@ namespace BeeInterface
         public FrameRenderer(Cyotek.Windows.Forms.ImageBox imageView)
         {
             _imgView = imageView ?? throw new ArgumentNullException(nameof(imageView));
+            _zoomProperty = _imgView.GetType().GetProperty("Zoom");
             EnableDoubleBuffer(_imgView);
+        }
+
+        private bool IsManagedBackBuffer(Image img)
+        {
+            return ReferenceEquals(img, _bmpA) || ReferenceEquals(img, _bmpB);
         }
 
         // Bật double-buffer cho viewer để vẽ mượt hơn
@@ -108,8 +115,7 @@ namespace BeeInterface
                     float s = 1.0f;
                     try
                     {
-                        var pi = _imgView.GetType().GetProperty("Zoom");
-                        if (pi != null) s = Convert.ToSingle(pi.GetValue(_imgView)) / 100f;
+                        if (_zoomProperty != null) s = Convert.ToSingle(_zoomProperty.GetValue(_imgView)) / 100f;
                     }
                     catch { }
                     xf.Scale(s, s);
@@ -145,13 +151,15 @@ namespace BeeInterface
                     {
                         var old = pb.Image;
                         pb.Image = _displayBmp;  // dùng back buffer trực tiếp
-                        old?.Dispose();          // giải phóng ảnh cũ mà control giữ
+                        if (old != null && !ReferenceEquals(old, _displayBmp) && !IsManagedBackBuffer(old))
+                            old.Dispose();
                     }
                     else
                     {
                         var old = _imgView.BackgroundImage;
                         _imgView.BackgroundImage = _displayBmp;
-                        old?.Dispose();
+                        if (old != null && !ReferenceEquals(old, _displayBmp) && !IsManagedBackBuffer(old))
+                            old.Dispose();
                     }
 
                     // Nếu control tự vẽ từ bmResult, chỉ cần Invalidate()
@@ -252,6 +260,26 @@ namespace BeeInterface
         {
             if (_disposed) return;
             _disposed = true;
+
+            Action clearControlImage = () =>
+            {
+                if (_imgView is Cyotek.Windows.Forms.ImageBox pb)
+                {
+                    var old = pb.Image;
+                    pb.Image = null;
+                    if (old != null && !IsManagedBackBuffer(old))
+                        old.Dispose();
+                }
+                else
+                {
+                    var old = _imgView.BackgroundImage;
+                    _imgView.BackgroundImage = null;
+                    if (old != null && !IsManagedBackBuffer(old))
+                        old.Dispose();
+                }
+            };
+            if (_imgView.IsHandleCreated && _imgView.InvokeRequired) _imgView.BeginInvoke(clearControlImage);
+            else clearControlImage();
 
             lock (_swapLock)
             {
