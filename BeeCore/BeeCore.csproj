@@ -375,6 +375,22 @@
     <Compile Include="Unit\MatchingShape.cs" />
     <Compile Include="Unit\ColorArea.cs" />
     <Compile Include="Common.cs" />
+    <Compile Include="ShapeEditing\CanvasMouseArgs.cs" />
+    <Compile Include="ShapeEditing\CanvasMouseButton.cs" />
+    <Compile Include="ShapeEditing\CanvasCursorKind.cs" />
+    <Compile Include="ShapeEditing\ColorPickerOverlay.cs" />
+    <Compile Include="ShapeEditing\ColorPickedArgs.cs" />
+    <Compile Include="ShapeEditing\DefaultShapeRepository.cs" />
+    <Compile Include="ShapeEditing\GeometryHelper.cs" />
+    <Compile Include="ShapeEditing\IImageCanvas.cs" />
+    <Compile Include="ShapeEditing\InteractionMode.cs" />
+    <Compile Include="ShapeEditing\IOverlayPainter.cs" />
+    <Compile Include="ShapeEditing\IShapeEditor.cs" />
+    <Compile Include="ShapeEditing\IShapeRepository.cs" />
+    <Compile Include="ShapeEditing\ShapeChangedArgs.cs" />
+    <Compile Include="ShapeEditing\ShapeChangeKind.cs" />
+    <Compile Include="ShapeEditing\ShapeEditOptions.cs" />
+    <Compile Include="ShapeEditing\ShapeEditState.cs" />
     <Compile Include="Unit\Circle.cs" />
     <Compile Include="Unit\Positions.cs" />
     <Compile Include="Unit\PositionAdj.cs" />
@@ -390,6 +406,9 @@
     <Compile Include="Unit\Counter.cs" />
     <Compile Include="Unit\Yolo.cs" />
     <Compile Include="ValueRobot.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ShapeEditing\MigrationNotes.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

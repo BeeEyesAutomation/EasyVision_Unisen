@@ -28,6 +28,19 @@ namespace BeeInterface
     public partial class ToolMultiOnnx : UserControl
     {
 
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
         public ToolMultiOnnx()
         {
             InitializeComponent();
@@ -58,16 +71,16 @@ namespace BeeInterface
 
             btnOffBlackDot.IsCLick = !Propety.IsBlackDot;
             btnOnBlackDot.IsCLick = Propety.IsBlackDot;
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+            OwnerTool.StatusTool = StatusTool.WaitCheck;
          
 
          
 
            
-            trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
-            trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
-            trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
-            trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+            trackScore.Min = OwnerTool.MinValue;
+            trackScore.Max = OwnerTool.MaxValue;
+            trackScore.Step = OwnerTool.StepValue;
+            trackScore.Value = OwnerTool.Score;
          
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
@@ -83,7 +96,11 @@ namespace BeeInterface
           
             AdjWidthDetect.Value = Propety.WidthDetectBox;
             AdjArea.Value = Propety.minArea;
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolMultiPattern_StatusToolChanged;
+             if (OwnerTool != null)
+             {
+                 OwnerTool.StatusToolChanged -= ToolMultiPattern_StatusToolChanged;
+                 OwnerTool.StatusToolChanged += ToolMultiPattern_StatusToolChanged;
+             }
     
         }
 
@@ -92,7 +109,7 @@ namespace BeeInterface
         private void ToolMultiPattern_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
-            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (OwnerTool.StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true;
             }
@@ -100,7 +117,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (float)trackScore.Value;
+            OwnerTool.Score = (float)trackScore.Value;
 
 
         }
@@ -112,7 +129,7 @@ namespace BeeInterface
 
 
             btnTest.Enabled = false;
-            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
         }
         bool IsFullSize = false;
 
@@ -174,7 +191,7 @@ namespace BeeInterface
         private void NewShape(ShapeType newShape)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2;
+            var prop = Common.TryGetTool(Global.IndexToolSelected).Propety2;
             RectRotate rr = null;
             if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
             else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;
@@ -310,7 +327,7 @@ namespace BeeInterface
             Propety.IsCalibs = true;
 
             btnTest.Enabled = false;
-            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
         }
 
         private void rjButton1_Click_1(object sender, EventArgs e)

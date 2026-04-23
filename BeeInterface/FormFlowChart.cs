@@ -1,4 +1,4 @@
-﻿using BeeCore.Funtion;
+using BeeCore.Funtion;
 using BeeGlobal;
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace BeeInterface
         {
             Global.IndexProgChoose = 0;
 
-            ShowTool.ShowChart( Global.ToolSettings.pAllTool , BeeCore.Common.PropetyTools[Global.IndexProgChoose]);
+            ShowTool.ShowChart( Global.ToolSettings.pAllTool , BeeCore.Common.EnsureToolList(Global.IndexProgChoose));
             Global.EditTool.RefreshGuiEdit(Step.Step1);
             this.Close();
            
@@ -32,9 +32,9 @@ namespace BeeInterface
         private void btnCamera2_Click(object sender, EventArgs e)
         {
             Global.IndexProgChoose = 1;
-            if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] == null)
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose] = new List<BeeCore.PropetyTool>();
-            ShowTool.ShowChart(Global.ToolSettings.pAllTool , BeeCore.Common.PropetyTools[Global.IndexProgChoose]);
+            if (BeeCore.Common.TryGetToolList(Global.IndexProgChoose) == null)
+                BeeCore.Common.SetToolList(Global.IndexProgChoose, new List<BeeCore.PropetyTool>());
+            ShowTool.ShowChart(Global.ToolSettings.pAllTool , BeeCore.Common.EnsureToolList(Global.IndexProgChoose));
 
             Global.EditTool.RefreshGuiEdit(Step.Step1);
             this.Close();
@@ -43,8 +43,8 @@ namespace BeeInterface
         private void btnCamera3_Click(object sender, EventArgs e)
         {
             Global.IndexProgChoose = 2;
-            if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] == null)
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose] = new List<BeeCore.PropetyTool>();
+            if (BeeCore.Common.TryGetToolList(Global.IndexProgChoose) == null)
+                BeeCore.Common.SetToolList(Global.IndexProgChoose, new List<BeeCore.PropetyTool>());
             Global.EditTool.RefreshGuiEdit(Step.Step1);
             this.Close();
         }
@@ -52,8 +52,8 @@ namespace BeeInterface
         private void btnCamera4_Click(object sender, EventArgs e)
         {
             Global.IndexProgChoose = 3;
-            if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] == null)
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose] = new List<BeeCore.PropetyTool>();
+            if (BeeCore.Common.TryGetToolList(Global.IndexProgChoose) == null)
+                BeeCore.Common.SetToolList(Global.IndexProgChoose, new List<BeeCore.PropetyTool>());
             Global.EditTool.RefreshGuiEdit(Step.Step1);
             this.Close();
         }
@@ -84,7 +84,7 @@ namespace BeeInterface
         private void rjButton1_Click(object sender, EventArgs e)
         {
            BeeCore.Common.listCamera[1] = null;
-           BeeCore.Common.PropetyTools[1] = new List<BeeCore.PropetyTool>();
+           BeeCore.Common.SetToolList(1, new List<BeeCore.PropetyTool>());
             Global.EditTool.RefreshGuiEdit(Step.Run);
             this.Close();
             
@@ -94,7 +94,7 @@ namespace BeeInterface
         private void btnDelect3_Click(object sender, EventArgs e)
         {
             BeeCore.Common.listCamera[2] = null;
-            BeeCore.Common.PropetyTools[2] = new List<BeeCore.PropetyTool>();
+            BeeCore.Common.SetToolList(2, new List<BeeCore.PropetyTool>());
             Global.EditTool.RefreshGuiEdit(Step.Run);
             this.Close();
         }
@@ -102,7 +102,7 @@ namespace BeeInterface
         private void btnDelect4_Click(object sender, EventArgs e)
         {
             BeeCore.Common.listCamera[3] = null;
-            BeeCore.Common.PropetyTools[3] = new List<BeeCore.PropetyTool>();
+            BeeCore.Common.SetToolList(3, new List<BeeCore.PropetyTool>());
             Global.EditTool.RefreshGuiEdit(Step.Run);
             this.Close();
         }

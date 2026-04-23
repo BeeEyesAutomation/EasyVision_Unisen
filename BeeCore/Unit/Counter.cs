@@ -58,14 +58,14 @@ namespace BeeCore
         {
            
             if (rotArea == null) rotArea = new RectRotate();
-            Common.PropetyTools[IndexThread][Index].StepValue = 1;
-            Common.PropetyTools[IndexThread][Index].MinValue = 0;
-            Common.PropetyTools[IndexThread][Index].MaxValue = 100;
+            Common.TryGetTool(IndexThread, Index).StepValue = 1;
+            Common.TryGetTool(IndexThread, Index).MinValue = 0;
+            Common.TryGetTool(IndexThread, Index).MaxValue = 100;
             if (labelItems==null)labelItems = new List<LabelItem>();
 
             try
             {
-                Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.NotInitial;
+                Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.NotInitial;
                 if (pathFullModel.Trim().Contains(".pth"))
                 {
                     TypeYolo = TypeYolo.RCNN;
@@ -80,7 +80,7 @@ namespace BeeCore
                 else
                 {
                     TypeYolo = TypeYolo.YOLO;
-                    Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                    Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
                     return;
                 }
                 if (Global.IsIntialPython)
@@ -90,19 +90,19 @@ namespace BeeCore
                    if(!File.Exists(pathFullModel))
                         {
 
-                            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                            Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
                             return;
                         }    
-                    G.objYolo.load_model(Common.PropetyTools[IndexThread][Index].Name, pathFullModel, (int)TypeYolo);
+                    G.objYolo.load_model(Common.TryGetTool(IndexThread, Index).Name, pathFullModel, (int)TypeYolo);
                     //dynamic mod = Py.Import("Tool.Learning");
                     //dynamic cls = mod.GetAttr("ObjectDetector"); // class
                     //dynamic obj = cls.Invoke();              // khởi tạo instance
 
-                    //if (Common.PropetyTools[IndexThread][Index].Name.Trim() == "")
+                    //if (Common.TryGetTool(IndexThread, Index).Name.Trim() == "")
                     //{
-                    //    Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                    //    Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
                     //}
-                    Common.PropetyTools[IndexThread][Index]. StatusTool = StatusTool.WaitCheck;
+                    Common.TryGetTool(IndexThread, Index). StatusTool = StatusTool.WaitCheck;
                   
                 }
             }
@@ -114,7 +114,7 @@ namespace BeeCore
                 {
                       MessageBox.Show("Error: " + ex.Message);
                 }
-            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+            Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
 
             // G.YoloPlus.LoadModel(nameTool, nameModel, (int)TypeYolo);
         }
@@ -334,8 +334,8 @@ namespace BeeCore
                         int stride = (int)matCrop.Step(); // bytes/row (có thể > w*ch)
                         IntPtr p = matCrop.Data;
 
-                        float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
-                        string toolName = Common.PropetyTools[IndexThread][Index].Name ?? "default";
+                        float conf = (float)(Common.TryGetTool(IndexThread, Index).Score / 100.0);
+                        string toolName = Common.TryGetTool(IndexThread, Index).Name ?? "default";
 
                         // === Gọi YOLO (nhận: (boxes, scores, labels)) ===
                         // Ký hiệu: result là tuple-like (3 phần)
@@ -435,8 +435,8 @@ namespace BeeCore
         //                    long stride = matCrop.Step(); // có thể != w*ch, đã hỗ trợ ở Python
         //                    IntPtr p = matCrop.Data;
 
-        //                    float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
-        //                    string toolName = Common.PropetyTools[IndexThread][Index].Name;
+        //                    float conf = (float)(Common.TryGetTool(IndexThread, Index).Score / 100.0);
+        //                    string toolName = Common.TryGetTool(IndexThread, Index).Name;
 
         //                    dynamic result = G.objYolo.predict((long)p, h, w, ch, (int)stride, conf, toolName);
 
@@ -551,14 +551,14 @@ namespace BeeCore
                         listLabel = new List<string>();
                         rectRotates = new List<RectRotate>();
                         listScore = new List<float>();
-                        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                        Common.TryGetTool(IndexThread, Index).Results = Results.OK;
                         int i = 0;
                         int numOK = 0, numNG = 0;
                         int scoreRS = 0;
                         List<String> _listLabelCompare = new List<String>();
                         if (labelItems == null)
                         {
-                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                            Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                             return;
                         }
                         Content = "";
@@ -651,29 +651,29 @@ namespace BeeCore
                             foreach (string s in listLabel)
                                 Content += s;
                         }
-                        Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(scoreRS / (rectRotates.Count() * 1.0));
-                        if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
-                        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                        Common.TryGetTool(IndexThread, Index).ScoreResult = (int)(scoreRS / (rectRotates.Count() * 1.0));
+                        if (Common.TryGetTool(IndexThread, Index).ScoreResult < 0) Common.TryGetTool(IndexThread, Index).ScoreResult = 0;
+                        Common.TryGetTool(IndexThread, Index).Results = Results.OK;
                         switch (Compare)
                         {
                             case Compares.Equal:
                                 if (numOK != NumObject)
-                                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                                 break;
                             case Compares.Less:
                                 if (numOK >= NumObject)
-                                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                                 break;
                             case Compares.More:
                                 if (numOK <= NumObject)
-                                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                                 break;
                         }
                         if (IsEnContent)
                         {
                             if (Matching != Content)
                             {
-                                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                                Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                             }
                         }
 
@@ -701,7 +701,7 @@ namespace BeeCore
 
                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "No Initial"));
                 //  Global.Ex = "No Initial PY";
-                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                Common.TryGetTool(IndexThread, Index).Results = Results.NG;
             }
 
         }
@@ -723,7 +723,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = new SolidBrush(Global.ParaShow.TextColor);
             Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[Global.IndexProgChoose][Index].Results)
+            switch (Common.TryGetTool(Global.IndexProgChoose, Index).Results)
             {
                 case Results.OK:
                     cl =  Global.ParaShow.ColorOK;
@@ -733,7 +733,7 @@ namespace BeeCore
                     break;
             }
             Pen pen = new Pen(Color.Blue, 2);
-            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.TryGetTool(IndexThread, Index).Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
                 Draws.Box2Label(gc, rotA, nameTool,"Count: "+ rectRotates.Count , font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);

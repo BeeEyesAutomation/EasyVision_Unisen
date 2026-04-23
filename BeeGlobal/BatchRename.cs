@@ -158,9 +158,19 @@ namespace BeeGlobal
         /// sau đó rename tất cả file trong folder gốc (TopDirectoryOnly)
         /// thành: newFolderName + extension.
         /// </summary>
-        public static void RenameRootFolderAndFiles(string rootFolderPath, string newFolderName)
+        public static bool RenameRootFolderAndFiles(string rootFolderPath, string newFolderName)
         {
-     
+            if (string.IsNullOrWhiteSpace(rootFolderPath))
+                throw new ArgumentException("rootFolderPath is empty.", nameof(rootFolderPath));
+
+            if (string.IsNullOrWhiteSpace(newFolderName))
+                throw new ArgumentException("newFolderName is empty.", nameof(newFolderName));
+
+            if (newFolderName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+                throw new ArgumentException("Program name contains invalid characters.", nameof(newFolderName));
+
+            rootFolderPath = Path.GetFullPath(rootFolderPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+
             if (!Directory.Exists(rootFolderPath))
                 throw new DirectoryNotFoundException(rootFolderPath);
 
@@ -168,27 +178,73 @@ namespace BeeGlobal
             if (string.IsNullOrEmpty(parent))
                 throw new Exception("Cannot rename drive root.");
 
-            // 1️⃣ Rename folder gốc
             string newRootPath = Path.Combine(parent, newFolderName);
+
+            if (Directory.Exists(newRootPath) &&
+                !string.Equals(rootFolderPath, newRootPath, StringComparison.OrdinalIgnoreCase))
+                throw new IOException($"Target folder already exists: {newRootPath}");
+
+            bool moved = true;
             if (!string.Equals(rootFolderPath, newRootPath, StringComparison.OrdinalIgnoreCase))
             {
-                Directory.Move(rootFolderPath, newRootPath);
+                try
+                {
+                    MoveDirectoryWithRetry(rootFolderPath, newRootPath);
+                }
+                catch (IOException)
+                {
+                    CopyDirectoryRecursive(rootFolderPath, newRootPath);
+                    moved = false;
+                }
             }
 
-            // 2️⃣ Rename file: đổi TÊN GỐC, giữ extension
             foreach (var file in Directory.GetFiles(newRootPath))
             {
                 string dir = Path.GetDirectoryName(file);
                 string ext = Path.GetExtension(file);
-
                 string newFile = Path.Combine(dir, newFolderName + ext);
 
                 if (string.Equals(file, newFile, StringComparison.OrdinalIgnoreCase))
                     continue;
 
+                if (File.Exists(newFile))
+                    throw new IOException($"Target file already exists: {newFile}");
+
                 File.Move(file, newFile);
             }
-        
+
+            return moved;
+        }
+
+        private static void MoveDirectoryWithRetry(string sourcePath, string targetPath)
+        {
+            const int retryCount = 5;
+            IOException lastIo = null;
+            UnauthorizedAccessException lastUnauthorized = null;
+
+            for (int i = 0; i < retryCount; i++)
+            {
+                try
+                {
+                    Directory.Move(sourcePath, targetPath);
+                    return;
+                }
+                catch (IOException ex)
+                {
+                    lastIo = ex;
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    lastUnauthorized = ex;
+                }
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                System.Threading.Thread.Sleep(120);
+            }
+
+            Exception last = (Exception)lastUnauthorized ?? lastIo;
+            throw new IOException("Cannot rename program folder. Please close files/images/models opened from this program and try again. Source: " + sourcePath, last);
         }
 
         private static string RenameRootFolder(string rootFolderPath, string newFolderName)

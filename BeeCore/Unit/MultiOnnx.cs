@@ -293,17 +293,17 @@ namespace BeeCore
             if (ExpandX == 0) ExpandX = 50;
             if (ExpandY == 0) ExpandY = 50;
 
-            Common.PropetyTools[IndexThread][Index].StepValue = 1;
-            Common.PropetyTools[IndexThread][Index].MinValue = 0;
+            Common.TryGetTool(IndexThread, Index).StepValue = 1;
+            Common.TryGetTool(IndexThread, Index).MinValue = 0;
 
-            Common.PropetyTools[IndexThread][Index].MaxValue = 100;
-            if (Common.PropetyTools[IndexThread][Index].Score == 0)
-                Common.PropetyTools[IndexThread][Index].Score = 80;
+            Common.TryGetTool(IndexThread, Index).MaxValue = 100;
+            if (Common.TryGetTool(IndexThread, Index).Score == 0)
+                Common.TryGetTool(IndexThread, Index).Score = 80;
            
             if (ResultMulti == null)
                 ResultMulti = new List<ResultMulti>();
          
-                Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.NotInitial;
+                Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.NotInitial;
             //    if (pathFullModel != null)
                 {
                     //if (pathFullModel.Trim().Contains(".pth"))
@@ -319,7 +319,7 @@ namespace BeeCore
                     //else
                     //{
                     //    TypeYolo = TypeYolo.YOLO;
-                    //    Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                    //    Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
                     //    return;
                     //}
                                 try
@@ -339,7 +339,7 @@ namespace BeeCore
                             ListNameOnnx = NativeOnnx2.LoadNames(pathChip + "\\metadata.yaml");
                         }
                         else
-                            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                            Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
                     }
 
                                 }
@@ -366,7 +366,7 @@ namespace BeeCore
                                 // ListNameOnnx = NativeOnnx.LoadNames(pathBlack + "\\metadata.yaml");
                             }
                             else
-                                Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                                Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
 
                         }
                         catch (Exception ex)
@@ -375,7 +375,7 @@ namespace BeeCore
                     new LogEntry(DateTime.Now, LeveLLog.ERROR, "IniBlack", ex.ToString()));
 
                         }
-                Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
 
 
 
@@ -386,7 +386,7 @@ namespace BeeCore
            
           
         
-            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+            Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
         }
         public String[] LoadNameModel(String nameTool)
         {
@@ -701,7 +701,7 @@ namespace BeeCore
         {
             if (ResultItems != null)
                 ResultItems.Clear();
-            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
+            Common.TryGetTool(Global.IndexProgChoose, Index).ScoreResult = 0;
            
             rectRotates = new List<RectRotate>();
            
@@ -757,7 +757,7 @@ namespace BeeCore
                         Cv2.CvtColor(matCheckCip, matCheckCip, ColorConversionCodes.GRAY2BGR);
                         // Cv2.ImWrite("Gray.png", matCheckCip);
                     }
-                    float conf = (float)((Common.PropetyTools[IndexThread][Index].Score*0.8) / 100.0);
+                    float conf = (float)((Common.TryGetTool(IndexThread, Index).Score*0.8) / 100.0);
                     ResultItemChips = CheckBoxOnnx(matCheckCip, conf, rotArea);
 
                    
@@ -871,8 +871,8 @@ namespace BeeCore
                     int stride = (int)matCrop.Step(); // bytes/row (có thể > w*ch)
                     IntPtr p = matCrop.Data;
 
-                    float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
-                    string toolName = Common.PropetyTools[IndexThread][Index].Name.Trim()+i;
+                    float conf = (float)(Common.TryGetTool(IndexThread, Index).Score / 100.0);
+                    string toolName = Common.TryGetTool(IndexThread, Index).Name.Trim()+i;
 
                     // === Gọi YOLO (nhận: (boxes, scores, labels)) ===
                     // Ký hiệu: result là tuple-like (3 phần)
@@ -1190,7 +1190,7 @@ namespace BeeCore
         }
         public async void RunMode(RectRotate rectRotate)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
+            Common.TryGetTool(Global.IndexProgChoose, Index).ScoreResult = 0;
             rectRotates = new List<RectRotate>();
          
             listP_Center = new List<System.Drawing.Point>();
@@ -1370,7 +1370,7 @@ namespace BeeCore
                                 // ===== RIGHT =====
                                 () =>
                                 {
-                                    float conf = (float)((Common.PropetyTools[IndexThread][Index].Score ) / 100.0);
+                                    float conf = (float)((Common.TryGetTool(IndexThread, Index).Score ) / 100.0);
                                  
                                     ResultItemChips = CheckBoxOnnx(matChip, conf, rectRotate);
 
@@ -1610,24 +1610,24 @@ namespace BeeCore
                 ValueCompare++;
 
             }
-            Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-            Common.PropetyTools[IndexThread][Index].ScoreResult = ValueCompare;
+            Common.TryGetTool(IndexThread, Index).Results = Results.OK;
+            Common.TryGetTool(IndexThread, Index).ScoreResult = ValueCompare;
             if (ResultItemChips == null)
-                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                Common.TryGetTool(IndexThread, Index).Results = Results.NG;
             else
             {
                 if (ResultItemChips.Count() == ResultMulti.Count && !IsNG)
                 {
-                    Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                    Common.TryGetTool(IndexThread, Index).Results = Results.OK;
                 }
 
                 else
                 {
-                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                 }
                 if (ResultItems != null)
                     if (ResultItems.Count > 0)
-                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                        Common.TryGetTool(IndexThread, Index).Results = Results.NG;
             }
 
            
@@ -1761,7 +1761,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText =new SolidBrush( Global.ParaShow.TextColor);
             Color cl = Color.LimeGreen;
-            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.NG)
+            if (Common.TryGetTool(Global.IndexProgChoose, Index).Results == Results.NG)
             {
                 cl = Global.ParaShow.ColorNG;
             }
@@ -1776,7 +1776,7 @@ namespace BeeCore
                 Content += " (Fail Corner)";
 
             }    
-            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.TryGetTool(IndexThread, Index).Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
                 Draws.Box2Label(gc, rotA, nameTool, Content, font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
@@ -1881,7 +1881,7 @@ namespace BeeCore
                     mat.Translate(rs.rot._PosCenter.X, rs.rot._PosCenter.Y);
                     mat.Rotate(rs.rot._rectRotation);
                     gc.Transform = mat;
-                    Draws.Box1Label(gc, rs.rot._rect, "", font, brushText, cl2, Global.ParaShow.ThicknessLine);
+                    Draws.Box1Label(gc, rs.rot, "", font, brushText, cl2, Global.ParaShow.ThicknessLine);
 
                     gc.ResetTransform();
                 }
@@ -1920,7 +1920,7 @@ namespace BeeCore
                 String valueScore = Math.Round(rs.Score) + "%";
                 if (!Global.ParaShow.IsShowScore) valueScore = "";
                 if (!Global.ParaShow.IsShowLabel) label = "";
-                Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
+                Draws.Box3Label(gc, rs.rot, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
                 gc.ResetTransform();
 
             }

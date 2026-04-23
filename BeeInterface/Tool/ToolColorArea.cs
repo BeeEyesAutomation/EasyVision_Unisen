@@ -26,6 +26,19 @@ namespace BeeInterface
     public partial class ToolColorArea : UserControl
     {
      
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
         public TypeTool TypeTool;
         public ToolColorArea( )
         {
@@ -49,17 +62,19 @@ namespace BeeInterface
             EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
             EditRectRot1.IsHide = false;
+            this.VisibleChanged -= ToolColorArea_VisibleChanged;
             this.VisibleChanged += ToolColorArea_VisibleChanged;
             Global.SetColorChange -= Global_SetColorChange;
             Global.SetColorChange += Global_SetColorChange;
             if (Propety.listCLShow==null)
                 Propety.listCLShow = new List<Color>();
-            trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
-            trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
-            trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
-            trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+            trackScore.Min = OwnerTool.MinValue;
+            trackScore.Max = OwnerTool.MaxValue;
+            trackScore.Step = OwnerTool.StepValue;
+            trackScore.Value = OwnerTool.Score;
             AdjValueTemp.Value = Propety.PxTemp;
-
+            btnNGLess.IsCLick = Propety.IsNGLess;
+            btnNGMore.IsCLick = Propety.IsNGMore;
             AdjClose.Value = Propety.SizeClose;
             AdjOpen.Value = Propety.SizeOpen;
             AdjClearNoise.Value = Propety.SizeClearsmall;
@@ -72,8 +87,16 @@ namespace BeeInterface
             AdjClearBig.Enabled = Propety.IsClearNoiseBig;
             AdjOpen.Enabled = Propety.IsOpen;
             AdjClose.Enabled = Propety.IsClose;
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolColorArea_StatusToolChanged;
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ScoreChanged += ToolColorArea_ScoreChanged;
+             if (OwnerTool != null)
+             {
+                 OwnerTool.StatusToolChanged -= ToolColorArea_StatusToolChanged;
+                 OwnerTool.StatusToolChanged += ToolColorArea_StatusToolChanged;
+             }
+             if (OwnerTool != null)
+             {
+                 OwnerTool.ScoreChanged -= ToolColorArea_ScoreChanged;
+                 OwnerTool.ScoreChanged += ToolColorArea_ScoreChanged;
+             }
         
             trackPixel.Value = (int)Propety.Extraction;
             switch(Propety.TypeColor)
@@ -89,7 +112,7 @@ namespace BeeInterface
               
             btnGetColor.IsCLick = Propety.IsGetColor;
 
-            trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+            trackScore.Value = OwnerTool.Score;
           
 
 
@@ -186,7 +209,7 @@ namespace BeeInterface
         private void NewShape(ShapeType newShape)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2;
+            var prop = Common.TryGetTool(Global.IndexToolSelected).Propety2;
             RectRotate rr = null;
             if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
             else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;
@@ -317,7 +340,7 @@ namespace BeeInterface
         {
 
             if (Global.IsRun) return;
-            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (OwnerTool.StatusTool == StatusTool.Done)
             {
                 btnInspect.Enabled = true;
 
@@ -437,7 +460,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (int)trackScore.Value;
+            OwnerTool.Score = (int)trackScore.Value;
             
           
 
@@ -519,7 +542,7 @@ namespace BeeInterface
         private void btnInspect_Click(object sender, EventArgs e)
         {
             btnInspect.Enabled = false;
-            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
         }
 
         private void btnRGB_Click(object sender, EventArgs e)
@@ -603,7 +626,7 @@ namespace BeeInterface
             btnCalib.Enabled = false;
             Propety.IsCalib = true;
          
-            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
         }
 
         private void AdjValueTemp_ValueChanged(float obj)
@@ -614,5 +637,20 @@ namespace BeeInterface
         private void label9_Click(object sender, EventArgs e)
         {
                     }
+
+        private void rjButton2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnNGLess_Click(object sender, EventArgs e)
+        {
+            Propety.IsNGLess=btnNGLess.IsCLick;
+        }
+
+        private void btnNGMore_Click(object sender, EventArgs e)
+        {
+            Propety.IsNGMore=btnNGMore.IsCLick;
+        }
     }
 }

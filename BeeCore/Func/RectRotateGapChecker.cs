@@ -12,6 +12,7 @@ public sealed class AdjacentGapInfo
 
     public RectRotate BoxA { get; set; }
     public RectRotate BoxB { get; set; }
+    public RectRotate BoxNG { get; set; }
 
     public float Distance { get; set; }
     public float ScorePercent { get; set; }
@@ -27,6 +28,7 @@ public sealed class AdjacentGapCheckResult
     public List<AdjacentGapInfo> Gaps { get; set; } = new List<AdjacentGapInfo>();
 
     public AdjacentGapInfo FirstFailed { get; set; }
+    public RectRotate BoxNG { get; set; }
 }
 
 public static class RectRotateGapChecker
@@ -110,6 +112,7 @@ public static class RectRotateGapChecker
                 IndexB = i + 1,
                 BoxA = sorted[i],
                 BoxB = sorted[i + 1],
+                BoxNG = isNg ? CreateNgBox(sorted[i], sorted[i + 1]) : null,
                 Distance = d,
                 ScorePercent = score,
                 IsNG = isNg
@@ -121,12 +124,47 @@ public static class RectRotateGapChecker
             {
                 result.IsOK = false;
                 result.FirstFailed = info;
+                result.BoxNG = info.BoxNG;
                 return result;
             }
         }
 
         result.IsOK = true;
         return result;
+    }
+
+    private static RectRotate CreateNgBox(RectRotate boxA, RectRotate boxB)
+    {
+        if (boxA == null || boxB == null) return null;
+
+        float width = Math.Max(1f, (boxA._rect.Width + boxB._rect.Width) * 0.5f);
+        float height = Math.Max(1f, (boxA._rect.Height + boxB._rect.Height) * 0.5f);
+        var center = new PointF(
+            (boxA._PosCenter.X + boxB._PosCenter.X) * 0.5f,
+            (boxA._PosCenter.Y + boxB._PosCenter.Y) * 0.5f);
+        float angle = AverageAngle(boxA._rectRotation, boxB._rectRotation);
+
+        var boxNG = new RectRotate(
+            new RectangleF(-width / 2f, -height / 2f, width, height),
+            center,
+            angle,
+            AnchorPoint.None);
+        boxNG.Name = "NG";
+        boxNG.IsOK = false;
+        return boxNG;
+    }
+
+    private static float AverageAngle(float angleA, float angleB)
+    {
+        double radA = angleA * Math.PI / 180.0;
+        double radB = angleB * Math.PI / 180.0;
+        double x = Math.Cos(radA) + Math.Cos(radB);
+        double y = Math.Sin(radA) + Math.Sin(radB);
+
+        if (Math.Abs(x) < 1e-12 && Math.Abs(y) < 1e-12)
+            return angleA;
+
+        return (float)(Math.Atan2(y, x) * 180.0 / Math.PI);
     }
 
     public static bool CheckAdjacentCenterGapSimple(

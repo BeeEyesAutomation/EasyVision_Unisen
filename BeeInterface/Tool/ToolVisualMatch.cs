@@ -30,7 +30,20 @@ namespace BeeInterface
     [Serializable()]
     public partial class ToolVisualMatch : UserControl
     {
-        
+
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
         public ToolVisualMatch( )
         {
             InitializeComponent();
@@ -38,7 +51,7 @@ namespace BeeInterface
                 Propety = new  VisualMatch();
 
         }
-        
+
 
         public void LoadPara()
         {
@@ -49,8 +62,8 @@ namespace BeeInterface
             EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
             this.VisibleChanged -= ToolVisualMatch_VisibleChanged;
             this.VisibleChanged += ToolVisualMatch_VisibleChanged;
-          
-        
+
+
 
             imgTemp.Cursor = Cursors.Hand;
             imgTemp.AllowClickZoom = true;
@@ -62,12 +75,12 @@ namespace BeeInterface
 
             if (Propety.bmRaw != null)
             {
-              
+
                 imgTemp.Image = Propety.bmRaw;
-                
+
                 ShowTool.Full(imgTemp, Propety.bmRaw.Size,true);
             }
-            
+
             btnColor.IsCLick= Propety.TypeImg == TypeMat.Color ? true : false;
             btnGray.IsCLick = Propety.TypeImg == TypeMat.Binary ? true : false;
             AdjThreshGray.Enabled =! Propety.IsAutoThreshBinary;
@@ -79,23 +92,39 @@ namespace BeeInterface
             }
             btnAutoBinary.IsCLick = Propety.IsBinary;
             //this.btnAutoBinary.Text = Propety.IsBinary == true ? "ON" : "OFF";
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+            OwnerTool.StatusTool = StatusTool.WaitCheck;
 
-          
-            trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
-            trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
-            trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
-            trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+
+            trackScore.Min = OwnerTool.MinValue;
+            trackScore.Max = OwnerTool.MaxValue;
+            trackScore.Step = OwnerTool.StepValue;
+            trackScore.Value = OwnerTool.Score;
             if (Propety.rotArea == null)
                 Propety.rotArea = new RectRotate();
 
-          
-         
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
-          
+
+
+             if (OwnerTool != null)
+
+
+
+             {
+
+
+
+                 OwnerTool.StatusToolChanged -= ToolPattern_StatusToolChanged;
+
+
+
+                 OwnerTool.StatusToolChanged += ToolPattern_StatusToolChanged;
+
+
+
+             }
+
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
-        
+
             AdjClearNoise.Value = Propety.SzClearNoise;
             btnOFFCalib.IsCLick = Propety.ModeCalibVisualMatch == ModeCalibVisualMatch.OFF ? true : false;
             btnSlowCalib.IsCLick = Propety.ModeCalibVisualMatch == ModeCalibVisualMatch.Slow ? true : false;
@@ -136,7 +165,7 @@ namespace BeeInterface
             }
         }
 
-     
+
         private void btnNone_Click(object sender, EventArgs e)
         {
             switch (Global.TypeCrop)
@@ -190,7 +219,7 @@ namespace BeeInterface
         private void NewShape(ShapeType newShape)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2;
+            var prop = Common.TryGetTool(Global.IndexToolSelected).Propety2;
             RectRotate rr = null;
             if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
             else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;
@@ -354,17 +383,17 @@ namespace BeeInterface
         private void ToolPattern_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
-            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (OwnerTool.StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true;
-              
+
             }
         }
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (float)trackScore.Value;
-           
+            OwnerTool.Score = (float)trackScore.Value;
+
 
         }
 
@@ -374,19 +403,19 @@ namespace BeeInterface
         Mat matClear = new Mat(); Mat matMask = new Mat();
         public void GetTemp(RectRotate rotateRect, Mat matRegister)
         {
-           
+
                 float angle = rotateRect._rectRotation;
                 if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
                 Mat matCrop =BeeCore.Cropper.CropRotatedRect(matRegister, rotateRect,null);
                 if (matCrop.Type() == MatType.CV_8UC3)
                     Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
-               
+
         }
-       
+
         private void rjButton3_Click(object sender, EventArgs e)
         {
 
-          
+
           //  cv3.Pattern();
         }
 
@@ -395,34 +424,34 @@ namespace BeeInterface
 
         }
 
-      
-     
+
+
 
         private void trackScore_MouseUp(object sender, MouseEventArgs e)
         {
-           
+
 
             //if (!threadProcess.IsBusy)
             //    threadProcess.RunWorkerAsync();
         }
 
-       
-  
-    
+
+
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
           //  G.IsCancel = true;
-            
+
           //  G.EditTool.RefreshGuiEdit(Step.Step3);
         }
 
-       
 
-        
+
+
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-          
+
          //   G.EditTool.RefreshGuiEdit(Step.Step3);
         }
 
@@ -431,7 +460,7 @@ namespace BeeInterface
 
         }
 
-      
+
 
         private void btnLearning_Click(object sender, EventArgs e)
         {   // tránh leak bộ nhớ nếu là Bitmap tự tạo
@@ -449,9 +478,9 @@ namespace BeeInterface
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            
+
             btnTest.Enabled = false;
-            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
         }
         bool IsFullSize = false;
         private void btnCropHalt_Click(object sender, EventArgs e)
@@ -462,7 +491,7 @@ namespace BeeInterface
             IsFullSize = false;
             Propety.rotArea = Propety.rotAreaTemp.Clone();
             Global.StatusDraw = StatusDraw.Check;
-           
+
         }
 
         private void btnCropFull_Click(object sender, EventArgs e)
@@ -476,7 +505,7 @@ namespace BeeInterface
             Propety.TypeCrop = Global.TypeCrop;
 
             Global.StatusDraw = StatusDraw.Check;
-         
+
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
@@ -484,22 +513,22 @@ namespace BeeInterface
 
         }
 
-      
+
         private void rjButton3_Click_1(object sender, EventArgs e)
         {
 
         }
 
-     
+
 
         private void rjButton5_Click(object sender, EventArgs e)
         {
 
         }
 
-   
 
-  
+
+
 
         //private void btnLimitCounter_Click(object sender, EventArgs e)
         //{
@@ -507,19 +536,19 @@ namespace BeeInterface
         //    layLimitCouter.Enabled = btnLimitCounter.IsCLick;
         //}
 
-    
+
 
         private void workLoadModel_DoWork(object sender, DoWorkEventArgs e)
         {
             Patterns.LoadEdge();
-          
+
         }
 
-   
+
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-           
-          
+
+
             //    Bitmap bmTemp = Propety.bmTemp;
             //imgTemp.Image = bmTemp;
 
@@ -551,7 +580,7 @@ namespace BeeInterface
 
         }
 
-     
+
 
         private void trackNumObject_ValueChanged(float obj)
         {
@@ -594,17 +623,17 @@ namespace BeeInterface
 			Propety.ModeCalibVisualMatch = ModeCalibVisualMatch.Fast;
 		}
 
-       
+
 
         private void btn2_Click(object sender, EventArgs e)
         {
           EditRectRot1.Visible = !btn2.IsCLick;
-            
+
         }
 
         private void rjButton1_Click(object sender, EventArgs e)
         {
-           
+
         }
 
         private void btn4_Click(object sender, EventArgs e)
@@ -619,7 +648,7 @@ namespace BeeInterface
 
         private void rjButton1_Click_1(object sender, EventArgs e)
         {
-          
+
         }
 
         private void btn6_Click(object sender, EventArgs e)
@@ -627,7 +656,7 @@ namespace BeeInterface
             lay6.Visible = !btn6.IsCLick;
         }
 
-      
+
         private void btn8_Click(object sender, EventArgs e)
         {
             trackScore.Visible = !btn8.IsCLick;
@@ -658,9 +687,9 @@ namespace BeeInterface
             Propety.Aspect=AdjAspect.Value;
         }
 
-   
 
-       
+
+
 
         private void AdjThreshGray_ValueChanged(float obj)
         {

@@ -1,4 +1,4 @@
-﻿using BeeCore;
+using BeeCore;
 using BeeGlobal;
 using OpenCvSharp.Flann;
 using System;
@@ -54,7 +54,7 @@ namespace BeeInterface
                 Global.EditTool.UnResgisTer();
                 NameProject = NameProject.Replace(".prog", "");
 
-                // ==== dispose tools cũ ====
+                // ==== dispose tools cu ====
                 if (BeeCore.Common.PropetyTools != null)
                 {
                     foreach (var list in BeeCore.Common.PropetyTools)
@@ -125,19 +125,19 @@ namespace BeeInterface
                 //if(BeeCore.Common.PropetyTools.Count >= 2)
                 //{
                 //    List<PropetyTool> newList = new List<PropetyTool>();
-                //    foreach (PropetyTool List1 in BeeCore.Common.PropetyTools[1])
+                //    foreach (PropetyTool List1 in BeeCore.Common.EnsureToolList(1))
                 //    {
                 //        newList.Add((PropetyTool)List1.Clone());
                 //    }
-                //    BeeCore.Common.PropetyTools[2] = newList;
+                //    BeeCore.Common.EnsureToolList(2) = newList;
 
 
                 //    List<PropetyTool> newList2 = new List<PropetyTool>();
-                //    foreach (PropetyTool List2 in BeeCore.Common.PropetyTools[1])
+                //    foreach (PropetyTool List2 in BeeCore.Common.EnsureToolList(1))
                 //    {
                 //        newList2.Add((PropetyTool)List2.Clone());
                 //    }
-                //    BeeCore.Common.PropetyTools[3] = newList2;
+                //    BeeCore.Common.EnsureToolList(3) = newList2;
                 //}
                 bool IsVerNew = false;
                 foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
@@ -215,30 +215,30 @@ namespace BeeInterface
 
                 for (int t = 0; t < BeeCore.Common.PropetyTools.Count; t++)
                 {
-                    //var list = BeeCore.Common.PropetyTools[t];
+                    //var list = BeeCore.Common.EnsureToolList(t);
                   
-                    if (BeeCore.Common.PropetyTools[t] == null) continue;
+                    if (BeeCore.Common.TryGetToolList(t) == null) continue;
 
                    
 
-                    for (int i = 0; i < BeeCore.Common.PropetyTools[t].Count; i++)
+                    for (int i = 0; i < BeeCore.Common.EnsureToolList(t).Count; i++)
                     {
                         
                        
                         try
                         {
-                        if (BeeCore.Common.PropetyTools[t][i] == null)
+                        if (BeeCore.Common.TryGetTool(t, i) == null)
                         {
                           
                             continue;
                         }
-                            BeeCore.Common.PropetyTools[t][i].ItemTool = CreateItemTool(BeeCore.Common.PropetyTools[t][i], i, indexThread);
-                            if (BeeCore.Common.PropetyTools[t][i].TypeTool == TypeTool.Learning)
+                            BeeCore.Common.TryGetTool(t, i).ItemTool = CreateItemTool(BeeCore.Common.TryGetTool(t, i), i, indexThread);
+                            if (BeeCore.Common.TryGetTool(t, i).TypeTool == TypeTool.Learning)
                             {
-                                BeeCore.Common.PropetyTools[t][i].ItemTool.NotChange = true;
+                                BeeCore.Common.TryGetTool(t, i).ItemTool.NotChange = true;
                             }
  
-                            BeeCore.Common.PropetyTools[t][i].Control = CreateControls(BeeCore.Common.PropetyTools[t][i], i, indexThread);
+                            BeeCore.Common.TryGetTool(t, i).Control = CreateControls(BeeCore.Common.TryGetTool(t, i), i, indexThread);
                          
                         
                         }
@@ -473,7 +473,7 @@ namespace BeeInterface
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose].Remove(PropetyTool);
+                BeeCore.Common.EnsureToolList(Global.IndexProgChoose).Remove(PropetyTool);
                 return null;
             }
             return itemTool;
@@ -556,7 +556,7 @@ namespace BeeInterface
                 //    {
                 //        PropetyTool.Results = Results.NG;
                 //        PropetyTool.StatusTool = StatusTool.Done;
-                //        e.Cancel = true; // coi như timeout
+                //        e.Cancel = true; // coi nhu timeout
                 //        return;
                 //    }
 
@@ -572,7 +572,7 @@ namespace BeeInterface
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
-               BeeCore.Common.PropetyTools[Global.IndexProgChoose].Remove(PropetyTool);
+               BeeCore.Common.EnsureToolList(Global.IndexProgChoose).Remove(PropetyTool);
                 return null;
             }
             return control;

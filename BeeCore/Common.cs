@@ -149,7 +149,59 @@ namespace BeeCore
         private static int frameRate = 0;
         public static Image ImageShow = new Bitmap(376, 240);
         public static List<List<PropetyTool>> PropetyTools = new List<List<PropetyTool>>();
-      
+
+        /// <summary>Lấy tool an toàn theo (indexProg, indexTool). Trả về null nếu out-of-range.</summary>
+        public static PropetyTool TryGetTool(int indexProg, int indexTool)
+        {
+            if (PropetyTools == null) return null;
+            if (indexProg < 0 || indexProg >= PropetyTools.Count) return null;
+            var list = PropetyTools[indexProg];
+            if (list == null || indexTool < 0 || indexTool >= list.Count) return null;
+            return list[indexTool];
+        }
+
+        /// <summary>Lấy tool theo Global.IndexProgChoose hiện hành.</summary>
+        public static PropetyTool TryGetTool(int indexTool)
+            => TryGetTool(Global.IndexProgChoose, indexTool);
+
+        /// <summary>Lấy danh sách tool an toàn theo index program/thread. Trả về null nếu out-of-range.</summary>
+        public static List<PropetyTool> TryGetToolList(int indexProg)
+        {
+            if (PropetyTools == null) return null;
+            if (indexProg < 0 || indexProg >= PropetyTools.Count) return null;
+            return PropetyTools[indexProg];
+        }
+
+        /// <summary>Lấy danh sách tool theo Global.IndexProgChoose hiện hành.</summary>
+        public static List<PropetyTool> TryGetCurrentToolList()
+            => TryGetToolList(Global.IndexProgChoose);
+
+        /// <summary>Lấy hoặc tạo danh sách tool theo index program/thread.</summary>
+        public static List<PropetyTool> EnsureToolList(int indexProg)
+        {
+            if (PropetyTools == null)
+                PropetyTools = new List<List<PropetyTool>>();
+            while (PropetyTools.Count <= indexProg)
+                PropetyTools.Add(null);
+            if (PropetyTools[indexProg] == null)
+                PropetyTools[indexProg] = new List<PropetyTool>();
+            return PropetyTools[indexProg];
+        }
+
+        /// <summary>Lấy hoặc tạo danh sách tool theo Global.IndexProgChoose hiện hành.</summary>
+        public static List<PropetyTool> EnsureCurrentToolList()
+            => EnsureToolList(Global.IndexProgChoose);
+
+        /// <summary>Gán danh sách tool an toàn theo index program/thread.</summary>
+        public static void SetToolList(int indexProg, List<PropetyTool> tools)
+        {
+            if (PropetyTools == null)
+                PropetyTools = new List<List<PropetyTool>>();
+            while (PropetyTools.Count <= indexProg)
+                PropetyTools.Add(null);
+            PropetyTools[indexProg] = tools;
+        }
+
 
         public static int currentTrig = 0;
        

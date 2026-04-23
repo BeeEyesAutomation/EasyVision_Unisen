@@ -33,8 +33,8 @@ namespace BeeInterface
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            BeeInterface.ShapeEditing.DefaultShapeRepository defaultShapeRepository3 = new BeeInterface.ShapeEditing.DefaultShapeRepository();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(View));
-            this.imgView = new Cyotek.Windows.Forms.ImageBox();
             this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showImageFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.showResultTool = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,6 +62,7 @@ namespace BeeInterface
             this.btnGird = new BeeInterface.RJButton();
             this.btnShowArea = new BeeInterface.RJButton();
             this.pView = new System.Windows.Forms.Panel();
+            this.imgView = new BeeInterface.ShapeEditing.ImageCanvasControl();
             this.workUndo = new System.ComponentModel.BackgroundWorker();
             this.tmTool = new System.Windows.Forms.Timer(this.components);
             this.workPlay = new System.ComponentModel.BackgroundWorker();
@@ -111,33 +112,6 @@ namespace BeeInterface
             this.pBtn.SuspendLayout();
             this.pImageShow.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // imgView
-            // 
-            this.imgView.AlwaysShowHScroll = true;
-            this.imgView.AlwaysShowVScroll = true;
-            this.imgView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.imgView.AutoCenter = false;
-            this.imgView.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.imgView.GridColor = System.Drawing.Color.Transparent;
-            this.imgView.GridScale = Cyotek.Windows.Forms.ImageBoxGridScale.None;
-            this.imgView.Location = new System.Drawing.Point(0, 0);
-            this.imgView.Name = "imgView";
-            this.imgView.PanMode = Cyotek.Windows.Forms.ImageBoxPanMode.Left;
-            this.imgView.ShortcutsEnabled = false;
-            this.imgView.Size = new System.Drawing.Size(1077, 697);
-            this.imgView.TabIndex = 1;
-            this.imgView.TextBackColor = System.Drawing.Color.White;
-            this.imgView.Visible = false;
-            this.imgView.ZoomChanged += new System.EventHandler(this.imgView_ZoomChanged);
-            this.imgView.Scroll += new System.Windows.Forms.ScrollEventHandler(this.imgView_Scroll);
-            this.imgView.Click += new System.EventHandler(this.imgView_Click_1);
-            this.imgView.Paint += new System.Windows.Forms.PaintEventHandler(this.imgView_Paint);
-            this.imgView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.imgView_MouseDown);
-            this.imgView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.imgView_MouseMove);
-            this.imgView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.imgView_MouseUp);
             // 
             // contextMenu
             // 
@@ -256,7 +230,7 @@ namespace BeeInterface
             this.pMenu.BackColor = System.Drawing.Color.WhiteSmoke;
             this.pMenu.Controls.Add(this.tableLayoutPanel1);
             this.pMenu.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pMenu.Location = new System.Drawing.Point(1429, 62);
+            this.pMenu.Location = new System.Drawing.Point(1427, 62);
             this.pMenu.Name = "pMenu";
             this.pMenu.Size = new System.Drawing.Size(65, 697);
             this.pMenu.TabIndex = 28;
@@ -832,15 +806,41 @@ namespace BeeInterface
             // 
             // pView
             // 
-            this.pView.AutoScroll = true;
             this.pView.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.pView.Controls.Add(this.pImg);
             this.pView.Controls.Add(this.imgView);
             this.pView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pView.Location = new System.Drawing.Point(0, 62);
             this.pView.Name = "pView";
-            this.pView.Size = new System.Drawing.Size(1077, 697);
+            this.pView.Size = new System.Drawing.Size(1427, 697);
             this.pView.TabIndex = 6;
             this.pView.SizeChanged += new System.EventHandler(this.pView_SizeChanged);
+            // 
+            // imgView
+            // 
+            this.imgView.AlwaysShowHScroll = true;
+            this.imgView.AlwaysShowVScroll = true;
+            this.imgView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.imgView.AutoCenter = false;
+            this.imgView.ColorChooe = System.Drawing.Color.Empty;
+            this.imgView.DragThreshold = 4;
+            this.imgView.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.imgView.GridColor = System.Drawing.Color.Transparent;
+            this.imgView.GridDisplayMode = Cyotek.Windows.Forms.ImageBoxGridDisplayMode.None;
+            this.imgView.GridScale = Cyotek.Windows.Forms.ImageBoxGridScale.None;
+            this.imgView.Location = new System.Drawing.Point(0, 0);
+            this.imgView.MinimumZoom = 1;
+            this.imgView.Name = "imgView";
+            this.imgView.PanMode = Cyotek.Windows.Forms.ImageBoxPanMode.Left;
+            this.imgView.Repository = defaultShapeRepository3;
+            this.imgView.ShapeContext = null;
+            this.imgView.ShortcutsEnabled = false;
+            this.imgView.Size = new System.Drawing.Size(1080, 697);
+            this.imgView.TabIndex = 1;
+            this.imgView.TextBackColor = System.Drawing.Color.White;
+            this.imgView.Visible = false;
             // 
             // workPlay
             // 
@@ -1531,7 +1531,7 @@ namespace BeeInterface
             // 
             this.spImgs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.spImgs.Dock = System.Windows.Forms.DockStyle.Right;
-            this.spImgs.Location = new System.Drawing.Point(1077, 62);
+            this.spImgs.Location = new System.Drawing.Point(1492, 62);
             this.spImgs.Name = "spImgs";
             this.spImgs.Size = new System.Drawing.Size(2, 697);
             this.spImgs.TabIndex = 33;
@@ -1542,10 +1542,10 @@ namespace BeeInterface
             this.pImg.BackColor = System.Drawing.Color.WhiteSmoke;
             this.pImg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pImg.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pImg.Location = new System.Drawing.Point(1079, 62);
+            this.pImg.Location = new System.Drawing.Point(1077, 0);
             this.pImg.Name = "pImg";
             this.pImg.Size = new System.Drawing.Size(350, 697);
-            this.pImg.TabIndex = 32;
+            this.pImg.TabIndex = 33;
             this.pImg.Visible = false;
             // 
             // View
@@ -1554,9 +1554,8 @@ namespace BeeInterface
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
             this.Controls.Add(this.pView);
-            this.Controls.Add(this.spImgs);
-            this.Controls.Add(this.pImg);
             this.Controls.Add(this.pMenu);
+            this.Controls.Add(this.spImgs);
             this.Controls.Add(this.split5);
             this.Controls.Add(this.pBtn);
             this.DoubleBuffered = true;
@@ -1587,7 +1586,7 @@ namespace BeeInterface
         private System.ComponentModel.BackgroundWorker workInsert;
         private System.Windows.Forms.OpenFileDialog openFile;
         public System.ComponentModel.BackgroundWorker workReadCCD;
-        public Cyotek.Windows.Forms.ImageBox imgView;
+        public BeeInterface.ShapeEditing.ImageCanvasControl imgView;
         private System.Windows.Forms.Timer tmRefresh;
         public System.Windows.Forms.Timer tmOut;
         public System.Windows.Forms.Panel pMenu;
@@ -1636,7 +1635,6 @@ namespace BeeInterface
         private System.Windows.Forms.Timer tmKeys;
         public RJButton btnChangeImg;
         private System.Windows.Forms.Splitter spImgs;
-        public ViewHost pImg;
         public System.Windows.Forms.Splitter splitter2;
         private RJButton btnMenuKeyBoard;
         public System.Windows.Forms.Splitter splitter3;
@@ -1644,5 +1642,6 @@ namespace BeeInterface
         private RJButton btnShowImgHistory;
         private RJButton btnShowRaw;
         public System.Windows.Forms.TableLayoutPanel pImageShow;
+        public ViewHost pImg;
     }
 }

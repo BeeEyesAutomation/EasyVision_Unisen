@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,19 +21,19 @@ namespace BeeInterface
         private readonly Cyotek.Windows.Forms.ImageBox _imgView;
 
         // Locks
-        private readonly object _bmLock = new object(); // bảo vệ bmResult
-        private readonly object _camLock = new object(); // bảo vệ nguồn camera (nếu cần)
-        private readonly object _swapLock = new object(); // bảo vệ Mat/Bitmap A/B
+        private readonly object _bmLock = new object(); // b?o v? bmResult
+        private readonly object _camLock = new object(); // b?o v? ngu?n camera (n?u c?n)
+        private readonly object _swapLock = new object(); // b?o v? Mat/Bitmap A/B
 
-        // Double-buffer Mat (sống suốt vòng đời; KHÔNG dispose giữa chừng)
+        // Double-buffer Mat (s?ng su?t v�ng d?i; KH�NG dispose gi?a ch?ng)
         private Mat _bufA = new Mat();
         private Mat _bufB = new Mat();
-        private Mat _displayMat; // tham chiếu tới buffer đang hiển thị (A hoặc B)
+        private Mat _displayMat; // tham chi?u t?i buffer dang hi?n th? (A ho?c B)
 
-        // Double-buffer Bitmap (tái sử dụng, không tạo mới liên tục)
+        // Double-buffer Bitmap (t�i s? d?ng, kh�ng t?o m?i li�n t?c)
         private Bitmap _bmpA;
         private Bitmap _bmpB;
-        private Bitmap _displayBmp; // tham chiếu tới bitmap đang hiển thị (A hoặc B)
+        private Bitmap _displayBmp; // tham chi?u t?i bitmap dang hi?n th? (A ho?c B)
 
         private bool _disposed;
 
@@ -43,7 +43,7 @@ namespace BeeInterface
             EnableDoubleBuffer(_imgView);
         }
 
-        // Bật double-buffer cho viewer để vẽ mượt hơn
+        // B?t double-buffer cho viewer d? v? mu?t hon
         private static void EnableDoubleBuffer(Control c)
         {
             c.GetType().GetProperty("DoubleBuffered",
@@ -51,12 +51,12 @@ namespace BeeInterface
                 ?.SetValue(c, true, null);
         }
 
-        /// === API chính ===
+        /// === API ch�nh ===
         public void RenderAndDisplay(Mat raw)
         {
             if (_disposed) return;
 
-            // 1) Clone frame nguồn an toàn
+            // 1) Clone frame ngu?n an to�n
             Mat src;
             lock (_camLock)
             {
@@ -68,34 +68,34 @@ namespace BeeInterface
                 return;
             }
 
-            // 2) Chọn working Mat và đảm bảo còn sống/đúng kích thước
+            // 2) Ch?n working Mat v� d?m b?o c�n s?ng/d�ng k�ch thu?c
             Mat working;
             lock (_swapLock)
             {
                 bool useB = ReferenceEquals(_displayMat, _bufA);
                 working = useB ? _bufB : _bufA;
 
-                // đảm bảo size/type (Create sẽ cấp phát lại nếu cần)
+                // d?m b?o size/type (Create s? c?p ph�t l?i n?u c?n)
                 working.Create(src.Rows, src.Cols, src.Type());
                 src.CopyTo(working);
             }
             src.Dispose();
 
-            // 3) Đảm bảo 8UC3 (BGR) để copy vào Bitmap 24bppRgb
+            // 3) �?m b?o 8UC3 (BGR) d? copy v�o Bitmap 24bppRgb
             using (Mat bgr = EnsureBgr8Uc3(working))
             {
-                // 4) Copy dữ liệu Mat -> Bitmap back-buffer (không tạo bitmap mới)
+                // 4) Copy d? li?u Mat -> Bitmap back-buffer (kh�ng t?o bitmap m?i)
                 Bitmap backBmp;
                 lock (_swapLock)
                 {
                     bool useB = ReferenceEquals(_displayBmp, _bmpA);
-                    backBmp = useB ? EnsureBitmap(ref _bmpB, bgr.Width, bgr.Height)    // dùng B nếu A đang hiển thị
-                                   : EnsureBitmap(ref _bmpA, bgr.Width, bgr.Height);   // dùng A nếu B đang hiển thị
+                    backBmp = useB ? EnsureBitmap(ref _bmpB, bgr.Width, bgr.Height)    // d�ng B n?u A dang hi?n th?
+                                   : EnsureBitmap(ref _bmpA, bgr.Width, bgr.Height);   // d�ng A n?u B dang hi?n th?
                 }
 
                 CopyMatToBitmap24(bgr, backBmp);
 
-                // 5) Vẽ overlay trực tiếp lên backBmp (không tạo Bitmap mới)
+                // 5) V? overlay tr?c ti?p l�n backBmp (kh�ng t?o Bitmap m?i)
                 using (var g = Graphics.FromImage(backBmp))
                 using (var xf = new Matrix())
                 {
@@ -115,37 +115,37 @@ namespace BeeInterface
                     xf.Scale(s, s);
                     g.Transform = xf;
 
-                    var tools = BeeCore.Common.PropetyTools[Global.IndexProgChoose];
+                    var tools = BeeCore.Common.EnsureToolList(Global.IndexProgChoose);
                     foreach (var tool in tools)
                         if (tool.UsedTool != UsedTool.NotUsed)
                             tool.Propety2.DrawResult(g);
                 }
 
-                // 6) Swap: cập nhật bmResult (clone một lần, ảnh cũ dispose) + hiển thị lên imgView
-                //    (không tạo ảnh mới cho viewer; dùng chính backBmp tái sử dụng)
+                // 6) Swap: c?p nh?t bmResult (clone m?t l?n, ?nh cu dispose) + hi?n th? l�n imgView
+                //    (kh�ng t?o ?nh m?i cho viewer; d�ng ch�nh backBmp t�i s? d?ng)
                 //lock (_bmLock)
                 //{
                 //    BeeCore.Common.bmResult?.Dispose();
-                //    BeeCore.Common.bmResult = (Bitmap)backBmp.Clone(); // giữ lại cho các hàm lưu ảnh
+                //    BeeCore.Common.bmResult = (Bitmap)backBmp.Clone(); // gi? l?i cho c�c h�m luu ?nh
                 //}
 
-                // swap con trỏ hiển thị (Mat & Bitmap)
+                // swap con tr? hi?n th? (Mat & Bitmap)
                 lock (_swapLock)
                 {
                     _displayMat = working;
                     _displayBmp = backBmp;
                 }
 
-                // 7) Gán lên imgView (không rò rỉ: giải phóng ảnh cũ của control)
+                // 7) G�n l�n imgView (kh�ng r� r?: gi?i ph�ng ?nh cu c?a control)
                 Action assign = () =>
                 {
-                    // Tùy bạn: dùng Image hay BackgroundImage
+                    // T�y b?n: d�ng Image hay BackgroundImage
                     var pb = _imgView as Cyotek.Windows.Forms.ImageBox;
                     if (pb != null)
                     {
                         var old = pb.Image;
-                        pb.Image = _displayBmp;  // dùng back buffer trực tiếp
-                        old?.Dispose();          // giải phóng ảnh cũ mà control giữ
+                        pb.Image = _displayBmp;  // d�ng back buffer tr?c ti?p
+                        old?.Dispose();          // gi?i ph�ng ?nh cu m� control gi?
                     }
                     else
                     {
@@ -154,7 +154,7 @@ namespace BeeInterface
                         old?.Dispose();
                     }
 
-                    // Nếu control tự vẽ từ bmResult, chỉ cần Invalidate()
+                    // N?u control t? v? t? bmResult, ch? c?n Invalidate()
                     _imgView.Invalidate();
                 };
 
@@ -163,15 +163,15 @@ namespace BeeInterface
             }
         }
 
-        /// Lưu ảnh hiện tại (không block render)
+        /// Luu ?nh hi?n t?i (kh�ng block render)
    
 
-        /// === Helper tối ưu ===
-        // Đảm bảo Mat 8UC3 (BGR). Trả về NEW Mat nếu cần, còn nếu working đã 8UC3 thì trả working.Clone() để tránh share data.
+        /// === Helper t?i uu ===
+        // �?m b?o Mat 8UC3 (BGR). Tr? v? NEW Mat n?u c?n, c�n n?u working d� 8UC3 th� tr? working.Clone() d? tr�nh share data.
         private static Mat EnsureBgr8Uc3(Mat working)
         {
             if (working.Type() == MatType.CV_8UC3)
-                return working.Clone(); // clone tách bộ nhớ, tránh writer/reader đụng nhau
+                return working.Clone(); // clone t�ch b? nh?, tr�nh writer/reader d?ng nhau
 
             var dst = new Mat();
             if (working.Channels() == 1)
@@ -201,7 +201,7 @@ namespace BeeInterface
             return dst;
         }
 
-        // Tạo/giữ Bitmap 24bppRgb đúng kích thước để tái sử dụng
+        // T?o/gi? Bitmap 24bppRgb d�ng k�ch thu?c d? t�i s? d?ng
         private static Bitmap EnsureBitmap(ref Bitmap bmp, int w, int h)
         {
             if (bmp == null || bmp.Width != w || bmp.Height != h || bmp.PixelFormat != PixelFormat.Format24bppRgb)
@@ -211,13 +211,13 @@ namespace BeeInterface
             }
             return bmp;
         }
-        // P/Invoke copy unmanaged->unmanaged, KHÔNG cần /unsafe
+        // P/Invoke copy unmanaged->unmanaged, KH�NG c?n /unsafe
         [DllImport("kernel32.dll", EntryPoint = "RtlMoveMemory", SetLastError = false)]
         private static extern void CopyMemory(IntPtr dest, IntPtr src, UIntPtr count);
-        // Copy dữ liệu từ Mat BGR 8UC3 -> Bitmap 24bppRgb (không alloc mới)
+        // Copy d? li?u t? Mat BGR 8UC3 -> Bitmap 24bppRgb (kh�ng alloc m?i)
         private static void CopyMatToBitmap24(Mat srcBgr, Bitmap dstBmp)
         {
-            // y/c: srcBgr: CV_8UC3, dstBmp: 24bppRgb, cùng Width/Height
+            // y/c: srcBgr: CV_8UC3, dstBmp: 24bppRgb, c�ng Width/Height
             var rect = new Rectangle(0, 0, dstBmp.Width, dstBmp.Height);
             BitmapData data = null;
             try
@@ -234,7 +234,7 @@ namespace BeeInterface
                 IntPtr pSrc = srcBgr.Data;
                 IntPtr pDst = data.Scan0;
 
-                // copy từng dòng để xử lý stride khác nhau
+                // copy t?ng d�ng d? x? l� stride kh�c nhau
                 for (int y = 0; y < height; y++)
                 {
                     IntPtr srcRow = IntPtr.Add(pSrc, y * srcStride);
@@ -259,13 +259,13 @@ namespace BeeInterface
                 _bufB?.Dispose();
                 _displayMat = null;
 
-                // Không dispose _displayBmp vì control có thể đang giữ; chủ động clear control trước khi shutdown app.
+                // Kh�ng dispose _displayBmp v� control c� th? dang gi?; ch? d?ng clear control tru?c khi shutdown app.
                 _bmpA?.Dispose();
                 _bmpB?.Dispose();
                 _bmpA = _bmpB = _displayBmp = null;
             }
 
-            // Tuỳ nhu cầu có huỷ bmResult:
+            // Tu? nhu c?u c� hu? bmResult:
             // lock (_bmLock) { BeeCore.Common.bmResult?.Dispose(); BeeCore.Common.bmResult = null; }
         }
     }

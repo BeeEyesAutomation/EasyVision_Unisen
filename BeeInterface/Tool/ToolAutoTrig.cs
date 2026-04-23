@@ -29,6 +29,19 @@ namespace BeeInterface
     public partial class ToolAutoTrig : UserControl
     {
         
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
         public ToolAutoTrig( )
         {
             InitializeComponent();
@@ -45,9 +58,17 @@ namespace BeeInterface
                
                 AdjAspectLen.Value = Propety.AspectLen;
 
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolWidth_StatusToolChanged;
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ScoreChanged += ToolWidth_ScoreChanged;
+                OwnerTool.StatusTool = StatusTool.WaitCheck;
+                 if (OwnerTool != null)
+                 {
+                     OwnerTool.StatusToolChanged -= ToolWidth_StatusToolChanged;
+                     OwnerTool.StatusToolChanged += ToolWidth_StatusToolChanged;
+                 }
+                 if (OwnerTool != null)
+                 {
+                     OwnerTool.ScoreChanged -= ToolWidth_ScoreChanged;
+                     OwnerTool.ScoreChanged += ToolWidth_ScoreChanged;
+                 }
                 AdjThreshod.Value = Propety.ThresholdBinary;
 
            
@@ -196,7 +217,7 @@ namespace BeeInterface
         private void NewShape(ShapeType newShape)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2;
+            var prop = Common.TryGetTool(Global.IndexToolSelected).Propety2;
             RectRotate rr = null;
             if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
             else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;
@@ -351,7 +372,7 @@ namespace BeeInterface
 
         private void ToolWidth_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {if (Global.IsRun) return;
-            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (OwnerTool.StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true;
                
@@ -388,8 +409,8 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected]. worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            if (!Common.TryGetTool(Global.IndexToolSelected). worker.IsBusy)
+                Common.TryGetTool(Global.IndexToolSelected).worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }

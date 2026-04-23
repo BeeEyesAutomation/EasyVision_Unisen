@@ -26,6 +26,19 @@ namespace BeeInterface
     public partial class ToolOKNG : UserControl
     {
         
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
         public ToolOKNG( )
         {
             InitializeComponent();
@@ -42,9 +55,10 @@ namespace BeeInterface
             EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
             EditRectRot1.IsHide = false;
+            this.VisibleChanged -= ToolOKNG_VisibleChanged;
             this.VisibleChanged += ToolOKNG_VisibleChanged;
 
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+            OwnerTool.StatusTool = StatusTool.WaitCheck;
             trackResize.Value =(int) Propety.ScaleResize;
             btnEnResizeSample.IsCLick = Propety.EnResize;
 
@@ -55,7 +69,11 @@ namespace BeeInterface
             numCPU.Enabled = Propety.Multi;
             btnMulti.IsCLick=Propety.Multi;
             btnSingle.IsCLick=!Propety.Multi;
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
+             if (OwnerTool != null)
+             {
+                 OwnerTool.StatusToolChanged -= ToolPattern_StatusToolChanged;
+                 OwnerTool.StatusToolChanged += ToolPattern_StatusToolChanged;
+             }
         }
 
         private void ToolOKNG_VisibleChanged(object sender, EventArgs e)
@@ -84,7 +102,7 @@ namespace BeeInterface
         private void ToolPattern_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
-            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (OwnerTool.StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true;
             }
@@ -92,7 +110,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-          //  Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (float)trackScore.Value;
+          //  OwnerTool.Score = (float)trackScore.Value;
            
 
         }
@@ -188,8 +206,8 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();
+            if (!OwnerTool.worker.IsBusy)
+                OwnerTool.worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }

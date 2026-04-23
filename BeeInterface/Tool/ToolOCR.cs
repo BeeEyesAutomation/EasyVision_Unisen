@@ -26,6 +26,19 @@ namespace BeeInterface
     public partial class ToolOCR : UserControl
     {
 
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
         public ToolOCR(bool IsNew = false)
         {
             InitializeComponent();
@@ -61,7 +74,7 @@ namespace BeeInterface
             //        btn.ForeColor = Color.Black;
             //        btn.BorderRadius = 10;
             //        btn.Height = 30;
-            //        if (Propety.listScore[index] >Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score)
+            //        if (Propety.listScore[index] >OwnerTool.Score)
             //            btn.IsCLick = true;
             //        else
             //            btn.IsCLick = false;
@@ -95,14 +108,22 @@ namespace BeeInterface
             Global.TypeCrop = TypeCrop.Area;
             txtContent.Text = Propety.Matching;
 
-            trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
-            trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
-            trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
-            trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+            trackScore.Min = OwnerTool.MinValue;
+            trackScore.Max = OwnerTool.MaxValue;
+            trackScore.Step = OwnerTool.StepValue;
+            trackScore.Value = OwnerTool.Score;
 
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolOCR_StatusToolChanged;
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ScoreChanged += ToolOCR_ScoreChanged;
+            OwnerTool.StatusTool = StatusTool.WaitCheck;
+             if (OwnerTool != null)
+             {
+                 OwnerTool.StatusToolChanged -= ToolOCR_StatusToolChanged;
+                 OwnerTool.StatusToolChanged += ToolOCR_StatusToolChanged;
+             }
+             if (OwnerTool != null)
+             {
+                 OwnerTool.ScoreChanged -= ToolOCR_ScoreChanged;
+                 OwnerTool.ScoreChanged += ToolOCR_ScoreChanged;
+             }
             AdjLimitArea.Value = Propety.LimitArea;
         
             numCLAHE.Value = Propety.Clahe;
@@ -118,7 +139,7 @@ namespace BeeInterface
             
             if (IsNew)
             {
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ItemTool.Enabled = false;
+                OwnerTool.ItemTool.Enabled = false;
                 IsNew = false;
                 if (!workLoadModel.IsBusy)
                     workLoadModel.RunWorkerAsync();
@@ -154,9 +175,8 @@ namespace BeeInterface
         private void ToolOCR_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
-            if (Propety.Index >= Common.PropetyTools[Global.IndexProgChoose].Count)
-                return;
-            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (OwnerTool == null) return;
+            if (OwnerTool.StatusTool == StatusTool.Done)
             {
                
                 btnTest.Enabled = true;
@@ -171,7 +191,7 @@ namespace BeeInterface
         private void trackScore_ValueChanged(float obj)
         {
 
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (int)trackScore.Value;
+            OwnerTool.Score = (int)trackScore.Value;
 
         }
 
@@ -443,7 +463,7 @@ namespace BeeInterface
         {
 
             btnTest.Enabled = false;
-            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
 
         }
 
@@ -581,8 +601,8 @@ namespace BeeInterface
 
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ItemTool.Enabled = true;
-          //  Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ItemTool.Name = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Name;
+            OwnerTool.ItemTool.Enabled = true;
+          //  OwnerTool.ItemTool.Name = OwnerTool.Name;
         }
 
         private void numEnhance_ValueChanged(object sender, EventArgs e)

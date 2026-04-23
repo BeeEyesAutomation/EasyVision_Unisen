@@ -200,9 +200,12 @@ namespace BeeInterface
         }
         public void CreateNewTool()
         {
+            var tools = BeeCore.Common.TryGetCurrentToolList();
+            if (tools == null) return;
+
             if(TypeTool==TypeTool.Position_Adjustment)
             {
-                int ix = BeeCore.Common.PropetyTools[Global.IndexProgChoose].FindIndex(p => p.TypeTool == TypeTool.Position_Adjustment);
+                int ix = tools.FindIndex(p => p.TypeTool == TypeTool.Position_Adjustment);
             if(ix>-1)
                 {
                     MessageBox.Show("Position Adjustment is Already! ");
@@ -210,19 +213,19 @@ namespace BeeInterface
                 }
             else
                 {
-                    if (BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count>0)
+                    if (tools.Count>0)
                     {
                         int indexName2 = 1;
                         dynamic control2 = DataTool.NewControl(TypeTool, indexName2 - 1, Global.IndexProgChoose, TypeTool.ToString() + " " + indexName2);
                         PropetyTool propetyTool2 = new PropetyTool(control2.Propety, TypeTool, TypeTool.ToString() + " " + indexName2);
                         propetyTool2.UsedTool = UsedTool.Used;
-                        BeeCore.Common.PropetyTools[Global.IndexProgChoose].Insert(0,propetyTool2);
+                        tools.Insert(0,propetyTool2);
                         ItemTool Itemtool2 = DataTool.CreateItemTool(propetyTool2, indexName2 - 1, Global.IndexProgChoose);
 
-                        BeeCore.Common.PropetyTools[Global.IndexProgChoose][0].ItemTool = Itemtool2;
-                        BeeCore.Common.PropetyTools[Global.IndexProgChoose][0].Control = control2;
+                        BeeCore.Common.TryGetTool(Global.IndexProgChoose, 0).ItemTool = Itemtool2;
+                        BeeCore.Common.TryGetTool(Global.IndexProgChoose, 0).Control = control2;
                         int i = 0;
-                        foreach(PropetyTool propety in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
+                        foreach(PropetyTool propety in tools)
                         {
                             propety.ItemTool.IndexTool = i;
                             propety.Propety2.Index = i;i++;
@@ -265,24 +268,24 @@ namespace BeeInterface
                         propetyTool2.Propety2.SetModel();
 
                         DataTool.LoadPropety(control2);
-                        ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexProgChoose]);
+                        ShowTool.ShowChart(Global.ToolSettings.pAllTool, tools);
 
                         return;
                     }
                 }    
 
             }    
-            int indexName = BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count() + 1;
+            int indexName = tools.Count() + 1;
             dynamic control = DataTool.NewControl(TypeTool, indexName - 1, Global.IndexProgChoose, TypeTool.ToString() + " " + indexName);
             PropetyTool propetyTool = new PropetyTool(control.Propety, TypeTool, TypeTool.ToString() + " " + indexName);
             propetyTool.UsedTool = UsedTool.Used;
 
-            BeeCore.Common.PropetyTools[Global.IndexProgChoose].Add(propetyTool);
+            tools.Add(propetyTool);
             ItemTool Itemtool = DataTool.CreateItemTool(propetyTool ,indexName - 1, Global.IndexProgChoose);
           
 
-            BeeCore.Common.PropetyTools[Global.IndexProgChoose][BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count() - 1].ItemTool = Itemtool;
-            BeeCore.Common.PropetyTools[Global.IndexProgChoose][BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count() - 1].Control = control;
+            BeeCore.Common.TryGetTool(Global.IndexProgChoose, tools.Count() - 1).ItemTool = Itemtool;
+            BeeCore.Common.TryGetTool(Global.IndexProgChoose, tools.Count() - 1).Control = control;
             
                 propetyTool.worker = new System.ComponentModel.BackgroundWorker();
                 propetyTool.timer = new System.Diagnostics.Stopwatch();
@@ -323,7 +326,7 @@ namespace BeeInterface
                 propetyTool.Propety2.SetModel();
             
                 DataTool.LoadPropety(control);
-            ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexProgChoose]);
+            ShowTool.ShowChart(Global.ToolSettings.pAllTool, tools);
             BeeInterface.Load.ArrangeLogic();
 
         }

@@ -59,31 +59,80 @@ namespace BeeInterface.Group
                 }
             }
         }
+        private bool HasValidSelection()
+        {
+            return Rot != null && Rot.Count > 0 && index >= 0 && index < Rot.Count;
+        }
+
+        private RectRotate EnsureCurrent()
+        {
+            if (Rot == null)
+                Rot = new List<RectRotate>();
+
+            if (Rot.Count == 0)
+            {
+                index = 0;
+                Rot.Add(new RectRotate());
+            }
+
+            if (index < 0)
+                index = 0;
+            if (index >= Rot.Count)
+                index = Rot.Count - 1;
+
+            if (Rot[index] == null)
+                Rot[index] = new RectRotate();
+
+            rotCurrent = Rot[index];
+            return rotCurrent;
+        }
+
+        private void SetGlobalEditCurrent(bool clone = true)
+        {
+            if (rotCurrent == null)
+                return;
+
+            Global.rotCurrent = clone ? rotCurrent.Clone() : rotCurrent;
+            Global.StatusDraw = StatusDraw.None;
+            Global.StatusDraw = StatusDraw.Edit;
+        }
+
+        private void SyncCurrentUi()
+        {
+            if (rotCurrent == null)
+                return;
+
+            lay2Mask.Enabled = rotCurrent.TypeCrop == TypeCrop.Mask;
+            layRange.Enabled = rotCurrent.TypeCrop == TypeCrop.Area;
+            layLimit.Enabled = rotCurrent.TypeCrop == TypeCrop.Limit || rotCurrent.TypeCrop == TypeCrop.Mask;
+            btnElip.IsCLick = rotCurrent.Shape == ShapeType.Ellipse;
+            btnRect.IsCLick = rotCurrent.Shape == ShapeType.Rectangle;
+            btnHexagon.IsCLick = rotCurrent.Shape == ShapeType.Hexagon;
+            btnPolygon.IsCLick = rotCurrent.Shape == ShapeType.Polygon;
+            btnWhite.IsCLick = rotCurrent.IsWhite;
+            btnBlack.IsCLick = !rotCurrent.IsWhite;
+        }
+
+        private void DetachGlobalEvents()
+        {
+            Global.RotateCurentChanged -= Global_RotateCurentChanged;
+        }
+
         private void Btn_Click(object sender, EventArgs e)
         {
             RJButton btn = sender as RJButton;
-            index = Convert.ToInt32( btn.Name);
-            rotCurrent = Rot[index];
-            if (rotCurrent == null)
-                rotCurrent = new RectRotate();
-            lay2Mask.Enabled = _rotCurrent.TypeCrop == TypeCrop.Mask ? true : false;
-            layRange.Enabled = _rotCurrent.TypeCrop == TypeCrop.Area ? true : false;
-            layLimit.Enabled = (_rotCurrent.TypeCrop == TypeCrop.Limit || _rotCurrent.TypeCrop == TypeCrop.Mask);
-            btnElip.IsCLick = _rotCurrent.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = _rotCurrent.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = _rotCurrent.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = _rotCurrent.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = _rotCurrent.IsWhite;
-            btnBlack.IsCLick = !_rotCurrent.IsWhite;
+            int newIndex;
+            if (btn == null || !int.TryParse(btn.Name, out newIndex))
+                return;
+            index = newIndex;
+            EnsureCurrent();
+            SyncCurrentUi();
 
             
             if (btn.IsCLick)
             {
                
-                Global.rotCurrent = rotCurrent.Clone();
-               
-                Global.StatusDraw = StatusDraw.None;
-                Global.StatusDraw = StatusDraw.Edit;
+                SetGlobalEditCurrent();
                 
             }
             else
@@ -95,11 +144,14 @@ namespace BeeInterface.Group
 
         private void Global_RotateCurentChanged(RectRotate obj)
         {
-          
+            if (obj == null || !HasValidSelection())
+                return;
+
             if(obj._rect.Width!=0)
             {
                 rotCurrent = obj.Clone();
                 Rot[index] = rotCurrent;
+                SyncCurrentUi();
             }
             else
             {
@@ -111,8 +163,10 @@ namespace BeeInterface.Group
         ShapeType ShapeType = ShapeType.Rectangle;
         private void SetShapeFor( ShapeType shape)
         {
+            RectRotate rr = EnsureCurrent();
+            if (rr == null)
+                return;
 
-            RectRotate rr = Rot[index];
 
             rr.Shape = shape;
             if (shape == ShapeType.Polygon)
@@ -134,10 +188,9 @@ namespace BeeInterface.Group
 
             _rotCurrent = rr;
             Rot[index] = rr;
-            Global._rotCurrent = rr.Clone();
-            // Global.TypeCrop = which;
-            Global.StatusDraw = StatusDraw.None;
-            Global.StatusDraw = StatusDraw.Edit;
+            rotCurrent = rr;
+            SyncCurrentUi();
+            SetGlobalEditCurrent();
 
 
 
@@ -231,38 +284,33 @@ namespace BeeInterface.Group
 
         private void btnNewShape_Click(object sender, EventArgs e)
         {
+            if (EnsureCurrent() == null)
+                return;
             TypeCrop typeCrop = rotCurrent.TypeCrop;
             String OldName = rotCurrent.Name;
             NewShape(ShapeType, (int)numW.Value, (int)numH.Value);
             rotCurrent.TypeCrop = typeCrop;
             rotCurrent.Name = OldName;
             Rot[index] = rotCurrent;
-            Global.rotCurrent = rotCurrent.Clone();
-            Global.StatusDraw = StatusDraw.None;
-            Global.StatusDraw = StatusDraw.Edit;
+            SyncCurrentUi();
+            SetGlobalEditCurrent();
         }
         private void btnRect_Click(object sender, EventArgs e)
         {
             ShapeType = ShapeType.Rectangle;
             SetShapeFor( ShapeType);
-            Global.StatusDraw = StatusDraw.None;
-            Global.StatusDraw = StatusDraw.Edit;
         }
 
         private void btnElip_Click(object sender, EventArgs e)
         {
             ShapeType = ShapeType.Ellipse;
             SetShapeFor(ShapeType);
-            Global.StatusDraw = StatusDraw.None;
-            Global.StatusDraw = StatusDraw.Edit;
         }
 
         private void btnHexagon_Click(object sender, EventArgs e)
         {
             ShapeType = ShapeType.Hexagon;
             SetShapeFor( ShapeType);
-            Global.StatusDraw = StatusDraw.None;
-            Global.StatusDraw = StatusDraw.Edit;
         }
 
         private void btnPolygon_Click(object sender, EventArgs e)
@@ -270,29 +318,33 @@ namespace BeeInterface.Group
             ShapeType = ShapeType.Polygon;
 
             SetShapeFor( ShapeType);
-            Global.StatusDraw = StatusDraw.None;
-            Global.StatusDraw = StatusDraw.Edit;
         }
         private void btnNone_Click(object sender, EventArgs e)
-        {TypeCrop typeCrop=rotCurrent.TypeCrop;
+        {
+            if (EnsureCurrent() == null)
+                return;
+            TypeCrop typeCrop=rotCurrent.TypeCrop;
             String Name = rotCurrent.Name;
             rotCurrent = new RectRotate();
             rotCurrent.TypeCrop = typeCrop;
             rotCurrent.Name = Name;
             Rot[index] = rotCurrent;
-            Global.rotCurrent = rotCurrent;
-            Global.StatusDraw = StatusDraw.None;
-            Global.StatusDraw = StatusDraw.Edit;
+            SyncCurrentUi();
+            SetGlobalEditCurrent(false);
             
         }
         private void btnWhite_Click(object sender, EventArgs e)
         {
+            if (EnsureCurrent() == null)
+                return;
             rotCurrent.IsWhite = btnWhite.IsCLick;
           
         }
 
         private void btnBlack_Click(object sender, EventArgs e)
         {
+            if (EnsureCurrent() == null)
+                return;
             rotCurrent.IsWhite = !btnBlack.IsCLick;
           
         }
@@ -301,50 +353,37 @@ namespace BeeInterface.Group
             if (Rot == null)
                 return;
             int CountType = Rot.Count;
-            if(Rot[index] == null)
-                Rot[index]=new RectRotate();
-            this.rotCurrent = Rot[index];
-            Global.rotCurrent = this.rotCurrent.Clone();
+            if (CountType == 0)
+            {
+                layType.Controls.Clear();
+                layType.ColumnStyles.Clear();
+                layType.ColumnCount = 0;
+                return;
+            }
+
+            EnsureCurrent();
+            SetGlobalEditCurrent();
             Global.RotateCurentChanged -= Global_RotateCurentChanged;
             Global.RotateCurentChanged += Global_RotateCurentChanged;
          
-            lay2Mask.Enabled = _rotCurrent.TypeCrop == TypeCrop.Mask ? true : false;
-            layRange.Enabled = _rotCurrent.TypeCrop == TypeCrop.Area ? true : false;
-            layLimit.Enabled = _rotCurrent.TypeCrop == TypeCrop.Limit ? true : false;
-            btnElip.IsCLick = _rotCurrent.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = _rotCurrent.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = _rotCurrent.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = _rotCurrent.Shape == ShapeType.Polygon ? true : false;
-            if (this.layType.Controls.Count < CountType|| IsIni)
+            SyncCurrentUi();
+            if (this.layType.Controls.Count != CountType || IsIni)
             {
-            
-
-
-             
-               
                 this.layType.SuspendLayout();
                 this.layType.ColumnStyles.Clear();
-              
-              
-
-                for (int i = this.layType.ColumnStyles.Count - 1; i >= 0; i--)
-                {
-                    this.layType.ColumnStyles.RemoveAt(i);
-                }
-                if(this.Controls.Count > 0) 
-                this.layType.Controls.Clear();
+                if (this.layType.Controls.Count > 0)
+                    this.layType.Controls.Clear();
                
                 this.layType.ColumnCount = 0;
-
-                this.layType.ResumeLayout();
                 for (int i = 0; i < CountType; i++)
                 {
-                    this.layType.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100 / CountType));
+                    this.layType.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F / CountType));
                 }
-             
                 for (int i = 0; i < CountType; i++)
                 {
-                   
+                    if (Rot[i] == null)
+                        Rot[i] = new RectRotate();
+
                     RJButton btn = new RJButton();
                     btn.AutoFont = true;
                     btn.AutoFontHeightRatio = 0.75F;
@@ -370,7 +409,7 @@ namespace BeeInterface.Group
                     // btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                     btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60938F);
                     btn.ForeColor = System.Drawing.Color.Black;
-                    btn.Enabled =! Rot[i].IsVisible;
+                    btn.Enabled = !Rot[i].IsVisible;
                     btn.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
                     btn.ImageTintHover = System.Drawing.Color.Empty;
                     btn.ImageTintNormal = System.Drawing.Color.Empty;
@@ -388,13 +427,15 @@ namespace BeeInterface.Group
                     btn.Dock = DockStyle.Fill;
                     btn.Size = new System.Drawing.Size(110, 45);
                     btn.TabIndex = 5;
-                 
                     btn.Text = Rot[i].Name;
                     btn.TextColor = System.Drawing.Color.Black;
                     btn.Name = i.ToString();
-                    if (i == 0)
+                    if (i == index)
                     {
                         btn.IsCLick = true;
+                    }
+                    if (i == 0)
+                    {
                         btn.Corner = BeeGlobal.Corner.Left;
                     }
                     else if (i == CountType - 1)
@@ -407,7 +448,25 @@ namespace BeeInterface.Group
                     this.layType.Controls.Add(btn, i, 0);
 
                 }
-            } 
+                this.layType.ResumeLayout();
+            }
+            else
+            {
+                for (int i = 0; i < CountType; i++)
+                {
+                    if (Rot[i] == null)
+                        Rot[i] = new RectRotate();
+
+                    Control[] found = layType.Controls.Find(i.ToString(), false);
+                    RJButton btn = found.Length > 0 ? found[0] as RJButton : null;
+                    if (btn == null)
+                        continue;
+
+                    btn.Text = Rot[i].Name;
+                    btn.Enabled = !Rot[i].IsVisible;
+                    btn.IsCLick = i == index;
+                }
+            }
         }
         public event Action<int> ChooseScanChange;
   
@@ -419,9 +478,8 @@ namespace BeeInterface.Group
 
         private void EditRectRot_VisibleChanged(object sender, EventArgs e)
         {
-        
-        
-           
+            if (!Visible)
+                DetachGlobalEvents();
            
              
         }
@@ -429,6 +487,8 @@ namespace BeeInterface.Group
         public event Action<int> ChooseEditEnd;
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            if (EnsureCurrent() == null)
+                return;
            
            // Propety.ModeCheck = ModeCheck.Single;
            
@@ -460,6 +520,8 @@ namespace BeeInterface.Group
         public  event Action<bool> ClearAllEvent;
         private void btnAddToList_Click(object sender, EventArgs e)
         {
+            if (EnsureCurrent() == null)
+                return;
             RectRotate rot = rotCurrent.Clone();
             RectRotate rotArea = null;
 
@@ -498,33 +560,44 @@ namespace BeeInterface.Group
             Global.StatusDraw = StatusDraw.Edit;
         }
 
+        private void btnDeleteMask_Click(object sender, EventArgs e)
+        {
+            DeleteEvent?.Invoke(true);
+            Global.StatusDraw = StatusDraw.None;
+            Global.StatusDraw = StatusDraw.Edit;
+        }
+
         bool IsFullSize= true;
         RectRotate rotTemp=new RectRotate();
         private void btnCropHalt_Click(object sender, EventArgs e)
         {
+            if (rotTemp == null)
+                return;
          
             rotCurrent = rotTemp.Clone();
             rotCurrent.TypeCrop = rotTemp.TypeCrop;
             rotCurrent.Name = rotTemp.Name;
+            rotCurrent.Dir = rotTemp.Dir;
             Rot[index] = rotCurrent;
-            Global.rotCurrent = rotCurrent.Clone();
-            Global.StatusDraw = StatusDraw.None;
-            Global.StatusDraw = StatusDraw.Edit;
+            SyncCurrentUi();
+            SetGlobalEditCurrent();
 
         }
 
         private void btnCropFull_Click(object sender, EventArgs e)
         {
+            if (EnsureCurrent() == null)
+                return;
             IsFullSize = true;
 
             rotTemp = rotCurrent.Clone();
             rotCurrent = new RectRotate(new RectangleF(-Global.Config.SizeCCD.Width / 2, -Global.Config.SizeCCD.Height / 2, Global.Config.SizeCCD.Width, Global.Config.SizeCCD.Height), new PointF(Global.Config.SizeCCD.Width / 2, Global.Config.SizeCCD.Height / 2), 0, AnchorPoint.None);
             rotCurrent.TypeCrop = rotTemp.TypeCrop;
             rotCurrent.Name = rotTemp.Name;
+            rotCurrent.Dir = rotTemp.Dir;
             Rot[index] = rotCurrent;
-            Global.rotCurrent = rotCurrent.Clone();
-            Global.StatusDraw = StatusDraw.None;
-            Global.StatusDraw = StatusDraw.Edit;
+            SyncCurrentUi();
+            SetGlobalEditCurrent();
         }
 
         private void btnClearAllMask_Click(object sender, EventArgs e)

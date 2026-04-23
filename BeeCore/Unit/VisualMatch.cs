@@ -215,11 +215,11 @@ namespace BeeCore
                     LearnPattern(matTemp, true);
                 }
 
-                Common.PropetyTools[IndexThread][Index].StepValue = 1;
-                Common.PropetyTools[IndexThread][Index].MinValue = 0;
+                Common.TryGetTool(IndexThread, Index).StepValue = 1;
+                Common.TryGetTool(IndexThread, Index).MinValue = 0;
 
-                Common.PropetyTools[IndexThread][Index].MaxValue = 5000;
-                Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                Common.TryGetTool(IndexThread, Index).MaxValue = 5000;
+                Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
             }
             catch(Exception ex)
             {
@@ -328,13 +328,13 @@ namespace BeeCore
             {
                 if (IsCalib)
                     PxTemp = pxRS;
-                Common.PropetyTools[IndexThread][Index].ScoreResult = pxRS;
-                if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0)
-                    Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
-                if (Common.PropetyTools[IndexThread][Index].ScoreResult> Common.PropetyTools[IndexThread][Index].Score) 
-                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                Common.TryGetTool(IndexThread, Index).ScoreResult = pxRS;
+                if (Common.TryGetTool(IndexThread, Index).ScoreResult < 0)
+                    Common.TryGetTool(IndexThread, Index).ScoreResult = 0;
+                if (Common.TryGetTool(IndexThread, Index).ScoreResult> Common.TryGetTool(IndexThread, Index).Score) 
+                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                 else
-                    Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                    Common.TryGetTool(IndexThread, Index).Results = Results.OK;
             }
             catch(Exception ex)
             {
@@ -363,11 +363,11 @@ namespace BeeCore
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
 
-            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.NG)
+            if (Common.TryGetTool(Global.IndexProgChoose, Index).Results == Results.NG)
                 cl = Color.Red;
             else
                 cl = Color.LimeGreen;
-            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.TryGetTool(IndexThread, Index).Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
                 Draws.Box2Label(gc, rotA, nameTool, pxRS + " Px", font, cl, brushText, Global.ParaShow.Opacity, Global.ParaShow.ThicknessLine);

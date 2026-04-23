@@ -24,7 +24,7 @@ namespace BeeUi.Unit
         }
         public void LoadData()
         {
-            registerImg.LoadAllItem(Global.listRegsImg, BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].IndexImgRegis);
+            registerImg.LoadAllItem(Global.listRegsImg, BeeCore.Common.TryGetTool(Global.IndexProgChoose, Global.IndexToolSelected).IndexImgRegis);
 
         }
         private void RegisterImgs_Load(object sender, EventArgs e)
@@ -66,7 +66,7 @@ namespace BeeUi.Unit
                // Global.EditTool.View.matResgiter = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone();
                 Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
                 ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].IndexImgRegis = registerImg.IndexSelected;
+                BeeCore.Common.TryGetTool(Global.IndexProgChoose, Global.IndexToolSelected).IndexImgRegis = registerImg.IndexSelected;
             }
 
         }

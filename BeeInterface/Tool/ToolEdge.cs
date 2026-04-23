@@ -29,6 +29,19 @@ namespace BeeInterface
     public partial class ToolEdge : UserControl
     {
         
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
         public ToolEdge( )
         {
             InitializeComponent();
@@ -55,14 +68,22 @@ namespace BeeInterface
                 EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
                 this.VisibleChanged -= ToolEdge_VisibleChanged;
                 this.VisibleChanged += ToolEdge_VisibleChanged;
-                trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
-                trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
-                trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
-                trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+                trackScore.Min = OwnerTool.MinValue;
+                trackScore.Max = OwnerTool.MaxValue;
+                trackScore.Step = OwnerTool.StepValue;
+                trackScore.Value = OwnerTool.Score;
 
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolWidth_StatusToolChanged;
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ScoreChanged += ToolWidth_ScoreChanged;
+                OwnerTool.StatusTool = StatusTool.WaitCheck;
+                 if (OwnerTool != null)
+                 {
+                     OwnerTool.StatusToolChanged -= ToolWidth_StatusToolChanged;
+                     OwnerTool.StatusToolChanged += ToolWidth_StatusToolChanged;
+                 }
+                 if (OwnerTool != null)
+                 {
+                     OwnerTool.ScoreChanged -= ToolWidth_ScoreChanged;
+                     OwnerTool.ScoreChanged += ToolWidth_ScoreChanged;
+                 }
                 AdjThreshod.Value = Propety.ThresholdBinary;
 
                 AdjScale.Value = (float)Propety.Scale;
@@ -158,7 +179,7 @@ namespace BeeInterface
 
         private void ToolWidth_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {if (Global.IsRun) return;
-            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (OwnerTool.StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true;
                 if (Propety.IsCalibs)
@@ -175,7 +196,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score=trackScore.Value;
+            OwnerTool.Score=trackScore.Value;
          }
         public bool IsClear = false;
         public Edge Propety { get; set; }
@@ -273,7 +294,7 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
 
             //btnTest.IsCLick = false;
         }
@@ -436,7 +457,7 @@ namespace BeeInterface
         {
             btnCalib.Enabled = false;
             Propety.IsCalibs = true;
-            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
           
             
         }

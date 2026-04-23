@@ -1,4 +1,4 @@
-﻿using BeeCore;
+using BeeCore;
 using BeeCore.Func;
 using BeeGlobal;
 using CvPlus;
@@ -19,22 +19,22 @@ using Image = System.Drawing.Image;
 using TextBox = System.Windows.Forms.TextBox;
 
 namespace BeeCore
-{ // ADD: nếu muốn dùng chuẩn .NET
+{ // ADD: n?u mu?n d�ng chu?n .NET
     public interface IDeepCloneable<T>
     {
         T Clone(bool copyRuntime = true);
     }
     public partial class ItemTool : UserControl, IDeepCloneable<ItemTool>, ICloneable
-    {  // ADD: Clone công khai
+    {  // ADD: Clone c�ng khai
         /// <summary>
-        /// Clone ItemTool bằng cách tạo instance mới và sao chép thuộc tính.
-        /// copyRuntime=false: chỉ copy cấu hình; true: copy cả trạng thái runtime (Score/Status/CT...).
+        /// Clone ItemTool b?ng c�ch t?o instance m?i v� sao ch�p thu?c t�nh.
+        /// copyRuntime=false: ch? copy c?u h�nh; true: copy c? tr?ng th�i runtime (Score/Status/CT...).
         /// </summary>
         public ItemTool Clone(bool copyRuntime = true)
         {
             var clone = new ItemTool(this.TypeTool, this.Name,this.TriggerNum);
 
-            // --- Cấu hình/thiết kế cơ bản ---
+            // --- C?u h�nh/thi?t k? co b?n ---
             clone.Size = this.Size;
             clone.MinimumSize = this.MinimumSize;
             clone.MaximumSize = this.MaximumSize;
@@ -46,11 +46,11 @@ namespace BeeCore
             clone.ForeColor = this.ForeColor;
             clone.BackColor = this.BackColor;
             clone.TriggerNum = this.TriggerNum;
-            clone.IconTool = SafeCloneImage(this.IconTool); // tránh share cùng Bitmap
+            clone.IconTool = SafeCloneImage(this.IconTool); // tr�nh share c�ng Bitmap
             clone.ColorTrack = this.ColorTrack;
             clone.Score=this.Score;
             clone.Step = this.Step;
-            clone.Min = this.Min;     // dùng field/backing để không bắn Invalidate quá sớm
+            clone.Min = this.Min;     // d�ng field/backing d? kh�ng b?n Invalidate qu� s?m
             clone.Max = this.Max;
             clone.NotChange = this.NotChange;
             clone.IsEdit = this.IsEdit;
@@ -59,7 +59,7 @@ namespace BeeCore
             clone.IndexTool = this.IndexTool;
             clone.TriggerNum = this.TriggerNum;
 
-            // --- Thuộc tính hiển thị/trạng thái ---
+            // --- Thu?c t�nh hi?n th?/tr?ng th�i ---
             if (copyRuntime)
             {
                 clone.ClStatus = this.ClStatus;
@@ -68,55 +68,55 @@ namespace BeeCore
                 clone.Score = this.Score;
                 clone.CT = this.CT;
 
-                // Set Value/ValueScore cuối cùng để cập nhật pTick + layout
+                // Set Value/ValueScore cu?i c�ng d? c?p nh?t pTick + layout
                 clone.ValueScore = this.ValueScore;
             }
             else
             {
-                // Reset runtime: như lúc chưa chạy
+                // Reset runtime: nhu l�c chua ch?y
                 clone.ClStatus = Global.ColorNone;
                 clone.ClScore = Global.ColorNone;
                 clone.Status = "---";
                 clone.Score = "---";
                 clone.CT = 0;
                 clone.ValueScore = 0;
-                // Nếu muốn giữ Score cấu hình thì lấy từ Common.PropetyTools (nếu có)
+                // N?u mu?n gi? Score c?u h�nh th� l?y t? Common.PropetyTools (n?u c�)
                 //try
                 //{
-                //    clone.Step = Common.PropetyTools[clone.IndexThread][clone.IndexTool].StepValue;
-                //    clone.Min = Common.PropetyTools[clone.IndexThread][clone.IndexTool].MinValue;
-                //    clone.Max = Common.PropetyTools[clone.IndexThread][clone.IndexTool].MaxValue;
-                //    clone.Value = BeeCore.Common.PropetyTools[clone.IndexThread][clone.IndexTool].Score;
+                //    clone.Step = Common.TryGetTool(clone.IndexThread, clone.IndexTool).StepValue;
+                //    clone.Min = Common.TryGetTool(clone.IndexThread, clone.IndexTool).MinValue;
+                //    clone.Max = Common.TryGetTool(clone.IndexThread, clone.IndexTool).MaxValue;
+                //    clone.Value = BeeCore.Common.TryGetTool(clone.IndexThread, clone.IndexTool).Score;
                 //}
-                //catch { /* an toàn nếu chưa có Common.PropetyTools */ }
+                //catch { /* an to�n n?u chua c� Common.PropetyTools */ }
             }
 
-            // Đồng bộ nội bộ hình học
+            // �?ng b? n?i b? h�nh h?c
             clone.UpdateLayout();
 
-            // LƯU Ý: KHÔNG sao chép event subscriber bên ngoài (ValueChanged, ...).
-            // Nếu cần, ở nơi sử dụng hãy đăng ký lại:
+            // LUU �: KH�NG sao ch�p event subscriber b�n ngo�i (ValueChanged, ...).
+            // N?u c?n, ? noi s? d?ng h�y dang k� l?i:
             // clone.ValueChanged += ...;
 
             return clone;
         }
 
-        // ADD: hỗ trợ ICloneable (mặc định copyRuntime=true)
+        // ADD: h? tr? ICloneable (m?c d?nh copyRuntime=true)
         object ICloneable.Clone() => this.Clone(true);
 
-        // ADD: tiện ích clone Image an toàn
+        // ADD: ti?n �ch clone Image an to�n
         private static Image SafeCloneImage(Image src)
         {
             if (src == null) return null;
             try
             {
-                // Nếu là Bitmap, clone pixel để không share handle/stream
+                // N?u l� Bitmap, clone pixel d? kh�ng share handle/stream
                 if (src is Bitmap bmp)
                 {
-                    // Clone theo toàn bộ rect và format
+                    // Clone theo to�n b? rect v� format
                     return bmp.Clone(new Rectangle(0, 0, bmp.Width, bmp.Height), bmp.PixelFormat);
                 }
-                // Fallback: dùng MemoryStream
+                // Fallback: d�ng MemoryStream
                 using (var ms = new System.IO.MemoryStream())
                 {
                     src.Save(ms, src.RawFormat);
@@ -126,7 +126,7 @@ namespace BeeCore
             }
             catch
             {
-                // Nếu không clone được, chấp nhận trả về ref (ít gặp)
+                // N?u kh�ng clone du?c, ch?p nh?n tr? v? ref (�t g?p)
                 return src;
             }
         }
@@ -182,7 +182,7 @@ namespace BeeCore
                         return;
                     this.value = (float)Math.Round(value, 1);
                     pTick = new Point(pTrack.X + (int)((value * 1.0 / (Max - Min)) * (this.szTrack.Width - imgTick.Width)), pTrack.Y);
-                    BeeCore.Common.PropetyTools[IndexThread][IndexTool].Score = Value;
+                    BeeCore.Common.TryGetTool(IndexThread, IndexTool).Score = Value;
                     this.Invalidate();
                 }    
               
@@ -286,11 +286,11 @@ namespace BeeCore
         }
 
         private void ItemTool_VisibleChanged(object sender, EventArgs e)
-        {if (IndexTool >= Common.PropetyTools[IndexThread].Count)
+        {if (IndexTool >= Common.EnsureToolList(IndexThread).Count)
                 return;
-            Common.PropetyTools[IndexThread][IndexTool].StatusToolChanged -= ItemTool_StatusToolChanged;
-            Common.PropetyTools[IndexThread][IndexTool].StatusToolChanged += ItemTool_StatusToolChanged;
-            //  Value = BeeCore.Common.PropetyTools[IndexThread][IndexTool].Score;
+            Common.TryGetTool(IndexThread, IndexTool).StatusToolChanged -= ItemTool_StatusToolChanged;
+            Common.TryGetTool(IndexThread, IndexTool).StatusToolChanged += ItemTool_StatusToolChanged;
+            //  Value = BeeCore.Common.TryGetTool(IndexThread, IndexTool).Score;
         }
 
         private void ItemTool_MouseUp(object sender, MouseEventArgs e)
@@ -324,11 +324,11 @@ namespace BeeCore
             //        {
             //            G.IsCancel = false;
             //            G.listAlltool[IndexThread][G.indexToolSelected].tool.Propety = G.PropetyOld.Clone();
-            //            BeeCore.Common.PropetyTools[IndexThread][G.indexToolSelected].Propety = G.listAlltool[IndexThread][G.indexToolSelected].tool.Propety;
+            //            BeeCore.Common.TryGetTool(IndexThread, G.indexToolSelected).Propety = G.listAlltool[IndexThread][G.indexToolSelected].tool.Propety;
 
             //            G.EditTool.View.imgView.Invalidate();
             //        }
-            //        Score.Value = BeeCore.Common.PropetyTools[IndexThread][G.indexToolSelected].Propety.Score;
+            //        Score.Value = BeeCore.Common.TryGetTool(IndexThread, G.indexToolSelected).Propety.Score;
             //    }
             //}
             
@@ -408,51 +408,51 @@ namespace BeeCore
                 pEnd = new PointF(this.Width - 5, 5);
                 Rectangle rectSurface = this.ClientRectangle;
                 Rectangle rect = new Rectangle(0, 0, this.Width, this.Height);
-                // Xác định màu nền dựa trên trạng thái
+                // X�c d?nh m�u n?n d?a tr�n tr?ng th�i
                 Color topColor, middleColor, bottomColor;
 
                 if (isCLick)
                 {
-                    // Màu khi bấm xuống
+                    // M�u khi b?m xu?ng
                     topColor = Color.FromArgb(244, 192, 89);
                     middleColor = Color.FromArgb(246, 204, 120);
                     bottomColor = Color.FromArgb(247, 211, 139);//247, 211, 139
                 }
                 else if (isHovered)
                 {
-                    // Màu khi hover
+                    // M�u khi hover
                     topColor = Color.FromArgb(208, 211, 213);
                     middleColor = Color.FromArgb(193, 197, 199);
                     bottomColor = Color.FromArgb(179, 182, 185);
                 }
                 else
                 {
-                    // Màu mặc định
+                    // M�u m?c d?nh
                     topColor = Color.FromArgb(243, 247, 250);
                     middleColor = Color.FromArgb(218, 221, 224);
                     bottomColor = Color.FromArgb(199, 203, 206);
                 }
 
-                // Gradient 3 màu
+                // Gradient 3 m�u
                 using (LinearGradientBrush brush = new LinearGradientBrush(rect, Color.White, Color.Gray, LinearGradientMode.Vertical))
                 {
                     ColorBlend colorBlend = new ColorBlend();
                     colorBlend.Colors = new Color[] { topColor, middleColor, bottomColor };
-                    colorBlend.Positions = new float[] { 0.0f, 0.5f, 1.0f }; // 3 điểm màu
+                    colorBlend.Positions = new float[] { 0.0f, 0.5f, 1.0f }; // 3 di?m m�u
                     brush.InterpolationColors = colorBlend;
 
                     pevent.Graphics.FillRectangle(brush, rect);
                 }
-                // Vẽ hình ảnh nếu có
+                // V? h�nh ?nh n?u c�
 
-                // Vẽ hình ảnh nếu có
-                int imgSize = Math.Min(this.Height - 10, 24); // Giới hạn kích thước ảnh
+                // V? h�nh ?nh n?u c�
+                int imgSize = Math.Min(this.Height - 10, 24); // Gi?i h?n k�ch thu?c ?nh
                 Rectangle imgRect = Rectangle.Empty;
                 Rectangle textRect = rect;
-                int spacing = 5; // Khoảng cách giữa ảnh và chữ
+                int spacing = 5; // Kho?ng c�ch gi?a ?nh v� ch?
 
 
-                // Vẽ chữ trên button
+                // V? ch? tr�n button
                 textRect = new Rectangle(0, 0, this.Width, this.Height);
                 TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter;
 
@@ -622,13 +622,14 @@ namespace BeeCore
         {
             UpdateLayout();
             this.DoubleClick += ItemTool_DoubleClick;
-            Step = Common.PropetyTools[IndexThread][IndexTool].StepValue;
-            Min = Common.PropetyTools[IndexThread][IndexTool].MinValue;
-            Max = Common.PropetyTools[IndexThread][IndexTool].MaxValue;
-            Value = BeeCore.Common.PropetyTools[IndexThread][IndexTool].Score;
-            Common.PropetyTools[IndexThread][IndexTool].StatusToolChanged -= ItemTool_StatusToolChanged;
-            Common.PropetyTools[IndexThread][IndexTool].StatusToolChanged += ItemTool_StatusToolChanged;
-            Common.PropetyTools[IndexThread][IndexTool].ScoreChanged += ItemTool_ScoreChanged;
+            Step = Common.TryGetTool(IndexThread, IndexTool).StepValue;
+            Min = Common.TryGetTool(IndexThread, IndexTool).MinValue;
+            Max = Common.TryGetTool(IndexThread, IndexTool).MaxValue;
+            Value = BeeCore.Common.TryGetTool(IndexThread, IndexTool).Score;
+            Common.TryGetTool(IndexThread, IndexTool).StatusToolChanged -= ItemTool_StatusToolChanged;
+            Common.TryGetTool(IndexThread, IndexTool).StatusToolChanged += ItemTool_StatusToolChanged;
+            Common.TryGetTool(IndexThread, IndexTool).ScoreChanged -= ItemTool_ScoreChanged;
+            Common.TryGetTool(IndexThread, IndexTool).ScoreChanged += ItemTool_ScoreChanged;
             this.Parent.VisibleChanged += Parent_VisibleChanged1;
             imgTick = Properties.Resources.Disnable;
             this.Resize += ItemTool_Resize;
@@ -646,18 +647,18 @@ namespace BeeCore
             var r = this.ClientRectangle;
             int margin = 10;
 
-            // 1) Vị trí và size thanh track:
+            // 1) V? tr� v� size thanh track:
             szTrack = new Size(r.Width - szStatus.Width - margin * 2, 15);
             pTrack = new Point(margin, r.Height / 2 - szTrack.Height / 2+5);
 
-            // 2) Vị trí tick theo value:
+            // 2) V? tr� tick theo value:
             float ratio = (Value - Min) / (Max - Min);
             pTick = new PointF(
                 pTrack.X + ratio * (szTrack.Width - imgTick.Width),
                  pTrack.Y
             );
 
-            // 3) Vị trí icon/label trên đầu:
+            // 3) V? tr� icon/label tr�n d?u:
             pFist = new Point(margin, margin);
             pEnd = new PointF(r.Right - margin, margin);
 
@@ -699,38 +700,38 @@ namespace BeeCore
                     break;
                 case StatusTool.Done:
                   
-                    if(Common.PropetyTools[IndexThread][IndexTool].Results==Results.OK)
+                    if(Common.TryGetTool(IndexThread, IndexTool).Results==Results.OK)
                     {   
-                        if (Common.PropetyTools[IndexThread][IndexTool].Location != null&&Common.PropetyTools[IndexThread][IndexTool].Location != "")
-                            Score = Common.PropetyTools[IndexThread][IndexTool].Location;
+                        if (Common.TryGetTool(IndexThread, IndexTool).Location != null&&Common.TryGetTool(IndexThread, IndexTool).Location != "")
+                            Score = Common.TryGetTool(IndexThread, IndexTool).Location;
                         else 
                         {
-                            valueScore = Common.PropetyTools[IndexThread][IndexTool].ScoreResult;
+                            valueScore = Common.TryGetTool(IndexThread, IndexTool).ScoreResult;
                             Score = valueScore + "";
                         }    
                          
-                        Status = Common.PropetyTools[IndexThread][IndexTool].Results.ToString();
-                        CT = Common.PropetyTools[IndexThread][IndexTool].CycleTime;
+                        Status = Common.TryGetTool(IndexThread, IndexTool).Results.ToString();
+                        CT = Common.TryGetTool(IndexThread, IndexTool).CycleTime;
                         colorTrack =  Global.ParaShow.ColorOK;
                         ClStatus =  Global.ParaShow.ColorOK;
                         ClScore=  Global.ParaShow.ColorOK;
                     }
-                    else if (Common.PropetyTools[IndexThread][IndexTool].Results == Results.NG)
+                    else if (Common.TryGetTool(IndexThread, IndexTool).Results == Results.NG)
                     {
-                        if (Common.PropetyTools[IndexThread][IndexTool].Location != "")
-                            Score = Common.PropetyTools[IndexThread][IndexTool].Location;
+                        if (Common.TryGetTool(IndexThread, IndexTool).Location != "")
+                            Score = Common.TryGetTool(IndexThread, IndexTool).Location;
                         else
                         {
-                            valueScore = Common.PropetyTools[IndexThread][IndexTool].ScoreResult;
+                            valueScore = Common.TryGetTool(IndexThread, IndexTool).ScoreResult;
                             Score = valueScore + "";
                         }
-                        Status = Common.PropetyTools[IndexThread][IndexTool].Results.ToString();
-                        CT = Common.PropetyTools[IndexThread][IndexTool].CycleTime;
+                        Status = Common.TryGetTool(IndexThread, IndexTool).Results.ToString();
+                        CT = Common.TryGetTool(IndexThread, IndexTool).CycleTime;
                         colorTrack = Global.ParaShow.ColorNG;
                         ClStatus = Global.ParaShow.ColorNG;
                         ClScore = Global.ParaShow.ColorNG;
                     }
-                    else if (Common.PropetyTools[IndexThread][IndexTool].Results == Results.None)
+                    else if (Common.TryGetTool(IndexThread, IndexTool).Results == Results.None)
                     {
                         Score = "---";
                         Status = "NC";
@@ -809,8 +810,8 @@ namespace BeeCore
             if(e.KeyCode==Keys.Enter)
             {
                 Global.IndexToolSelected = IndexTool;
-                BeeCore.Common.PropetyTools[IndexThread][Global.IndexToolSelected].Name = txtEdit.Text.Trim();
-                BeeCore.Common.PropetyTools[IndexThread][Global.IndexToolSelected].Propety2.SetModel();
+                BeeCore.Common.TryGetTool(IndexThread, Global.IndexToolSelected).Name = txtEdit.Text.Trim();
+                BeeCore.Common.TryGetTool(IndexThread, Global.IndexToolSelected).Propety2.SetModel();
               Name= txtEdit.Text.Trim();
                 txtEdit.Visible = false;
                 this.Invalidate();

@@ -1,4 +1,4 @@
-﻿ using BeeCore;
+ using BeeCore;
 using BeeCore.Funtion;
 using BeeGlobal;
 using BeeInterface;
@@ -48,10 +48,10 @@ namespace BeeUi
             //this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             //this.SetStyle(ControlStyles.UserPaint, true);
            
-            //this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
+            //this.AutoScaleMode = AutoScaleMode.Dpi; // ho?c AutoScaleMode.Font
             _layout = new LayoutPersistence(this, key: "MainLayout");
-            _layout.LoadDelayMs = 300;        // trễ 500ms sau Form.Shown
-            _layout.SplitterLocked = true;   // tuỳ chọn
+            _layout.LoadDelayMs = 300;        // tr? 500ms sau Form.Shown
+            _layout.SplitterLocked = true;   // tu? ch?n
             _layout.EnableAuto();
            
         }
@@ -80,7 +80,7 @@ namespace BeeUi
                 int i= 0;
                 foreach (PropetyTool propety in ListTool)
                 {
-                    String name = "Tools" + IndexProgChoose+ Global.IndexProgChoose  + BeeCore.Common.PropetyTools[IndexProgChoose][i].Name;
+                    String name = "Tools" + IndexProgChoose+ Global.IndexProgChoose  + BeeCore.Common.TryGetTool(IndexProgChoose, i).Name;
 
                     pEditTool.Unregister(name);
                     i++;
@@ -192,7 +192,7 @@ namespace BeeUi
                 System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             piDB?.SetValue(c, true, null);
 
-            // giúp redraw mượt khi resize
+            // gi�p redraw mu?t khi resize
             var piRR = t.GetProperty("ResizeRedraw",
                 System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             piRR?.SetValue(c, true, null);
@@ -327,7 +327,7 @@ namespace BeeUi
                                             Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
                                             Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
                                         }
-                            foreach(PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
+                            foreach(PropetyTool propetyTool in BeeCore.Common.EnsureToolList(Global.IndexProgChoose))
                             {
                                 if (propetyTool.ItemTool == null)
                                     continue;
@@ -354,7 +354,7 @@ namespace BeeUi
                         break;
                     case Step.Step1:
                         View.pImageShow.Visible = false;
-                        foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
+                        foreach (PropetyTool PropetyTool in BeeCore.Common.EnsureToolList(Global.IndexProgChoose))
                         {
                             if (PropetyTool.ItemTool != null)
                                 PropetyTool.ItemTool.IsEdit = false;
@@ -480,7 +480,7 @@ namespace BeeUi
                         pName.Visible = true;
                        
                         pEditTool.Show("Tool");
-                        ShowTool.ShowChart( Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexProgChoose]);
+                        ShowTool.ShowChart( Global.ToolSettings.pAllTool, BeeCore.Common.EnsureToolList(Global.IndexProgChoose));
                         Mat matReg2 = new Mat();
                         try
                         {
@@ -692,7 +692,7 @@ namespace BeeUi
 
             }    
              
-            // Chưa chạy gì
+            // Chua ch?y g�
 
 
             lbVersion.Text= GetDllVersion("BeeUi.dll").ToString()??"----";
@@ -744,7 +744,7 @@ namespace BeeUi
             btnShowTop.Checked = Global.EditTool.pTop.Visible;
             btnShowDashBoard.Checked = Global.EditTool.pInfor.Visible;
             btnMenu.Checked = Global.EditTool.View.pBtn.Visible;
-            //   Global.LogsDashboard.AddLog(LeveLLog.INFO, "Ứng dụng khởi động", "Main");
+            //   Global.LogsDashboard.AddLog(LeveLLog.INFO, "?ng d?ng kh?i d?ng", "Main");
 
             btnShowToolBar.Checked = btnShowToolBar.Checked;
             if (Global.EditTool.pEdit.Width == 0)
@@ -794,7 +794,7 @@ namespace BeeUi
             {
                 if (obj)
                 {
-                     formWarning = new FormWarning("ESOP", "Nút nhấn ESOP đã được Nhấn !!! " + Global.Ex);
+                     formWarning = new FormWarning("ESOP", "N�t nh?n ESOP d� du?c Nh?n !!! " + Global.Ex);
                     formWarning.btnCancel.Visible = false;
                     formWarning.TopMost = true;
                     formWarning.Show();
@@ -849,11 +849,11 @@ namespace BeeUi
             }
             else
             {
-                // chưa load xong → load trực tiếp từ file (nếu muốn)
+                // chua load xong ? load tr?c ti?p t? file (n?u mu?n)
                 View.imgView.Image = System.Drawing.Image.FromFile(e.Path);
             }
             ShowTool.Full(View.imgView, View.imgView.Image.Size);
-            // lblInfo.Text = $"{e.Caption}  ({e.OriginalSize.Width}×{e.OriginalSize.Height})";
+            // lblInfo.Text = $"{e.Caption}  ({e.OriginalSize.Width}�{e.OriginalSize.Height})";
         }
 
    
@@ -1237,7 +1237,7 @@ namespace BeeUi
 
         private void btnLogo_Click(object sender, EventArgs e)
         {
-            // Lấy vị trí ngay dưới nút
+            // L?y v? tr� ngay du?i n�t
             Point menuPoint = new Point(0, btnLogo.Height);
 
             //if(btnLogo.IsCLick)
@@ -1283,13 +1283,13 @@ namespace BeeUi
         private Thread _displayThread;
         private readonly AutoResetEvent _frameReady = new AutoResetEvent(false);
         private Bitmap _sharedFrame;
-        private int _uiPending; // 0: idle, 1: đang đẩy frame lên UI
+        private int _uiPending; // 0: idle, 1: dang d?y frame l�n UI
         void PublishFrame(Bitmap src)
         {
             if (!Global.IsLive) { src.Dispose(); return; }
-            // Clone 1 lần ở producer, không clone trong display thread
+            // Clone 1 l?n ? producer, kh�ng clone trong display thread
             var clone = (Bitmap)src.Clone();
-            var old = Interlocked.Exchange(ref _sharedFrame, clone); // giữ frame mới nhất, drop cũ
+            var old = Interlocked.Exchange(ref _sharedFrame, clone); // gi? frame m?i nh?t, drop cu
             old?.Dispose();
             _frameReady.Set();
         }
@@ -1308,7 +1308,7 @@ namespace BeeUi
             _displayThread?.Join();
             _displayThread = null;
 
-            // Clear ảnh trên UI
+            // Clear ?nh tr�n UI
             if (IsHandleCreated && !IsDisposed)
                 BeginInvoke(new Action(() =>
                 {
@@ -1317,7 +1317,7 @@ namespace BeeUi
                     old?.Dispose();
                 }));
 
-            // Dọn rác còn sót
+            // D?n r�c c�n s�t
             var leftover = Interlocked.Exchange(ref _sharedFrame, null);
             leftover?.Dispose();
             if (CameraLive.matRaw!= null)
@@ -1337,14 +1337,14 @@ namespace BeeUi
         {
             while (btnLive.IsCLick)
             {
-                _frameReady.WaitOne(50);        // chờ tín hiệu có frame (hoặc timeout để thoát nhanh)
+                _frameReady.WaitOne(50);        // ch? t�n hi?u c� frame (ho?c timeout d? tho�t nhanh)
                 if (!btnLive.IsCLick) break;
 
-                // Lấy quyền sở hữu frame mới nhất và làm rỗng buffer chung
+                // L?y quy?n s? h?u frame m?i nh?t v� l�m r?ng buffer chung
                 var frame = Interlocked.Exchange(ref _sharedFrame, null);
                 if (frame == null) continue;
 
-                // Chỉ cho phép 1 cập nhật UI pending; nếu UI chưa kịp xử lý → drop frame
+                // Ch? cho ph�p 1 c?p nh?t UI pending; n?u UI chua k?p x? l� ? drop frame
                 if (Interlocked.Exchange(ref _uiPending, 1) == 1)
                 {
                     frame.Dispose();
@@ -1360,8 +1360,8 @@ namespace BeeUi
                             try
                             {
                                 var old = imgLive.Image;
-                                imgLive.Image = frame;   // chuyển quyền sở hữu cho PictureBox
-                                old?.Dispose();          // hủy ảnh cũ sau khi gán
+                                imgLive.Image = frame;   // chuy?n quy?n s? h?u cho PictureBox
+                                old?.Dispose();          // h?y ?nh cu sau khi g�n
                             }
                             finally
                             {
@@ -1398,20 +1398,20 @@ namespace BeeUi
                         if (!CameraLive.matRaw.Empty())
                         {
                            // Global.Config.SizeCCD = CameraLive.GetSzCCD();
-                            // matRaw là OpenCvSharp.Mat
+                            // matRaw l� OpenCvSharp.Mat
                             var bmp = BitmapConverter.ToBitmap(CameraLive.matRaw);
 
-                            // Đẩy frame mới nhất và hủy frame cũ một cách an toàn, không cần lock
+                            // �?y frame m?i nh?t v� h?y frame cu m?t c�ch an to�n, kh�ng c?n lock
                             var old = Interlocked.Exchange(ref _sharedFrame, bmp);
                             old?.Dispose();
 
-                            // (tuỳ chọn) báo cho display thread là có frame mới
+                            // (tu? ch?n) b�o cho display thread l� c� frame m?i
                             _frameReady?.Set();
                             //using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw))
                             //{
 
                             //        _sharedFrame?.Dispose();
-                            //        _sharedFrame = (Bitmap)frame.Clone(); // Clone để thread-safe
+                            //        _sharedFrame = (Bitmap)frame.Clone(); // Clone d? thread-safe
 
                             //}
                         }
@@ -1476,7 +1476,7 @@ namespace BeeUi
             }
 
             //string tarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ProgramBackup.tar");
-            //// Import lại vào \Program
+            //// Import l?i v�o \Program
             //TarProgramHelper.ImportToDefaultProgram(tarPath);
         }
 
@@ -1516,7 +1516,7 @@ namespace BeeUi
             SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Title = "Export List";
             saveFile.Filter = " Text|*.txt";
-            BeeCore.Common.PropetyTools[Global.IndexProgChoose] = new List<BeeCore.PropetyTool>();
+            BeeCore.Common.SetToolList(Global.IndexProgChoose, new List<BeeCore.PropetyTool>());
             
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
@@ -1533,7 +1533,7 @@ namespace BeeUi
         {
             SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Title = "New Program";
-            BeeCore.Common.PropetyTools[Global.IndexProgChoose] = new List<BeeCore.PropetyTool>();
+            BeeCore.Common.SetToolList(Global.IndexProgChoose, new List<BeeCore.PropetyTool>());
             saveFile.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Program";
             if (saveFile.ShowDialog() == DialogResult.OK)
             {

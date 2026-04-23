@@ -67,10 +67,10 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
-        
+
         public void InitialYolo()
         {
-           
+
         }
         public List<RectRotate> ListRotMask = new List<RectRotate>();
         public List<RectRotate> ListRotCrop = new List<RectRotate>();
@@ -100,9 +100,9 @@ namespace BeeCore
             rotLimit.Name = "Area Limit";
             rotLimit.TypeCrop = TypeCrop.Limit;
             if (listRotScan == null) listRotScan = new List<RectRotate>();
-            Common.PropetyTools[IndexThread][Index].StepValue = 1;
-            Common.PropetyTools[IndexThread][Index].MinValue = 0;
-            Common.PropetyTools[IndexThread][Index].MaxValue = 100;
+            Common.TryGetTool(IndexThread, Index).StepValue = 1;
+            Common.TryGetTool(IndexThread, Index).MinValue = 0;
+            Common.TryGetTool(IndexThread, Index).MaxValue = 100;
             if (labelItems==null)labelItems = new List<LabelItem>();
             if (ListRotMask == null)
                 ListRotMask = new List<RectRotate>();
@@ -110,7 +110,7 @@ namespace BeeCore
                 ListRotCrop = new List<RectRotate>();
             try
             {
-                Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.NotInitial;
+                Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.NotInitial;
 
                 //            if (pathFullModel.Trim().Contains(".pth"))
                 //            {
@@ -137,12 +137,12 @@ namespace BeeCore
 							if (!File.Exists(pathFullModel))
 							{
 
-								Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+								Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
 								return;
 							}
 
-							G.objYolo.load_model(Common.PropetyTools[IndexThread][Index].Name, pathFullModel, (int)TypeYolo);
-							Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+							G.objYolo.load_model(Common.TryGetTool(IndexThread, Index).Name, pathFullModel, (int)TypeYolo);
+							Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
 
 						}
 						break;
@@ -158,10 +158,10 @@ namespace BeeCore
 
 								NativeOnnx.Warmup(10);
 								OnnxBoxes = new NativeYolo.YoloBox[200];
-								
+
 							}
 
-							Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+							Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
 
 						}
 						catch (Exception ex)
@@ -182,9 +182,9 @@ namespace BeeCore
 
 								NativeRCNN.Warmup(10);
 								RCNNBoxes = new NativeRCNN.RCNNBox[200];
-								
+
 							}
-						Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+						Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
 
 						}
 						catch (Exception ex)
@@ -194,11 +194,11 @@ namespace BeeCore
 
 						break;
 				}
-					
-                
+
+
 
                 if (Global.IsIntialPython)
-           
+
                 SetListTemp(); IsIniYolo = true;
 
 			}
@@ -210,7 +210,7 @@ namespace BeeCore
                 {
                       MessageBox.Show("Error: " + ex.Message);
                 }
-            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+            Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
 
             // G.YoloPlus.LoadModel(nameTool, nameModel, (int)TypeYolo);
         }
@@ -301,14 +301,14 @@ namespace BeeCore
 
                             dynamic result = G.objYolo.loadNames(nameTool);
 
-                            // Dùng list() để ép dict_values về list
+                            // Dùng list() d? ép dict_values v? list
                             PyObject obj = Py.Import("builtins").GetAttr("list").Invoke(result.InvokeMethod("values"));
                             var labels = new List<string>();
                             int counts = (int)obj.Length();
                             for (int j = 0; j < counts; j++)
                             {
 
-                                labels.Add(obj[j].ToString());  // hoặc item.As<string>() nếu bạn chắc chắn là string
+                                labels.Add(obj[j].ToString());  // ho?c item.As<string>() n?u b?n ch?c ch?n là string
                             }
 
 
@@ -329,7 +329,7 @@ namespace BeeCore
                         break;
 
                 }
-               
+
             }
             else
                 return new string[0];
@@ -378,11 +378,11 @@ namespace BeeCore
         }
         public string pathRaw;
         public TypeCrop TypeCrop;
-     
+
         public bool IsAreaWhite = false;
-       
+
         public bool IsIni = false;
-      
+
         int _NumObject = 0;
         public int NumObject
         {
@@ -402,7 +402,7 @@ namespace BeeCore
         [NonSerialized]
         public List<RectRotate> rectTrain = new List<RectRotate>();
         String[] sSplit;
-        
+
         public List<string> listModels = new List<string>();
         public List<string> listModelOnnx = new List<string>();
         String listMatch;
@@ -411,7 +411,7 @@ namespace BeeCore
         public Point p1 = new Point();
         public Point p2 = new Point();
         public int yLine = 100;
-       
+
         public String Content = "";
         public String Matching = "";
         public bool IsEnContent = false;
@@ -439,14 +439,14 @@ namespace BeeCore
         {
             Rect roi = new Rect(new OpenCvSharp. Point(rot._PosCenter.X - rot._rect.Width / 2, rot._PosCenter.Y - rot._rect.Height / 2), new OpenCvSharp. Size(rot._rect.Width, rot._rect.Height));
             if (src == null || src.Empty()) return new Mat();
-            return new Mat(src, roi); // view, dùng xong nhớ Dispose
+            return new Mat(src, roi); // view, dùng xong nh? Dispose
         }
         public static Mat CropRoiViewAuto(Mat src, RectRotate rot)
         {
             if (src == null || src.Empty() || rot == null)
                 return new Mat();
 
-            // Tính ROI axis-aligned từ center + width/height
+            // Tính ROI axis-aligned t? center + width/height
             int x = (int)Math.Round(rot._PosCenter.X - rot._rect.Width / 2.0);
             int y = (int)Math.Round(rot._PosCenter.Y - rot._rect.Height / 2.0);
             int w = (int)Math.Round(rot._rect.Width);
@@ -455,7 +455,7 @@ namespace BeeCore
             if (w <= 0 || h <= 0)
                 return new Mat();
 
-            // Clamp vào trong ảnh
+            // Clamp vào trong ?nh
             int x1 = Math.Max(0, x);
             int y1 = Math.Max(0, y);
             int x2 = Math.Min(src.Width, x + w);
@@ -464,12 +464,12 @@ namespace BeeCore
             int cw = x2 - x1;
             int ch = y2 - y1;
 
-            // Nếu hoàn toàn nằm ngoài ảnh
+            // N?u hoàn toàn n?m ngoài ?nh
             if (cw <= 0 || ch <= 0)
                 return new Mat();
 
             Rect roi = new Rect(x1, y1, cw, ch);
-            return new Mat(src, roi); // view, dùng xong nhớ Dispose
+            return new Mat(src, roi); // view, dùng xong nh? Dispose
         }
         // [NonSerialized]
         //BeeCpp. ColorArea ColorAreaPP = new BeeCpp.ColorArea();
@@ -496,10 +496,10 @@ namespace BeeCore
                     else
                     {
                         bgr = src; // reuse
-                    }  
+                    }
                     SizeClearBig = 50;
          SizeClose = 5;
-                   
+
                     ColorAreaPP.SetImgeNoCrop(
                         bgr.Data, bgr.Width, bgr.Height, (int)bgr.Step(), bgr.Channels());
 
@@ -509,10 +509,10 @@ namespace BeeCore
                     IntPtr ptr = ColorAreaPP.Check(out w, out h, out s, out c);
                     try
                     {
-                        // Validate trước, nhưng KHÔNG return trước khi FreeBuffer
+                        // Validate tru?c, nhung KHÔNG return tru?c khi FreeBuffer
                         if (ptr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
                         {
-                            return 0; // finally phía dưới vẫn chạy để FreeBuffer nếu cần
+                            return 0; // finally phía du?i v?n ch?y d? FreeBuffer n?u c?n
                         }
 
                         MatType mt = (c == 1) ? MatType.CV_8UC1
@@ -521,12 +521,12 @@ namespace BeeCore
 
                         using (var mNative = new Mat(h, w, mt, ptr, s))
                         {
-                            matProcess = mNative.Clone(); // bây giờ dữ liệu đã thuộc về OpenCV (managed)
+                            matProcess = mNative.Clone(); // bây gi? d? li?u dã thu?c v? OpenCV (managed)
                         }
                     }
                     finally
                     {
-                        // GIẢI PHÓNG BỘ NHỚ DO native CẤP PHÁT — luôn luôn!
+                        // GI?I PHÓNG B? NH? DO native C?P PHÁT — luôn luôn!
                         if (ptr != IntPtr.Zero)
                         {
                             ColorAreaPP.FreeBuffer(ptr);
@@ -534,7 +534,7 @@ namespace BeeCore
                         }
                     }
 
-                    // Hậu xử lý:
+                    // H?u x? lý:
                    // if (IsClearNoiseSmall)
                     //{
                     //    Mat t = Filters.ClearNoise(matProcess, SizeClearsmall);
@@ -583,13 +583,173 @@ namespace BeeCore
                 }
             }
         }
-        
+
+        private static System.Drawing.Rectangle GetAxisRect(RectRotate rot)
+        {
+            if (rot == null)
+                return System.Drawing.Rectangle.Empty;
+
+            int x = (int)Math.Round(rot._PosCenter.X - rot._rect.Width / 2.0f);
+            int y = (int)Math.Round(rot._PosCenter.Y - rot._rect.Height / 2.0f);
+            int w = (int)Math.Round(rot._rect.Width);
+            int h = (int)Math.Round(rot._rect.Height);
+
+            if (w <= 0 || h <= 0)
+                return System.Drawing.Rectangle.Empty;
+
+            return new System.Drawing.Rectangle(x, y, w, h);
+        }
+
+        private static bool HasAxisOverlap(RectRotate a, RectRotate b)
+        {
+            System.Drawing.Rectangle rectA = GetAxisRect(a);
+            System.Drawing.Rectangle rectB = GetAxisRect(b);
+
+            if (rectA.IsEmpty || rectB.IsEmpty)
+                return false;
+
+            return rectA.IntersectsWith(rectB);
+        }
+
+        private static List<ResultItem> GetLabelMarkItems(
+            ResultItem target,
+            IEnumerable<ResultItem> source,
+            HashSet<string> labelMarkNames)
+        {
+            if (target == null || target.rot == null || source == null || labelMarkNames == null || labelMarkNames.Count == 0)
+                return new List<ResultItem>();
+
+            return source
+                .Where(x =>
+                    x != null &&
+                    !object.ReferenceEquals(x, target) &&
+                    x.rot != null &&
+                    !string.IsNullOrEmpty(x.Name) &&
+                    labelMarkNames.Contains(x.Name) &&
+                    HasAxisOverlap(target.rot, x.rot))
+                .ToList();
+        }
+
+        private static void SubtractLabelMarkMask(ResultItem target, IEnumerable<ResultItem> labelMarks)
+        {
+            if (target == null || target.rot == null || target.matProcess == null || target.matProcess.Empty() || labelMarks == null)
+                return;
+
+            System.Drawing.Rectangle targetRect = GetAxisRect(target.rot);
+            if (targetRect.IsEmpty)
+                return;
+
+            foreach (ResultItem mark in labelMarks)
+            {
+                if (mark == null || mark.rot == null)
+                    continue;
+
+                System.Drawing.Rectangle markRect = GetAxisRect(mark.rot);
+                if (markRect.IsEmpty)
+                    continue;
+
+                System.Drawing.Rectangle inter = System.Drawing.Rectangle.Intersect(targetRect, markRect);
+                if (inter.IsEmpty || inter.Width <= 0 || inter.Height <= 0)
+                    continue;
+
+                int x = inter.X - targetRect.X;
+                int y = inter.Y - targetRect.Y;
+                int w = inter.Width;
+                int h = inter.Height;
+
+                if (x < 0)
+                {
+                    w += x;
+                    x = 0;
+                }
+                if (y < 0)
+                {
+                    h += y;
+                    y = 0;
+                }
+
+                w = Math.Min(w, target.matProcess.Width - x);
+                h = Math.Min(h, target.matProcess.Height - y);
+                if (w <= 0 || h <= 0)
+                    continue;
+
+                using (Mat roi = new Mat(target.matProcess, new OpenCvSharp.Rect(x, y, w, h)))
+                {
+                    roi.SetTo(Scalar.Black);
+                }
+            }
+        }
+
+        private int CheckColorExcludeMarks(
+            BeeCpp.ColorArea colorArea,
+            ref Mat matProcess,
+            Mat crop,
+            ResultItem target,
+            IEnumerable<ResultItem> markSource,
+            HashSet<string> labelMarkNames)
+        {
+            int pixels = CheckColor(colorArea, ref matProcess, crop);
+
+            if (target == null)
+                return pixels;
+
+            target.matProcess = matProcess;
+            SubtractLabelMarkMask(target, GetLabelMarkItems(target, markSource, labelMarkNames));
+
+            if (target.matProcess == null || target.matProcess.Empty())
+                return 0;
+
+            return Cv2.CountNonZero(target.matProcess);
+        }
+
+        private static string BuildScanInfo(LabelItem item, double sumArea, double sumColor, float sumWidth, float sumHeight)
+        {
+            if (item == null)
+                return "";
+
+            List<string> lines = new List<string>();
+            if (item.IsArea)
+                lines.Add("MinArea: " + (int)Math.Round(sumArea / 100.0) + "/" + item.ValueArea);
+            if (item.IsMinColor)
+                lines.Add("MinColor: " + (int)Math.Round(sumColor) + "/" + item.ValueMinColor);
+            if (item.IsHeight)
+                lines.Add("MinHeight: " + (int)Math.Round(sumHeight) + "/" + item.ValueHeight);
+            if (item.IsWidth)
+                lines.Add("MinWidth: " + (int)Math.Round(sumWidth) + "/" + item.ValueWidth);
+
+            return string.Join(Environment.NewLine, lines);
+        }
+
+        private static void DrawScanInfo(Graphics graphics, RectRotate rect, Font font, Brush textBrush, Color backColor, int opacity)
+        {
+            if (graphics == null || rect == null || string.IsNullOrWhiteSpace(rect.Infor))
+                return;
+
+            string[] lines = rect.Infor.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            if (lines.Length == 0)
+                return;
+
+            int alpha = Math.Max(0, Math.Min(255, opacity));
+            using (SolidBrush bgBrush = new SolidBrush(Color.FromArgb(alpha, backColor.R, backColor.G, backColor.B)))
+            {
+                float y = rect._rect.Bottom + 2;
+                foreach (string line in lines)
+                {
+                    SizeF size = graphics.MeasureString(line, font);
+                    RectangleF bg = new RectangleF(rect._rect.Left, y, size.Width + 4, size.Height + 2);
+                    graphics.FillRectangle(bgBrush, bg);
+                    graphics.DrawString(line, font, textBrush, bg.Left + 2, bg.Top + 1);
+                    y += size.Height + 2;
+                }
+            }
+        }
+
        public HSV HSV = new HSV();
         [NonSerialized]
         public bool IsIniYolo = false;
         public void SetListTemp()
         {
-           
+
            // using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
             {
 
@@ -603,14 +763,14 @@ namespace BeeCore
                             if (lb.IsMinColor)
                             {
                                 if (lb.ListColorArea != null)
-                                
+
                                     lb.ListColorArea.Clear();
                             if (lb.ListColorArea != null)
                                 if (lb.ListColorArea.Count() !=0)
                                     lb.ListColorArea.Clear();
                                 lb.ListColorArea = new List<BeeCpp.ColorArea>();
-                          
-                           
+
+
                           if(lb.ListInsideBox!=null)
                             {
                                 if (lb.ListInsideBox.Count >= 0)
@@ -663,12 +823,12 @@ namespace BeeCore
                                     }
 
                                 }
-                            }    
-                               
+                            }
+
                           else
                             {
                                 lb.ListColorArea.Add(new BeeCpp.ColorArea());
-                               
+
                                 HSVCli[] arrHSV = new HSVCli[lb.ListHSV.Count];
                                 int h = 0;
                                 foreach (HSV hSV in lb.ListHSV)
@@ -686,13 +846,13 @@ namespace BeeCore
                                 //    lb.ListColorArea = new List<BeeCpp.ColorArea>();
                                 //    IsIni = true; lb.ListTempColor = new List<int>();
                                 //}
-                            }    
+                            }
 
                         }
                         }
-                    
+
                 }
-            }    
+            }
         }
 
 
@@ -767,10 +927,10 @@ namespace BeeCore
                                     using (var tmp8u = new Mat())
                                     {
                                         Cv2.ConvertScaleAbs(matCrop, tmp8u); // 16U/32F -> 8U
-                                        matCrop.AssignTo(tmp8u);             // ghi đè dữ liệu (OpenCvSharp: AssignTo giữ shape/type mới)
+                                        matCrop.AssignTo(tmp8u);             // ghi dè d? li?u (OpenCvSharp: AssignTo gi? shape/type m?i)
                                     }
                                 }
-                                // 2) đảm bảo đúng số kênh
+                                // 2) d?m b?o dúng s? kênh
                                 if (matCrop.Channels() == 1)
                                 {
                                     Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
@@ -784,7 +944,7 @@ namespace BeeCore
 
                                     using (Mat matTemp = Cropper.CropRotatedRect(matCrop, ListRotMask[i], null))
                                     {
-                                        float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+                                        float conf = (float)(Common.TryGetTool(IndexThread, Index).Score / 100.0);
                                         int countDetect = NativeOnnx.Detect(
                                           matTemp.Data,
                                           matTemp.Width,
@@ -835,7 +995,7 @@ namespace BeeCore
                             using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
                             {
 
-                                float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+                                float conf = (float)(Common.TryGetTool(IndexThread, Index).Score / 100.0);
 
                                 if (matCrop.Type() == MatType.CV_8UC1)
                                     Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
@@ -882,7 +1042,7 @@ namespace BeeCore
                                 using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
                                 {
 
-                                    float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+                                    float conf = (float)(Common.TryGetTool(IndexThread, Index).Score / 100.0);
 
                                     if (matCrop.Type() == MatType.CV_8UC1)
                                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
@@ -915,7 +1075,7 @@ namespace BeeCore
                             }
                             catch (Exception e)
                             {
-                                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Dowork-" + Common.PropetyTools[IndexThread][Index].Name, e.Message));
+                                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Dowork-" + Common.TryGetTool(IndexThread, Index).Name, e.Message));
                             }
                         }
                         break;
@@ -929,7 +1089,7 @@ namespace BeeCore
 
                             try
                             {
-                                // === Tính offset (như cũ) ===
+                                // === Tính offset (nhu cu) ===
                                 CropOffSetX = (rotArea._PosCenter.X - rotArea._rect.Width / 2);
                                 CropOffSetY = (rotArea._PosCenter.Y - rotArea._rect.Height / 2);
                                 CropOffSetX = (CropOffSetX > 0) ? 0 : -CropOffSetX;
@@ -942,7 +1102,7 @@ namespace BeeCore
                                     {
                                         if (matCrop.Empty()) return;
 
-                                        // ===== 1) Convert về 8U =====
+                                        // ===== 1) Convert v? 8U =====
                                         if (matCrop.Type().Depth != MatType.CV_8U)
                                         {
                                             using (var tmp8u = new Mat())
@@ -952,7 +1112,7 @@ namespace BeeCore
                                             }
                                         }
 
-                                        // ===== 2) đảm bảo BGR =====
+                                        // ===== 2) d?m b?o BGR =====
                                         if (matCrop.Channels() == 1)
                                             Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
                                         else if (matCrop.Channels() == 4)
@@ -964,12 +1124,12 @@ namespace BeeCore
                                             if (dyn == null)
                                             {
                                                 Global.LogsDashboard?.AddLog(
-                                                    new LogEntry(DateTime.Now, LeveLLog.ERROR, "Dowork-" + Common.PropetyTools[IndexThread][Index].Name, "Loi Khoi Tao Yolo"));
+                                                    new LogEntry(DateTime.Now, LeveLLog.ERROR, "Dowork-" + Common.TryGetTool(IndexThread, Index).Name, "Loi Khoi Tao Yolo"));
                                                 return;
                                             }
 
-                                            float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
-                                            string toolName = Common.PropetyTools[IndexThread][Index].Name ?? "default";
+                                            float conf = (float)(Common.TryGetTool(IndexThread, Index).Score / 100.0);
+                                            string toolName = Common.TryGetTool(IndexThread, Index).Name ?? "default";
 
                                             // ===== 3) Build batch =====
                                             var matTemps = new List<Mat>();
@@ -1060,8 +1220,8 @@ namespace BeeCore
                                                 dynamic results = dyn.predict_batch(pyImages, conf, toolName);
                                                 int IndexScanBox = 0;
                                                 String Old = "";
-                                             
-                                                // ===== 6) Parse kết quả =====
+
+                                                // ===== 6) Parse k?t qu? =====
                                                 for (int i = 0; i < roiList.Count; i++)
                                                 {
                                                     var roi = roiList[i];
@@ -1070,11 +1230,11 @@ namespace BeeCore
                                                     {
                                                         Old=roi.Name;
                                                         IndexScanBox = 0;
-                                                    }    
-                                                    dynamic dets = results[i];   // list detection của riêng hình i
+                                                    }
+                                                    dynamic dets = results[i];   // list detection c?a riêng hình i
                                                                                  // Console.WriteLine(dets);
 
-              
+
                                                     int n = (int)dets.Length();
                                                     if (n > 0)
                                                     {
@@ -1134,18 +1294,18 @@ namespace BeeCore
                                                         item.IsOK = false;
                                                         item.Score = 0;
                                                         item.IndexScanBox = IndexScanBox;
-                                                        
+
                                                         resultTemp.Add(item);
-                                                       
+
                                                         //resultTemp[resultTemp.Count - 1].IndexScanBox = IndexScanBox;
                                                     }
-                                                   
+
                                                     IndexScanBox++;
                                                 }
                                                 //// ===== 5) CALL BATCH =====
                                                 //dynamic results = dyn.predict_batch(pyImages, conf, toolName);
 
-                                                //// ===== 6) Parse kết quả =====
+                                                //// ===== 6) Parse k?t qu? =====
                                                 //for (int i = 0; i < roiList.Count; i++)
                                                 //{
                                                 //    var roi = roiList[i];
@@ -1207,7 +1367,7 @@ namespace BeeCore
                                         catch (Exception ex)
                                         {
                                             Global.LogsDashboard?.AddLog(
-                                                new LogEntry(DateTime.Now, LeveLLog.ERROR, "Dowork-" + Common.PropetyTools[IndexThread][Index].Name, ex.ToString()));
+                                                new LogEntry(DateTime.Now, LeveLLog.ERROR, "Dowork-" + Common.TryGetTool(IndexThread, Index).Name, ex.ToString()));
                                         }
                                     }
                                 }
@@ -1225,11 +1385,11 @@ namespace BeeCore
                                             using (var tmp8u = new Mat())
                                             {
                                                 Cv2.ConvertScaleAbs(matCrop, tmp8u); // 16U/32F -> 8U
-                                                matCrop.AssignTo(tmp8u);             // ghi đè dữ liệu (OpenCvSharp: AssignTo giữ shape/type mới)
+                                                matCrop.AssignTo(tmp8u);             // ghi dè d? li?u (OpenCvSharp: AssignTo gi? shape/type m?i)
                                             }
                                         }
 
-                                        // 2) đảm bảo đúng số kênh
+                                        // 2) d?m b?o dúng s? kênh
                                         if (matCrop.Channels() == 1)
                                         {
                                             Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
@@ -1242,26 +1402,26 @@ namespace BeeCore
                                         if (matCropTemp == null) matCropTemp = new Mat();
                                         if (!matCropTemp.Empty()) matCropTemp.Dispose();
                                         matCropTemp = matCrop.Clone();
-                                        // nếu đã 3 kênh BGR thì giữ nguyên
+                                        // n?u dã 3 kênh BGR thì gi? nguyên
 
                                         int h = matCrop.Rows;
                                         int w = matCrop.Cols;
                                         int ch = matCrop.Channels(); // 3
-                                        int stride = (int)matCrop.Step(); // bytes/row (có thể > w*ch)
+                                        int stride = (int)matCrop.Step(); // bytes/row (có th? > w*ch)
                                         IntPtr p = matCrop.Data;
 
-                                        float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
-                                        string toolName = Common.PropetyTools[IndexThread][Index].Name ?? "default";
+                                        float conf = (float)(Common.TryGetTool(IndexThread, Index).Score / 100.0);
+                                        string toolName = Common.TryGetTool(IndexThread, Index).Name ?? "default";
 
-                                        // === Gọi YOLO (nhận: (boxes, scores, labels)) ===
-                                        // Ký hiệu: result là tuple-like (3 phần)
+                                        // === G?i YOLO (nh?n: (boxes, scores, labels)) ===
+                                        // Ký hi?u: result là tuple-like (3 ph?n)
                                         dynamic dyn = G.objYolo;
                                         if (dyn == null)
                                             return;
 
                                         result = dyn.predict((long)p, h, w, ch, stride, conf, toolName);
 
-                                        // Ép về PyObject để chủ động Dispose
+                                        // Ép v? PyObject d? ch? d?ng Dispose
                                         boxes = (PyObject)result[0];
                                         scores = (PyObject)result[1];
                                         labels = (PyObject)result[2];
@@ -1297,15 +1457,15 @@ namespace BeeCore
                             }
                             catch (PythonException pyEx)
                             {
-                                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Dowork-" + Common.PropetyTools[IndexThread][Index].Name, pyEx.ToString()));
+                                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Dowork-" + Common.TryGetTool(IndexThread, Index).Name, pyEx.ToString()));
                             }
                             catch (Exception ex)
                             {
-                                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Dowork-" + Common.PropetyTools[IndexThread][Index].Name, ex.ToString()));
+                                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Dowork-" + Common.TryGetTool(IndexThread, Index).Name, ex.ToString()));
                             }
                             finally
                             {
-                                // Giải phóng PyObject để tránh rò rỉ
+                                // Gi?i phóng PyObject d? tránh rò r?
                                 if (labels != null) labels.Dispose();
                                 if (scores != null) scores.Dispose();
                                 if (boxes != null) boxes.Dispose();
@@ -1331,7 +1491,7 @@ namespace BeeCore
             }
         }
 
-    
+
         public string AddPLC = "";
         public TypeSendPLC TypeSendPLC = TypeSendPLC.Float;
         public bool IsSendResult;
@@ -1412,7 +1572,7 @@ namespace BeeCore
             float minX = r._PosCenter.X - extX;
             float maxX = r._PosCenter.X + extX;
 
-            return maxX>=valueX ;   // cắt đường x = valueX
+            return maxX>=valueX ;   // c?t du?ng x = valueX
         }
 
         static bool IntersectY(RectRotate r, float valueY)
@@ -1425,7 +1585,7 @@ namespace BeeCore
             float minY = r._PosCenter.Y - extY;
             float maxY = r._PosCenter.Y + extY;
 
-            return maxY>=valueY ;   // cắt đường y = valueY
+            return maxY>=valueY ;   // c?t du?ng y = valueY
         }
         static bool IntersectXMax(RectRotate r, float valueX)
         {
@@ -1437,7 +1597,7 @@ namespace BeeCore
             float minX = r._PosCenter.X - extX;
             float maxX = r._PosCenter.X + extX;
 
-            return maxX <= valueX;   // cắt đường x = valueX
+            return maxX <= valueX;   // c?t du?ng x = valueX
         }
 
         static bool IntersectYMax(RectRotate r, float valueY)
@@ -1450,15 +1610,15 @@ namespace BeeCore
             float minY = r._PosCenter.Y - extY;
             float maxY = r._PosCenter.Y + extY;
 
-            return maxY <= valueY;   // cắt đường y = valueY
+            return maxY <= valueY;   // c?t du?ng y = valueY
         }
         public static double CalcMissingPercent_AutoMinMax(ref Mat src, Rect bbox, double brightRatio = 0.4)
         {
-            // brightRatio = phần trăm "vùng sáng nhất" muốn lấy (0.2–0.4 thường ok)
+            // brightRatio = ph?n tram "vùng sáng nh?t" mu?n l?y (0.2–0.4 thu?ng ok)
             if (brightRatio <= 0) brightRatio = 0.25;
             if (brightRatio >= 1) brightRatio = 0.9;
 
-            // 1. Crop ROI từ YOLO box
+            // 1. Crop ROI t? YOLO box
             using (var roi = new Mat(src, bbox))
             using (var gray = new Mat())
             using (var mask = new Mat())
@@ -1469,28 +1629,28 @@ namespace BeeCore
                 else
                     roi.CopyTo(gray);
                // Cv2.ImWrite("cropyolo.png", gray);
-                // 3. Lấy min / max trong ROI
+                // 3. L?y min / max trong ROI
                 double minVal, maxVal;
                OpenCvSharp. Point minLoc, maxLoc;
                 Cv2.MinMaxLoc(gray, out minVal, out maxVal, out minLoc, out maxLoc);
 
-                // Trường hợp phẳng màu (không có gì khác biệt)
+                // Tru?ng h?p ph?ng màu (không có gì khác bi?t)
                 if (Math.Abs(maxVal - minVal) < 1e-6)
                     return 0.0;
 
-                // 4. Tính ngưỡng t dựa trên khoảng [min, max]
-                // Ví dụ brightRatio = 0.25 => lấy vùng sáng nhất 25% gần max
-                // tương đương: t = min + (max-min)*(1 - brightRatio)
+                // 4. Tính ngu?ng t d?a trên kho?ng [min, max]
+                // Ví d? brightRatio = 0.25 => l?y vùng sáng nh?t 25% g?n max
+                // tuong duong: t = min + (max-min)*(1 - brightRatio)
                 double t = minVal + (maxVal - minVal) * (1.0 - brightRatio);
 
-                // 5. Threshold vùng sáng (thiếu chì)
+                // 5. Threshold vùng sáng (thi?u chì)
                 Cv2.Threshold(gray, mask, t, 255, ThresholdTypes.Binary);
                 src = mask.Clone();
-                // (tuỳ chọn) làm sạch mask một chút
+                // (tu? ch?n) làm s?ch mask m?t chút
                 // var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
                 // Cv2.MorphologyEx(mask, mask, MorphTypes.Open, kernel);
 
-                // 6. Đếm pixel trắng = vùng thiếu chì
+                // 6. Ð?m pixel tr?ng = vùng thi?u chì
                 int missingPixels = Cv2.CountNonZero(mask);
                 int totalPixels = bbox.Width * bbox.Height;
 
@@ -1520,7 +1680,7 @@ namespace BeeCore
             //        (int)r.rot._rect.Width,
             //        (int)r.rot._rect.Height);
 
-              
+
             //    if (r.matProcess == null)
             //        r.matProcess = new Mat();
             //    if (r.matProcess.Width != 0)
@@ -1543,7 +1703,7 @@ namespace BeeCore
             {
                 if(listRotScan[k].Name != Name) continue ;
                 if (listRotScan[k].ContainsPoint(rs.rot._PosCenter))
-                  
+
                     return k;
             }
 
@@ -1580,7 +1740,7 @@ namespace BeeCore
             float right = Math.Min(rObj.Right, rScan.Right);
             float bottom = Math.Min(rObj.Bottom, rScan.Bottom);
 
-            // thực sự không còn vùng giao
+            // th?c s? không còn vùng giao
             if (right <= left || bottom <= top)
                 return null;
 
@@ -1609,7 +1769,7 @@ namespace BeeCore
 
             float halfW = scan._rect.Width / 2f;
 
-            // clamp tránh lỗi âm
+            // clamp tránh l?i âm
             float left = pLocal.X - obj._rect.Width / 2;
             float right = pLocal.X + obj._rect.Width / 2;
             int deltaL = (int)left;
@@ -1618,7 +1778,7 @@ namespace BeeCore
             switch(Dir)
             {
                 case Dir.Left:
-                    
+
                     if (deltaL < deltaR) IsRS= true;
                     else  IsRS =false;
                     break;
@@ -1631,18 +1791,18 @@ namespace BeeCore
                     break;
             }
           return IsRS;
-          
+
         }
-        [NonSerialized] 
+        [NonSerialized]
         private List<ValueRobot> valueRobots = new List<ValueRobot>();
-   
+
         public async void Complete()
         {
             if (!Global.IsIntialPython)
             {
                 Global.LogsDashboard.AddLog(
                     new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "No Initial"));
-                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                 return;
             }
 
@@ -1653,16 +1813,15 @@ namespace BeeCore
 
                 if (labelItems == null)
                 {
-                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                     return;
                 }
 
-                //--------------------------------
-                // MAP LABEL
-                //--------------------------------
-                var labelMap = labelItems
-                    .GroupBy(x => x.Name.ToLower())
-                    .ToDictionary(g => g.Key, g => g.First());
+                var labelMarkNames = new HashSet<string>(
+                    labelItems
+                        .Where(x => x != null && x.IsUse && x.IsLabelMark && !string.IsNullOrWhiteSpace(x.Name))
+                        .Select(x => x.Name),
+                    StringComparer.OrdinalIgnoreCase);
 
                 //--------------------------------
                 // BUILD RESULT
@@ -1710,7 +1869,7 @@ namespace BeeCore
                     //}
                     //else
                     //{
-                    //    // world mode: nên check 4 góc của object
+                    //    // world mode: nên check 4 góc c?a object
                     //    PointF p1 = new PointF(r._PosCenter.X - r._rect.Width / 2f, r._PosCenter.Y - r._rect.Height / 2f);
                     //    PointF p2 = new PointF(r._PosCenter.X + r._rect.Width / 2f, r._PosCenter.Y - r._rect.Height / 2f);
                     //    PointF p3 = new PointF(r._PosCenter.X + r._rect.Width / 2f, r._PosCenter.Y + r._rect.Height / 2f);
@@ -1725,25 +1884,42 @@ namespace BeeCore
                     if (IsCropSingle)
                     {
                         RectangleF rect = new RectangleF(0, 0, scan._rect.Width, scan._rect.Height);
-               
-                       
+
+
                         return rect.Contains(r._PosCenter);
                     }
                     else
                         return scan.ContainsPoint(r._PosCenter);
                 }
 
-                //--------------------------------
-                // SCANBOX (FIX CHUẨN)
-                //--------------------------------
-           
+                bool IsMaskedByScan(LabelItem item, ResultItem r)
                 {
-                
+                    if (item == null || r == null || r.rot == null || item.ListInsideBox == null)
+                        return false;
+
+                    return item.ListInsideBox.Any(scan =>
+                        scan != null &&
+                        scan.Dir == Dir.Mask &&
+                        IsInside(scan, r.rot));
+                }
+
+                //--------------------------------
+                // SCANBOX (FIX CHU?N)
+                //--------------------------------
+
+                {
+
 
                     foreach (var item in labelItems)
                     {
+                        if (item == null)
+                            continue;
+
                         item.IsOK = false;
-                        if (item == null || !item.IsUse)
+                        if (!item.IsUse)
+                            continue;
+
+                        if (item.IsLabelMark)
                             continue;
 
                         //--------------------------------
@@ -1753,19 +1929,20 @@ namespace BeeCore
                         {
                             var objs = ResultItem
                                 .Where(x => x.rot != null &&
-                                            x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase))
+                                            x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase) &&
+                                            !IsMaskedByScan(item, x))
                                 .OrderBy(x => x.rot._PosCenter.X)
                                 .ToList();
-                         
+
                             if (objs.Count == 0)
                                 continue;
 
-                            
+
 
                             //--------------------------------
                             // COUNTER
                             //--------------------------------
-                          
+
 
                             //--------------------------------
                             // LOOP OBJECT
@@ -1807,32 +1984,32 @@ namespace BeeCore
                                             if (r.Area < item.ValueArea)
                                                 numNG++;
 
-                                        }    
+                                        }
                                         if(numNG>= item.ValueCounter)
                                         {
                                             objs.ForEach(rs => rs.IsOK = true);
-                                          
+
                                             continue;
-                                        }    
+                                        }
                                         //if (objs.Count(x => x.IsOK) < item.ValueCounter)
                                         //{
                                         //    objs.ForEach(rs => rs.IsOK = false);
                                         //}
                                     }
-                                }    
-                             
+                                }
+
                                 if (item.IsArea)
                                 {
-                             
+
                                     ok &= r.Area >= item.ValueArea;
-                                   
+
                                     if(ok==false)
                                     {
                                         r.IsOK = ok;
                                         continue;
 
                                     }
-                                  
+
                                 }
                                 if (IsLine)
                                 {
@@ -1850,7 +2027,7 @@ namespace BeeCore
                                             r.point = point;
 
                                         }
-                                        if (!Line2D.Found)
+                                        if ( !Line2D.Found)
                                             r.IsOK = true;
                                         ok &= r.IsOK;
 
@@ -1859,7 +2036,7 @@ namespace BeeCore
                                 //--------------------------------
                                 // AREA
                                 //--------------------------------
-                               
+
 
                                 //--------------------------------
                                 // COLOR
@@ -1868,13 +2045,13 @@ namespace BeeCore
                                 {
                                     using (Mat crop = CropRoiView(matCropTemp, r.rot))
                                     {
-                                    
+
                                             r.matProcess = new Mat();
                                         if(item.ListColorArea==null)
                                         {
-                                            item.ListColorArea.Add(new BeeCpp.ColorArea());
-                                        }    
-                                        if (item.ListColorArea.Count <= j)
+                                            item.ListColorArea = new List<BeeCpp.ColorArea>();
+                                        }
+                                        while (item.ListColorArea.Count <= j)
                                         {
                                             item.ListColorArea.Add(new BeeCpp.ColorArea());
                                             HSVCli[] arrHSV = new HSVCli[item.ListHSV.Count];
@@ -1889,7 +2066,8 @@ namespace BeeCore
                                             }
                                             SetTemp(item.ListColorArea[item.ListColorArea.Count - 1], arrHSV, item.ValueExternColor);
                                         }
-                                        r.ValueColor =(int) (CheckColor(item.ListColorArea[j], ref r.matProcess, crop)/100.0);
+                                        int colorPixels = CheckColorExcludeMarks(item.ListColorArea[j], ref r.matProcess, crop, r, ResultItem, labelMarkNames);
+                                        r.ValueColor = (int)(colorPixels / 100.0);
 
                                         //if (!Global.IsRun)
                                         //    item.ListTempColor[j] = val;
@@ -1917,7 +2095,7 @@ namespace BeeCore
                             if (objs.Count(x => x.IsOK) >0)
                                 item.IsOK = true;
                             else
-                               
+
                                 item.IsOK = false;
                             numOK += objs.Count(x => x.IsOK);
 
@@ -1931,7 +2109,22 @@ namespace BeeCore
                             int k = 0;
                             foreach (var scan in item.ListInsideBox)
                             {
-                                bool boxOK = true;   // ✅ reset đúng chỗ
+                                if (scan == null)
+                                {
+                                    k++;
+                                    continue;
+                                }
+
+                                scan.Infor = "";
+                                bool boxOK = true;   // ? reset dúng ch?
+
+                                if (scan.Dir == Dir.Mask)
+                                {
+                                    scan.IsOK = true;
+                                    scan.NumInside = 0;
+                                    k++;
+                                    continue;
+                                }
 
                                 //--------------------------------
                                 // GET OBJECT TRONG BOX
@@ -1958,6 +2151,7 @@ namespace BeeCore
                                  .Where(x =>
                                      x.rot != null &&
                                      x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase) &&
+                                     !IsMaskedByScan(item, x) &&
                                      IsInside(scan, x.rot))
                                  .OrderBy(x => x.rot._PosCenter.X)
                                  .ToList();
@@ -1975,23 +2169,27 @@ namespace BeeCore
                                     .Where(x =>
                                         x.rot != null &&
                                         x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase) &&
+                                        !IsMaskedByScan(item, x) &&
                                         IsInside(scan, x.rot))
                                     .OrderBy(x => x.rot._PosCenter.X)
                                     .ToList();
 
-                                    var ObjOK = ResultItem.Where(x =>
-                                    x.rot != null &&
-                                    x.Name.Equals("OK", StringComparison.OrdinalIgnoreCase) &&
-                                    IsInside(scan, x.rot))
-                                .OrderBy(x => x.rot._PosCenter.X)
-                                .ToList();
-                                    if (ObjOK.Count() > 0)
-                                    {
-                                        scan.NumInside = 0;
-                                        scan.IsOK = false;
-                                        continue;
+                                //    var ObjOK = ResultItem.Where(x =>
+                                //    x.rot != null &&
+                                //    x.Name.Equals("OK", StringComparison.OrdinalIgnoreCase) &&
+                                //    !labelMarkNames.Contains(x.Name) &&
+                                //    !IsMaskedByScan(item, x) &&
+                                //    IsInside(scan, x.rot))
+                                //.OrderBy(x => x.rot._PosCenter.X)
+                                //.ToList();
+                                //    if (ObjOK.Count() > 0)
+                                //    {
+                                //        scan.NumInside = 0;
+                                //        scan.IsOK = false;
+                                //        k++;
+                                //        continue;
 
-                                    }
+                                //    }
                                     //    else
                                     //    {
                                     //        IsNGBox = true;
@@ -2029,6 +2227,14 @@ namespace BeeCore
                                 }
 
                                 scan.NumInside = objsValid.Count;
+                                foreach (var r in objsValid)
+                                {
+                                    float percentColor;
+                                    r.Area = (float)CalcArea(r, item, out percentColor);
+                                }
+                                double sumArea = objsValid.Sum(x => x.Area);
+                                float sumWidth = objsValid.Sum(x => x.rot != null ? x.rot._rect.Width : 0f);
+                                float sumHeight = objsValid.Sum(x => x.rot != null ? x.rot._rect.Height : 0f);
 
                                 //--------------------------------
                                 // COUNTER
@@ -2067,10 +2273,10 @@ namespace BeeCore
                                     bool ok = true;
 
                                     if (item.IsWidth)
-                                        ok &= r.rot._rect.Width >= item.ValueWidth;
+                                        ok &= sumWidth >= item.ValueWidth;
 
                                     if (item.IsHeight)
-                                        ok &= r.rot._rect.Height >= item.ValueHeight;
+                                        ok &= sumHeight >= item.ValueHeight;
 
                                     if (item.IsX)
                                         ok &= IntersectX(r.rot, item.ValueX);
@@ -2110,15 +2316,15 @@ namespace BeeCore
                                     //--------------------------------
                                     if (item.IsArea)
                                     {
-                                        double sumArea = objsValid.Sum(x => x.Area);
                                         ok &= sumArea >= item.ValueArea * 100;
                                     }
                                     if (item.IsMinColor)
                                     {
-                                        int indexColor = k * item.ValueCounter + j;
+                                        int colorStride = item.ValueCounter > 0 ? item.ValueCounter : Math.Max(1, objsValid.Count);
+                                        int indexColor = k * colorStride + j;
 
                                         //--------------------------------
-                                        // COLOR (fix index đúng)
+                                        // COLOR (fix index dúng)
                                         //--------------------------------
 
                                         //if(item.ListColorArea == null)
@@ -2133,14 +2339,17 @@ namespace BeeCore
                                         //    item.ListTempColor = new List<int>();
                                         //    item.ListColorArea = null;
                                         //    SetListTemp();
-                                        //}    
+                                        //}
 
 
 
                                         using (Mat crop = CropRoiView(matCropTemp, r.rot))
                                         {
                                             r.matProcess = new Mat();
-                                            if (item.ListColorArea.Count <= indexColor)
+                                            if (item.ListColorArea == null)
+                                                item.ListColorArea = new List<BeeCpp.ColorArea>();
+
+                                            while (item.ListColorArea.Count <= indexColor)
                                             {
                                                 item.ListColorArea.Add(new BeeCpp.ColorArea());
                                                 HSVCli[] arrHSV = new HSVCli[item.ListHSV.Count];
@@ -2155,7 +2364,14 @@ namespace BeeCore
                                                 }
                                                 SetTemp(item.ListColorArea[item.ListColorArea.Count - 1], arrHSV, item.ValueExternColor);
                                             }
-                                            r.ValueColor = (int)(CheckColor(item.ListColorArea[j], ref r.matProcess, crop) / 100.0);
+
+                                            IEnumerable<ResultItem> markSource = IsCropSingle
+                                                ? ResultItem.Where(x => x != null && x.IndexScanBox == k)
+                                                : ResultItem.Where(x => x != null && x.rot != null && IsInside(scan, x.rot));
+
+                                            int colorPixels = CheckColorExcludeMarks(item.ListColorArea[indexColor], ref r.matProcess, crop, r, markSource, labelMarkNames);
+                                            r.ValueColor = (int)(colorPixels / 100.0);
+                                            ok &= r.ValueColor >= item.ValueMinColor;
 
                                             //if (!Global.IsRun)
                                             //    item.ListTempColor[j] = val;
@@ -2200,11 +2416,12 @@ namespace BeeCore
                                 }
                                 if (item.IsMinColor)
                                 {
-                                    double sumArea = objsValid.Sum(x => x.ValueColor);
-                                    boxOK = sumArea >= item.ValueMinColor;
+                                    double sumColor = objsValid.Sum(x => x.ValueColor);
+                                    boxOK = sumColor >= item.ValueMinColor;
                                     objsValid.ForEach(rs => rs.IsOK = boxOK);
 
                                 }
+                                scan.Infor = BuildScanInfo(item, sumArea, objsValid.Sum(x => x.ValueColor), sumWidth, sumHeight);
                                 if (item.IsCounter)
                                 {
                                     if (objsValid.Count(x => x.IsOK) < item.ValueCounter)
@@ -2225,10 +2442,10 @@ namespace BeeCore
                                 else
                                 {
 
-                                
+
                                 scan.IsOK = boxOK;
                                 k++;
-                           
+
                                 numOK += objsValid.Count(x => x.IsOK);
                                 if (objsValid.Count(x => x.IsOK) > 0)
                                     item.IsOK = true;
@@ -2248,36 +2465,36 @@ namespace BeeCore
                         int X = (int)((rs.rot._PosCenter.X/Global.Config.Scale)*1.0);
                         int Y = (int)((rs.rot._PosCenter.Y /Global.Config.Scale )* 1.0);
                         int A = (int)(rs.rot._rectRotation);
-     
+
                         valueRobots.Add(new ValueRobot(X,Y,A, Convert.ToInt32(rs.IsOK), 0,0));
                     }
                 }
-               
+
                     //--------------------------------
                     // RESULT
                     //--------------------------------
-                    Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                    Common.TryGetTool(IndexThread, Index).Results = Results.OK;
 
                 if (Compare == Compares.Equal && numOK != NumObject)
-                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
 
                 if (Compare == Compares.Less && numOK >= NumObject)
-                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
 
                 if (Compare == Compares.More && numOK <= NumObject)
-                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
 
-                if (IsLine && !Line2D.Found)
-                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                if (IsLine && (!Line2D.Found))
+                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
 
                 G.IsChecked = true;
             }
             catch (Exception ex)
             {
                 Global.LogsDashboard.AddLog(
-                    new LogEntry(DateTime.Now, LeveLLog.ERROR, "Complete-" + Common.PropetyTools[IndexThread][Index].Name, ex.Message));
+                    new LogEntry(DateTime.Now, LeveLLog.ERROR, "Complete-" + Common.TryGetTool(IndexThread, Index).Name, ex.Message));
             }
-            Common.PropetyTools[IndexThread][Index].ScoreResult = numOK;
+            Common.TryGetTool(IndexThread, Index).ScoreResult = numOK;
           await  SendResult();
         }
         //public void Complete()
@@ -2286,7 +2503,7 @@ namespace BeeCore
         //    {
         //        Global.LogsDashboard.AddLog(
         //            new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "No Initial"));
-        //        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //        Common.TryGetTool(IndexThread, Index).Results = Results.NG;
         //        return;
         //    }
 
@@ -2300,7 +2517,7 @@ namespace BeeCore
 
         //        if (labelItems == null)
         //        {
-        //            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //            Common.TryGetTool(IndexThread, Index).Results = Results.NG;
         //            return;
         //        }
 
@@ -2346,7 +2563,7 @@ namespace BeeCore
         //        }
 
         //        //--------------------------------
-        //        // PASS 3 : ScanBox xử lý chính
+        //        // PASS 3 : ScanBox x? lý chính
         //        //--------------------------------
         //        if (!IsCropSingle && listRotScan != null && listRotScan.Count > 0)
         //        {
@@ -2354,13 +2571,13 @@ namespace BeeCore
         //            {
         //                var scan = listRotScan[scanIndex];
 
-        //                // lấy object trong box
+        //                // l?y object trong box
         //                var listInBox = ResultItem
         //                    .Where(x => x.rot != null &&
         //                                scan.ContainsPoint(x.rot._PosCenter))
         //                    .ToList();
 
-        //                // ❌ KHÔNG có object → FAIL luôn
+        //                // ? KHÔNG có object ? FAIL luôn
         //                if (listInBox.Count == 0)
         //                {
         //                    scan.IsOK = false;
@@ -2463,28 +2680,28 @@ namespace BeeCore
         //        //--------------------------------
         //        // RESULT FINAL
         //        //--------------------------------
-        //        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+        //        Common.TryGetTool(IndexThread, Index).Results = Results.OK;
 
         //        switch (Compare)
         //        {
         //            case Compares.Equal:
         //                if (numOK != NumObject)
-        //                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
         //                break;
 
         //            case Compares.Less:
         //                if (numOK >= NumObject)
-        //                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
         //                break;
 
         //            case Compares.More:
         //                if (numOK <= NumObject)
-        //                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
         //                break;
         //        }
 
         //        if (IsLine && !Line2D.Found)
-        //            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //            Common.TryGetTool(IndexThread, Index).Results = Results.NG;
 
         //        G.IsChecked = true;
         //    }
@@ -2509,7 +2726,7 @@ namespace BeeCore
             var mat = new Matrix();
             int i = 0;
             Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[Global.IndexProgChoose][Index].Results)
+            switch (Common.TryGetTool(Global.IndexProgChoose, Index).Results)
             {
                 case Results.OK:
                     cl = Global.ParaShow.ColorOK;
@@ -2520,21 +2737,21 @@ namespace BeeCore
             }
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
                 Color clScan= Color.White;
-               
-           
+
+
                     if (listRotScan != null)
                     foreach (RectRotate rot in listRotScan)
                 {
                     String cOK ="("+ rot.NumInside+ ") OK";
-                  
+
                     if (Global.StatusDraw==StatusDraw.Scan)
                         {
                         cOK += "-" + rot.Dir.ToString();
-                       
+
                         if (rot.Name == null)
                             rot.Name = "Area Limit";
                         if (rot._dragAnchor == AnchorPoint.Center && rot.Name.Trim() != "Area Limit")
-                            
+
                             clScan = Global.ParaShow.ColorChoose;
                         else
                         {
@@ -2557,8 +2774,8 @@ namespace BeeCore
                         //    {
                         //        rot._dragAnchor = AnchorPoint.None;
                         //        clScan = Color.LightGray;
-                        //    }    
-                                
+                        //    }
+
                         //    //if (rot.Name != "")
                         //    //    {
 
@@ -2572,7 +2789,7 @@ namespace BeeCore
                         {
                         //if (Global.IsRun)
                         {
-                           
+
                             //if (!IsCropSingle)
                             {
                                 int index = labelItems.FindIndex(item => string.Equals(item.Name, rot.Name, StringComparison.OrdinalIgnoreCase));
@@ -2580,28 +2797,37 @@ namespace BeeCore
                                 if (index > -1)
                                 {
                                     LabelItem item = labelItems[index];
-                                  
-                                    if (rot.IsOK == true)
-                                        if (IsColorAllObjLabel)
-                                            clScan = cl;
-                                        else
-                                            clScan = Global.ParaShow.ColorOK;
+                                    if (rot.Dir == Dir.Mask)
+                                    {
+                                        clScan = Global.ParaShow.ColorNone;
+                                        cOK = "Mask";
+                                    }
                                     else
                                     {
-                                        cOK = "(" + rot.NumInside + ") NG";
-                                        if (IsColorAllObjLabel)
-                                            if(item.IsCounter)
-                                            { 
-                                                clScan = Global.ParaShow.ColorNG;
-                                            }  else
-                                            {
-                                                clScan = Global.ParaShow.ColorNone;
-                                            }
 
+
+                                        if (rot.IsOK == true)
+                                        {
+                                            cOK = "(" + rot.NumInside + ") ";
+                                            if (IsColorAllObjLabel)
+                                                clScan = rot.NumInside == 0 ? Global.ParaShow.ColorNone :cl;
+                                            else
+                                                clScan = Global.ParaShow.ColorOK;
+                                           
+                                        }
 
                                         else
+                                        {
+                                            cOK = "(" + rot.NumInside + ") ";
+                                            if (IsColorAllObjLabel)
+                                                clScan = rot.NumInside == 0 ? Global.ParaShow.ColorNone : cl;
+                                            else
                                                 clScan = Global.ParaShow.ColorNG;
+                                        }
+                                        if (!IsColorAllObjLabel)
+                                            cOK += "-" + rot.Dir.ToString();
                                     }
+
                                 }
                                 else
                                 {
@@ -2614,8 +2840,8 @@ namespace BeeCore
                                     }
                                 }
 
-                                cOK +="-"+ rot.Dir.ToString();
-                                
+
+
                             }
                             //else
                             //{
@@ -2628,7 +2854,7 @@ namespace BeeCore
                             //    }
                             //}
                         }
-                    
+
                         //else
                         //{
                         ////    if (rot.Name != "")
@@ -2639,11 +2865,11 @@ namespace BeeCore
                         ////        //  continue;
                         ////    }
                         //}
-                           
-                         
 
-                        }    
-                           
+
+
+                        }
+
                         Pen penScan = new Pen(clScan, Global.ParaShow.ThicknessLine);
                         mat = new Matrix();
                             if (!Global.IsRun)
@@ -2658,9 +2884,12 @@ namespace BeeCore
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
                     int indexArea = i + 1;
-                    if (IsColorAllObjLabel)
-                        cOK = "";
+                    //if (IsColorAllObjLabel)
+                    //    cOK = "";
+
                         Draws.Box2Label(gc, rot, indexArea + "."+ rot.Name, cOK, font, clScan, brushText, Global.ParaShow.Opacity, Global.ParaShow.ThicknessLine,true);
+                        if (rot.Dir != Dir.Mask)
+                            DrawScanInfo(gc, rot, font, brushText, clScan, Global.ParaShow.Opacity);
 
 
                     ////  Draws.Box1Label(gc, rotA, rot.Name, "Count: " + numOK, font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
@@ -2715,11 +2944,11 @@ namespace BeeCore
                 gc.ResetTransform();
 
             }
-         
+
             if (IsLine)
                 if (rotCropAdjustment != null)
                 {
-                    bool IsHasLine = Line2D.Found;
+                    bool IsHasLine =  Line2D.Found;
                     Color clLine = Global.ParaShow.ColorNG;
                     String sOK = "NG";
                     if (IsHasLine)
@@ -2727,9 +2956,9 @@ namespace BeeCore
                         clLine = Global.ParaShow.ColorOK;
                         sOK = "OK";
 
-                    }    
-                     
-                    
+                    }
+
+
                             mat = new Matrix();
                     if (!Global.IsRun)
                     {
@@ -2755,9 +2984,9 @@ namespace BeeCore
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
 
-         
+
             Pen pen = new Pen(Color.Blue, 2);
-            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.TryGetTool(IndexThread, Index).Name;
             //Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
                 Draws.Box2Label(gc, rotA, nameTool,"Count: "+ numOK, font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
@@ -2768,7 +2997,7 @@ namespace BeeCore
                 gc.Transform = mat;
                 Draws.DrawInfiniteLine(gc, new Pen(Global.ParaShow.ColorChoose, Global.ParaShow.ThicknessLine), LineVerital);
                 gc.ResetTransform();
-                
+
 
                 }
 
@@ -2799,7 +3028,7 @@ namespace BeeCore
             if (!Global.IsRun)
                 foreach (LabelItem item in labelItems)
             {
-               
+
                     mat = new Matrix();
                     if (!Global.IsRun)
                     {
@@ -2837,7 +3066,7 @@ namespace BeeCore
                         Point p2 = new Point(item.ValueXMax, 50);
                         Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, Global.ParaShow.ThicknessLine));
                     }
-                    gc.ResetTransform();  
+                    gc.ResetTransform();
             }
             if (ResultItem == null)
                 return gc;
@@ -2862,7 +3091,7 @@ namespace BeeCore
                         clShow = Global.ParaShow.ColorOK;
                     else
                         clShow = Global.ParaShow.ColorNG;
-                }    
+                }
                 else
                 {
                     if (rs.IsOK == true)
@@ -2872,8 +3101,8 @@ namespace BeeCore
                         clShow = Global.ParaShow.ColorOK;
 
                 }
-               
-               
+
+
                     mat = new Matrix();
                 if (!Global.IsRun)
                 {
@@ -2886,15 +3115,15 @@ namespace BeeCore
                 gc.Transform = mat;
                 if (CropOffSetX < 0 || CropOffSetY < 0)
                 {
-               
+
                     mat.Translate(CropOffSetX, CropOffSetY);
                     gc.Transform = mat;
                 }
-                
-                      
+
+
 
                 int index = labelItems.FindIndex(item => string.Equals(item.Name, rs.Name, StringComparison.OrdinalIgnoreCase));
-               
+
                 if (index > -1)
                 {
                     LabelItem item = labelItems[index];
@@ -2902,8 +3131,8 @@ namespace BeeCore
                     {
                         i++;
                         continue;
-                    }    
-                       
+                    }
+
                     if (item.IsY)
                     {
                         Point p1 = new Point(0, item.ValueY);
@@ -2943,7 +3172,7 @@ namespace BeeCore
                                 decimals: 1,
                                 textOffsetPx: 8f
                             );
-                       
+
                     }
                     if (item.IsHeight || item.IsWidth)
                     {
@@ -2964,7 +3193,7 @@ namespace BeeCore
                         gc.DrawLine(new Pen(clShow, 8), point5, point6);
                         mat.Translate(rs.rot._PosCenter.X, rs.rot._PosCenter.Y);
                         gc.Transform = mat;
-                        String content = rs.rot._rect.Height + " px";
+                        String content = (int)Math.Round(rs.rot._rect.Height) + " px";
                          font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
                         SizeF sz1 = gc.MeasureString(content, font);
                          gc.DrawString(content, font, new SolidBrush(Global.ParaShow.ColorInfor) , new System.Drawing.Point((int)(rs.rot._rect.X + rs.rot._rect.Width / 2), (int)(rs.rot._rect.Y + rs.rot._rect.Height / 2 - sz1.Height / 2)));
@@ -2978,10 +3207,10 @@ namespace BeeCore
                         //Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(ResultItem[i].Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 20, Global.ParaShow.IsShowDetail);//("+Math.Round( ResultItem[i].Percent) + "%)
                         gc.ResetTransform();
                     }
-                   
+
                     else
                     {
-                      
+
                         //  mat = new Matrix();
                         //mat = new Matrix();
                         if(IsCropSingle)
@@ -2995,7 +3224,7 @@ namespace BeeCore
                                 gc.Transform = mat;
                             }
 
-                        }    
+                        }
                         mat.Translate(rs.rot._PosCenter.X, rs.rot._PosCenter.Y);
                         mat.Rotate(rs.rot._rectRotation);
                         gc.Transform = mat;
@@ -3003,15 +3232,15 @@ namespace BeeCore
                             {
                                 int min = (int)Math.Min(rs.rot._rect.Width / 4, rs.rot._rect.Height / 4);
                                 Draws.Plus(gc, 0, 0, min, cl, Global.ParaShow.ThicknessLine);
-                                String sPos = "X,Y,A _ " + rs.rot._PosCenter.X + "," + rs.rot._PosCenter.Y + "," + Math.Round(rs.rot._rectRotation, 1);
-                               
+                                String sPos = "X,Y,A _ " + (int)Math.Round(rs.rot._PosCenter.X) + "," + (int)Math.Round(rs.rot._PosCenter.Y) + "," + (int)Math.Round(rs.rot._rectRotation);
+
                                 gc.DrawString(sPos, font, new SolidBrush(Global.ParaShow.ColorInfor), new PointF(5, 5));
 
                             }
-                          
-                        
+
+
                         //  gc.Transform = mat;
-                  
+
                         if (!Global.IsRun  || Global.ParaShow.IsShowDetail)
                             if (rs.matProcess != null && !rs.matProcess.Empty())
                             {
@@ -3020,16 +3249,16 @@ namespace BeeCore
                             }
                         font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
                         String label =  rs.Name;
-                        String valueScore = Math.Round(rs.Score, 1) + "%";
+                        String valueScore = (int)Math.Round(rs.Score) + "%";
                         if (!Global.ParaShow.IsShowScore) valueScore = "";
                         if (!Global.ParaShow.IsShowLabel) label = "";
 
                         if(item.IsMinColor)
-                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore,rs.ValueColor + "px", font, clShow, brushText, 30,Global.ParaShow.ThicknessLine,false, Global.ParaShow.FontSize, 1,true);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        Draws.Box3Label(gc, rs.rot, label, valueScore, (int)Math.Round((double)rs.ValueColor) + "px", font, clShow, brushText, 30,Global.ParaShow.ThicknessLine,false, Global.ParaShow.FontSize, 1,true);//("+Math.Round( ResultItem[i].Percent) + "%)
                         else if (item.IsArea)
-                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area ) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        Draws.Box3Label(gc, rs.rot, label, valueScore, (int)Math.Round(rs.Area) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
                         else
-                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area ) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        Draws.Box3Label(gc, rs.rot, label, valueScore, (int)Math.Round(rs.Area) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
                         gc.ResetTransform();
 
                     }
@@ -3053,7 +3282,7 @@ namespace BeeCore
                     {
                         int min = (int)Math.Min(rs.rot._rect.Width / 4, rs.rot._rect.Height / 4);
                         Draws.Plus(gc, 0, 0, min, cl, Global.ParaShow.ThicknessLine);
-                        String sPos = "X,Y,A _ " + rs.rot._PosCenter.X + "," + rs.rot._PosCenter.Y + "," + Math.Round(rs.rot._rectRotation, 1);
+                        String sPos = "X,Y,A _ " + (int)Math.Round(rs.rot._PosCenter.X) + "," + (int)Math.Round(rs.rot._PosCenter.Y) + "," + (int)Math.Round(rs.rot._rectRotation);
 
                         gc.DrawString(sPos, font, new SolidBrush(Global.ParaShow.ColorInfor), new PointF(5, 5));
 
@@ -3070,10 +3299,10 @@ namespace BeeCore
                         }
                     font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
                     String label = rs.Name;
-                    String valueScore = Math.Round(rs.Score, 1) + "%";
+                    String valueScore = (int)Math.Round(rs.Score) + "%";
                     if (!Global.ParaShow.IsShowScore) valueScore = "";
                     if (!Global.ParaShow.IsShowLabel) label = "";
-                    Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine,false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
+                    Draws.Box3Label(gc, rs.rot, label, valueScore, (int)Math.Round(rs.Area / 100.0) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine,false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
                     gc.ResetTransform();
 
 

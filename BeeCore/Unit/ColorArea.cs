@@ -124,10 +124,10 @@ namespace BeeCore
             rotArea.TypeCrop = TypeCrop.Area;
             ColorAreaPP = new BeeCpp.ColorArea();
             SetColor();
-            Common.PropetyTools[IndexThread][Index].StepValue = 1f;
-            Common.PropetyTools[IndexThread][Index].MinValue = 0;
-            Common.PropetyTools[IndexThread][Index].MaxValue = 2000;
-            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+            Common.TryGetTool(IndexThread, Index).StepValue = 1f;
+            Common.TryGetTool(IndexThread, Index).MinValue = 0;
+            Common.TryGetTool(IndexThread, Index).MaxValue = 2000;
+            Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
         }
         [NonSerialized]
         public HSVCli hSV;
@@ -284,12 +284,30 @@ namespace BeeCore
         {
             if(IsCalib) 
                 PxTemp = pxRS;
-            Common.PropetyTools[IndexThread][Index].ScoreResult =Math.Abs( pxRS-PxTemp)/10;
+            if(IsNGMore)
+            {
+                if(pxRS<PxTemp)
+                {
+                    Common.TryGetTool(IndexThread, Index).Results = Results.OK;
+                    return;
+
+                }    
+            }
+            if (IsNGLess)
+            {
+                if (pxRS > PxTemp)
+                {
+                    Common.TryGetTool(IndexThread, Index).Results = Results.OK;
+                    return;
+
+                }
+            }
+            Common.TryGetTool(IndexThread, Index).ScoreResult =Math.Abs( pxRS-PxTemp)/10;
            
-            if (Common.PropetyTools[IndexThread][Index].ScoreResult > Common.PropetyTools[IndexThread][Index].Score)
-                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+            if (Common.TryGetTool(IndexThread, Index).ScoreResult > Common.TryGetTool(IndexThread, Index).Score)
+                Common.TryGetTool(IndexThread, Index).Results = Results.NG;
             else
-                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                Common.TryGetTool(IndexThread, Index).Results = Results.OK;
         }
         public Graphics DrawResult(Graphics gc)
         {
@@ -311,7 +329,7 @@ namespace BeeCore
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
 
-            if (Common.PropetyTools[IndexThread][Index].Results == Results.NG)
+            if (Common.TryGetTool(IndexThread, Index).Results == Results.NG)
             {
                 cl = Global.ParaShow.ColorNG;
             }
@@ -319,9 +337,10 @@ namespace BeeCore
             {
                 cl =  Global.ParaShow.ColorOK;
             }
-            String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[IndexThread][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + Common.TryGetTool(IndexThread, Index).Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
-            Draws.Box3Label(gc, rotA._rect, nameTool, Common.PropetyTools[IndexThread][Index].ScoreResult + "%", pxRS + " Px", font, cl, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
+            //Common.TryGetTool(IndexThread, Index).ScoreResult + "%"
+            Draws.Box3Label(gc, rotA, nameTool, "", pxRS + " Px", font, cl, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
 
           //  Draws.Box2Label(gc, rotA, nameTool, pxRS + " Px", font, cl, brushText, 16, Global.ParaShow.ThicknessLine);
            if(!Global.IsRun||Global.ParaShow.IsShowDetail)
@@ -335,6 +354,8 @@ namespace BeeCore
         [NonSerialized]
         private Native Native = new Native();
         float ValueColor = 0;
+        public bool IsNGLess = false;
+        public bool IsNGMore = false;
         public int CheckColor(RectRotate rot)
         {
             int pxRs = 0;

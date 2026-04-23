@@ -1,4 +1,4 @@
-﻿using BeeCore;
+using BeeCore;
 using BeeCore.Funtion;
 using BeeGlobal;
 using BeeInterface;
@@ -41,16 +41,16 @@ namespace BeeInterface
 
         private void btnDelect_Click(object sender, EventArgs e)
         {
-            if(MessageBox.Show("Xóa","Bạn chắc chứ",MessageBoxButtons.YesNo)==DialogResult.Yes)
+            if(MessageBox.Show("X�a","B?n ch?c ch?",MessageBoxButtons.YesNo)==DialogResult.Yes)
             {
                 if (Global.IndexToolSelected>-1)
                 {
                     Global.ToolSettings.pAllTool.Controls.RemoveAt(Global.IndexToolSelected);
-                    BeeCore.Common.PropetyTools[Global.IndexProgChoose].RemoveAt(Global.IndexToolSelected);
+                    BeeCore.Common.EnsureToolList(Global.IndexProgChoose).RemoveAt(Global.IndexToolSelected);
                    // G.listAlltool[Global.IndexProgChoose].RemoveAt(Global.IndexToolSelected);
-                    Global.IndexToolSelected = BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count() - 1;
+                    Global.IndexToolSelected = BeeCore.Common.EnsureToolList(Global.IndexProgChoose).Count() - 1;
                     int index = 0;
-                    foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
+                    foreach (PropetyTool propetyTool in BeeCore.Common.EnsureToolList(Global.IndexProgChoose))
                     {
                        
                         propetyTool.Propety2.Index = index;
@@ -67,7 +67,7 @@ namespace BeeInterface
                     }
                    
                   BeeInterface. Load.ArrangeLogic();
-                    ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexProgChoose]);
+                    ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.EnsureToolList(Global.IndexProgChoose));
                 }    
             }    
         }
@@ -108,14 +108,14 @@ namespace BeeInterface
         {
             if (Global.IndexToolSelected == -1) return;
        
-          PropetyTool propety = (PropetyTool)BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Clone();
+          PropetyTool propety = (PropetyTool)BeeCore.Common.TryGetTool(Global.IndexProgChoose, Global.IndexToolSelected).Clone();
        
-            propety.Name = propety.TypeTool.ToString() + " " + (int)(BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count + 1);
-            BeeCore.Common.PropetyTools[Global.IndexProgChoose].Add(propety);
+            propety.Name = propety.TypeTool.ToString() + " " + (int)(BeeCore.Common.EnsureToolList(Global.IndexProgChoose).Count + 1);
+            BeeCore.Common.EnsureToolList(Global.IndexProgChoose).Add(propety);
            
-            int Index = BeeCore.Common.PropetyTools[Global.IndexProgChoose].Count - 1;
+            int Index = BeeCore.Common.EnsureToolList(Global.IndexProgChoose).Count - 1;
          
-            PropetyTool propetyTools = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Index];
+            PropetyTool propetyTools = BeeCore.Common.TryGetTool(Global.IndexProgChoose, Index);
             propetyTools.ItemTool = DataTool.CreateItemTool(propety, Index, Global.IndexProgChoose);
             propetyTools.Control = DataTool.CreateControls(propety, Index, Global.IndexProgChoose);
 
@@ -125,7 +125,7 @@ namespace BeeInterface
           
             propetyTools.Propety2.SetModel(true);
             BeeInterface.Load.ArrangeLogic();
-            ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexProgChoose]);
+            ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.EnsureToolList(Global.IndexProgChoose));
 
 
         }
@@ -135,7 +135,7 @@ namespace BeeInterface
             CustomGui.RoundRg(pBtn, 20, Corner.Both);
           
             //this.pBtn.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
-         //   _layout.EnableAuto(); // tự load sau Shown, tự save khi Closing
+         //   _layout.EnableAuto(); // t? load sau Shown, t? save khi Closing
         }
      
         private void ToolSettings_SizeChanged(object sender, EventArgs e)
@@ -157,7 +157,7 @@ namespace BeeInterface
         private void btnRename_Click(object sender, EventArgs e)
         {   if(!btnRename.IsCLick)
             {
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].ItemTool.VisbleEditname();
+                BeeCore.Common.TryGetTool(Global.IndexProgChoose, Global.IndexToolSelected).ItemTool.VisbleEditname();
             }
             else
             {
@@ -166,7 +166,7 @@ namespace BeeInterface
                     btnRename.IsCLick = false;
                     return;
                 }
-                BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].ItemTool.EditName();
+                BeeCore.Common.TryGetTool(Global.IndexProgChoose, Global.IndexToolSelected).ItemTool.EditName();
                
             }
          

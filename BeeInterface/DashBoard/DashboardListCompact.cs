@@ -303,24 +303,33 @@ namespace BeeInterface
             out Rectangle headerRect,
             out Rectangle nameRect,
             out Rectangle btnRect,
+            out Rectangle maskRect,
             out bool showButton)
         {
             headerRect = new Rectangle(_padX, yTop + 2, totalWidth - _padX * 2, _nameH - 4);
 
             int btnW = (int)(100 * _scale);
+            int maskW = (int)(64 * _scale);
             BeeCore.LabelItem it = _items[itemIndex];
 
             showButton = it.IsUse && (_chooseActiveIndex < 0 || _chooseActiveIndex == itemIndex);
+            maskRect = it.IsUse
+                ? new Rectangle(headerRect.Right - maskW - 4, headerRect.Y + 1, maskW, headerRect.Height - 2)
+                : Rectangle.Empty;
 
             if (showButton)
             {
                 btnRect = new Rectangle(headerRect.Right - btnW - 4, headerRect.Y + 2, btnW, headerRect.Height - 4);
-                nameRect = new Rectangle(headerRect.X + 6, headerRect.Y, headerRect.Width - btnW - 12, headerRect.Height);
+                maskRect = new Rectangle(btnRect.Left - maskW - 6, headerRect.Y + 1, maskW, headerRect.Height - 2);
+                nameRect = new Rectangle(headerRect.X + 6, headerRect.Y, Math.Max(1, maskRect.Left - headerRect.X - 12), headerRect.Height);
             }
             else
             {
                 btnRect = Rectangle.Empty;
-                nameRect = new Rectangle(headerRect.X + 6, headerRect.Y, headerRect.Width - 12, headerRect.Height);
+                if (it.IsUse && !maskRect.IsEmpty)
+                    nameRect = new Rectangle(headerRect.X + 6, headerRect.Y, Math.Max(1, maskRect.Left - headerRect.X - 12), headerRect.Height);
+                else
+                    nameRect = new Rectangle(headerRect.X + 6, headerRect.Y, headerRect.Width - 12, headerRect.Height);
             }
         }
 
@@ -350,10 +359,10 @@ namespace BeeInterface
 
         private void DrawUseButton(Graphics g, int itemIndex, int yTop, BeeCore.LabelItem it, int totalWidth)
         {
-            Rectangle headerRect, nameRect, btnRect;
+            Rectangle headerRect, nameRect, btnRect, maskRect;
             bool showButton;
 
-            GetHeaderRects(itemIndex, yTop, totalWidth, out headerRect, out nameRect, out btnRect, out showButton);
+            GetHeaderRects(itemIndex, yTop, totalWidth, out headerRect, out nameRect, out btnRect, out maskRect, out showButton);
 
             Color back = it.IsUse ? Color.FromArgb(246, 201, 110) : Color.FromArgb(190, 190, 190);
             Color border = it.IsUse ? Color.FromArgb(220, 178, 98) : Color.FromArgb(160, 160, 160);
@@ -371,6 +380,22 @@ namespace BeeInterface
                 nameRect,
                 Color.Black,
                 TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+
+            if (it.IsUse && !maskRect.IsEmpty)
+            {
+                Size glyph = CheckBoxRenderer.GetGlyphSize(g, CheckBoxState.UncheckedNormal);
+                int cbY = maskRect.Y + (maskRect.Height - glyph.Height) / 2;
+                CheckBoxState state = it.IsLabelMark ? CheckBoxState.CheckedNormal : CheckBoxState.UncheckedNormal;
+                CheckBoxRenderer.DrawCheckBox(g, new Point(maskRect.X, cbY), state);
+
+                TextRenderer.DrawText(
+                    g,
+                    "Mask",
+                    _scaledFontBold,
+                    new Rectangle(maskRect.X + glyph.Width + 4, maskRect.Y, maskRect.Width - glyph.Width - 4, maskRect.Height),
+                    Color.Black,
+                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+            }
 
             if (!showButton) return;
 
@@ -512,6 +537,7 @@ namespace BeeInterface
             YMax, ValueYMax,
             Distance, ValueDistance,
             MinColor,
+            LabelMark,
             ValueMinColor,
             ValueExternColor,
             PickColor
@@ -533,15 +559,22 @@ namespace BeeInterface
 
             int top = item * _itemHeight;
 
-            Rectangle headerRect, nameRect, btnRect;
+            Rectangle headerRect, nameRect, btnRect, maskRect;
             bool showButton;
 
-            GetHeaderRects(idx, top, w, out headerRect, out nameRect, out btnRect, out showButton);
+            GetHeaderRects(idx, top, w, out headerRect, out nameRect, out btnRect, out maskRect, out showButton);
 
             if (showButton && btnRect.Contains(pt))
             {
                 seg = Segment.ChooseAreaLimit;
                 targetRect = btnRect;
+                return true;
+            }
+
+            if (!maskRect.IsEmpty && maskRect.Contains(pt))
+            {
+                seg = Segment.LabelMark;
+                targetRect = maskRect;
                 return true;
             }
 
@@ -849,6 +882,12 @@ namespace BeeInterface
                     {
                         BeginEditColor(idx);
                     }
+                    Invalidate(RowRect(idx));
+                    break;
+
+                case Segment.LabelMark:
+                    it.IsLabelMark = !it.IsLabelMark;
+                    UpdateScroll();
                     Invalidate(RowRect(idx));
                     break;
 

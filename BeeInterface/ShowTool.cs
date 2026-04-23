@@ -1,4 +1,4 @@
-﻿using BeeGlobal;
+using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
@@ -91,7 +91,7 @@ namespace BeeCore.Funtion
                
                 for (int i = 0; i < Global.Config.NumTrig; i++)
                 {
-                    foreach (PropetyTool tool in BeeCore.Common.PropetyTools[0])
+                    foreach (PropetyTool tool in BeeCore.Common.EnsureToolList(0))
                     {
                         switch (i)
                         {
@@ -149,7 +149,7 @@ namespace BeeCore.Funtion
                         control.Controls.Add(Global.ToolSettings.Labels[i], 0, row);
                         row++;
                     }
-                    foreach (PropetyTool tool in BeeCore.Common.PropetyTools[0])
+                    foreach (PropetyTool tool in BeeCore.Common.EnsureToolList(0))
                     {
                         switch (i)
                         {
@@ -227,14 +227,14 @@ namespace BeeCore.Funtion
         
         try
         {
-            // Giải phóng ảnh cũ nếu có
+            // Gi?i ph�ng ?nh cu n?u c�
             if (image.Image != null)
             {
                 image.Image.Dispose();
                 image.Image = null;
             }
 
-            // Chọn ảnh để hiển thị
+            // Ch?n ?nh d? hi?n th?
             switch (typeImg)
             {
                 case TypeImg.Raw:
@@ -249,7 +249,7 @@ namespace BeeCore.Funtion
                 image.Image = new Bitmap(bm);
 
             }
-                // Tạo bản sao của ảnh thông qua MemoryStream an toàn
+                // T?o b?n sao c?a ?nh th�ng qua MemoryStream an to�n
                 //using (MemoryStream ms = new MemoryStream())
                 //{
                 //    bmShow.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
@@ -257,14 +257,14 @@ namespace BeeCore.Funtion
 
                 //    using (var tempImage = Image.FromStream(ms))
                 //    {
-                //        // Clone để ảnh không giữ tham chiếu tới stream
+                //        // Clone d? ?nh kh�ng gi? tham chi?u t?i stream
                 //        bmpFinal = new Bitmap(tempImage);
                 //    }
                 //}
 
              
            
-             // GC định kỳ sau mỗi 60 frame (nếu fps cao)
+             // GC d?nh k? sau m?i 60 frame (n?u fps cao)
              frameCounter++;
             if (frameCounter % 2== 0)
             {
@@ -274,7 +274,7 @@ namespace BeeCore.Funtion
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Lỗi: " + ex.Message);
+            Console.WriteLine("L?i: " + ex.Message);
 
             if (ex.Message.Contains("GDI"))
             {
@@ -291,13 +291,13 @@ namespace BeeCore.Funtion
         }
         finally
         {
-            // Giải phóng bmShow nếu là ảnh tạm
+            // Gi?i ph�ng bmShow n?u l� ?nh t?m
             if (bmShow != null )
             {
                 bmShow.Dispose();
             }
 
-            // Nếu bmpFinal không được gán vào image → giải phóng
+            // N?u bmpFinal kh�ng du?c g�n v�o image ? gi?i ph�ng
           
         }
     }));        }

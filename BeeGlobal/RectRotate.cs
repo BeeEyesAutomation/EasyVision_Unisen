@@ -168,6 +168,8 @@ namespace BeeGlobal
         public int ActiveVertexIndex { get; set; }
         [NonSerialized]
         public int NumInside = 0;
+        [NonSerialized]
+        public string Infor = "";
         public bool AutoExpandBounds { get; set; } = true;
         public bool AutoOrientPolygon { get; set; } = true; // auto xoay theo PCA khi chuẩn hoá polygon (MouseUp)
 
@@ -195,6 +197,8 @@ namespace BeeGlobal
             _rectRotation = clone._rectRotation;
             _dragAnchor = clone._dragAnchor;
             Shape = clone.Shape;
+
+
             if(clone.HexVertexOffsets==null)
             {
                 clone.HexVertexOffsets = new PointF[6];
@@ -210,6 +214,7 @@ namespace BeeGlobal
             PolyLocalPoints = new List<PointF>(clone.PolyLocalPoints);
             IsPolygonClosed = clone.IsPolygonClosed;
             ActiveVertexIndex = clone.ActiveVertexIndex;
+            Infor = clone.Infor;
             AutoExpandBounds = clone.AutoExpandBounds;
             AutoOrientPolygon = clone.AutoOrientPolygon;
             Name=clone.Name;

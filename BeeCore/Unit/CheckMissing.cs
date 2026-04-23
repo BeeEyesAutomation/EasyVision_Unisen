@@ -413,13 +413,13 @@ namespace BeeCore
             if(rotArea == null) rotArea = new RectRotate();
             if (ScorePattern == 0)
                 ScorePattern = 80;
-            Common.PropetyTools[IndexThread][Index].StepValue = 1;
-			Common.PropetyTools[IndexThread][Index].MinValue = 0;
+            Common.TryGetTool(IndexThread, Index).StepValue = 1;
+			Common.TryGetTool(IndexThread, Index).MinValue = 0;
 
-            Common.PropetyTools[IndexThread][Index].MaxValue = 100;
-            if (Common.PropetyTools[IndexThread][Index].Score == 0)
-                Common.PropetyTools[IndexThread][Index].Score = 80;
-            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+            Common.TryGetTool(IndexThread, Index).MaxValue = 100;
+            if (Common.TryGetTool(IndexThread, Index).Score == 0)
+                Common.TryGetTool(IndexThread, Index).Score = 80;
+            Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
         }
 
         public List<RectRotate> rectRotates = new List<RectRotate>();
@@ -430,7 +430,7 @@ namespace BeeCore
         public int DistanceMedium= 0;
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
+            Common.TryGetTool(Global.IndexProgChoose, Index).ScoreResult = 0;
             // 5) Gom kết quả
             rectRotates = new List<RectRotate>();
             listScore = new List<double>();
@@ -506,8 +506,10 @@ namespace BeeCore
                     cfg.BitwiseNot = ckBitwiseNot;
                     cfg.SubPixel = ckSubPixel;
                     cfg.EnableValidator = true;
+                  
                     cfg.EnableKeepFilter = true;
-                    cfg.EnableNms = true;
+                    cfg.EnableNms = false;
+                    cfg.Difficulty = Pattern2DifficultyLevel.Hard;
                     cfg.EnableAutoThreshold = true;
 
                     // scale mẫu
@@ -565,7 +567,7 @@ namespace BeeCore
 
                     if (scoreSum != 0 && rectRotates.Count > 0)
                     {
-                        Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult =
+                        Common.TryGetTool(Global.IndexProgChoose, Index).ScoreResult =
                             (int)Math.Round(scoreSum / rectRotates.Count, 1);
                     }
                 }
@@ -592,15 +594,15 @@ namespace BeeCore
         public float AverageGap = 0;
         public void Complete()
         {
-            Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+            Common.TryGetTool(IndexThread, Index).Results = Results.OK;
             if (rectRotates.Count()< LimitCounter)
             {
-                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                Common.TryGetTool(IndexThread, Index).Results = Results.NG;
             }
             else
             {
                 
-                BoxGapCheckResult = RectRotateGapChecker.CheckAdjacentCenterGap(rectRotates, LineOrientation,!Global.IsRun,AverageGap, Common.PropetyTools[IndexThread][Index].Score);
+                BoxGapCheckResult = RectRotateGapChecker.CheckAdjacentCenterGap(rectRotates, LineOrientation,!Global.IsRun,AverageGap, Common.TryGetTool(IndexThread, Index).Score);
             if(!Global.IsRun)
                 if(BoxGapCheckResult != null)
                 {
@@ -608,7 +610,7 @@ namespace BeeCore
                 } 
                     
                 if(!BoxGapCheckResult.IsOK)
-                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
             } 
                 
       
@@ -632,7 +634,7 @@ namespace BeeCore
 			gc.Transform = mat;
 			Brush brushText = Brushes.White;
 			Color cl = Color.LimeGreen;
-            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.NG)
+            if (Common.TryGetTool(Global.IndexProgChoose, Index).Results == Results.NG)
 			{
 				cl = Global.ParaShow.ColorNG;
 			}
@@ -640,7 +642,7 @@ namespace BeeCore
 			{
 				cl =  Global.ParaShow.ColorOK;
 			}
-			String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+			String nameTool = (int)(Index + 1) + "." + BeeCore.Common.TryGetTool(IndexThread, Index).Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             String Infor = "";
             if(BoxGapCheckResult!=null)
@@ -649,7 +651,7 @@ namespace BeeCore
                 if (BoxGapCheckResult.IsOK)
                     Infor += "Gap" + (int)BoxGapCheckResult.AverageDistance + "/"+ (int)AverageGap;
                 else
-                    Infor += "Gap" + (int)BoxGapCheckResult.AverageDistance + "-"+ "Fail: " + (int)BoxGapCheckResult.FirstFailed.ScorePercent;
+                    Infor += "Gap" + (int)BoxGapCheckResult.AverageDistance + "-"+ "Fail: " + (int)BoxGapCheckResult.FirstFailed.ScorePercent+"%";
 
             }    
             if (Global.ParaShow.IsShowBox)
@@ -698,7 +700,8 @@ namespace BeeCore
                         gc.DrawString(sPos, font, new SolidBrush(Global.ParaShow.ColorInfor), new PointF(5, 5));
 
                     }
-                    Draws.Box2Label(gc, rot._rect, i + "", Math.Round(listScore[i - 1], 1) +"%", font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
+                    //Math.Round(listScore[i - 1], 1) +"%"
+                    Draws.Box2Label(gc, rot._rect, i + "", "", font, Global.ParaShow.ColorOK, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
 
 
 					gc.ResetTransform();
@@ -706,7 +709,29 @@ namespace BeeCore
 				}
 			}
 
-           
+            if (Global.ParaShow.IsShowBox &&
+                BoxGapCheckResult != null &&
+                !BoxGapCheckResult.IsOK &&
+                BoxGapCheckResult.BoxNG != null)
+            {
+                RectRotate rotNG = BoxGapCheckResult.BoxNG;
+                mat = new Matrix();
+                if (!Global.IsRun)
+                {
+                    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                }
+                mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                mat.Rotate(rotA._rectRotation);
+                mat.Translate(rotA._rect.X, rotA._rect.Y);
+                mat.Translate(rotNG._PosCenter.X, rotNG._PosCenter.Y);
+                mat.Rotate(rotNG._rectRotation);
+                gc.Transform = mat;
+
+                Draws.Box2Label(gc, rotNG._rect, "NG", "", font, Global.ParaShow.ColorNG, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
+                gc.ResetTransform();
+            }
+
            
 
 

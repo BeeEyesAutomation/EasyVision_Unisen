@@ -13,6 +13,10 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
+            if (disposing)
+            {
+                DetachGlobalEvents();
+            }
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -44,6 +48,7 @@
             this.label20 = new System.Windows.Forms.Label();
             this.btnUnoMask = new BeeInterface.RJButton();
             this.btnClearAllMask = new BeeInterface.RJButton();
+            this.btnDeleteMask = new BeeInterface.RJButton();
             this.btnAddToList = new BeeInterface.RJButton();
             this.lay2Mask = new System.Windows.Forms.TableLayoutPanel();
             this.label21 = new System.Windows.Forms.Label();
@@ -555,17 +560,19 @@
             // layLimit
             // 
             this.layLimit.BackColor = System.Drawing.Color.White;
-            this.layLimit.ColumnCount = 5;
+            this.layLimit.ColumnCount = 6;
             this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 86F));
-            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 108F));
-            this.layLimit.Controls.Add(this.btnEdit, 4, 0);
+            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.layLimit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.layLimit.Controls.Add(this.btnEdit, 5, 0);
             this.layLimit.Controls.Add(this.label20, 0, 0);
             this.layLimit.Controls.Add(this.btnUnoMask, 2, 0);
             this.layLimit.Controls.Add(this.btnClearAllMask, 1, 0);
-            this.layLimit.Controls.Add(this.btnAddToList, 3, 0);
+            this.layLimit.Controls.Add(this.btnDeleteMask, 3, 0);
+            this.layLimit.Controls.Add(this.btnAddToList, 4, 0);
             this.layLimit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layLimit.Enabled = false;
             this.layLimit.Location = new System.Drawing.Point(5, 293);
@@ -623,11 +630,11 @@
             this.btnEdit.IsRect = false;
             this.btnEdit.IsTouch = false;
             this.btnEdit.IsUnGroup = true;
-            this.btnEdit.Location = new System.Drawing.Point(289, 5);
+            this.btnEdit.Location = new System.Drawing.Point(335, 5);
             this.btnEdit.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnEdit.Multiline = false;
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(105, 35);
+            this.btnEdit.Size = new System.Drawing.Size(59, 35);
             this.btnEdit.TabIndex = 61;
             this.btnEdit.Text = "Edit";
             this.btnEdit.TextColor = System.Drawing.Color.Black;
@@ -674,7 +681,7 @@
             this.btnUnoMask.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnUnoMask.FlatAppearance.BorderSize = 0;
             this.btnUnoMask.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUnoMask.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.40625F);
+            this.btnUnoMask.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.9375F);
             this.btnUnoMask.ForeColor = System.Drawing.Color.Black;
             this.btnUnoMask.Image = null;
             this.btnUnoMask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -694,11 +701,11 @@
             this.btnUnoMask.IsRect = false;
             this.btnUnoMask.IsTouch = false;
             this.btnUnoMask.IsUnGroup = true;
-            this.btnUnoMask.Location = new System.Drawing.Point(157, 5);
+            this.btnUnoMask.Location = new System.Drawing.Point(152, 5);
             this.btnUnoMask.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnUnoMask.Multiline = false;
             this.btnUnoMask.Name = "btnUnoMask";
-            this.btnUnoMask.Size = new System.Drawing.Size(63, 35);
+            this.btnUnoMask.Size = new System.Drawing.Size(58, 35);
             this.btnUnoMask.TabIndex = 6;
             this.btnUnoMask.Text = "Undo";
             this.btnUnoMask.TextColor = System.Drawing.Color.Black;
@@ -731,7 +738,7 @@
             this.btnClearAllMask.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnClearAllMask.FlatAppearance.BorderSize = 0;
             this.btnClearAllMask.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClearAllMask.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.734375F);
+            this.btnClearAllMask.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.btnClearAllMask.ForeColor = System.Drawing.Color.Black;
             this.btnClearAllMask.Image = null;
             this.btnClearAllMask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -755,13 +762,70 @@
             this.btnClearAllMask.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnClearAllMask.Multiline = false;
             this.btnClearAllMask.Name = "btnClearAllMask";
-            this.btnClearAllMask.Size = new System.Drawing.Size(63, 35);
+            this.btnClearAllMask.Size = new System.Drawing.Size(58, 35);
             this.btnClearAllMask.TabIndex = 5;
             this.btnClearAllMask.Text = "Clear All";
             this.btnClearAllMask.TextColor = System.Drawing.Color.Black;
             this.btnClearAllMask.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnClearAllMask.UseVisualStyleBackColor = false;
             this.btnClearAllMask.Click += new System.EventHandler(this.btnClearAllMask_Click);
+            // 
+            // btnDeleteMask
+            // 
+            this.btnDeleteMask.AutoFont = true;
+            this.btnDeleteMask.AutoFontHeightRatio = 0.75F;
+            this.btnDeleteMask.AutoFontMax = 100F;
+            this.btnDeleteMask.AutoFontMin = 6F;
+            this.btnDeleteMask.AutoFontWidthRatio = 0.92F;
+            this.btnDeleteMask.AutoImage = true;
+            this.btnDeleteMask.AutoImageMaxRatio = 0.75F;
+            this.btnDeleteMask.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnDeleteMask.AutoImageTint = true;
+            this.btnDeleteMask.BackColor = System.Drawing.Color.White;
+            this.btnDeleteMask.BackgroundColor = System.Drawing.Color.White;
+            this.btnDeleteMask.BorderColor = System.Drawing.Color.White;
+            this.btnDeleteMask.BorderRadius = 10;
+            this.btnDeleteMask.BorderSize = 1;
+            this.btnDeleteMask.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnDeleteMask.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnDeleteMask.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnDeleteMask.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnDeleteMask.Corner = BeeGlobal.Corner.Both;
+            this.btnDeleteMask.DebounceResizeMs = 16;
+            this.btnDeleteMask.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnDeleteMask.FlatAppearance.BorderSize = 0;
+            this.btnDeleteMask.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDeleteMask.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.203125F);
+            this.btnDeleteMask.ForeColor = System.Drawing.Color.Black;
+            this.btnDeleteMask.Image = null;
+            this.btnDeleteMask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDeleteMask.ImageDisabled = null;
+            this.btnDeleteMask.ImageHover = null;
+            this.btnDeleteMask.ImageNormal = null;
+            this.btnDeleteMask.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnDeleteMask.ImagePressed = null;
+            this.btnDeleteMask.ImageTextSpacing = 6;
+            this.btnDeleteMask.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnDeleteMask.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnDeleteMask.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnDeleteMask.ImageTintOpacity = 0.5F;
+            this.btnDeleteMask.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnDeleteMask.IsCLick = false;
+            this.btnDeleteMask.IsNotChange = true;
+            this.btnDeleteMask.IsRect = false;
+            this.btnDeleteMask.IsTouch = false;
+            this.btnDeleteMask.IsUnGroup = true;
+            this.btnDeleteMask.Location = new System.Drawing.Point(213, 5);
+            this.btnDeleteMask.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnDeleteMask.Multiline = false;
+            this.btnDeleteMask.Name = "btnDeleteMask";
+            this.btnDeleteMask.Size = new System.Drawing.Size(58, 35);
+            this.btnDeleteMask.TabIndex = 62;
+            this.btnDeleteMask.Text = "Delete";
+            this.btnDeleteMask.TextColor = System.Drawing.Color.Black;
+            this.btnDeleteMask.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnDeleteMask.UseVisualStyleBackColor = false;
+            this.btnDeleteMask.Click += new System.EventHandler(this.btnDeleteMask_Click);
             // 
             // btnAddToList
             // 
@@ -808,11 +872,11 @@
             this.btnAddToList.IsRect = false;
             this.btnAddToList.IsTouch = false;
             this.btnAddToList.IsUnGroup = true;
-            this.btnAddToList.Location = new System.Drawing.Point(223, 5);
+            this.btnAddToList.Location = new System.Drawing.Point(274, 5);
             this.btnAddToList.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnAddToList.Multiline = false;
             this.btnAddToList.Name = "btnAddToList";
-            this.btnAddToList.Size = new System.Drawing.Size(63, 35);
+            this.btnAddToList.Size = new System.Drawing.Size(58, 35);
             this.btnAddToList.TabIndex = 4;
             this.btnAddToList.Text = "Add";
             this.btnAddToList.TextColor = System.Drawing.Color.Black;
@@ -1205,6 +1269,7 @@
         private RJButton btnEdit;
         private System.Windows.Forms.Label label20;
         private RJButton btnUnoMask;
+        private RJButton btnDeleteMask;
         private RJButton btnClearAllMask;
         private RJButton btnAddToList;
         private System.Windows.Forms.TableLayoutPanel lay23;

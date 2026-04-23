@@ -30,6 +30,19 @@ namespace BeeInterface
     public partial class ToolCircle : UserControl
     {
         
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
         public ToolCircle( )
         {
             InitializeComponent();
@@ -44,13 +57,21 @@ namespace BeeInterface
         {
 
        
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolCircle_StatusToolChanged;
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ScoreChanged += ToolCircle_ScoreChanged;
-            trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
-            trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
-            trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
-            trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+            OwnerTool.StatusTool = StatusTool.WaitCheck;
+             if (OwnerTool != null)
+             {
+                 OwnerTool.StatusToolChanged -= ToolCircle_StatusToolChanged;
+                 OwnerTool.StatusToolChanged += ToolCircle_StatusToolChanged;
+             }
+             if (OwnerTool != null)
+             {
+                 OwnerTool.ScoreChanged -= ToolCircle_ScoreChanged;
+                 OwnerTool.ScoreChanged += ToolCircle_ScoreChanged;
+             }
+            trackScore.Min = OwnerTool.MinValue;
+            trackScore.Max = OwnerTool.MaxValue;
+            trackScore.Step = OwnerTool.StepValue;
+            trackScore.Value = OwnerTool.Score;
             
             AdjScale.Value= (float) Propety.Scale;
             trackThreshold.IsInital = true;
@@ -226,7 +247,7 @@ private void SetShapeFor(TypeCrop which, ShapeType shape)
 private void NewShape(ShapeType newShape)
 {
     // 1) Chốt shape hiện tại
-    var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2;
+    var prop = Common.TryGetTool(Global.IndexToolSelected).Propety2;
     RectRotate rr = null;
     if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
     else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;
@@ -382,7 +403,7 @@ private void ToolCircle_ScoreChanged(float obj)
 
         private void ToolCircle_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
-           if(Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool==StatusTool.Done)
+           if(OwnerTool.StatusTool==StatusTool.Done)
                 if (Propety.IsCalibs)
                 {
                     btnCalib.IsCLick = false;
@@ -396,7 +417,7 @@ private void ToolCircle_ScoreChanged(float obj)
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score =trackScore.Value;
+            OwnerTool.Score =trackScore.Value;
           
         }
         public Circle Propety { get; set; }
@@ -426,8 +447,8 @@ private void ToolCircle_ScoreChanged(float obj)
         private void btnTest_Click(object sender, EventArgs e)
         {
           
-          if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+          if (!Common.TryGetTool(Global.IndexToolSelected).worker.IsBusy)
+                Common.TryGetTool(Global.IndexToolSelected).worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }
@@ -519,8 +540,8 @@ private void ToolCircle_ScoreChanged(float obj)
         {
             btnCalib.Enabled = false;
             Propety.IsCalibs = btnCalib.IsCLick;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            if (!Common.TryGetTool(Global.IndexToolSelected).worker.IsBusy)
+                Common.TryGetTool(Global.IndexToolSelected).worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }

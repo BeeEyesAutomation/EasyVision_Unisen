@@ -1,4 +1,4 @@
-﻿
+
 using BeeCore;
 using BeeGlobal;
 using BeeUi;
@@ -166,7 +166,7 @@ namespace BeeInterface
 
 
             }
-            foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
+            foreach (PropetyTool PropetyTool in BeeCore.Common.EnsureToolList(Global.IndexProgChoose))
             {
                 PropetyTool.ItemTool.IsCLick = false;
             }
@@ -606,13 +606,13 @@ namespace BeeInterface
             if (Global.Initialed)
                 G.listProgram.Visible = true;
             if (IsKeyEnter) return;
-                // Lấy chuỗi tìm kiếm từ TextBox
+                // L?y chu?i t�m ki?m t? TextBox
                 string filter = txtQrCode.Text.ToLower();
 
-            // Lọc danh sách dựa trên chuỗi tìm kiếm
+            // L?c danh s�ch d?a tr�n chu?i t�m ki?m
             listFilter = listNameProg.Where(item => item.ToLower().Contains(filter)).ToList();
                 IsKeyPress = true;
-            // Cập nhật ComboBox với các mục đã lọc
+            // C?p nh?t ComboBox v?i c�c m?c d� l?c
             if (Global.Initialed)
                 G.listProgram.DataSource = new BindingSource(listFilter, null);
             IsLoad = false;
@@ -702,13 +702,13 @@ txtQrCode.Focus();
           //  btnShowList.Anchor= AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left;
         }
         private Timer fadeTimer;
-        private float opacity = 0.0f; // Bắt đầu từ 0
+        private float opacity = 0.0f; // B?t d?u t? 0
       
         private void AnimateColumn( System.Windows.Forms.TableLayoutPanel tableLayoutPanel, int columnIndex, bool show)
         {
             Timer timer = new Timer();
-            timer.Interval = 10; // Thời gian refresh animation
-            float step = show ? 2F : -2F; // Tăng hoặc giảm kích thước
+            timer.Interval = 10; // Th?i gian refresh animation
+            float step = show ? 2F : -2F; // Tang ho?c gi?m k�ch thu?c
 
             timer.Tick += (s, e) =>
             {
@@ -795,7 +795,7 @@ txtQrCode.Focus();
             }
             catch (AggregateException)
             {
-                // bỏ qua lỗi khi cancel
+                // b? qua l?i khi cancel
             }
 
             _isRunning = false;
@@ -1000,7 +1000,7 @@ txtQrCode.Focus();
    
     public    bool CheckLan()
         {
-            string tenMangCanCheck = "LAN"; // Đổi thành tên card mạng bạn muốn kiểm tra
+            string tenMangCanCheck = "LAN"; // �?i th�nh t�n card m?ng b?n mu?n ki?m tra
 
             var cardMang = NetworkInterface
                 .GetAllNetworkInterfaces();

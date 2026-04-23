@@ -1,4 +1,4 @@
-﻿using BeeCore;
+using BeeCore;
 using BeeGlobal;
 using BeeInterface;
 using System;
@@ -65,7 +65,7 @@ namespace BeeUi.Unit
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            BeeCore.Common.PropetyTools[Global.IndexProgChoose] = new List<BeeCore.PropetyTool>();
+            BeeCore.Common.SetToolList(Global.IndexProgChoose, new List<BeeCore.PropetyTool>());
             saveFile.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Program";
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
@@ -220,26 +220,34 @@ namespace BeeUi.Unit
             if (MessageBox.Show(" Rename Prog To " +  BeeInterface.G.Header.txtQrCode.Text+ " .Are you sure!", "Rename Prog", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 String newName =  BeeInterface.G.Header.txtQrCode.Text.Trim();
-                if ( Directory.Exists("Program\\"+Global.Project) && !Directory.Exists("Program\\" + newName))
+                string programRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Program");
+                string oldProgramPath = Path.Combine(programRoot, Global.Project);
+                string newProgramPath = Path.Combine(programRoot, newName);
+                if (Directory.Exists(oldProgramPath) && !Directory.Exists(newProgramPath))
                 {
-                   
-                    Batch.RenameRootFolderAndFiles("Program\\" + Global.Project, newName);
-                    //Directory.Move("Program\\" + Global.Project, "Program\\" + newName);
-                   
-                    //if (File.Exists("Program\\" + newName + "\\"+Global.Project+ ".cam"))
-                    //    File.Move("Program\\" + newName + "\\" + Global.Project + ".cam", "Program\\" + newName + "\\" + newName + ".cam");
-                    //if (File.Exists("Program\\" + newName + "\\" + Global.Project + ".para"))
-                    //    File.Move("Program\\" + newName + "\\" + Global.Project + ".para", "Program\\" + newName + "\\" + newName + ".para");
-                    //if (File.Exists("Program\\" + newName + "\\" + Global.Project + ".prog"))
-                    //    File.Move("Program\\" + newName + "\\" + Global.Project + ".prog", "Program\\" + newName + "\\" + newName + ".prog");
-             
-                   
-                    G.listProgram.Visible = false;
-                     BeeInterface.G.Header.RefreshListPJ();
+                    try
+                    {
+                        bool moved = Batch.RenameRootFolderAndFiles(oldProgramPath, newName);
 
-                    Global.Project = newName;
-                    BeeInterface.Properties.Settings.Default.programCurrent = Global.Project;
-                    BeeInterface.Properties.Settings.Default.Save();
+                        G.listProgram.Visible = false;
+                        BeeInterface.G.Header.RefreshListPJ();
+
+                        Global.Project = newName;
+                        BeeInterface.Properties.Settings.Default.programCurrent = Global.Project;
+                        BeeInterface.Properties.Settings.Default.Save();
+                        if (!moved)
+                        {
+                            MessageBox.Show(
+                                "Program was copied to the new name because the old folder is locked by opened files/models. You can delete the old program after closing/reopening the app.\n\nOld: " + oldProgramPath,
+                                "Rename Prog",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Rename Prog", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }    
             }
         }

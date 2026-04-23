@@ -343,6 +343,23 @@
     <Compile Include="Group\View.Designer.cs">
       <DependentUpon>View.cs</DependentUpon>
     </Compile>
+    <Compile Include="ShapeEditing\InteractionMode.cs" />
+    <Compile Include="ShapeEditing\ShapeEditState.cs" />
+    <Compile Include="ShapeEditing\ShapeEditOptions.cs" />
+    <Compile Include="ShapeEditing\IShapeRepository.cs" />
+    <Compile Include="ShapeEditing\CanvasViewportChangedArgs.cs" />
+    <Compile Include="ShapeEditing\ImageCanvasInteractionState.cs" />
+    <Compile Include="ShapeEditing\ImageCanvasShapeContext.cs" />
+    <Compile Include="ShapeEditing\CanvasMouseArgs.cs" />
+    <Compile Include="ShapeEditing\IOverlayPainter.cs" />
+    <Compile Include="ShapeEditing\IImageCanvas.cs" />
+    <Compile Include="ShapeEditing\ShapeChangedArgs.cs" />
+    <Compile Include="ShapeEditing\IShapeEditor.cs" />
+    <Compile Include="ShapeEditing\DefaultShapeRepository.cs" />
+    <Compile Include="ShapeEditing\GeometryHelper.cs" />
+    <Compile Include="ShapeEditing\ImageCanvasControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ItemValue.cs">
       <SubType>UserControl</SubType>
     </Compile>

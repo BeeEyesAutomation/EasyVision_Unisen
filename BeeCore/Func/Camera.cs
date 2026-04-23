@@ -1,4 +1,4 @@
-﻿using BeeCore.Func;
+using BeeCore.Func;
 using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -149,29 +149,29 @@ namespace BeeCore
         public  Bitmap bmResult;
         private Mat EnsureWorkingBuffer(Mat src)
         {
-            // Nếu đang hiển thị A thì vẽ vào B, ngược lại
+            // N?u dang hi?n th? A th� v? v�o B, ngu?c l?i
             bool useB = ReferenceEquals(_displayMat, _bufA);
             Mat target = useB ? _bufB : _bufA;
 
             if (target == null || target.IsDisposed)
             {
-                target = new Mat();                     // tạo mới nếu đã Dispose
+                target = new Mat();                     // t?o m?i n?u d� Dispose
                 if (useB) _bufB = target; else _bufA = target;
             }
 
-            // target.Create sẽ cấp phát đúng kích thước/kiểu; không cần Release trước
+            // target.Create s? c?p ph�t d�ng k�ch thu?c/ki?u; kh�ng c?n Release tru?c
             target.Create(src.Rows, src.Cols, src.Type());
             return target;
         }
         // Locks
-        private readonly object _bmLock = new object();   // bảo vệ bmResult
-        private readonly object _camLock = new object();   // bảo vệ nguồn camera (nếu cần)
-        private readonly object _swapLock = new object();   // bảo vệ A/B & _displayMat
+        private readonly object _bmLock = new object();   // b?o v? bmResult
+        private readonly object _camLock = new object();   // b?o v? ngu?n camera (n?u c?n)
+        private readonly object _swapLock = new object();   // b?o v? A/B & _displayMat
 
-        // Double-buffer Mat (KHÔNG readonly để có thể thay thế khi bị Dispose)
+        // Double-buffer Mat (KH�NG readonly d? c� th? thay th? khi b? Dispose)
         private Mat _bufA = new Mat();
         private Mat _bufB = new Mat();
-        private Mat _displayMat; // trỏ tới buffer đang hiển thị (A hoặc B)
+        private Mat _displayMat; // tr? t?i buffer dang hi?n th? (A ho?c B)
 
         private bool _disposed;
         private static Mat EnsureBgr8Uc3AliasOrConvert(Mat working, out bool createdTemp)
@@ -229,8 +229,8 @@ namespace BeeCore
             Results = Results.OK;
             // foreach (List<PropetyTool> PropetyTools in BeeCore.Common.PropetyTools)
             {
-                if (BeeCore.Common.PropetyTools[Global.IndexProgChoose] == null) return Results.None;
-                foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
+                if (BeeCore.Common.TryGetToolList(Global.IndexProgChoose) == null) return Results.None;
+                foreach (PropetyTool PropetyTool in BeeCore.Common.EnsureToolList(Global.IndexProgChoose))
                 {
                   
                     if (PropetyTool.UsedTool == UsedTool.NotUsed)
@@ -247,11 +247,19 @@ namespace BeeCore
             }
             return Results;
         }
+        private static bool ShouldDrawToolResult(PropetyTool tool)
+        {
+            if (tool == null || tool.UsedTool == UsedTool.NotUsed)
+                return false;
+
+            return !Global.IsRun || tool.StatusTool == StatusTool.Done;
+        }
+
         public void DrawResult()
         {
             if (_disposed) return;
 
-            // 1) Lấy frame nguồn
+            // 1) L?y frame ngu?n
             Mat src;
             lock (_camLock)
             {
@@ -264,7 +272,7 @@ namespace BeeCore
                 return;
             }
 
-            // 2) Chuẩn bị buffer
+            // 2) Chu?n b? buffer
             Mat working;
             lock (_swapLock)
             {
@@ -274,7 +282,7 @@ namespace BeeCore
 
             src.Dispose();
 
-            // Cache giá trị tránh race condition
+            // Cache gi� tr? tr�nh race condition
             int triggerLocal =(int) Global.TriggerNum;
             var resultLocal = Results;
 
@@ -295,9 +303,14 @@ namespace BeeCore
                         g.PixelOffsetMode = PixelOffsetMode.Half;
 
                         //========================
-                        // 1. Vẽ TEXT (không scale)
+                        // 1. V? TEXT (kh�ng scale)
                         //========================
-                        if(Global.Config.IsMultiProg)
+                        bool hasFinalResult = resultLocal == Results.OK || resultLocal == Results.NG;
+                        bool canShowFinalResult = !Global.IsRun ||
+                                                  Global.StatusProcessing == StatusProcessing.SendResult ||
+                                                  Global.StatusProcessing == StatusProcessing.Drawing ||
+                                                  Global.StatusProcessing == StatusProcessing.Done;
+                        if (Global.Config.IsMultiProg && hasFinalResult && canShowFinalResult)
                         {
                             string triggerText = triggerLocal.ToString();
                             string resultText = resultLocal == Results.OK ? "OK" : "NG";
@@ -329,18 +342,22 @@ namespace BeeCore
                         // 3. Draw tools overlay
                         //========================
 
-                        var tools = BeeCore.Common.PropetyTools[Global.IndexProgChoose];
+                        var tools = BeeCore.Common.EnsureToolList(Global.IndexProgChoose);
 
                         if (Global.Config.IsAutoTrigger && Global.StatusProcessing != StatusProcessing.Drawing)
                         {
-                            tools[Global.IndexToolAuto].Propety2.DrawResult(g);
+                            if (Global.IndexToolAuto >= 0 && Global.IndexToolAuto < tools.Count)
+                            {
+                                var tool = tools[Global.IndexToolAuto];
+                                if (ShouldDrawToolResult(tool))
+                                    tool.Propety2.DrawResult(g);
+                            }
                         }
                         else
                         {
                             foreach (var tool in tools)
                             {
-                                if (tool == null) continue;
-                                if (tool.UsedTool != UsedTool.NotUsed)
+                                if (ShouldDrawToolResult(tool))
                                     tool.Propety2.DrawResult(g);
                             }
                         }
@@ -422,7 +439,7 @@ namespace BeeCore
         //{
         //    if (_disposed) return;
 
-        //    // 1) Lấy frame nguồn
+        //    // 1) L?y frame ngu?n
         //    Mat src;
         //    lock (_camLock)
         //    {
@@ -434,7 +451,7 @@ namespace BeeCore
         //        return;
         //    }
 
-        //    // 2) Chuẩn bị buffer
+        //    // 2) Chu?n b? buffer
         //    Mat working;
         //    lock (_swapLock)
         //    {
@@ -443,7 +460,7 @@ namespace BeeCore
         //    }
         //    src.Dispose();
 
-        //    // 3) Convert -> Bitmap & vẽ overlay
+        //    // 3) Convert -> Bitmap & v? overlay
         //    using (Mat bgr = EnsureBgr8Uc3AliasOrConvert(working, out bool createdTemp))
         //    {
         //        Bitmap canvas = null;
@@ -482,7 +499,7 @@ namespace BeeCore
         //                    g.DrawString("OK", new Font("Arial", Global.ParaShow.FontSize*6), Brushes.Green, new PointF(100, sz.Height + 5));
         //                else
         //                    g.DrawString("NG", new Font("Arial", Global.ParaShow.FontSize * 6), Brushes.Red, new PointF(100, sz.Height + 5));
-        //                var tools = BeeCore.Common.PropetyTools[Global.IndexProgChoose];
+        //                var tools = BeeCore.Common.EnsureToolList(Global.IndexProgChoose);
         //                if(Global.Config.IsAutoTrigger&&Global.StatusProcessing!=StatusProcessing.Drawing)
         //                {
         //                    tools[Global.IndexToolAuto].Propety.DrawResult(g);
@@ -502,7 +519,7 @@ namespace BeeCore
         //                //g.DrawString(Content, new Font("Arial", 12, FontStyle.Regular),new SolidBrush(Color.WhiteSmoke),new Point(10,10));
         //            }
 
-        //            // 4) Tạo bmResult bằng copy pixel data trực tiếp từ canvas
+        //            // 4) T?o bmResult b?ng copy pixel data tr?c ti?p t? canvas
         //            Bitmap storeCopy = new Bitmap(canvas.Width, canvas.Height, canvas.PixelFormat);
         //            using (var gCopy = Graphics.FromImage(storeCopy))
         //            {
@@ -554,10 +571,10 @@ namespace BeeCore
 
         //                //  bmResult.Save("Result"+ IndexCCD + ".png");
         //            }
-        //            canvas = null; // tránh dispose ở finally
+        //            canvas = null; // tr�nh dispose ? finally
 
 
-        //            // 6) Xác nhận buffer hiển thị
+        //            // 6) X�c nh?n buffer hi?n th?
         //            lock (_swapLock)
         //            {
         //                _displayMat = working;
@@ -2059,16 +2076,16 @@ namespace BeeCore
         private CameraIOFast cameraIOFast = new CameraIOFast();
         //public unsafe bool TryGrabFast_NoStride(ref Mat matRaw)
         //{
-        //    IntPtr intPtr = IntPtr.Zero;   // buffer từ native (MVS/USB)
-        //    IntPtr pylonPtr = IntPtr.Zero; // buffer từ Pylon (khác hàm free)
+        //    IntPtr intPtr = IntPtr.Zero;   // buffer t? native (MVS/USB)
+        //    IntPtr pylonPtr = IntPtr.Zero; // buffer t? Pylon (kh�c h�m free)
         //    int rows = 0, cols = 0;
-        //    int matTypeCode = (int)MatType.CV_8UC1; // native trả về code; ta cast về MatType khi tạo Mat
-        //    int srcStride = 0;   // stride (bytes/row) của nguồn nếu có
+        //    int matTypeCode = (int)MatType.CV_8UC1; // native tr? v? code; ta cast v? MatType khi t?o Mat
+        //    int srcStride = 0;   // stride (bytes/row) c?a ngu?n n?u c�
 
         //    try
         //    {
-        //        // Nếu đang ở chế độ chỉ set tham số (không grab), nên return false thay vì true
-        //        // để caller biết chưa có frame mới. Nếu bạn cố tình muốn "OK", giữ true.
+        //        // N?u dang ? ch? d? ch? set tham s? (kh�ng grab), n�n return false thay v� true
+        //        // d? caller bi?t chua c� frame m?i. N?u b?n c? t�nh mu?n "OK", gi? true.
         //        if (Global.IsSetPara)
         //            return false;
 
@@ -2077,20 +2094,20 @@ namespace BeeCore
         //            case TypeCamera.MVS:
         //            case TypeCamera.USB:
         //                {
-        //                    // Read từ DLL: trả về con trỏ + fill rows/cols/matTypeCode
+        //                    // Read t? DLL: tr? v? con tr? + fill rows/cols/matTypeCode
         //                    intPtr = new IntPtr(CCDPlus.ReadCCD(IndexCCD, &rows, &cols, &matTypeCode));
         //                    FrameRate = CCDPlus.FPS;
 
         //                    if (intPtr == IntPtr.Zero || rows <= 0 || cols <= 0)
         //                        return false;
 
-        //                    // Stride nguồn nếu API có (giả sử CCDPlus có hàm trả stride; nếu không, dùng packed)
+        //                    // Stride ngu?n n?u API c� (gi? s? CCDPlus c� h�m tr? stride; n?u kh�ng, d�ng packed)
         //                    srcStride = 0;// CCDPlus.GetStride != null ? CCDPlus.GetStride(IndexCCD) : cols * (int)new Mat(rows, cols, (MatType)matTypeCode).ElemSize();
 
-        //                    // Đảm bảo matRaw đúng kích thước & kiểu
+        //                    // �?m b?o matRaw d�ng k�ch thu?c & ki?u
         //                    EnsureMat(ref matRaw, rows, cols, (MatType)matTypeCode);
 
-        //                    // Copy từng dòng, tôn trọng stride nguồn & đích
+        //                    // Copy t?ng d�ng, t�n tr?ng stride ngu?n & d�ch
         //                    CopyRows((byte*)intPtr, matRaw, rows, cols);
         //                    Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "ReadCCD", "OK"));
         //                    return true;
@@ -2109,20 +2126,20 @@ namespace BeeCore
         //                    var mt = (c == 1) ? MatType.CV_8UC1 : MatType.CV_8UC3;
         //                    FrameRate = (int)PylonCam.GetMeasuredFps();
 
-        //                    // Cấp phát (hoặc reuse) đích đúng size/kiểu
+        //                    // C?p ph�t (ho?c reuse) d�ch d�ng size/ki?u
         //                    EnsureMat(ref matRaw, h, w, mt);
 
-        //                    // Copy theo stride nguồn s và step đích
+        //                    // Copy theo stride ngu?n s v� step d�ch
         //                    CopyRows((byte*)pylonPtr, matRaw, h, w, s);
 
-        //                    // Nếu SDK yêu cầu trả buffer (tuỳ API của bạn), gọi release ở đây
-        //                    // PylonCam.ReleaseBuffer(); // nếu có
+        //                    // N?u SDK y�u c?u tr? buffer (tu? API c?a b?n), g?i release ? d�y
+        //                    // PylonCam.ReleaseBuffer(); // n?u c�
         //                    Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "ReadCCD", "OK"));
         //                    return true;
         //                }
         //        }
 
-        //        // Nếu rơi ra ngoài switch (loại camera chưa hỗ trợ)
+        //        // N?u roi ra ngo�i switch (lo?i camera chua h? tr?)
         //        return false;
         //    }
         //    catch (Exception ex)
@@ -2133,17 +2150,17 @@ namespace BeeCore
         //    }
         //    finally
         //    {
-        //        // Chỉ free buffer thuộc về CCDPlus nếu API yêu cầu bạn giải phóng
+        //        // Ch? free buffer thu?c v? CCDPlus n?u API y�u c?u b?n gi?i ph�ng
         //        if (intPtr != IntPtr.Zero)
         //            Native.FreeBuffer(intPtr);
 
-        //        // Với pylonPtr: thường là buffer thuộc SDK; chỉ release nếu SDK yêu cầu.
+        //        // V?i pylonPtr: thu?ng l� buffer thu?c SDK; ch? release n?u SDK y�u c?u.
         //        // if (pylonPtr != IntPtr.Zero) PylonCam.ReleaseBuffer(pylonPtr);
         //    }
         //}
 
         /// <summary>
-        /// Đảm bảo mat != null, chưa Dispose, và có đúng size/type; nếu khác thì Dispose + tạo mới.
+        /// �?m b?o mat != null, chua Dispose, v� c� d�ng size/type; n?u kh�c th� Dispose + t?o m?i.
         /// </summary>
         private static void EnsureMat(ref Mat m, int rows, int cols, MatType type)
         {
@@ -2155,18 +2172,18 @@ namespace BeeCore
         }
 
         /// <summary>
-        /// Copy theo từng dòng, tôn trọng stride nguồn & step đích.
-        /// Nếu không truyền stride nguồn (srcStride=0), suy ra packed: srcStride = cols * elemSize.
+        /// Copy theo t?ng d�ng, t�n tr?ng stride ngu?n & step d�ch.
+        /// N?u kh�ng truy?n stride ngu?n (srcStride=0), suy ra packed: srcStride = cols * elemSize.
         /// </summary>
         private static unsafe void CopyRows(byte* srcBase, Mat dst, int rows, int cols, int srcStride = 0)
         {
             int elem = (int)dst.ElemSize();               // bytes per pixel
-            long dstStep = (long)dst.Step();              // bytes per row ở đích
+            long dstStep = (long)dst.Step();              // bytes per row ? d�ch
             long bytesPerRow = (long)cols * elem;
 
             if (srcStride <= 0) srcStride = (int)bytesPerRow;
 
-            // Không copy quá giới hạn step đích
+            // Kh�ng copy qu� gi?i h?n step d�ch
             long copyCount = bytesPerRow <= dstStep ? bytesPerRow : dstStep;
 
             byte* dstBase = (byte*)dst.DataPointer;
@@ -2216,7 +2233,7 @@ namespace BeeCore
                         intPtr = PylonCam.CopyLatestImage(out w, out h, out s, out c);
                             matType = (c == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
                             FrameRate = (int)PylonCam.GetMeasuredFps();
-                            matRaw = new Mat(h, w, matType); // hoặc CV_8UC1 nếu Mono
+                            matRaw = new Mat(h, w, matType); // ho?c CV_8UC1 n?u Mono
                             if (intPtr == IntPtr.Zero)
                             {
                                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", PylonCam.LastError));
@@ -2258,9 +2275,9 @@ namespace BeeCore
 
                 int elem = (int)matRaw.ElemSize();
                 long bytesPerRow = (long)cols * elem;
-                long dstStep = (long)matRaw.Step();      // có thể >= bytesPerRow do alignment
+                long dstStep = (long)matRaw.Step();      // c� th? >= bytesPerRow do alignment
 
-                // Copy từng dòng để an toàn với step của đích
+                // Copy t?ng d�ng d? an to�n v?i step c?a d�ch
                 long copyBytes = Math.Min(bytesPerRow, dstStep);
                 for (int r = 0; r < rows; r++)
                 {

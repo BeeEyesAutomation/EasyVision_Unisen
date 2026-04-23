@@ -445,13 +445,13 @@ namespace BeeCore
             if (rotCrop == null) rotCrop = new RectRotate();
             if(rotArea == null) rotArea = new RectRotate();
            
-            Common.PropetyTools[IndexThread][Index].StepValue = 1;
-			Common.PropetyTools[IndexThread][Index].MinValue = 0;
+            Common.TryGetTool(IndexThread, Index).StepValue = 1;
+			Common.TryGetTool(IndexThread, Index).MinValue = 0;
 
-            Common.PropetyTools[IndexThread][Index].MaxValue = 100;
-            if (Common.PropetyTools[IndexThread][Index].Score == 0)
-                Common.PropetyTools[IndexThread][Index].Score = 80;
-            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+            Common.TryGetTool(IndexThread, Index).MaxValue = 100;
+            if (Common.TryGetTool(IndexThread, Index).Score == 0)
+                Common.TryGetTool(IndexThread, Index).Score = 80;
+            Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
         }
 
         //IsProcess,Convert.ToBoolean((int) TypeMode)
@@ -473,8 +473,8 @@ namespace BeeCore
             float DeltaAngle = (rotCrop._rectRotation) - (rotArea._rectRotation);
             AngleLower = DeltaAngle - Angle;
            AngleUper = DeltaAngle + Angle;
-            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
-            Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
+            Common.TryGetTool(Global.IndexProgChoose, Index).ScoreResult = 0;
+            Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.NG;
             // 5) Gom kết quả
             rectRotates = new List<RectRotate>();
           
@@ -565,7 +565,7 @@ namespace BeeCore
                     cfg.AngleStartDeg = AngleLower;
                     cfg.AngleEndDeg = AngleUper;
                     cfg.AngleStepDeg = StepAngle;      // auto
-                    cfg.MinAcceptScore = Common.PropetyTools[IndexThread][Index].Score / 100.0;
+                    cfg.MinAcceptScore = Common.TryGetTool(IndexThread, Index).Score / 100.0;
                     cfg.MaxPos = MaxObject;
                     cfg.MaxOverlap = OverLap;
                     cfg.BitwiseNot = ckBitwiseNot;
@@ -603,7 +603,7 @@ namespace BeeCore
                             {
                                 if (rot.AngleDeg < AngleLower || rot.AngleDeg > AngleUper)
                                     continue;
-                                if (rot.Score < Common.PropetyTools[IndexThread][Index].Score)
+                                if (rot.Score < Common.TryGetTool(IndexThread, Index).Score)
 
                                     if (rot.Score > rotBest.Score)
                                     {
@@ -613,7 +613,7 @@ namespace BeeCore
                             }
                                 if (rotBest.AngleDeg >= AngleLower && rotBest.AngleDeg <= AngleUper)
 
-                                    if (rotBest.Score >= Common.PropetyTools[IndexThread][Index].Score)
+                                    if (rotBest.Score >= Common.TryGetTool(IndexThread, Index).Score)
                                     {
                                         float w = (float)rotBest.Width;
                                         float h = (float)rotBest.Height;
@@ -638,7 +638,7 @@ namespace BeeCore
                                 scoreSum += score;
                                 if (angle < AngleLower || angle > AngleUper)
                                     continue;
-                                if (score < Common.PropetyTools[IndexThread][Index].Score)
+                                if (score < Common.TryGetTool(IndexThread, Index).Score)
                                     continue;
                                 rectRotates.Add(new RectRotate(
                                     new System.Drawing.RectangleF(-w / 2f, -h / 2f, w, h),
@@ -672,7 +672,7 @@ namespace BeeCore
 
                     if (scoreSum != 0 && rectRotates.Count > 0)
                     {
-                        Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult =
+                        Common.TryGetTool(Global.IndexProgChoose, Index).ScoreResult =
                             (int)Math.Round(scoreSum / rectRotates.Count, 1);
                     }
                 }
@@ -696,23 +696,23 @@ namespace BeeCore
         }
         public void Complete()
         {
-            Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+            Common.TryGetTool(IndexThread, Index).Results = Results.OK;
             switch (Compare)
             {
                 case Compares.Equal:
                     if (rectRotates.Count() != LimitCounter)
-                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                        Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                     break;
                 case Compares.Less:
                     if (rectRotates.Count() >= LimitCounter)
-                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                        Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                     break;
                 case Compares.More:
                     if (rectRotates.Count() <= LimitCounter)
-                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                        Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                     break;
             }
-            //if (Common.PropetyTools[IndexThread][Index].Results == Results.OK)
+            //if (Common.TryGetTool(IndexThread, Index).Results == Results.OK)
             //{if (rectRotates != null)
             //        if (rectRotates.Count > 0)
             //        {
@@ -733,11 +733,11 @@ namespace BeeCore
             //            Global.pOrigin = new OpenCvSharp.Point(x, y);
             //        }
             //}
-            //if(Common.PropetyTools[IndexThread][Index].TypeTool==TypeTool.Position_Adjustment)
+            //if(Common.TryGetTool(IndexThread, Index).TypeTool==TypeTool.Position_Adjustment)
             //if (!Global.IsRun)
             //{
             //    Global.StatusDraw = StatusDraw.Check;
-            //    if (Common.PropetyTools[Global.IndexProgChoose][Index].Results==Results.OK)
+            //    if (Common.TryGetTool(Global.IndexProgChoose, Index).Results==Results.OK)
             //    {
             //        rotPositionAdjustment = rectRotates[0].Clone();
             //        Global.rotOriginAdj = new RectRotate(rotCrop._rect, new PointF(rotArea._PosCenter.X -rotArea._rect.Width / 2 + rotPositionAdjustment._PosCenter.X,rotArea._PosCenter.Y - rotArea._rect.Height / 2 + rotPositionAdjustment._PosCenter.Y), rotPositionAdjustment._rectRotation, AnchorPoint.None);
@@ -768,7 +768,7 @@ namespace BeeCore
             //int OffSetY = (int)(rotA._PosCenter.Y - rotA._rect.Height / 2);
             //OffSetX = (OffSetX > 0) ? 0 : -OffSetX;
             //OffSetY = (OffSetY > 0) ? 0 : -OffSetY;
-            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.NG)
+            if (Common.TryGetTool(Global.IndexProgChoose, Index).Results == Results.NG)
 			{
 				cl = Global.ParaShow.ColorNG;
 			}
@@ -776,7 +776,7 @@ namespace BeeCore
 			{
 				cl =  Global.ParaShow.ColorOK;
 			}
-			String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+			String nameTool = (int)(Index + 1) + "." + BeeCore.Common.TryGetTool(IndexThread, Index).Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
 				Draws.Box1Label(gc,rotA, nameTool, font, brushText, cl, Global.ParaShow.ThicknessLine);
@@ -961,7 +961,7 @@ namespace BeeCore
 				//rectRotates = new List<RectRotate>();
 				//listScore = new List<double>();
 				//listP_Center = new List<System.Drawing.Point>();
-				//var ListRS = Pattern.Match(IsHighSpeed, 0, AngleLower, AngleUper, Common.PropetyTools[IndexThread][Index].Score / 100.0, ckSIMD, ckBitwiseNot, ckSubPixel, NumObject, OverLap, false, -1);
+				//var ListRS = Pattern.Match(IsHighSpeed, 0, AngleLower, AngleUper, Common.TryGetTool(IndexThread, Index).Score / 100.0, ckSIMD, ckBitwiseNot, ckSubPixel, NumObject, OverLap, false, -1);
     //            float scoreRs = 0;
     //            foreach (Rotaterectangle rot in ListRS)
 				//{
@@ -979,7 +979,7 @@ namespace BeeCore
 
 				//}
     //            if (scoreRs != 0)
-    //                Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult =(int)Math.Round( scoreRs / rectRotates.Count(),1);
+    //                Common.TryGetTool(Global.IndexProgChoose, Index).ScoreResult =(int)Math.Round( scoreRs / rectRotates.Count(),1);
 
 
     //            matProcess.Dispose();

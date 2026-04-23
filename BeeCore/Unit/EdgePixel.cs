@@ -220,24 +220,24 @@ namespace BeeCore
         public void Complete()
             {
 
-            Common.PropetyTools[IndexThread][Index].ScoreResult = (float)(PxResult );
+            Common.TryGetTool(IndexThread, Index).ScoreResult = (float)(PxResult );
          
-            if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0)
-                Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
-            Common.PropetyTools[IndexThread][Index].ScoreResult = (float)Math.Round(Common.PropetyTools[IndexThread][Index].ScoreResult);
-            if (Common.PropetyTools[IndexThread][Index].ScoreResult <= Common.PropetyTools[IndexThread][Index].Score)
-                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+            if (Common.TryGetTool(IndexThread, Index).ScoreResult < 0)
+                Common.TryGetTool(IndexThread, Index).ScoreResult = 0;
+            Common.TryGetTool(IndexThread, Index).ScoreResult = (float)Math.Round(Common.TryGetTool(IndexThread, Index).ScoreResult);
+            if (Common.TryGetTool(IndexThread, Index).ScoreResult <= Common.TryGetTool(IndexThread, Index).Score)
+                Common.TryGetTool(IndexThread, Index).Results = Results.OK;
             else
-                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                Common.TryGetTool(IndexThread, Index).Results = Results.NG;
 
         }
         public async Task SendResult()
         {
-            if (Common.PropetyTools[IndexThread][Index].IsSendResult)
+            if (Common.TryGetTool(IndexThread, Index).IsSendResult)
             {
                 if (Global.Comunication.Protocol.IsConnected)
                 {
-                   // await Global.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, WidthResult);
+                   // await Global.Comunication.Protocol.WriteResultFloat(Common.TryGetTool(IndexThread, Index).AddPLC, WidthResult);
                 }
             }
         }
@@ -261,7 +261,7 @@ namespace BeeCore
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
 
-            if (Common.PropetyTools[IndexThread][Index].Results == Results.NG)
+            if (Common.TryGetTool(IndexThread, Index).Results == Results.NG)
             {
                 cl = Global.ParaShow.ColorNG;
             }
@@ -269,7 +269,7 @@ namespace BeeCore
             {
                 cl =  Global.ParaShow.ColorOK;
             }
-            String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[IndexThread][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + Common.TryGetTool(IndexThread, Index).Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             
             Draws.Box2Label(gc, rotA, nameTool,PxResult+ " Px", font, cl, brushText,16, Global.ParaShow.ThicknessLine);
@@ -304,11 +304,11 @@ namespace BeeCore
                 ListRotMask = new List<RectRotate>();
            // if (rotCrop == null) rotCrop = new RectRotate();
             if (rotArea == null) rotArea = new RectRotate();
-            Common.PropetyTools[IndexThread][Index].StepValue =1f;
-            Common.PropetyTools[IndexThread][Index].MinValue = 0;
+            Common.TryGetTool(IndexThread, Index).StepValue =1f;
+            Common.TryGetTool(IndexThread, Index).MinValue = 0;
           
-            Common.PropetyTools[IndexThread][Index].MaxValue = 100000;
-            Common.PropetyTools[IndexThread][Index]. StatusTool = StatusTool.WaitCheck;
+            Common.TryGetTool(IndexThread, Index).MaxValue = 100000;
+            Common.TryGetTool(IndexThread, Index). StatusTool = StatusTool.WaitCheck;
         }
       
         public int IndexThread = 0;

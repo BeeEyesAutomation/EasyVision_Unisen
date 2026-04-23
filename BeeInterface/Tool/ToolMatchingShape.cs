@@ -23,6 +23,20 @@ namespace BeeInterface
     public partial class ToolMatchingShape : UserControl
     {
         
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
+
         public ToolMatchingShape( )
         {
             InitializeComponent();
@@ -78,7 +92,7 @@ namespace BeeInterface
         Mat matRS = new Mat(); 
         private void trackScore_ValueChanged(float obj)
         {
-           Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (int)trackScore.Value;
+            if (OwnerTool != null) OwnerTool.Score = (int)trackScore.Value;
            
 
         }

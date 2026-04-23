@@ -32,6 +32,19 @@ namespace BeeInterface
     public partial class ToolBarcode : UserControl
     {
         
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
         public ToolBarcode( )
         {
             InitializeComponent();
@@ -50,19 +63,28 @@ namespace BeeInterface
                 EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
                 EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
                 EditRectRot1.IsHide = false;
+                this.VisibleChanged -= ToolBarcode_VisibleChanged;
                 this.VisibleChanged += ToolBarcode_VisibleChanged;
                 btnOnSendResult.IsCLick = Propety.IsSendResult;
                 btnOffSendResult.IsCLick =! Propety.IsSendResult;
                 txtAdd.Text = Propety.AddPLC;
                
-                trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
-                trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
-                trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
-                trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+                trackScore.Min = OwnerTool.MinValue;
+                trackScore.Max = OwnerTool.MaxValue;
+                trackScore.Step = OwnerTool.StepValue;
+                trackScore.Value = OwnerTool.Score;
 
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolWidth_StatusToolChanged;
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].ScoreChanged += ToolWidth_ScoreChanged;
+                OwnerTool.StatusTool = StatusTool.WaitCheck;
+                 if (OwnerTool != null)
+                 {
+                     OwnerTool.StatusToolChanged -= ToolWidth_StatusToolChanged;
+                     OwnerTool.StatusToolChanged += ToolWidth_StatusToolChanged;
+                 }
+                 if (OwnerTool != null)
+                 {
+                     OwnerTool.ScoreChanged -= ToolWidth_ScoreChanged;
+                     OwnerTool.ScoreChanged += ToolWidth_ScoreChanged;
+                 }
               
                 
                
@@ -115,7 +137,7 @@ namespace BeeInterface
         private void ToolWidth_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {if (Global.IsRun) return;
             btnScan.Enabled = true;
-            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (OwnerTool.StatusTool == StatusTool.Done)
                 {if(Propety.IsScan)
                     {
                         AdjIndexProgChoose.Value = Propety.IndexProgChoose+1;
@@ -142,7 +164,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score=trackScore.Value;
+            OwnerTool.Score=trackScore.Value;
          }
         public bool IsClear = false;
         public Barcode Propety { get; set; }
@@ -195,7 +217,7 @@ namespace BeeInterface
             Global.TypeCrop= TypeCrop.Area;
 
             btnTest.Enabled = false;
-            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
 
         }
         bool IsFullSize = false;

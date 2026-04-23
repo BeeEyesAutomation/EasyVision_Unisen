@@ -230,18 +230,18 @@ namespace BeeCore
         {
 
 
-          //  Common.PropetyTools[IndexThread][Index].ScoreResult= (int)((Math.Abs(WidthResult - WidthTemp) / (WidthTemp * 1.0))*100);
+          //  Common.TryGetTool(IndexThread, Index).ScoreResult= (int)((Math.Abs(WidthResult - WidthTemp) / (WidthTemp * 1.0))*100);
          if (Result.Found)
             {
-                Common.PropetyTools[IndexThread][Index].Location = listP_Center[0].X + "," + listP_Center[0].Y;
-                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                Common.TryGetTool(IndexThread, Index).Location = listP_Center[0].X + "," + listP_Center[0].Y;
+                Common.TryGetTool(IndexThread, Index).Results = Results.OK;
             }
          
          else
             {
-                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                Common.PropetyTools[IndexThread][Index].Location = "";
-                Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
+                Common.TryGetTool(IndexThread, Index).Results = Results.NG;
+                Common.TryGetTool(IndexThread, Index).Location = "";
+                Common.TryGetTool(IndexThread, Index).ScoreResult = 0;
             }    
               
             
@@ -279,11 +279,11 @@ namespace BeeCore
             Brush brushText = new SolidBrush(Global.ParaShow.TextColor);
             Color cl = Color.LimeGreen;
 
-            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.NG)
+            if (Common.TryGetTool(Global.IndexProgChoose, Index).Results == Results.NG)
                 cl = Global.ParaShow.ColorNG;
             else
                 cl = Global.ParaShow.ColorOK;
-            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.TryGetTool(IndexThread, Index).Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
                 Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.ParaShow.ThicknessLine);
@@ -331,11 +331,11 @@ namespace BeeCore
             if (rotArea == null) rotArea = new RectRotate();
             rotMask = null;
             DetectIntersect = new DetectIntersect();
-            Common.PropetyTools[IndexThread][Index].StepValue = 0.1f;
-            Common.PropetyTools[IndexThread][Index].MinValue = 0;
+            Common.TryGetTool(IndexThread, Index).StepValue = 0.1f;
+            Common.TryGetTool(IndexThread, Index).MinValue = 0;
           
-            Common.PropetyTools[IndexThread][Index].MaxValue = 20;
-            Common.PropetyTools[IndexThread][Index]. StatusTool = StatusTool.WaitCheck;
+            Common.TryGetTool(IndexThread, Index).MaxValue = 20;
+            Common.TryGetTool(IndexThread, Index). StatusTool = StatusTool.WaitCheck;
         }
         public float Scale = 1;
         public int IndexThread = 0;

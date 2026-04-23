@@ -23,6 +23,19 @@ namespace BeeInterface
     public partial class ToolPosition_Adjustment : UserControl
     {
         
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
         public ToolPosition_Adjustment( )
         {
             InitializeComponent();
@@ -41,9 +54,10 @@ namespace BeeInterface
             EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
 
+            this.VisibleChanged -= ToolPosition_Adjustment_VisibleChanged;
             this.VisibleChanged += ToolPosition_Adjustment_VisibleChanged;
             EditRectRot1.Refresh();
-            trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+            trackScore.Value = OwnerTool.Score;
             trackAngle.Value = (int)Propety.Angle;
             if (Propety.Angle > 360) Propety.Angle = 360;
 
@@ -132,8 +146,12 @@ namespace BeeInterface
                 btnHighSpeed.IsCLick = true;
             else
                 btnNormal.IsCLick = true;
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPosition_Adjustment_StatusToolChanged;
+            OwnerTool.StatusTool = StatusTool.WaitCheck;
+             if (OwnerTool != null)
+             {
+                 OwnerTool.StatusToolChanged -= ToolPosition_Adjustment_StatusToolChanged;
+                 OwnerTool.StatusToolChanged += ToolPosition_Adjustment_StatusToolChanged;
+             }
            
             btnAutoMean.IsCLick = Propety.AutoMean == true ? true : false;
             btnFixedMean.IsCLick = Propety.AutoMean == false ? true : false;
@@ -177,7 +195,7 @@ namespace BeeInterface
         {
             if (Global.IsRun) return;
            
-            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (OwnerTool.StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true; btnTest.IsCLick = false;
                 if (Propety.IsCalib)
@@ -396,8 +414,8 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (int)trackScore.Value;
-            //numScore.Value =Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+            OwnerTool.Score = (int)trackScore.Value;
+            //numScore.Value =OwnerTool.Score;
 
         }
 
@@ -421,13 +439,13 @@ namespace BeeInterface
         private async void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-             Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+             Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
 
 
-            //if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
+            //if (!OwnerTool.worker.IsBusy)
             //{
             //    btnTest.Enabled = false;
-            //    Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();
+            //    OwnerTool.worker.RunWorkerAsync();
 
             //}    
                
@@ -439,8 +457,8 @@ namespace BeeInterface
         private void numScore_ValueChanged(object sender, EventArgs e)
         {
 
-          //  Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (int)trackScore.Value;
-            //numScore.Value =Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+          //  OwnerTool.Score = (int)trackScore.Value;
+            //numScore.Value =OwnerTool.Score;
         }
         private void trackAngle_ValueChanged(float obj)
         {
@@ -694,8 +712,8 @@ namespace BeeInterface
         {
             btnCalib.Enabled = false;
             Propety.IsCalib= true;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            if (!Common.TryGetTool(Global.IndexToolSelected).worker.IsBusy)
+                Common.TryGetTool(Global.IndexToolSelected).worker.RunWorkerAsync();
             else
                 Propety.IsCalib = false;
         }

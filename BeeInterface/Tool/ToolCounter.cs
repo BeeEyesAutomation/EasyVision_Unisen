@@ -25,6 +25,19 @@ namespace BeeInterface
     public partial class ToolCounter : UserControl
     {
         
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
         public ToolCounter( )
         {
             InitializeComponent();
@@ -97,10 +110,10 @@ namespace BeeInterface
                 //picTemp1.Image = Propety.matTemp;
                 //picTemp2.Image = Propety.matTemp2;
 
-                trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
-                trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
-                trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
-                trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+                trackScore.Min = OwnerTool.MinValue;
+                trackScore.Max = OwnerTool.MaxValue;
+                trackScore.Step = OwnerTool.StepValue;
+                trackScore.Value = OwnerTool.Score;
                 numEpoch.Value = Propety.Epoch;
                
                 switch (Propety.Compare)
@@ -132,7 +145,11 @@ namespace BeeInterface
                         break;
 
                 }
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolYolo_StatusToolChanged;
+                 if (OwnerTool != null)
+                 {
+                     OwnerTool.StatusToolChanged -= ToolYolo_StatusToolChanged;
+                     OwnerTool.StatusToolChanged += ToolYolo_StatusToolChanged;
+                 }
                 
             }
             catch (Exception ex)
@@ -147,9 +164,8 @@ namespace BeeInterface
         private void ToolYolo_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
-            if (Propety.Index >= Common.PropetyTools[Global.IndexProgChoose].Count)
-                return;
-            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (OwnerTool == null) return;
+            if (OwnerTool.StatusTool == StatusTool.Done)
             {
                 Propety.rectTrain = Propety.rectRotates;//note
                 btnTest.Enabled = true;
@@ -159,7 +175,7 @@ namespace BeeInterface
         private void trackScore_ValueChanged(float obj)
         {
 
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (int)trackScore.Value;
+            OwnerTool.Score = (int)trackScore.Value;
           
         }
 
@@ -498,8 +514,8 @@ namespace BeeInterface
         private void btnTest_Click_1(object sender, EventArgs e)
         {
            btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            if (!Common.TryGetTool(Global.IndexToolSelected).worker.IsBusy)
+                Common.TryGetTool(Global.IndexToolSelected).worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }
@@ -1104,11 +1120,12 @@ namespace BeeInterface
 
            // boxLog.Items.Add($"{DateTime.Now:HH:mm:ss} - Start training: {Propety.PathModel}");
 
+            Propety.PercentChange -= Yolo_PercentChange;
             Propety.PercentChange += Yolo_PercentChange;
 
             try
             {
-                Propety.Training(Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Name, Propety.pathFullModel, pathYaml);
+                Propety.Training(OwnerTool.Name, Propety.pathFullModel, pathYaml);
 
             }
             catch (Exception ex)
@@ -1251,7 +1268,7 @@ namespace BeeInterface
         {
             if (MessageBox.Show("Are you sure", "Reload All Para of Label", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                String[] Content = Propety.LoadNameModel(Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Name);
+                String[] Content = Propety.LoadNameModel(OwnerTool.Name);
                 if (Content != null && Content.Length > 0)
                 {
                     Propety.labelItems = new List<LabelItem>();
@@ -1302,9 +1319,9 @@ namespace BeeInterface
         public List<PointF[]> listBoxCorners = new List<PointF[]>();
         private void btnCheck_Click(object sender, EventArgs e)
         {
-            if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
+            if (!Common.TryGetTool(Global.IndexToolSelected).worker.IsBusy)
             {
-                Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+                Common.TryGetTool(Global.IndexToolSelected).worker.RunWorkerAsync();
             }
                 
             else
@@ -1319,7 +1336,7 @@ namespace BeeInterface
 
         private void btnEnable_Click(object sender, EventArgs e)
         {
-            Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].IsSendResult = btnEnable.IsCLick;
+            Common.TryGetTool(Global.IndexToolSelected).IsSendResult = btnEnable.IsCLick;
 
         }
 
@@ -1330,12 +1347,12 @@ namespace BeeInterface
 
         private void btnBits_Click(object sender, EventArgs e)
         {
-           // Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.Bits;
+           // Common.TryGetTool(Global.IndexToolSelected).TypeSendPLC = TypeSendPLC.Bits;
         }
 
         private void btnString_Click(object sender, EventArgs e)
         {
-           // Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.String;
+           // Common.TryGetTool(Global.IndexToolSelected).TypeSendPLC = TypeSendPLC.String;
         }
     }
 }

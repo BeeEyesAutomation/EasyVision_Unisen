@@ -1,4 +1,4 @@
-﻿using BeeCore.Funtion;
+using BeeCore.Funtion;
 using BeeGlobal;
 using BeeInterface;
 using OpenCvSharp;
@@ -46,7 +46,7 @@ namespace BeeUi.Unit
             if (e.Image.Empty()) return;
             using (Mat clone = e.Image?.Clone())
             {
-                // phần Global của bạn — giữ nguyên
+                // ph?n Global c?a b?n � gi? nguy�n
                 BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = clone.Clone();
               //  Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
                 Global.Config.SizeCCD = new System.Drawing.Size(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Height);
@@ -64,7 +64,7 @@ namespace BeeUi.Unit
             {
                 this.Location = new Point(Global.EditTool.View.Width - this.Width, Global.EditTool.View.pBtn.Height + 1);
 
-               // registerImg.LoadAllItem((BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].IndexImgRegis));
+               // registerImg.LoadAllItem((BeeCore.Common.TryGetTool(Global.IndexProgChoose, Global.IndexToolSelected).IndexImgRegis));
 
             }
         }
@@ -83,7 +83,7 @@ namespace BeeUi.Unit
                         break;
                     case TriggerNum.Trigger1:
                         Global.TriggerNum = TriggerNum.Trigger2;
-                        if (BeeCore.Common.PropetyTools[1] != null)
+                        if (BeeCore.Common.TryGetToolList(1) != null)
                             Global.IndexProgChoose = 1;
                         else
                         {
@@ -97,7 +97,7 @@ namespace BeeUi.Unit
                     case TriggerNum.Trigger2:
                         Global.TriggerNum = TriggerNum.Trigger3;
 
-                        if (BeeCore.Common.PropetyTools[2] != null)
+                        if (BeeCore.Common.TryGetToolList(2) != null)
                             Global.IndexProgChoose = 2;
                         else
                         {
@@ -110,7 +110,7 @@ namespace BeeUi.Unit
                         break;
                     case TriggerNum.Trigger3:
                         Global.TriggerNum = TriggerNum.Trigger4;
-                        if (BeeCore.Common.PropetyTools[3] != null)
+                        if (BeeCore.Common.TryGetToolList(3) != null)
                             Global.IndexProgChoose = 3;
                         else
                         {

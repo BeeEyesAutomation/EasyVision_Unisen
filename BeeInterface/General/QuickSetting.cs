@@ -1,4 +1,4 @@
-﻿using BeeCore;
+using BeeCore;
 using BeeGlobal;
 using Newtonsoft.Json.Linq;
 using System;
@@ -27,10 +27,10 @@ namespace BeeInterface
 
         private void QuickSetting_Load(object sender, EventArgs e)
         {
-            if (BeeCore.Common.PropetyTools[0] != null)
-                if (BeeCore.Common.PropetyTools[0].Count > 0)
-                    if (BeeCore.Common.PropetyTools[0][0].TypeTool == TypeTool.MultiLearning)
-                        multiOnnx = BeeCore.Common.PropetyTools[0][0].Propety2 as MultiOnnx;
+            if (BeeCore.Common.TryGetToolList(0) != null)
+                if (BeeCore.Common.EnsureToolList(0).Count > 0)
+                    if (BeeCore.Common.TryGetTool(0, 0).TypeTool == TypeTool.MultiLearning)
+                        multiOnnx = BeeCore.Common.TryGetTool(0, 0).Propety2 as MultiOnnx;
                     else
                         multiOnnx = null;
                 else
@@ -120,7 +120,7 @@ namespace BeeInterface
            if(multiOnnx!=null)
             {
                 multiOnnx.AspectBox=AdjAspect.Value;
-                BeeCore.Common.PropetyTools[0][0].Propety2 = multiOnnx;
+                BeeCore.Common.TryGetTool(0, 0).Propety2 = multiOnnx;
             }    
            
         }
@@ -130,7 +130,7 @@ namespace BeeInterface
             if (multiOnnx != null)
             {
                 multiOnnx.LimitXSub = AdjLimitLeft.Value;
-                BeeCore.Common.PropetyTools[0][0].Propety2 = multiOnnx;
+                BeeCore.Common.TryGetTool(0, 0).Propety2 = multiOnnx;
             }
         }
 
@@ -139,7 +139,7 @@ namespace BeeInterface
             if (multiOnnx != null)
             {
                 multiOnnx.LimitX = AdjLimitRight.Value;
-                BeeCore.Common.PropetyTools[0][0].Propety2 = multiOnnx;
+                BeeCore.Common.TryGetTool(0, 0).Propety2 = multiOnnx;
             }
         }
 
@@ -148,7 +148,7 @@ namespace BeeInterface
             if (multiOnnx != null)
             {
                 multiOnnx.LimitY = AdjLimitY.Value;
-                BeeCore.Common.PropetyTools[0][0].Propety2 = multiOnnx;
+                BeeCore.Common.TryGetTool(0, 0).Propety2 = multiOnnx;
             }
         }
 
@@ -157,7 +157,7 @@ namespace BeeInterface
             if (multiOnnx != null)
             {
                 multiOnnx.ScoreYolo =(int) AdjScoreBlack.Value;
-                BeeCore.Common.PropetyTools[0][0].Propety2 = multiOnnx;
+                BeeCore.Common.TryGetTool(0, 0).Propety2 = multiOnnx;
             }
         }
 
@@ -166,7 +166,7 @@ namespace BeeInterface
             if (multiOnnx != null)
             {
                 multiOnnx.IsBlackDot = btnOnBlackDot.IsCLick;
-                BeeCore.Common.PropetyTools[0][0].Propety2 = multiOnnx;
+                BeeCore.Common.TryGetTool(0, 0).Propety2 = multiOnnx;
             }
           
         }
@@ -176,7 +176,7 @@ namespace BeeInterface
             if (multiOnnx != null)
             {
                 multiOnnx.IsBlackDot =!btnOffBlackDot.IsCLick;
-                BeeCore.Common.PropetyTools[0][0].Propety2 = multiOnnx;
+                BeeCore.Common.TryGetTool(0, 0).Propety2 = multiOnnx;
             }
         }
 
@@ -230,7 +230,7 @@ namespace BeeInterface
             {
                 multiOnnx.MethordEdge = MethordEdge.Binary;
                 AdjBinary.Visible = multiOnnx.MethordEdge == MethordEdge.Binary ? true : false;
-                BeeCore.Common.PropetyTools[0][0].Propety2 = multiOnnx;
+                BeeCore.Common.TryGetTool(0, 0).Propety2 = multiOnnx;
             }
         }
 
@@ -240,7 +240,7 @@ namespace BeeInterface
             {
                 multiOnnx.MethordEdge = MethordEdge.StrongEdges;
                 AdjBinary.Visible = multiOnnx.MethordEdge == MethordEdge.Binary ? true : false;
-                BeeCore.Common.PropetyTools[0][0].Propety2 = multiOnnx;
+                BeeCore.Common.TryGetTool(0, 0).Propety2 = multiOnnx;
             }
 
         }
@@ -250,7 +250,7 @@ namespace BeeInterface
             if (multiOnnx != null)
             {
                 multiOnnx.ThresholdBinary =(int) AdjBinary.Value;
-                BeeCore.Common.PropetyTools[0][0].Propety2 = multiOnnx;
+                BeeCore.Common.TryGetTool(0, 0).Propety2 = multiOnnx;
             }
         }
 
@@ -260,7 +260,7 @@ namespace BeeInterface
             {
                 multiOnnx.MethordEdge = MethordEdge.CloseEdges;
                 AdjBinary.Visible = multiOnnx.MethordEdge == MethordEdge.Binary ? true : false;
-                BeeCore.Common.PropetyTools[0][0].Propety2 = multiOnnx;
+                BeeCore.Common.TryGetTool(0, 0).Propety2 = multiOnnx;
             }
           
         }

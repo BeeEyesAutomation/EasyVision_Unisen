@@ -22,6 +22,7 @@ namespace BeeCore
         public bool IsHeight { get; set; }
         public bool IsCounter { get; set; }
         public bool IsOK = false;
+        public bool IsLabelMark { get; set; }
         //public bool IsLine { get; set; }
 
         public bool IsX { get; set; }//HAU

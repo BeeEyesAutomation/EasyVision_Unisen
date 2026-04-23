@@ -455,8 +455,8 @@ namespace BeeCore
         }
         public static void Box1Label(Graphics graphics, RectangleF baseRect, string text, Font font, Brush textBrush, Color backgroundBrush,int thiness=4, bool alignRight = false)
         {
-           
-            graphics.DrawRectangle(new Pen(backgroundBrush, thiness), new Rectangle((int)baseRect.X, (int)baseRect.Y, (int)baseRect.Width, (int)baseRect.Height));
+            using (var pen = new Pen(backgroundBrush, thiness))
+                graphics.DrawRectangle(pen, new Rectangle((int)baseRect.X, (int)baseRect.Y, (int)baseRect.Width, (int)baseRect.Height));
 
             // Đo kích thước vùng text
             SizeF textSize = graphics.MeasureString(text, font);
@@ -480,14 +480,16 @@ namespace BeeCore
             Rectangle labelRect = new Rectangle(labelX, labelY, labelWidth, labelHeight);
 
             // Vẽ nền rectangle
-            graphics.FillRectangle(new SolidBrush( backgroundBrush), labelRect);
+            using (var bgBrush = new SolidBrush(backgroundBrush))
+                graphics.FillRectangle(bgBrush, labelRect);
 
             // Vẽ text (trong rectangle, có padding)
             graphics.DrawString(text, font, textBrush, labelX + padding, labelY + padding);
         }
         public static void Box1Label(Graphics graphics, RectRotate rot, string text, Font font, Brush textBrush, Color backgroundBrush, int thiness = 4, bool alignRight = false)
         {
-            DrawRectRotate(graphics, rot, new Pen(backgroundBrush, thiness));
+            using (var pen = new Pen(backgroundBrush, thiness))
+                DrawRectRotate(graphics, rot, pen);
             
             // Đo kích thước vùng text
             SizeF textSize = graphics.MeasureString(text, font);
@@ -564,7 +566,8 @@ namespace BeeCore
 
             Rectangle rightRect = new Rectangle(rightStartX, labelY, rightWidth, labelHeight);
 
-            Color transparentColor = Color.FromArgb(opacity, baseBackColor.R, baseBackColor.G, baseBackColor.B);
+            int rightOpacity = Math.Min(255, Math.Max(0, opacity));
+            Color transparentColor = Color.FromArgb(rightOpacity, baseBackColor.R, baseBackColor.G, baseBackColor.B);
             using (SolidBrush rightBgBrush = new SolidBrush(transparentColor))
             {
                 graphics.FillRectangle(rightBgBrush, rightRect);
@@ -578,11 +581,18 @@ namespace BeeCore
         }
         public static void Box3Label(Graphics graphics, RectangleF baseRect, string leftText, string rightText, string Area , Font baseFont, Color baseBackColor, Brush textBrush, int opacity = 128, int thiness = 4,bool IsFill=false, int minFontSize = 10, int padding = 1, bool ShowArea = false)
         {
-            Color transparentColor1 = Color.FromArgb((int)(opacity * 1.1f), baseBackColor.R, baseBackColor.G, baseBackColor.B);
+            int fillOpacity = Math.Min(255, Math.Max(0, (int)(opacity * 1.1f)));
+            Color transparentColor1 = Color.FromArgb(fillOpacity, baseBackColor.R, baseBackColor.G, baseBackColor.B);
             if (IsFill)
-                graphics.FillRectangle(new SolidBrush(transparentColor1), new Rectangle((int)baseRect.X, (int)baseRect.Y, (int)baseRect.Width, (int)baseRect.Height));
+            {
+                using (var fillBrush = new SolidBrush(transparentColor1))
+                    graphics.FillRectangle(fillBrush, new Rectangle((int)baseRect.X, (int)baseRect.Y, (int)baseRect.Width, (int)baseRect.Height));
+            }
             else
-                graphics.DrawRectangle(new Pen(baseBackColor, thiness), new Rectangle((int)baseRect.X, (int)baseRect.Y, (int)baseRect.Width, (int)baseRect.Height));
+            {
+                using (var pen = new Pen(baseBackColor, thiness))
+                    graphics.DrawRectangle(pen, new Rectangle((int)baseRect.X, (int)baseRect.Y, (int)baseRect.Width, (int)baseRect.Height));
+            }
 
             float fontSize = baseFont.Size;
 
@@ -641,15 +651,92 @@ namespace BeeCore
             }
         }
 
+        public static void Box3Label(Graphics graphics, RectRotate baseRect, string leftText, string rightText, string Area, Font baseFont, Color baseBackColor, Brush textBrush, int opacity = 128, int thiness = 4, bool IsFill = false, int minFontSize = 10, int padding = 1, bool ShowArea = false)
+        {
+            int fillOpacity = Math.Min(255, Math.Max(0, (int)(opacity * 1.1f)));
+            Color transparentColor1 = Color.FromArgb(fillOpacity, baseBackColor.R, baseBackColor.G, baseBackColor.B);
+            if (IsFill)
+            {
+                using (var fillBrush = new SolidBrush(transparentColor1))
+                using (var path = BuildPathLocal(baseRect))
+                {
+                    if (path.PointCount > 0)
+                        graphics.FillPath(fillBrush, path);
+                }
+            }
+            else
+            {
+                using (var pen = new Pen(baseBackColor, thiness))
+                    DrawRectRotate(graphics, baseRect, pen);
+            }
+
+            float fontSize = baseFont.Size;
+
+            Font currentFont;
+            SizeF leftSize, rightSize;
+            int totalTextWidth;
+
+            do
+            {
+                currentFont = new Font(baseFont.FontFamily, fontSize, baseFont.Style);
+                leftSize = graphics.MeasureString(leftText, currentFont);
+                rightSize = graphics.MeasureString(rightText, currentFont);
+                totalTextWidth = (int)(leftSize.Width + rightSize.Width + 3 * padding);
+                fontSize--;
+            }
+            while (totalTextWidth > baseRect._rect.Width && fontSize >= minFontSize);
+
+            int labelHeight = (int)Math.Max(leftSize.Height, rightSize.Height) + 2 * padding;
+            int labelY = (int)baseRect._rect.Top - labelHeight;
+
+            int leftWidth = (int)leftSize.Width + 2 * padding;
+            Rectangle leftRect = new Rectangle((int)baseRect._rect.Left, labelY, leftWidth, labelHeight);
+            if (ShowArea)
+                graphics.DrawString(Area, currentFont, textBrush, baseRect._rect.X, (int)baseRect._rect.Y + (int)baseRect._rect.Height - labelHeight - 5);
+
+            using (SolidBrush leftBgBrush = new SolidBrush(baseBackColor))
+            {
+                graphics.FillRectangle(leftBgBrush, leftRect);
+                graphics.DrawString(leftText, currentFont, textBrush, leftRect.Left + padding, leftRect.Top + padding);
+            }
+
+            int rightStartX = leftRect.Right;
+            int rightEndX = (int)baseRect._rect.Right;
+            int rightWidth = rightEndX - rightStartX;
+
+            Rectangle rightRect = new Rectangle(rightStartX, labelY, rightWidth, labelHeight);
+
+            int rightOpacity = Math.Min(255, Math.Max(0, opacity));
+            Color transparentColor = Color.FromArgb(rightOpacity, baseBackColor.R, baseBackColor.G, baseBackColor.B);
+            using (SolidBrush rightBgBrush = new SolidBrush(transparentColor))
+            {
+                graphics.FillRectangle(rightBgBrush, rightRect);
+
+                float textX = rightRect.Right - rightSize.Width - padding;
+                float textY = rightRect.Top + padding;
+
+                graphics.DrawString(rightText, currentFont, textBrush, textX, textY);
+            }
+        }
+
         public static void Box2Label(Graphics graphics, RectRotate baseRect, string leftText, string rightText, Font baseFont, Color baseBackColor, Brush textBrush, int opacity = 128, int thiness = 4,bool Isfill=false, int minFontSize = 10, int padding = 1, bool ShowArea = false)
         {
-            Color transparentColor1 = Color.FromArgb((int)(opacity * 1.1f), baseBackColor.R, baseBackColor.G, baseBackColor.B);
+            int fillOpacity = Math.Min(255, Math.Max(0, (int)(opacity * 1.1f)));
+            Color transparentColor1 = Color.FromArgb(fillOpacity, baseBackColor.R, baseBackColor.G, baseBackColor.B);
             if (Isfill)
-                graphics.FillRectangle(new SolidBrush(transparentColor1), new Rectangle((int)baseRect._rect.X, (int)baseRect._rect.Y, (int)baseRect._rect.Width, (int)baseRect._rect.Height));
-
-          //  FillRectRotate(graphics, baseRect, new SolidBrush(transparentColor1));
+            {
+                using (var fillBrush = new SolidBrush(transparentColor1))
+                using (var path = BuildPathLocal(baseRect))
+                {
+                    if (path.PointCount > 0)
+                        graphics.FillPath(fillBrush, path);
+                }
+            }
             else
-                DrawRectRotate(graphics, baseRect, new Pen(baseBackColor, thiness));
+            {
+                using (var pen = new Pen(baseBackColor, thiness))
+                    DrawRectRotate(graphics, baseRect, pen);
+            }
             float fontSize = baseFont.Size;
 
             Font currentFont;
@@ -1186,6 +1273,9 @@ Pen outlinePen)
         static GraphicsPath BuildPathLocal(RectRotate rr)
         {
             var path = new GraphicsPath();
+            if (rr == null)
+                return path;
+
             switch (rr.Shape)
             {
                 case ShapeType.Rectangle:
@@ -1201,6 +1291,13 @@ Pen outlinePen)
                         // 6 đỉnh trong local-rect-space (đã gồm offsets)
                         PointF[] pts = rr.GetHexagonVerticesLocal();
                         path.AddPolygon(pts);
+                    }
+                    break;
+                case ShapeType.Polygon:
+                    {
+                        PointF[] pts = rr.GetPolygonVerticesLocal();
+                        if (pts != null && pts.Length >= 3)
+                            path.AddPolygon(pts);
                     }
                     break;
             }

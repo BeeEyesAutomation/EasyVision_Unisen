@@ -145,7 +145,7 @@ namespace BeeCore
 
             //OKNGapi = OKNGAPI.OKNG_Create();
             //// vẫn set threshold như trước:
-            //float Score = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+            //float Score = (float)(Common.TryGetTool(IndexThread, Index).Score / 100.0);
             //OKNGAPI.OKNG_SetMatchThreshold(OKNGapi, Score);
            
             oKNGHandle.SetMatchMode(1);
@@ -154,7 +154,7 @@ namespace BeeCore
             oKNGHandle.SetThreshold(0.75f); // chỉ áp dụng cho detect NG→OK (không áp dụng Nearest)
 
             // vẫn set threshold như trước:
-            float Score = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+            float Score = (float)(Common.TryGetTool(IndexThread, Index).Score / 100.0);
             OKNGAPI.OKNG_SetMatchThreshold(oKNGHandle.Handle, 0.8f);
             OKNGAPI.OKNG_RemoveAllByLabel(oKNGHandle.Handle, -1);
             OKNGAPI.OKNG_RemoveAllByLabel(oKNGHandle.Handle, +1);
@@ -231,9 +231,9 @@ namespace BeeCore
         }
         public void SaveModel()
         {
-            if (!Directory.Exists("Program\\" + Global.Project + "\\" + Common.PropetyTools[IndexThread][Index].Name))
-                Directory.CreateDirectory("Program\\" + Global.Project + "\\" + Common.PropetyTools[IndexThread][Index].Name);
-            OKNGAPI.OKNG_SaveModels(oKNGHandle.Handle, "Program\\" + Global.Project + "\\" + Common.PropetyTools[IndexThread][Index].Name+"\\data.yaml");
+            if (!Directory.Exists("Program\\" + Global.Project + "\\" + Common.TryGetTool(IndexThread, Index).Name))
+                Directory.CreateDirectory("Program\\" + Global.Project + "\\" + Common.TryGetTool(IndexThread, Index).Name);
+            OKNGAPI.OKNG_SaveModels(oKNGHandle.Handle, "Program\\" + Global.Project + "\\" + Common.TryGetTool(IndexThread, Index).Name+"\\data.yaml");
         }
         [NonSerialized]
         private bool IsLoadModel = false;
@@ -279,7 +279,7 @@ namespace BeeCore
      
         public void LoadModel()
         {
-            if (OKNGAPI.OKNG_LoadModels(oKNGHandle.Handle, "Program\\" + Global.Project + "\\" + Common.PropetyTools[IndexThread][Index].Name + "\\data.yaml") == 0)
+            if (OKNGAPI.OKNG_LoadModels(oKNGHandle.Handle, "Program\\" + Global.Project + "\\" + Common.TryGetTool(IndexThread, Index).Name + "\\data.yaml") == 0)
                 IsLoadModel = false;
             else IsLoadModel = true;
         }
@@ -301,10 +301,10 @@ namespace BeeCore
 
             rotArea.Name = "Area Check";
             rotArea.TypeCrop = TypeCrop.Area;
-            Common.PropetyTools[IndexThread][Index].StepValue = 1;
-			Common.PropetyTools[IndexThread][Index].MinValue = 0;
+            Common.TryGetTool(IndexThread, Index).StepValue = 1;
+			Common.TryGetTool(IndexThread, Index).MinValue = 0;
 
-            Common.PropetyTools[IndexThread][Index].MaxValue = 100;
+            Common.TryGetTool(IndexThread, Index).MaxValue = 100;
 
 
             oKNGHandle.SetWorkingResize(EnResize, (float)(_ScaleResize / 100.0));
@@ -336,7 +336,7 @@ namespace BeeCore
             //}
 
 
-            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+            Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
         }
         public List<RectRotate> rectRotates = new List<RectRotate>();
         public List<String> listLabel = new List<String>();
@@ -355,7 +355,7 @@ namespace BeeCore
                 listScore = new List<double>();
                 listP_Center = new List<System.Drawing.Point>(); 
                 listLabel = new List<string>();
-                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                Common.TryGetTool(IndexThread, Index).Results = Results.NG;
            //     Cv2.ImWrite("Crop.png", matCrop);
                 // Nearest 2: best OK vs best NG (bỏ ngưỡng)
                 if (OKNGAPI.BestPerLabelFromMat(oKNGHandle.Handle, matCrop,
@@ -365,8 +365,8 @@ namespace BeeCore
                     ScoreNG = (float)Math.Round(ngScore*100);
                     if (okScore>=ngScore)
                     {
-                        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-                        Common.PropetyTools[IndexThread][Index].ScoreResult =  (float)Math.Round(okScore * 100);
+                        Common.TryGetTool(IndexThread, Index).Results = Results.OK;
+                        Common.TryGetTool(IndexThread, Index).ScoreResult =  (float)Math.Round(okScore * 100);
                         rectRotates.Add(rotArea);
                         listLabel.Add("OK");
                        
@@ -374,8 +374,8 @@ namespace BeeCore
                     else
                     {
 
-                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                        Common.PropetyTools[IndexThread][Index].ScoreResult = 100 - (float)Math.Round(ngScore * 100);
+                        Common.TryGetTool(IndexThread, Index).Results = Results.NG;
+                        Common.TryGetTool(IndexThread, Index).ScoreResult = 100 - (float)Math.Round(ngScore * 100);
                         rectRotates.Add(rotArea);
                         listLabel.Add("NG");
                     }
@@ -393,7 +393,7 @@ namespace BeeCore
                 //    if (label > 0)
                 //    {
                 //        listLabel.Add("OK");
-                //        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                //        Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                 //    }
                 //    else listLabel.Add("NG");
 
@@ -455,20 +455,20 @@ namespace BeeCore
         }
         public void Complete()
         {
-            //Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+            //Common.TryGetTool(IndexThread, Index).Results = Results.OK;
             //switch (Compare)
             //{
             //    case Compares.Equal:
             //        if (rectRotates.Count() != LimitCounter)
-            //            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+            //            Common.TryGetTool(IndexThread, Index).Results = Results.NG;
             //        break;
             //    case Compares.Less:
             //        if (rectRotates.Count() >= LimitCounter)
-            //            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+            //            Common.TryGetTool(IndexThread, Index).Results = Results.NG;
             //        break;
             //    case Compares.More:
             //        if (rectRotates.Count() <= LimitCounter)
-            //            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+            //            Common.TryGetTool(IndexThread, Index).Results = Results.NG;
             //        break;
             //}
            
@@ -497,10 +497,10 @@ namespace BeeCore
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
 
-            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.NG)
+            if (Common.TryGetTool(Global.IndexProgChoose, Index).Results == Results.NG)
             {
                 cl = Color.Red;
-                //if (BeeCore.Common.PropetyTools[IndexThread][Index].UsedTool == UsedTool.Invertse &&
+                //if (BeeCore.Common.TryGetTool(IndexThread, Index).UsedTool == UsedTool.Invertse &&
                 //    G.Config.ConditionOK == ConditionOK.Logic)
                 //    cl = Color.LimeGreen;
 
@@ -509,16 +509,16 @@ namespace BeeCore
             else
             {
                 cl = Color.LimeGreen;
-                //if (BeeCore.Common.PropetyTools[IndexThread][Index].UsedTool == UsedTool.Invertse &&
+                //if (BeeCore.Common.TryGetTool(IndexThread, Index).UsedTool == UsedTool.Invertse &&
                 //    G.Config.ConditionOK == ConditionOK.Logic)
                 //    cl = Color.Red;
             }
-            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.TryGetTool(IndexThread, Index).Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
                 Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);
 
-            if (Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.OK)
+            if (Common.TryGetTool(Global.IndexProgChoose, Index).Results == Results.OK)
             {
                 ScoreOK += 10;
                 ScoreNG -= 10;

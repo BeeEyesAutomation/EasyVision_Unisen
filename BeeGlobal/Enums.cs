@@ -31,7 +31,7 @@ namespace BeeGlobal
     }
     public enum Dir
     {
-        Left,Top,Right,Bottom,None
+        Left,Top,Right,Bottom,None,Mask
     }
     public enum CornerAdj
     {

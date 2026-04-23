@@ -171,10 +171,10 @@ namespace BeeCore
             listScore = new List<float>();
             listLabelResult = new List<String>();
             Content = "";
-            Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
+            Common.TryGetTool(IndexThread, Index).ScoreResult = 0;
             if (!IsModelOK)
             {
-                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name, "Load Model Fail"));
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.TryGetTool(IndexThread, Index).Name, "Load Model Fail"));
                 return;
             }
 
@@ -221,7 +221,7 @@ namespace BeeCore
                         int limit = LimitArea * 100;
                         //if (!IsEnLimitArea)
                         limit = 0;
-                        dynamic result = G.objOCR.find_ocr((long)p, h, w, ch, stride, Common.PropetyTools[IndexThread][Index].Name, limit);//, (float)(Score / 100.0), nameTool
+                        dynamic result = G.objOCR.find_ocr((long)p, h, w, ch, stride, Common.TryGetTool(IndexThread, Index).Name, limit);//, (float)(Score / 100.0), nameTool
 
                         if (result == null) return;
                         // File.WriteAllText("ErC.txt", pyEx.Message);
@@ -303,7 +303,7 @@ namespace BeeCore
                             listOK.Add(false);
                             rectRotates.Add(rt);
                             listScore.Add(score * 100);
-                            Common.PropetyTools[IndexThread][Index].ScoreResult  += (int)(score * 100);
+                            Common.TryGetTool(IndexThread, Index).ScoreResult  += (int)(score * 100);
 
 
                         }
@@ -328,12 +328,12 @@ namespace BeeCore
                 }
                 catch (PythonException pyEx)
                 {
-                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name, pyEx.Message.ToString()));
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.TryGetTool(IndexThread, Index).Name, pyEx.Message.ToString()));
                   
                 }
                 catch (Exception ex)
                 {
-                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name, ex.Message.ToString()));
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.TryGetTool(IndexThread, Index).Name, ex.Message.ToString()));
 
                 }
                 finally
@@ -351,10 +351,10 @@ namespace BeeCore
             {
 
 
-                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                Common.TryGetTool(IndexThread, Index).Results = Results.OK;
 
 
-                Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(Common.PropetyTools[IndexThread][Index].ScoreResult / (rectRotates.Count() * 1.0));
+                Common.TryGetTool(IndexThread, Index).ScoreResult = (int)(Common.TryGetTool(IndexThread, Index).ScoreResult / (rectRotates.Count() * 1.0));
                if(IsCompareNoFixed)
                 {
                     try
@@ -363,7 +363,7 @@ namespace BeeCore
                     }
                     catch (Exception ex)
                     {
-                        Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name , ex.ToString()));
+                        Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.TryGetTool(IndexThread, Index).Name , ex.ToString()));
                     }
                    
                 }    
@@ -372,25 +372,25 @@ namespace BeeCore
                     Content += label;
       
                 
-                if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
+                if (Common.TryGetTool(IndexThread, Index).ScoreResult < 0) Common.TryGetTool(IndexThread, Index).ScoreResult = 0;
                 if (Content != "")
                 {
                     if (Matching == "")
-                        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                        Common.TryGetTool(IndexThread, Index).Results = Results.OK;
                     else
                         if (Matching == Content)
                     {
 
-                        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                        Common.TryGetTool(IndexThread, Index).Results = Results.OK;
                     }
                     else
-                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                        Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                     //  listContent = CompareStrings(listMatching, listContent);
 
                 }
                 else
                 {
-                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                 }
               
                
@@ -398,7 +398,7 @@ namespace BeeCore
             }
             catch (Exception ex)
             {
-                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name, ex.Message.ToString()));
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.TryGetTool(IndexThread, Index).Name, ex.Message.ToString()));
 
             }
         }
@@ -447,7 +447,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[Global.IndexProgChoose][Index].Results)
+            switch (Common.TryGetTool(Global.IndexProgChoose, Index).Results)
             {
                 case Results.OK:
                     cl = Global.ParaShow.ColorOK;
@@ -457,7 +457,7 @@ namespace BeeCore
                     break;
             }
             Pen pen = new Pen(cl, Global.ParaShow.ThicknessLine);
-            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.TryGetTool(IndexThread, Index).Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             Draws.Box1Label(gc, rotA, nameTool, font, new SolidBrush(Global.ParaShow.TextColor), cl, Global.ParaShow.ThicknessLine);
             gc.ResetTransform();
@@ -515,9 +515,9 @@ namespace BeeCore
             rotArea.Name = "Area Check";
             rotArea.TypeCrop = TypeCrop.Area;
             //if (rotMask == null) rotMask = new RectRotate();
-            Common.PropetyTools[IndexThread][Index].StepValue = 1;
-                Common.PropetyTools[IndexThread][Index].MinValue = 0;
-                Common.PropetyTools[IndexThread][Index].MaxValue = 100;
+            Common.TryGetTool(IndexThread, Index).StepValue = 1;
+                Common.TryGetTool(IndexThread, Index).MinValue = 0;
+                Common.TryGetTool(IndexThread, Index).MaxValue = 100;
             if (sAllow == "")
                 sAllow = "ABCDEFJKLMNOPQSTUWXYZabcdefghijklmnopqstuwxyz0123456789,.;'\"?/\"<>@#!$%^&*()_-+={}[]|\\~`";
             if (!IsAllChar)
@@ -525,7 +525,7 @@ namespace BeeCore
          
            // if(!IsNew2)
            SetModelOCR();
-            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+            Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
             return true;
         }
         public bool SetModelOCR()
@@ -539,7 +539,7 @@ namespace BeeCore
 
                 try
                 {
-                    G.objOCR.initialize_ocr(Common.PropetyTools[IndexThread][Index].Name);
+                    G.objOCR.initialize_ocr(Common.TryGetTool(IndexThread, Index).Name);
                     Global.IsInitialOCR = true;
                     IsModelOK = true;
                     Isini2 = true;
@@ -548,7 +548,7 @@ namespace BeeCore
                 {
                     IsModelOK = false;
                     Global.IsInitialOCR = false;
-                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name, pyEx.Message.ToString()));
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.TryGetTool(IndexThread, Index).Name, pyEx.Message.ToString()));
 
                 
                 }
@@ -556,7 +556,7 @@ namespace BeeCore
                 {
                     IsModelOK = false;
                     Global.IsInitialOCR = false;
-                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name, ex.Message.ToString()));
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.TryGetTool(IndexThread, Index).Name, ex.Message.ToString()));
 
                 }
 

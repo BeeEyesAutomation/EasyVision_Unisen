@@ -25,13 +25,26 @@ namespace BeeInterface
     [Serializable()]
     public partial class ToolCrop : UserControl
     {
-        
+
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
         public ToolCrop( )
         {
             InitializeComponent();
-         
+
         }
-        
+
 
         public void LoadPara()
         {
@@ -39,22 +52,30 @@ namespace BeeInterface
 
             txtFolder.Text = Propety.PathSaveImage;
 
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-         
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
+            OwnerTool.StatusTool = StatusTool.WaitCheck;
+
+             if (OwnerTool != null)
+
+             {
+
+                 OwnerTool.StatusToolChanged -= ToolPattern_StatusToolChanged;
+
+                 OwnerTool.StatusToolChanged += ToolPattern_StatusToolChanged;
+
+             }
         }
 
         private void ToolPattern_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
-            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (OwnerTool.StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true;
                 imgTemp.Image = Propety.matProcess.ToBitmap();
             }
         }
 
-     
+
 
         public Crop Propety { get; set; }
 
@@ -67,8 +88,8 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.IsBusy)
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].worker.RunWorkerAsync();
+            if (!OwnerTool.worker.IsBusy)
+                OwnerTool.worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }
@@ -85,7 +106,7 @@ namespace BeeInterface
             Propety.TypeCrop = Global.TypeCrop;
 
             Global.StatusDraw = StatusDraw.Check;
-          
+
         }
 
         private void btnCropHalt_Click(object sender, EventArgs e)
@@ -103,7 +124,7 @@ namespace BeeInterface
                 Propety.PathSaveImage = folderBrowser.SelectedPath;
                 txtFolder.Text = Propety.PathSaveImage;
             }
-          
+
         }
     }
 }

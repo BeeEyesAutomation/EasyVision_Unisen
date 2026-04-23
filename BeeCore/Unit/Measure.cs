@@ -34,10 +34,10 @@ namespace BeeCore
             rotMask = null;
             rotCrop = null;
             rotArea = null;
-            Common.PropetyTools[IndexThread][Index].StepValue = 0.1f;
-            Common.PropetyTools[IndexThread][Index].MinValue = 0;
-            Common.PropetyTools[IndexThread][Index].MaxValue = 45;
-            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+            Common.TryGetTool(IndexThread, Index).StepValue = 0.1f;
+            Common.TryGetTool(IndexThread, Index).MinValue = 0;
+            Common.TryGetTool(IndexThread, Index).MaxValue = 45;
+            Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
             if (listRot == null)
             {
                 listRot = new List<RectRotate> { new RectRotate(), new RectRotate(), new RectRotate(), new RectRotate() };
@@ -97,15 +97,18 @@ namespace BeeCore
       private bool IsDone1=false,  IsDone2 = false,  IsDone3 = false,  IsDone4 = false;
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
-        X: Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.OK;
+        X: Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.OK;
+
+            var tools = BeeCore.Common.TryGetToolList(IndexThread);
+            if (tools == null) return;
           
-          PropetyTool PropetyTool1 = BeeCore.Common.PropetyTools[IndexThread][BeeCore.Common.PropetyTools[IndexThread].FindIndex(a => a.Name == listPointChoose[0].Item1)];
-            PropetyTool PropetyTool2 = BeeCore.Common.PropetyTools[IndexThread][BeeCore.Common.PropetyTools[IndexThread].FindIndex(a => a.Name == listPointChoose[1].Item1)];
+          PropetyTool PropetyTool1 = BeeCore.Common.TryGetTool(IndexThread, tools.FindIndex(a => a.Name == listPointChoose[0].Item1));
+            PropetyTool PropetyTool2 = BeeCore.Common.TryGetTool(IndexThread, tools.FindIndex(a => a.Name == listPointChoose[1].Item1));
             PropetyTool PropetyTool3 = null, PropetyTool4 = null;
             if (TypeMeasure == TypeMeasure.Angle)
             {
-                PropetyTool3 = BeeCore.Common.PropetyTools[IndexThread][BeeCore.Common.PropetyTools[IndexThread].FindIndex(a => a.Name == listPointChoose[2].Item1)];
-                PropetyTool4 = BeeCore.Common.PropetyTools[IndexThread][BeeCore.Common.PropetyTools[IndexThread].FindIndex(a => a.Name == listPointChoose[3].Item1)];
+                PropetyTool3 = BeeCore.Common.TryGetTool(IndexThread, tools.FindIndex(a => a.Name == listPointChoose[2].Item1));
+                PropetyTool4 = BeeCore.Common.TryGetTool(IndexThread, tools.FindIndex(a => a.Name == listPointChoose[3].Item1));
 
 
             }
@@ -124,11 +127,11 @@ namespace BeeCore
                     }
 
                     else
-                        Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
+                        Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.NG;
                 }
                 else
                 {
-                    Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
+                    Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.NG;
                 }
 
 
@@ -148,11 +151,11 @@ namespace BeeCore
                     }
 
                     else
-                        Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
+                        Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.NG;
                 }
                 else
                 {
-                    Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG; 
+                    Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.NG; 
                 }
             }
             if (TypeMeasure == TypeMeasure.PointToPoint)
@@ -176,11 +179,11 @@ namespace BeeCore
                         }
 
                         else
-                            Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
+                            Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.NG;
                     }
                     else
                     {
-                        Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
+                        Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.NG;
                     }
 
                 }
@@ -220,11 +223,11 @@ namespace BeeCore
                             }
 
                             else
-                                Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
+                                Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.NG;
                         }
                         else
                         {
-                            Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
+                            Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.NG;
                         }
                     }
                     catch (Exception ex)
@@ -241,13 +244,13 @@ namespace BeeCore
         private   PointF pCenter1, pCenter2, pCenter3, pCenter4, pIntersection;
         public async Task SendResult()
         {
-            if (Common.PropetyTools[IndexThread][Index].IsSendResult)
+            if (Common.TryGetTool(IndexThread, Index).IsSendResult)
             {
                 if (Global.Comunication.Protocol.IsConnected)
                 {
                     if (TypeMeasure == TypeMeasure.Angle)
                     {
-                      //  await Global.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, (float)AngleDetect);
+                      //  await Global.Comunication.Protocol.WriteResultFloat(Common.TryGetTool(IndexThread, Index).AddPLC, (float)AngleDetect);
                     }
                 }
             }
@@ -263,8 +266,8 @@ namespace BeeCore
                         IsDone2 = false;
                         IsDone3 = false;
                         IsDone4 = false;
-                    Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = 0;
-                        if ( Common.PropetyTools[Global.IndexProgChoose][Index].Results == Results.OK)
+                    Common.TryGetTool(Global.IndexProgChoose, Index).ScoreResult = 0;
+                        if ( Common.TryGetTool(Global.IndexProgChoose, Index).Results == Results.OK)
                         {
                             pCenter1 = listLine1Point[0];
                             pCenter2 = listLine1Point[1];
@@ -274,10 +277,10 @@ namespace BeeCore
                             AngleDetect = Cal.GetAngleBetweenSegments(pCenter1, pCenter2, pCenter3, pCenter4);
                             // AngleDetect = Cal.Finddistasnce(listLine1Point[0], listLine1Point[1]) / Scale;
                             AngleDetect = Math.Round(AngleDetect, 1);
-                            Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = (float)AngleDetect;
-                            if (Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult <= Common.PropetyTools[Global.IndexProgChoose][Index].Score)
-                                Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.OK;
-                            else Common.PropetyTools[Global.IndexProgChoose][Index].Results = Results.NG;
+                            Common.TryGetTool(Global.IndexProgChoose, Index).ScoreResult = (float)AngleDetect;
+                            if (Common.TryGetTool(Global.IndexProgChoose, Index).ScoreResult <= Common.TryGetTool(Global.IndexProgChoose, Index).Score)
+                                Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.OK;
+                            else Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.NG;
                         }
                        
                  
@@ -321,9 +324,9 @@ namespace BeeCore
                                 break;
                         }
                         AngleDetect = Math.Round(AngleDetect, 2);
-                        Common.PropetyTools[Global.IndexProgChoose][Index].ScoreResult = (float)AngleDetect;
+                        Common.TryGetTool(Global.IndexProgChoose, Index).ScoreResult = (float)AngleDetect;
                        
-                    //if (ScoreRs <= Common.PropetyTools[Global.IndexProgChoose][Index].Score)
+                    //if (ScoreRs <= Common.TryGetTool(Global.IndexProgChoose, Index).Score)
                         //    IsOK = true;
                         //else IsOK = false;
 
@@ -367,7 +370,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[Global.IndexProgChoose][Index].Results)
+            switch (Common.TryGetTool(Global.IndexProgChoose, Index).Results)
             {
                 case Results.OK:
                     cl = Global.ParaShow.ColorOK;

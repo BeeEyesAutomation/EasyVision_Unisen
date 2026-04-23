@@ -1,4 +1,4 @@
-﻿using BeeCore;
+using BeeCore;
 using BeeGlobal;
 
 using OpenCvSharp;
@@ -69,7 +69,7 @@ namespace BeeInterface
 
             //}
             pItemsRs.Controls.Clear();
-            foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexProgChoose])
+            foreach (PropetyTool propetyTool in BeeCore.Common.EnsureToolList(Global.IndexProgChoose))
             {
                 ItemRS itemRs = new ItemRS();
                 ItemLogic itemLogic = new ItemLogic();

@@ -41,6 +41,19 @@ namespace BeeInterface
     public partial class ToolYolo : UserControl
     {
         
+        #region OwnerTool cache (Phase 2 refactor)
+        private PropetyTool _ownerTool;
+        private PropetyTool OwnerTool
+        {
+            get
+            {
+                if (_ownerTool == null)
+                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
+                return _ownerTool;
+            }
+        }
+        private void InvalidateOwnerToolCache() => _ownerTool = null;
+        #endregion
         public ToolYolo( )
         {
             InitializeComponent();
@@ -77,6 +90,8 @@ namespace BeeInterface
                 EditRectRot1.ClearAllEvent += EditRectRot1_ClearAllEvent;
                 EditRectRot1.UnoRotEvent -= EditRectRot1_UnoRotEvent;
                 EditRectRot1.UnoRotEvent += EditRectRot1_UnoRotEvent;
+                EditRectRot1.DeleteEvent -= EditRectRot1_DeleteEvent;
+                EditRectRot1.DeleteEvent += EditRectRot1_DeleteEvent;
                 EditRectRot1.AddRotEvent -= EditRectRot1_AddRotEvent;
                 EditRectRot1.AddRotEvent += EditRectRot1_AddRotEvent;
                 Global.ChooseRotChage -= Global_ChooseRotChage1;
@@ -101,6 +116,7 @@ namespace BeeInterface
                 this.dashboardLabel.ExternColorCharge += new System.Action<int>(this.dashboardLabel_ExternColorCharge);
                 EditRectRot1.IsHide = false;
                 txtAddPLC.Text = Propety.AddPLC;
+                this.VisibleChanged -= ToolYolo_VisibleChanged;
                 this.VisibleChanged += ToolYolo_VisibleChanged;
                 btnCLAll.IsCLick = Propety.IsColorAllObjLabel;
                 btnClOne.IsCLick=!Propety.IsColorAllObjLabel;
@@ -108,6 +124,8 @@ namespace BeeInterface
                 btnNone.IsCLick = Global.Dir == Dir.None ? true : false;
                 btnLeft.IsCLick = Global.Dir == Dir.Left ? true : false;
                 btnRight.IsCLick = Global.Dir == Dir.Right ? true : false;
+                if (btnMaskDir != null)
+                    btnMaskDir.IsCLick = Global.Dir == Dir.Mask ? true : false;
                 Global.SetColorChange -= Global_SetColorChange;
                 Global.SetColorChange += Global_SetColorChange;
                 btnNoCropMask.IsCLick = !Propety.IsCropSingle;
@@ -201,10 +219,10 @@ namespace BeeInterface
 
 
 
-                trackScore.Min = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MinValue;
-                trackScore.Max = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].MaxValue;
-                trackScore.Step = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StepValue;
-                trackScore.Value = Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score;
+                trackScore.Min = OwnerTool.MinValue;
+                trackScore.Max = OwnerTool.MaxValue;
+                trackScore.Step = OwnerTool.StepValue;
+                trackScore.Value = OwnerTool.Score;
                 numEpoch.Value = Propety.Epoch;
                btnMergeBox.IsCLick=Propety.FilterBox==FilterBox.Merge?true:false;
                 btnRemoveBox.IsCLick = Propety.FilterBox == FilterBox.Remove ? true : false;
@@ -243,7 +261,11 @@ namespace BeeInterface
                         break;
 
                 }
-                Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusToolChanged += ToolYolo_StatusToolChanged;
+                 if (OwnerTool != null)
+                 {
+                     OwnerTool.StatusToolChanged -= ToolYolo_StatusToolChanged;
+                     OwnerTool.StatusToolChanged += ToolYolo_StatusToolChanged;
+                 }
                 
             }
             catch (Exception ex)
@@ -262,7 +284,7 @@ namespace BeeInterface
             if (obj < 0) return;
            
                 Propety.IndexProgChoose = obj;
-                List<RectRotate> ListScan=new List<RectRotate>();
+                List<RectRotate> ListScan = null;
                 switch (EditRectRot1.rotCurrent.TypeCrop)
                 {
                     case TypeCrop.Limit:
@@ -272,8 +294,7 @@ namespace BeeInterface
                         ListScan = Propety.ListRotMask;
                         break;
                 }
-            if (obj >= ListScan.Count()) return;
-            if (obj >= Propety.listRotScan.Count()) return;
+            if (ListScan == null || obj >= ListScan.Count()) return;
             if (Propety.ModeCheck == ModeCheck.Single)
             {
                 int i = 0;
@@ -311,7 +332,7 @@ namespace BeeInterface
                 {
                     rotMul.Dir = Global.Dir;
                     rotMul._dragAnchor = AnchorPoint.Center;
-                    rotMul.Name = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2.NameChoose;
+                    rotMul.Name = Common.TryGetTool(Global.IndexToolSelected).Propety2.NameChoose;
                 }
                 Global.StatusDraw = StatusDraw.None;
                 Global.StatusDraw = StatusDraw.Scan;
@@ -321,6 +342,7 @@ namespace BeeInterface
             {
 
                 RectRotate rot = Propety.listRotScan[obj];
+                if (Propety.labelItems != null)
                 foreach (LabelItem labelItem in Propety.labelItems)
                 {
                     int index = 0;
@@ -337,9 +359,9 @@ namespace BeeInterface
 
                 }
             }
-            if (IsChooseAreaLabel)
+            if (IsChooseAreaLabel && _currentLabel != null)
             {
-                RectRotate rotEdit = ListScan[Global.IndexRotChoose];
+                RectRotate rotEdit = ListScan[obj];
 
                 if (_currentLabel.ListInsideBox == null)
                     _currentLabel.ListInsideBox = new List<RectRotate>();
@@ -422,6 +444,46 @@ namespace BeeInterface
           
         }
 
+        private void EditRectRot1_DeleteEvent(bool obj)
+        {
+            List<RectRotate> listScan = null;
+            switch (EditRectRot1.rotCurrent.TypeCrop)
+            {
+                case TypeCrop.Limit:
+                    listScan = Propety.listRotScan;
+                    break;
+                case TypeCrop.Mask:
+                    listScan = Propety.ListRotMask;
+                    break;
+            }
+
+            if (listScan == null || listScan.Count == 0)
+                return;
+
+            int deleteIndex = Global.IndexRotChoose;
+            if (deleteIndex < 0 || deleteIndex >= listScan.Count)
+                deleteIndex = listScan.FindIndex(a => a != null && a._dragAnchor == AnchorPoint.Center);
+            if (deleteIndex < 0 || deleteIndex >= listScan.Count)
+                return;
+
+            RectRotate deletedRot = listScan[deleteIndex];
+            listScan.RemoveAt(deleteIndex);
+            if (EditRectRot1.rotCurrent.TypeCrop == TypeCrop.Limit && Propety.labelItems != null)
+            {
+                foreach (LabelItem lb in Propety.labelItems)
+                {
+                    if (lb.ListInsideBox == null)
+                        continue;
+                    lb.ListInsideBox.RemoveAll(a => ReferenceEquals(a, deletedRot));
+                }
+            }
+
+            Global.IndexRotChoose = -1;
+            Global.StatusDraw = StatusDraw.None;
+            Global.StatusDraw = StatusDraw.Edit;
+            Global.EditTool.View.imgView.Invalidate();
+        }
+
         private void EditRectRot1_ClearAllEvent(bool obj)
         {
             List<RectRotate> ListScan = new List<RectRotate>();
@@ -450,8 +512,9 @@ namespace BeeInterface
         }
 
         private void EditRectRot1_ChooseEditEnd(int obj)
-        {if (obj == -1) return;
-            List<RectRotate> ListScan = new List<RectRotate>();
+        {
+            if (obj == -1) return;
+            List<RectRotate> ListScan = null;
             switch (EditRectRot1.rotCurrent.TypeCrop)
             {
                 case TypeCrop.Limit:
@@ -461,44 +524,38 @@ namespace BeeInterface
                     ListScan = Propety.ListRotMask;
                     break;
             }
+            if (ListScan == null || obj < 0 || obj >= ListScan.Count)
+                return;
+
             if (EditRectRot1.rotCurrent != null)
             {
-                Dir Dir= ListScan[obj].Dir;
-                EditRectRot1.rotCurrent.Dir = Dir;
+                RectRotate oldRot = ListScan[obj];
+                Dir dir = oldRot != null ? oldRot.Dir : EditRectRot1.rotCurrent.Dir;
+                string name = oldRot != null ? oldRot.Name : EditRectRot1.rotCurrent.Name;
                 RectRotate rot = EditRectRot1.rotCurrent.Clone();
+                rot.Dir = dir;
+                rot.Name = name;
 
                 PointF pCenter = Propety.rotArea.WorldToLocal(rot._PosCenter);
                 rot._PosCenter = pCenter;
-                if(obj < ListScan.Count())
+                ListScan[obj] = rot;
+                if (EditRectRot1.rotCurrent.TypeCrop == TypeCrop.Limit && Propety.labelItems != null)
                 {
-                    ListScan[obj] = rot;
-                    if (EditRectRot1.rotCurrent.TypeCrop == TypeCrop.Limit)
+                    foreach (LabelItem labelItem in Propety.labelItems)
                     {
-                        foreach (LabelItem labelItem in Propety.labelItems)
-                        {
-                            int index = 0;
-                            if (labelItem.ListInsideBox != null)
-                            {
-                                index = labelItem.ListInsideBox.FindIndex(a => a.Name == rot.Name);
-                                if (index >= 0)
-                                {
-                                    labelItem.ListInsideBox[IndxOld] = ListScan[obj];
-                                    break;
-                                }
-                            }
+                        if (labelItem.ListInsideBox == null)
+                            continue;
 
+                        for (int i = 0; i < labelItem.ListInsideBox.Count; i++)
+                        {
+                            if (ReferenceEquals(labelItem.ListInsideBox[i], oldRot))
+                            {
+                                labelItem.ListInsideBox[i] = rot;
+                                break;
+                            }
                         }
                     }
-                    //foreach (RectRotate rot1 in Propety.listRotScan)
-                    //{
-                    //    rot1.Name = "";
-                    //}
-
-
-                }    
-              
-                
-
+                }
             }
 
         }
@@ -534,6 +591,10 @@ namespace BeeInterface
                 EditRectRot1.IsHide = true;
                 EditRectRot1.ChooseEditBegin -= EditRectRot1_ChooseEditBegin;
                 EditRectRot1.ChooseEditEnd -= EditRectRot1_ChooseEditEnd;
+                EditRectRot1.ClearAllEvent -= EditRectRot1_ClearAllEvent;
+                EditRectRot1.UnoRotEvent -= EditRectRot1_UnoRotEvent;
+                EditRectRot1.DeleteEvent -= EditRectRot1_DeleteEvent;
+                EditRectRot1.AddRotEvent -= EditRectRot1_AddRotEvent;
                 EditRectRot1.RotateCurentChanged -= EditRectRot_RotateCurentChanged;
             } 
                 
@@ -597,9 +658,8 @@ namespace BeeInterface
         private void ToolYolo_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
-            if (Propety.Index >= Common.PropetyTools[Global.IndexProgChoose].Count)
-                return;
-            if (Common.PropetyTools[Global.IndexProgChoose][Propety.Index].StatusTool == StatusTool.Done)
+            if (OwnerTool == null) return;
+            if (OwnerTool.StatusTool == StatusTool.Done)
             {
                 Propety.rectTrain = Propety.rectRotates;//note
                 btnTest.Enabled = true;
@@ -609,7 +669,7 @@ namespace BeeInterface
         private void trackScore_ValueChanged(float obj)
         {
 
-            Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Score = (int)trackScore.Value;
+            OwnerTool.Score = (int)trackScore.Value;
           
         }
 
@@ -943,10 +1003,10 @@ namespace BeeInterface
         private async void btnTest_Click_1(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-             Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+             Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
           
-            //if (!Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.IsBusy)
-            //    Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            //if (!Common.TryGetTool(Global.IndexToolSelected).worker.IsBusy)
+            //    Common.TryGetTool(Global.IndexToolSelected).worker.RunWorkerAsync();
             //else
             //    btnTest.IsCLick = false;
         }
@@ -1670,11 +1730,12 @@ namespace BeeInterface
 
            // boxLog.Items.Add($"{DateTime.Now:HH:mm:ss} - Start training: {Propety.PathModel}");
 
+            Propety.PercentChange -= Yolo_PercentChange;
             Propety.PercentChange += Yolo_PercentChange;
 
             try
             {
-                Propety.Training(Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Name, Propety.pathFullModel, pathYaml);
+                Propety.Training(OwnerTool.Name, Propety.pathFullModel, pathYaml);
 
             }
             catch (Exception ex)
@@ -1855,7 +1916,7 @@ namespace BeeInterface
             if (MessageBox.Show("Are you sure", "Reload All Para of Label", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                
-                String[] Content = Propety.LoadNameModel(Common.PropetyTools[Global.IndexProgChoose][Propety.Index].Name);
+                String[] Content = Propety.LoadNameModel(OwnerTool.Name);
                 if (Content != null && Content.Length > 0)
                 {
                     Propety.labelItems = new List<LabelItem>();
@@ -1906,7 +1967,7 @@ namespace BeeInterface
         {
            
             btnTest.Enabled = false;
-             Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].RunToolAsync();
+             Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
 
         }
 
@@ -1930,13 +1991,13 @@ namespace BeeInterface
         {
             Propety.TypeSendPLC = TypeSendPLC.Bits;
 
-           // Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.Bits;
+           // Common.TryGetTool(Global.IndexToolSelected).TypeSendPLC = TypeSendPLC.Bits;
         }
 
         private void btnString_Click(object sender, EventArgs e)
         {
             Propety.TypeSendPLC = TypeSendPLC.String;
-            // Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.String;
+            // Common.TryGetTool(Global.IndexToolSelected).TypeSendPLC = TypeSendPLC.String;
         }
 
         private void btnMergeBox_Click(object sender, EventArgs e)
@@ -2057,7 +2118,7 @@ namespace BeeInterface
         private void NewShape(ShapeType newShape,int W=0,int H=0)
         {
             // 1) Chốt shape hiện tại
-            var prop = BeeCore.Common.PropetyTools[Global.IndexProgChoose][Global.IndexToolSelected].Propety2;
+            var prop = Common.TryGetTool(Global.IndexToolSelected).Propety2;
             RectRotate rr = null;
             //if (Global.TypeCrop == TypeCrop.Area) rr = prop?.rotArea;
             //else if (Global.TypeCrop == TypeCrop.Mask) rr = prop?.rotMask;
@@ -2572,11 +2633,28 @@ namespace BeeInterface
         private void btnLeft_Click(object sender, EventArgs e)
         {
             Global.Dir = Dir.Left;
+            RefreshDirButtons();
         }
 
         private void btnRight_Click(object sender, EventArgs e)
         {
             Global.Dir = Dir.Right;
+            RefreshDirButtons();
+        }
+
+        private void btnMaskDir_Click(object sender, EventArgs e)
+        {
+            Global.Dir = Dir.Mask;
+            RefreshDirButtons();
+        }
+
+        private void RefreshDirButtons()
+        {
+            btnNone.IsCLick = Global.Dir == Dir.None;
+            btnLeft.IsCLick = Global.Dir == Dir.Left;
+            btnRight.IsCLick = Global.Dir == Dir.Right;
+            if (btnMaskDir != null)
+                btnMaskDir.IsCLick = Global.Dir == Dir.Mask;
         }
 
         private void label17_Click(object sender, EventArgs e)
@@ -2587,6 +2665,7 @@ namespace BeeInterface
         private void btnNone_Click(object sender, EventArgs e)
         {
             Global.Dir=Dir.None;
+            RefreshDirButtons();
         }
 
         private void btnCLAll_Click(object sender, EventArgs e)

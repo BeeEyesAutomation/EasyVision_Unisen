@@ -213,7 +213,7 @@ namespace BeeCore
                 TempCountCrest = PitchResult.Crests.Length;
                 TempCountRoot = PitchResult.Roots.Length;
             }
-            Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+            Common.TryGetTool(IndexThread, Index).Results = Results.OK;
             IsNGCrestPitch = false; IsNGCrestHeight = false; IsNGRootPitch = false; IsNGRootHeight = false; IsNGCountCrest = false; IsNGCountRoot = false; 
             if (IsEnCrestCounter)
             {
@@ -222,7 +222,7 @@ namespace BeeCore
                     case Compares.Equal:
                         if(PitchResult.Crests.Length!=NumCrestCouter)
                         {
-                            IsNGCountCrest = true; Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                            IsNGCountCrest = true; Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                         }
                            
                         break;
@@ -230,7 +230,7 @@ namespace BeeCore
                        
                         if (PitchResult.Crests.Length >= NumCrestCouter)
                         {
-                            IsNGCountCrest = true; Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                            IsNGCountCrest = true; Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                         }
                       
                         break;
@@ -238,7 +238,7 @@ namespace BeeCore
                        
                         if (PitchResult.Crests.Length <= NumCrestCouter)
                         {
-                            IsNGCountCrest = true; Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                            IsNGCountCrest = true; Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                         }
                        
                         break;
@@ -251,21 +251,21 @@ namespace BeeCore
                     case Compares.Equal:
                         if (PitchResult.Roots.Length != NumRootCouter)
                         {
-                            IsNGCountRoot = true; Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                            IsNGCountRoot = true; Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                         }
                            
                         break;
                     case Compares.Less:
                         if (PitchResult.Roots.Length >= NumRootCouter)
                         {
-                            IsNGCountRoot = true; Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                            IsNGCountRoot = true; Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                         }
                            
                         break;
                     case Compares.More:
                         if (PitchResult.Roots.Length <= NumRootCouter)
                         {
-                            IsNGCountRoot = true; Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                            IsNGCountRoot = true; Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                         }
                        
                         break;
@@ -275,26 +275,26 @@ namespace BeeCore
              CurPitchRoot = (float)(Values == Values.Mean ? PitchResult.PitchRootMeanMM : (Values == Values.Median ? PitchResult.PitchRootMedianMM : (Values == Values.Min ? PitchResult.PitchRootMinMM : PitchResult.PitchRootMaxMM)));
              CurHeightCrest = (float)(Values == Values.Mean ? PitchResult.CrestHMeanMM : (Values == Values.Median ? PitchResult.CrestHMedianMM : (Values == Values.Min ? PitchResult.CrestHMinMM : PitchResult.CrestHMaxMM)));
              CurHeightRoot = (float)(Values == Values.Mean ? PitchResult.RootHMeanMM : (Values == Values.Median ? PitchResult.RootHMedianMM : (Values == Values.Min ? PitchResult.RootHMinMM : PitchResult.RootHMaxMM)));
-            Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
+            Common.TryGetTool(IndexThread, Index).ScoreResult = 0;
             float value=0;
             if (IsEnCrestPitch)
             {
                 value = (Math.Abs(TempPitchCrest - CurPitchCrest) / TempPitchCrest) * 100;
-                if (value > Common.PropetyTools[IndexThread][Index].ScoreResult) Common.PropetyTools[IndexThread][Index].ScoreResult = value;
-                if (Common.PropetyTools[IndexThread][Index].ScoreResult > Common.PropetyTools[IndexThread][Index].Score)
+                if (value > Common.TryGetTool(IndexThread, Index).ScoreResult) Common.TryGetTool(IndexThread, Index).ScoreResult = value;
+                if (Common.TryGetTool(IndexThread, Index).ScoreResult > Common.TryGetTool(IndexThread, Index).Score)
                 {
-                    IsNGCrestPitch = true; Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    IsNGCrestPitch = true; Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                 }
               
             }
             if (IsEnRootPitch)
             {
                 value = (Math.Abs(TempPitchRoot - CurPitchRoot) / TempPitchRoot) * 100;
-                if (value > Common.PropetyTools[IndexThread][Index].ScoreResult) Common.PropetyTools[IndexThread][Index].ScoreResult = value;
+                if (value > Common.TryGetTool(IndexThread, Index).ScoreResult) Common.TryGetTool(IndexThread, Index).ScoreResult = value;
 
-                if (Common.PropetyTools[IndexThread][Index].ScoreResult > Common.PropetyTools[IndexThread][Index].Score) 
+                if (Common.TryGetTool(IndexThread, Index).ScoreResult > Common.TryGetTool(IndexThread, Index).Score) 
                 {
-                    IsNGRootPitch = true; Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    IsNGRootPitch = true; Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                 }
                 
             }
@@ -302,11 +302,11 @@ namespace BeeCore
             if (IsEnRootHeight)
             {
                value= (Math.Abs(TempHeightRoot - CurHeightRoot) / TempHeightRoot) * 100;
-                if (value > Common.PropetyTools[IndexThread][Index].ScoreResult) Common.PropetyTools[IndexThread][Index].ScoreResult = value;
+                if (value > Common.TryGetTool(IndexThread, Index).ScoreResult) Common.TryGetTool(IndexThread, Index).ScoreResult = value;
 
-                if (Common.PropetyTools[IndexThread][Index].ScoreResult >Common.PropetyTools[IndexThread][Index].Score) 
+                if (Common.TryGetTool(IndexThread, Index).ScoreResult >Common.TryGetTool(IndexThread, Index).Score) 
                 {
-                    IsNGRootHeight = true; Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    IsNGRootHeight = true; Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                 }
                
             }
@@ -314,12 +314,12 @@ namespace BeeCore
             if (IsEnCrestHeight)
             {
                 value = (Math.Abs(TempHeightCrest - CurHeightCrest) / TempHeightCrest) * 100;
-                if (value > Common.PropetyTools[IndexThread][Index].ScoreResult)
-                    Common.PropetyTools[IndexThread][Index].ScoreResult = value;
+                if (value > Common.TryGetTool(IndexThread, Index).ScoreResult)
+                    Common.TryGetTool(IndexThread, Index).ScoreResult = value;
 
-                if (Common.PropetyTools[IndexThread][Index].ScoreResult > Common.PropetyTools[IndexThread][Index].Score)
+                if (Common.TryGetTool(IndexThread, Index).ScoreResult > Common.TryGetTool(IndexThread, Index).Score)
                 {
-                    IsNGCrestHeight = true; Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    IsNGCrestHeight = true; Common.TryGetTool(IndexThread, Index).Results = Results.NG;
                 }
                
             }
@@ -328,11 +328,11 @@ namespace BeeCore
         }
         public async Task SendResult()
         {
-            if (Common.PropetyTools[IndexThread][Index].IsSendResult)
+            if (Common.TryGetTool(IndexThread, Index).IsSendResult)
             {
                 if (Global.Comunication.Protocol.IsConnected)
                 {
-                   // await Global.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, WidthResult);
+                   // await Global.Comunication.Protocol.WriteResultFloat(Common.TryGetTool(IndexThread, Index).AddPLC, WidthResult);
                 }
             }
         }
@@ -355,7 +355,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
-            switch(Common.PropetyTools[Global.IndexProgChoose][Index].Results)
+            switch(Common.TryGetTool(Global.IndexProgChoose, Index).Results)
             {
                 case Results.OK:
                     cl =  Global.ParaShow.ColorOK;
@@ -365,7 +365,7 @@ namespace BeeCore
                     break;
             }
             Pen pen = new Pen(Color.Blue, 2);
-            String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexProgChoose][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + Common.TryGetTool(Global.IndexProgChoose, Index).Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
             {
@@ -456,12 +456,12 @@ namespace BeeCore
           
             if (rotArea == null) rotArea = new RectRotate();
             PitchMeasure = new BeeCppCli.PitchCli();
-            Common.PropetyTools[IndexThread][Index].StepValue = 0.1f;
+            Common.TryGetTool(IndexThread, Index).StepValue = 0.1f;
     
-            Common.PropetyTools[IndexThread][Index].MinValue = 0;
+            Common.TryGetTool(IndexThread, Index).MinValue = 0;
           
-            Common.PropetyTools[IndexThread][Index].MaxValue = 20;
-            Common.PropetyTools[IndexThread][Index]. StatusTool = StatusTool.WaitCheck;
+            Common.TryGetTool(IndexThread, Index).MaxValue = 20;
+            Common.TryGetTool(IndexThread, Index). StatusTool = StatusTool.WaitCheck;
         }
         public float Scale = 1;
         public int IndexThread = 0;
