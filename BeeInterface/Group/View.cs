@@ -43,6 +43,8 @@ using UserControl = System.Windows.Forms.UserControl;
 namespace BeeInterface
 {
     [Serializable()]
+    // BeeInterface owns the embedded runtime inspection/camera view used by the
+    // main operator workflow. Keep standalone camera discovery UI in BeeUi.ScanCCD.
     public partial class View : UserControl
     {
         public event System.Windows.Forms.PreviewKeyDownEventHandler PreviewKeyDown;

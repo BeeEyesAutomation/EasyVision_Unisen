@@ -39,6 +39,8 @@ using Point = System.Drawing.Point;
 namespace BeeCore
 {
     [Serializable()]
+    // Large-file guide: keep model/runtime interop, ROI filtering, and result
+    // scoring changes localized in this class until the YOLO unit is split.
     public class Yolo
     {
         public int _Percent = 0;//note

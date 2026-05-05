@@ -1,4 +1,4 @@
-﻿using BeeCore;
+using BeeCore;
 using BeeGlobal;
 using BeeInterface;
 using BeeUi.Commons;
@@ -26,6 +26,8 @@ using Camera = BeeCore.Camera;
 
 namespace BeeUi
 {
+    // BeeUi owns standalone camera discovery/connection dialogs. Keep embedded
+    // runtime inspection and live-view behavior in BeeInterface.View.
     public partial class ScanCCD : Form
     {
         public ScanCCD()

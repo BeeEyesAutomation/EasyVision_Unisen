@@ -63,6 +63,8 @@ namespace BeeCore
 
     public class HEROJE
     {
+        // Large-file guide: keep scanner transport, packet assembly, and device
+        // parameter handling changes grouped here until the HEROJE driver is split.
         private static byte[] DeviceParaRead = new byte[4096];
 
         private static  DevStateCB DevStateCallback;

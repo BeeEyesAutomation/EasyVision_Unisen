@@ -1205,13 +1205,27 @@ namespace BeeCore.Algorithm
         public static Mat ClearNoise(Mat edges, int minCompArea = 1000)
         {
             Mat labels = new Mat(), stats = new Mat(), centroids = new Mat();
+            Mat binary = new Mat();
             try
             {
+                if (edges == null || edges.Empty())
+                    return new Mat();
+
+                if (edges.Channels() == 1)
+                    Cv2.Threshold(edges, binary, 0, 255, ThresholdTypes.Binary);
+                else
+                {
+                    using (Mat gray = new Mat())
+                    {
+                        Cv2.CvtColor(edges, gray, ColorConversionCodes.BGR2GRAY);
+                        Cv2.Threshold(gray, binary, 0, 255, ThresholdTypes.Binary);
+                    }
+                }
+
                 // 4) Xóa nhiễu bằng Connected Components (trên ảnh nhị phân edge)
 
-                int num = Cv2.ConnectedComponentsWithStats(edges, labels, stats, centroids, PixelConnectivity.Connectivity8, MatType.CV_32S);
-                var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
-                Mat clean = Mat.Zeros(edges.Size(), MatType.CV_8U);
+                int num = Cv2.ConnectedComponentsWithStats(binary, labels, stats, centroids, PixelConnectivity.Connectivity8, MatType.CV_32S);
+                Mat clean = Mat.Zeros(binary.Size(), MatType.CV_8UC1);
                 for (int i = 1; i < num; i++)
                 {
                     int area = stats.At<int>(i, (int)ConnectedComponentsTypes.Area);
@@ -1233,6 +1247,7 @@ namespace BeeCore.Algorithm
                 labels.Dispose();
                 stats.Dispose();
                 centroids.Dispose();
+                binary.Dispose();
             }
             // (Tùy chọn) mở nhẹ để mảnh hơn
             //Cv2.MorphologyEx(clean, clean, MorphTypes.Open, kernel, iterations: 1);

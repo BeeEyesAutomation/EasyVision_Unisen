@@ -141,7 +141,7 @@
       <AdditionalDependencies>opencv_world455.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>powershell -NoProfile -ExecutionPolicy Bypass -File "$(MSBuildProjectDirectory)\..\tools\update_native_version.ps1" -VersionFile "$(ProjectDir)version.h" -Major 1 -Minor 1 -DefaultBuild 1</Command>
+      <Command>powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$(MSBuildProjectDirectory)\..\tools\update_native_version.ps1" -VersionFile "$(ProjectDir)version.h" -Major 1 -Minor 1 -DefaultBuild 1</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

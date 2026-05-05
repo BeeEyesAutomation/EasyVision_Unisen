@@ -149,6 +149,9 @@ namespace BeeCore
                             case MethordEdge.Binary:
                                 matProcess = Filters.Threshold(matEua, ThresholdBinary, ThresholdTypes.Binary);
                                 break;
+                            case MethordEdge.InvertBinary:
+                                matProcess = Filters.Threshold(matEua, ThresholdBinary, ThresholdTypes.BinaryInv);
+                                break;
                             case MethordEdge.Stable:
 
                                 matProcess = Filters.GetStrongEdgesStable(matEua);
