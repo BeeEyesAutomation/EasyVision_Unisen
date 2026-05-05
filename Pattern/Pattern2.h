@@ -7,6 +7,7 @@
 #include <vector>
 #include <cmath>
 #include <limits>
+#include <mutex>
 
 
 #include <thread>
@@ -374,6 +375,7 @@ namespace BeeCpp
 		std::vector<s_StableScaleTemplate> stableScaleBank;
 		int         m_iMinReduceArea = 256;
 		bool        m_EnableGpu = false;
+		std::recursive_mutex stateMutex;
 		//cv::Mat EnhanceForPatternStrong(const cv::Mat& src);
 
 		void ClearStableScaleBank()

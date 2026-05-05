@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeCore.Funtion.Engines;
 using BeeGlobal;
 using BeeInterface;
 using OpenCvSharp;
@@ -50,9 +51,10 @@ namespace BeeInterface
         {
 
 
-            txtFolder.Text = Propety.PathSaveImage;
+            var state = CropEngineRunner.ReadFromOwner(OwnerTool, Propety);
+            txtFolder.Text = state.PathSaveImage;
 
-            OwnerTool.StatusTool = StatusTool.WaitCheck;
+            CropEngineRunner.MarkOwnerWaiting(OwnerTool);
 
              if (OwnerTool != null)
 
@@ -88,10 +90,11 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            if (!OwnerTool.worker.IsBusy)
-                OwnerTool.worker.RunWorkerAsync();
-            else
+            if (!CropEngineRunner.TryStartTool(OwnerTool))
+            {
+                btnTest.Enabled = true;
                 btnTest.IsCLick = false;
+            }
         }
         bool IsFullSize = false;
         public bool IsClear;

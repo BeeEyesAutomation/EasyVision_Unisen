@@ -76,8 +76,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\OpenCV4.5\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenCV4.5\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\OpenCV4.5\opencv\build\include;C:\OpenCV4.5\Barcode\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\OpenCV4.5\opencv\build\x64\vc15\lib;C:\OpenCV4.5\Barcode\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\OpenCV4.5\opencv\build\include;C:\OpenCV4.5\Barcode\include;$(IncludePath)</IncludePath>
@@ -86,12 +86,13 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>COLORPIXELSCPP_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COLORPIXELSCPP_EXPORTS;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
-      <LanguageStandard>Default</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opencv_world455d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world455.lib;ZXing.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

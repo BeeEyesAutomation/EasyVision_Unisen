@@ -20,6 +20,33 @@ namespace BeeGlobal
         public static String PathRS = "";
         public static  Dictionary<string, SemaphoreSlim> _toolSemaphores
         = new Dictionary<string, SemaphoreSlim>();
+        public static readonly object _toolSchedulerLock = new object();
+        public static SemaphoreSlim _toolSchedulerSemaphore = new SemaphoreSlim(1, 1);
+
+        public static int ResolveToolSchedulerConcurrency()
+        {
+            int configured = Config?.MaxConcurrentTools ?? 0;
+            if (configured > 0)
+                return configured;
+
+            int logicalCores = Environment.ProcessorCount;
+            if (logicalCores <= 2)
+                return 1;
+
+            return Math.Max(1, logicalCores - 1);
+        }
+
+        public static void ResetToolSchedulers()
+        {
+            lock (_toolSchedulerLock)
+            {
+                _toolSemaphores = new Dictionary<string, SemaphoreSlim>();
+
+                int maxConcurrency = ResolveToolSchedulerConcurrency();
+                _toolSchedulerSemaphore?.Dispose();
+                _toolSchedulerSemaphore = new SemaphoreSlim(maxConcurrency, maxConcurrency);
+            }
+        }
         public static int _IndexRotChoose = -1;
         public static event Action<int> ChooseRotChage;
         public static int IndexRotChoose

@@ -1,0 +1,649 @@
+{
+  "_meta": {
+    "name": "EasyVision_Unisen Code Map",
+    "version": "1.0.0",
+    "generated": "2026-05-03",
+    "purpose": "Compact source map for Codex/Claude to navigate the codebase with minimal tokens. UI + Core layer focus. Native (C++) projects intentionally omitted.",
+    "format": "Each project lists its files with [type, key public symbols] only. Read code_preview.md for narrative. Read CLAUDE.md mục 0 BEFORE editing.",
+    "totals": {
+      "csharp_projects": 8,
+      "native_projects_skipped": 6,
+      "tool_user_controls": 24,
+      "tool_engines_serializable": 24,
+      "unit_folder_files_total": 28,
+      "unit_helpers_no_ui": ["OKNGAPI.cs", "PaperEnhance.cs", "PitchGdiPainter.cs", "Positions.cs"],
+      "designer_loc_total_approx": 83000,
+      "beecore_loc_approx": 50567
+    },
+    "hard_invariants_for_save_load_compat": [
+      "BinaryFormatter format: do NOT change [Serializable] field name/order in BeeCore/Unit/* and PropetyTool/ToolState",
+      "Namespace 'BeeCore' is wire-format for type lookup of Circle/Patterns/Yolo/...; do NOT rename without SerializationBinder",
+      "GetObjectData keys: 'Propety', '<Propety2>k__BackingField', 'IndexCamera', 'Name', 'TypeTool', 'IndexLogics', 'UsedTool', 'IsSendResult', 'IndexImgRegis', '_Score', '_Percent', 'Location', 'CycleTime', 'ScoreResult', 'MinValue', 'MaxValue', 'StepValue', '_StatusTool', 'Results' — these strings are persistent format, freeze",
+      "Files: Common\\Common.prog OR Program\\<Project>\\<Project>.prog (Base64 of BinaryFormatter); selector = Global.Config.IsSaveProg",
+      "Other persisted files per project: .para .cam .com .gc .img .sim .config .no — all via Access.Save*/Load*"
+    ]
+  },
+
+  "layers": {
+    "App":      ["BeeMain"],
+    "UI_Shell": ["BeeUi", "BeeInterface"],
+    "Tool_UI":  ["BeeInterface/Tool/* (25 ToolXxx UserControls)"],
+    "Core":     ["BeeCore"],
+    "Shared":   ["BeeGlobal"],
+    "Driver":   ["PLC_Communication"],
+    "Native":   ["Pattern (BeeCpp)", "BeeCV", "BeeNativeOnnx", "BeeNativeRCNN", "OKNG", "PylonCli"]
+  },
+
+  "dependencies": {
+    "BeeMain": ["BeeInterface", "BeeUi"],
+    "BeeUi": ["BeeCore", "BeeGlobal", "BeeInterface", "PylonCli"],
+    "BeeInterface": ["BeeCore", "BeeGlobal", "Pattern"],
+    "BeeCore": ["BeeGlobal", "Pattern", "BeeCV", "PylonCli"],
+    "BeeGlobal": ["PLC_Communication"]
+  },
+
+  "projects": {
+    "BeeMain": {
+      "csproj": "BeeMain.csproj",
+      "type": "WinExe",
+      "namespace": "BeeIV2",
+      "assembly": "EasyVision",
+      "framework": "v4.8 / x64",
+      "files": {
+        "Program.cs": ["entry: static void Main()"]
+      }
+    },
+
+    "BeeGlobal": {
+      "csproj": "BeeGlobal/BeeGlobal.csproj",
+      "type": "Library",
+      "namespace": "BeeGlobal",
+      "framework": "v4.8 / x64",
+      "role": "Cross-cutting models, enums, parameters, comm protocol POCOs",
+      "files": {
+        "Global.cs": ["struct G", "many static states"],
+        "Config.cs": ["class Config — persisted via Access.SaveConfig"],
+        "Comunication.cs": ["class Comunication — PLC/RS comm settings"],
+        "Enums.cs": ["LayoutOrientation", "SearchPattern", "DifficultyPattern", "Dir", "CornerAdj", "TypeValuePLC", "SideLR", "SideTB", "DisplayResolution", "ModeSaveProg", "TypeOutputRS", "ModeCheck", "ColorGp", "Users", "ZeroPos", "Values", "MethodSample", "LinePairStrategy", "FillMode1", "PLCStatus", "CameraStatus", "TypeSendPLC", "ShaftMeasureType", "LineOrientation"],
+        "ParaCommon.cs": ["class ParaCommon — saved as .para"],
+        "ParaCamera.cs": ["class ParaCamera — saved as .cam"],
+        "ParaShow.cs": ["class ParaShow — saved as .gc"],
+        "ParaIO.cs": ["class ParaIO"],
+        "RectRotate.cs": ["class RectRotate — rotated rectangle, used everywhere as ROI"],
+        "ProgNo.cs": ["class ProgNo — program list entry, saved as .no"],
+        "ItemRegsImg.cs": ["class ItemRegsImg — saved as .img/.sim"],
+        "ItemNew.cs": ["class ItemNew"],
+        "Labels.cs": ["class Labels"],
+        "LogsDashboard.cs": ["class LogsDashboard"],
+        "HistoryCheck.cs": ["class HistoryCheck"],
+        "Model.cs": ["class Model"],
+        "TimingUtils.cs": ["timing helpers"],
+        "QpcTimer.cs": ["high-precision timer"],
+        "CycleTimerSplit.cs": ["class CycleTimerSplit"],
+        "IntArrayWithEvent.cs": ["array + change events"],
+        "RotatedBoxInfo.cs": ["class RotatedBoxInfo"],
+        "ValuePara.cs": ["class ValuePara"],
+        "BatchRename.cs": ["batch file rename"],
+        "DASK.cs": ["class DASK — low-level driver wrapper (out of place; CLAUDE.md notes)"],
+        "PCI_Card.cs": ["class PCI_Card — low-level (out of place)"],
+        "Common/": ["sub-folder for shared utilities (per CLAUDE.md target)"],
+        "General/": ["sub-folder"],
+        "Protocol/": ["protocol POCOs"]
+      }
+    },
+
+    "BeeCore": {
+      "csproj": "BeeCore/BeeCore.csproj",
+      "type": "Library",
+      "namespace": "BeeCore (root) + BeeCore.Algorithm + BeeCore.Func (=Funtion) + BeeCore.ShapeEditing",
+      "framework": "v4.8 / x64",
+      "deps": ["BeeGlobal", "Pattern (native BeeCpp)", "BeeCV (native)", "PylonCli (C++/CLI)", "OpenCvSharp4", "Newtonsoft.Json", "Cyotek.ImageBox"],
+      "loc_total": 50567,
+      "role": "God-project. Contains: domain models, tool engines, algorithms, vision utils, camera HAL, comm, AI inference, IO. CLAUDE.md plans to split into 7 sub-projects.",
+
+      "root_files": {
+        "Common.cs": [
+          "class Common — STATIC GOD-CLASS (~22.7k bytes)",
+          "List<List<PropetyTool>> PropetyTools  ← global tool registry (per program × per index)",
+          "PropetyTool TryGetTool(int prog, int tool)",
+          "PropetyTool TryGetTool(int tool)  ← uses Global.IndexProgChoose",
+          "List<PropetyTool> TryGetToolList(int prog)",
+          "List<PropetyTool> TryGetCurrentToolList()",
+          "List<PropetyTool> EnsureToolList(int prog)",
+          "List<PropetyTool> EnsureCurrentToolList()",
+          "void SetToolList(int prog, List<PropetyTool>)",
+          "RectRotate TransformToolRect(...)",
+          "Mat AutoCanny(Mat, double)",
+          "Mat CannyWithMorph(Mat)",
+          "RectRotate GetPositionAdjustment(...)",
+          "Comunication Comunication (static singleton)",
+          "List<Camera> listCamera (4 slots)",
+          "void IniPython() / ClosePython()",
+          "static event PropertyChangedEventHandler FrameChanged, PropertyChanged",
+          "P/Invoke: GetImage, GetImageCrop, GetImageResult, SetSrc"
+        ],
+        "PropetyTool.cs": [
+          "[Serializable] class PropetyTool : ICloneable, IDisposable, ISerializable",
+          "public dynamic Propety  ← engine (Circle/Patterns/Yolo/...)",
+          "public dynamic Propety2 { get; set; }  ← optional secondary state",
+          "public ToolState State",
+          "Pass-through props to State: IndexCamera, Name, TypeTool, IndexLogics, UsedTool, Score, Percent, Location, CycleTime, ScoreResult, MinValue, MaxValue, StepValue, StatusTool, Results, IsSendResult, IndexImgRegis, ItemTool/ItemTool2/3/4, Control",
+          "void DoWork() / RunToolAsync() / Complete()",
+          "GetObjectData keys: SEE _meta.hard_invariants_for_save_load_compat"
+        ],
+        "ToolState.cs": [
+          "[Serializable] class ToolState : IDisposable",
+          "[NonSerialized] PropetyTool Owner",
+          "Fields: IndexCamera, Name, TypeTool, IndexLogics[6], UsedTool, ItemTool/2/3/4, Control, IsSendResult, IndexImgRegis",
+          "Properties with events: Score (event ScoreChanged), Percent (event PercentChange), StatusTool (event StatusToolChanged, ToolDoneChanged)",
+          "Runtime: Stopwatch timer, BackgroundWorker worker"
+        ],
+        "Checking.cs": ["class Checking (~18k LOC) — orchestration of inspection runs"],
+        "KeepLargestAuto.cs": ["~33k LOC — heavy algorithm; per CLAUDE.md should move to Algorithm/"],
+        "Vision.cs": ["class Vision — high-level vision facade"],
+        "dataMat.cs": ["class dataMat — Mat container; rename DataMat planned in P6"],
+        "AddTool.cs": ["class AddTool — add tool helper"],
+        "LocalTool.cs": ["class LocalTool"],
+        "LabelItem.cs": ["class LabelItem"],
+        "ValueRobot.cs": ["class ValueRobot"],
+        "Actions.cs": ["actions registry"],
+        "BitmapExtensions.cs": ["extension methods"],
+        "MatrixExtension.cs": ["extension methods"],
+        "Converts.cs": ["class Converts (also exists as BeeCore/Func/Converts.cs — duplicate per CLAUDE.md)"],
+        "DB.cs": ["class DB — DB access"],
+        "LibreTranslateClient.cs": ["class LibreTranslateClient : IDisposable — i18n"],
+        "CustomGui.cs": ["class CustomGui — DUPLICATE of BeeInterface/CustomGui.cs and BeeCore/Func/CustomGui.cs (Phase 1.1 merge target)"]
+      },
+
+      "Algorithm": {
+        "Colors.cs": [],
+        "DetectIntersect.cs": [],
+        "EdgePoints.cs": [],
+        "FilletCornerMeasure.cs": [],
+        "FilletCornerMeasure2.cs": [],
+        "FilterItem.cs": ["class FilterItem"],
+        "Filters.cs": ["1383 LOC"],
+        "Gap.cs": ["struct GapResult", "class ParallelGapDetector"],
+        "Geometry2D.cs": [],
+        "ImagePreprocessPipeline.cs": ["class ImagePreprocessPipeline — used by Pattern2"],
+        "InsertLine.cs": [],
+        "LineDetector.cs": [],
+        "MonoSegmentation.cs": ["struct MonoSegParams"],
+        "RansacCircleFitter.cs": ["class RansacCircleFitter (1101 LOC)"],
+        "RansacFitLine.cs": ["struct LineAB"]
+      },
+
+      "Camera": {
+        "About.cs": ["class About : Form (?)"],
+        "DeviceFindAndCom.cs": ["class DeviceFindAndCom (894 LOC)"],
+        "HEROJE.cs": ["class HEROJE (2215 LOC) — Heroje camera"],
+        "HardwareEnum.cs": ["enum HardwareEnum"],
+        "HJ_CRC32.cs": ["CRC helper"],
+        "KEY_Send.cs": ["KEY_Send — input automation"],
+        "ModuleSetting.cs": ["class ModuleSetting (2984 LOC)"],
+        "USB.cs": ["class USB"],
+        "ToolCfg.cs": ["class ToolCfg"],
+        "DevStateCB.cs": [],
+        "DevStateDef.cs": ["enum DevStateDef"],
+        "GetCfgCB.cs": [],
+        "LogRecord.cs": [],
+        "PnPEntityInfo.cs": ["struct PnPEntityInfo"],
+        "ProtocolExtraDataStu.cs": ["struct ProtocolExtraDataStu"],
+        "ProtocolHeaderStu.cs": ["struct ProtocolHeaderStu"],
+        "SendCfgDataCB.cs": [],
+        "SetCfgCB.cs": []
+      },
+
+      "Core": {
+        "HSV.cs": ["class HSV"],
+        "HsvConvert.cs": [],
+        "HelpMouseView.cs": [],
+        "RGB.cs": ["class RGB"]
+      },
+
+      "Data": {
+        "Access.cs": [
+          "class Access — BinaryFormatter+Base64 atomic write/read",
+          "byte[] SerializeBytes<T>(T)",
+          "void SaveProg(string, List<List<PropetyTool>>)",
+          "List<List<PropetyTool>> LoadProg(string)",
+          "void SaveProgNo / LoadProgNo",
+          "void SaveConfig / LoadConfig",
+          "void SaveParaComon / LoadParaComon",
+          "void SaveParaCamera / LoadParaCamera",
+          "void SaveComunication / LoadComunication",
+          "void SavelistImg / LoadlistImg",
+          "void SaveParaShow / LoadParaShow",
+          "PRIVATE: SerializeToBase64<T>, DeserializeFromBase64File<T>, AtomicWriteAllText, SaveBase64, LoadBase64"
+        ],
+        "ClassProject.cs": ["class ClassProject — EMPTY shell (per CLAUDE.md was reserved; not used)"],
+        "LoadData.cs": [
+          "class LoadData",
+          "List<List<PropetyTool>> Project(string)  ← entry point of project load",
+          "ParaCommon Para(string)",
+          "Comunication Comunication(string)",
+          "ParaShow ParaShow(string)",
+          "List<ItemRegsImg> listImgRegister(string)",
+          "List<ItemRegsImg> listImgSim(string)",
+          "Config Config()",
+          "List<ProgNo> ProgNo()",
+          "List<ParaCamera> ParaCamera(string)"
+        ],
+        "SaveData.cs": [
+          "class SaveData",
+          "void ParaPJ(string, ParaCommon)",
+          "void Config(Config)",
+          "void ProgNo(List<ProgNo>)",
+          "void Camera(string, List<ParaCamera>)",
+          "void Comunication(string, Comunication)",
+          "void ParaShow(string, ParaShow)",
+          "void ListImgRegister(string, List<ItemRegsImg>)",
+          "void ListImgSim(string, List<ItemRegsImg>)",
+          "void Program(string, List<List<PropetyTool>>, bool IsBk)",
+          "void Project(string)"
+        ]
+      },
+
+      "EtherNetIP": {
+        "AssemblyHelper.cs": [],
+        "EDS.cs": ["class EDS"],
+        "EIPAdapter.cs": ["class EIPAdapter"],
+        "EIPScanner.cs": ["class EIPScanner"]
+      },
+
+      "Func": {
+        "_namespace": "BeeCore.Funtion (typo — used everywhere)",
+        "Cal.cs": ["class Cal"],
+        "Camera.cs": ["class Camera (2451 LOC)"],
+        "CameraIOFast.cs": [],
+        "CodeSymbologyCliExtensions.cs": [],
+        "ComboBoxExtensions.cs": [],
+        "Converts.cs": ["class Convert2 / class Converts (DUPLICATE with BeeCore/Converts.cs)"],
+        "Crop.cs": ["class Cropper (1209 LOC)"],
+        "CustomGui.cs": ["class CustomGui — DUPLICATE"],
+        "Draws.cs": ["class Draws (1681 LOC)"],
+        "FilterRect.cs": [],
+        "General.cs": ["class General"],
+        "ImageUtils.cs": [],
+        "Init.cs": ["class Init"],
+        "Line2DTransform.cs": [],
+        "Logs.cs": [],
+        "MatHelper.cs": [],
+        "MatMerger.cs": ["enum MergeDirection"],
+        "Native.cs": ["class Native"],
+        "NativeRCNN.cs": ["class NativeRCNN : IDisposable", "struct RCNNBox"],
+        "NativeYolo.cs": ["class NativeYolo : IDisposable", "struct YoloBox"],
+        "PolyOffset.cs": ["struct Polygon"],
+        "RectRotateGapChecker.cs": [],
+        "ResultFilter.cs": [],
+        "ResultItem.cs": ["class ResultItem"],
+        "ResultItemHelper.cs": [],
+        "ResultMulti.cs": ["class ResultMulti"],
+        "TarProgramHelper.cs": []
+      },
+
+      "Items": {
+        "ItemTool.cs / .Designer.cs": ["partial class ItemTool : UserControl, IDeepCloneable<ItemTool>, ICloneable — generic tool list item UI (840 LOC)"]
+      },
+
+      "Parameter": {
+        "G.cs": ["struct G — global parameters bag (duplicates with BeeGlobal/Global.cs and BeeUi/Global.cs per CLAUDE.md)"]
+      },
+
+      "ShapeEditing": {
+        "_role": "Reusable shape-editing canvas abstractions",
+        "CanvasCursorKind.cs": ["enum CanvasCursorKind"],
+        "CanvasMouseArgs.cs": [],
+        "CanvasMouseButton.cs": ["enum CanvasMouseButton"],
+        "ColorPickedArgs.cs": [],
+        "ColorPickerOverlay.cs": [],
+        "DefaultShapeRepository.cs": [],
+        "GeometryHelper.cs": [],
+        "IImageCanvas.cs": ["interface IImageCanvas"],
+        "IOverlayPainter.cs": ["interface IOverlayPainter"],
+        "IShapeEditor.cs": ["interface IShapeEditor"],
+        "IShapeRepository.cs": ["interface IShapeRepository"],
+        "InteractionMode.cs": ["enum InteractionMode"],
+        "ShapeChangeKind.cs": ["enum ShapeChangeKind"],
+        "ShapeChangedArgs.cs": [],
+        "ShapeEditOptions.cs": ["class ShapeEditOptions"],
+        "ShapeEditState.cs": ["class ShapeEditState"]
+      },
+
+      "Unit": {
+        "_role": "Tool engine payload classes — [Serializable], stored inside PropetyTool.Propety. **DO NOT rename namespace BeeCore — it breaks BinaryFormatter type lookup.**",
+        "_count": 25,
+        "_pattern": "Each class: [Serializable] public class Xxx { object Clone() => MemberwiseClone(); ... bool IsNew, int IndexCCD, int Index, RectRotate rotArea/rotCheck/rotCrop/rotMask, ... }",
+        "AutoTrig.cs": ["class AutoTrig"],
+        "Barcode.cs": ["class Barcode"],
+        "CheckMissing.cs": ["class CheckMissing"],
+        "Circle.cs": ["class Circle — 32 fields ex: MaxCircles, Iterations, Threshold, ThresholdBinary, MinInliers, rotArea/rotCheck/rotCrop/rotMask, listP_Center, IsClose/IsOpen/IsClearNoiseBig/IsClearNoiseSmall, SizeClose/Open, etc."],
+        "ColorArea.cs": ["class ColorArea"],
+        "Counter.cs": ["class Counter (864 LOC)"],
+        "CraftOCR.cs": ["class CraftOCR (838 LOC)"],
+        "Crop.cs": ["class Crop"],
+        "Edge.cs": ["class Edge"],
+        "EdgePixel.cs": ["class EdgePixel"],
+        "Intersect.cs": ["class Intersect"],
+        "MatchingShape.cs": ["class MatchingShape"],
+        "Measure.cs": ["class Measure"],
+        "MeasureCorner.cs": ["class MeasureCorner — used by ToolCorner"],
+        "MultiOnnx.cs": ["class MultiOnnx (1990 LOC)"],
+        "MultiPattern.cs": ["class MultiPattern (2233 LOC)"],
+        "OCR.cs": ["class OCR"],
+        "OKNG.cs": ["class OKNG"],
+        "OKNGAPI.cs": ["OKNG API wrapper"],
+        "PaperEnhance.cs": ["class PaperEnhance"],
+        "Patterns.cs": ["class Patterns (2109 LOC) — Pattern engine; used by ToolPattern"],
+        "Pitch.cs": ["class Pitch"],
+        "PitchGdiPainter.cs": ["GDI painter for Pitch — should become UserControl per CLAUDE.md 10.5"],
+        "PositionAdj.cs": ["class PositionAdj (1022 LOC)"],
+        "Positions.cs": ["class Positions"],
+        "VisualMatch.cs": ["class VisualMatch"],
+        "Width.cs": ["class Width"],
+        "Yolo.cs": ["class Yolo (3386 LOC)"]
+      }
+    },
+
+    "BeeInterface": {
+      "csproj": "BeeInterface/BeeInterface.csproj",
+      "type": "Library",
+      "namespace": "BeeInterface",
+      "framework": "v4.8 / x64",
+      "deps": ["BeeCore", "BeeGlobal", "Pattern", "OpenCvSharp", "Cyotek.ImageBox", "Google.Apis (Drive)", "Newtonsoft.Json"],
+      "role": "Tool UserControls + UI shell (Dashboard, Steps, General, Group, PLC, Custom controls). Tool engine cells embedded; Forms also live here.",
+
+      "root_files": {
+        "AppRestart.cs": [],
+        "ControlStylePersistence.cs": ["save/load WinForms control styles"],
+        "ConvertImg.cs": ["class ConvertImg — Bitmap/Mat/Image conversion"],
+        "CustomGui.cs": ["class Gui — UI helpers (Color, RoundRg). DUPLICATE per CLAUDE.md P1.1"],
+        "DataTool.cs": ["class DataTool — data binding helper"],
+        "FileName.cs": [],
+        "FormFlowChart.cs/.Designer.cs": ["Form FormFlowChart"],
+        "FormWarning.cs/.Designer.cs": ["Form FormWarning"],
+        "ForrmAlarm.cs/.Designer.cs": ["Form ForrmAlarm (typo)"],
+        "FrameRenderer.cs": [],
+        "GeneralSetting.cs/.Designer.cs": ["Form GeneralSetting"],
+        "Global.cs": ["struct G — global state (duplicates per CLAUDE.md)"],
+        "GlobalIconManager.cs": ["icon registry"],
+        "ItemValue.cs/.Designer.cs": ["UserControl ItemValue"],
+        "LayoutPersistence.cs": ["save/restore window layout"],
+        "Load.cs": ["class Load — load orchestration"],
+        "MultiDockHost.cs": ["enum DockSide", "enum ZoneLayout", "class MultiDockHost : Panel — dockable container"],
+        "ShowTool.cs": ["class ShowTool"],
+        "StepEdit.cs/.Designer.cs": ["UserControl StepEdit — workflow step editor"],
+        "Tools.cs": []
+      },
+
+      "Class": {
+        "_role": "Backend services (auth, decompile, sql, drive)",
+        "Cryto.cs": ["crypto helpers"],
+        "Decompile.cs": [],
+        "Func.cs": [],
+        "GoogleDriveDllManager.cs": ["Google Drive integration"],
+        "Gui.cs": [],
+        "KbdListener.cs": ["global keyboard hook"],
+        "KeyAcitve.cs": ["activation keys (typo in name)"],
+        "RsDirPermissions.cs": [],
+        "SqlServer.cs": []
+      },
+
+      "Comunications": {
+        "WriteValuePLCSystems.cs": ["PLC value writer (typo in folder)"]
+      },
+
+      "Custom": {
+        "_role": "Reusable custom WinForms controls — TARGET of Phase 4 move to BeeShared.UI",
+        "AdjustBarEx.cs": ["class AdjustBarEx : UserControl — slider with min/max/step/value, USED IN ALL TOOLS"],
+        "AdjustNumberPad.cs": ["class AdjustNumberPad : UserControl — numeric keypad"],
+        "AutoLabel.cs": ["class AutoFontLabel : ScrollableControl — auto-fit font"],
+        "CollageRenderer.cs": ["enum CollageLayout"],
+        "CustomNumericEx.cs": ["class CustomNumericEx : UserControl"],
+        "DbTableLayoutPanel.cs": ["class TableLayoutPanel2 : TableLayoutPanel — designer-friendly layout"],
+        "GradientTabControl.cs": ["partial class GradientTab — gradient tab control (used in tool tabs)"],
+        "RJButton.cs": ["class RJButton : Button — image+text rounded button, USED IN ALL TOOLS", "enum ImageFitMode"],
+        "RoundedPanel.cs": ["class RoundedPanel : Panel — rounded corners"],
+        "StepProgressBar.cs": ["class StepProgressBar : UserControl"],
+        "TextBoxAuto.cs": ["class TextBoxAuto : TextBox"]
+      },
+
+      "DashBoard": {
+        "DashboardImages.cs": [],
+        "DashboardListCompact.cs": [],
+        "FlipClockControl.cs": [],
+        "RegisterImgDashboard.cs": [],
+        "ReportDashBoard.cs": [],
+        "SaveProgressDialog.cs": [],
+        "StatusDashboard.cs": []
+      },
+
+      "General": {
+        "Account.cs/.Designer.cs": ["Form Account — login"],
+        "FormCheckUpdate.cs": ["update checker"],
+        "FormChoose.cs/.Designer.cs": ["Form FormChoose"],
+        "FormReport.cs": ["Form FormReport"],
+        "InforGroup.cs/.Designer.cs": ["UserControl InforGroup"],
+        "ItemLogic.cs/.Designer.cs": ["UserControl ItemLogic — logic operator block"],
+        "ItemRS.cs/.Designer.cs": ["UserControl ItemRS — R/S latch UI"],
+        "MessageChoose.cs": [],
+        "QuickSetting.cs": [],
+        "ToolPage.cs/.Designer.cs": ["UserControl ToolPage — wraps a tool list page"]
+      },
+
+      "Group": {
+        "_role": "Layout shell components used in main window",
+        "AddFilters.cs": ["UserControl AddFilters"],
+        "AddTool.cs": ["Form AddTool — tool picker dialog"],
+        "BarRight.cs": ["UserControl Cameras (right sidebar — note: file name vs class differ)"],
+        "BtnHeaderBar.cs": ["UserControl BtnHeaderBar"],
+        "EditBar.cs": ["UserControl EditBar"],
+        "EditProg.cs": ["UserControl EditProg — program editor strip"],
+        "EditRectRot.cs": ["UserControl EditRectRot — rotated-rect editor"],
+        "Header.cs": ["UserControl Header"],
+        "HideBar.cs": ["UserControl HideBar"],
+        "InforBar.cs": ["UserControl InforBar"],
+        "RegisterImgs.cs": ["UserControl RegisterImgs"],
+        "SimImgs.cs": ["UserControl SimImgs"],
+        "StatusBar.cs": ["UserControl StatusBar"],
+        "ToolSettings.cs": ["UserControl ToolSettings"],
+        "View.cs": ["UserControl View"],
+        "ViewHost.cs": ["class ViewHost : Panel"],
+        "ucReport.cs": ["UserControl ucReport"]
+      },
+
+      "GroupControl": {
+        "OK_Cancel.cs": ["UserControl OK_Cancel"]
+      },
+
+      "PLC": {
+        "ProtocolPLC.cs": [],
+        "ucBitInput.cs": ["UserControl ucBitInput"],
+        "ucBitOutput.cs": ["UserControl ucBitOutput"],
+        "ucValueOutput.cs": ["UserControl ucValueOutput"]
+      },
+
+      "ShapeEditing": {
+        "_role": "DUPLICATE of BeeCore/ShapeEditing — UI side; per CLAUDE.md unify to BeeCore.Vision/ShapeEditing",
+        "ImageCanvasControl.cs": ["UserControl — main interactive canvas, hosts shape editor"],
+        "ImageCanvasInteractionState.cs": [],
+        "ImageCanvasShapeContext.cs": [],
+        "CanvasMouseArgs.cs": [],
+        "CanvasViewportChangedArgs.cs": [],
+        "DefaultShapeRepository.cs": [],
+        "GeometryHelper.cs": [],
+        "IImageCanvas.cs": [],
+        "IOverlayPainter.cs": [],
+        "IShapeEditor.cs": [],
+        "IShapeRepository.cs": [],
+        "InteractionMode.cs": [],
+        "ShapeChangedArgs.cs": [],
+        "ShapeEditOptions.cs": [],
+        "ShapeEditState.cs": []
+      },
+
+      "Steps": {
+        "SettingStep1.cs": ["wizard step 1"],
+        "SettingStep2.cs": ["wizard step 2"],
+        "SettingStep4.cs": ["wizard step 4 (no 3?)"]
+      },
+
+      "Tool": {
+        "_role": "25 ToolXxx UserControls. Each has .cs (~200-3300 LOC) + .Designer.cs (~1200-4900 LOC) + .resx. PATTERN: [Serializable] partial class ToolXxx : UserControl { PropetyTool _ownerTool cached; public XxxEngine Propety { get; set; }; LoadPara(); }",
+        "_pattern_explanation": "ToolCircle.cs example: ctor sets Propety = new Circle(); LoadPara() reads from OwnerTool (resolved via Common.TryGetTool(IndexProgChoose, Propety.Index)); subscribes to OwnerTool.StatusToolChanged & ScoreChanged with -=/+= pair; binds to AdjustBarEx + RJButton + tabControl",
+        "_tab_count_observed": {
+          "ToolCircle": 3,
+          "ToolBarcode": 2,
+          "ToolPattern": 4,
+          "ToolYolo": 4,
+          "ToolPitch": 3,
+          "ToolPosition_Adjustment": 4
+        },
+        "ToolAutoTrig.cs": ["partial class ToolAutoTrig : UserControl — engine: AutoTrig"],
+        "ToolBarcode.cs": ["partial class ToolBarcode : UserControl — engine: Barcode (line 170: public Barcode Propety { get; set; })"],
+        "ToolCheckMissing.cs": ["engine: CheckMissing"],
+        "ToolCircle.cs": ["engine: Circle (line 423: public Circle Propety { get; set; })"],
+        "ToolColorArea.cs": ["engine: ColorArea"],
+        "ToolCorner.cs": ["engine: MeasureCorner"],
+        "ToolCounter.cs": ["engine: Counter (1359 LOC)"],
+        "ToolCraftOCR.cs": ["engine: CraftOCR"],
+        "ToolCrop.cs": ["engine: Crop"],
+        "ToolEdge.cs": ["engine: Edge"],
+        "ToolEdgePixel.cs": ["engine: EdgePixel"],
+        "ToolIntersect.cs": ["engine: Intersect"],
+        "ToolMatchingShape.cs": ["engine: MatchingShape"],
+        "ToolMeasure.cs": ["engine: Measure (line 181: public Measure Propety = new Measure();)"],
+        "ToolMultiOnnx.cs": ["engine: MultiOnnx"],
+        "ToolMultiPattern.cs": ["engine: MultiPattern"],
+        "ToolOCR.cs": ["engine: OCR"],
+        "ToolOKNG.cs": ["engine: OKNG"],
+        "ToolPattern.cs": ["engine: Patterns (1241 LOC; line 551: public Patterns Propety { get; set; })"],
+        "ToolPitch.cs": ["engine: Pitch"],
+        "ToolPosition_Adjustment.cs": ["engine: PositionAdj"],
+        "ToolVisualMatch.cs": ["engine: VisualMatch"],
+        "ToolWidth.cs": ["engine: Width"],
+        "ToolYolo.cs": ["engine: Yolo (2713 LOC)"],
+        "CounterInfor.cs": ["UserControl CounterInfor — companion to ToolCounter"]
+      }
+    },
+
+    "BeeUi": {
+      "csproj": "BeeUi/BeeUi.csproj",
+      "type": "Library",
+      "namespace": "BeeUi",
+      "framework": "v4.8 / x64",
+      "deps": ["BeeCore", "BeeGlobal", "BeeInterface", "PylonCli"],
+      "role": "Top-level forms (Main, FormLoad, ScanCCD, FormActive, ShowEraser) and unit/python helpers",
+
+      "root_files": {
+        "ForrmCCD.cs/.Designer.cs": ["partial class ForrmCCD : Form (typo in name)"],
+        "Funtion.cs": ["class Funtion (typo)"],
+        "Global.cs": ["struct G — duplicates"],
+        "PCITriggerEngine.cs": ["struct TriggerEvent", "class PCITriggerEngine : IDisposable"]
+      },
+      "Form": {
+        "Main.cs": ["partial class Main : Form — main window"],
+        "FormLoad.cs": ["partial class FormLoad : Form — splash/loader"],
+        "ScanCCD.cs": ["partial class ScanCCD : Form"],
+        "FormActive.cs": ["partial class FormActive : Form — activation"],
+        "ShowEraser.cs": ["partial class ShowEraser : Form"]
+      },
+      "Tool": {"_note": "May contain helpers; not enumerated"},
+      "Unit": {
+        "EditTool.cs": ["partial class EditTool : UserControl"]
+      },
+      "Commons": {"_note": "Shared helpers within BeeUi"},
+      "Python": {"_note": "Python.Runtime hosts"}
+    },
+
+    "PLC_Communication": {
+      "csproj": "PLC_Communication/PLC_Communication.csproj",
+      "type": "Library",
+      "role": "PLC/RS protocol drivers; used by BeeGlobal",
+      "_note": "Has its own solution PLC_Communication.sln per CLAUDE.md mục 1.1"
+    },
+
+    "BeeUpdate": {
+      "type": "WinExe",
+      "role": "Auto-updater, decoupled from main app"
+    },
+
+    "BeeTest": {
+      "type": "Library",
+      "role": "Test fixtures (existing)"
+    }
+  },
+
+  "tool_layer_inventory_compact": {
+    "_format": "tool_id: { engine, tabs_observed, loc_cs, loc_designer, group }",
+    "_groups_per_claudemd_10_5": {
+      "A": "Fits standard frame (12 tools)",
+      "B": "Fits but needs extra UserControls (7 tools)",
+      "C": "Skip / custom layout (5 tools)"
+    },
+    "Circle":              {"engine": "BeeCore.Circle",          "tabs": 3, "group": "A", "uc_loc": 800,  "ds_loc": 3354},
+    "Width":               {"engine": "BeeCore.Width",           "tabs": null, "group": "A", "uc_loc": 600,  "ds_loc": 3202},
+    "Measure":             {"engine": "BeeCore.Measure",         "tabs": null, "group": "A", "uc_loc": 500,  "ds_loc": null},
+    "Edge":                {"engine": "BeeCore.Edge",            "tabs": null, "group": "A", "uc_loc": 600,  "ds_loc": 2733},
+    "EdgePixel":           {"engine": "BeeCore.EdgePixel",       "tabs": null, "group": "A", "uc_loc": null, "ds_loc": 2538},
+    "Corner":              {"engine": "BeeCore.MeasureCorner",   "tabs": null, "group": "A", "uc_loc": null, "ds_loc": 2215},
+    "Crop":                {"engine": "BeeCore.Crop",            "tabs": null, "group": "A", "uc_loc": null, "ds_loc": null},
+    "Intersect":           {"engine": "BeeCore.Intersect",       "tabs": null, "group": "A", "uc_loc": null, "ds_loc": 3300},
+    "ColorArea":           {"engine": "BeeCore.ColorArea",       "tabs": null, "group": "A", "uc_loc": null, "ds_loc": 1855},
+    "Counter":             {"engine": "BeeCore.Counter",         "tabs": null, "group": "A", "uc_loc": 1359, "ds_loc": 3037},
+    "CheckMissing":        {"engine": "BeeCore.CheckMissing",    "tabs": null, "group": "A", "uc_loc": null, "ds_loc": 3356},
+    "Position_Adjustment": {"engine": "BeeCore.PositionAdj",     "tabs": 4, "group": "A", "uc_loc": null, "ds_loc": 4323},
+
+    "Pattern":             {"engine": "BeeCore.Patterns",        "tabs": 4, "group": "B", "uc_loc": 1241, "ds_loc": 4920, "needs_uc": ["PresetCombo", "AngleControl", "ScoreBar"]},
+    "MultiPattern":        {"engine": "BeeCore.MultiPattern",    "tabs": null, "group": "B", "uc_loc": null, "ds_loc": 4093, "needs_uc": ["PresetCombo", "AngleControl", "ScoreBar", "PatternListGrid"]},
+    "MatchingShape":       {"engine": "BeeCore.MatchingShape",   "tabs": null, "group": "B", "uc_loc": null, "ds_loc": null, "needs_uc": ["ShapeEditor", "ScoreBar"]},
+    "Pitch":               {"engine": "BeeCore.Pitch",           "tabs": 3, "group": "B", "uc_loc": null, "ds_loc": 3646, "needs_uc": ["PitchPainter (extract from BeeCore.Unit.PitchGdiPainter)"]},
+    "Barcode":             {"engine": "BeeCore.Barcode",         "tabs": 2, "group": "B", "uc_loc": null, "ds_loc": 1206, "needs_uc": ["SymbologyCombo"]},
+    "OCR":                 {"engine": "BeeCore.OCR",             "tabs": null, "group": "B", "uc_loc": null, "ds_loc": 1360, "needs_uc": ["PresetCombo", "DictionaryPicker"]},
+    "CraftOCR":            {"engine": "BeeCore.CraftOCR",        "tabs": null, "group": "B", "uc_loc": null, "ds_loc": 1991, "needs_uc": ["PresetCombo", "ModelPathPicker"]},
+
+    "Yolo":                {"engine": "BeeCore.Yolo",            "tabs": 4, "group": "C", "uc_loc": 2713, "ds_loc": 4869, "skip_reason": "Label editor + training UI tightly coupled"},
+    "MultiOnnx":            {"engine": "BeeCore.MultiOnnx",       "tabs": null, "group": "C", "uc_loc": null, "ds_loc": 3608, "skip_reason": "Multi-model list, similar to Yolo"},
+    "OKNG":                {"engine": "BeeCore.OKNG",            "tabs": null, "group": "C", "uc_loc": null, "ds_loc": 1369, "skip_reason": "Native OKNG API tightly bound"},
+    "AutoTrig":            {"engine": "BeeCore.AutoTrig",        "tabs": null, "group": "C", "uc_loc": null, "ds_loc": 2666, "skip_reason": "Trigger logic + timer, no image preview"},
+    "VisualMatch":         {"engine": "BeeCore.VisualMatch",     "tabs": null, "group": "C", "uc_loc": null, "ds_loc": 1982, "skip_reason": "Legacy; usage TBD"}
+  },
+
+  "established_conventions_phase_0_to_2": {
+    "tool_resolution": "Common.TryGetTool / TryGetToolList / EnsureToolList / EnsureCurrentToolList / SetToolList",
+    "forbidden": "Common.PropetyTools[ip][it] — direct two-level indexing (CI guard: tools/check_propety_tools.sh)",
+    "event_subscribe": "ALWAYS pair: X.Event -= Handler; X.Event += Handler;",
+    "owner_tool_cache": "Each ToolXxx caches private PropetyTool _ownerTool; getter calls Common.TryGetTool(Global.IndexProgChoose, Propety.Index); InvalidateOwnerToolCache() to refresh",
+    "namespace_freeze": "BeeCore (root namespace) MUST NOT change for [Serializable] payload classes in Unit/* — file is loaded with type lookup by full name",
+    "events_on_state": "ToolState exposes ScoreChanged, PercentChange, StatusToolChanged, ToolDoneChanged"
+  },
+
+  "duplicates_to_unify": {
+    "CustomGui.cs": ["BeeCore/CustomGui.cs", "BeeCore/Func/CustomGui.cs", "BeeInterface/CustomGui.cs"],
+    "Converts.cs":  ["BeeCore/Converts.cs", "BeeCore/Func/Converts.cs"],
+    "ShapeEditing/*": ["BeeCore/ShapeEditing/*", "BeeInterface/ShapeEditing/*"],
+    "Global state": ["BeeGlobal/Global.cs", "BeeInterface/Global.cs", "BeeCore/Parameter/G.cs", "BeeUi/Global.cs"]
+  },
+
+  "designer_pattern_in_tools": {
+    "_typical_layout": "TabControl tabControl2 → 2-4 TabPage → TableLayoutPanel → mix of: RJButton (action btn), AdjustBarEx (slider trackScore/trackThreshold/trackMinInlier/AdjScale), Cyotek.ImageBox (preview), Label, GradientTab, ItemTool",
+    "_visible_in_ToolCircle": "tabControl2, tabP1, tabPage4, btnCalib, btn1..btn5, btnNewShape/Polygon/Hexagon/Elip/Rect, btnArea/Crop/Mask, btnBlack/White, btnCropFull/CropHalt, btnInsideOut/OutsideIn, btnInvert/Binary/StrongEdge/CloseEdge, AdjScale, AdjThreshod, trackScore, trackThreshold, trackMinInlier, multiple TableLayoutPanels"
+  },
+
+  "save_load_pipeline": {
+    "save_program": "SaveData.Program(string Project, List<List<PropetyTool>> Prog) → Access.SaveProg(path, list) → SerializeToBase64(BinaryFormatter) → AtomicWriteAllText(.tmp+Replace+.bak)",
+    "load_program": "LoadData.Project(string Project) → Access.LoadProg(path) → File.ReadAllText(UTF8) → Convert.FromBase64String → BinaryFormatter.Deserialize → List<List<PropetyTool>>",
+    "path_selector": "if Global.Config.IsSaveProg: Common\\Common.prog ; else: Program\\<Project>\\<Project>.prog",
+    "ancillary_files": {
+      ".para":   "ParaCommon",
+      ".cam":    "List<ParaCamera>",
+      ".com":    "Comunication",
+      ".gc":     "ParaShow",
+      ".img":    "List<ItemRegsImg> register",
+      ".sim":    "List<ItemRegsImg> simulation",
+      ".config": "Config",
+      ".no":     "List<ProgNo>",
+      ".prog":   "List<List<PropetyTool>>"
+    }
+  }
+}

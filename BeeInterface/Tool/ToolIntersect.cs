@@ -1,5 +1,6 @@
 ﻿using BeeCore;
 using BeeCore.Algorithm;
+using BeeCore.Funtion.Engines;
 using BeeCore.Func;
 using BeeGlobal;
 using BeeInterface;
@@ -63,12 +64,13 @@ namespace BeeInterface
             try
             {
                
-                trackScore.Min = OwnerTool.MinValue;
-                trackScore.Max = OwnerTool.MaxValue;
-                trackScore.Step = OwnerTool.StepValue;
-                trackScore.Value = OwnerTool.Score;
+                var state = IntersectEngineRunner.ReadFromOwner(OwnerTool, Propety);
+                trackScore.Min = state.ScoreMin;
+                trackScore.Max = state.ScoreMax;
+                trackScore.Step = state.ScoreStep;
+                trackScore.Value = state.Score;
 
-                OwnerTool.StatusTool = StatusTool.WaitCheck;
+                IntersectEngineRunner.MarkOwnerWaiting(OwnerTool);
                  if (OwnerTool != null)
                  {
                      OwnerTool.StatusToolChanged -= ToolWidth_StatusToolChanged;
@@ -390,7 +392,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            OwnerTool.Score=trackScore.Value;
+            IntersectEngineRunner.ApplyScoreToOwner(OwnerTool, trackScore.Value);
          }
      
         public Intersect Propety { get; set; }
@@ -485,10 +487,11 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            if (!Common.TryGetTool(Global.IndexToolSelected). worker.IsBusy)
-                Common.TryGetTool(Global.IndexToolSelected).worker.RunWorkerAsync();
-            else
+            if (!IntersectEngineRunner.TryStartSelectedTool())
+            {
+                btnTest.Enabled = true;
                 btnTest.IsCLick = false;
+            }
         }
         bool IsFullSize = false;
         private void btnCropHalt_Click(object sender, EventArgs e)

@@ -27,7 +27,7 @@ namespace BeeCore
             if (StatusProcessing == StatusProcessing.None)
             {
                 doneCount = 0;
-                Global._toolSemaphores = new Dictionary<string, SemaphoreSlim>();
+                Global.ResetToolSchedulers();
                 if (!Global.Comunication.Protocol.IsConnected && !Global.Comunication.Protocol.IsBypass)
                 {
                     Global.PLCStatus = PLCStatus.ErrorConnect;
@@ -306,7 +306,7 @@ namespace BeeCore
                     break;
                 case StatusProcessing.Checking:
                     doneCount = 0;
-                    Global._toolSemaphores = new Dictionary<string, SemaphoreSlim>();
+                    Global.ResetToolSchedulers();
                     StatusProcessing = StatusProcessing.WaitingDone; totalTools = 0;
                     foreach (PropetyTool PropetyTool in BeeCore.Common.EnsureToolList(indexThread))
                     {
@@ -317,7 +317,7 @@ namespace BeeCore
 
                     foreach (PropetyTool PropetyTool in BeeCore.Common.EnsureToolList(indexThread))
                     {
-                        // FIX: b? qua tool NotUsed d? d?ng b? v?i vòng d?m totalTools ? trên
+                        // FIX: b? qua tool NotUsed d? d?ng b? v?i vï¿½ng d?m totalTools ? trï¿½n
                         if (PropetyTool.UsedTool == UsedTool.NotUsed)
                             continue;
 
@@ -327,8 +327,8 @@ namespace BeeCore
                         //PropetyTool.ItemTool.ClStatus = Color.Gray;
                         if (PropetyTool.TypeTool == TypeTool.AutoTrig)
                         {
-                            // FIX: AutoTrig dã ch?y xong ? state Waiting, nhung v?n du?c
-                            // d?m vào totalTools ? trên => ph?i tang doneCount d? không deadlock
+                            // FIX: AutoTrig dï¿½ ch?y xong ? state Waiting, nhung v?n du?c
+                            // d?m vï¿½o totalTools ? trï¿½n => ph?i tang doneCount d? khï¿½ng deadlock
                             Interlocked.Increment(ref doneCount);
                             continue;
                         }
@@ -349,8 +349,8 @@ namespace BeeCore
                         //if (!PropetyTool.worker.IsBusy)
                         //    PropetyTool.worker.RunWorkerAsync();
                     }
-                    // FIX: phòng tru?ng h?p toàn b? tool còn l?i d?u là AutoTrig/Position_Adjustment/NotUsed
-                    // thì sau khi tang doneCount ? trên có th? dã == totalTools, c?n check k?t thúc luôn
+                    // FIX: phï¿½ng tru?ng h?p toï¿½n b? tool cï¿½n l?i d?u lï¿½ AutoTrig/Position_Adjustment/NotUsed
+                    // thï¿½ sau khi tang doneCount ? trï¿½n cï¿½ th? dï¿½ == totalTools, c?n check k?t thï¿½c luï¿½n
                     if (doneCount >= totalTools && totalTools > 0)
                     {
                         doneCount = 0;
@@ -369,12 +369,12 @@ namespace BeeCore
         private void PropetyTool_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (obj != StatusTool.Done) return;
-            // FIX: ch? d?m nh?ng tool th?t s? Used, tránh NotUsed làm l?ch doneCount
+            // FIX: ch? d?m nh?ng tool th?t s? Used, trï¿½nh NotUsed lï¿½m l?ch doneCount
             if (tool != null && tool.UsedTool == UsedTool.NotUsed) return;
 
             int current = Interlocked.Increment(ref doneCount);
 
-            // FIX: dùng >= và snapshot d? tránh race khi nhi?u tool Done cùng lúc
+            // FIX: dï¿½ng >= vï¿½ snapshot d? trï¿½nh race khi nhi?u tool Done cï¿½ng lï¿½c
             if (current >= totalTools && totalTools > 0)
             {
                 doneCount = 0;

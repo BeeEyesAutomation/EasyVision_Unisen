@@ -19,6 +19,8 @@ namespace BeeCore
         public float Percent { get; set; }
         public float Area { get; set; }
         public int ValueColor { get; set; }
+        public Rectangle ColorMarkRect { get; set; } = Rectangle.Empty;
+        public OpenCvSharp.Point[] ColorMarkContour { get; set; }
         public int IndexScanBox { get; set; }
 
         public float Distance { get; set; }
@@ -29,6 +31,10 @@ namespace BeeCore
         public bool IsOK { get; set; }
         public Mat matProcess = null;
         public float PercentColor = 0;
+
+        // Overlay debug cho color check: base crop + viền mask vàng + pixel NG đỏ.
+        [NonSerialized]
+        public Mat ColorDebugOverlay = null;
 
     }
 

@@ -52,6 +52,7 @@ namespace BeeGlobal
         public int LimitDelayTrigger = 100000;
         public float LimitExposure = 1000000;
         public int TimerOutChecking = 3000;
+        public int MaxConcurrentTools = 0;
         public bool IsShowFull = false;
         public bool IsAutoTrigger = false;
         public DisplayResolution DisplayResolution=DisplayResolution.Full;

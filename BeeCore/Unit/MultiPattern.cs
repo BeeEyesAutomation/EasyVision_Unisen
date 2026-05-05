@@ -1175,27 +1175,33 @@ namespace BeeCore
                         int w = 0, h = 0, s = 0, c = 0;
 
                         IntPtr intpr = list_Patterns[i].SetImgeSample(
-                              gray.Data,
-                              gray.Width,
-                              gray.Height,
-                              (int)gray.Step(),
-                              gray.Channels(),
-                              rrCli2,
-                              rrMaskCliLocal2,
-                              false,
-                              out w, out h, out s, out c
-
-                          );
-                        list_Patterns[i].LearnPatternStable();
-                        
-                        rot.ExpandPixels(ExpandX, ExpandY);
-                        MatType mt = c == 1 ? MatType.CV_8UC1
-                                   : c == 3 ? MatType.CV_8UC3
-                                   : MatType.CV_8UC4;
-                        using (var m = new Mat(h, w, mt, intpr, s))
+                            gray.Data,
+                            gray.Width,
+                            gray.Height,
+                            (int)gray.Step(),
+                            gray.Channels(),
+                            rrCli2,
+                            rrMaskCliLocal2,
+                            false,
+                            out w, out h, out s, out c
+                        );
+                        try
                         {
-                        //    Cv2.ImWrite($"Temp\\Temp"+i+".png", m);
-                            ResultMulti[i].BTemp = m.Clone().ToBitmap();
+                            list_Patterns[i].LearnPatternStable();
+
+                            rot.ExpandPixels(ExpandX, ExpandY);
+                            MatType mt = c == 1 ? MatType.CV_8UC1
+                                       : c == 3 ? MatType.CV_8UC3
+                                       : MatType.CV_8UC4;
+                            using (var m = new Mat(h, w, mt, intpr, s))
+                            {
+                                //    Cv2.ImWrite($"Temp\\Temp"+i+".png", m);
+                                ResultMulti[i].BTemp = m.Clone().ToBitmap();
+                            }
+                        }
+                        finally
+                        {
+                            list_Patterns[i].FreeBuffer(intpr);
                         }
 
                        

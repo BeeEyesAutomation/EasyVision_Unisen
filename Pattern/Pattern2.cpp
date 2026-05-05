@@ -12,6 +12,39 @@ using namespace System;
 using namespace System::IO;
 using namespace System::Text;
 using namespace System::Globalization;
+
+namespace
+{
+	std::mutex g_openCvRuntimeMutex;
+
+	struct ScopedOpenCvRuntimeLock
+	{
+		std::unique_lock<std::mutex> lock;
+		bool restoreOpenCl = false;
+		bool oldOpenCl = false;
+
+		void Lock()
+		{
+			if (!lock.owns_lock())
+				lock = std::unique_lock<std::mutex>(g_openCvRuntimeMutex);
+		}
+
+		void EnableOpenCl()
+		{
+			Lock();
+			oldOpenCl = cv::ocl::useOpenCL();
+			cv::ocl::setUseOpenCL(true);
+			restoreOpenCl = true;
+		}
+
+		~ScopedOpenCvRuntimeLock()
+		{
+			if (restoreOpenCl)
+				cv::ocl::setUseOpenCL(oldOpenCl);
+		}
+	};
+}
+
 inline int _mm_hsum_epi32(__m128i V)      // V3 V2 V1 V0
 {
 	// 實測這個速度要快些，_mm_extract_epi32最慢。
@@ -613,6 +646,7 @@ Pattern2::~Pattern2() { this->!Pattern2(); }
 Pattern2::!Pattern2() { if (img) { delete img; img = nullptr; } if (com) { delete com; com = nullptr; } }
 void Pattern2::SetImgeSampleNoCrop(IntPtr data, int w, int h, int stride, int ch)
 {
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
 	if (data == IntPtr::Zero || w <= 0 || h <= 0 || stride <= 0)
 	{
 		img->matSample.release();
@@ -656,6 +690,7 @@ System::IntPtr Pattern2::SetImgeSample(System::IntPtr tplData, int tplW, int tpl
 	[System::Runtime::InteropServices::Out] int% outStride,
 	[System::Runtime::InteropServices::Out] int% outChannels)
 {
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
 
 	if (NoCrop)img->matSample = Mat(tplH, tplW, CV_8UC1, tplData.ToPointer(), tplStride);
 	else
@@ -695,6 +730,7 @@ System::IntPtr Pattern2::SetImgeSample(System::IntPtr tplData, int tplW, int tpl
 }
 void Pattern2::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask)
 {
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
 	Nullable<RectRotateCli> mask =
 		rrMask.HasValue ? Nullable<RectRotateCli>(rrMask.Value)
 		: Nullable<RectRotateCli>();
@@ -709,6 +745,7 @@ void Pattern2::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStr
 }
 void Pattern2::SetRawNoCrop(IntPtr data, int w, int h, int stride, int ch)
 {
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
 	if (data == IntPtr::Zero || w <= 0 || h <= 0 || stride <= 0)
 	{
 		// reset an toàn
@@ -1811,6 +1848,7 @@ namespace
 //}
 void Pattern2::LearnPattern()
 {
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
 	Mat raw = img->matSample.clone();
 
 	int iTopLayer = img->GetTopLayer(&raw, (int)sqrt((double)img->m_iMinReduceArea));
@@ -1859,6 +1897,7 @@ void Pattern2::LearnPatternStable()
 
 void Pattern2::LearnPatternStable(Pattern2StableConfig cfg)
 {
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
 	if (img == nullptr) return;
 
 	img->ClearStableScaleBank();
@@ -2005,6 +2044,7 @@ void Pattern2::FreeBuffer(System::IntPtr p)
 
 void Pattern2::SetGpuEnabled(bool enable)
 {
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
 	if (img != nullptr)
 		img->m_EnableGpu = enable && CanUseGpu(true);
 }
@@ -2023,6 +2063,7 @@ System::IntPtr Pattern2::PreviewPreprocessed(
 	[System::Runtime::InteropServices::Out] int% outStride,
 	[System::Runtime::InteropServices::Out] int% outChannels)
 {
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
 	outW = 0;
 	outH = 0;
 	outStride = 0;
@@ -2151,6 +2192,7 @@ List<Rotaterectangle>^ Pattern2::Match(
 	int    numThreads
 )
 {
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
 	//  Kết quả .NET 
 	auto results = gcnew List<Rotaterectangle>(Math::Max(m_iMaxPos, 0));
 
@@ -2214,8 +2256,9 @@ List<Rotaterectangle>^ Pattern2::Match(
 	}
 
 	const bool useGpuMatch = img->m_EnableGpu && CanUseGpu(true);
+	ScopedOpenCvRuntimeLock runtimeLock;
 	if (useGpuMatch)
-		cv::ocl::setUseOpenCL(true);
+		runtimeLock.EnableOpenCl();
 
 	//  Pyramid nguồn 
 	std::vector<cv::Mat> vecMatSrcPyr;
@@ -2315,6 +2358,7 @@ List<Rotaterectangle>^ Pattern2::Match(
 	}
 	else
 	{
+		runtimeLock.Lock();
 		ScopedCvThreadLimit cvThreadLimit(true);
 		std::vector<std::vector<s_MatchParameter>> buckets((size_t)cpuThreadCount);
 		std::vector<std::thread> workers;
@@ -2556,6 +2600,7 @@ List<Rotaterectangle>^ Pattern2::Match(
 
 List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 {
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
 	auto results = gcnew List<Rotaterectangle>();
 
 	if (img == nullptr) return results;

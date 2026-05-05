@@ -713,7 +713,7 @@ namespace BeeCore
                 graphics.FillRectangle(rightBgBrush, rightRect);
 
                 float textX = rightRect.Right - rightSize.Width - padding;
-                float textY = rightRect.Top + padding;
+                float textY = rightRect.Top + padding+10;
 
                 graphics.DrawString(rightText, currentFont, textBrush, textX, textY);
             }

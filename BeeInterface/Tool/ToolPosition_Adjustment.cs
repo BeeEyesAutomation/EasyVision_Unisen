@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeCore.Funtion.Engines;
 using BeeGlobal;
 using BeeInterface;
 using BeeInterface.Group;
@@ -57,7 +58,8 @@ namespace BeeInterface
             this.VisibleChanged -= ToolPosition_Adjustment_VisibleChanged;
             this.VisibleChanged += ToolPosition_Adjustment_VisibleChanged;
             EditRectRot1.Refresh();
-            trackScore.Value = OwnerTool.Score;
+            var state = PositionAdjustmentEngineRunner.ReadFromOwner(OwnerTool, Propety);
+            trackScore.Value = state.Score;
             trackAngle.Value = (int)Propety.Angle;
             if (Propety.Angle > 360) Propety.Angle = 360;
 
@@ -146,7 +148,7 @@ namespace BeeInterface
                 btnHighSpeed.IsCLick = true;
             else
                 btnNormal.IsCLick = true;
-            OwnerTool.StatusTool = StatusTool.WaitCheck;
+            PositionAdjustmentEngineRunner.MarkOwnerWaiting(OwnerTool);
              if (OwnerTool != null)
              {
                  OwnerTool.StatusToolChanged -= ToolPosition_Adjustment_StatusToolChanged;
@@ -414,7 +416,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            OwnerTool.Score = (int)trackScore.Value;
+            PositionAdjustmentEngineRunner.ApplyScoreToOwner(OwnerTool, trackScore.Value);
             //numScore.Value =OwnerTool.Score;
 
         }
@@ -439,7 +441,11 @@ namespace BeeInterface
         private async void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-             Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
+             if (!PositionAdjustmentEngineRunner.TryRunSelectedTool())
+             {
+                 btnTest.Enabled = true;
+                 btnTest.IsCLick = false;
+             }
 
 
             //if (!OwnerTool.worker.IsBusy)
@@ -711,11 +717,12 @@ namespace BeeInterface
         private void btnCalib_Click(object sender, EventArgs e)
         {
             btnCalib.Enabled = false;
-            Propety.IsCalib= true;
-            if (!Common.TryGetTool(Global.IndexToolSelected).worker.IsBusy)
-                Common.TryGetTool(Global.IndexToolSelected).worker.RunWorkerAsync();
-            else
-                Propety.IsCalib = false;
+            PositionAdjustmentEngineRunner.BeginCalibration(Propety);
+            if (!PositionAdjustmentEngineRunner.TryRunSelectedTool())
+            {
+                btnCalib.Enabled = true;
+                btnCalib.IsCLick = false;
+            }
         }
 
         private void trackMinInlierB_ValueChanged(float obj)

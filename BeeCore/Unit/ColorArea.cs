@@ -126,7 +126,7 @@ namespace BeeCore
             SetColor();
             Common.TryGetTool(IndexThread, Index).StepValue = 1f;
             Common.TryGetTool(IndexThread, Index).MinValue = 0;
-            Common.TryGetTool(IndexThread, Index).MaxValue = 2000;
+            Common.TryGetTool(IndexThread, Index).MaxValue = 20000;
             Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.WaitCheck;
         }
         [NonSerialized]
@@ -274,10 +274,10 @@ namespace BeeCore
 
         public bool IsCalib;
      public   int pxRS = 0;
-        public void DoWork(RectRotate rotArea, RectRotate rotMask)
+        public void DoWork(RectRotate retRotAdj, RectRotate rotMask)
         {
-
-            pxRS= CheckColor(rotArea);
+            
+            pxRS = CheckColor(retRotAdj);
 
         }
         public void Complete()
@@ -288,6 +288,7 @@ namespace BeeCore
             {
                 if(pxRS<PxTemp)
                 {
+                    Common.TryGetTool(IndexThread, Index).ScoreResult = 0;
                     Common.TryGetTool(IndexThread, Index).Results = Results.OK;
                     return;
 
@@ -297,6 +298,7 @@ namespace BeeCore
             {
                 if (pxRS > PxTemp)
                 {
+                    Common.TryGetTool(IndexThread, Index).ScoreResult = 0;
                     Common.TryGetTool(IndexThread, Index).Results = Results.OK;
                     return;
 
@@ -323,6 +325,7 @@ namespace BeeCore
                 mat.Translate(Global.pScroll.X, Global.pScroll.Y);
                 mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
             }
+
             mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
@@ -341,11 +344,15 @@ namespace BeeCore
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             //Common.TryGetTool(IndexThread, Index).ScoreResult + "%"
             Draws.Box3Label(gc, rotA, nameTool, "", pxRS + " Px", font, cl, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
-
-          //  Draws.Box2Label(gc, rotA, nameTool, pxRS + " Px", font, cl, brushText, 16, Global.ParaShow.ThicknessLine);
-           if(!Global.IsRun||Global.ParaShow.IsShowDetail)
+            RectRotate rectRotate = rotA.Clone();
+            if (OffSetX > 0)
+            {
+                rectRotate._rect = new RectangleF(rectRotate._rect.X + OffSetX, rectRotate._rect.Y, rectRotate._rect.Width - OffSetX * 2, rectRotate._rect.Height);
+                rectRotate._PosCenter = new PointF(rectRotate._PosCenter.X + OffSetX, rectRotate._PosCenter.Y);
+            }
+            if (!Global.IsRun||Global.ParaShow.IsShowDetail)
             if (matProcess != null && !matProcess.Empty())
-                Draws.DrawMatInRectRotate(gc, matProcess, rotA,  Global.ScaleZoom * 100, Global.pScroll, cl,Global.ParaShow.Opacity/100.0f);
+                Draws.DrawMatInRectRotate(gc, matProcess, rectRotate,  Global.ScaleZoom * 100, Global.pScroll, cl,Global.ParaShow.Opacity/100.0f);
           
             return gc;
         }
@@ -356,9 +363,12 @@ namespace BeeCore
         float ValueColor = 0;
         public bool IsNGLess = false;
         public bool IsNGMore = false;
+        public int OffSetX = 0;
+       
         public int CheckColor(RectRotate rot)
         {
             int pxRs = 0;
+
 
             if (matProcess != null) { matProcess.Dispose(); matProcess = null; }
 
@@ -378,9 +388,16 @@ namespace BeeCore
                     {
                         bgr = src; // reuse
                     }
-                    var rrCli = Converts.ToCli(rot); // như ở reply trước
+                    RectRotate rectRotate = rot.Clone();
+                    if (OffSetX > 0)
+                    {
+                        rectRotate._rect = new RectangleF(rectRotate._rect.X + OffSetX, rectRotate._rect.Y, rectRotate._rect.Width - OffSetX*2, rectRotate._rect.Height);
+                        rectRotate._PosCenter = new PointF(rectRotate._PosCenter.X + OffSetX, rectRotate._PosCenter.Y);
+                    }
+                        var rrCli = Converts.ToCli(rectRotate); // như ở reply trước
+                    
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
-
+          
                     ColorAreaPP.SetImgeCrop(
                         bgr.Data, bgr.Width, bgr.Height, (int)bgr.Step(), bgr.Channels(), rrCli,rrMaskCli);
 

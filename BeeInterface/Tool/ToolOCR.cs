@@ -1,5 +1,7 @@
 ﻿using BeeCore;
+using BeeCore.Funtion.Engines;
 using BeeGlobal;
+using BeeInterface.Tool._Base;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -23,28 +25,28 @@ using Size = System.Drawing.Size;
 namespace BeeInterface
 {
     [Serializable()]
-    public partial class ToolOCR : UserControl
+    public partial class ToolOCR : ToolViewBase
     {
+        private OCR _propety;
 
-        #region OwnerTool cache (Phase 2 refactor)
-        private PropetyTool _ownerTool;
-        private PropetyTool OwnerTool
+        public new OCR Propety
         {
-            get
+            get { return _propety; }
+            set
             {
-                if (_ownerTool == null)
-                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
-                return _ownerTool;
+                _propety = value;
+                base.Propety = value;
+                InvalidateOwnerToolCache();
             }
         }
-        private void InvalidateOwnerToolCache() => _ownerTool = null;
-        #endregion
         public ToolOCR(bool IsNew = false)
         {
             InitializeComponent();
+            HostLegacyControlsInBaseTabs();
             this.IsNew = IsNew;
             if (Propety == null)
                 Propety = new OCR();
+            RequestDynamicTabsForKind("OCR");
 
         }
         bool IsNew = false;
@@ -94,8 +96,9 @@ namespace BeeInterface
 
         }
 
-        public void LoadPara()
+        public override void LoadPara()
         {
+            OCRViewState viewState = OCREngineRunner.ReadFromOwner(OwnerTool, Propety);
             EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotMask };
             EditRectRot1.IsHide = false;
             EditRectRot1.Refresh();
@@ -106,14 +109,14 @@ namespace BeeInterface
             this.VisibleChanged += ToolOCR_VisibleChanged;
           
             Global.TypeCrop = TypeCrop.Area;
-            txtContent.Text = Propety.Matching;
+            txtContent.Text = viewState.Matching;
 
-            trackScore.Min = OwnerTool.MinValue;
-            trackScore.Max = OwnerTool.MaxValue;
-            trackScore.Step = OwnerTool.StepValue;
-            trackScore.Value = OwnerTool.Score;
+            trackScore.Min = viewState.ScoreMin;
+            trackScore.Max = viewState.ScoreMax;
+            trackScore.Step = viewState.ScoreStep;
+            trackScore.Value = viewState.Score;
 
-            OwnerTool.StatusTool = StatusTool.WaitCheck;
+            OCREngineRunner.MarkOwnerWaiting(OwnerTool);
              if (OwnerTool != null)
              {
                  OwnerTool.StatusToolChanged -= ToolOCR_StatusToolChanged;
@@ -124,18 +127,18 @@ namespace BeeInterface
                  OwnerTool.ScoreChanged -= ToolOCR_ScoreChanged;
                  OwnerTool.ScoreChanged += ToolOCR_ScoreChanged;
              }
-            AdjLimitArea.Value = Propety.LimitArea;
+            AdjLimitArea.Value = viewState.LimitArea;
         
-            numCLAHE.Value = Propety.Clahe;
-            numUnsharp.Value = Propety.Sigma;
-            numBlur.Value = Propety.Blur;
+            numCLAHE.Value = viewState.Clahe;
+            numUnsharp.Value = viewState.Sigma;
+            numBlur.Value = viewState.Blur;
             Propety.rotMask = null;
           
-            if (Propety.sAllow != null)
-                txtAllow.Text = Propety.sAllow;
-            btn8.IsCLick =! Propety.IsCompareNoFixed;
+            if (viewState.Allow != null)
+                txtAllow.Text = viewState.Allow;
+            btn8.IsCLick = !viewState.IsCompareNoFixed;
            lay8.Visible = !btn8.IsCLick;
-            txtAddressPLC.Text = Propety.AddPLC;
+            txtAddressPLC.Text = viewState.AddPLC;
             
             if (IsNew)
             {
@@ -145,7 +148,7 @@ namespace BeeInterface
                     workLoadModel.RunWorkerAsync();
             }
 
-            lay4.Enabled = !Propety.IsCompareNoFixed;
+            lay4.Enabled = !viewState.IsCompareNoFixed;
 
         }
 
@@ -191,11 +194,10 @@ namespace BeeInterface
         private void trackScore_ValueChanged(float obj)
         {
 
-            OwnerTool.Score = (int)trackScore.Value;
+            OCREngineRunner.ApplyScoreToOwner(OwnerTool, (int)trackScore.Value);
 
         }
 
-        public OCR Propety { get; set; }
         public Mat matTemp = new Mat();
         Mat matClear = new Mat(); Mat matMask = new Mat();
 
@@ -463,7 +465,7 @@ namespace BeeInterface
         {
 
             btnTest.Enabled = false;
-            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
+            OCREngineRunner.TryRunSelectedTool();
 
         }
 
@@ -589,7 +591,7 @@ namespace BeeInterface
         {
             if (!IsIni)
             {
-                Propety.SetModelOCR();
+                OCREngineRunner.LoadModel(Propety);
                 
                 IsIni = true;
             }
@@ -728,6 +730,54 @@ namespace BeeInterface
         private void btn2_Click(object sender, EventArgs e)
         {
             EditRectRot1.Visible = !btn2.IsCLick;
+        }
+
+        private void HostLegacyControlsInBaseTabs()
+        {
+            if (tabRoot == null)
+                return;
+
+            if (tabControl1 != null)
+            {
+                tabRoot.Font = tabControl1.Font;
+                Controls.Remove(tabControl1);
+            }
+
+            Controls.Remove(pInspect);
+            Controls.Remove(oK_Cancel1);
+
+            AddControlsToBaseTab(tabRoi, btn2, EditRectRot1);
+            AddControlsToBaseTab(tabParams, btn3, lay3, btn4, lay4, btn6, AdjLimitArea, btn8, lay8, tableLayoutPanel8);
+            AddControlsToBaseTab(tabResult, btn5, trackScore);
+            AddControlsToBaseTab(tabGeneral, pInspect, oK_Cancel1);
+        }
+
+        private static void AddControlsToBaseTab(TabPage tabPage, params Control[] controls)
+        {
+            TableLayoutPanel panel = new TableLayoutPanel
+            {
+                AutoScroll = true,
+                BackColor = SystemColors.Control,
+                ColumnCount = 1,
+                Dock = DockStyle.Fill,
+                Padding = new Padding(1, 0, 1, 0),
+                RowCount = controls.Length
+            };
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+
+            for (int i = 0; i < controls.Length; i++)
+            {
+                Control control = controls[i];
+                if (control == null)
+                    continue;
+
+                control.Dock = DockStyle.Fill;
+                panel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+                panel.Controls.Add(control, 0, i);
+            }
+
+            tabPage.Controls.Clear();
+            tabPage.Controls.Add(panel);
         }
     }
 }

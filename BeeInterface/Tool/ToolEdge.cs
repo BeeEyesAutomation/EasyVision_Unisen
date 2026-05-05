@@ -1,6 +1,7 @@
 ﻿using BeeCore;
 using BeeCore.Algorithm;
 using BeeCore.Func;
+using BeeCore.Funtion.Engines;
 using BeeGlobal;
 using BeeInterface;
 using OpenCvSharp;
@@ -68,12 +69,13 @@ namespace BeeInterface
                 EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
                 this.VisibleChanged -= ToolEdge_VisibleChanged;
                 this.VisibleChanged += ToolEdge_VisibleChanged;
-                trackScore.Min = OwnerTool.MinValue;
-                trackScore.Max = OwnerTool.MaxValue;
-                trackScore.Step = OwnerTool.StepValue;
-                trackScore.Value = OwnerTool.Score;
+                var state = EdgeEngineRunner.ReadFromOwner(OwnerTool, Propety);
+                trackScore.Min = state.ScoreMin;
+                trackScore.Max = state.ScoreMax;
+                trackScore.Step = state.ScoreStep;
+                trackScore.Value = state.Score;
 
-                OwnerTool.StatusTool = StatusTool.WaitCheck;
+                EdgeEngineRunner.MarkOwnerWaiting(OwnerTool);
                  if (OwnerTool != null)
                  {
                      OwnerTool.StatusToolChanged -= ToolWidth_StatusToolChanged;
@@ -84,14 +86,14 @@ namespace BeeInterface
                      OwnerTool.ScoreChanged -= ToolWidth_ScoreChanged;
                      OwnerTool.ScoreChanged += ToolWidth_ScoreChanged;
                  }
-                AdjThreshod.Value = Propety.ThresholdBinary;
+                AdjThreshod.Value = state.ThresholdBinary;
 
-                AdjScale.Value = (float)Propety.Scale;
-                AdjAngleRange.Value = (int)Propety.AngleRange;
-                trackMinInlier.Value = Propety.MinInliers;
-                btnStable.IsCLick = Propety.MethordEdge == MethordEdge.Stable ? true : false;
+                AdjScale.Value = state.Scale;
+                AdjAngleRange.Value = state.AngleRange;
+                trackMinInlier.Value = state.MinInliers;
+                btnStable.IsCLick = state.MethordEdge == MethordEdge.Stable ? true : false;
                
-                switch (Propety.MethordEdge)
+                switch (state.MethordEdge)
                 {
                     case MethordEdge.StrongEdges:
                         btnStrongEdge.IsCLick = true; layThreshod.Enabled = false;
@@ -106,7 +108,7 @@ namespace BeeInterface
                         btnInvert.IsCLick = true; layThreshod.Enabled = true;
                         break;
                 }
-                if(Propety.LineOrientation==LineOrientation.Horizontal)
+                if(state.LineOrientation==LineOrientation.Horizontal)
                 {
                     btnDirScan1.Text = "Top-Bottom";
                     btnDirScan2.Text = "Bottom-Top";
@@ -116,28 +118,28 @@ namespace BeeInterface
                     btnDirScan1.Text = "Top-Bottom";
                     btnDirScan2.Text = "Bottom-Top";
                 }
-                if (Propety.LineDirScan == LineDirScan.TopBot|| Propety.LineDirScan == LineDirScan.LeftRight)
+                if (state.LineDirScan == LineDirScan.TopBot|| state.LineDirScan == LineDirScan.LeftRight)
                     btnDirScan1.IsCLick = true;
-                if (Propety.LineDirScan == LineDirScan.BotTop || Propety.LineDirScan == LineDirScan.RightLeft)
+                if (state.LineDirScan == LineDirScan.BotTop || state.LineDirScan == LineDirScan.RightLeft)
                     btnDirScan2.IsCLick = true;
-                if (Propety.LineDirScan == LineDirScan.None )
+                if (state.LineDirScan == LineDirScan.None )
                     btnNone.IsCLick = true;
-                AdjRANSACThreshold.Value=(float) Propety.RansacThreshold ;
-                AdjRANSACIterations.Value = Propety.RansacIterations;
-                trackMinInlier.Value =(float) Propety.MinInliers;
-                AdjMorphology.Value = Propety.SizeClose;
-                AdjOpen.Value = Propety.SizeOpen;
-                AdjClearNoise.Value = Propety.SizeClearsmall;
-                AdjClearBig.Value = Propety.SizeClearBig;
+                AdjRANSACThreshold.Value=(float) state.RansacThreshold ;
+                AdjRANSACIterations.Value = state.RansacIterations;
+                trackMinInlier.Value = state.MinInliers;
+                AdjMorphology.Value = state.SizeClose;
+                AdjOpen.Value = state.SizeOpen;
+                AdjClearNoise.Value = state.SizeClearSmall;
+                AdjClearBig.Value = state.SizeClearBig;
                
-                btnClose.IsCLick = Propety.IsClose;
-                btnOpen.IsCLick = Propety.IsOpen;
-                btnIsClearSmall.IsCLick = Propety.IsClearNoiseSmall;
-                btnIsClearBig.IsCLick = Propety.IsClearNoiseBig;
-                AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
-                AdjClearBig.Enabled = Propety.IsClearNoiseBig;
-                AdjOpen.Enabled = Propety.IsOpen;
-                AdjMorphology.Enabled = Propety.IsClose;
+                btnClose.IsCLick = state.IsClose;
+                btnOpen.IsCLick = state.IsOpen;
+                btnIsClearSmall.IsCLick = state.IsClearNoiseSmall;
+                btnIsClearBig.IsCLick = state.IsClearNoiseBig;
+                AdjClearNoise.Enabled = state.IsClearNoiseSmall;
+                AdjClearBig.Enabled = state.IsClearNoiseBig;
+                AdjOpen.Enabled = state.IsOpen;
+                AdjMorphology.Enabled = state.IsClose;
              
            
             }
@@ -196,7 +198,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            OwnerTool.Score=trackScore.Value;
+            EdgeEngineRunner.ApplyScoreToOwner(OwnerTool, trackScore.Value);
          }
         public bool IsClear = false;
         public Edge Propety { get; set; }
@@ -294,7 +296,11 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
+            if (!EdgeEngineRunner.TryStartSelectedTool())
+            {
+                btnTest.Enabled = true;
+                btnTest.IsCLick = false;
+            }
 
             //btnTest.IsCLick = false;
         }
@@ -456,8 +462,12 @@ namespace BeeInterface
         private void btnCalib_Click(object sender, EventArgs e)
         {
             btnCalib.Enabled = false;
-            Propety.IsCalibs = true;
-            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
+            EdgeEngineRunner.BeginCalibration(Propety);
+            if (!EdgeEngineRunner.TryStartSelectedTool())
+            {
+                Propety.IsCalibs = false;
+                btnCalib.Enabled = true;
+            }
           
             
         }

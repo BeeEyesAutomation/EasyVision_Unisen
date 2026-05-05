@@ -1,5 +1,6 @@
 ﻿using BeeCore;
 using BeeCore.Func;
+using BeeCore.Funtion.Engines;
 using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -88,11 +89,12 @@ namespace BeeInterface
          
          
            // numScale.Value=(decimal)Propety.Scale ;
-            OwnerTool.StatusTool = StatusTool.WaitCheck;
-            trackScore.Min = OwnerTool.MinValue;
-            trackScore.Max = OwnerTool.MaxValue;
-            trackScore.Step = OwnerTool.StepValue;
-            trackScore.Value = OwnerTool.Score;
+            MeasureEngineRunner.MarkOwnerWaiting(OwnerTool);
+            var state = MeasureEngineRunner.ReadFromOwner(OwnerTool, Propety);
+            trackScore.Min = state.ScoreMin;
+            trackScore.Max = state.ScoreMax;
+            trackScore.Step = state.ScoreStep;
+            trackScore.Value = state.Score;
             if (Propety.listPointChoose.Count>=4)
             {
                 if (Propety.listPointChoose[0].Item1 != null)
@@ -129,8 +131,8 @@ namespace BeeInterface
                   
                 }
             }
-            cbMeasure.SelectedIndex= cbMeasure.FindStringExact(Propety.TypeMeasure.ToString());
-            cbDirect.SelectedIndex = cbMeasure.FindStringExact(Propety.DirectMeasure.ToString());
+            cbMeasure.SelectedIndex= cbMeasure.FindStringExact(state.TypeMeasure.ToString());
+            cbDirect.SelectedIndex = cbMeasure.FindStringExact(state.DirectMeasure.ToString());
             //worker.RunWorkerCompleted += (sender, e) =>
             //{
             //    try
@@ -174,7 +176,7 @@ namespace BeeInterface
         }
         private void trackScore_ValueChanged(float obj)
         {
-            OwnerTool.Score = trackScore.Value;
+            MeasureEngineRunner.ApplyScoreToOwner(OwnerTool, trackScore.Value);
 
         }
 
@@ -530,10 +532,11 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            if (!Common.TryGetTool(Global.IndexToolSelected).worker.IsBusy)
-                Common.TryGetTool(Global.IndexToolSelected).worker.RunWorkerAsync();
-            else
+            if (!MeasureEngineRunner.TryStartSelectedTool())
+            {
+                btnTest.Enabled = true;
                 btnTest.IsCLick = false;
+            }
         }
         bool IsFullSize = false;
       

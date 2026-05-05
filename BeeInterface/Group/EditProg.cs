@@ -65,10 +65,11 @@ namespace BeeUi.Unit
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            BeeCore.Common.SetToolList(Global.IndexProgChoose, new List<BeeCore.PropetyTool>());
+          
             saveFile.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Program";
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
+                BeeCore.Common.SetToolList(Global.IndexProgChoose, new List<BeeCore.PropetyTool>());
                 Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
                Directory.CreateDirectory("Program\\"+Global.Project);
                 Access.SaveProg("Program\\" + Global.Project+"\\"+ Global.Project+ ".prog", BeeCore.Common.PropetyTools);

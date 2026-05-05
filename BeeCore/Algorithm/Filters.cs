@@ -94,40 +94,43 @@ namespace BeeCore.Algorithm
             return result;
         }
 
-        public static Mat SuppressHighlight(Mat src, int blurSize = 51, int delta = 18)
-    {
-        Mat gray = new Mat();
-        if (src.Channels() == 3)
-            Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
-        else
-            gray = src.Clone();
-
-        // blur lớn để lấy nền sáng chậm, không phải để blur ảnh output
-        Mat bg = new Mat();
-        Cv2.GaussianBlur(gray, bg, new Size(blurSize, blurSize), 0);
-
-        Mat result = gray.Clone();
-
-        int rows = gray.Rows;
-        int cols = gray.Cols;
-
-        for (int y = 0; y < rows; y++)
+        public static unsafe Mat SuppressHighlight(Mat src, int blurSize = 51, int delta = 18)
         {
-            for (int x = 0; x < cols; x++)
+            Mat gray = new Mat();
+            if (src.Channels() == 3)
+                Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+            else
+                gray = src.Clone();
+
+            // blur lớn để lấy nền sáng chậm, không phải để blur ảnh output
+            Mat bg = new Mat();
+            Cv2.GaussianBlur(gray, bg, new Size(blurSize, blurSize), 0);
+
+            Mat result = gray.Clone();
+
+            int rows = gray.Rows;
+            int cols = gray.Cols;
+
+            for (int y = 0; y < rows; y++)
             {
-                byte g = gray.At<byte>(y, x);
-                byte b = bg.At<byte>(y, x);
+                byte* grayRow = (byte*)gray.Ptr(y).ToPointer();
+                byte* bgRow = (byte*)bg.Ptr(y).ToPointer();
+                byte* resultRow = (byte*)result.Ptr(y).ToPointer();
+                for (int x = 0; x < cols; x++)
+                {
+                    byte g = grayRow[x];
+                    byte b = bgRow[x];
 
-                int limit = b + delta; // sáng hơn nền quá delta thì hạ xuống
-                if (g > limit)
-                    result.Set(y, x, (byte)limit);
+                    int limit = b + delta; // sáng hơn nền quá delta thì hạ xuống
+                    if (g > limit)
+                        resultRow[x] = (byte)limit;
+                }
             }
-        }
 
-        bg.Dispose();
-        gray.Dispose();
-        return result;
-    }
+            bg.Dispose();
+            gray.Dispose();
+            return result;
+        }
         public static unsafe Mat BinaryTextAutoBlack(Mat src, int minArea = 20, int maxHoleArea = 30)
         {
             if (src == null || src.Empty())
@@ -350,11 +353,11 @@ namespace BeeCore.Algorithm
             Cv2.BitwiseNot(binInv, bin);
 
             // remove small noise
-         Mat clean = RemoveSmallBlackDots(bin, minArea);
+            Mat clean = RemoveSmallBlackDots(bin, minArea);
 
             gray.Dispose();
             binInv.Dispose();
-           bin.Dispose();
+            bin.Dispose();
 
             return clean;
         }
@@ -566,7 +569,7 @@ namespace BeeCore.Algorithm
             // =========================
             // 3. CLAHE (adaptive)
             // =========================
-            var clahe = Cv2.CreateCLAHE(clipLimit: 3.0, tileGridSize: new Size(4,4));
+            var clahe = Cv2.CreateCLAHE(clipLimit: 3.0, tileGridSize: new Size(4, 4));
             Mat enhanced = new Mat();
             clahe.Apply(stretched, enhanced);
 
@@ -615,7 +618,7 @@ namespace BeeCore.Algorithm
                 throw new ArgumentException("Percentile expects CV_8UC1");
 
             // hist as Mat (256x1 float)
-              var hist = new Mat();
+            var hist = new Mat();
             Cv2.CalcHist(
                 images: new[] { img8u },
                 channels: new[] { 0 },
@@ -905,10 +908,10 @@ namespace BeeCore.Algorithm
                     return result;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Filter", ex.Message));
-              
+
             }
             finally
             {
@@ -939,7 +942,7 @@ namespace BeeCore.Algorithm
                 int lower = (int)Math.Max(0, peak * k1);
                 int upper = (int)Math.Min(255, peak * k2);
                 return (lower, upper);
-              }
+            }
         }
         public static Mat Edge(Mat raw)
         {
@@ -947,7 +950,7 @@ namespace BeeCore.Algorithm
             try
             {
                 Mat edges = new Mat();
-              
+
                 if (raw.Type() == MatType.CV_8UC3)
                     Cv2.CvtColor(raw, gray, ColorConversionCodes.BGR2GRAY);
                 else
@@ -979,7 +982,7 @@ namespace BeeCore.Algorithm
                 Cv2.Erode(edges, edges, kernel, iterations: 1);
                 return edges;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Filter", ex.Message));
 
@@ -991,28 +994,28 @@ namespace BeeCore.Algorithm
             //  Cv2.ImWrite("Edge.png", edges);
             return null;
         }
-        public static Mat Threshold(Mat raw,int Threshold, ThresholdTypes thresholdTypes=ThresholdTypes.Binary)
+        public static Mat Threshold(Mat raw, int Threshold, ThresholdTypes thresholdTypes = ThresholdTypes.Binary)
         {
             Mat edges = new Mat();
             Mat gray = new Mat();
             try
-            {  
-           
-            if (raw.Type() == MatType.CV_8UC3)
-                Cv2.CvtColor(raw, gray, ColorConversionCodes.BGR2GRAY);
-            else
-                gray = raw.Clone();
-            Cv2.Threshold(gray, gray, Threshold, 255, thresholdTypes);
-           // Cv2.BitwiseNot(gray, gray);
-            // 3. Làm mượt bằng Gaussian Blur
-            Mat smooth = new Mat();
-          //  Cv2.GaussianBlur(gray, smooth, new Size(5, 5), sigmaX: 1.0);
+            {
 
-            // 4. Tự động tính threshold Canny dựa trên histogram
-          //  var (lower, upper) = AutoCannyThresholdFromHistogram(smooth, k1: 0.66, k2: 1.33);
-            // 1. Histogram truncation để giảm vùng trắng chói
-           
-            Cv2.Canny(gray, edges, 0, 255);
+                if (raw.Type() == MatType.CV_8UC3)
+                    Cv2.CvtColor(raw, gray, ColorConversionCodes.BGR2GRAY);
+                else
+                    gray = raw.Clone();
+                Cv2.Threshold(gray, gray, Threshold, 255, thresholdTypes);
+                // Cv2.BitwiseNot(gray, gray);
+                // 3. Làm mượt bằng Gaussian Blur
+                Mat smooth = new Mat();
+                //  Cv2.GaussianBlur(gray, smooth, new Size(5, 5), sigmaX: 1.0);
+
+                // 4. Tự động tính threshold Canny dựa trên histogram
+                //  var (lower, upper) = AutoCannyThresholdFromHistogram(smooth, k1: 0.66, k2: 1.33);
+                // 1. Histogram truncation để giảm vùng trắng chói
+
+                Cv2.Canny(gray, edges, 0, 255);
                 // 6. Morphological closing để nối đoạn đứt
                 var kernelClose = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
                 Cv2.MorphologyEx(edges, edges, MorphTypes.Close, kernelClose);
@@ -1021,7 +1024,7 @@ namespace BeeCore.Algorithm
                 var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
                 Cv2.Dilate(edges, edges, kernel, iterations: 1);
                 Cv2.Erode(edges, edges, kernel, iterations: 1);
-               
+
                 return edges;
             }
             catch (Exception ex)
@@ -1127,8 +1130,9 @@ namespace BeeCore.Algorithm
                 kernel.Dispose();
 
             };
-        public static Mat Morphology( Mat src ,MorphTypes type, Size ksize, int iterations = 1) 
-         { Mat dst =new Mat();
+        public static Mat Morphology(Mat src, MorphTypes type, Size ksize, int iterations = 1)
+        {
+            Mat dst = new Mat();
 
             using (Mat kernel = Cv2.GetStructuringElement(MorphShapes.Ellipse, ksize))
             {
@@ -1136,7 +1140,7 @@ namespace BeeCore.Algorithm
                 kernel.Dispose();
                 return dst;
             }
-          }
+        }
 
 
         public static Mat KeepThinEdges(Mat edges, int minContourLen = 60)
@@ -1159,7 +1163,7 @@ namespace BeeCore.Algorithm
             //   Bỏ nếu bạn muốn giữ đúng bề dày do Canny tạo ra.
             //return Skeletonize(outBin);
             return outBin;
-           
+
         }
 
         public static Mat ClearNoiseBig(Mat edges, int minCompArea = 1000)
@@ -1198,13 +1202,13 @@ namespace BeeCore.Algorithm
 
         }
 
-        public static Mat ClearNoise( Mat edges,int minCompArea=1000)
+        public static Mat ClearNoise(Mat edges, int minCompArea = 1000)
         {
             Mat labels = new Mat(), stats = new Mat(), centroids = new Mat();
             try
             {
                 // 4) Xóa nhiễu bằng Connected Components (trên ảnh nhị phân edge)
-              
+
                 int num = Cv2.ConnectedComponentsWithStats(edges, labels, stats, centroids, PixelConnectivity.Connectivity8, MatType.CV_32S);
                 var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
                 Mat clean = Mat.Zeros(edges.Size(), MatType.CV_8U);
@@ -1215,8 +1219,9 @@ namespace BeeCore.Algorithm
                     {
                         using (Mat mask = new Mat())
                         {
-                            Cv2.InRange(labels, i, i, mask); // giữ lại đúng nhãn i
-                            clean.SetTo(255, mask);
+                            Cv2.InRange(labels, Scalar.All(i), Scalar.All(i), mask);
+                           // Cv2.InRange(labels, i, i, mask); // giữ lại đúng nhãn i
+                            clean.SetTo(Scalar.All(255), mask);
                         }
                     }
                 }
@@ -1231,7 +1236,7 @@ namespace BeeCore.Algorithm
             }
             // (Tùy chọn) mở nhẹ để mảnh hơn
             //Cv2.MorphologyEx(clean, clean, MorphTypes.Open, kernel, iterations: 1);
-            
+
         }
         public static Mat ClearNoiseByWidth(Mat edges, int minWidth = 10)
         {

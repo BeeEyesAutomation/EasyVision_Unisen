@@ -30,12 +30,12 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.cbTool = new System.Windows.Forms.ComboBox();
+            this.cbTypeResults = new System.Windows.Forms.ComboBox();
             this.lbValue = new BeeInterface.AutoFontLabel();
             this.autoFontLabel4 = new BeeInterface.AutoFontLabel();
             this.autoFontLabel3 = new BeeInterface.AutoFontLabel();
             this.autoFontLabel2 = new BeeInterface.AutoFontLabel();
             this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
-            this.cbTypeResults = new System.Windows.Forms.ComboBox();
             this.txtAdd = new BeeInterface.TextBoxAuto();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -75,6 +75,16 @@
             this.cbTool.Name = "cbTool";
             this.cbTool.Size = new System.Drawing.Size(99, 21);
             this.cbTool.TabIndex = 20;
+            // 
+            // cbTypeResults
+            // 
+            this.cbTypeResults.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbTypeResults.ForeColor = System.Drawing.Color.Blue;
+            this.cbTypeResults.FormattingEnabled = true;
+            this.cbTypeResults.Location = new System.Drawing.Point(3, 19);
+            this.cbTypeResults.Name = "cbTypeResults";
+            this.cbTypeResults.Size = new System.Drawing.Size(99, 21);
+            this.cbTypeResults.TabIndex = 13;
             // 
             // lbValue
             // 
@@ -156,16 +166,6 @@
             this.autoFontLabel1.Text = "Type";
             this.autoFontLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // cbTypeResults
-            // 
-            this.cbTypeResults.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbTypeResults.ForeColor = System.Drawing.Color.Blue;
-            this.cbTypeResults.FormattingEnabled = true;
-            this.cbTypeResults.Location = new System.Drawing.Point(3, 19);
-            this.cbTypeResults.Name = "cbTypeResults";
-            this.cbTypeResults.Size = new System.Drawing.Size(99, 21);
-            this.cbTypeResults.TabIndex = 13;
-            // 
             // txtAdd
             // 
             this.txtAdd.AutoFont = true;
@@ -183,7 +183,6 @@
             this.Name = "ItemValue";
             this.Size = new System.Drawing.Size(420, 45);
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }

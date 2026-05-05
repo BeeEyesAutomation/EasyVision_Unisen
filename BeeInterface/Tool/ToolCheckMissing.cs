@@ -1,5 +1,6 @@
 ﻿using BeeCore;
 using BeeCpp;
+using BeeCore.Funtion.Engines;
 using BeeGlobal;
 using BeeInterface;
 using Cyotek.Windows.Forms;
@@ -67,7 +68,8 @@ namespace BeeInterface
             {
                 imgTemp.Image = Propety.bmRaw;
             }
-            OwnerTool.StatusTool = StatusTool.WaitCheck;
+            var state = CheckMissingEngineRunner.ReadFromOwner(OwnerTool, Propety);
+            CheckMissingEngineRunner.MarkOwnerWaiting(OwnerTool);
             trackAngle.Value =(int) Propety.Angle;
 
 
@@ -82,11 +84,11 @@ namespace BeeInterface
             Propety.AngleUper = angle + Propety.Angle;
             btnHorizontal.IsCLick=Propety.LineOrientation==LineOrientation.Horizontal?true:false;
             btnVer.IsCLick = Propety.LineOrientation == LineOrientation.Vertical ? true : false;
-            AdjTolorenceDis.Min = OwnerTool.MinValue;
-            AdjTolorenceDis.Max = OwnerTool.MaxValue;
-            AdjTolorenceDis.Step = OwnerTool.StepValue;
-            AdjTolorenceDis.Value = OwnerTool.Score;
-            trackScore.Value = Propety.ScorePattern;
+            AdjTolorenceDis.Min = state.ScoreMin;
+            AdjTolorenceDis.Max = state.ScoreMax;
+            AdjTolorenceDis.Step = state.ScoreStep;
+            AdjTolorenceDis.Value = state.Score;
+            trackScore.Value = state.ScorePattern;
             if (Propety.MaxObject == 0) Propety.MaxObject = 1;
             AdjMaximumObj.Value = Propety.MaxObject;
             AdjStepAngle.Value = Propety.StepAngle;
@@ -120,17 +122,9 @@ namespace BeeInterface
 
 
              if (OwnerTool != null)
-
-
              {
-
-
                  OwnerTool.StatusToolChanged -= ToolPattern_StatusToolChanged;
-
-
                  OwnerTool.StatusToolChanged += ToolPattern_StatusToolChanged;
-
-
              }
         }
 
@@ -168,7 +162,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-          Propety.ScorePattern = (int)trackScore.Value;
+          CheckMissingEngineRunner.ApplyPatternScore(Propety, (int)trackScore.Value);
 
 
         }
@@ -343,7 +337,11 @@ namespace BeeInterface
         {
 
             btnTest.Enabled = false;
-            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
+            if (!CheckMissingEngineRunner.TryRunSelectedTool())
+            {
+                btnTest.Enabled = true;
+                btnTest.IsCLick = false;
+            }
         }
         bool IsFullSize = false;
         private void btnCropHalt_Click(object sender, EventArgs e)
@@ -753,7 +751,7 @@ namespace BeeInterface
 
         private void AdjTolorenceDis_ValueChanged(float obj)
         {
-            OwnerTool.Score = (float)AdjTolorenceDis.Value;
+            CheckMissingEngineRunner.ApplyToleranceToOwner(OwnerTool, (float)AdjTolorenceDis.Value);
 
         }
 

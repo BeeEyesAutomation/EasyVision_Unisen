@@ -421,7 +421,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PreBuildEvent>
-      <Command>powershell -ExecutionPolicy Bypass -Command "$f='$(ProjectDir)version.h'; $c=Get-Content $f; $b=[int]([regex]::Match($c,'VER_BUILD (\d+)').Groups[1].Value)+1; $r=(Get-Date -Format 'yyMMdd'); $c=$c -replace 'VER_BUILD \d+',(\"VER_BUILD $b\") -replace 'VER_REVISION \d+',(\"VER_REVISION $r\"); Set-Content $f $c"</Command>
+      <Command>powershell -NoProfile -ExecutionPolicy Bypass -File "$(MSBuildProjectDirectory)\..\tools\update_native_version.ps1" -VersionFile "$(ProjectDir)version.h" -Major 1 -Minor 1 -DefaultBuild 332</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

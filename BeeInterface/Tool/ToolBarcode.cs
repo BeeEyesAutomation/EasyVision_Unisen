@@ -2,8 +2,10 @@
 using BeeCore.Algorithm;
 using BeeCore.Func;
 using BeeCore.Funtion;
+using BeeCore.Funtion.Engines;
 using BeeGlobal;
 using BeeInterface;
+using BeeInterface.Tool._Base;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -29,35 +31,37 @@ using Size = OpenCvSharp.Size;
 namespace BeeInterface
 {
     [Serializable()]
-    public partial class ToolBarcode : UserControl
+    public partial class ToolBarcode : ToolViewBase
     {
-        
-        #region OwnerTool cache (Phase 2 refactor)
-        private PropetyTool _ownerTool;
-        private PropetyTool OwnerTool
+        private Barcode _propety;
+
+        public new Barcode Propety
         {
-            get
+            get { return _propety; }
+            set
             {
-                if (_ownerTool == null)
-                    _ownerTool = Common.TryGetTool(Global.IndexProgChoose, Propety.Index);
-                return _ownerTool;
+                _propety = value;
+                base.Propety = value;
+                InvalidateOwnerToolCache();
             }
         }
-        private void InvalidateOwnerToolCache() => _ownerTool = null;
-        #endregion
+
         public ToolBarcode( )
         {
             InitializeComponent();
+            HostLegacyControlsInBaseTabs();
             if (Propety == null)
                 Propety = new Barcode();
+            RequestDynamicTabsForKind("Barcode");
         }
         
-        public void LoadPara()
+        public override void LoadPara()
         {
 
           
             try
             {
+                BarcodeViewState viewState = BarcodeEngineRunner.ReadFromOwner(OwnerTool, Propety);
                 EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotCrop };
                 EditRectRot1.Refresh();
                 EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
@@ -65,16 +69,16 @@ namespace BeeInterface
                 EditRectRot1.IsHide = false;
                 this.VisibleChanged -= ToolBarcode_VisibleChanged;
                 this.VisibleChanged += ToolBarcode_VisibleChanged;
-                btnOnSendResult.IsCLick = Propety.IsSendResult;
-                btnOffSendResult.IsCLick =! Propety.IsSendResult;
-                txtAdd.Text = Propety.AddPLC;
+                btnOnSendResult.IsCLick = viewState.IsSendResult;
+                btnOffSendResult.IsCLick = !viewState.IsSendResult;
+                txtAdd.Text = viewState.AddPLC;
                
-                trackScore.Min = OwnerTool.MinValue;
-                trackScore.Max = OwnerTool.MaxValue;
-                trackScore.Step = OwnerTool.StepValue;
-                trackScore.Value = OwnerTool.Score;
+                trackScore.Min = viewState.ScoreMin;
+                trackScore.Max = viewState.ScoreMax;
+                trackScore.Step = viewState.ScoreStep;
+                trackScore.Value = viewState.Score;
 
-                OwnerTool.StatusTool = StatusTool.WaitCheck;
+                BarcodeEngineRunner.MarkOwnerWaiting(OwnerTool);
                  if (OwnerTool != null)
                  {
                      OwnerTool.StatusToolChanged -= ToolWidth_StatusToolChanged;
@@ -93,12 +97,12 @@ namespace BeeInterface
                 Propety.TypeCrop = Global.TypeCrop;
                 imgTemp.Image = Propety.bmRaw;
              
-                btnModeSingle.IsCLick=Propety.ModeCheck==ModeCheck.Single ? true : false;
-                btnModeMulti.IsCLick = Propety.ModeCheck == ModeCheck.Multi ? true : false;
-                AdjIndexProgChoose.Value = Propety.IndexProgChoose + 1;
+                btnModeSingle.IsCLick = viewState.ModeCheck == ModeCheck.Single ? true : false;
+                btnModeMulti.IsCLick = viewState.ModeCheck == ModeCheck.Multi ? true : false;
+                AdjIndexProgChoose.Value = viewState.IndexProgChoose + 1;
                 AdjOffSetArea.IsInital = true;
-                AdjOffSetArea.Value = Propety.OffSetArea;
-                AdjIndexProgChoose.Enabled= Propety.ModeCheck == ModeCheck.Single ? true : false;
+                AdjOffSetArea.Value = viewState.OffSetArea;
+                AdjIndexProgChoose.Enabled = viewState.ModeCheck == ModeCheck.Single ? true : false;
             }
             catch (Exception ex)
             {
@@ -164,10 +168,9 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            OwnerTool.Score=trackScore.Value;
+            BarcodeEngineRunner.ApplyScoreToOwner(OwnerTool, trackScore.Value);
          }
         public bool IsClear = false;
-        public Barcode Propety { get; set; }
 
 
 
@@ -217,7 +220,7 @@ namespace BeeInterface
             Global.TypeCrop= TypeCrop.Area;
 
             btnTest.Enabled = false;
-            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
+            BarcodeEngineRunner.TryRunSelectedTool();
 
         }
         bool IsFullSize = false;
@@ -257,8 +260,7 @@ namespace BeeInterface
         private void btnScanOCR_Click(object sender, EventArgs e)
         {
             btnChoose.IsCLick = false;
-            Propety.IsScan = true;
-         Propety.Scan();
+            BarcodeEngineRunner.Scan(Propety);
            
         }
 
@@ -312,6 +314,54 @@ namespace BeeInterface
         private void btnOffSendResult_Click(object sender, EventArgs e)
         {
             Propety.IsSendResult = false;
+        }
+
+        private void HostLegacyControlsInBaseTabs()
+        {
+            if (tabRoot == null)
+                return;
+
+            if (tabControl2 != null)
+            {
+                tabRoot.Font = tabControl2.Font;
+                Controls.Remove(tabControl2);
+            }
+
+            Controls.Remove(pInspect);
+            Controls.Remove(oK_Cancel1);
+
+            AddControlsToBaseTab(tabRoi, label3, EditRectRot1, tableLayoutPanel7);
+            AddControlsToBaseTab(tabParams, label5, tableLayoutPanel8, tableLayoutPanel9, label2, AdjOffSetArea);
+            AddControlsToBaseTab(tabResult, label8, trackScore, label9, layTemp);
+            AddControlsToBaseTab(tabGeneral, tableLayoutPanel10, pInspect, oK_Cancel1);
+        }
+
+        private static void AddControlsToBaseTab(TabPage tabPage, params Control[] controls)
+        {
+            TableLayoutPanel panel = new TableLayoutPanel
+            {
+                AutoScroll = true,
+                BackColor = SystemColors.Control,
+                ColumnCount = 1,
+                Dock = DockStyle.Fill,
+                Padding = new Padding(1, 0, 1, 0),
+                RowCount = controls.Length
+            };
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+
+            for (int i = 0; i < controls.Length; i++)
+            {
+                Control control = controls[i];
+                if (control == null)
+                    continue;
+
+                control.Dock = DockStyle.Fill;
+                panel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+                panel.Controls.Add(control, 0, i);
+            }
+
+            tabPage.Controls.Clear();
+            tabPage.Controls.Add(panel);
         }
     }
 }

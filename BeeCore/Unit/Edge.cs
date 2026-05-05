@@ -441,7 +441,7 @@ namespace BeeCore
         }
 
 
-        public void SetModel()
+        public void SetModel( bool IsCoppy=false)
         {
             if (rotArea == null) rotArea = new RectRotate();
             if (rotCrop == null) rotCrop = new RectRotate();

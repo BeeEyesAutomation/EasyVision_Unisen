@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props" Condition="Exists('..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>false</Deterministic>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,13 +76,13 @@
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="OpenCvSharp">
-      <HintPath>C:\Lib\OpenCvSharp.dll</HintPath>
+      <HintPath>..\packages\OpenCvSharp4.4.11.0.20250507\lib\net48\OpenCvSharp.dll</HintPath>
     </Reference>
     <Reference Include="OpenCvSharp.Extensions">
-      <HintPath>C:\Lib\OpenCvSharp.Extensions.dll</HintPath>
+      <HintPath>..\packages\OpenCvSharp4.Extensions.4.11.0.20250507\lib\net48\OpenCvSharp.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="OpenCvSharp.UserInterface">
-      <HintPath>C:\Lib\OpenCvSharp.UserInterface.dll</HintPath>
+      <HintPath>..\BeeCore\bin\x64\Debug\OpenCvSharp.UserInterface.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -437,13 +440,43 @@
     <Compile Include="Custom\TextBoxAuto.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Tool\CounterInfor.cs">
+    <Compile Include="Custom\ResultMiniGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Tool\CounterInfor.Designer.cs">
-      <DependentUpon>CounterInfor.cs</DependentUpon>
+    <Compile Include="Custom\ResultMiniGrid.Designer.cs">
+      <DependentUpon>ResultMiniGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Custom\RoiToolbar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Custom\RoiToolbar.Designer.cs">
+      <DependentUpon>RoiToolbar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Custom\ScoreThresholdBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Custom\ScoreThresholdBar.Designer.cs">
+      <DependentUpon>ScoreThresholdBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\_Base\GroupBToolTabRegistrar.cs" />
+    <Compile Include="Tool\_Base\IToolView.cs" />
+    <Compile Include="Tool\_Base\ToolTabContext.cs" />
+    <Compile Include="Tool\_Base\ToolTabRegistry.cs" />
+    <Compile Include="Tool\_Base\ToolViewBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\_Base\ToolViewBase.Designer.cs">
+      <DependentUpon>ToolViewBase.cs</DependentUpon>
     </Compile>
     <Compile Include="Tool\ToolCircle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolCircle.Parameters.cs">
+      <DependentUpon>ToolCircle.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolCircle.Roi.cs">
+      <DependentUpon>ToolCircle.cs</DependentUpon>
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Tool\ToolCircle.Designer.cs">
@@ -728,8 +761,14 @@
     <EmbeddedResource Include="DashBoard\StatusDashboard.resx">
       <DependentUpon>StatusDashboard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tool\CounterInfor.resx">
-      <DependentUpon>CounterInfor.cs</DependentUpon>
+    <EmbeddedResource Include="Custom\ResultMiniGrid.resx">
+      <DependentUpon>ResultMiniGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Custom\RoiToolbar.resx">
+      <DependentUpon>RoiToolbar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Custom\ScoreThresholdBar.resx">
+      <DependentUpon>ScoreThresholdBar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolCircle.resx">
       <DependentUpon>ToolCircle.cs</DependentUpon>
@@ -1586,4 +1625,10 @@
     <None Include="Resources\Keyboard.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props'))" />
+  </Target>
 </Project>

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props" Condition="Exists('..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -73,7 +74,7 @@
       <HintPath>..\packages\CyotekImageBox.2.0.0-beta.2\lib\net472\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
     </Reference>
     <Reference Include="LibUsbDotNet">
-      <HintPath>C:\Lib\LibUsbDotNet.dll</HintPath>
+      <HintPath>..\bin\Release\LibUsbDotNet.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
@@ -85,15 +86,15 @@
     </Reference>
     <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Lib\OpenCvSharp.dll</HintPath>
+      <HintPath>..\BeeCore\bin\x64\Release\OpenCvSharp.dll</HintPath>
     </Reference>
     <Reference Include="OpenCvSharp.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Lib\OpenCvSharp.Extensions.dll</HintPath>
+      <HintPath>..\BeeCore\bin\x64\Release\OpenCvSharp.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="OpenCvSharp.UserInterface, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Lib\OpenCvSharp.UserInterface.dll</HintPath>
+      <HintPath>..\BeeCore\bin\x64\Release\OpenCvSharp.UserInterface.dll</HintPath>
     </Reference>
     <Reference Include="Python.Runtime">
       <HintPath>..\packages\pythonnet.3.0.5\lib\netstandard2.0\Python.Runtime.dll</HintPath>
@@ -292,7 +293,20 @@
     <Compile Include="Func\CodeSymbologyCliExtensions.cs" />
     <Compile Include="Func\ComboBoxExtensions.cs" />
     <Compile Include="Func\Converts.cs" />
+    <Compile Include="Func\Engines\CheckMissingEngineRunner.cs" />
+    <Compile Include="Func\Engines\BarcodeEngineRunner.cs" />
+    <Compile Include="Func\Engines\OCREngineRunner.cs" />
     <Compile Include="Func\Crop.cs" />
+    <Compile Include="Func\Engines\CircleEngineRunner.cs" />
+    <Compile Include="Func\Engines\ColorAreaEngineRunner.cs" />
+    <Compile Include="Func\Engines\CornerEngineRunner.cs" />
+    <Compile Include="Func\Engines\CropEngineRunner.cs" />
+    <Compile Include="Func\Engines\EdgeEngineRunner.cs" />
+    <Compile Include="Func\Engines\EdgePixelEngineRunner.cs" />
+    <Compile Include="Func\Engines\IntersectEngineRunner.cs" />
+    <Compile Include="Func\Engines\MeasureEngineRunner.cs" />
+    <Compile Include="Func\Engines\PositionAdjustmentEngineRunner.cs" />
+    <Compile Include="Func\Engines\WidthEngineRunner.cs" />
     <Compile Include="Func\FilterRect.cs" />
     <Compile Include="Func\General.cs" />
     <Compile Include="Func\ImageUtils.cs" />
@@ -462,5 +476,6 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
+    <Error Condition="!Exists('..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props'))" />
   </Target>
 </Project>

@@ -4265,9 +4265,9 @@ namespace BeeInterface
 private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int stride, int channels)
         {
             if (buffer == IntPtr.Zero) return ; // timeout ho?c fail
-            int matType = (channels == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
+            var matType = (channels == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
 
-            using (var m = new Mat(height, width, matType, buffer, stride))// new OpenCvSharp.Mat(h, w, type, p, s))
+            using (var m = Mat.FromPixelData(height, width, matType, buffer, stride))
             {
                
                 BeeCore.Common.listCamera[Global.IndexCCCD].GetFpsPylon();

@@ -542,8 +542,8 @@ namespace BeeCore
                                 cfg.SubPixel = ckSubPixel;
                                 cfg.EnableScaleSearch = false;
                                 cfg.EnableAutoThreshold = true;
-                                cfg.EnableKeepFilter = false;
-                                cfg.EnableValidator = false;
+                                cfg.EnableKeepFilter = true;
+                                cfg.EnableValidator = true;
                                 cfg.EnableNms = false;
                                cfg.EnableCpuMultiThread = false;
                                 cfg.CpuThreads = 0      ; // auto theo hardware_concurrency

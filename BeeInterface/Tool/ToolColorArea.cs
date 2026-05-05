@@ -1,5 +1,6 @@
 ﻿using BeeCore;
 using BeeCpp;
+using BeeCore.Funtion.Engines;
 using BeeGlobal;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp;
@@ -62,16 +63,18 @@ namespace BeeInterface
             EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
             EditRectRot1.IsHide = false;
+            AdjOffSetX.Value = Propety.OffSetX;
             this.VisibleChanged -= ToolColorArea_VisibleChanged;
             this.VisibleChanged += ToolColorArea_VisibleChanged;
             Global.SetColorChange -= Global_SetColorChange;
             Global.SetColorChange += Global_SetColorChange;
             if (Propety.listCLShow==null)
                 Propety.listCLShow = new List<Color>();
-            trackScore.Min = OwnerTool.MinValue;
-            trackScore.Max = OwnerTool.MaxValue;
-            trackScore.Step = OwnerTool.StepValue;
-            trackScore.Value = OwnerTool.Score;
+            var state = ColorAreaEngineRunner.ReadFromOwner(OwnerTool, Propety);
+            trackScore.Min = state.ScoreMin;
+            trackScore.Max = state.ScoreMax;
+            trackScore.Step = state.ScoreStep;
+            trackScore.Value = state.Score;
             AdjValueTemp.Value = Propety.PxTemp;
             btnNGLess.IsCLick = Propety.IsNGLess;
             btnNGMore.IsCLick = Propety.IsNGMore;
@@ -112,7 +115,7 @@ namespace BeeInterface
               
             btnGetColor.IsCLick = Propety.IsGetColor;
 
-            trackScore.Value = OwnerTool.Score;
+            trackScore.Value = state.Score;
           
 
 
@@ -338,9 +341,14 @@ namespace BeeInterface
 
         private void ToolColorArea_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => ToolColorArea_StatusToolChanged(tool, obj)));
+                return;
+            }
 
             if (Global.IsRun) return;
-            if (OwnerTool.StatusTool == StatusTool.Done)
+            if (obj == StatusTool.Done)
             {
                 btnInspect.Enabled = true;
 
@@ -460,7 +468,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            OwnerTool.Score = (int)trackScore.Value;
+            ColorAreaEngineRunner.ApplyScoreToOwner(OwnerTool, trackScore.Value);
             
           
 
@@ -542,7 +550,11 @@ namespace BeeInterface
         private void btnInspect_Click(object sender, EventArgs e)
         {
             btnInspect.Enabled = false;
-            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
+            if (!ColorAreaEngineRunner.TryRunSelectedTool())
+            {
+                btnInspect.Enabled = true;
+                btnInspect.IsCLick = false;
+            }
         }
 
         private void btnRGB_Click(object sender, EventArgs e)
@@ -624,9 +636,13 @@ namespace BeeInterface
         private void btnCalib_Click(object sender, EventArgs e)
         {
             btnCalib.Enabled = false;
-            Propety.IsCalib = true;
+            ColorAreaEngineRunner.BeginCalibration(Propety);
          
-            Common.TryGetTool(Global.IndexToolSelected).RunToolAsync();
+            if (!ColorAreaEngineRunner.TryRunSelectedTool())
+            {
+                btnCalib.Enabled = true;
+                btnCalib.IsCLick = false;
+            }
         }
 
         private void AdjValueTemp_ValueChanged(float obj)
@@ -651,6 +667,11 @@ namespace BeeInterface
         private void btnNGMore_Click(object sender, EventArgs e)
         {
             Propety.IsNGMore=btnNGMore.IsCLick;
+        }
+
+        private void AdjOffSetX_ValueChanged(float obj)
+        {
+            Propety.OffSetX = (int)AdjOffSetX.Value;
         }
     }
 }

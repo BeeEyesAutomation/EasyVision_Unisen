@@ -1,6 +1,7 @@
 ﻿using BeeCore;
 using BeeCore.Algorithm;
 using BeeCore.Func;
+using BeeCore.Funtion.Engines;
 using BeeGlobal;
 using BeeInterface;
 using OpenCvSharp;
@@ -60,13 +61,20 @@ namespace BeeInterface
           
             try
             {
-               
-                trackScore.Min = OwnerTool.MinValue;
-                trackScore.Max = OwnerTool.MaxValue;
-                trackScore.Step = OwnerTool.StepValue;
-                trackScore.Value = OwnerTool.Score;
-
-                OwnerTool.StatusTool = StatusTool.WaitCheck;
+                EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotMask };
+                EditRectRot1.Refresh();
+                EditRectRot1.IsHide = false;
+                EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
+                EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
+                this.VisibleChanged -= ToolWidth_VisibleChanged;
+                this.VisibleChanged += ToolWidth_VisibleChanged;
+                var state = WidthEngineRunner.ReadFromOwner(OwnerTool, Propety);
+                trackScore.Min = state.ScoreMin;
+                trackScore.Max = state.ScoreMax;
+                trackScore.Step = state.ScoreStep;
+                trackScore.Value = state.Score;
+                btnEnEqualizeHist.IsCLick = Propety.IsEnEqualizeHist;
+                WidthEngineRunner.MarkOwnerWaiting(OwnerTool);
                  if (OwnerTool != null)
                  {
                      OwnerTool.StatusToolChanged -= ToolWidth_StatusToolChanged;
@@ -77,16 +85,16 @@ namespace BeeInterface
                      OwnerTool.ScoreChanged -= ToolWidth_ScoreChanged;
                      OwnerTool.ScoreChanged += ToolWidth_ScoreChanged;
                  }
-                AdjThreshod.Value = Propety.ThresholdBinary;
+                AdjThreshod.Value = state.ThresholdBinary;
 
-                AdjScale.Value = (float)Propety.Scale;
-                trackMinInlier.Value = Propety.MinInliers;
-                trackMaxLine.Value = Propety.MaximumLine;
-                AdjRANSACIterations.Value = Propety.RansacIterations;
-                AdjRANSACThreshold.Value = (float)Propety.RansacThreshold;
-                numMinLen.Value = Propety.MinLen;
-                numMaxLen.Value = Propety.MaxLen;
-                switch (Propety.MethordEdge)
+                AdjScale.Value = state.Scale;
+                trackMinInlier.Value = state.MinInliers;
+                trackMaxLine.Value = state.MaximumLine;
+                AdjRANSACIterations.Value = state.RansacIterations;
+                AdjRANSACThreshold.Value = (float)state.RansacThreshold;
+                numMinLen.Value = state.MinLen;
+                numMaxLen.Value = state.MaxLen;
+                switch (state.MethordEdge)
                 {
                     case MethordEdge.StrongEdges:
                         btnStrongEdge.IsCLick = true; lay62.Enabled = false;
@@ -97,11 +105,11 @@ namespace BeeInterface
                     case MethordEdge.Binary:
                         btnBinary.IsCLick = true; lay62.Enabled = true;
                         break;
-                    case MethordEdge.InvertBinary:
-                        btnInvert.IsCLick = true; lay62.Enabled = true;
+                    case MethordEdge.Stable:
+                        btnStable.IsCLick = true; lay62.Enabled = true;
                         break;
                 }
-                switch (Propety.LineOrientation)
+                switch (state.LineOrientation)
                 {
                     case LineOrientation.Vertical:
                         btnVer.IsCLick = true;
@@ -110,7 +118,7 @@ namespace BeeInterface
                         btnHori.IsCLick = true;
                         break;
                 }
-                switch (Propety.SegmentStatType)
+                switch (state.SegmentStatType)
                 {
                     case SegmentStatType.Longest:
                         btnLong.IsCLick = true;
@@ -122,7 +130,7 @@ namespace BeeInterface
                         btnAverage.IsCLick = true;
                         break;
                 }
-                switch (Propety.GapExtremum)
+                switch (state.GapExtremum)
                 {
                     case GapExtremum.Outermost:
                         btnOutter.IsCLick = true;
@@ -137,77 +145,50 @@ namespace BeeInterface
                         btnFar.IsCLick = true;
                         break;
                 }
-                AdjMorphology.Value = Propety.SizeClose;
-                AdjOpen.Value = Propety.SizeOpen;
-                AdjClearNoise.Value = Propety.SizeClearsmall;
-                AdjClearBig.Value = Propety.SizeClearBig;
+                AdjMorphology.Value = state.SizeClose;
+                AdjOpen.Value = state.SizeOpen;
+                AdjClearNoise.Value = state.SizeClearSmall;
+                AdjClearBig.Value = state.SizeClearBig;
                
-                btnClose.IsCLick = Propety.IsClose;
-                btnOpen.IsCLick = Propety.IsOpen;
-                btnIsClearSmall.IsCLick = Propety.IsClearNoiseSmall;
-                btnIsClearBig.IsCLick = Propety.IsClearNoiseBig;
-                AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
-                AdjClearBig.Enabled = Propety.IsClearNoiseBig;
-                AdjOpen.Enabled = Propety.IsOpen;
-                AdjMorphology.Enabled = Propety.IsClose;
-                btnArea.IsCLick = true;
-                Global.TypeCrop = TypeCrop.Area;
-                Propety.TypeCrop = Global.TypeCrop;
-
-                btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
-                btnRect.IsCLick = Propety.rotArea.Shape == ShapeType.Rectangle ? true : false;
-                btnHexagon.IsCLick = Propety.rotArea.Shape == ShapeType.Hexagon ? true : false;
-                btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
-                btnWhite.IsCLick = Propety.rotArea.IsWhite;
-                btnBlack.IsCLick = !Propety.rotArea.IsWhite;
+                btnClose.IsCLick = state.IsClose;
+                btnOpen.IsCLick = state.IsOpen;
+                btnIsClearSmall.IsCLick = state.IsClearNoiseSmall;
+                btnIsClearBig.IsCLick = state.IsClearNoiseBig;
+                AdjClearNoise.Enabled = state.IsClearNoiseSmall;
+                AdjClearBig.Enabled = state.IsClearNoiseBig;
+                AdjOpen.Enabled = state.IsOpen;
+                AdjMorphology.Enabled = state.IsClose;
+               
             }
             catch (Exception ex)
             {
                 String s = ex.Message;
             }
         }
-        private void btnCropRect_Click(object sender, EventArgs e)
-        {
-            Global.TypeCrop = TypeCrop.Crop;
-            Propety.TypeCrop = Global.TypeCrop;
-            btnElip.IsCLick = Propety.rotCrop.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotCrop.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotCrop.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotCrop.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotCrop.IsWhite;
-            btnBlack.IsCLick = !Propety.rotCrop.IsWhite;
 
-        }
-
-        private void btnCropArea_Click(object sender, EventArgs e)
+        private void ToolWidth_VisibleChanged(object sender, EventArgs e)
         {
-            Global.TypeCrop = TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
-
-            btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotArea.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotArea.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick = !Propety.rotArea.IsWhite;
-        }
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-            Global.TypeCrop = TypeCrop.Mask;
-            Propety.TypeCrop = Global.TypeCrop;
-            if (Propety.rotMask == null)
+            if (!this.Visible)
             {
-                Propety.rotMask = DataTool.NewRotRect(TypeCrop.Mask); ;
+                EditRectRot1.IsHide = true;
+                EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             }
-            btnElip.IsCLick = Propety.rotMask.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotMask.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotMask.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotMask.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick = !Propety.rotArea.IsWhite;
-
-
         }
+
+        private void EditRectRot1_RotateCurentChanged(RectRotate obj)
+        {
+            switch (obj.TypeCrop)
+            {
+                case TypeCrop.Area:
+                    Propety.rotArea = obj; break;
+                case TypeCrop.Crop:
+                    Propety.rotCrop = obj; break;
+                case TypeCrop.Mask:
+                    Propety.rotMask = obj; break;
+
+            }
+        }
+
         private void btnNone_Click(object sender, EventArgs e)
         {
             switch (Global.TypeCrop)
@@ -381,34 +362,7 @@ namespace BeeInterface
 
         }
 
-        private void btnWhite_Click(object sender, EventArgs e)
-        {
-            switch (Global.TypeCrop)
-            {
-                case TypeCrop.Area:
-                    Propety.rotArea.IsWhite = btnWhite.IsCLick;
-                    break;
-                case TypeCrop.Crop:
-                    Propety.rotCrop.IsWhite = btnWhite.IsCLick;
-                    break;
-            }
-
-        }
-
-        private void btnBlack_Click(object sender, EventArgs e)
-        {
-            switch (Global.TypeCrop)
-            {
-                case TypeCrop.Area:
-                    Propety.rotArea.IsWhite = !btnBlack.IsCLick;
-                    break;
-                case TypeCrop.Crop:
-                    Propety.rotCrop.IsWhite = !btnBlack.IsCLick;
-                    break;
-            }
-
-        }
-
+    
         private void ToolWidth_ScoreChanged(float obj)
         {
            trackScore.Value = obj;
@@ -434,7 +388,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            OwnerTool.Score=trackScore.Value;
+            WidthEngineRunner.ApplyScoreToOwner(OwnerTool, trackScore.Value);
          }
         public bool IsClear = false;
         public Width Propety { get; set; }
@@ -532,10 +486,11 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            if (!Common.TryGetTool(Global.IndexToolSelected). worker.IsBusy)
-                Common.TryGetTool(Global.IndexToolSelected).worker.RunWorkerAsync();
-            else
+            if (!WidthEngineRunner.TryStartSelectedTool())
+            {
+                btnTest.Enabled = true;
                 btnTest.IsCLick = false;
+            }
         }
         bool IsFullSize = false;
         private void btnCropHalt_Click(object sender, EventArgs e)
@@ -698,11 +653,13 @@ namespace BeeInterface
         private void btnCalib_Click(object sender, EventArgs e)
         {
             btnCalib.Enabled = false;
-            Common.TryGetTool(Global.IndexToolSelected).Propety2.IsCalibs = true;
-            if (!Common.TryGetTool(Global.IndexToolSelected).worker.IsBusy)
-                Common.TryGetTool(Global.IndexToolSelected).worker.RunWorkerAsync();
-            else
+            WidthEngineRunner.BeginCalibration(Propety);
+
+            if (!WidthEngineRunner.TryStartSelectedTool())
+            {
                 Propety.IsCalibs = false;
+                btnCalib.Enabled = true;
+            }
             
         }
 
@@ -742,8 +699,8 @@ namespace BeeInterface
 
         private void btnInvert_Click(object sender, EventArgs e)
         {
-            Propety.MethordEdge = MethordEdge.InvertBinary;
-            lay62.Enabled = true;
+            Propety.MethordEdge = MethordEdge.Stable;
+            lay62.Enabled = false;
         }
 
         private void btnStrongEdge_Click(object sender, EventArgs e)
@@ -818,20 +775,7 @@ namespace BeeInterface
             Propety.Scale = AdjScale.Value;
         }
 
-        private void btn1_Click(object sender, EventArgs e)
-        {
-            lay1.Visible = !btn1.IsCLick;
-        }
-
-        private void btn2_Click(object sender, EventArgs e)
-        {
-            lay21.Visible = !btn2.IsCLick;
-            lay22.Visible = !btn2.IsCLick;
-            lay23.Visible = !btn2.IsCLick;
-            lay24.Visible=!btn2.IsCLick;
-            lay25.Visible=!btn2.IsCLick;
-        }
-
+       
         private void btn3_Click(object sender, EventArgs e)
         {
             lay3.Visible = !btn3.IsCLick;
@@ -868,6 +812,11 @@ namespace BeeInterface
         private void btn8_Click(object sender, EventArgs e)
         {
             trackScore.Visible = !btn8.IsCLick;
+        }
+
+        private void btnEnEqualizeHist_Click(object sender, EventArgs e)
+        {
+            Propety.IsEnEqualizeHist = btnEnEqualizeHist.IsCLick;
         }
 
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

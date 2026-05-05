@@ -22,6 +22,7 @@ namespace BeeInterface
 {
 
     [Serializable()]
+    [Obsolete("Bypassed; use the Learning/Yolo workflow instead.")]
     public partial class ToolCounter : UserControl
     {
         

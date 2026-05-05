@@ -33,6 +33,7 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        public bool IsEnEqualizeHist = false;
         [NonSerialized]
         public bool IsNew = false;
         public int IndexCCD = 0;
@@ -132,21 +133,27 @@ namespace BeeCore
                     if (!matProcess.Empty()) matProcess.Dispose();
                     if (matCrop.Type() == MatType.CV_8UC3)
                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
-                    switch (MethordEdge)
-                    {
-                        case MethordEdge.CloseEdges:
-                            matProcess = Filters.Edge(matCrop);
-                            break;
-                        case MethordEdge.StrongEdges:
-                            matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                            break;
-                        case MethordEdge.Binary:
-                            matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
-                            break;
-                        case MethordEdge.InvertBinary:
-                            matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                            break;
-                    }
+                    Mat matEua = new Mat();
+                    if (IsEnEqualizeHist)
+                        Cv2.EqualizeHist(matCrop, matEua);
+                    else
+                        matEua = matCrop;
+                        switch (MethordEdge)
+                        {
+                            case MethordEdge.CloseEdges:
+                                matProcess = Filters.Edge(matEua);
+                                break;
+                            case MethordEdge.StrongEdges:
+                                matProcess = Filters.GetStrongEdgesOnly(matEua);
+                                break;
+                            case MethordEdge.Binary:
+                                matProcess = Filters.Threshold(matEua, ThresholdBinary, ThresholdTypes.Binary);
+                                break;
+                            case MethordEdge.Stable:
+
+                                matProcess = Filters.GetStrongEdgesStable(matEua);
+                                break;
+                        }
                     if (IsClearNoiseSmall)
                         matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
                     if (IsClose)
@@ -211,7 +218,7 @@ namespace BeeCore
                 }
 
             }
-            Common.TryGetTool(IndexThread, Index).ScoreResult= (int)((Math.Abs(WidthResult - WidthTemp) / (WidthTemp * 1.0))*100);
+            Common.TryGetTool(IndexThread, Index).ScoreResult = (float)Math.Round( (float)(Math.Abs(WidthResult - WidthTemp) ),1);
             if (GapResult.line2Ds ==null)
             {
                 Common.TryGetTool(IndexThread, Index).Results = Results.NG;
@@ -330,12 +337,22 @@ namespace BeeCore
             return gc;
         }
 
-
-        public void SetModel()
+        public int MaxThread = 0;
+        public void SetModel(bool IsCopy=false)
         {
-            
+
             if (rotArea == null) rotArea = new RectRotate();
-            rotMask = null;
+            if (rotCrop == null) rotCrop = new RectRotate();
+            if (rotMask == null) rotMask = new RectRotate();
+
+  
+
+
+            rotMask.Name = "Area Mask";
+            rotMask.TypeCrop = TypeCrop.Mask;
+
+            rotArea.Name = "Area Check";
+            rotArea.TypeCrop = TypeCrop.Area;
             ParallelGapDetector = new ParallelGapDetector();
             Common.TryGetTool(IndexThread, Index).StepValue = 0.1f;
             Common.TryGetTool(IndexThread, Index).MinValue = 0;

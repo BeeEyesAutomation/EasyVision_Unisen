@@ -295,9 +295,9 @@ namespace BeeCore
                 if (UsedTool == UsedTool.NotUsed && Global.IsRun)
                     return;
                 if (!Global.IsRun)
-                    Propety2.rotAreaAdjustment = Propety2.rotArea;
+                    Propety2.rotAreaAdjustment = Propety2.rotArea.Clone();
                 if (Propety2.rotAreaAdjustment == null)
-                    Propety2.rotAreaAdjustment = Propety2.rotArea;
+                    Propety2.rotAreaAdjustment = Propety2.rotArea.Clone();
                 if (!Global.IsRun)
                     Propety2.rotMaskAdjustment = Propety2.rotMask;
                 Propety2.DoWork(Propety2.rotAreaAdjustment, Propety2.rotMaskAdjustment);
@@ -319,24 +319,37 @@ namespace BeeCore
         public void RunToolAsync()
         {
             var key = this.Name.ToString();
+            SemaphoreSlim schedulerSem;
             if (Propety2.MaxThread == 0) Propety2.MaxThread = 1;
-            lock (Global._toolSemaphores)
+            lock (Global._toolSchedulerLock)
             {
+                if (Global._toolSchedulerSemaphore == null)
+                {
+                    int maxConcurrency = Global.ResolveToolSchedulerConcurrency();
+                    Global._toolSchedulerSemaphore = new SemaphoreSlim(maxConcurrency, maxConcurrency);
+                }
+
                 if (!Global._toolSemaphores.ContainsKey(key))
                     Global._toolSemaphores[key] = new SemaphoreSlim(Propety2.MaxThread);
+
+                schedulerSem = Global._toolSchedulerSemaphore;
             }
 
             var sem = Global._toolSemaphores[key];
 
-            _ = RunInternalAsync(sem);
+            _ = RunInternalAsync(schedulerSem, sem);
         }
 
-        private async Task RunInternalAsync(SemaphoreSlim sem)
+        private async Task RunInternalAsync(SemaphoreSlim schedulerSem, SemaphoreSlim sem)
         {
+            bool enteredScheduler = false;
             bool entered = false;
 
             try
             {
+                await schedulerSem.WaitAsync();
+                enteredScheduler = true;
+
                 await sem.WaitAsync();
                 entered = true;
 
@@ -363,6 +376,9 @@ namespace BeeCore
             {
                 if (entered)
                     sem.Release();
+
+                if (enteredScheduler)
+                    schedulerSem.Release();
 
                 Complete();
             }
