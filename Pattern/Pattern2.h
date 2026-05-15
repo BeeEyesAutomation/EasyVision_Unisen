@@ -21,7 +21,6 @@ using namespace System::Collections::Generic;
 #include "Global.h"
 namespace BeeCpp
 {
-
 	// ===== Hằng số =====
 #ifndef VISION_TOLERANCE
 #define VISION_TOLERANCE 1e-6
@@ -366,6 +365,38 @@ namespace BeeCpp
 
 
 	// ===== Class Img (native) =====
+	// Batch-mode entry: 1 template đã học, chứa pyramid + scale bank + preprocess snapshot + label.
+	// Dùng cho multi-template match (MatchBatchStable). Layout song song với single-template fields
+	// trong Img (matSample/m_TemplData/stableScaleBank) để swap dễ.
+	struct s_BatchEntry
+	{
+		cv::Mat                              matSample;       // template grayscale level-0
+		s_TemplData                          templData;       // pyramid + auto-thresholds + preprocess snapshot
+		std::vector<s_StableScaleTemplate>   scaleBank;       // multi-scale variants of THIS template
+		std::string                          label;           // UTF-8 label
+		double                               minAcceptScore;  // 0..1; <=0 => fallback cfg.MinAcceptScore
+		int                                  expectedCount;   // ≥0; 0 = optional
+		int                                  maxPerTemplate;  // 0 => cfg.MaxPos
+
+		s_BatchEntry()
+			: minAcceptScore(0.0), expectedCount(0), maxPerTemplate(0) {}
+	};
+
+	// Snapshot ảnh source đã preprocess (gray + edge) cùng preprocess config đã load từ template.
+	// Build 1 lần ở MatchStable / MatchBatchStable, dùng lại trong loop scale + (với batch) loop entries.
+	// Các Mat NON-const vì validator code gọi GetRotatedROI(cv::Mat&) cần ref non-const.
+	struct SourceFeatures
+	{
+		cv::Mat feature;          // feature dùng cho matchTemplate (gray hoặc edge tuỳ Domain)
+		cv::Mat grayPre;          // gray sau preprocess (dùng cho validator)
+		cv::Mat edgeMag;          // edge magnitude (dùng cho validator khi Domain==GrayPlusEdge)
+		cv::Mat edgeBin;          // edge binary (dùng cho debug, có thể empty)
+		cv::Mat validatorGray;    // grayscale dùng cho GetRotatedROI ở validator
+		// Pattern2PreprocessConfig là value struct managed (Pattern2.h ~line 439). Field này
+		// dùng để validator biết Domain (Gray/Edge/GrayPlusEdge), FuseGrayWeight, v.v.
+		// Vì .h chỉ được include bởi Pattern2.cpp (compile /clr), nhúng value struct là OK.
+	};
+
 	class Img
 	{
 	public:
@@ -373,6 +404,8 @@ namespace BeeCpp
 		cv::Mat     matSample;
 		s_TemplData m_TemplData;
 		std::vector<s_StableScaleTemplate> stableScaleBank;
+		std::vector<s_BatchEntry> batchEntries;   // multi-template state (empty in single mode)
+		bool        batchActive = false;          // true sau LearnPatternBatchBegin, false khi single API dùng
 		int         m_iMinReduceArea = 256;
 		bool        m_EnableGpu = false;
 		std::recursive_mutex stateMutex;
@@ -557,6 +590,31 @@ namespace BeeCpp
 	};
 
 
+	// ===== Multi-template batch I/O =====
+	public value struct Pattern2BatchTemplateConfig
+	{
+		System::String^ Label;
+		double          MinAcceptScore;  // 0..1; <=0 => fallback cfg.MinAcceptScore
+		int             ExpectedCount;   // ≥0; 0 = optional
+		int             MaxPerTemplate;  // 0 => cfg.MaxPos
+
+		Pattern2BatchTemplateConfig(System::String^ label, double minAcceptScore, int expectedCount)
+		{
+			Label = label;
+			MinAcceptScore = minAcceptScore;
+			ExpectedCount = expectedCount;
+			MaxPerTemplate = 0;
+		}
+	};
+
+	public value struct Pattern2BatchResult
+	{
+		int             TemplateIndex;
+		System::String^ Label;
+		double          Cx, Cy, AngleDeg, Width, Height;
+		double          Score;           // 0..100 (×100 như Rotaterectangle)
+	};
+
 	// ===== Wrapper managed =====
 	public ref class Pattern2
 	{
@@ -607,8 +665,30 @@ namespace BeeCpp
 		);
 		List<Rotaterectangle>^ MatchStable(Pattern2StableConfig cfg);
 
+		// ===== Multi-template batch API =====
+		// Workflow:
+		//   1) LearnPatternBatchBegin()   -- reset list, vào batch mode
+		//   2) AddBatchTemplate(...)      -- gọi N lần, mỗi template học riêng (preprocess phải đồng nhất)
+		//   3) LearnPatternBatchEnd()     -- validate shared preprocess snapshot
+		//   4) SetRawNoCrop / SetImgeRaw  -- nạp ảnh cần match (như single mode)
+		//   5) MatchBatchStable(cfg)      -- preprocess source 1 lần, scan N template, NMS toàn cục
+		void LearnPatternBatchBegin();
+		int  AddBatchTemplate(
+				System::IntPtr data, int w, int h, int stride, int ch,
+				Pattern2StableConfig learnCfg,
+				Pattern2BatchTemplateConfig tplCfg);
+		void LearnPatternBatchEnd();
+		List<Pattern2BatchResult>^ MatchBatchStable(Pattern2StableConfig cfg);
+
 	private:
 		CommonPlus* com;
 		Img* img;
+
+		// Helper riêng (lifted từ thân MatchStable lines ~2789-3115). Cả MatchStable và
+		// MatchBatchStable đều gọi để chạy phần coarse+validator+NMS+collect trên ảnh đã
+		// preprocess sẵn (sf). Khi gọi, img->matSample / img->m_TemplData / img->stableScaleBank
+		// phải đã được nạp template tương ứng.
+		List<Rotaterectangle>^ RunStableMatchOnFeatures(
+			Pattern2StableConfig cfg, const SourceFeatures& sf);
 	};
 }

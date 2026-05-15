@@ -1,5 +1,6 @@
 ﻿#include "Pattern2.h"
 
+#include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc/imgproc_c.h>
 #include <opencv2/core/ocl.hpp>
 #include <cstring>
@@ -682,6 +683,9 @@ void Pattern2::SetImgeSampleNoCrop(IntPtr data, int w, int h, int stride, int ch
 	img->ClearStableScaleBank();
 	img->m_TemplData.clear();
 	img->m_TemplData.bIsPatternLearned = false;
+	// Exit batch mode khi user dùng single-template API.
+	img->batchActive = false;
+	img->batchEntries.clear();
 }
 // === PUBLIC API ===
 System::IntPtr Pattern2::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool NoCrop,
@@ -726,6 +730,9 @@ System::IntPtr Pattern2::SetImgeSample(System::IntPtr tplData, int tplW, int tpl
 	img->ClearStableScaleBank();
 	img->m_TemplData.clear();
 	img->m_TemplData.bIsPatternLearned = false;
+	// Exit batch mode khi user dùng single-template API.
+	img->batchActive = false;
+	img->batchEntries.clear();
 	return mem;
 }
 void Pattern2::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask)
@@ -1180,12 +1187,105 @@ namespace
 		}
 	}
 
+	static std::string ToAnsiString(System::String^ text)
+	{
+		if (System::String::IsNullOrEmpty(text))
+			return std::string();
+
+		System::IntPtr p = System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(text);
+		const char* s = static_cast<const char*>(p.ToPointer());
+		std::string result = s != nullptr ? std::string(s) : std::string();
+		System::Runtime::InteropServices::Marshal::FreeHGlobal(p);
+		return result;
+	}
+
+	static System::String^ BuildDebugArtifactDir(System::String^ logPath)
+	{
+		if (System::String::IsNullOrWhiteSpace(logPath))
+			return nullptr;
+
+		System::String^ fullLogPath = Path::GetFullPath(logPath);
+		System::String^ baseDir = Path::GetDirectoryName(fullLogPath);
+		if (System::String::IsNullOrWhiteSpace(baseDir))
+			baseDir = Directory::GetCurrentDirectory();
+
+		System::String^ stem = Path::GetFileNameWithoutExtension(fullLogPath);
+		if (System::String::IsNullOrWhiteSpace(stem))
+			stem = "pattern2_debug";
+
+		return Path::Combine(baseDir, stem + "_artifacts");
+	}
+
+	static void AppendMatStats(StringBuilder^ sb, const char* name, const cv::Mat& mat)
+	{
+		if (sb == nullptr || name == nullptr) return;
+		if (mat.empty())
+		{
+			sb->AppendLine(System::String::Format(
+				CultureInfo::InvariantCulture,
+				"{0}: empty",
+				gcnew System::String(name)));
+			return;
+		}
+
+		double minv = 0.0, maxv = 0.0;
+		cv::minMaxLoc(mat.reshape(1), &minv, &maxv, nullptr, nullptr);
+		sb->AppendLine(System::String::Format(
+			CultureInfo::InvariantCulture,
+			"{0}: size={1}x{2}, channels={3}, depth={4}, type={5}, nonZero={6}, min={7:F3}, max={8:F3}",
+			gcnew System::String(name),
+			mat.cols,
+			mat.rows,
+			mat.channels(),
+			mat.depth(),
+			mat.type(),
+			mat.channels() == 1 ? cv::countNonZero(mat) : -1,
+			minv,
+			maxv));
+	}
+
+	static bool SaveDebugMat(System::String^ path, const cv::Mat& mat)
+	{
+		if (System::String::IsNullOrWhiteSpace(path) || mat.empty())
+			return false;
+
+		try
+		{
+			cv::Mat out;
+			if (mat.depth() == CV_8U)
+			{
+				out = mat;
+			}
+			else
+			{
+				double minv = 0.0, maxv = 0.0;
+				cv::minMaxLoc(mat.reshape(1), &minv, &maxv, nullptr, nullptr);
+				if (maxv > minv)
+					mat.convertTo(out, CV_8U, 255.0 / (maxv - minv), -minv * 255.0 / (maxv - minv));
+				else
+					out = cv::Mat::zeros(mat.size(), CV_8UC(mat.channels()));
+			}
+
+			return cv::imwrite(ToAnsiString(path), out);
+		}
+		catch (...) { return false; }
+	}
+
+	static void SaveDebugImage(System::String^ artifactDir, System::String^ fileName, const cv::Mat& mat)
+	{
+		if (System::String::IsNullOrWhiteSpace(artifactDir) || System::String::IsNullOrWhiteSpace(fileName))
+			return;
+
+		SaveDebugMat(Path::Combine(artifactDir, fileName), mat);
+	}
+
 	struct ScopedTemplSwap
 	{
 		Img* img;
 		cv::Mat raw;
 		cv::Mat sample;
 		s_TemplData templData;
+		std::vector<s_StableScaleTemplate> scaleBank;   // batch: caller có thể mutate
 		bool enableGpu;
 
 		ScopedTemplSwap(Img* p) : img(p), enableGpu(false)
@@ -1195,6 +1295,7 @@ namespace
 				raw = img->matRaw.clone();
 				sample = img->matSample.clone();
 				templData = img->m_TemplData;
+				scaleBank = img->stableScaleBank;       // copy (rẻ — vector of struct chứa Mat reference-counted)
 				enableGpu = img->m_EnableGpu;
 			}
 		}
@@ -1206,10 +1307,84 @@ namespace
 				img->matRaw = raw;
 				img->matSample = sample;
 				img->m_TemplData = templData;
+				img->stableScaleBank = scaleBank;
 				img->m_EnableGpu = enableGpu;
 			}
 		}
 	};
+
+	// SourceFeatures struct nằm trong Pattern2.h (BeeCpp namespace). BuildSourceFeatures load
+	// preprocess snapshot từ template, áp ApplyFullPreprocess lên matRaw, populate các Mat.
+	// Note: learnedPreprocess KHÔNG lưu trong SourceFeatures (vì Pattern2PreprocessConfig là CLI
+	// value struct declared muộn hơn trong .h). RunStableMatchOnFeatures sẽ tự LoadPreprocess
+	// từ img->m_TemplData ở runtime.
+	static bool BuildSourceFeatures(const cv::Mat& matRaw, const s_TemplData& templ, SourceFeatures& out)
+	{
+		Pattern2PreprocessConfig pp = LoadPreprocess(templ);
+		out.feature = ApplyFullPreprocess(matRaw, pp, &out.grayPre, &out.edgeMag, &out.edgeBin);
+		if (out.feature.empty()) return false;
+		out.validatorGray = (pp.Domain == Pattern2FeatureDomain::Edge)
+			? out.feature
+			: out.grayPre;
+		return true;
+	}
+
+	// Rotated-rect IoU dùng cho NMS toàn cục cross-template ở MatchBatchStable.
+	static double RotatedIoU(const Rotaterectangle& a, const Rotaterectangle& b)
+	{
+		cv::RotatedRect ra(cv::Point2f((float)a.Cx, (float)a.Cy),
+			cv::Size2f((float)a.Width, (float)a.Height),
+			(float)a.AngleDeg);
+		cv::RotatedRect rb(cv::Point2f((float)b.Cx, (float)b.Cy),
+			cv::Size2f((float)b.Width, (float)b.Height),
+			(float)b.AngleDeg);
+		std::vector<cv::Point2f> inter;
+		int code = cv::rotatedRectangleIntersection(ra, rb, inter);
+		(void)code;
+		if (inter.size() < 3) return 0.0;
+		double interArea = cv::contourArea(inter);
+		double unionArea = (double)ra.size.area() + (double)rb.size.area() - interArea;
+		return (unionArea > 1e-9) ? interArea / unionArea : 0.0;
+	}
+
+	// Marshal CLI String^ -> std::string (UTF-8). Trả "" nếu null.
+	// `using namespace std;` ở file-scope khiến `array<>` resolve về std::array, nên phải
+	// dùng `cli::array<>` explicit.
+	static std::string SystemStringToUtf8(System::String^ s)
+	{
+		if (System::String::IsNullOrEmpty(s)) return std::string();
+		cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(s);
+		if (bytes == nullptr || bytes->Length == 0) return std::string();
+		std::string r((size_t)bytes->Length, '\0');
+		System::Runtime::InteropServices::Marshal::Copy(bytes, 0, System::IntPtr(&r[0]), bytes->Length);
+		return r;
+	}
+
+	// So sánh field preprocess snapshot trong s_TemplData (Pattern2.h:70-89).
+	// Dùng để validate các template trong batch học cùng preprocess.
+	static bool PreprocessSnapshotEqual(const s_TemplData& a, const s_TemplData& b)
+	{
+		return a.ppEnableBitwiseNot == b.ppEnableBitwiseNot
+			&& a.ppEnableIlluminationFix == b.ppEnableIlluminationFix
+			&& a.ppIllumKernel == b.ppIllumKernel
+			&& a.ppEnableCLAHE == b.ppEnableCLAHE
+			&& std::abs(a.ppClaheClip - b.ppClaheClip) < 1e-9
+			&& a.ppClaheTile == b.ppClaheTile
+			&& a.ppEnableGamma == b.ppEnableGamma
+			&& std::abs(a.ppGamma - b.ppGamma) < 1e-9
+			&& a.ppDenoiseMethod == b.ppDenoiseMethod
+			&& a.ppDenoiseKernel == b.ppDenoiseKernel
+			&& a.ppDomain == b.ppDomain
+			&& a.ppEdgeMethod == b.ppEdgeMethod
+			&& a.ppEdgeKernel == b.ppEdgeKernel
+			&& std::abs(a.ppCannyLow - b.ppCannyLow) < 1e-9
+			&& std::abs(a.ppCannyHigh - b.ppCannyHigh) < 1e-9
+			&& a.ppEdgeKeepMagnitude == b.ppEdgeKeepMagnitude
+			&& a.ppEdgeDilatePx == b.ppEdgeDilatePx
+			&& a.ppEnableEdgeLengthFilter == b.ppEnableEdgeLengthFilter
+			&& a.ppMinEdgeSegmentLen == b.ppMinEdgeSegmentLen
+			&& std::abs(a.ppFuseGrayWeight - b.ppFuseGrayWeight) < 1e-9;
+	}
 
 	struct ScopedCvThreadLimit
 	{
@@ -2598,6 +2773,9 @@ List<Rotaterectangle>^ Pattern2::Match(
 
 
 
+// Single-template entry point. Backward-compat wrapper: validate -> ScopedTemplSwap -> build
+// source features (preprocess) -> delegate phần coarse+validator+NMS+collect cho
+// RunStableMatchOnFeatures. Behavior phải bit-identical so với version pre-refactor.
 List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 {
 	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
@@ -2609,31 +2787,70 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 	if (!img->m_TemplData.bIsPatternLearned) return results;
 	if (img->stableScaleBank.empty()) return results;
 
+	ScopedTemplSwap restore(img);
+	img->m_EnableGpu = cfg.EnableGpu && CanUseGpu(true);
+
+	SourceFeatures sf;
+	if (!BuildSourceFeatures(img->matRaw, img->m_TemplData, sf))
+		return results;
+
+	return RunStableMatchOnFeatures(cfg, sf);
+}
+
+// Lifted body: phần coarse+validator+NMS+collect. Yêu cầu caller đã:
+//   - lock img->stateMutex
+//   - set img->m_EnableGpu
+//   - load img->matSample/m_TemplData/stableScaleBank của template hiện tại
+//   - chuẩn bị sf qua BuildSourceFeatures
+// Function tự ghi sf.feature vào img->matRaw trong từng iteration scale; ScopedTemplSwap
+// ở caller sẽ restore matRaw cuối cùng.
+List<Rotaterectangle>^ Pattern2::RunStableMatchOnFeatures(Pattern2StableConfig cfg, const SourceFeatures& sf)
+{
+	auto results = gcnew List<Rotaterectangle>();
+
 	const int maxPos = std::max(1, std::min(cfg.MaxPos, 256));
 	const double maxOverlap = std::max(0.0, std::min(cfg.MaxOverlap, 0.90));
 	const double relaxedRawScore = Clamp01(cfg.RelaxedRawScore);
 
-	ScopedTemplSwap restore(img);
-	img->m_EnableGpu = cfg.EnableGpu && CanUseGpu(true);
 	const DifficultyTune diffTune = GetDifficultyTune((int)cfg.Difficulty);
 	const double effectiveNmsOverlap =
 		GetEffectiveNmsOverlap(maxOverlap, (int)cfg.Difficulty);
 
+	// Re-load preprocess snapshot locally (Pattern2PreprocessConfig là CLI value struct,
+	// không lưu trong SourceFeatures để tránh phụ thuộc thứ tự khai báo trong header).
 	Pattern2PreprocessConfig learnedPreprocess = LoadPreprocess(img->m_TemplData);
-	cv::Mat srcGrayPre, srcEdgeMag, srcEdgeBin;
-	cv::Mat srcFeature = ApplyFullPreprocess(img->matRaw, learnedPreprocess, &srcGrayPre, &srcEdgeMag, &srcEdgeBin);
-	if (srcFeature.empty()) return results;
-
-	cv::Mat srcValidatorGray = (learnedPreprocess.Domain == Pattern2FeatureDomain::Edge)
-		? srcFeature
-		: srcGrayPre;
+	// Shallow copies (cv::Mat ref-counted) — cho phép bind non-const ref khi gọi GetRotatedROI.
+	cv::Mat srcFeature = sf.feature;
+	cv::Mat srcGrayPre = sf.grayPre;
+	cv::Mat srcEdgeMag = sf.edgeMag;
+	cv::Mat srcEdgeBin = sf.edgeBin;
+	cv::Mat srcValidatorGray = sf.validatorGray;
 
 	StringBuilder^ sb = nullptr;
+	System::String^ debugArtifactDir = nullptr;
+	const int debugCandidateImageLimit = 64;
+	int debugCandidateImageCount = 0;
+	int debugCandidateId = 0;
 	if (cfg.DebugLog)
 	{
 		sb = gcnew StringBuilder();
 		sb->AppendLine("==== Pattern2::MatchStable ====");
 		sb->AppendLine(DateTime::Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+		debugArtifactDir = BuildDebugArtifactDir(cfg.DebugLogPath);
+		if (!System::String::IsNullOrWhiteSpace(debugArtifactDir))
+		{
+			try
+			{
+				Directory::CreateDirectory(debugArtifactDir);
+				sb->AppendLine(System::String::Format(CultureInfo::InvariantCulture, "debugArtifacts={0}", debugArtifactDir));
+				SaveDebugImage(debugArtifactDir, "source_raw.png", img->matRaw);
+				SaveDebugImage(debugArtifactDir, "source_feature.png", srcFeature);
+				SaveDebugImage(debugArtifactDir, "source_gray_pre.png", srcGrayPre);
+				SaveDebugImage(debugArtifactDir, "source_edge_mag.png", srcEdgeMag);
+				SaveDebugImage(debugArtifactDir, "source_edge_bin.png", srcEdgeBin);
+			}
+			catch (...) {}
+		}
 		sb->AppendLine(System::String::Format(
 			CultureInfo::InvariantCulture,
 			"range=[{0:F2},{1:F2}], step={2:F3}, minAccept={3:F3}, maxPos={4}, maxOverlap={5:F3}, validator={6}, keep={7}, nms={8}, auto={9}, learnedScales={10}",
@@ -2667,13 +2884,20 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 			cfg.Preprocess.AutoPickDomain ? 1 : 0));
 		if (learnedPreprocess.EnableBitwiseNot && learnedPreprocess.Domain != Pattern2FeatureDomain::Gray)
 			sb->AppendLine("preprocess warning: EnableBitwiseNot ignored because domain is not Gray");
+		AppendMatStats(sb, "sourceRaw", img->matRaw);
+		AppendMatStats(sb, "sourceFeature", srcFeature);
+		AppendMatStats(sb, "sourceGrayPre", srcGrayPre);
+		AppendMatStats(sb, "sourceEdgeMag", srcEdgeMag);
+		AppendMatStats(sb, "sourceEdgeBin", srcEdgeBin);
 	}
 
 	std::vector<s_MatchParameter> acceptedAll;
 	acceptedAll.reserve((size_t)maxPos * std::max<size_t>(1, img->stableScaleBank.size()) * 4);
 
+	int scaleIndex = 0;
 	for (const auto& item : img->stableScaleBank)
 	{
+		const int currentScaleIndex = scaleIndex++;
 		const double scale = item.scale;
 		const cv::Mat& tplGray = item.tplGray;
 		const cv::Mat& tplNorm = item.tplNorm;
@@ -2709,6 +2933,19 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 				item.templData.modelEdgeDensity,
 				item.templData.modelEntropy,
 				item.templData.modelEntropyNorm));
+			AppendMatStats(sb, "templateFeature", tplGray);
+			AppendMatStats(sb, "templateNorm", tplNorm);
+			AppendMatStats(sb, "templateGrad", tplGrad);
+			AppendMatStats(sb, "templateEdge", tplEdge);
+			if (!System::String::IsNullOrWhiteSpace(debugArtifactDir))
+			{
+				System::String^ prefix = System::String::Format(CultureInfo::InvariantCulture, "scale_{0:D3}_", currentScaleIndex);
+				SaveDebugImage(debugArtifactDir, prefix + "tpl_feature.png", tplGray);
+				SaveDebugImage(debugArtifactDir, prefix + "tpl_norm.png", tplNorm);
+				SaveDebugImage(debugArtifactDir, prefix + "tpl_grad.png", tplGrad);
+				SaveDebugImage(debugArtifactDir, prefix + "tpl_edge.png", tplEdge);
+				SaveDebugImage(debugArtifactDir, prefix + "tpl_edge_mag.png", tplEdgeMag);
+			}
 			sb->AppendLine(System::String::Format(
 				CultureInfo::InvariantCulture,
 				"auto strongBase={0:F3}, softEdgeIou={1:F3}, softEdgeRatio={2:F3}, hardEdgeIou={3:F3}, hardEdgeRatio={4:F3}, finalThreshold={5:F3}",
@@ -2744,6 +2981,7 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 
 		for each(Rotaterectangle rr in coarse)
 		{
+			const int candidateId = debugCandidateId++;
 			const int w = std::max(1, (int)std::round(rr.Width));
 			const int h = std::max(1, (int)std::round(rr.Height));
 			if (w <= 4 || h <= 4) continue;
@@ -2788,8 +3026,8 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 					{
 						sb->AppendLine(System::String::Format(
 							CultureInfo::InvariantCulture,
-							"cx={0:F2}, cy={1:F2}, ang={2:F2}, coarse={3:F3}, final=0.000, keep=0, reason=roi_invalid",
-							rr.Cx, rr.Cy, rr.AngleDeg, coarseScore));
+							"candidate={0}, cx={1:F2}, cy={2:F2}, ptLT=({3:F2},{4:F2}), size={5}x{6}, ang={7:F2}, scale={8:F3}, coarse={9:F3}, final=0.000, keep=0, reason=roi_invalid",
+							candidateId, rr.Cx, rr.Cy, ptLT.x, ptLT.y, w, h, rr.AngleDeg, scale, coarseScore));
 					}
 					continue;
 				}
@@ -2801,6 +3039,21 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 				cv::Mat roiNorm = NormalizeForCompare(roiGray);
 				cv::Mat roiGrad = GradientMag8(roiNorm);
 				cv::Mat roiEdge = EdgeMaskFromGrad(roiGrad);
+
+				if (!System::String::IsNullOrWhiteSpace(debugArtifactDir) &&
+					debugCandidateImageCount < debugCandidateImageLimit)
+				{
+					System::String^ prefix = System::String::Format(
+						CultureInfo::InvariantCulture,
+						"candidate_{0:D4}_scale_{1:D3}_",
+						candidateId,
+						currentScaleIndex);
+					SaveDebugImage(debugArtifactDir, prefix + "roi_gray.png", roiGray);
+					SaveDebugImage(debugArtifactDir, prefix + "roi_norm.png", roiNorm);
+					SaveDebugImage(debugArtifactDir, prefix + "roi_grad.png", roiGrad);
+					SaveDebugImage(debugArtifactDir, prefix + "roi_edge.png", roiEdge);
+					debugCandidateImageCount++;
+				}
 
 				rawNcc = ScoreSameSizeNCC(tplNorm, roiNorm);
 				gradNcc = ScoreSameSizeNCC(tplGrad, roiGrad);
@@ -2903,8 +3156,8 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 			{
 				sb->AppendLine(System::String::Format(
 					CultureInfo::InvariantCulture,
-					"cx={0:F2}, cy={1:F2}, ang={2:F2}, scale={3:F3}, coarse={4:F3}, raw={5:F3}, rawEdge={6:F3}, grad={7:F3}, edgeIoU={8:F3}, edgeRatio={9:F3}, final={10:F3}, keepStrong={11}, keepNormal={12}, keepRescue={13}, keep={14}, reason={15}",
-					rr.Cx, rr.Cy, rr.AngleDeg, scale,
+					"candidate={0}, cx={1:F2}, cy={2:F2}, ptLT=({3:F2},{4:F2}), size={5}x{6}, ang={7:F2}, scale={8:F3}, coarse={9:F3}, raw={10:F3}, rawEdge={11:F3}, grad={12:F3}, edgeIoU={13:F3}, edgeRatio={14:F3}, final={15:F3}, keepStrong={16}, keepNormal={17}, keepRescue={18}, keep={19}, reason={20}",
+					candidateId, rr.Cx, rr.Cy, ptLT.x, ptLT.y, w, h, rr.AngleDeg, scale,
 					coarseScore, rawNcc, rawNccEdge, gradNcc, edgeIou, edgeRatio, finalScore,
 					keepStrong ? 1 : 0,
 					keepNormal ? 1 : 0,
@@ -2938,6 +3191,8 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 
 	if (sb != nullptr)
 		sb->AppendLine(System::String::Format(CultureInfo::InvariantCulture, "acceptedAfterNms={0}", (int)acceptedAll.size()));
+	if (sb != nullptr)
+		sb->AppendLine(System::String::Format(CultureInfo::InvariantCulture, "debugCandidateImagesSaved={0}", debugCandidateImageCount));
 
 	const int takeN = std::min((int)acceptedAll.size(), maxPos);
 	for (int i = 0; i < takeN; ++i)
@@ -2961,6 +3216,256 @@ List<Rotaterectangle>^ Pattern2::MatchStable(Pattern2StableConfig cfg)
 		catch (...) {}
 	}
 
+	return results;
+}
+
+
+// ============================================================================
+// Multi-template batch API
+// ============================================================================
+
+// Local struct ở file-scope (CLI restriction: không được khai báo local class
+// trong managed member function). Greater score wins NMS.
+namespace {
+	// Native struct flatten các trường numeric. Tránh embed Rotaterectangle (CLI value struct)
+	// trong native struct ở anonymous namespace — gây lỗi C3699 ở /clr.
+	struct LabeledMatch
+	{
+		int templateIndex;
+		std::string label;
+		double cx, cy, angleDeg, width, height, score;
+	};
+	struct LabeledMatchScoreDesc
+	{
+		bool operator()(const LabeledMatch& a, const LabeledMatch& b) const
+		{
+			return a.score > b.score;
+		}
+	};
+	// Compute IoU dùng các trường flatten (tránh dùng RotatedIoU(Rotaterectangle,...) để khỏi
+	// nhét CLI value struct vào hot loop).
+	static double RotatedIoUFlat(const LabeledMatch& a, const LabeledMatch& b)
+	{
+		cv::RotatedRect ra(cv::Point2f((float)a.cx, (float)a.cy),
+			cv::Size2f((float)a.width, (float)a.height), (float)a.angleDeg);
+		cv::RotatedRect rb(cv::Point2f((float)b.cx, (float)b.cy),
+			cv::Size2f((float)b.width, (float)b.height), (float)b.angleDeg);
+		std::vector<cv::Point2f> inter;
+		int code = cv::rotatedRectangleIntersection(ra, rb, inter);
+		(void)code;
+		if (inter.size() < 3) return 0.0;
+		double interArea = cv::contourArea(inter);
+		double unionArea = (double)ra.size.area() + (double)rb.size.area() - interArea;
+		return (unionArea > 1e-9) ? interArea / unionArea : 0.0;
+	}
+}
+
+// Bắt đầu batch học: clear list cũ, đánh dấu batch active, dọn single-template state.
+void Pattern2::LearnPatternBatchBegin()
+{
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
+	if (img == nullptr) return;
+	img->batchEntries.clear();
+	img->batchActive = true;
+	// Dọn single-template state để tránh state lai khi switch mode.
+	img->matSample.release();
+	img->stableScaleBank.clear();
+	img->m_TemplData.clear();
+	img->m_TemplData.bIsPatternLearned = false;
+}
+
+// Học 1 template + push vào batchEntries. Trả index của entry vừa thêm.
+// Nguyên tắc: copy raw data vào img->matSample (tận dụng LearnPatternStable đã có),
+// rồi MOVE kết quả ra entry. Cuối cùng reset single fields về empty.
+int Pattern2::AddBatchTemplate(IntPtr data, int w, int h, int stride, int ch,
+	Pattern2StableConfig learnCfg,
+	Pattern2BatchTemplateConfig tplCfg)
+{
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
+	if (img == nullptr) return -1;
+	if (!img->batchActive)
+		throw gcnew System::InvalidOperationException("LearnPatternBatchBegin must be called first");
+	if (data == IntPtr::Zero || w <= 0 || h <= 0 || stride <= 0)
+		throw gcnew System::ArgumentException("Invalid template buffer");
+
+	int cvType;
+	switch (ch)
+	{
+	case 1: cvType = CV_8UC1; break;
+	case 3: cvType = CV_8UC3; break;
+	case 4: cvType = CV_8UC4; break;
+	default: cvType = CV_8UC1; break;
+	}
+
+	// Wrap input + clone to own memory (giống SetImgeSampleNoCrop pattern).
+	cv::Mat wrapped(h, w, cvType, data.ToPointer(), stride);
+	cv::Mat gray;
+	if (ch == 1)
+		gray = wrapped.clone();
+	else
+	{
+		cv::cvtColor(wrapped, gray,
+			(ch == 4) ? cv::COLOR_BGRA2GRAY : cv::COLOR_BGR2GRAY);
+	}
+
+	// Nạp vào single fields rồi gọi LearnPatternStable (đã có, line 2073).
+	img->matSample = gray;
+	img->stableScaleBank.clear();
+	img->m_TemplData.clear();
+	img->m_TemplData.bIsPatternLearned = false;
+	LearnPatternStable(learnCfg);
+
+	if (!img->m_TemplData.bIsPatternLearned || img->stableScaleBank.empty())
+		throw gcnew System::InvalidOperationException("Template training failed (empty pyramid or scale bank)");
+
+	// Move ra entry.
+	s_BatchEntry e;
+	e.matSample = std::move(img->matSample);
+	e.templData = std::move(img->m_TemplData);
+	e.scaleBank = std::move(img->stableScaleBank);
+	e.label = SystemStringToUtf8(tplCfg.Label);
+	e.minAcceptScore = (tplCfg.MinAcceptScore > 0.0) ? tplCfg.MinAcceptScore : 0.0;
+	e.expectedCount = std::max(0, tplCfg.ExpectedCount);
+	e.maxPerTemplate = std::max(0, tplCfg.MaxPerTemplate);
+	img->batchEntries.push_back(std::move(e));
+
+	// Reset single fields (đã move sạch, đảm bảo state nhất quán).
+	img->matSample.release();
+	img->stableScaleBank.clear();
+	img->m_TemplData.clear();
+	img->m_TemplData.bIsPatternLearned = false;
+	return (int)img->batchEntries.size() - 1;
+}
+
+// Hoàn tất batch học: validate tất cả template có cùng preprocess snapshot.
+// Lý do: MatchBatchStable preprocess source 1 lần theo entry 0; nếu các entry học
+// với preprocess khác nhau, kết quả sai. Caller (C#) phải đảm bảo cùng preset.
+void Pattern2::LearnPatternBatchEnd()
+{
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
+	if (img == nullptr) return;
+	if (img->batchEntries.empty())
+		throw gcnew System::InvalidOperationException("Batch is empty; AddBatchTemplate must be called at least once");
+
+	const s_TemplData& ref = img->batchEntries[0].templData;
+	for (size_t i = 1; i < img->batchEntries.size(); ++i)
+	{
+		if (!PreprocessSnapshotEqual(img->batchEntries[i].templData, ref))
+		{
+			throw gcnew System::InvalidOperationException(
+				System::String::Format(
+					"Batch template at index {0} has a different preprocess snapshot than template 0. "
+					"All batch templates must share the same preprocess config.",
+					(int)i));
+		}
+	}
+}
+
+// Match đa template trên cùng 1 source.
+// Pipeline:
+//   1) Preprocess source 1 lần (dùng snapshot của entry 0 — đã validate đồng nhất).
+//   2) Lặp từng entry: swap vào single fields -> RunStableMatchOnFeatures(sf) -> gắn label.
+//   3) NMS toàn cục cross-template (rotated-rect IoU > cfg.MaxOverlap thì loại).
+//   4) Sắp xếp giảm dần theo Score, giới hạn maxPos toàn cục.
+List<Pattern2BatchResult>^ Pattern2::MatchBatchStable(Pattern2StableConfig cfg)
+{
+	std::lock_guard<std::recursive_mutex> guard(img->stateMutex);
+	auto results = gcnew List<Pattern2BatchResult>();
+
+	if (img == nullptr) return results;
+	if (img->matRaw.empty()) return results;
+	if (!img->batchActive || img->batchEntries.empty()) return results;
+
+	const int maxPosGlobal = std::max(1, std::min(cfg.MaxPos, 256));
+	const double maxOverlap = std::max(0.0, std::min(cfg.MaxOverlap, 0.90));
+
+	// Step 1: build source features 1 lần.
+	img->m_EnableGpu = cfg.EnableGpu && CanUseGpu(true);
+	SourceFeatures sf;
+	if (!BuildSourceFeatures(img->matRaw, img->batchEntries[0].templData, sf))
+		return results;
+
+	std::vector<LabeledMatch> all;
+	all.reserve((size_t)maxPosGlobal * img->batchEntries.size());
+
+	// Step 2: lặp template.
+	for (int idx = 0; idx < (int)img->batchEntries.size(); ++idx)
+	{
+		const s_BatchEntry& e = img->batchEntries[idx];
+
+		// RAII guard: restore matRaw/matSample/m_TemplData/stableScaleBank/m_EnableGpu cuối iteration.
+		ScopedTemplSwap restore(img);
+		img->matSample = e.matSample;
+		img->m_TemplData = e.templData;
+		img->stableScaleBank = e.scaleBank;
+		img->m_EnableGpu = cfg.EnableGpu && CanUseGpu(true);
+
+		if (img->stableScaleBank.empty() || !img->m_TemplData.bIsPatternLearned)
+			continue;
+
+		Pattern2StableConfig perCfg = cfg;
+		if (e.minAcceptScore > 0.0)
+			perCfg.MinAcceptScore = e.minAcceptScore;
+		if (e.maxPerTemplate > 0)
+			perCfg.MaxPos = e.maxPerTemplate;
+
+		auto perResults = RunStableMatchOnFeatures(perCfg, sf);
+		if (perResults == nullptr) continue;
+		for (int j = 0; j < perResults->Count; ++j)
+		{
+			Rotaterectangle rr = perResults[j];
+			LabeledMatch lm;
+			lm.templateIndex = idx;
+			lm.label = e.label;
+			lm.cx = rr.Cx;
+			lm.cy = rr.Cy;
+			lm.angleDeg = rr.AngleDeg;
+			lm.width = rr.Width;
+			lm.height = rr.Height;
+			lm.score = rr.Score;
+			all.push_back(lm);
+		}
+	}
+
+	if (all.empty()) return results;
+
+	// Step 3: sort descending theo Score và greedy NMS toàn cục.
+	std::sort(all.begin(), all.end(), LabeledMatchScoreDesc());
+
+	std::vector<LabeledMatch> kept;
+	kept.reserve(all.size());
+	for (const auto& cand : all)
+	{
+		bool reject = false;
+		for (const auto& k : kept)
+		{
+			if (RotatedIoUFlat(cand, k) > maxOverlap)
+			{
+				reject = true;
+				break;
+			}
+		}
+		if (!reject) kept.push_back(cand);
+		// Giới hạn lỏng: maxPos × số entry để cho phép nhiều label cùng tồn tại,
+		// đồng thời tránh vô hạn nếu user set MaxPos quá nhỏ.
+		if ((int)kept.size() >= maxPosGlobal * (int)img->batchEntries.size())
+			break;
+	}
+
+	// Step 4: pack managed result.
+	for (const auto& k : kept)
+	{
+		Pattern2BatchResult r;
+		r.TemplateIndex = k.templateIndex;
+		r.Label = gcnew System::String(k.label.c_str());
+		r.Cx = k.cx;
+		r.Cy = k.cy;
+		r.AngleDeg = k.angleDeg;
+		r.Width = k.width;
+		r.Height = k.height;
+		r.Score = k.score;
+		results->Add(r);
+	}
 	return results;
 }
 
