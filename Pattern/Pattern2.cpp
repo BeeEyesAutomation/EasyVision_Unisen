@@ -3327,6 +3327,9 @@ int Pattern2::AddBatchTemplate(IntPtr data, int w, int h, int stride, int ch,
 	e.minAcceptScore = (tplCfg.MinAcceptScore > 0.0) ? tplCfg.MinAcceptScore : 0.0;
 	e.expectedCount = std::max(0, tplCfg.ExpectedCount);
 	e.maxPerTemplate = std::max(0, tplCfg.MaxPerTemplate);
+	e.hasAngleRange = tplCfg.HasAngleRange;
+	e.angleStartDeg = tplCfg.AngleStartDeg;
+	e.angleEndDeg = tplCfg.AngleEndDeg;
 	img->batchEntries.push_back(std::move(e));
 
 	// Reset single fields (đã move sạch, đảm bảo state nhất quán).
@@ -3408,6 +3411,13 @@ List<Pattern2BatchResult>^ Pattern2::MatchBatchStable(Pattern2StableConfig cfg)
 			perCfg.MinAcceptScore = e.minAcceptScore;
 		if (e.maxPerTemplate > 0)
 			perCfg.MaxPos = e.maxPerTemplate;
+		if (e.hasAngleRange)
+		{
+			// Per-template angle: mỗi template được crop ở rotCrop khác → DeltaAngle khác →
+			// expected match angle khác. Override để chỉ tìm trong range của entry.
+			perCfg.AngleStartDeg = e.angleStartDeg;
+			perCfg.AngleEndDeg = e.angleEndDeg;
+		}
 
 		auto perResults = RunStableMatchOnFeatures(perCfg, sf);
 		if (perResults == nullptr) continue;

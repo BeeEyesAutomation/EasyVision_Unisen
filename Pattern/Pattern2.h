@@ -377,9 +377,13 @@ namespace BeeCpp
 		double                               minAcceptScore;  // 0..1; <=0 => fallback cfg.MinAcceptScore
 		int                                  expectedCount;   // ≥0; 0 = optional
 		int                                  maxPerTemplate;  // 0 => cfg.MaxPos
+		bool                                 hasAngleRange;   // override cfg.AngleStart/EndDeg
+		double                               angleStartDeg;
+		double                               angleEndDeg;
 
 		s_BatchEntry()
-			: minAcceptScore(0.0), expectedCount(0), maxPerTemplate(0) {}
+			: minAcceptScore(0.0), expectedCount(0), maxPerTemplate(0),
+			  hasAngleRange(false), angleStartDeg(0.0), angleEndDeg(0.0) {}
 	};
 
 	// Snapshot ảnh source đã preprocess (gray + edge) cùng preprocess config đã load từ template.
@@ -597,6 +601,12 @@ namespace BeeCpp
 		double          MinAcceptScore;  // 0..1; <=0 => fallback cfg.MinAcceptScore
 		int             ExpectedCount;   // ≥0; 0 = optional
 		int             MaxPerTemplate;  // 0 => cfg.MaxPos
+		// Per-template angle range (deg). Nếu HasAngleRange=true, MatchBatchStable sẽ override
+		// cfg.AngleStartDeg/EndDeg cho entry này. Lý do: mỗi template được crop ở góc rotCrop
+		// khác nhau → DeltaAngle khác → angle range expected khác.
+		bool            HasAngleRange;
+		double          AngleStartDeg;
+		double          AngleEndDeg;
 
 		Pattern2BatchTemplateConfig(System::String^ label, double minAcceptScore, int expectedCount)
 		{
@@ -604,6 +614,9 @@ namespace BeeCpp
 			MinAcceptScore = minAcceptScore;
 			ExpectedCount = expectedCount;
 			MaxPerTemplate = 0;
+			HasAngleRange = false;
+			AngleStartDeg = 0.0;
+			AngleEndDeg = 0.0;
 		}
 	};
 

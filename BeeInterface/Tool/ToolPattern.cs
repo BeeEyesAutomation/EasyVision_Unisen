@@ -1396,7 +1396,9 @@ namespace BeeInterface
                         using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
                         using (var bmp = new Bitmap(fs))
                         {
-                            AddTemplateEntry(bmp, System.IO.Path.GetFileNameWithoutExtension(path));
+                            // File-based template không có rotCrop context → dùng angle range
+                            // toàn cục (HasAngleRange=false).
+                            AddTemplateEntry(bmp, System.IO.Path.GetFileNameWithoutExtension(path), captureCurrentAngle: false);
                         }
                     }
                     catch (Exception ex)
@@ -1408,7 +1410,7 @@ namespace BeeInterface
             }
         }
 
-        private void AddTemplateEntry(Bitmap source, string suggestedLabel = null)
+        private void AddTemplateEntry(Bitmap source, string suggestedLabel = null, bool captureCurrentAngle = true)
         {
             if (source == null || Propety == null) return;
             var entry = new BeeCore.Pattern2TemplateEntry
@@ -1418,6 +1420,20 @@ namespace BeeInterface
                 ExpectedCount = 1,
             };
             entry.SetBitmap(source);
+
+            // Capture per-template angle range theo công thức single-mode:
+            //   DeltaAngle = rotCrop._rectRotation - rotArea._rectRotation
+            //   AngleLower/Upper = DeltaAngle ∓ Propety.Angle
+            // Mỗi mẫu thường crop ở góc khác nhau → range expected khác. Native side sẽ
+            // override cfg.AngleStart/EndDeg cho từng entry trong MatchBatchStable.
+            if (captureCurrentAngle && Propety.rotCrop != null && Propety.rotArea != null)
+            {
+                float deltaAngle = Propety.rotCrop._rectRotation - Propety.rotArea._rectRotation;
+                entry.HasAngleRange = true;
+                entry.AngleLower = deltaAngle - Propety.Angle;
+                entry.AngleUpper = deltaAngle + Propety.Angle;
+            }
+
             Propety.MultiTemplates.Add(entry);
             Propety.MarkBatchDirty();
             RefreshTemplatesGrid();

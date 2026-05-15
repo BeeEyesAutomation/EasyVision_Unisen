@@ -1717,6 +1717,12 @@ namespace BeeCore
                                 e.ScoreThreshold / 100.0,
                                 e.ExpectedCount);
                             tplCfg.MaxPerTemplate = e.MaxPerTemplate;
+                            if (e.HasAngleRange)
+                            {
+                                tplCfg.HasAngleRange = true;
+                                tplCfg.AngleStartDeg = e.AngleLower;
+                                tplCfg.AngleEndDeg = e.AngleUpper;
+                            }
                             GC.KeepAlive(gray);
                             Pattern.AddBatchTemplate(
                                 gray.Data, gray.Width, gray.Height,
@@ -1765,7 +1771,8 @@ namespace BeeCore
             {
                 foreach (var r in listBatch)
                 {
-                    if (r.AngleDeg < AngleLower || r.AngleDeg > AngleUper) continue;
+                    // Skip global AngleLower/Upper filter: native batch đã enforce per-template
+                    // angle range (xem Pattern2BatchTemplateConfig.HasAngleRange).
                     if (r.Score < globalThreshold) continue;
 
                     float w = (float)r.Width, h = (float)r.Height;
@@ -2396,6 +2403,12 @@ namespace BeeCore
         public float ScoreThreshold { get; set; } = 70f;   // 0..100 (UI scale)
         public int ExpectedCount { get; set; } = 1;        // ≥0; 0 = optional
         public int MaxPerTemplate { get; set; } = 0;       // 0 = follow global MaxObject
+
+        // Per-template angle range (deg). Lưu lúc Add từ DeltaAngle ± Angle. Override
+        // cfg.AngleStart/EndDeg trong native batch khi check.
+        public bool HasAngleRange { get; set; } = false;
+        public double AngleLower { get; set; } = 0.0;
+        public double AngleUpper { get; set; } = 0.0;
 
         // PNG bytes của template image. JSON sẽ serialize thành base64.
         public byte[] TemplatePng { get; set; }
