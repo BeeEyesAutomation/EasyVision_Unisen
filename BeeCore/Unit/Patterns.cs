@@ -434,7 +434,16 @@ namespace BeeCore
         // (Pattern.LearnPatternBatchBegin/AddBatchTemplate/MatchBatchStable). Backward-compat:
         // serialize mặc định IsMultiTemplate=false, MultiTemplates=[] cho project cũ.
         public bool IsMultiTemplate { get; set; } = false;
-        public List<Pattern2TemplateEntry> MultiTemplates { get; set; } = new List<Pattern2TemplateEntry>();
+
+        // Lazy getter: BinaryFormatter/[Serializable] dùng FormatterServices.GetUninitializedObject
+        // bypass auto-property initializer → field có thể null sau deserialize. Phải lazy-init
+        // để tránh NRE ở UI/engine call site.
+        private List<Pattern2TemplateEntry> _multiTemplates;
+        public List<Pattern2TemplateEntry> MultiTemplates
+        {
+            get { return _multiTemplates ?? (_multiTemplates = new List<Pattern2TemplateEntry>()); }
+            set { _multiTemplates = value; }
+        }
 
         [NonSerialized]
         public BeeCpp.Pattern2 Pattern =new BeeCpp.Pattern2();
