@@ -948,7 +948,7 @@ namespace BeeInterface
 
         private void rjButton1_Click(object sender, EventArgs e)
         {
-            lay5.Visible =! btn5.IsCLick;
+            laySample.Visible =! btn5.IsCLick;
         }
 
        
@@ -1269,7 +1269,23 @@ namespace BeeInterface
             // RJButton.IsCLick highlight (pattern dùng cho Best/All Object, btnHard/Normal/Easy).
             if (btnModeSingle != null) btnModeSingle.IsCLick = !multi;
             if (btnModeMulti != null) btnModeMulti.IsCLick = multi;
-            if (tlpMulti != null) tlpMulti.Visible = multi;
+            if (multi)
+            {
+                this.laySample.Controls.Remove(this.imgTemp);
+                this.laySample.Controls.Add(this.dgvTemplates, 0, 0);
+                 btnAddSample.Visible = true;
+                 btnDeleteSample.Visible = true;
+            }
+            else
+            {
+                this.laySample.Controls.Remove(this.dgvTemplates);
+                this.laySample.Controls.Add(this.imgTemp, 0, 0);
+                btnAddSample.Visible = false;
+                btnDeleteSample.Visible = false;
+            }
+                
+                
+            
         }
 
         /// <summary>
@@ -1390,5 +1406,50 @@ namespace BeeInterface
             UpdateModeToggleUi();
         }
         #endregion
+
+        private void btn11_Click(object sender, EventArgs e)
+        {
+            lay11.Visible = !btn11.IsCLick;
+        }
+
+        private void btnChangeSample_Click(object sender, EventArgs e)
+        {
+            if (Propety.rotCrop == null) return;
+            if (Propety.rotCrop._rect.Width == 0 || Propety.rotCrop._rect.Height == 0) return;
+
+            // Learn template từ ROI hiện tại (chung cho single + multi).
+            var newBmp = Propety.LearnPattern(BeeCore.Common.listCamera[Propety.IndexThread].matRaw.Clone(), false).ToBitmap();
+            Propety.bmRaw = newBmp;
+            imgTemp.Image = Propety.bmRaw;
+
+            if (Propety.IsMultiTemplate)
+            {
+                // Multi-mode: thay template của row đang chọn trong dgvTemplates.
+                // Nếu chưa có row nào hoặc chưa chọn → fallback Add mới (giữ workflow Sample).
+                int idx = dgvTemplates?.CurrentCell?.RowIndex ?? -1;
+                if (idx >= 0 && idx < Propety.MultiTemplates.Count)
+                {
+                    var entry = Propety.MultiTemplates[idx];
+                    entry.SetBitmap(newBmp);
+                    // Update angle range theo rotCrop mới (mẫu mới có thể khác góc).
+                    if (Propety.rotCrop != null && Propety.rotArea != null)
+                    {
+                        float deltaAngle = Propety.rotCrop._rectRotation - Propety.rotArea._rectRotation;
+                        entry.HasAngleRange = true;
+                        entry.AngleLower = deltaAngle - Propety.Angle;
+                        entry.AngleUpper = deltaAngle + Propety.Angle;
+                    }
+                    Propety.MarkBatchDirty();
+                    RefreshTemplatesGrid();
+                    if (idx < dgvTemplates.Rows.Count)
+                        dgvTemplates.CurrentCell = dgvTemplates.Rows[idx].Cells[0];
+                }
+                else
+                {
+                    // Không có row chọn → thêm mới như Sample workflow.
+                    TryAutoAddSampleToMulti();
+                }
+            }
+        }
     }
 }
