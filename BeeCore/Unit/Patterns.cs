@@ -25,7 +25,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 using static BeeCore.Cropper;
-using static LibUsbDotNet.Main.UsbTransferQueue;
+
 using Point = OpenCvSharp.Point;
 using Size = OpenCvSharp.Size;
 
@@ -95,11 +95,9 @@ namespace BeeCore
                 matTemp.Dispose();
             matTemp = new Mat();
 
-            if (bmRaw != null)
-            {
-                bmRaw.Dispose();
-                bmRaw = null;
-            }
+            // bmRaw is the learned template image, not runtime state. The copied
+            // ToolPattern UI can already hold it in imgTemp.Image before SetModel(true)
+            // runs, so disposing it here leaves PictureBox with an invalid Bitmap.
         }
 
         public object Clone()
@@ -430,6 +428,14 @@ namespace BeeCore
         private int numOK;
         private int delayTrig;
         public List< System.Drawing.Point > listP_Center=new List<System.Drawing.Point>();
+
+        // ===== Multi-template mode =====
+        // Khi IsMultiTemplate=true, engine bỏ qua single-template flow và đi qua API batch
+        // (Pattern.LearnPatternBatchBegin/AddBatchTemplate/MatchBatchStable). Backward-compat:
+        // serialize mặc định IsMultiTemplate=false, MultiTemplates=[] cho project cũ.
+        public bool IsMultiTemplate { get; set; } = false;
+        public List<Pattern2TemplateEntry> MultiTemplates { get; set; } = new List<Pattern2TemplateEntry>();
+
         [NonSerialized]
         public BeeCpp.Pattern2 Pattern =new BeeCpp.Pattern2();
         [NonSerialized]
@@ -461,6 +467,14 @@ namespace BeeCore
         {
             lock (RuntimeLock)
             {
+            // Multi-template mode: học từ list MultiTemplates qua native batch API.
+            // bmRaw không có ý nghĩa ở chế độ này → trả Mat rỗng.
+            if (IsMultiTemplate)
+            {
+                LearnPatternsBatch();
+                raw?.Dispose();
+                return new Mat();
+            }
 
             using (Mat img = raw)
             {
@@ -498,7 +512,7 @@ namespace BeeCore
                                     : c == 3 ? MatType.CV_8UC3
                                     : MatType.CV_8UC4;
                         // Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
-                        using (var m = new Mat(h, w, mt, intpr, s))
+                        using (var m = Mat.FromPixelData(h, w, mt, intpr, s))
                         {
                             // CopyTo hoặc Clone đều OK; Clone gọn hơn:
                             mat = m.Clone();
@@ -953,7 +967,7 @@ namespace BeeCore
         //                    : c == 3 ? MatType.CV_8UC3
         //                    : MatType.CV_8UC4;
 
-        //                using (var nativeMask = new Mat(h, w, mt, ptr, s))
+        //                using (var nativeMask = Mat.FromPixelData(h, w, mt, ptr, s))
         //                {
         //                    colorMask = nativeMask.Clone();
         //                }
@@ -1048,7 +1062,7 @@ namespace BeeCore
                             : c == 3 ? MatType.CV_8UC3
                             : MatType.CV_8UC4;
 
-                        using (var nativeMask = new Mat(h, w, mt, ptr, s))
+                        using (var nativeMask = Mat.FromPixelData(h, w, mt, ptr, s))
                         {
                             colorMask = nativeMask.Clone();
                         }
@@ -1622,14 +1636,170 @@ namespace BeeCore
         public int NumThreads = 1;
         public int ScalePattern = 0;
         public int ScaleStep = 0;
+
+        // ===== Multi-template helpers =====
+
+        /// <summary>
+        /// Build Pattern2StableConfig từ tool fields (angle, preset, GPU, etc.).
+        /// Caller set <see cref="Pattern2StableConfig.MinAcceptScore"/> và
+        /// <see cref="Pattern2StableConfig.MaxPos"/> riêng (tuỳ run-time score/MaxObject).
+        /// </summary>
+        private Pattern2StableConfig BuildStableConfig()
+        {
+            var cfg = new Pattern2StableConfig(true);
+            cfg.AngleStartDeg = AngleLower;
+            cfg.AngleEndDeg = AngleUper;
+            cfg.AngleStepDeg = StepAngle;
+            cfg.MaxOverlap = OverLap;
+            cfg.BitwiseNot = ckBitwiseNot;
+            cfg.SubPixel = ckSubPixel;
+            cfg.Difficulty = (Pattern2DifficultyLevel)(int)DifficultyPattern;
+            cfg.EnableValidator = EnableValidator;
+            cfg.EnableKeepFilter = EnableKeepFilter;
+            cfg.EnableNms = EnableNms;
+            cfg.EnableAutoThreshold = true;
+            cfg.EnableScaleSearch = EnableScaleSearch;
+            cfg.ScaleMin = (100 - ScalePattern) / 100.0;
+            cfg.ScaleMax = (100 + ScalePattern) / 100.0;
+            cfg.ScaleStep = ScaleStep / 100.0;
+            cfg.EnableGpu = UseGpu;
+            cfg.EnableCpuMultiThread = EnableMultiThread;
+            cfg.CpuThreads = NumThreads;
+            cfg.DebugLog = false;
+            return cfg;
+        }
+
+        /// <summary>
+        /// Học tất cả template trong MultiTemplates qua native batch API.
+        /// Tất cả template dùng cùng preprocess (shared cfg) — đây là contract của native batch.
+        /// </summary>
+        private void LearnPatternsBatch()
+        {
+            if (MultiTemplates == null || MultiTemplates.Count == 0) return;
+
+            var learnCfg = BuildStableConfig();
+            Pattern.LearnPatternBatchBegin();
+            try
+            {
+                foreach (var e in MultiTemplates)
+                {
+                    var bmp = e.GetBitmap();
+                    if (bmp == null) continue;
+                    using (Mat m = OpenCvSharp.Extensions.BitmapConverter.ToMat(bmp))
+                    {
+                        Mat gray = m;
+                        bool ownsGray = false;
+                        if (m.Channels() != 1)
+                        {
+                            gray = new Mat();
+                            Cv2.CvtColor(m, gray,
+                                m.Channels() == 4 ? ColorConversionCodes.BGRA2GRAY
+                                                  : ColorConversionCodes.BGR2GRAY);
+                            ownsGray = true;
+                        }
+                        try
+                        {
+                            var tplCfg = new Pattern2BatchTemplateConfig(
+                                e.Label ?? "",
+                                e.ScoreThreshold / 100.0,
+                                e.ExpectedCount);
+                            tplCfg.MaxPerTemplate = e.MaxPerTemplate;
+                            GC.KeepAlive(gray);
+                            Pattern.AddBatchTemplate(
+                                gray.Data, gray.Width, gray.Height,
+                                (int)gray.Step(), gray.Channels(),
+                                learnCfg, tplCfg);
+                        }
+                        finally
+                        {
+                            if (ownsGray) gray.Dispose();
+                        }
+                    }
+                }
+                Pattern.LearnPatternBatchEnd();
+            }
+            catch (Exception ex)
+            {
+                Global.LogsDashboard?.AddLog(
+                    new LogEntry(DateTime.Now, LeveLLog.ERROR, "Pattern2.Batch.Learn", ex.ToString()));
+            }
+        }
+
+        /// <summary>
+        /// Xử lý kết quả từ MatchBatchStable: filter theo angle range + global threshold,
+        /// đếm match per label, judge OK/NG theo expected count.
+        /// Push từng match vào ResultItems với <see cref="ResultItem.Name"/> = label.
+        /// </summary>
+        private void ProcessBatchResults(List<Pattern2BatchResult> listBatch, RectRotate rotArea)
+        {
+            var owner = Common.TryGetTool(Global.IndexProgChoose, Index);
+            var globalThreshold = Common.TryGetTool(IndexThread, Index).Score; // 0..100
+
+            // Init counters theo MultiTemplates (đảm bảo label thiếu match cũng có entry).
+            var perLabelCount = new Dictionary<string, int>(StringComparer.Ordinal);
+            foreach (var e in MultiTemplates)
+            {
+                if (!perLabelCount.ContainsKey(e.Label ?? ""))
+                    perLabelCount[e.Label ?? ""] = 0;
+            }
+
+            float scoreSum = 0f;
+            int kept = 0;
+
+            if (listBatch != null)
+            {
+                foreach (var r in listBatch)
+                {
+                    if (r.AngleDeg < AngleLower || r.AngleDeg > AngleUper) continue;
+                    if (r.Score < globalThreshold) continue;
+
+                    float w = (float)r.Width, h = (float)r.Height;
+                    var pCenter = new System.Drawing.PointF((float)r.Cx, (float)r.Cy);
+                    float angle = (float)r.AngleDeg;
+                    float score = (float)r.Score;
+                    scoreSum += score;
+                    kept++;
+
+                    var localRect = new RectRotate(
+                        new System.Drawing.RectangleF(-w / 2f, -h / 2f, w, h),
+                        pCenter, angle, AnchorPoint.None);
+                    var item = AddMatchResult(rotArea, localRect, score);
+                    if (item != null)
+                    {
+                        // Tận dụng ResultItem.Name làm label (tránh thêm field mới phá serialize).
+                        item.Name = r.Label ?? "";
+                    }
+
+                    string lbl = r.Label ?? "";
+                    if (perLabelCount.ContainsKey(lbl))
+                        perLabelCount[lbl] = perLabelCount[lbl] + 1;
+                }
+            }
+
+            // Judge OK/NG: mỗi label có ExpectedCount > 0 phải đạt ≥ expected.
+            bool overallOk = true;
+            foreach (var e in MultiTemplates)
+            {
+                if (e.ExpectedCount <= 0) continue; // 0 = optional
+                string lbl = e.Label ?? "";
+                int found = perLabelCount.TryGetValue(lbl, out int c) ? c : 0;
+                if (found < e.ExpectedCount) { overallOk = false; break; }
+            }
+
+            owner.Results = overallOk ? Results.OK : Results.NG;
+            owner.ScoreResult = (kept > 0) ? (int)Math.Round(scoreSum / kept, 1) : 0;
+        }
+
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
-            lock (RuntimeLock)
+          //  lock (RuntimeLock)
             {
-
-            float DeltaAngle = (rotCrop._rectRotation) - (rotArea._rectRotation);
-            AngleLower = DeltaAngle - Angle;
-           AngleUper = DeltaAngle + Angle;
+                if (!Global.IsRun)
+                {
+                    float DeltaAngle = (rotCrop._rectRotation) - (rotArea._rectRotation);
+                    AngleLower = DeltaAngle - Angle;
+                    AngleUper = DeltaAngle + Angle;
+                }
             Common.TryGetTool(Global.IndexProgChoose, Index).ScoreResult = 0;
             Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.NG;
             // 5) Gom kết quả
@@ -1681,21 +1851,7 @@ namespace BeeCore
                                 if (!matProcess.IsDisposed)
                                     if (!matProcess.Empty()) matProcess.Dispose();
 
-                                switch (MethordEdge)
-                                {
-                                    case MethordEdge.CloseEdges:
-                                        matProcess = Filters.Edge(matCrop);
-                                        break;
-                                    case MethordEdge.StrongEdges:
-                                        matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                                        break;
-                                    case MethordEdge.Binary:
-                                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
-                                        break;
-                                    case MethordEdge.InvertBinary:
-                                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                                        break;
-                                }
+                                matProcess = Filters.ApplyEdgeMethod(matCrop, MethordEdge, ThresholdBinary);
 
                                 matProcess = ApplyShapeMaskAndCompose(matProcess, ctx, rotArea, rotMask, returnMaskOnly: false);
                             //Cv2.ImWrite("process.png", matProcess);
@@ -1746,6 +1902,16 @@ namespace BeeCore
                     cfg.ScaleMax = ScaleMax;
                     cfg.ScaleStep = ScaleStep/100.0;
                    // cfg.DebugLogPath = "E:\\pattern2_debug.txt";
+
+                    // Multi-template branch: gọi native batch API, judge OK/NG theo expected
+                    // count per label, rồi skip phần single-template processing bên dưới.
+                    if (IsMultiTemplate)
+                    {
+                        var listBatch = Pattern.MatchBatchStable(cfg);
+                        ProcessBatchResults(listBatch, rotArea);
+                        return; // exit DoWork; finally block (nếu có) vẫn chạy.
+                    }
+
                     var listRS = Pattern.MatchStable(
                      cfg
                     );
@@ -2087,7 +2253,7 @@ namespace BeeCore
                     if (pyResult == null) return;
 
                     byte[] edgeBytes = pyResult.As<byte[]>();
-                    matProcess = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
+                    matProcess = Mat.FromPixelData(height, width, MatType.CV_8UC1, edgeBytes);
                 }
                 finally
                 {
@@ -2146,7 +2312,7 @@ namespace BeeCore
 
     //                        // Chuyển kết quả ngược về byte[] rồi sang Mat
     //                        byte[] edgeBytes = result.As<byte[]>();
-    //                        matProcess = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
+    //                        matProcess = Mat.FromPixelData(height, width, MatType.CV_8UC1, edgeBytes);
     //                    }
 
     //                    break;
@@ -2200,5 +2366,49 @@ namespace BeeCore
 
     //    }
 
+    }
+
+    /// <summary>
+    /// Một template trong multi-template mode của <see cref="Patterns"/>.
+    /// Lưu bitmap dạng PNG byte[] để JSON-serialize được (Bitmap không serialize trực tiếp).
+    /// </summary>
+    [Serializable]
+    public class Pattern2TemplateEntry
+    {
+        public string Label { get; set; } = "";
+        public float ScoreThreshold { get; set; } = 70f;   // 0..100 (UI scale)
+        public int ExpectedCount { get; set; } = 1;        // ≥0; 0 = optional
+        public int MaxPerTemplate { get; set; } = 0;       // 0 = follow global MaxObject
+
+        // PNG bytes của template image. JSON sẽ serialize thành base64.
+        public byte[] TemplatePng { get; set; }
+
+        [NonSerialized]
+        private Bitmap _cachedBitmap;
+
+        /// <summary>Lazy decode PNG -> Bitmap. Trả null nếu chưa có template.</summary>
+        public Bitmap GetBitmap()
+        {
+            if (_cachedBitmap != null) return _cachedBitmap;
+            if (TemplatePng == null || TemplatePng.Length == 0) return null;
+            try
+            {
+                using (var ms = new System.IO.MemoryStream(TemplatePng))
+                    _cachedBitmap = new Bitmap(ms);
+            }
+            catch { _cachedBitmap = null; }
+            return _cachedBitmap;
+        }
+
+        public void SetBitmap(Bitmap bmp)
+        {
+            _cachedBitmap = null;
+            if (bmp == null) { TemplatePng = null; return; }
+            using (var ms = new System.IO.MemoryStream())
+            {
+                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                TemplatePng = ms.ToArray();
+            }
+        }
     }
 }
