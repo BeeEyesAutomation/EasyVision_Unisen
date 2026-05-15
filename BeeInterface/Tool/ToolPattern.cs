@@ -82,7 +82,6 @@ namespace BeeInterface
         {
             InitializeComponent();
             BuildColorUi();
-            BuildMultiTemplateUi();
 
             if (Propety == null)
                 Propety = new Patterns();
@@ -1241,99 +1240,9 @@ namespace BeeInterface
             Propety.ColorNgOffsetRight = (int)AdjOffSetRight.Value;
         }
 
-        #region Multi-Template UI
-        // Toggle Single|Multi placed dock-top trong tableLayoutPanel1 → user thấy ngay sau
-        // section "2. Method Detect". Khi Multi selected, IsMultiTemplate=true → section list
-        // panel tự hiện. Theo memory feedback_ui_in_designer event wire -=/+=.
-
-        private TableLayoutPanel tlpModeToggle;
-        private RJButton btnModeSingle;
-        private RJButton btnModeMulti;
-
-        private TableLayoutPanel tlpMulti;
-        private DataGridView dgvTemplates;
-        private Button btnDeleteTpl;
-        private bool _bindingMultiUi = false; // suppress event reentrancy khi RefreshTemplatesGrid
-
-        private void BuildMultiTemplateUi()
-        {
-            // ===== Single | Multi toggle =====
-            tlpModeToggle = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 2,
-                RowCount = 1,
-                Margin = new Padding(5, 0, 5, 0),
-                Padding = new Padding(5),
-                Height = 40,
-            };
-            tlpModeToggle.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tlpModeToggle.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-
-            btnModeSingle = new RJButton { Text = "Single", Dock = DockStyle.Fill, IsTouch = true };
-            btnModeMulti = new RJButton { Text = "Multi", Dock = DockStyle.Fill, IsTouch = true };
-            btnModeSingle.Click -= OnModeSingleClicked; btnModeSingle.Click += OnModeSingleClicked;
-            btnModeMulti.Click -= OnModeMultiClicked; btnModeMulti.Click += OnModeMultiClicked;
-            tlpModeToggle.Controls.Add(btnModeSingle, 0, 0);
-            tlpModeToggle.Controls.Add(btnModeMulti, 1, 0);
-
-            // ===== Multi list panel =====
-            // Khi IsMultiTemplate=true, panel này hiện. Trong mode multi, chỉ có DataGridView
-            // + nút Xóa. Add tự động khi user nhấn Sample (btnLearning_Click hook).
-            tlpMulti = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                ColumnCount = 1,
-                Visible = false,
-            };
-            tlpMulti.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-
-            btnDeleteTpl = new Button
-            {
-                Text = "Xóa template đang chọn",
-                AutoSize = true,
-                Dock = DockStyle.Top,
-                Margin = new Padding(3),
-            };
-            btnDeleteTpl.Click -= OnDeleteTplClicked; btnDeleteTpl.Click += OnDeleteTplClicked;
-
-            dgvTemplates = new DataGridView
-            {
-                Dock = DockStyle.Top,
-                Height = 220,
-                AllowUserToAddRows = false,
-                AllowUserToResizeRows = false,
-                AutoGenerateColumns = false,
-                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                MultiSelect = false,
-            };
-            dgvTemplates.RowTemplate.Height = 60;
-            dgvTemplates.Columns.Add(new DataGridViewTextBoxColumn { Name = "colLabel", HeaderText = "Label", Width = 90 });
-            dgvTemplates.Columns.Add(new DataGridViewImageColumn { Name = "colThumb", HeaderText = "Thumb", Width = 70, ImageLayout = DataGridViewImageCellLayout.Zoom });
-            dgvTemplates.Columns.Add(new DataGridViewTextBoxColumn { Name = "colScore", HeaderText = "Score≥", Width = 55 });
-            dgvTemplates.Columns.Add(new DataGridViewTextBoxColumn { Name = "colExpected", HeaderText = "Expect", Width = 55 });
-            dgvTemplates.CellValueChanged -= OnDgvCellValueChanged;
-            dgvTemplates.CellValueChanged += OnDgvCellValueChanged;
-
-            tlpMulti.Controls.Add(btnDeleteTpl, 0, 0);
-            tlpMulti.Controls.Add(dgvTemplates, 0, 1);
-
-            // Append: trên là toggle Single|Multi, dưới là list panel. TLP1 auto-grow.
-            try
-            {
-                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                tableLayoutPanel1.RowCount = tableLayoutPanel1.RowCount + 2;
-                tableLayoutPanel1.Controls.Add(tlpModeToggle, 0, tableLayoutPanel1.RowCount - 2);
-                tableLayoutPanel1.Controls.Add(tlpMulti, 0, tableLayoutPanel1.RowCount - 1);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("BuildMultiTemplateUi: " + ex.Message);
-            }
-        }
+        #region Multi-Template UI (handlers only — controls + layout in Designer.cs)
+        // Suppress event reentrancy khi RefreshTemplatesGrid programmatic populate cells.
+        private bool _bindingMultiUi = false;
 
         private void OnModeSingleClicked(object s, EventArgs e)
         {
