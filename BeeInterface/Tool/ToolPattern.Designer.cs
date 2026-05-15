@@ -4491,8 +4491,6 @@ namespace BeeInterface
             this.Size = new System.Drawing.Size(524, 858);
             this.Load += new System.EventHandler(this.ToolOutLine_Load);
             this.VisibleChanged += new System.EventHandler(this.ToolOutLine_VisibleChanged);
-            // Multi-template UI: append section vào cuối tableLayoutPanel1.
-            BuildMultiTemplateUi();
             this.tabControl2.ResumeLayout(false);
             this.tabP1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);

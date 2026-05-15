@@ -81,6 +81,10 @@ namespace BeeInterface
         public ToolPattern( )
         {
             InitializeComponent();
+            // BuildMultiTemplateUi defined in Designer.cs nhưng gọi từ constructor để VS
+            // Forms Designer không cố parse custom method trong InitializeComponent (sẽ
+            // báo "Method not found" khi mở form trong Designer).
+            BuildMultiTemplateUi();
             BuildColorUi();
 
             if (Propety == null)
