@@ -28,6 +28,8 @@ using Size = System.Drawing.Size;
 namespace BeeInterface
 {
     [Serializable()]
+    // ToolPattern owns pattern-tool parameter UI and handler orchestration;
+    // keep image matching and scoring behavior in BeeCore.Unit.Patterns.
     public partial class ToolPattern : UserControl
     {
 
@@ -48,7 +50,7 @@ namespace BeeInterface
         private TableLayoutPanel colorModeLayout;
         private TableLayoutPanel colorPickLayout;
         private TableLayoutPanel colorNgPickLayout;
-        private RJButton btnEnableColorCheck;
+       
         private RJButton btnColorHSV;
         private RJButton btnColorRGB;
         private RJButton btnGetColor;
@@ -80,6 +82,7 @@ namespace BeeInterface
         {
             InitializeComponent();
             BuildColorUi();
+            BuildMultiTemplateUi();
 
             if (Propety == null)
                 Propety = new Patterns();
@@ -105,8 +108,8 @@ namespace BeeInterface
             }
             OwnerTool.StatusTool = StatusTool.WaitCheck;
             trackAngle.Value =(int) Propety.Angle;
-           
 
+            layOverLap.Visible = Propety.EnableNms;
             if (Propety.Angle > 360) Propety.Angle = 360;
 
             if (Propety.Angle == 0)
@@ -174,7 +177,7 @@ namespace BeeInterface
          
 
             txtAddPLC.Text = Propety.AddPLC;
-            adjScale.Value = Propety.Scale;
+            //adjScale.Value = Propety.Scale;
             if (Propety.listCLMaskShow == null)
                 Propety.listCLMaskShow = new List<Color>();
             if (Propety.listCLNgShow == null)
@@ -189,18 +192,19 @@ namespace BeeInterface
             trackColorExtraction.Value = Propety.ExtractionMask;
             trackColorExtractionNG.Value = Propety.ExtractionNG;
             AdjColorScoreNG.Value = Propety.ScoreNG;
-            panelColorHost.Visible = !btnColorSection.IsCLick;
+          
             picColorPreview.Invalidate();
             picColorNgPreview.Invalidate();
             ApplyColorUiState();
+            BindMultiTemplateUi();
             btnCPU.IsCLick = Propety.UseCpu;
             btnGPU.IsCLick = Propety.UseGpu;
             btnMultiThread.IsCLick = Propety.EnableMultiThread;
             numThread.Value = Propety.NumThreads <= 0 ? 1 : Propety.NumThreads;
             SyncThreadUi();
 
-            btnZero0.IsCLick=Propety.ZeroPos==ZeroPos.Zero?true:false;
-            btnZeroAdj.IsCLick = Propety.ZeroPos == ZeroPos.ZeroADJ ? true : false;
+            //btnZero0.IsCLick=Propety.ZeroPos==ZeroPos.Zero?true:false;
+            //btnZeroAdj.IsCLick = Propety.ZeroPos == ZeroPos.ZeroADJ ? true : false;
 
              if (OwnerTool != null)
 
@@ -236,7 +240,7 @@ namespace BeeInterface
             colorModeLayout = new TableLayoutPanel();
             colorPickLayout = new TableLayoutPanel();
             colorNgPickLayout = new TableLayoutPanel();
-            btnEnableColorCheck = new RJButton();
+         
             btnColorHSV = new RJButton();
             btnColorRGB = new RJButton();
             btnGetColor = new RJButton();
@@ -263,7 +267,7 @@ namespace BeeInterface
             panelColorHost.AutoScroll = true;
             panelColorHost.AutoSize = true;
             panelColorHost.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            panelColorHost.Padding = new Padding(6);
+        //    panelColorHost.Padding = new Padding(0);
 
             colorLayout.ColumnCount = 1;
             colorLayout.RowCount = 14;
@@ -273,10 +277,10 @@ namespace BeeInterface
             colorLayout.BackColor = SystemColors.Control;
             for (int i = 0; i < 14; i++)
                 colorLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            colorLayout.RowStyles.Add(new RowStyle(SizeType.Absolute,70f));
+            colorLayout.RowStyles.Add(new RowStyle(SizeType.Absolute,45f));
             panelColorHost.Controls.Add(colorLayout);
 
-            ConfigureSectionLabel(lbColorMode, "Enable Color Check");
+          
             ConfigureSectionLabel(lbColorList, "Color Type");
             ConfigureSectionLabel(lbColorSet, "List Color Mask");
             ConfigureSectionLabel(lbColorExtraction, "ExternColor Mask");
@@ -284,13 +288,15 @@ namespace BeeInterface
             ConfigureSectionLabel(lbColorNgExtraction, "ExternColor NG");
             ConfigureSectionLabel(lbColorScore, "Score NG");
 
-            ConfigureToggleButton(btnEnableColorCheck, "OFF", btnEnableColorCheck_Click);
+           
 
             colorModeLayout.ColumnCount = 2;
             colorModeLayout.RowCount = 1;
             colorModeLayout.Dock = DockStyle.Fill;
+            
             colorModeLayout.BackColor = Color.White;
-            colorModeLayout.Padding = new Padding(5);
+            colorModeLayout.Height = 50;
+            colorModeLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             colorModeLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             colorModeLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             ConfigureToggleButton(btnColorHSV, "HSV", btnColorHSV_Click, Corner.Left, false);
@@ -302,27 +308,28 @@ namespace BeeInterface
             colorPickLayout.RowCount = 1;
             colorPickLayout.Dock = DockStyle.Fill;
             colorPickLayout.BackColor = Color.White;
-            colorPickLayout.Padding = new Padding(5);
+            colorPickLayout.Height = 50;
+            colorPickLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             colorPickLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
             colorPickLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            colorPickLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50F));
             colorPickLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
+            colorPickLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70F));
 
             ConfigureToggleButton(btnGetColor, "Get Color", btnGetColor_Click);
             ConfigureToggleButton(btnGetColorNG, "Get Color", btnGetColorNG_Click);
 
             picColorPreview.BackColor = Color.Gainsboro;
             picColorPreview.Dock = DockStyle.Fill;
-            picColorPreview.Margin = new Padding(5, 0, 5, 0);
+           // picColorPreview.Margin = new Padding(5, 0, 5, 0);
             picColorPreview.Paint += picColorPreview_Paint;
 
             picColorNgPreview.BackColor = Color.Gainsboro;
             picColorNgPreview.Dock = DockStyle.Fill;
-            picColorNgPreview.Margin = new Padding(5, 0, 5, 0);
+           // picColorNgPreview.Margin = new Padding(5, 0, 5, 0);
             picColorNgPreview.Paint += picColorNgPreview_Paint;
 
             btnUndoColor.Dock = DockStyle.Fill;
-            btnUndoColor.Margin = new Padding(5, 0, 5, 0);
+          //  btnUndoColor.Margin = new Padding(5, 0, 5, 0);
             btnUndoColor.Text = "Undo";
             btnUndoColor.Click += btnUndoColor_Click;
 
@@ -332,7 +339,7 @@ namespace BeeInterface
             btnClearColor.Click += btnClearColor_Click;
 
             btnUndoColorNG.Dock = DockStyle.Fill;
-            btnUndoColorNG.Margin = new Padding(5, 0, 5, 0);
+           // btnUndoColorNG.Margin = new Padding(5, 0, 5, 0);
             btnUndoColorNG.Text = "Undo";
             btnUndoColorNG.Click += btnUndoColorNG_Click;
 
@@ -350,11 +357,12 @@ namespace BeeInterface
             colorNgPickLayout.RowCount = 1;
             colorNgPickLayout.Dock = DockStyle.Fill;
             colorNgPickLayout.BackColor = Color.White;
-            colorNgPickLayout.Padding = new Padding(5);
+            colorNgPickLayout.Height = 50;
+            colorNgPickLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             colorNgPickLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
             colorNgPickLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            colorNgPickLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50F));
-            colorNgPickLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
+            colorNgPickLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,60F));
+            colorNgPickLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70F));
             colorNgPickLayout.Controls.Add(btnGetColorNG, 0, 0);
             colorNgPickLayout.Controls.Add(picColorNgPreview, 1, 0);
             colorNgPickLayout.Controls.Add(btnUndoColorNG, 2, 0);
@@ -363,9 +371,6 @@ namespace BeeInterface
             ConfigureAdjustBar(trackColorExtraction, 0, 100, 1, trackColorExtraction_ValueChanged);
             ConfigureAdjustBar(trackColorExtractionNG, 0, 100, 1, trackColorExtractionNG_ValueChanged);
             ConfigureAdjustBar(AdjColorScoreNG, 0, 1000000, 1, AdjColorScoreNG_ValueChanged);
-
-            colorLayout.Controls.Add(lbColorMode, 0, 0);
-            colorLayout.Controls.Add(btnEnableColorCheck, 0, 1);
             colorLayout.Controls.Add(lbColorList, 0, 2);
             colorLayout.Controls.Add(colorModeLayout, 0, 3);
             colorLayout.Controls.Add(lbColorSet, 0, 4);
@@ -387,7 +392,7 @@ namespace BeeInterface
             label.Dock = DockStyle.Fill;
             label.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label.ForeColor = Color.Transparent;
-            label.Margin = new Padding(5, 10, 5, 0);
+           // label.Margin = new Padding(5, 10, 5, 0);
             label.Text = text;
             label.TextAlign = ContentAlignment.MiddleLeft;
         }
@@ -454,7 +459,7 @@ namespace BeeInterface
             bar.Font = new Font("Segoe UI", 10F);
             bar.InnerPadding = new Padding(10, 6, 10, 6);
             bar.KeyboardStep = 1F;
-            bar.Margin = new Padding(5, 0, 5, 0);
+          //  bar.Margin = new Padding(5, 0, 5, 0);
             bar.MatchTextboxFontToThumb = true;
             bar.Max = max;
             bar.Min = min;
@@ -481,12 +486,8 @@ namespace BeeInterface
         {
             bool enabled = Propety.EnableColorCheck;
             btnEnableColorCheck.Text = enabled ? "ON" : "OFF";
-            colorModeLayout.Enabled = enabled;
-            colorPickLayout.Enabled = enabled;
-            colorNgPickLayout.Enabled = enabled;
-            trackColorExtraction.Enabled = enabled;
-            trackColorExtractionNG.Enabled = enabled;
-            AdjColorScoreNG.Enabled = enabled;
+
+            panelColorHost.Visible = enabled;
         }
 
         private void SyncThreadUi()
@@ -943,10 +944,7 @@ namespace BeeInterface
             lay5.Visible =! btn5.IsCLick;
         }
 
-        private void btnColorSection_Click(object sender, EventArgs e)
-        {
-            panelColorHost.Visible = !btnColorSection.IsCLick;
-        }
+       
 
       
 
@@ -966,16 +964,16 @@ namespace BeeInterface
             Propety.ZeroPos = ZeroPos.ZeroADJ;
         }
 
-        private void adjScale_ValueChanged(float obj)
-        {
-            Propety.Scale =(float)adjScale.Value;
-        }
+        //private void adjScale_ValueChanged(float obj)
+        //{
+        //    Propety.Scale =(float)adjScale.Value;
+        //}
 
-        private void btn7_Click_1(object sender, EventArgs e)
-        {
-            lay71.Visible = !btn7.IsCLick;
-            lay72.Visible = !btn7.IsCLick;
-        }
+        //private void btn7_Click_1(object sender, EventArgs e)
+        //{
+        //    lay71.Visible = !btn7.IsCLick;
+        //    lay72.Visible = !btn7.IsCLick;
+        //}
 
         private void btnZero0_Click(object sender, EventArgs e)
         {
@@ -1043,6 +1041,7 @@ namespace BeeInterface
         private void btnEnableOverLap_Click(object sender, EventArgs e)
         {
             Propety.EnableNms=btnEnableOverLap.IsCLick;
+            layOverLap.Visible = Propety.EnableNms;
         }
 
         private void btnCPU_Click(object sender, EventArgs e)
@@ -1237,5 +1236,284 @@ namespace BeeInterface
         {
             Propety.ColorNgOffsetRight = (int)AdjOffSetRight.Value;
         }
+
+        #region Multi-Template UI
+        // Section quản lý list template + label cho multi-template mode.
+        // Tạo programmatic (thay vì sửa 4643-line Designer.cs) để cô lập rủi ro.
+        // Layout theo memory feedback_collapsible_param_sections: RJButton header IsTouch=true
+        // toggle Visible của TableLayoutPanel con. Event subscribe -=/+= theo CLAUDE.md 0.1.4.
+
+        private RJButton secMultiHeader;
+        private TableLayoutPanel tlpMulti;
+        private CheckBox chkMultiTemplate;
+        private DataGridView dgvTemplates;
+        private Button btnAddTpl;
+        private Button btnAddTplFromFile;
+        private Button btnRemoveTpl;
+        private Button btnTplUp;
+        private Button btnTplDown;
+        private bool _bindingMultiUi = false; // suppress event reentrancy khi RefreshTemplatesGrid
+
+        private void BuildMultiTemplateUi()
+        {
+            // Header
+            secMultiHeader = new RJButton();
+            secMultiHeader.Text = "▶ Multi-Template";
+            secMultiHeader.IsTouch = true;
+            secMultiHeader.Dock = DockStyle.Fill;
+            secMultiHeader.Height = 28;
+            secMultiHeader.Click -= OnSecMultiClicked;
+            secMultiHeader.Click += OnSecMultiClicked;
+
+            // Container collapsible
+            tlpMulti = new TableLayoutPanel();
+            tlpMulti.Dock = DockStyle.Fill;
+            tlpMulti.AutoSize = true;
+            tlpMulti.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            tlpMulti.Visible = false; // mặc định collapsed
+            tlpMulti.ColumnCount = 1;
+            tlpMulti.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+
+            chkMultiTemplate = new CheckBox();
+            chkMultiTemplate.Text = "Enable multi-template mode";
+            chkMultiTemplate.AutoSize = true;
+            chkMultiTemplate.Margin = new Padding(3, 4, 3, 4);
+            chkMultiTemplate.CheckedChanged -= OnChkMultiTemplateChanged;
+            chkMultiTemplate.CheckedChanged += OnChkMultiTemplateChanged;
+
+            // Button row
+            var pnlBtns = new FlowLayoutPanel();
+            pnlBtns.Dock = DockStyle.Top;
+            pnlBtns.AutoSize = true;
+            pnlBtns.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            pnlBtns.WrapContents = true;
+            pnlBtns.Margin = new Padding(0);
+
+            btnAddTpl = new Button { Text = "Add (last learn)", AutoSize = true };
+            btnAddTpl.Click -= OnAddTplClicked; btnAddTpl.Click += OnAddTplClicked;
+            btnAddTplFromFile = new Button { Text = "Add from file...", AutoSize = true };
+            btnAddTplFromFile.Click -= OnAddTplFromFileClicked; btnAddTplFromFile.Click += OnAddTplFromFileClicked;
+            btnRemoveTpl = new Button { Text = "Remove", AutoSize = true };
+            btnRemoveTpl.Click -= OnRemoveTplClicked; btnRemoveTpl.Click += OnRemoveTplClicked;
+            btnTplUp = new Button { Text = "↑", AutoSize = true, Width = 32 };
+            btnTplUp.Click -= OnTplUpClicked; btnTplUp.Click += OnTplUpClicked;
+            btnTplDown = new Button { Text = "↓", AutoSize = true, Width = 32 };
+            btnTplDown.Click -= OnTplDownClicked; btnTplDown.Click += OnTplDownClicked;
+
+            pnlBtns.Controls.Add(btnAddTpl);
+            pnlBtns.Controls.Add(btnAddTplFromFile);
+            pnlBtns.Controls.Add(btnRemoveTpl);
+            pnlBtns.Controls.Add(btnTplUp);
+            pnlBtns.Controls.Add(btnTplDown);
+
+            // Grid
+            dgvTemplates = new DataGridView();
+            dgvTemplates.Dock = DockStyle.Top;
+            dgvTemplates.Height = 220;
+            dgvTemplates.AllowUserToAddRows = false;
+            dgvTemplates.AllowUserToResizeRows = false;
+            dgvTemplates.AutoGenerateColumns = false;
+            dgvTemplates.RowTemplate.Height = 60;
+            dgvTemplates.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvTemplates.MultiSelect = false;
+            dgvTemplates.Columns.Clear();
+            dgvTemplates.Columns.Add(new DataGridViewTextBoxColumn { Name = "colLabel", HeaderText = "Label", Width = 90 });
+            dgvTemplates.Columns.Add(new DataGridViewImageColumn { Name = "colThumb", HeaderText = "Thumb", Width = 70, ImageLayout = DataGridViewImageCellLayout.Zoom });
+            dgvTemplates.Columns.Add(new DataGridViewTextBoxColumn { Name = "colScore", HeaderText = "Score≥", Width = 55 });
+            dgvTemplates.Columns.Add(new DataGridViewTextBoxColumn { Name = "colExpected", HeaderText = "Expect", Width = 55 });
+            dgvTemplates.CellValueChanged -= OnDgvCellValueChanged;
+            dgvTemplates.CellValueChanged += OnDgvCellValueChanged;
+
+            tlpMulti.Controls.Add(chkMultiTemplate, 0, 0);
+            tlpMulti.Controls.Add(pnlBtns, 0, 1);
+            tlpMulti.Controls.Add(dgvTemplates, 0, 2);
+
+            // Append xuống cuối tableLayoutPanel1. TLP có RowCount cố định = 24, dùng vị trí 24-25.
+            // TLP cho phép Add controls quá RowCount; auto-grow nếu có thêm RowStyle.
+            try
+            {
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+                tableLayoutPanel1.RowCount = tableLayoutPanel1.RowCount + 2;
+                tableLayoutPanel1.Controls.Add(secMultiHeader, 0, tableLayoutPanel1.RowCount - 2);
+                tableLayoutPanel1.Controls.Add(tlpMulti, 0, tableLayoutPanel1.RowCount - 1);
+            }
+            catch (Exception ex)
+            {
+                // Nếu tableLayoutPanel1 không có (sau refactor designer), log nhẹ và bỏ qua.
+                System.Diagnostics.Debug.WriteLine("BuildMultiTemplateUi: " + ex.Message);
+            }
+        }
+
+        private void OnSecMultiClicked(object s, EventArgs e)
+        {
+            tlpMulti.Visible = !tlpMulti.Visible;
+            secMultiHeader.Text = (tlpMulti.Visible ? "▼ " : "▶ ") + "Multi-Template";
+        }
+
+        private void OnChkMultiTemplateChanged(object s, EventArgs e)
+        {
+            if (_bindingMultiUi || Propety == null) return;
+            Propety.IsMultiTemplate = chkMultiTemplate.Checked;
+            UpdateMultiUiEnabled();
+        }
+
+        private void UpdateMultiUiEnabled()
+        {
+            bool on = Propety != null && Propety.IsMultiTemplate;
+            dgvTemplates.Enabled = on;
+            btnAddTpl.Enabled = on;
+            btnAddTplFromFile.Enabled = on;
+            btnRemoveTpl.Enabled = on;
+            btnTplUp.Enabled = on;
+            btnTplDown.Enabled = on;
+        }
+
+        private void OnAddTplClicked(object s, EventArgs e)
+        {
+            if (Propety == null) return;
+            if (Propety.bmRaw == null)
+            {
+                MessageBox.Show("Chưa có template — học (Learn) ở single-mode trước rồi quay lại Add.",
+                    "Multi-Template", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            AddTemplateEntry(Propety.bmRaw);
+        }
+
+        private void OnAddTplFromFileClicked(object s, EventArgs e)
+        {
+            if (Propety == null) return;
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "Image files|*.png;*.bmp;*.jpg;*.jpeg|All files|*.*";
+                ofd.Multiselect = true;
+                if (ofd.ShowDialog() != DialogResult.OK) return;
+                foreach (var path in ofd.FileNames)
+                {
+                    try
+                    {
+                        using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+                        using (var bmp = new Bitmap(fs))
+                        {
+                            AddTemplateEntry(bmp, System.IO.Path.GetFileNameWithoutExtension(path));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi đọc " + path + ":\n" + ex.Message, "Multi-Template",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void AddTemplateEntry(Bitmap source, string suggestedLabel = null)
+        {
+            if (source == null || Propety == null) return;
+            var entry = new BeeCore.Pattern2TemplateEntry
+            {
+                Label = suggestedLabel ?? ("Tpl" + (Propety.MultiTemplates.Count + 1)),
+                ScoreThreshold = 70f,
+                ExpectedCount = 1,
+            };
+            entry.SetBitmap(source);
+            Propety.MultiTemplates.Add(entry);
+            RefreshTemplatesGrid();
+        }
+
+        private void OnRemoveTplClicked(object s, EventArgs e)
+        {
+            if (Propety == null) return;
+            int idx = dgvTemplates.CurrentCell?.RowIndex ?? -1;
+            if (idx < 0 || idx >= Propety.MultiTemplates.Count) return;
+            Propety.MultiTemplates.RemoveAt(idx);
+            RefreshTemplatesGrid();
+        }
+
+        private void OnTplUpClicked(object s, EventArgs e) { MoveTpl(-1); }
+        private void OnTplDownClicked(object s, EventArgs e) { MoveTpl(+1); }
+        private void MoveTpl(int delta)
+        {
+            if (Propety == null) return;
+            int idx = dgvTemplates.CurrentCell?.RowIndex ?? -1;
+            int newIdx = idx + delta;
+            if (idx < 0 || newIdx < 0 || newIdx >= Propety.MultiTemplates.Count) return;
+            var item = Propety.MultiTemplates[idx];
+            Propety.MultiTemplates.RemoveAt(idx);
+            Propety.MultiTemplates.Insert(newIdx, item);
+            RefreshTemplatesGrid();
+            if (newIdx < dgvTemplates.Rows.Count)
+                dgvTemplates.CurrentCell = dgvTemplates.Rows[newIdx].Cells[0];
+        }
+
+        private void OnDgvCellValueChanged(object s, DataGridViewCellEventArgs e)
+        {
+            if (_bindingMultiUi || Propety == null) return;
+            if (e.RowIndex < 0 || e.RowIndex >= Propety.MultiTemplates.Count) return;
+            var entry = Propety.MultiTemplates[e.RowIndex];
+            var row = dgvTemplates.Rows[e.RowIndex];
+            switch (e.ColumnIndex)
+            {
+                case 0: // Label
+                    entry.Label = row.Cells["colLabel"].Value?.ToString() ?? "";
+                    break;
+                case 2: // Score
+                    entry.ScoreThreshold = ParseFloatSafe(row.Cells["colScore"].Value, 70f);
+                    break;
+                case 3: // Expected
+                    entry.ExpectedCount = ParseIntSafe(row.Cells["colExpected"].Value, 1);
+                    break;
+            }
+        }
+
+        private static float ParseFloatSafe(object v, float fallback)
+        {
+            if (v == null) return fallback;
+            if (float.TryParse(v.ToString(), out float r)) return r;
+            return fallback;
+        }
+
+        private static int ParseIntSafe(object v, int fallback)
+        {
+            if (v == null) return fallback;
+            if (int.TryParse(v.ToString(), out int r)) return r;
+            return fallback;
+        }
+
+        private void RefreshTemplatesGrid()
+        {
+            if (Propety == null || dgvTemplates == null) return;
+            _bindingMultiUi = true;
+            try
+            {
+                dgvTemplates.Rows.Clear();
+                foreach (var entry in Propety.MultiTemplates)
+                {
+                    int r = dgvTemplates.Rows.Add();
+                    var row = dgvTemplates.Rows[r];
+                    row.Cells["colLabel"].Value = entry.Label;
+                    row.Cells["colThumb"].Value = entry.GetBitmap();
+                    row.Cells["colScore"].Value = entry.ScoreThreshold;
+                    row.Cells["colExpected"].Value = entry.ExpectedCount;
+                }
+            }
+            finally { _bindingMultiUi = false; }
+        }
+
+        /// <summary>Gọi từ LoadPara() để bind multi-template state khi mở tool.</summary>
+        public void BindMultiTemplateUi()
+        {
+            if (Propety == null || chkMultiTemplate == null) return;
+            _bindingMultiUi = true;
+            try
+            {
+                chkMultiTemplate.Checked = Propety.IsMultiTemplate;
+                RefreshTemplatesGrid();
+            }
+            finally { _bindingMultiUi = false; }
+            UpdateMultiUiEnabled();
+        }
+        #endregion
     }
 }
