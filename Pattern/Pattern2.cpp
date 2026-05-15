@@ -3467,7 +3467,19 @@ List<Pattern2BatchResult>^ Pattern2::MatchBatchStable(Pattern2StableConfig cfg)
 	{
 		Pattern2BatchResult r;
 		r.TemplateIndex = k.templateIndex;
-		r.Label = gcnew System::String(k.label.c_str());
+		// Decode label UTF-8 -> System::String. Constructor `String(const char*)` mặc định
+		// ANSI/system codepage → mất dấu tiếng Việt. Phải dùng Encoding.UTF8.GetString.
+		if (!k.label.empty())
+		{
+			cli::array<unsigned char>^ bytes = gcnew cli::array<unsigned char>((int)k.label.size());
+			System::Runtime::InteropServices::Marshal::Copy(
+				System::IntPtr((void*)k.label.data()), bytes, 0, bytes->Length);
+			r.Label = System::Text::Encoding::UTF8->GetString(bytes);
+		}
+		else
+		{
+			r.Label = System::String::Empty;
+		}
 		r.Cx = k.cx;
 		r.Cy = k.cy;
 		r.AngleDeg = k.angleDeg;

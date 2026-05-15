@@ -708,6 +708,10 @@ namespace BeeInterface
                 {
                     Propety.bmRaw = Propety.LearnPattern(BeeCore.Common.listCamera[Propety.IndexThread].matRaw.Clone(), false).ToBitmap();
                     imgTemp.Image = Propety.bmRaw;
+
+                    // Multi-mode: auto-add template vừa Sample vào list (rotCrop hiện tại
+                    // được capture làm angle range per-entry).
+                    TryAutoAddSampleToMulti();
                 }
 
 
@@ -1238,85 +1242,74 @@ namespace BeeInterface
         }
 
         #region Multi-Template UI
-        // Section quản lý list template + label cho multi-template mode.
-        // Tạo programmatic (thay vì sửa 4643-line Designer.cs) để cô lập rủi ro.
-        // Layout theo memory feedback_collapsible_param_sections: RJButton header IsTouch=true
-        // toggle Visible của TableLayoutPanel con. Event subscribe -=/+= theo CLAUDE.md 0.1.4.
+        // Toggle Single|Multi placed dock-top trong tableLayoutPanel1 → user thấy ngay sau
+        // section "2. Method Detect". Khi Multi selected, IsMultiTemplate=true → section list
+        // panel tự hiện. Theo memory feedback_ui_in_designer event wire -=/+=.
 
-        private RJButton secMultiHeader;
+        private TableLayoutPanel tlpModeToggle;
+        private RJButton btnModeSingle;
+        private RJButton btnModeMulti;
+
         private TableLayoutPanel tlpMulti;
-        private CheckBox chkMultiTemplate;
         private DataGridView dgvTemplates;
-        private Button btnAddTpl;
-        private Button btnAddTplFromFile;
-        private Button btnRemoveTpl;
-        private Button btnTplUp;
-        private Button btnTplDown;
+        private Button btnDeleteTpl;
         private bool _bindingMultiUi = false; // suppress event reentrancy khi RefreshTemplatesGrid
 
         private void BuildMultiTemplateUi()
         {
-            // Header
-            secMultiHeader = new RJButton();
-            secMultiHeader.Text = "▶ Multi-Template";
-            secMultiHeader.IsTouch = true;
-            secMultiHeader.Dock = DockStyle.Fill;
-            secMultiHeader.Height = 28;
-            secMultiHeader.Click -= OnSecMultiClicked;
-            secMultiHeader.Click += OnSecMultiClicked;
+            // ===== Single | Multi toggle =====
+            tlpModeToggle = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 2,
+                RowCount = 1,
+                Margin = new Padding(5, 0, 5, 0),
+                Padding = new Padding(5),
+                Height = 40,
+            };
+            tlpModeToggle.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tlpModeToggle.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
 
-            // Container collapsible
-            tlpMulti = new TableLayoutPanel();
-            tlpMulti.Dock = DockStyle.Fill;
-            tlpMulti.AutoSize = true;
-            tlpMulti.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            tlpMulti.Visible = false; // mặc định collapsed
-            tlpMulti.ColumnCount = 1;
+            btnModeSingle = new RJButton { Text = "Single", Dock = DockStyle.Fill, IsTouch = true };
+            btnModeMulti = new RJButton { Text = "Multi", Dock = DockStyle.Fill, IsTouch = true };
+            btnModeSingle.Click -= OnModeSingleClicked; btnModeSingle.Click += OnModeSingleClicked;
+            btnModeMulti.Click -= OnModeMultiClicked; btnModeMulti.Click += OnModeMultiClicked;
+            tlpModeToggle.Controls.Add(btnModeSingle, 0, 0);
+            tlpModeToggle.Controls.Add(btnModeMulti, 1, 0);
+
+            // ===== Multi list panel =====
+            // Khi IsMultiTemplate=true, panel này hiện. Trong mode multi, chỉ có DataGridView
+            // + nút Xóa. Add tự động khi user nhấn Sample (btnLearning_Click hook).
+            tlpMulti = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                ColumnCount = 1,
+                Visible = false,
+            };
             tlpMulti.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
 
-            chkMultiTemplate = new CheckBox();
-            chkMultiTemplate.Text = "Enable multi-template mode";
-            chkMultiTemplate.AutoSize = true;
-            chkMultiTemplate.Margin = new Padding(3, 4, 3, 4);
-            chkMultiTemplate.CheckedChanged -= OnChkMultiTemplateChanged;
-            chkMultiTemplate.CheckedChanged += OnChkMultiTemplateChanged;
+            btnDeleteTpl = new Button
+            {
+                Text = "Xóa template đang chọn",
+                AutoSize = true,
+                Dock = DockStyle.Top,
+                Margin = new Padding(3),
+            };
+            btnDeleteTpl.Click -= OnDeleteTplClicked; btnDeleteTpl.Click += OnDeleteTplClicked;
 
-            // Button row
-            var pnlBtns = new FlowLayoutPanel();
-            pnlBtns.Dock = DockStyle.Top;
-            pnlBtns.AutoSize = true;
-            pnlBtns.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            pnlBtns.WrapContents = true;
-            pnlBtns.Margin = new Padding(0);
-
-            btnAddTpl = new Button { Text = "Add (last learn)", AutoSize = true };
-            btnAddTpl.Click -= OnAddTplClicked; btnAddTpl.Click += OnAddTplClicked;
-            btnAddTplFromFile = new Button { Text = "Add from file...", AutoSize = true };
-            btnAddTplFromFile.Click -= OnAddTplFromFileClicked; btnAddTplFromFile.Click += OnAddTplFromFileClicked;
-            btnRemoveTpl = new Button { Text = "Remove", AutoSize = true };
-            btnRemoveTpl.Click -= OnRemoveTplClicked; btnRemoveTpl.Click += OnRemoveTplClicked;
-            btnTplUp = new Button { Text = "↑", AutoSize = true, Width = 32 };
-            btnTplUp.Click -= OnTplUpClicked; btnTplUp.Click += OnTplUpClicked;
-            btnTplDown = new Button { Text = "↓", AutoSize = true, Width = 32 };
-            btnTplDown.Click -= OnTplDownClicked; btnTplDown.Click += OnTplDownClicked;
-
-            pnlBtns.Controls.Add(btnAddTpl);
-            pnlBtns.Controls.Add(btnAddTplFromFile);
-            pnlBtns.Controls.Add(btnRemoveTpl);
-            pnlBtns.Controls.Add(btnTplUp);
-            pnlBtns.Controls.Add(btnTplDown);
-
-            // Grid
-            dgvTemplates = new DataGridView();
-            dgvTemplates.Dock = DockStyle.Top;
-            dgvTemplates.Height = 220;
-            dgvTemplates.AllowUserToAddRows = false;
-            dgvTemplates.AllowUserToResizeRows = false;
-            dgvTemplates.AutoGenerateColumns = false;
+            dgvTemplates = new DataGridView
+            {
+                Dock = DockStyle.Top,
+                Height = 220,
+                AllowUserToAddRows = false,
+                AllowUserToResizeRows = false,
+                AutoGenerateColumns = false,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                MultiSelect = false,
+            };
             dgvTemplates.RowTemplate.Height = 60;
-            dgvTemplates.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvTemplates.MultiSelect = false;
-            dgvTemplates.Columns.Clear();
             dgvTemplates.Columns.Add(new DataGridViewTextBoxColumn { Name = "colLabel", HeaderText = "Label", Width = 90 });
             dgvTemplates.Columns.Add(new DataGridViewImageColumn { Name = "colThumb", HeaderText = "Thumb", Width = 70, ImageLayout = DataGridViewImageCellLayout.Zoom });
             dgvTemplates.Columns.Add(new DataGridViewTextBoxColumn { Name = "colScore", HeaderText = "Score≥", Width = 55 });
@@ -1324,90 +1317,66 @@ namespace BeeInterface
             dgvTemplates.CellValueChanged -= OnDgvCellValueChanged;
             dgvTemplates.CellValueChanged += OnDgvCellValueChanged;
 
-            tlpMulti.Controls.Add(chkMultiTemplate, 0, 0);
-            tlpMulti.Controls.Add(pnlBtns, 0, 1);
-            tlpMulti.Controls.Add(dgvTemplates, 0, 2);
+            tlpMulti.Controls.Add(btnDeleteTpl, 0, 0);
+            tlpMulti.Controls.Add(dgvTemplates, 0, 1);
 
-            // Append xuống cuối tableLayoutPanel1. TLP có RowCount cố định = 24, dùng vị trí 24-25.
-            // TLP cho phép Add controls quá RowCount; auto-grow nếu có thêm RowStyle.
+            // Append: trên là toggle Single|Multi, dưới là list panel. TLP1 auto-grow.
             try
             {
                 tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.AutoSize));
                 tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.AutoSize));
                 tableLayoutPanel1.RowCount = tableLayoutPanel1.RowCount + 2;
-                tableLayoutPanel1.Controls.Add(secMultiHeader, 0, tableLayoutPanel1.RowCount - 2);
+                tableLayoutPanel1.Controls.Add(tlpModeToggle, 0, tableLayoutPanel1.RowCount - 2);
                 tableLayoutPanel1.Controls.Add(tlpMulti, 0, tableLayoutPanel1.RowCount - 1);
             }
             catch (Exception ex)
             {
-                // Nếu tableLayoutPanel1 không có (sau refactor designer), log nhẹ và bỏ qua.
                 System.Diagnostics.Debug.WriteLine("BuildMultiTemplateUi: " + ex.Message);
             }
         }
 
-        private void OnSecMultiClicked(object s, EventArgs e)
-        {
-            tlpMulti.Visible = !tlpMulti.Visible;
-            secMultiHeader.Text = (tlpMulti.Visible ? "▼ " : "▶ ") + "Multi-Template";
-        }
-
-        private void OnChkMultiTemplateChanged(object s, EventArgs e)
-        {
-            if (_bindingMultiUi || Propety == null) return;
-            Propety.IsMultiTemplate = chkMultiTemplate.Checked;
-            UpdateMultiUiEnabled();
-        }
-
-        private void UpdateMultiUiEnabled()
-        {
-            bool on = Propety != null && Propety.IsMultiTemplate;
-            dgvTemplates.Enabled = on;
-            btnAddTpl.Enabled = on;
-            btnAddTplFromFile.Enabled = on;
-            btnRemoveTpl.Enabled = on;
-            btnTplUp.Enabled = on;
-            btnTplDown.Enabled = on;
-        }
-
-        private void OnAddTplClicked(object s, EventArgs e)
+        private void OnModeSingleClicked(object s, EventArgs e)
         {
             if (Propety == null) return;
-            if (Propety.bmRaw == null)
-            {
-                MessageBox.Show("Chưa có template — học (Learn) ở single-mode trước rồi quay lại Add.",
-                    "Multi-Template", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+            Propety.IsMultiTemplate = false;
+            UpdateModeToggleUi();
+        }
+
+        private void OnModeMultiClicked(object s, EventArgs e)
+        {
+            if (Propety == null) return;
+            Propety.IsMultiTemplate = true;
+            UpdateModeToggleUi();
+        }
+
+        private void UpdateModeToggleUi()
+        {
+            if (Propety == null) return;
+            bool multi = Propety.IsMultiTemplate;
+            // RJButton.IsCLick highlight (pattern dùng cho Best/All Object, btnHard/Normal/Easy).
+            if (btnModeSingle != null) btnModeSingle.IsCLick = !multi;
+            if (btnModeMulti != null) btnModeMulti.IsCLick = multi;
+            if (tlpMulti != null) tlpMulti.Visible = multi;
+        }
+
+        /// <summary>
+        /// Gọi từ btnLearning_Click khi user nhấn Sample. Trong multi-mode, sau khi
+        /// LearnPattern xong và bmRaw được set, tự động push thành 1 entry mới trong list.
+        /// </summary>
+        private void TryAutoAddSampleToMulti()
+        {
+            if (Propety == null || !Propety.IsMultiTemplate || Propety.bmRaw == null) return;
             AddTemplateEntry(Propety.bmRaw);
         }
 
-        private void OnAddTplFromFileClicked(object s, EventArgs e)
+        private void OnDeleteTplClicked(object s, EventArgs e)
         {
             if (Propety == null) return;
-            using (var ofd = new OpenFileDialog())
-            {
-                ofd.Filter = "Image files|*.png;*.bmp;*.jpg;*.jpeg|All files|*.*";
-                ofd.Multiselect = true;
-                if (ofd.ShowDialog() != DialogResult.OK) return;
-                foreach (var path in ofd.FileNames)
-                {
-                    try
-                    {
-                        using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
-                        using (var bmp = new Bitmap(fs))
-                        {
-                            // File-based template không có rotCrop context → dùng angle range
-                            // toàn cục (HasAngleRange=false).
-                            AddTemplateEntry(bmp, System.IO.Path.GetFileNameWithoutExtension(path), captureCurrentAngle: false);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Lỗi đọc " + path + ":\n" + ex.Message, "Multi-Template",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
+            int idx = dgvTemplates.CurrentCell?.RowIndex ?? -1;
+            if (idx < 0 || idx >= Propety.MultiTemplates.Count) return;
+            Propety.MultiTemplates.RemoveAt(idx);
+            Propety.MarkBatchDirty();
+            RefreshTemplatesGrid();
         }
 
         private void AddTemplateEntry(Bitmap source, string suggestedLabel = null, bool captureCurrentAngle = true)
@@ -1437,33 +1406,6 @@ namespace BeeInterface
             Propety.MultiTemplates.Add(entry);
             Propety.MarkBatchDirty();
             RefreshTemplatesGrid();
-        }
-
-        private void OnRemoveTplClicked(object s, EventArgs e)
-        {
-            if (Propety == null) return;
-            int idx = dgvTemplates.CurrentCell?.RowIndex ?? -1;
-            if (idx < 0 || idx >= Propety.MultiTemplates.Count) return;
-            Propety.MultiTemplates.RemoveAt(idx);
-            Propety.MarkBatchDirty();
-            RefreshTemplatesGrid();
-        }
-
-        private void OnTplUpClicked(object s, EventArgs e) { MoveTpl(-1); }
-        private void OnTplDownClicked(object s, EventArgs e) { MoveTpl(+1); }
-        private void MoveTpl(int delta)
-        {
-            if (Propety == null) return;
-            int idx = dgvTemplates.CurrentCell?.RowIndex ?? -1;
-            int newIdx = idx + delta;
-            if (idx < 0 || newIdx < 0 || newIdx >= Propety.MultiTemplates.Count) return;
-            var item = Propety.MultiTemplates[idx];
-            Propety.MultiTemplates.RemoveAt(idx);
-            Propety.MultiTemplates.Insert(newIdx, item);
-            Propety.MarkBatchDirty();
-            RefreshTemplatesGrid();
-            if (newIdx < dgvTemplates.Rows.Count)
-                dgvTemplates.CurrentCell = dgvTemplates.Rows[newIdx].Cells[0];
         }
 
         private void OnDgvCellValueChanged(object s, DataGridViewCellEventArgs e)
@@ -1525,15 +1467,14 @@ namespace BeeInterface
         /// <summary>Gọi từ LoadPara() để bind multi-template state khi mở tool.</summary>
         public void BindMultiTemplateUi()
         {
-            if (Propety == null || chkMultiTemplate == null) return;
+            if (Propety == null || btnModeSingle == null) return;
             _bindingMultiUi = true;
             try
             {
-                chkMultiTemplate.Checked = Propety.IsMultiTemplate;
                 RefreshTemplatesGrid();
             }
             finally { _bindingMultiUi = false; }
-            UpdateMultiUiEnabled();
+            UpdateModeToggleUi();
         }
         #endregion
     }
