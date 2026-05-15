@@ -1721,9 +1721,15 @@ namespace BeeCore
                 if (bmp == null) continue;
 
                 // Per-entry config: clone + override threshold/MaxPos/angle theo entry.
+                // Crop mode: phải cho phép tìm nhiều match/label (nhiều hình trong vùng
+                // rotLimit). MaxPos default = max(MaxObject, ExpectedCount, 1) để bao quát
+                // case user set Expect lớn hơn MaxObject global.
                 Pattern2StableConfig perCfg = cfg;
                 perCfg.MinAcceptScore = (entry.ScoreThreshold > 0f) ? entry.ScoreThreshold / 100.0 : cfg.MinAcceptScore;
-                if (entry.MaxPerTemplate > 0) perCfg.MaxPos = entry.MaxPerTemplate;
+                int perMax = Math.Max(1, MaxObject);
+                if (entry.ExpectedCount > perMax) perMax = entry.ExpectedCount;
+                if (entry.MaxPerTemplate > 0) perMax = entry.MaxPerTemplate;
+                perCfg.MaxPos = perMax;
                 if (entry.HasAngleRange)
                 {
                     perCfg.AngleStartDeg = entry.AngleLower;
