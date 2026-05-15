@@ -1419,6 +1419,7 @@ namespace BeeInterface
             };
             entry.SetBitmap(source);
             Propety.MultiTemplates.Add(entry);
+            Propety.MarkBatchDirty();
             RefreshTemplatesGrid();
         }
 
@@ -1428,6 +1429,7 @@ namespace BeeInterface
             int idx = dgvTemplates.CurrentCell?.RowIndex ?? -1;
             if (idx < 0 || idx >= Propety.MultiTemplates.Count) return;
             Propety.MultiTemplates.RemoveAt(idx);
+            Propety.MarkBatchDirty();
             RefreshTemplatesGrid();
         }
 
@@ -1442,6 +1444,7 @@ namespace BeeInterface
             var item = Propety.MultiTemplates[idx];
             Propety.MultiTemplates.RemoveAt(idx);
             Propety.MultiTemplates.Insert(newIdx, item);
+            Propety.MarkBatchDirty();
             RefreshTemplatesGrid();
             if (newIdx < dgvTemplates.Rows.Count)
                 dgvTemplates.CurrentCell = dgvTemplates.Rows[newIdx].Cells[0];
@@ -1465,6 +1468,7 @@ namespace BeeInterface
                     entry.ExpectedCount = ParseIntSafe(row.Cells["colExpected"].Value, 1);
                     break;
             }
+            Propety.MarkBatchDirty();
         }
 
         private static float ParseFloatSafe(object v, float fallback)
@@ -1488,6 +1492,7 @@ namespace BeeInterface
             try
             {
                 dgvTemplates.Rows.Clear();
+                if(Propety.MultiTemplates!=null)
                 foreach (var entry in Propety.MultiTemplates)
                 {
                     int r = dgvTemplates.Rows.Add();

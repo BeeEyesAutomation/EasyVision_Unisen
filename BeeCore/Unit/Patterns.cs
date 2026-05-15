@@ -442,8 +442,15 @@ namespace BeeCore
         public List<Pattern2TemplateEntry> MultiTemplates
         {
             get { return _multiTemplates ?? (_multiTemplates = new List<Pattern2TemplateEntry>()); }
-            set { _multiTemplates = value; }
+            set { _multiTemplates = value; MarkBatchDirty(); }
         }
+
+        // Cờ batch đã học (lifetime runtime, không serialize). UI mutate MultiTemplates → gọi
+        // MarkBatchDirty() → DoWork sẽ học lại batch ở lần check kế tiếp.
+        [NonSerialized]
+        private bool _batchLearned = false;
+
+        public void MarkBatchDirty() { _batchLearned = false; }
 
         [NonSerialized]
         public BeeCpp.Pattern2 Pattern =new BeeCpp.Pattern2();
@@ -476,14 +483,9 @@ namespace BeeCore
         {
             lock (RuntimeLock)
             {
-            // Multi-template mode: học từ list MultiTemplates qua native batch API.
-            // bmRaw không có ý nghĩa ở chế độ này → trả Mat rỗng.
-            if (IsMultiTemplate)
-            {
-                LearnPatternsBatch();
-                raw?.Dispose();
-                return new Mat();
-            }
+            // Single Learn vẫn chạy bình thường ngay cả khi IsMultiTemplate=true — kết quả
+            // bmRaw được user dùng cho "Add (last learn)" trong section Multi-Template.
+            // Batch sẽ được học lazy trong DoWork (xem _batchLearned flag).
 
             using (Mat img = raw)
             {
@@ -1681,9 +1683,11 @@ namespace BeeCore
         /// <summary>
         /// Học tất cả template trong MultiTemplates qua native batch API.
         /// Tất cả template dùng cùng preprocess (shared cfg) — đây là contract của native batch.
+        /// Public để UI gọi sau khi mutate MultiTemplates; cũng được DoWork gọi lazy.
         /// </summary>
-        private void LearnPatternsBatch()
+        public void LearnPatternsBatch()
         {
+            _batchLearned = false;
             if (MultiTemplates == null || MultiTemplates.Count == 0) return;
 
             var learnCfg = BuildStableConfig();
@@ -1726,9 +1730,11 @@ namespace BeeCore
                     }
                 }
                 Pattern.LearnPatternBatchEnd();
+                _batchLearned = true;
             }
             catch (Exception ex)
             {
+                _batchLearned = false;
                 Global.LogsDashboard?.AddLog(
                     new LogEntry(DateTime.Now, LeveLLog.ERROR, "Pattern2.Batch.Learn", ex.ToString()));
             }
@@ -1912,13 +1918,15 @@ namespace BeeCore
                     cfg.ScaleStep = ScaleStep/100.0;
                    // cfg.DebugLogPath = "E:\\pattern2_debug.txt";
 
-                    // Multi-template branch: gọi native batch API, judge OK/NG theo expected
-                    // count per label, rồi skip phần single-template processing bên dưới.
+                    // Multi-template branch: lazy-learn batch nếu chưa học, gọi native batch
+                    // API, judge OK/NG theo expected count per label, rồi skip phần
+                    // single-template processing bên dưới.
                     if (IsMultiTemplate)
                     {
+                        if (!_batchLearned) LearnPatternsBatch();
                         var listBatch = Pattern.MatchBatchStable(cfg);
                         ProcessBatchResults(listBatch, rotArea);
-                        return; // exit DoWork; finally block (nếu có) vẫn chạy.
+                        return; // exit DoWork; finally block vẫn chạy.
                     }
 
                     var listRS = Pattern.MatchStable(
