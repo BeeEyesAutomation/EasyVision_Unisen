@@ -1698,6 +1698,45 @@ namespace BeeCore
         }
 
         /// <summary>
+        /// Convert (Cx, Cy, angle) from rotLimit-local (native crop frame) to rotArea-local
+        /// (frame expected by ProcessBatchResults / AddMatchResult / ToAbsoluteRectRotate).
+        /// Native CropRotated returns coords where (0,0) là top-left của cropped image.
+        /// </summary>
+        private static void TransformLimitLocalToAreaLocal(
+            RectRotate rotLimit, RectRotate rotArea,
+            double cxLimit, double cyLimit, double angleLimit,
+            out double cxArea, out double cyArea, out double angleArea)
+        {
+            // Step 1: rotLimit-local → global image coords.
+            // Cropped image origin (0,0) ứng với top-left của rotLimit._rect → tâm rect = (W/2, H/2)
+            // trong local. Shift về center-relative rồi rotate quanh rotLimit._PosCenter.
+            float thetaL = rotLimit._rectRotation;
+            double sinL = Math.Sin(thetaL * Math.PI / 180.0);
+            double cosL = Math.Cos(thetaL * Math.PI / 180.0);
+            double dxL = cxLimit + rotLimit._rect.X;   // _rect.X usually = -W/2
+            double dyL = cyLimit + rotLimit._rect.Y;   // _rect.Y usually = -H/2
+            double gx = rotLimit._PosCenter.X + dxL * cosL - dyL * sinL;
+            double gy = rotLimit._PosCenter.Y + dxL * sinL + dyL * cosL;
+
+            // Step 2: global → rotArea-local (inverse của ToAbsoluteRectRotate).
+            //   intermediate = inverse-rotate(global - rotArea._PosCenter, -rotArea._rectRotation)
+            //   local._PosCenter = intermediate - rotArea._rect.{X,Y}
+            float thetaA = rotArea._rectRotation;
+            double sinA = Math.Sin(-thetaA * Math.PI / 180.0);
+            double cosA = Math.Cos(-thetaA * Math.PI / 180.0);
+            double dxG = gx - rotArea._PosCenter.X;
+            double dyG = gy - rotArea._PosCenter.Y;
+            double interX = dxG * cosA - dyG * sinA;
+            double interY = dxG * sinA + dyG * cosA;
+            cxArea = interX - rotArea._rect.X;
+            cyArea = interY - rotArea._rect.Y;
+
+            // Angle: ToAbsoluteRectRotate dùng area.rotation + local.rotation = global.
+            // global angle = rotLimit.rotation + native angle. → local-area angle = global - area.rotation.
+            angleArea = thetaL + angleLimit - thetaA;
+        }
+
+        /// <summary>
         /// Per-label area limit flow: từng entry crop raw theo entry.RotLimit, học template
         /// + match qua single API, gắn label vào kết quả. Trả về list giống MatchBatchStable
         /// để tái dùng ProcessBatchResults logic.
@@ -1781,14 +1820,26 @@ namespace BeeCore
                     // 3) Match single API.
                     var rs = Pattern.MatchStable(perCfg);
                     if (rs == null) continue;
+
+                    // 4) Transform native coords (rotLimit-local) → rotArea-local nếu có
+                    //    rotLimit; nếu không (Full fallback), giữ nguyên (rotArea-local).
+                    bool hasLimit = entry.RotLimit != null
+                        && entry.RotLimit._rect.Width > 0 && entry.RotLimit._rect.Height > 0;
                     foreach (var r in rs)
                     {
+                        double cx = r.Cx, cy = r.Cy, angle = r.AngleDeg;
+                        if (hasLimit && rotArea != null)
+                        {
+                            TransformLimitLocalToAreaLocal(
+                                entry.RotLimit, rotArea, r.Cx, r.Cy, r.AngleDeg,
+                                out cx, out cy, out angle);
+                        }
                         var br = new Pattern2BatchResult();
                         br.TemplateIndex = idx;
                         br.Label = entry.Label ?? "";
-                        br.Cx = r.Cx;
-                        br.Cy = r.Cy;
-                        br.AngleDeg = r.AngleDeg;
+                        br.Cx = cx;
+                        br.Cy = cy;
+                        br.AngleDeg = angle;
                         br.Width = r.Width;
                         br.Height = r.Height;
                         br.Score = r.Score;
@@ -2330,6 +2381,30 @@ namespace BeeCore
 			if (Global.ParaShow.IsShowBox)
 				Draws.Box1Label(gc,rotA, nameTool, font, brushText, cl, Global.ParaShow.ThicknessLine);
 			gc.ResetTransform();
+
+			// Vẽ rotLimit của từng label (multi-mode + CheckByAreaLimit) ở toạ độ global.
+			// User vẽ rotLimit trực tiếp trên ảnh raw → coords đã ở global frame.
+			if (IsMultiTemplate && CheckByAreaLimit && MultiTemplates != null)
+			{
+				foreach (var entry in MultiTemplates)
+				{
+					if (entry == null || entry.RotLimit == null) continue;
+					var rl = entry.RotLimit;
+					if (rl._rect.Width <= 0 || rl._rect.Height <= 0) continue;
+					var matLim = new Matrix();
+					if (!Global.IsRun)
+					{
+						matLim.Translate(Global.pScroll.X, Global.pScroll.Y);
+						matLim.Scale(Global.ScaleZoom, Global.ScaleZoom);
+					}
+					matLim.Translate(rl._PosCenter.X, rl._PosCenter.Y);
+					matLim.Rotate(rl._rectRotation);
+					gc.Transform = matLim;
+					Draws.Box1Label(gc, rl, entry.Label ?? "", font, brushText,
+						Color.DeepSkyBlue, Global.ParaShow.ThicknessLine);
+					gc.ResetTransform();
+				}
+			}
 			
 			if (rectRotatesSnapshot != null && rectRotatesSnapshot.Count > 0)
 			{
