@@ -1756,6 +1756,20 @@ namespace BeeCore
             var owner = Common.TryGetTool(Global.IndexProgChoose, Index);
             var globalThreshold = Common.TryGetTool(IndexThread, Index).Score; // 0..100
 
+            // BestObj filter: chỉ giữ match top-score cho MỖI label (không phải top-1 tổng thể).
+            // Bước này áp lên listBatch trước khi đếm/đẩy vào ResultItems.
+            if (SearchPattern == SearchPattern.BestObj && listBatch != null && listBatch.Count > 0)
+            {
+                var bestPerLabel = new Dictionary<string, Pattern2BatchResult>(StringComparer.Ordinal);
+                foreach (var r in listBatch)
+                {
+                    string lbl = r.Label ?? "";
+                    if (!bestPerLabel.TryGetValue(lbl, out var cur) || r.Score > cur.Score)
+                        bestPerLabel[lbl] = r;
+                }
+                listBatch = new List<Pattern2BatchResult>(bestPerLabel.Values);
+            }
+
             // Init counters theo MultiTemplates (đảm bảo label thiếu match cũng có entry).
             var perLabelCount = new Dictionary<string, int>(StringComparer.Ordinal);
             foreach (var e in MultiTemplates)
@@ -2178,7 +2192,10 @@ namespace BeeCore
                     if (Global.ParaShow.IsShowScore || EnableColorCheck)
                     {
                         string scoreTextShow = Global.ParaShow.IsShowScore ? scoreText : "";
-                        Draws.Box3Label(gc, rot, i + "", scoreTextShow, valueBottom, font, clItem, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, EnableColorCheck);
+                        // Multi-template: show label (item.Name) thay vì index. Single mode
+                        // hoặc item.Name rỗng → fallback index "1","2","3"...
+                        string topLabel = (item != null && !string.IsNullOrEmpty(item.Name)) ? item.Name : (i + "");
+                        Draws.Box3Label(gc, rot, topLabel, scoreTextShow, valueBottom, font, clItem, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, EnableColorCheck);
                     }
                     if (EnableColorCheck && item != null && item.ColorMarkContour != null && item.ColorMarkContour.Length > 0)
                     {
