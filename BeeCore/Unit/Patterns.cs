@@ -156,7 +156,7 @@ namespace BeeCore
         public bool IsIni = false;
         public int Index = -1;
         public SearchPattern SearchPattern = SearchPattern.BestObj;
-        public RectRotate rotArea,rotCheck, rotCrop, rotMask;
+        public RectRotate rotArea,rotCheck, rotCrop, rotMask, rotLimit;
         public RectRotate rotAreaTemp = new RectRotate();
         [NonSerialized]
         public RectRotate rotAreaAdjustment;
@@ -451,6 +451,11 @@ namespace BeeCore
         private bool _batchLearned = false;
 
         public void MarkBatchDirty() { _batchLearned = false; }
+
+        // Multi-mode: nếu true, mỗi label crop ảnh raw theo entry.RotLimit trước khi match
+        // (Pattern.SetImgeRaw với rotLimitCli). Nếu false (default), match toàn bộ ảnh raw
+        // 1 lần qua MatchBatchStable. Theo yêu cầu UX: toggle "Full | Crop".
+        public bool CheckByAreaLimit { get; set; } = false;
 
         [NonSerialized]
         public BeeCpp.Pattern2 Pattern =new BeeCpp.Pattern2();
@@ -1597,15 +1602,27 @@ namespace BeeCore
                 if (rotArea == null) rotArea = new RectRotate();
                 if (rotCrop == null) rotCrop = new RectRotate();
                 if (rotMask == null) rotMask = new RectRotate();
-
+                if (rotArea == null) rotArea = new RectRotate();
+                if (rotCrop == null) rotCrop = new RectRotate();
+                if (rotMask == null) rotMask = new RectRotate();
+                if (rotLimit == null) rotLimit = new RectRotate();
                 rotCrop.Name = "Area Temp";
                 rotCrop.TypeCrop = TypeCrop.Crop;
-
                 rotMask.Name = "Area Mask";
                 rotMask.TypeCrop = TypeCrop.Mask;
-
                 rotArea.Name = "Area Check";
                 rotArea.TypeCrop = TypeCrop.Area;
+
+                rotLimit.Name = "Area Limit";
+                rotLimit.TypeCrop = TypeCrop.Limit;
+                //rotCrop.Name = "Area ";
+                //rotCrop.TypeCrop = TypeCrop.Crop;
+
+                //rotMask.Name = "Area Mask";
+                //rotMask.TypeCrop = TypeCrop.Mask;
+
+                //rotArea.Name = "Area Check";
+                //rotArea.TypeCrop = TypeCrop.Area;
                 if (listCLMaskShow == null)
                     listCLMaskShow = new List<Color>();
                 if (listCLNgShow == null)
@@ -1678,6 +1695,109 @@ namespace BeeCore
             cfg.CpuThreads = NumThreads;
             cfg.DebugLog = false;
             return cfg;
+        }
+
+        /// <summary>
+        /// Per-label area limit flow: từng entry crop raw theo entry.RotLimit, học template
+        /// + match qua single API, gắn label vào kết quả. Trả về list giống MatchBatchStable
+        /// để tái dùng ProcessBatchResults logic.
+        /// Chậm hơn MatchBatchStable (re-learn mỗi DoWork) nhưng cần thiết vì native batch
+        /// chỉ hỗ trợ 1 source chung. Sẽ mark batch dirty để khi tắt CheckByAreaLimit, batch
+        /// chuẩn được học lại.
+        /// </summary>
+        private List<Pattern2BatchResult> RunBatchWithPerLabelAreaLimit(
+            Pattern2StableConfig cfg, Mat raw, RectRotate rotArea, RectRotate rotMask)
+        {
+            _batchLearned = false; // dùng single API → batch state bị invalidate
+            var results = new List<Pattern2BatchResult>();
+            if (MultiTemplates == null || MultiTemplates.Count == 0) return results;
+            if (raw == null || raw.Empty()) return results;
+
+            for (int idx = 0; idx < MultiTemplates.Count; idx++)
+            {
+                var entry = MultiTemplates[idx];
+                if (entry == null) continue;
+                var bmp = entry.GetBitmap();
+                if (bmp == null) continue;
+
+                // Per-entry config: clone + override threshold/MaxPos/angle theo entry.
+                Pattern2StableConfig perCfg = cfg;
+                perCfg.MinAcceptScore = (entry.ScoreThreshold > 0f) ? entry.ScoreThreshold / 100.0 : cfg.MinAcceptScore;
+                if (entry.MaxPerTemplate > 0) perCfg.MaxPos = entry.MaxPerTemplate;
+                if (entry.HasAngleRange)
+                {
+                    perCfg.AngleStartDeg = entry.AngleLower;
+                    perCfg.AngleEndDeg = entry.AngleUpper;
+                }
+
+                try
+                {
+                    // 1) Học template từ entry bitmap.
+                    using (Mat m = OpenCvSharp.Extensions.BitmapConverter.ToMat(bmp))
+                    {
+                        Mat gray = m;
+                        bool ownsGray = false;
+                        if (m.Channels() != 1)
+                        {
+                            gray = new Mat();
+                            Cv2.CvtColor(m, gray,
+                                m.Channels() == 4 ? ColorConversionCodes.BGRA2GRAY
+                                                  : ColorConversionCodes.BGR2GRAY);
+                            ownsGray = true;
+                        }
+                        try
+                        {
+                            GC.KeepAlive(gray);
+                            Pattern.SetImgeSampleNoCrop(gray.Data, gray.Width, gray.Height,
+                                (int)gray.Step(), gray.Channels());
+                            Pattern.LearnPatternStable(perCfg);
+                        }
+                        finally { if (ownsGray) gray.Dispose(); }
+                    }
+
+                    // 2) Nạp ảnh: nếu có RotLimit hợp lệ, dùng SetImgeRaw để native crop +
+                    //    map kết quả về toạ độ global. Nếu thiếu RotLimit, fallback dùng raw
+                    //    full image (tương đương Full mode cho entry này).
+                    if (entry.RotLimit != null &&
+                        entry.RotLimit._rect.Width > 0 && entry.RotLimit._rect.Height > 0)
+                    {
+                        var rrCli = Converts.ToCli(entry.RotLimit);
+                        Pattern.SetImgeRaw(raw.Data, raw.Width, raw.Height,
+                            (int)raw.Step(), raw.Channels(), rrCli, null);
+                    }
+                    else
+                    {
+                        Pattern.SetRawNoCrop(raw.Data, raw.Width, raw.Height,
+                            (int)raw.Step(), raw.Channels());
+                    }
+                    GC.KeepAlive(raw);
+
+                    // 3) Match single API.
+                    var rs = Pattern.MatchStable(perCfg);
+                    if (rs == null) continue;
+                    foreach (var r in rs)
+                    {
+                        var br = new Pattern2BatchResult();
+                        br.TemplateIndex = idx;
+                        br.Label = entry.Label ?? "";
+                        br.Cx = r.Cx;
+                        br.Cy = r.Cy;
+                        br.AngleDeg = r.AngleDeg;
+                        br.Width = r.Width;
+                        br.Height = r.Height;
+                        br.Score = r.Score;
+                        results.Add(br);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Global.LogsDashboard?.AddLog(
+                        new LogEntry(DateTime.Now, LeveLLog.ERROR,
+                            "Pattern2.AreaLimit[" + (entry.Label ?? idx.ToString()) + "]",
+                            ex.ToString()));
+                }
+            }
+            return results;
         }
 
         /// <summary>
@@ -1945,7 +2065,18 @@ namespace BeeCore
                     if (IsMultiTemplate)
                     {
                         if (!_batchLearned) LearnPatternsBatch();
-                        var listBatch = Pattern.MatchBatchStable(cfg);
+                        List<Pattern2BatchResult> listBatch;
+                        if (CheckByAreaLimit)
+                        {
+                            // Mỗi label crop ảnh theo RotLimit trước khi match → native
+                            // MatchBatchStable với source = crop của entry hiện tại. Kết quả
+                            // đã trong toạ độ raw global (SetImgeRaw map ngược).
+                            listBatch = RunBatchWithPerLabelAreaLimit(cfg, raw, rotArea, rotMask);
+                        }
+                        else
+                        {
+                            listBatch = Pattern.MatchBatchStable(cfg);
+                        }
                         ProcessBatchResults(listBatch, rotArea);
                         return; // exit DoWork; finally block vẫn chạy.
                     }
@@ -2463,6 +2594,12 @@ namespace BeeCore
         public bool HasAngleRange { get; set; } = false;
         public double AngleLower { get; set; } = 0.0;
         public double AngleUpper { get; set; } = 0.0;
+
+        // Per-label area limit (rotated rect trong toạ độ ảnh raw). Khi
+        // Patterns.CheckByAreaLimit=true và RotLimit có kích thước, engine crop ảnh theo
+        // vùng này trước khi match (chỉ tìm label này trong rotLimit). Reference: Yolo.cs
+        // dùng rotLimit + IsCropSingle để giới hạn vùng scan per-label.
+        public RectRotate RotLimit { get; set; }
 
         // PNG bytes của template image. JSON sẽ serialize thành base64.
         public byte[] TemplatePng { get; set; }

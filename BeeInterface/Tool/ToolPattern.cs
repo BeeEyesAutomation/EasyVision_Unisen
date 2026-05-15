@@ -94,7 +94,7 @@ namespace BeeInterface
 
         public void LoadPara()
         {
-            EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotCrop, Propety.rotMask };
+            EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotCrop, Propety.rotLimit, Propety.rotMask };
             EditRectRot1.Refresh();
             EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
@@ -532,7 +532,20 @@ namespace BeeInterface
                     Propety.rotCrop = obj; break;
                 case TypeCrop.Mask:
                     Propety.rotMask = obj; break;
-
+                case TypeCrop.Limit:
+                    {
+                        // Lưu rotLimit vào entry đang chọn trong multi-mode.
+                        if (Propety != null && Propety.IsMultiTemplate && Propety.CheckByAreaLimit)
+                        {
+                            int idx = dgvTemplates?.CurrentCell?.RowIndex ?? -1;
+                            if (idx >= 0 && idx < Propety.MultiTemplates.Count)
+                            {
+                                Propety.MultiTemplates[idx].RotLimit = obj;
+                                Propety.MarkBatchDirty();
+                            }
+                        }
+                        break;
+                    }
             }
         }
 
@@ -1283,9 +1296,77 @@ namespace BeeInterface
                 btnAddSample.Visible = false;
                 btnDeleteSample.Visible = false;
             }
-                
-                
-            
+            // Area toggle chỉ hiện ở multi-mode.
+            if (tlpAreaToggle != null) tlpAreaToggle.Visible = multi;
+            UpdateAreaToggleUi();
+        }
+
+        private void UpdateAreaToggleUi()
+        {
+            if (Propety == null || btnAreaFull == null || btnAreaCrop == null) return;
+            btnAreaFull.IsCLick = !Propety.CheckByAreaLimit;
+            btnAreaCrop.IsCLick = Propety.CheckByAreaLimit;
+        }
+
+        private void OnAreaFullClicked(object s, EventArgs e)
+        {
+            if (Propety == null) return;
+            Propety.CheckByAreaLimit = false;
+            UpdateAreaToggleUi();
+            // Tắt edit rotLimit khỏi EditRectRot1.
+            PushRotLimitForCurrentRow();
+        }
+
+        private void OnAreaCropClicked(object s, EventArgs e)
+        {
+            if (Propety == null) return;
+            Propety.CheckByAreaLimit = true;
+            UpdateAreaToggleUi();
+            // Push rotLimit của row đang chọn vào EditRectRot1 để user vẽ.
+            PushRotLimitForCurrentRow();
+        }
+
+        /// <summary>
+        /// Khi user chọn row khác trong dgvTemplates, push entry.RotLimit hiện tại lên
+        /// EditRectRot1 để user thấy/vẽ. Nếu RotLimit null + CheckByAreaLimit on → tạo default
+        /// rotLimit nằm giữa ảnh để user kéo thả.
+        /// </summary>
+        private void OnDgvSelectionChanged(object s, EventArgs e)
+        {
+            PushRotLimitForCurrentRow();
+        }
+
+        private void PushRotLimitForCurrentRow()
+        {
+            if (Propety == null || EditRectRot1 == null) return;
+            int idx = dgvTemplates?.CurrentCell?.RowIndex ?? -1;
+            if (!Propety.IsMultiTemplate || !Propety.CheckByAreaLimit
+                || idx < 0 || idx >= Propety.MultiTemplates.Count)
+            {
+                // Không hiển thị rotLimit khi single-mode/Full-mode/chưa chọn row.
+                var rotsNoLimit = new List<RectRotate> { Propety.rotArea, Propety.rotCrop, Propety.rotMask };
+                EditRectRot1.Rot = rotsNoLimit;
+                EditRectRot1.Refresh();
+                return;
+            }
+
+            var entry = Propety.MultiTemplates[idx];
+            if (entry.RotLimit == null)
+            {
+                // Default: centered, 200×200 — user kéo thả.
+                entry.RotLimit = new RectRotate(
+                    new RectangleF(-100, -100, 200, 200),
+                    new PointF(Propety.rotArea?._PosCenter.X ?? 0,
+                               Propety.rotArea?._PosCenter.Y ?? 0),
+                    0,
+                    AnchorPoint.None);
+            }
+            entry.RotLimit.Name = "Limit: " + (entry.Label ?? "");
+            entry.RotLimit.TypeCrop = TypeCrop.Limit;
+
+            var rots = new List<RectRotate> { Propety.rotArea, Propety.rotCrop, Propety.rotMask, entry.RotLimit };
+            EditRectRot1.Rot = rots;
+            EditRectRot1.Refresh();
         }
 
         /// <summary>
