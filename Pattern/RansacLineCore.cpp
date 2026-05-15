@@ -3,6 +3,8 @@
 #include <mutex>
 #include <limits>
 #include <cmath>
+#include <algorithm>
+#include <cfloat>
 
 using namespace cv;
 using std::vector;
@@ -924,6 +926,290 @@ static float ComputeMinLenPx(
             : ratio * h;
     }
 }
+
+struct ParallelCandidate {
+    std::vector<cv::Point2f> run;
+    cv::Vec4f line;
+    float runLen;
+    int inliers;
+};
+
+static float AxisAngleDeg(const cv::Vec4f& line)
+{
+    double ang = std::atan2((double)line[1], (double)line[0]) * 180.0 / CV_PI;
+    if (ang < 0.0) ang += 180.0;
+    if (ang >= 180.0) ang -= 180.0;
+    return (float)ang;
+}
+
+static float AxisAngleDiffDeg(float a, float b)
+{
+    float d = std::abs(a - b);
+    return std::min(d, 180.0f - d);
+}
+
+static void ProjectionRange(
+    const std::vector<cv::Point2f>& pts,
+    const cv::Point2f& v,
+    double& minT,
+    double& maxT)
+{
+    minT = DBL_MAX;
+    maxT = -DBL_MAX;
+    for (const auto& p : pts) {
+        double t = (double)p.x * (double)v.x + (double)p.y * (double)v.y;
+        minT = std::min(minT, t);
+        maxT = std::max(maxT, t);
+    }
+}
+
+static LineResult MakeLineResultFromRange(
+    const cv::Vec4f& line,
+    float t1,
+    float t2,
+    int inliers,
+    int totalPoints,
+    float mmPerPixel)
+{
+    LineResult out;
+    cv::Point2f v(line[0], line[1]);
+    cv::Point2f p0(line[2], line[3]);
+
+    out.found = true;
+    out.line = line;
+    out.p1 = p0 + (t1 - (p0.x * v.x + p0.y * v.y)) * v;
+    out.p2 = p0 + (t2 - (p0.x * v.x + p0.y * v.y)) * v;
+    out.inliers = inliers;
+    out.length_px = std::sqrt(
+        (out.p2.x - out.p1.x) * (out.p2.x - out.p1.x) +
+        (out.p2.y - out.p1.y) * (out.p2.y - out.p1.y));
+    out.length_mm = out.length_px * mmPerPixel;
+    out.score = totalPoints > 0 ? (float)inliers / (float)totalPoints : 0.f;
+    return out;
+}
+
+ParallelLinePairResult RansacLineCore::FindLongestParallelPair(
+    const cv::Mat& edges8u1,
+    int iterations,
+    float threshold,
+    int maxPoints,
+    unsigned seed,
+    float mmPerPixel,
+    float minLengthRatio,
+    float parallelToleranceDeg,
+    float minGapPx,
+    float maxGapPx,
+    float minOverlapRatio,
+    float contiguousGapPx)
+{
+    ParallelLinePairResult out;
+    if (edges8u1.empty() || edges8u1.type() != CV_8UC1 || iterations <= 0)
+        return out;
+
+    std::vector<cv::Point> nz;
+    cv::findNonZero(edges8u1, nz);
+    if (nz.size() < 4) return out;
+
+    maxPoints = std::max(2, maxPoints);
+    std::vector<cv::Point2f> pts;
+    pts.reserve(std::min((int)nz.size(), maxPoints));
+
+    int step = (int)nz.size() > maxPoints ? (int)nz.size() / maxPoints : 1;
+    if (step < 1) step = 1;
+    for (size_t i = 0; i < nz.size(); i += step)
+        pts.emplace_back((float)nz[i].x, (float)nz[i].y);
+    if (pts.size() < 4) return out;
+
+    auto pairs = PrecomputePairs((int)pts.size(), iterations, seed ? seed : 987654321u);
+
+    std::vector<ParallelCandidate> candidates;
+    std::mutex mtx;
+    int numThreads = std::max(1u, std::thread::hardware_concurrency());
+    int chunk = (iterations + numThreads - 1) / numThreads;
+    std::vector<std::thread> threads;
+
+    const double thr = (double)threshold;
+    // Đổi từ imageDiag sang min(W,H): khi crop lớn + có nhiều noise rìa, ngưỡng theo
+    // diagonal làm ngưỡng tối thiểu quá lớn (ví dụ 0.6×1414 = 848px) khiến line thực tế
+    // (~300px) bị reject. Dùng min(W,H) cho phép line ngắn hơn pass, nhất quán với
+    // FindBestLine::ComputeMinLenPx vốn dùng W hoặc H tuỳ direction.
+    const float minDim = (float)std::min(edges8u1.cols, edges8u1.rows);
+    const float minLenPx = std::max(2.0f, minLengthRatio * minDim);
+
+    auto worker = [&](int beg, int end)
+        {
+            std::vector<ParallelCandidate> local;
+            for (int it = beg; it < end; ++it)
+            {
+                const auto& pr = pairs[it];
+                const cv::Point2f& p1 = pts[pr.first];
+                const cv::Point2f& p2 = pts[pr.second];
+
+                double a = (double)p2.y - (double)p1.y;
+                double b = (double)p1.x - (double)p2.x;
+                double n = std::sqrt(a * a + b * b);
+                if (n < 1e-6) continue;
+                double c = -(a * (double)p1.x + b * (double)p1.y);
+                double invN = 1.0 / n;
+
+                std::vector<cv::Point2f> inl;
+                inl.reserve(256);
+                for (const auto& q : pts) {
+                    double d = std::abs(a * (double)q.x + b * (double)q.y + c) * invN;
+                    if (d < thr) inl.push_back(q);
+                }
+                if (inl.size() < 2) continue;
+
+                cv::Vec4f tmp;
+                cv::fitLine(inl, tmp, cv::DIST_L2, 0, 0.01, 0.01);
+
+                std::vector<cv::Point2f> run;
+                KeepLongestContiguousRun(inl, tmp, contiguousGapPx, run);
+                if (run.size() < 2) continue;
+
+                cv::Vec4f line;
+                cv::fitLine(run, line, cv::DIST_L2, 0, 0.01, 0.01);
+
+                float runLen = ComputeRunLengthPx(run, line);
+                if (runLen < minLenPx) continue;
+
+                local.push_back({ run, line, runLen, (int)inl.size() });
+            }
+
+            if (!local.empty()) {
+                std::lock_guard<std::mutex> lk(mtx);
+                candidates.insert(candidates.end(),
+                    std::make_move_iterator(local.begin()),
+                    std::make_move_iterator(local.end()));
+            }
+        };
+
+    int st = 0;
+    for (int t = 0; t < numThreads; ++t) {
+        int ed = std::min(iterations, st + chunk);
+        if (st >= ed) break;
+        threads.emplace_back(worker, st, ed);
+        st = ed;
+    }
+    for (auto& th : threads) th.join();
+
+    if (candidates.size() < 2) return out;
+
+    std::sort(candidates.begin(), candidates.end(),
+        [](const ParallelCandidate& a, const ParallelCandidate& b)
+        {
+            if (std::abs(a.runLen - b.runLen) > 1e-3f) return a.runLen > b.runLen;
+            return a.inliers > b.inliers;
+        });
+
+    const int candidateLimit = std::min((int)candidates.size(), 80);
+    float bestScore = -FLT_MAX;
+    int bestI = -1, bestJ = -1;
+    double bestOverlapMin = 0.0, bestOverlapMax = 0.0;
+    cv::Point2f bestV(0.f, 0.f), bestN(0.f, 0.f);
+    double bestCenterC = 0.0;
+    double bestGap = 0.0;
+
+    for (int i = 0; i < candidateLimit; ++i) {
+        const auto& a = candidates[i];
+        float angA = AxisAngleDeg(a.line);
+        cv::Point2f va(a.line[0], a.line[1]);
+        double vaLen = std::sqrt((double)va.x * va.x + (double)va.y * va.y);
+        if (vaLen < 1e-6) continue;
+        va *= (float)(1.0 / vaLen);
+
+        for (int j = i + 1; j < candidateLimit; ++j) {
+            const auto& b = candidates[j];
+            float angleDiff = AxisAngleDiffDeg(angA, AxisAngleDeg(b.line));
+            if (angleDiff > parallelToleranceDeg) continue;
+
+            cv::Point2f vb(b.line[0], b.line[1]);
+            double vbLen = std::sqrt((double)vb.x * vb.x + (double)vb.y * vb.y);
+            if (vbLen < 1e-6) continue;
+            vb *= (float)(1.0 / vbLen);
+            if (va.dot(vb) < 0.f) vb *= -1.f;
+
+            cv::Point2f v = va + vb;
+            double vLen = std::sqrt((double)v.x * v.x + (double)v.y * v.y);
+            if (vLen < 1e-6) v = va;
+            else v *= (float)(1.0 / vLen);
+
+            cv::Point2f n(-v.y, v.x);
+            cv::Point2f p0a(a.line[2], a.line[3]);
+            cv::Point2f p0b(b.line[2], b.line[3]);
+            double cA = -((double)n.x * p0a.x + (double)n.y * p0a.y);
+            double cB = -((double)n.x * p0b.x + (double)n.y * p0b.y);
+            double gap = std::abs(cB - cA);
+            if (gap < minGapPx) continue;
+            if (maxGapPx > 0.f && gap > maxGapPx) continue;
+
+            double minA, maxA, minB, maxB;
+            ProjectionRange(a.run, v, minA, maxA);
+            ProjectionRange(b.run, v, minB, maxB);
+            double overlapMin = std::max(minA, minB);
+            double overlapMax = std::min(maxA, maxB);
+            double overlap = overlapMax - overlapMin;
+            if (overlap <= 1.0) continue;
+
+            double minPairLen = std::max(1.0f, std::min(a.runLen, b.runLen));
+            double overlapRatio = overlap / minPairLen;
+            if (overlapRatio < minOverlapRatio) continue;
+
+            float densityA = (float)a.run.size() / (a.runLen + 1e-6f);
+            float densityB = (float)b.run.size() / (b.runLen + 1e-6f);
+            float score = (float)(overlap * 2.0 + minPairLen + 0.25 * (a.runLen + b.runLen)) +
+                (densityA + densityB) * 25.0f -
+                angleDiff * 10.0f;
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestI = i;
+                bestJ = j;
+                bestOverlapMin = overlapMin;
+                bestOverlapMax = overlapMax;
+                bestV = v;
+                bestN = n;
+                bestCenterC = (cA + cB) * 0.5;
+                bestGap = gap;
+            }
+        }
+    }
+
+    if (bestI < 0 || bestJ < 0) return out;
+
+    const auto& ca = candidates[bestI];
+    const auto& cb = candidates[bestJ];
+
+    cv::Point2f vaOut(ca.line[0], ca.line[1]);
+    cv::Point2f vbOut(cb.line[0], cb.line[1]);
+    double vaOutLen = std::sqrt((double)vaOut.x * vaOut.x + (double)vaOut.y * vaOut.y);
+    double vbOutLen = std::sqrt((double)vbOut.x * vbOut.x + (double)vbOut.y * vbOut.y);
+    if (vaOutLen < 1e-6 || vbOutLen < 1e-6) return out;
+    vaOut *= (float)(1.0 / vaOutLen);
+    vbOut *= (float)(1.0 / vbOutLen);
+
+    double minA, maxA, minB, maxB;
+    ProjectionRange(ca.run, vaOut, minA, maxA);
+    ProjectionRange(cb.run, vbOut, minB, maxB);
+
+    cv::Vec4f center(
+        bestV.x,
+        bestV.y,
+        (float)(-bestCenterC * bestN.x),
+        (float)(-bestCenterC * bestN.y));
+
+    out.found = true;
+    out.lineA = MakeLineResultFromRange(ca.line, (float)minA, (float)maxA, ca.inliers, (int)pts.size(), mmPerPixel);
+    out.lineB = MakeLineResultFromRange(cb.line, (float)minB, (float)maxB, cb.inliers, (int)pts.size(), mmPerPixel);
+    out.centerLine = MakeLineResultFromRange(center, (float)bestOverlapMin, (float)bestOverlapMax,
+        std::min(ca.inliers, cb.inliers), (int)pts.size(), mmPerPixel);
+    out.gap_px = (float)bestGap;
+    out.gap_mm = out.gap_px * mmPerPixel;
+    out.angle_deg = AxisAngleDeg(center);
+
+    return out;
+}
+
 LineResult RansacLineCore::FindBestLine(
     const cv::Mat& edges8u1,
     int iterations,

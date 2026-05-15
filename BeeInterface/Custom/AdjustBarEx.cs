@@ -121,6 +121,7 @@ namespace BeeInterface
 
         // ===== Init guard =====
         private bool _isInit;
+        private bool _layoutInProgress;
 
         // ===== Public API =====
         [Category("Behavior")]
@@ -188,8 +189,7 @@ namespace BeeInterface
                 if (_snapToStep) v = Snap(v);
                 if (Math.Abs(v - _value) < 1e-6f) return;
                 _value = v;
-                UpdateText();
-                if (_isInit) LayoutChildren(); // auto-width theo text mới
+                UpdateText(); // sets _tb.Text → TextChanged fires LayoutChildren automatically
                 Invalidate();
                 if (!IsInital)
                     ValueChanged?.Invoke(_value);
@@ -510,6 +510,7 @@ namespace BeeInterface
             }
         }
 
+
         private string FormatValue(float v)
         {
             if (_decimals > 0)
@@ -535,7 +536,12 @@ namespace BeeInterface
         private void LayoutChildren()
         {
             if (!_isInit) return;
+            if (_layoutInProgress) return;
             if (_tb == null || _btnMinus == null || _btnPlus == null) return;
+
+            _layoutInProgress = true;
+            try
+            {
 
             _btnMinus.Visible = _btnPlus.Visible = true;
             _tb.Visible = _textboxVisible;
@@ -605,6 +611,9 @@ namespace BeeInterface
                 _tb.SetBounds(tbX, tbY, tbW, tbH);
             else
                 _tb.SetBounds(rTbArea.X, rTbArea.Y, 1, 1);
+
+            } // end try
+            finally { _layoutInProgress = false; }
         }
 
         private ValueTuple<Rectangle, Rectangle> GetRects()
@@ -766,8 +775,9 @@ namespace BeeInterface
         private float Snap(float v)
         {
             if (_step <= 0) return v;
-            float n = (float)Math.Round((v - _min) / _step, MidpointRounding.AwayFromZero);
-            float s = _min + n * _step;
+            // Use double precision to avoid float accumulation drift (e.g. step=0.01 not idempotent in float)
+            double n = Math.Round(((double)v - _min) / _step, MidpointRounding.AwayFromZero);
+            float s = (float)(_min + n * _step);
             return Clamp(s);
         }
 

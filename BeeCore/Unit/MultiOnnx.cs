@@ -34,7 +34,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Markup;
 using static BeeCore.Cropper;
-using static LibUsbDotNet.Main.UsbTransferQueue;
+
 using static System.Windows.Forms.MonthCalendar;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Point = OpenCvSharp.Point;
@@ -453,22 +453,20 @@ namespace BeeCore
         {
              using (Mat m = raw)
                 {
+                    // Giữ các nhánh đặc biệt cho MultiOnnx (EdgeForCenterline, GetStrongEdgesOnly với thresh)
                     switch (methord)
                     {
                         case MethordEdge.CloseEdges:
                             return Filters.EdgeForCenterline(m);
-                        break;
-                    case MethordEdge.Binary:
-                       return  Filters.Threshold(m, ThresholdBinary, ThresholdTypes.Binary);
-                        break;
-                    case MethordEdge.StrongEdges:
+                        case MethordEdge.Binary:
+                            return Filters.Threshold(m, ThresholdBinary, ThresholdTypes.Binary);
+                        case MethordEdge.StrongEdges:
                             return Filters.GetStrongEdgesOnly(m, thresh);
-                            break;
+                        default:
+                            // Stable / InvertBinary / UltraThin / Adaptive / DenoiseFirst / None
+                            return Filters.ApplyEdgeMethod(m, methord, ThresholdBinary);
                     }
                 }
-           
-            
-            return raw;
         }
         public int OffSetBoxLine=50;
         public int OffSetBoxLineBot = 50;
@@ -797,33 +795,6 @@ namespace BeeCore
             }
         }
 
-        private RectRotate CalcRoiRect(Mat src, RectRotate rr)
-        {
-            int rw = (int)Math.Round(rr._rect.Width);
-            int rh = (int)Math.Round(rr._rect.Height);
-
-            int cx = (int)Math.Round(rr._PosCenter.X);
-            int cy = (int)Math.Round(rr._PosCenter.Y);
-
-            int x = cx - (rw >> 1);
-            int y = cy - (rh >> 1);
-
-            if (x < 0) x = 0;
-            if (y < 0) y = 0;
-
-            if (x + rw > src.Width) rw = src.Width - x;
-            if (y + rh > src.Height) rh = src.Height - y;
-
-            if (rw < 1) rw = 1;
-            if (rh < 1) rh = 1;
-
-            float roiCx = x + rw * 0.5f;
-            float roiCy = y + rh * 0.5f;
-
-            RectangleF localRect = new RectangleF(-rw * 0.5f, -rh * 0.5f, rw, rh);
-
-            return new RectRotate(localRect, new PointF(roiCx, roiCy), 0f, AnchorPoint.None);
-        }
         public bool CheckBaclk(Mat matCrop,int i)
         {
             using (Py.GIL())
@@ -1969,7 +1940,7 @@ namespace BeeCore
                         if (pyResult == null) return;
 
                         byte[] edgeBytes = pyResult.As<byte[]>();
-                        matProcess = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
+                        matProcess = Mat.FromPixelData(height, width, MatType.CV_8UC1, edgeBytes);
                     }
                     finally
                     {

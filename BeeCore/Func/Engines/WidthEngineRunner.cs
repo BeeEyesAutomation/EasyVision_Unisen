@@ -19,6 +19,14 @@ namespace BeeCore.Funtion.Engines
                 ScoreMax = owner.MaxValue,
                 ScoreStep = owner.StepValue,
                 Score = owner.Score,
+                MeasureMode = propety.MeasureMode,
+                PointSourceToolName = propety.PointSourceToolName,
+                PointSourceIndex = propety.PointSourceIndex,
+                PointToLineNominalMm = propety.PointToLineNominalMm,
+                PointToLineCheckAll = propety.PointToLineCheckAll,
+                ReferenceLineOrientation = propety.ReferenceLineOrientation,
+                ReferenceLineAngleRange = propety.ReferenceLineAngleRange,
+                ReferenceLineScan = propety.ReferenceLineScan,
                 ThresholdBinary = propety.ThresholdBinary,
                 Scale = propety.Scale,
                 MinInliers = propety.MinInliers,
@@ -95,6 +103,14 @@ namespace BeeCore.Funtion.Engines
         public float ScoreMax { get; set; }
         public float ScoreStep { get; set; }
         public float Score { get; set; }
+        public WidthMeasureMode MeasureMode { get; set; }
+        public string PointSourceToolName { get; set; }
+        public int PointSourceIndex { get; set; }
+        public float PointToLineNominalMm { get; set; }
+        public bool PointToLineCheckAll { get; set; }
+        public LineOrientation ReferenceLineOrientation { get; set; }
+        public int ReferenceLineAngleRange { get; set; }
+        public LineDirScan ReferenceLineScan { get; set; }
         public int ThresholdBinary { get; set; }
         public float Scale { get; set; }
         public int MinInliers { get; set; }
@@ -132,7 +148,7 @@ namespace BeeCore.Funtion.Engines
             PropetyTool owner = Common.TryGetTool(propety.IndexThread, propety.Index);
             return new WidthRunResult
             {
-                IsOk = propety.GapResult.line2Ds != null,
+                IsOk = propety.MeasureMode == WidthMeasureMode.PointToLine ? propety.PointToLineFound : propety.GapResult.line2Ds != null,
                 ScoreResult = owner != null ? owner.ScoreResult : 0,
                 WidthResult = propety.WidthResult,
                 SegmentCount = propety.GapResult.line2Ds != null ? propety.GapResult.line2Ds.Count : 0

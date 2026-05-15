@@ -384,6 +384,11 @@ namespace BeeInterface
                     if (IsNew)
                         control.Propety = new Edge();
                     break;
+                case TypeTool.Edge2:
+                    control = new Tool2Edge();
+                    if (IsNew)
+                        control.Propety = new Edge2();
+                    break;
                 case TypeTool.CraftOCR:
                     control = new ToolCraftOCR();
                     if (IsNew)
@@ -408,6 +413,11 @@ namespace BeeInterface
                     control = new ToolMultiOnnx();
                     if (IsNew)
                         control.Propety = new MultiOnnx();
+                    break;
+                case TypeTool.SegmentAI:
+                    control = new ToolSegmentAI();
+                    if (IsNew)
+                        control.Propety = new SegmentAI();
                     break;
                 case TypeTool.CheckMissing:
                     control = new ToolCheckMissing();

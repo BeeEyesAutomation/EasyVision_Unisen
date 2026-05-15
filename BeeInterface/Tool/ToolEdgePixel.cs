@@ -43,12 +43,18 @@ namespace BeeInterface
         }
         private void InvalidateOwnerToolCache() => _ownerTool = null;
         #endregion
+        private EdgeButtonsHelper.ExtraButtons _extraEdgeBtns;
+
         public ToolEdgePixel( )
         {
             InitializeComponent();
             if (Propety == null)
                 Propety = new EdgePixel();
-
+            _extraEdgeBtns = EdgeButtonsHelper.Attach(tableLayoutPanel15, m =>
+            {
+                Propety.MethordEdge = m;
+                layThreshod.Enabled = false;
+            });
         }
 
         public void LoadPara()
@@ -79,20 +85,18 @@ namespace BeeInterface
 
                
 
+                btnStrongEdge.IsCLick = btnCloseEdge.IsCLick = btnBinary.IsCLick = btnInvert.IsCLick = false;
+                _extraEdgeBtns?.ResetAll();
+                layThreshod.Enabled = false;
                 switch (Propety.MethordEdge)
                 {
-                    case MethordEdge.StrongEdges:
-                        btnStrongEdge.IsCLick = true; layThreshod.Enabled = false;
-                        break;
-                    case MethordEdge.CloseEdges:
-                        btnCloseEdge.IsCLick = true; layThreshod.Enabled = false;
-                        break;
-                    case MethordEdge.Binary:
-                        btnBinary.IsCLick = true; layThreshod.Enabled = true;
-                        break;
-                    case MethordEdge.InvertBinary:
-                        btnInvert.IsCLick = true; layThreshod.Enabled = true;
-                        break;
+                    case MethordEdge.StrongEdges:   btnStrongEdge.IsCLick = true; break;
+                    case MethordEdge.CloseEdges:    btnCloseEdge.IsCLick = true; break;
+                    case MethordEdge.Binary:        btnBinary.IsCLick = true; layThreshod.Enabled = true; break;
+                    case MethordEdge.InvertBinary:  btnInvert.IsCLick = true; layThreshod.Enabled = true; break;
+                    case MethordEdge.UltraThin:
+                    case MethordEdge.Adaptive:
+                    case MethordEdge.DenoiseFirst:  _extraEdgeBtns?.Highlight(Propety.MethordEdge); break;
                 }
              
                 AdjMorphology.Value = Propety.SizeClose;

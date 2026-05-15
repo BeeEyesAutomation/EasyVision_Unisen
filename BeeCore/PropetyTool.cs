@@ -294,8 +294,11 @@ namespace BeeCore
                 timer.Restart();
                 if (UsedTool == UsedTool.NotUsed && Global.IsRun)
                     return;
+                if (Propety2.rotArea == null)
+                    Propety2.rotArea = new RectRotate();
                 if (!Global.IsRun)
-                    Propety2.rotAreaAdjustment = Propety2.rotArea.Clone();
+                   
+                Propety2.rotAreaAdjustment = Propety2.rotArea.Clone();
                 if (Propety2.rotAreaAdjustment == null)
                     Propety2.rotAreaAdjustment = Propety2.rotArea.Clone();
                 if (!Global.IsRun)

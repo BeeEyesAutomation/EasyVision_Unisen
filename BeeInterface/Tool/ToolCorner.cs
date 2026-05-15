@@ -44,10 +44,16 @@ namespace BeeInterface
         }
         private void InvalidateOwnerToolCache() => _ownerTool = null;
         #endregion
+        private EdgeButtonsHelper.ExtraButtons _extraEdgeBtns;
+
         public ToolCorner( )
         {
             InitializeComponent();
-
+            _extraEdgeBtns = EdgeButtonsHelper.Attach(tableLayoutPanel15, m =>
+            {
+                if (Propety != null) Propety.MethordEdge = m;
+                layThreshod.Enabled = false;
+            });
         }
         public MeasureCorner Propety { get; set; }
         Stopwatch timer = new Stopwatch();
@@ -86,20 +92,18 @@ namespace BeeInterface
                 AdjRANSACIterations.Value=Propety.RansacIterations;
                 AdjThreshodAngle.Value =(float) Propety.PerpAngleToleranceDeg;
                 AdjMaxLineCandidates.Value = Propety.MaxLineCandidates;
+                btnStrongEdge.IsCLick = btnCloseEdge.IsCLick = btnBinary.IsCLick = btnInvert.IsCLick = false;
+                _extraEdgeBtns?.ResetAll();
+                layThreshod.Enabled = false;
                 switch (Propety.MethordEdge)
                 {
-                    case MethordEdge.StrongEdges:
-                        btnStrongEdge.IsCLick = true; layThreshod.Enabled = false;
-                        break;
-                    case MethordEdge.CloseEdges:
-                        btnCloseEdge.IsCLick = true; layThreshod.Enabled = false;
-                        break;
-                    case MethordEdge.Binary:
-                        btnBinary.IsCLick = true; layThreshod.Enabled = true;
-                        break;
-                    case MethordEdge.InvertBinary:
-                        btnInvert.IsCLick = true; layThreshod.Enabled = true;
-                        break;
+                    case MethordEdge.StrongEdges:   btnStrongEdge.IsCLick = true; break;
+                    case MethordEdge.CloseEdges:    btnCloseEdge.IsCLick = true; break;
+                    case MethordEdge.Binary:        btnBinary.IsCLick = true; layThreshod.Enabled = true; break;
+                    case MethordEdge.InvertBinary:  btnInvert.IsCLick = true; layThreshod.Enabled = true; break;
+                    case MethordEdge.UltraThin:
+                    case MethordEdge.Adaptive:
+                    case MethordEdge.DenoiseFirst:  _extraEdgeBtns?.Highlight(Propety.MethordEdge); break;
                 }
                 AdjScale.Value= Propety.Scale;
                 

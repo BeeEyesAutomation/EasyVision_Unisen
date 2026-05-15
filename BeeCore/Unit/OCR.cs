@@ -17,7 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
-using static LibUsbDotNet.Main.UsbTransferQueue;
+
 using static OpenCvSharp.ML.DTrees;
 using static System.Net.Mime.MediaTypeNames;
 using Point = System.Drawing.Point;

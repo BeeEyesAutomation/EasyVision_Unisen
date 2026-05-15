@@ -170,21 +170,7 @@ namespace BeeCore
                     if (!matProcess.Empty()) matProcess.Dispose();
                     if (matCrop.Type() == MatType.CV_8UC3)
                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
-                    switch (MethordEdge)
-                    {
-                        case MethordEdge.CloseEdges:
-                            matProcess = Filters.Edge(matCrop);
-                            break;
-                        case MethordEdge.StrongEdges:
-                            matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                            break;
-                        case MethordEdge.Binary:
-                            matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
-                            break;
-                        case MethordEdge.InvertBinary:
-                            matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                            break;
-                    }
+                    matProcess = Filters.ApplyEdgeMethod(matCrop, MethordEdge, ThresholdBinary);
                     if (IsClearNoiseSmall)
                         matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
                     if (IsClose)

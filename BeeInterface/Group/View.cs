@@ -43,6 +43,8 @@ using UserControl = System.Windows.Forms.UserControl;
 namespace BeeInterface
 {
     [Serializable()]
+    // BeeInterface owns the embedded runtime inspection/camera view used by the
+    // main operator workflow. Keep standalone camera discovery UI in BeeUi.ScanCCD.
     public partial class View : UserControl
     {
         public event System.Windows.Forms.PreviewKeyDownEventHandler PreviewKeyDown;
@@ -4184,12 +4186,31 @@ namespace BeeInterface
                 }
             }
         }
-        public void Live()
+        public async void Live()
         {
             if (Global.IsLive)
             {
-                BeeCore.Common.listCamera[Global.IndexCCCD].Read();
-                Global.Config.SizeCCD = BeeCore.Common.listCamera[Global.IndexCCCD].GetSzCCD();
+                var camera = BeeCore.Common.listCamera[Global.IndexCCCD];
+                if (camera == null)
+                {
+                    btnLive.IsCLick = false;
+                    Global.IsLive = false;
+                    return;
+                }
+
+                try
+                {
+                    await Task.Run(() => camera.Read());
+                }
+                catch
+                {
+                    btnLive.IsCLick = false;
+                    Global.IsLive = false;
+                    return;
+                }
+                if (!Global.IsLive) return;
+
+                Global.Config.SizeCCD = camera.GetSzCCD();
                 if(Global.Config.SizeCCD.Width==0|| Global.Config.SizeCCD.Height==0)
                 {
                     btnLive.IsCLick = false;
@@ -4197,7 +4218,7 @@ namespace BeeInterface
                     return;
                 }    
                 _liveBmp = new Bitmap(Global.Config.SizeCCD.Width, Global.Config.SizeCCD.Height, PixelFormat.Format24bppRgb);
-                imgView.Image = _liveBmp;   // set 1 l?n duy nh?t
+                imgView.Image = _liveBmp;   // set 1 lan duy nhat
                 //if (BeeCore.Common.listCamera[Global.IndexCCCD] != null)
                 //    if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw != null)
                 //        if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.IsDisposed)
@@ -4264,7 +4285,7 @@ namespace BeeInterface
         }
 private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int stride, int channels)
         {
-            if (buffer == IntPtr.Zero) return ; // timeout ho?c fail
+            if (buffer == IntPtr.Zero || !Global.IsLive) return ; // timeout ho?c fail
             var matType = (channels == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
 
             using (var m = Mat.FromPixelData(height, width, matType, buffer, stride))
@@ -4273,14 +4294,14 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 BeeCore.Common.listCamera[Global.IndexCCCD].GetFpsPylon();
                 try
                 {
-                    var bmp = BitmapConverter.ToBitmap(m);
-
-                    // Ð?y frame m?i nh?t và h?y frame cu m?t cách an toàn, không c?n lock
-                    var old = Interlocked.Exchange(ref _sharedFrame, bmp);
-                    old?.Dispose();
-
-                    // (tu? ch?n) báo cho display thread là có frame m?i
-                    _frameReady?.Set();
+                    if (channels == 1)
+                    {
+                        UpdateGray(m);
+                    }
+                    else if (_liveBmp != null && _liveBmp.Width == width && _liveBmp.Height == height)
+                    {
+                        UpdateBgr(m);
+                    }
                 }
                 catch(Exception ex)
                 {
@@ -4515,11 +4536,26 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                     _liveBmp.UnlockBits(bd);
                 }
             }
+            if (Interlocked.Exchange(ref _uiPending, 1) == 1) return;
 
-            imgView.BeginInvoke((Action)(() =>
+            try
             {
-                imgView.Invalidate();  // ch? redraw
-            }));
+                imgView.BeginInvoke((Action)(() =>
+                {
+                    try
+                    {
+                        imgView.Invalidate();  // redraw only
+                    }
+                    finally
+                    {
+                        Interlocked.Exchange(ref _uiPending, 0);
+                    }
+                }));
+            }
+            catch
+            {
+                Interlocked.Exchange(ref _uiPending, 0);
+            }
         }
         private async void  workReadCCD_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -4765,6 +4801,17 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         public List<Mat> listMat = new List<Mat>();
         public int indexFile = 0;
         private Native Native = new Native();
+        private void ShowCurrentRawImage(bool updateNative)
+        {
+            var matRaw = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw;
+            if (updateNative)
+                Native.SetImg(matRaw.Clone());
+
+            var oldImage = imgView.Image;
+            imgView.Image = matRaw.ToBitmap();
+            if (oldImage != null && !ReferenceEquals(oldImage, imgView.Image))
+                oldImage.Dispose();
+        }
         private void btnImg_Click(object sender, EventArgs e)
         {
             if(folderBrowserDialog1.ShowDialog()==DialogResult.OK)
@@ -4789,17 +4836,22 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 indexFile = 0;
                 pathFileSeleted = Files[indexFile];
                 BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = listMat[indexFile]; ;// Cv2.ImRead(Files[indexFile]);
-                Native.SetImg(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+                ShowCurrentRawImage(true);
             }
         }
    
         public float PictureScale = 1.0f;
-       
         private void DrawImage(Graphics gr)
         {
-            gr.DrawImage(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap(),new PointF(0,0));
-           
+            var currentImage = imgView.Image;
+            if (currentImage != null)
+            {
+                gr.DrawImage(currentImage, new PointF(0, 0));
+                return;
+            }
+
+            using (var bmp = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap())
+                gr.DrawImage(bmp, new PointF(0, 0));
         }
         private void btnZoomIn_Click(object sender, EventArgs e)
         {
@@ -5059,8 +5111,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = Cv2.ImRead(Files[indexFile]);
                 listMat = new List<Mat>();
                 listMat.Add(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-               Native.SetImg(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+               ShowCurrentRawImage(true);
             
                 Global.StatusMode = StatusMode.SimOne;
                 timer= CycleTimerSplit.Start();
@@ -5141,8 +5192,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             }
             pathFileSeleted=Files[indexFile];
             BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = listMat[indexFile]; ;// Cv2.ImRead(Files[indexFile]);
-            Native.SetImg(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-            imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+            ShowCurrentRawImage(true);
             if (Global.IsRun)
             {
                 Global.StatusMode = StatusMode.SimOne;
@@ -5985,7 +6035,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                
                 if (indexFile >= listMat.Count) indexFile = 0;
                 BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = listMat[indexFile];// Cv2.ImRead(Files[indexFile]);
-                imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+                ShowCurrentRawImage(false);
                 Global.StatusProcessing = StatusProcessing.Checking;
             }
            

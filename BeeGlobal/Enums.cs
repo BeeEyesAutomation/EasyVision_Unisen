@@ -122,6 +122,12 @@ namespace BeeGlobal
     {
         Mean, Median, Min, Max
     }
+    // Khoảng cách giữa 2 pin: tương đối (chiếu lên đường nối) hay tuyệt đối (Euclidean 2D)
+    public enum PinDistanceMode
+    {
+        Relative = 0,   // Projected lên trục dọc theo hàng pin (RowVx, RowVy)
+        Absolute = 1    // sqrt(dx² + dy²) * mmPerPx
+    }
     public enum MethodSample
     {
         Pattern,
@@ -285,13 +291,48 @@ namespace BeeGlobal
     }
     public enum MethordEdge
     {
-        StrongEdges,
-        CloseEdges,
-        Binary, InvertBinary, None, Stable
+        StrongEdges,    // Gradient percentile-based (GetStrongEdgesOnly)
+        CloseEdges,     // Canny auto + morphological close (Edge)
+        Binary,         // Threshold tĩnh → Canny
+        InvertBinary,   // Threshold nghịch đảo → Canny
+        None,
+        Stable,         // Sobel + Otsu, ổn định ánh sáng thay đổi (GetStrongEdgesStable)
+        UltraThin,      // Morphological gradient → cạnh cực mỏng, chính xác cao
+        Adaptive,       // AdaptiveThreshold Gaussian → tốt cho ánh sáng không đều
+        DenoiseFirst,   // Xoá nhiễu/glare trước rồi detect edge (bề mặt kim loại bóng)
+    }
+    public enum EdgeDetectMode
+    {
+        SingleLine,
+        ParallelPair
     }
     public enum TypeMeasure
     {
-        Angle, Distance, PointToPoint
+        Angle, Distance
+    }
+    public enum MeasureMethod
+    {
+        PointToPoint, PointToLine, LineToLine, MultiPointToLine
+    }
+    public enum MeasureLineInputMode
+    {
+        Point, Line
+    }
+    public enum PitchMeasureMode
+    {
+        PeakRoot,
+        PinPitch
+    }
+    public enum PinPitchArrangeMode
+    {
+        X,
+        Y,
+        RowProjection
+    }
+    public enum WidthMeasureMode
+    {
+        ParallelLines,
+        PointToLine
     }
     public enum TypeControler
     {
@@ -303,7 +344,7 @@ namespace BeeGlobal
     }
     public enum MethordMeasure
     {
-        Min, Max, Medium
+        Min, Max, Medium, EachOne
     }
     public enum Corner
     {
@@ -367,7 +408,7 @@ Color,Binary}
         Edge=22,
         CraftOCR = 23,
 
-        Intersect = 24,Systems=25, MultiPattern = 26,AutoTrig=27,MultiLearning=28,CheckMissing=29
+        Intersect = 24,Systems=25, MultiPattern = 26,AutoTrig=27,MultiLearning=28,CheckMissing=29, Edge2 = 30, SegmentAI = 31,
 
 
     }

@@ -43,10 +43,21 @@ namespace BeeInterface
         }
         private void InvalidateOwnerToolCache() => _ownerTool = null;
         #endregion
+        private EdgeButtonsHelper.ExtraButtons _extraEdgeBtns;
+        private ComboBox cbWidthMeasureMode;
+        private ComboBox cbPointSource;
+        private ComboBox cbPointIndex;
+        private NumericUpDown numPointNominal;
+
         public ToolWidth( )
         {
             InitializeComponent();
-        
+            _extraEdgeBtns = EdgeButtonsHelper.Attach(lay61, m =>
+            {
+                Propety.MethordEdge = m;
+                lay62.Enabled = false;
+            });
+            EnsurePointToLinePanel();
         }
         Stopwatch timer = new Stopwatch();
         public BackgroundWorker worker = new BackgroundWorker();
@@ -69,6 +80,7 @@ namespace BeeInterface
                 this.VisibleChanged -= ToolWidth_VisibleChanged;
                 this.VisibleChanged += ToolWidth_VisibleChanged;
                 var state = WidthEngineRunner.ReadFromOwner(OwnerTool, Propety);
+                LoadPointToLinePanel(state);
                 trackScore.Min = state.ScoreMin;
                 trackScore.Max = state.ScoreMax;
                 trackScore.Step = state.ScoreStep;
@@ -94,20 +106,19 @@ namespace BeeInterface
                 AdjRANSACThreshold.Value = (float)state.RansacThreshold;
                 numMinLen.Value = state.MinLen;
                 numMaxLen.Value = state.MaxLen;
+                btnStrongEdge.IsCLick = btnCloseEdge.IsCLick = btnBinary.IsCLick = btnStable.IsCLick = false;
+                _extraEdgeBtns?.ResetAll();
+                lay62.Enabled = false;
                 switch (state.MethordEdge)
                 {
-                    case MethordEdge.StrongEdges:
-                        btnStrongEdge.IsCLick = true; lay62.Enabled = false;
-                        break;
-                    case MethordEdge.CloseEdges:
-                        btnCloseEdge.IsCLick = true; lay62.Enabled = false;
-                        break;
-                    case MethordEdge.Binary:
-                        btnBinary.IsCLick = true; lay62.Enabled = true;
-                        break;
-                    case MethordEdge.Stable:
-                        btnStable.IsCLick = true; lay62.Enabled = true;
-                        break;
+                    case MethordEdge.StrongEdges:   btnStrongEdge.IsCLick = true; break;
+                    case MethordEdge.CloseEdges:    btnCloseEdge.IsCLick = true; break;
+                    case MethordEdge.Stable:        btnStable.IsCLick = true; break;
+                    case MethordEdge.Binary:        btnBinary.IsCLick = true; lay62.Enabled = true; break;
+                    case MethordEdge.InvertBinary:  lay62.Enabled = true; break;
+                    case MethordEdge.UltraThin:
+                    case MethordEdge.Adaptive:
+                    case MethordEdge.DenoiseFirst:  _extraEdgeBtns?.Highlight(state.MethordEdge); break;
                 }
                 switch (state.LineOrientation)
                 {
@@ -164,6 +175,156 @@ namespace BeeInterface
             {
                 String s = ex.Message;
             }
+        }
+
+        private void EnsurePointToLinePanel()
+        {
+            if (cbWidthMeasureMode != null)
+                return;
+
+            var panel = new TableLayoutPanel
+            {
+                ColumnCount = 2,
+                RowCount = 4,
+                Dock = DockStyle.Top,
+                AutoSize = true,
+                BackColor = Color.White,
+                Padding = new Padding(5)
+            };
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+
+            cbWidthMeasureMode = new ComboBox { Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList };
+            cbWidthMeasureMode.Items.AddRange(Enum.GetNames(typeof(WidthMeasureMode)));
+            cbWidthMeasureMode.SelectedIndexChanged += (s, e) =>
+            {
+                if (Propety == null || cbWidthMeasureMode.SelectedItem == null) return;
+                Propety.MeasureMode = (WidthMeasureMode)Enum.Parse(typeof(WidthMeasureMode), cbWidthMeasureMode.SelectedItem.ToString());
+                WidthEngineRunner.MarkOwnerWaiting(OwnerTool);
+            };
+
+            cbPointSource = new ComboBox { Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList };
+            cbPointSource.SelectedIndexChanged += (s, e) =>
+            {
+                if (Propety == null || cbPointSource.SelectedItem == null) return;
+                Propety.PointSourceToolName = cbPointSource.SelectedItem.ToString();
+                PopulatePointIndexCombo();
+            };
+
+            cbPointIndex = new ComboBox { Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList };
+            cbPointIndex.SelectedIndexChanged += (s, e) =>
+            {
+                if (Propety == null || cbPointIndex.SelectedIndex < 0) return;
+                if (cbPointIndex.SelectedIndex == 0)
+                {
+                    Propety.PointToLineCheckAll = true;
+                }
+                else
+                {
+                    Propety.PointToLineCheckAll = false;
+                    Propety.PointSourceIndex = cbPointIndex.SelectedIndex - 1;
+                }
+            };
+
+            numPointNominal = NewNumeric(0, 1000, 0, 3);
+            numPointNominal.ValueChanged += (s, e) => { if (Propety != null) Propety.PointToLineNominalMm = (float)numPointNominal.Value; };
+
+            AddPanelRow(panel, "Mode", cbWidthMeasureMode, 0);
+            AddPanelRow(panel, "Point tool", cbPointSource, 1);
+            AddPanelRow(panel, "Point", cbPointIndex, 2);
+            AddPanelRow(panel, "Nominal mm", numPointNominal, 3);
+
+            tableLayoutPanel1.RowCount += 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.Controls.Add(panel, 0, tableLayoutPanel1.RowCount - 1);
+        }
+
+        private static NumericUpDown NewNumeric(decimal min, decimal max, decimal value, int decimals)
+        {
+            return new NumericUpDown
+            {
+                Minimum = min,
+                Maximum = max,
+                Value = value,
+                DecimalPlaces = decimals,
+                Increment = decimals > 0 ? 0.01m : 1m,
+                Dock = DockStyle.Fill
+            };
+        }
+
+        private static void AddPanelRow(TableLayoutPanel panel, string label, Control control, int row)
+        {
+            panel.RowStyles.Add(new RowStyle());
+            panel.Controls.Add(new Label { Text = label, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft }, 0, row);
+            panel.Controls.Add(control, 1, row);
+        }
+
+        private void LoadPointToLinePanel(WidthViewState state)
+        {
+            if (cbWidthMeasureMode == null || Propety == null)
+                return;
+
+            cbWidthMeasureMode.SelectedItem = state.MeasureMode.ToString();
+            PopulatePointSourceCombo(state.PointSourceToolName);
+            PopulatePointIndexCombo();
+            numPointNominal.Value = ClampDecimal((decimal)state.PointToLineNominalMm, numPointNominal.Minimum, numPointNominal.Maximum);
+        }
+
+        private void PopulatePointSourceCombo(string selectedName)
+        {
+            cbPointSource.Items.Clear();
+            var tools = Common.EnsureToolList(Global.IndexProgChoose);
+            foreach (var tool in tools)
+            {
+                if (tool == null || tool.Name == OwnerTool?.Name || tool.Propety2 == null)
+                    continue;
+
+                try
+                {
+                    var pts = tool.Propety2.listP_Center as List<System.Drawing.Point>;
+                    if (pts != null && pts.Count > 0)
+                        cbPointSource.Items.Add(tool.Name);
+                }
+                catch { }
+            }
+
+            if (!string.IsNullOrEmpty(selectedName) && cbPointSource.Items.Contains(selectedName))
+                cbPointSource.SelectedItem = selectedName;
+            else if (cbPointSource.Items.Count > 0)
+                cbPointSource.SelectedIndex = 0;
+        }
+
+        private void PopulatePointIndexCombo()
+        {
+            cbPointIndex.Items.Clear();
+            cbPointIndex.Items.Add("Full");
+            string sourceName = cbPointSource.SelectedItem as string;
+            int count = 0;
+            var tool = Common.EnsureToolList(Global.IndexProgChoose).FirstOrDefault(t => t != null && t.Name == sourceName);
+            if (tool != null)
+            {
+                try
+                {
+                    var pts = tool.Propety2.listP_Center as List<System.Drawing.Point>;
+                    count = pts != null ? pts.Count : 0;
+                }
+                catch { count = 0; }
+            }
+
+            for (int i = 0; i < count; i++)
+                cbPointIndex.Items.Add(tool != null && tool.TypeTool == TypeTool.Pitch ? $"P{i + 1}" : $"Point {i + 1}");
+
+            if (Propety != null && Propety.PointToLineCheckAll)
+                cbPointIndex.SelectedIndex = 0;
+            else if (cbPointIndex.Items.Count > 1)
+                cbPointIndex.SelectedIndex = Math.Min(Math.Max(1, Propety != null ? Propety.PointSourceIndex + 1 : 1), cbPointIndex.Items.Count - 1);
+        }
+
+        private static decimal ClampDecimal(decimal value, decimal min, decimal max)
+        {
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
         }
 
         private void ToolWidth_VisibleChanged(object sender, EventArgs e)

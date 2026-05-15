@@ -994,6 +994,70 @@ namespace BeeCore.Algorithm
             //  Cv2.ImWrite("Edge.png", edges);
             return null;
         }
+        /// <summary>
+        /// Adaptive Gaussian threshold + Canny. Xử lý tốt ảnh ánh sáng không đều.
+        /// blockSize tự động theo kích thước ảnh.
+        /// </summary>
+        public static Mat AdaptiveEdge(Mat raw)
+        {
+            Mat gray = new Mat();
+            Mat adapted = new Mat();
+            Mat edges = new Mat();
+            try
+            {
+                if (raw.Type() == MatType.CV_8UC3)
+                    Cv2.CvtColor(raw, gray, ColorConversionCodes.BGR2GRAY);
+                else
+                    gray = raw.Clone();
+
+                Cv2.GaussianBlur(gray, gray, new OpenCvSharp.Size(3, 3), 0);
+
+                // blockSize phải lẻ, tối thiểu 11
+                int blockSize = Math.Max(11, (Math.Min(raw.Width, raw.Height) / 20) | 1);
+                Cv2.AdaptiveThreshold(gray, adapted, 255,
+                    AdaptiveThresholdTypes.GaussianC,
+                    ThresholdTypes.BinaryInv,
+                    blockSize, 4);
+
+                Cv2.Canny(adapted, edges, 0, 255);
+
+                var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new OpenCvSharp.Size(3, 3));
+                Cv2.MorphologyEx(edges, edges, MorphTypes.Close, kernel);
+                return edges;
+            }
+            catch (Exception ex)
+            {
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Filter", ex.Message));
+                return null;
+            }
+            finally
+            {
+                gray.Dispose();
+                adapted.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Điểm tập trung duy nhất cho switch MethordEdge.
+        /// Tất cả Unit class gọi method này thay vì tự switch.
+        /// </summary>
+        public static Mat ApplyEdgeMethod(Mat src, MethordEdge method, int thresholdBinary = 127)
+        {
+            switch (method)
+            {
+                case MethordEdge.CloseEdges:    return Edge(src);
+                case MethordEdge.StrongEdges:   return GetStrongEdgesOnly(src);
+                case MethordEdge.Stable:        return GetStrongEdgesStable(src);
+                case MethordEdge.Binary:        return Threshold(src, thresholdBinary, ThresholdTypes.Binary);
+                case MethordEdge.InvertBinary:  return Threshold(src, thresholdBinary, ThresholdTypes.BinaryInv);
+                case MethordEdge.UltraThin:     return GetUltraThinEdgesFast(src);
+                case MethordEdge.Adaptive:      return AdaptiveEdge(src);
+                case MethordEdge.DenoiseFirst:  return RemoveWhiteNoiseThenEdge(src);
+                case MethordEdge.None:
+                default:                        return src.Clone();
+            }
+        }
+
         public static Mat Threshold(Mat raw, int Threshold, ThresholdTypes thresholdTypes = ThresholdTypes.Binary)
         {
             Mat edges = new Mat();
@@ -1205,13 +1269,27 @@ namespace BeeCore.Algorithm
         public static Mat ClearNoise(Mat edges, int minCompArea = 1000)
         {
             Mat labels = new Mat(), stats = new Mat(), centroids = new Mat();
+            Mat binary = new Mat();
             try
             {
+                if (edges == null || edges.Empty())
+                    return new Mat();
+
+                if (edges.Channels() == 1)
+                    Cv2.Threshold(edges, binary, 0, 255, ThresholdTypes.Binary);
+                else
+                {
+                    using (Mat gray = new Mat())
+                    {
+                        Cv2.CvtColor(edges, gray, ColorConversionCodes.BGR2GRAY);
+                        Cv2.Threshold(gray, binary, 0, 255, ThresholdTypes.Binary);
+                    }
+                }
+
                 // 4) Xóa nhiễu bằng Connected Components (trên ảnh nhị phân edge)
 
-                int num = Cv2.ConnectedComponentsWithStats(edges, labels, stats, centroids, PixelConnectivity.Connectivity8, MatType.CV_32S);
-                var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
-                Mat clean = Mat.Zeros(edges.Size(), MatType.CV_8U);
+                int num = Cv2.ConnectedComponentsWithStats(binary, labels, stats, centroids, PixelConnectivity.Connectivity8, MatType.CV_32S);
+                Mat clean = Mat.Zeros(binary.Size(), MatType.CV_8UC1);
                 for (int i = 1; i < num; i++)
                 {
                     int area = stats.At<int>(i, (int)ConnectedComponentsTypes.Area);
@@ -1233,6 +1311,7 @@ namespace BeeCore.Algorithm
                 labels.Dispose();
                 stats.Dispose();
                 centroids.Dispose();
+                binary.Dispose();
             }
             // (Tùy chọn) mở nhẹ để mảnh hơn
             //Cv2.MorphologyEx(clean, clean, MorphTypes.Open, kernel, iterations: 1);
@@ -1383,6 +1462,6 @@ namespace BeeCore.Algorithm
         public static ImageFilter Resize(double scaleX, double scaleY,
                                          InterpolationFlags interp = InterpolationFlags.Linear) =>
             delegate (Mat src, Mat dst)
-            { Cv2.Resize(src, dst, Size.Zero, scaleX, scaleY, interp); };
+            { Cv2.Resize(src, dst, new Size(), scaleX, scaleY, interp); };
     }
 }

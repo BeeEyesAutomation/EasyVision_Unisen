@@ -1,5 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Ownership: shared configuration, protocol state, and cross-project data contracts with minimal UI or processing logic. -->
   <Import Project="..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props" Condition="Exists('..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -67,9 +68,6 @@
     <Reference Include="OpenCvSharp.Extensions">
       <HintPath>..\packages\OpenCvSharp4.Extensions.4.11.0.20250507\lib\net48\OpenCvSharp.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="OpenCvSharp.UserInterface">
-      <HintPath>..\BeeCore\bin\x64\Release\OpenCvSharp.UserInterface.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -87,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BatchRename.cs" />
+    <Compile Include="CameraCalibrationConfig.cs" />
     <Compile Include="Common\AdjustControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -131,7 +130,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PLC_Communication\PLC_Communication.csproj">
-      <Project>{d95338f7-a1fe-810a-8677-77d76d17b867}</Project>
+      <Project>
+  <!-- Ownership: shared configuration, protocol state, and cross-project data contracts with minimal UI or processing logic. -->{d95338f7-a1fe-810a-8677-77d76d17b867}</Project>
       <Name>PLC_Communication</Name>
     </ProjectReference>
   </ItemGroup>

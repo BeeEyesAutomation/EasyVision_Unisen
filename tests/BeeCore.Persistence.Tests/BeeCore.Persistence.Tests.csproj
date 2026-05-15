@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Ownership: BeeCore persistence regression tests. -->
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -64,11 +65,13 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\BeeGlobal\BeeGlobal.csproj">
-      <Project>{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>
+      <Project>
+  <!-- Ownership: BeeCore persistence regression tests. -->{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>
       <Name>BeeGlobal</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\BeeCore\BeeCore.csproj">
-      <Project>{AC6E4007-F2A0-49F3-B777-DDE4C58C5ADC}</Project>
+      <Project>
+  <!-- Ownership: BeeCore persistence regression tests. -->{AC6E4007-F2A0-49F3-B777-DDE4C58C5ADC}</Project>
       <Name>BeeCore</Name>
     </ProjectReference>
   </ItemGroup>

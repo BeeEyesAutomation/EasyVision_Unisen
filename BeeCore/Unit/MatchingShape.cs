@@ -61,7 +61,7 @@ namespace BeeCore
             unsafe
             {
 
-                Mat raw = new Mat(rows, cols, Type, intPtr);
+                Mat raw = Mat.FromPixelData(rows, cols, Type, intPtr);
                 matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(raw);
                 return raw;
             }

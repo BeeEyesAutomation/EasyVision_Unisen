@@ -30,10 +30,10 @@ namespace BeeGlobal
                 return configured;
 
             int logicalCores = Environment.ProcessorCount;
-            if (logicalCores <= 2)
+            if (logicalCores <= 1)
                 return 1;
 
-            return Math.Max(1, logicalCores - 1);
+            return Math.Max(1, logicalCores );
         }
 
         public static void ResetToolSchedulers()
@@ -327,6 +327,7 @@ namespace BeeGlobal
         public static event Action<StatusDraw> StatusDrawChanged;
         public static event Action<int > ChooseChanged;
         public static Config Config;
+        public static CameraCalibrationConfig CameraCalibration = new CameraCalibrationConfig();
         public static float ZoomMinimum = 0;
         public static int IndexToolAuto = -1;
        public static  bool IsLearning=true;

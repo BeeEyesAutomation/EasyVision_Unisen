@@ -140,6 +140,16 @@ namespace BeeCore
 
         }
 
+        public static void SaveCameraCalibration(string path, CameraCalibrationConfig config)
+        {
+            SaveBase64(path, config ?? new CameraCalibrationConfig());
+        }
+
+        public static CameraCalibrationConfig LoadCameraCalibration(string path)
+        {
+            return LoadBase64(path, defaultFactory: () => new CameraCalibrationConfig());
+        }
+
         // ----- ParaCommon -----
         public static void SaveParaComon(string path, ParaCommon para)
         {

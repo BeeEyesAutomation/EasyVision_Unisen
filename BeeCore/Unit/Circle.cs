@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using static BeeCore.Cropper;
-using static LibUsbDotNet.Main.UsbTransferQueue;
+
 using Point = System.Drawing.Point;
 using Size = OpenCvSharp.Size;
 
@@ -35,6 +35,7 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        public int MaxThread = 1;
         [NonSerialized]
         public bool IsNew = false;
         public int IndexCCD = 0;
@@ -72,11 +73,21 @@ namespace BeeCore
 
 
         }
-        public void SetModel()
+        public void SetModel( bool IsCopy=false)
         {
-          
+
             if (rotArea == null) rotArea = new RectRotate();
-            rotMask = null;
+            if (rotCrop == null) rotCrop = new RectRotate();
+            if (rotMask == null) rotMask = new RectRotate();
+
+           
+
+
+            rotMask.Name = "Area Mask";
+            rotMask.TypeCrop = TypeCrop.Mask;
+
+            rotArea.Name = "Area Check";
+            rotArea.TypeCrop = TypeCrop.Area;
             Common.TryGetTool(IndexThread, Index).StepValue = 0.1f;
             Common.TryGetTool(IndexThread, Index).MinValue = 0;
             Common.TryGetTool(IndexThread, Index).MaxValue = 20;
@@ -122,21 +133,7 @@ namespace BeeCore
                     if(matProcess==null) matProcess = new Mat();
                     if (!matProcess.IsDisposed)
                         if (!matProcess.Empty()) matProcess.Dispose();
-                    switch (MethordEdge)
-                    {
-                        case MethordEdge.CloseEdges:
-                            matProcess = Filters.Edge(matCrop);
-                            break;
-                        case MethordEdge.StrongEdges:
-                            matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                            break;
-                        case MethordEdge.Binary:
-                            matProcess = Filters.Threshold(matCrop,ThresholdBinary,ThresholdTypes.Binary);
-                            break;
-                        case MethordEdge.InvertBinary:
-                            matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                            break;
-                    }
+                    matProcess = Filters.ApplyEdgeMethod(matCrop, MethordEdge, ThresholdBinary);
                     if (rotArea.Shape == ShapeType.Ellipse)
                         matProcess = ApplyShapeMaskAndCompose(matProcess, ctx, rotArea, rotMask, returnMaskOnly: false);
                     //Cv2.ImWrite("CropCircle.png", matProcess);

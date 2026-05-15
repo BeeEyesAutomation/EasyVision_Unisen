@@ -21,7 +21,9 @@ namespace BeeCore.Funtion.Engines
                 Score = owner.Score,
                 TypeMeasure = propety.TypeMeasure,
                 DirectMeasure = propety.DirectMeasure,
-                MethordMeasure = propety.MethordMeasure
+                MethordMeasure = propety.MethordMeasure,
+                Line1InputMode = propety.Line1InputMode,
+                Line2InputMode = propety.Line2InputMode
             };
         }
 
@@ -82,6 +84,8 @@ namespace BeeCore.Funtion.Engines
         public TypeMeasure TypeMeasure { get; set; }
         public DirectMeasure DirectMeasure { get; set; }
         public MethordMeasure MethordMeasure { get; set; }
+        public MeasureLineInputMode Line1InputMode { get; set; }
+        public MeasureLineInputMode Line2InputMode { get; set; }
     }
 
     public sealed class MeasureRunResult

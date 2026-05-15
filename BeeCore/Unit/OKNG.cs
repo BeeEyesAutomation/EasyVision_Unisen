@@ -20,7 +20,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-using static LibUsbDotNet.Main.UsbTransferQueue;
+
 using Point = OpenCvSharp.Point;
 using Size = OpenCvSharp.Size;
 

@@ -437,7 +437,7 @@ namespace BeeCore
                 unsafe
                 {
 
-                    Mat raw = new Mat(rows, cols, Type, intPtr);
+                    Mat raw = Mat.FromPixelData(rows, cols, Type, intPtr);
                     return raw;
                 }
 

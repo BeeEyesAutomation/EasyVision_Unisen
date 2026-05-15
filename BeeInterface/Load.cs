@@ -28,6 +28,7 @@ namespace BeeInterface
             Global.itemNews.Add(new ItemNew(TypeTool.Pitch, GroupTool.Extra_Tool_1, Properties.Resources.Pitch, Properties.Resources.contentPitch, "Content.."));
             Global.itemNews.Add(new ItemNew(TypeTool.Width, GroupTool.Extra_Tool_1, Properties.Resources.Width, Properties.Resources.ContentWidth, "Content.."));
             Global.itemNews.Add(new ItemNew(TypeTool.Edge, GroupTool.Extra_Tool_1, Properties.Resources.Edge, Properties.Resources.contentEdge, "Content.."));
+            Global.itemNews.Add(new ItemNew(TypeTool.Edge2, GroupTool.Extra_Tool_1, Properties.Resources.Edge, Properties.Resources.contentEdge, "Content.."));
             Global.itemNews.Add(new ItemNew(TypeTool.Intersect, GroupTool.Extra_Tool_1, Properties.Resources.Intersect, Properties.Resources.contentInsert, "Content.."));
 
             Global.itemNews.Add(new ItemNew(TypeTool.Circle, GroupTool.Extra_Tool_1, Properties.Resources.Circle, Properties.Resources.contentCircle, "Content.."));

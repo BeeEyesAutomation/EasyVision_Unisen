@@ -1,5 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Ownership: vision core, tool models, camera abstraction, and processing algorithms; avoid WinForms presentation responsibilities here. -->
   <Import Project="..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props" Condition="Exists('..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -73,9 +74,6 @@
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.2.0.0-beta.2\lib\net472\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
     </Reference>
-    <Reference Include="LibUsbDotNet">
-      <HintPath>..\bin\Release\LibUsbDotNet.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
       <Private>True</Private>
@@ -86,15 +84,11 @@
     </Reference>
     <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\BeeCore\bin\x64\Release\OpenCvSharp.dll</HintPath>
+      <HintPath>..\packages\OpenCvSharp4.4.11.0.20250507\lib\net48\OpenCvSharp.dll</HintPath>
     </Reference>
     <Reference Include="OpenCvSharp.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\BeeCore\bin\x64\Release\OpenCvSharp.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenCvSharp.UserInterface, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\BeeCore\bin\x64\Release\OpenCvSharp.UserInterface.dll</HintPath>
+      <HintPath>..\packages\OpenCvSharp4.Extensions.4.11.0.20250507\lib\net48\OpenCvSharp.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Python.Runtime">
       <HintPath>..\packages\pythonnet.3.0.5\lib\netstandard2.0\Python.Runtime.dll</HintPath>
@@ -259,6 +253,7 @@
     <Compile Include="Actions.cs" />
     <Compile Include="AddTool.cs" />
     <Compile Include="Algorithm\Colors.cs" />
+    <Compile Include="Algorithm\ContourGeometry.cs" />
     <Compile Include="Algorithm\DetectIntersect.cs" />
     <Compile Include="Algorithm\EdgePoints.cs" />
     <Compile Include="Algorithm\FilletCornerMeasure.cs" />
@@ -289,12 +284,17 @@
     <Compile Include="EtherNetIP\EIPAdapter.cs" />
     <Compile Include="EtherNetIP\EIPScanner.cs" />
     <Compile Include="Func\Cal.cs" />
+    <Compile Include="Func\CameraCalibrationProfileStore.cs" />
+    <Compile Include="Func\CameraCalibrationService.cs" />
+    <Compile Include="Func\CameraPreviewCorrection.cs" />
+    <Compile Include="Func\CameraScaleCalibrationService.cs" />
     <Compile Include="Func\CameraIOFast.cs" />
     <Compile Include="Func\CodeSymbologyCliExtensions.cs" />
     <Compile Include="Func\ComboBoxExtensions.cs" />
     <Compile Include="Func\Converts.cs" />
     <Compile Include="Func\Engines\CheckMissingEngineRunner.cs" />
     <Compile Include="Func\Engines\BarcodeEngineRunner.cs" />
+    <Compile Include="Func\Engines\Edge2EngineRunner.cs" />
     <Compile Include="Func\Engines\OCREngineRunner.cs" />
     <Compile Include="Func\Crop.cs" />
     <Compile Include="Func\Engines\CircleEngineRunner.cs" />
@@ -306,6 +306,7 @@
     <Compile Include="Func\Engines\IntersectEngineRunner.cs" />
     <Compile Include="Func\Engines\MeasureEngineRunner.cs" />
     <Compile Include="Func\Engines\PositionAdjustmentEngineRunner.cs" />
+    <Compile Include="Func\Engines\SegmentAIEngineRunner.cs" />
     <Compile Include="Func\Engines\WidthEngineRunner.cs" />
     <Compile Include="Func\FilterRect.cs" />
     <Compile Include="Func\General.cs" />
@@ -315,6 +316,7 @@
     <Compile Include="Func\MatHelper.cs" />
     <Compile Include="Func\MatMerger.cs" />
     <Compile Include="Func\NativeRCNN.cs" />
+    <Compile Include="Func\NativeSegAI.cs" />
     <Compile Include="Func\NativeYolo.cs" />
     <Compile Include="Func\PolyOffset.cs" />
     <Compile Include="Func\RectRotateGapChecker.cs" />
@@ -336,6 +338,7 @@
     <Compile Include="Unit\Barcode.cs" />
     <Compile Include="Unit\Crop.cs" />
     <Compile Include="Unit\AutoTrig.cs" />
+    <Compile Include="Unit\Edge2.cs" />
     <Compile Include="Unit\MultiOnnx.cs" />
     <Compile Include="Unit\MultiPattern.cs" />
     <Compile Include="Unit\OKNGAPI.cs" />
@@ -353,6 +356,7 @@
     <Compile Include="Unit\MeasureCorner.cs" />
     <Compile Include="Unit\PaperEnhance.cs" />
     <Compile Include="Unit\CheckMissing.cs" />
+    <Compile Include="Unit\SegmentAI.cs" />
     <Compile Include="Unit\PitchGdiPainter.cs" />
     <Compile Include="Unit\VisualMatch.cs" />
     <Compile Include="Unit\Pitch.cs" />
@@ -361,26 +365,6 @@
     <Compile Include="Unit\Intersect.cs" />
     <Compile Include="Unit\Width.cs" />
     <Compile Include="Unit\Measure.cs" />
-    <Compile Include="Camera\About.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Camera\DeviceFindAndCom.cs" />
-    <Compile Include="Camera\DevStateCB.cs" />
-    <Compile Include="Camera\DevStateDef.cs" />
-    <Compile Include="Camera\GetCfgCB.cs" />
-    <Compile Include="Camera\HardwareEnum.cs" />
-    <Compile Include="Camera\HEROJE.cs" />
-    <Compile Include="Camera\HJ_CRC32.cs" />
-    <Compile Include="Camera\KEY_Send.cs" />
-    <Compile Include="Camera\LogRecord.cs" />
-    <Compile Include="Camera\ModuleSetting.cs" />
-    <Compile Include="Camera\PnPEntityInfo.cs" />
-    <Compile Include="Camera\ProtocolExtraDataStu.cs" />
-    <Compile Include="Camera\ProtocolHeaderStu.cs" />
-    <Compile Include="Camera\SendCfgDataCB.cs" />
-    <Compile Include="Camera\SetCfgCB.cs" />
-    <Compile Include="Camera\ToolCfg.cs" />
-    <Compile Include="Camera\USB.cs" />
     <Compile Include="Func\Camera.cs" />
     <Compile Include="Func\CustomGui.cs" />
     <Compile Include="Func\Draws.cs" />
@@ -444,19 +428,23 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BeeCV\BeeCV.vcxproj">
-      <Project>{ef3f0d87-d9d4-4971-a005-1899d08ed33c}</Project>
+      <Project>
+        <!-- Ownership: vision core, tool models, camera abstraction, and processing algorithms; avoid WinForms presentation responsibilities here. -->{ef3f0d87-d9d4-4971-a005-1899d08ed33c}</Project>
       <Name>BeeCV</Name>
     </ProjectReference>
     <ProjectReference Include="..\BeeGlobal\BeeGlobal.csproj">
-      <Project>{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>
+      <Project>
+        <!-- Ownership: vision core, tool models, camera abstraction, and processing algorithms; avoid WinForms presentation responsibilities here. -->{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>
       <Name>BeeGlobal</Name>
     </ProjectReference>
     <ProjectReference Include="..\Pattern\Pattern.vcxproj">
-      <Project>{39dd1722-85fe-45b8-8954-88c4146bf8bf}</Project>
+      <Project>
+        <!-- Ownership: vision core, tool models, camera abstraction, and processing algorithms; avoid WinForms presentation responsibilities here. -->{39dd1722-85fe-45b8-8954-88c4146bf8bf}</Project>
       <Name>Pattern</Name>
     </ProjectReference>
     <ProjectReference Include="..\PylonCli\PylonCli.vcxproj">
-      <Project>{04dea65d-1a93-433a-85ae-7366915067cf}</Project>
+      <Project>
+        <!-- Ownership: vision core, tool models, camera abstraction, and processing algorithms; avoid WinForms presentation responsibilities here. -->{04dea65d-1a93-433a-85ae-7366915067cf}</Project>
       <Name>PylonCli</Name>
     </ProjectReference>
   </ItemGroup>

@@ -137,24 +137,7 @@ namespace BeeCore
                     {
 
 
-                        switch (MethordEdge)
-                        {
-                            case MethordEdge.CloseEdges:
-                                matProcess = Filters.Edge(matCrop);
-                                break;
-                            case MethordEdge.StrongEdges:
-                                matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                                break;
-                            case MethordEdge.Binary:
-                                matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
-                                break;
-                            case MethordEdge.InvertBinary:
-                                matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                                break;
-                            default:
-                                matProcess = matCrop; // fallback
-                                break;
-                        }
+                        matProcess = Filters.ApplyEdgeMethod(matCrop, MethordEdge, ThresholdBinary);
                         // Hậu xử lý hình thái học / khử nhiễu (mỗi hàm có thể trả Mat mới → nhớ dispose cái cũ)
                         if (IsClearNoiseSmall)
                         {

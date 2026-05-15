@@ -34,7 +34,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Markup;
 using static BeeCore.Cropper;
-using static LibUsbDotNet.Main.UsbTransferQueue;
+
 using static System.Windows.Forms.MonthCalendar;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Point = OpenCvSharp.Point;
@@ -379,21 +379,7 @@ namespace BeeCore
                         if (!matProcess.IsDisposed)
                             if (!matProcess.Empty()) matProcess.Dispose();
 
-                        switch (MethordEdge)
-                        {
-                            case MethordEdge.CloseEdges:
-                                matProcess = Filters.Edge(matCrop);
-                                break;
-                            case MethordEdge.StrongEdges:
-                                matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                                break;
-                            case MethordEdge.Binary:
-                                matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
-                                break;
-                            case MethordEdge.InvertBinary:
-                                matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                                break;
-                        }
+                        matProcess = Filters.ApplyEdgeMethod(matCrop, MethordEdge, ThresholdBinary);
 
                         matProcess = ApplyShapeMaskAndCompose(matProcess, ctx, rotCrop, rotMask, returnMaskOnly: false);
                     }
@@ -426,7 +412,7 @@ namespace BeeCore
                                     : MatType.CV_8UC4;
 
                         // Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
-                        using (var m = new Mat(h, w, mt, intpr, s))
+                        using (var m = Mat.FromPixelData(h, w, mt, intpr, s))
                         {
                             // CopyTo hoặc Clone đều OK; Clone gọn hơn:
                             mat = m.Clone();
@@ -724,17 +710,13 @@ namespace BeeCore
         {
              using (Mat m = raw)
                 {
+                    // Giữ nhánh StrongEdges với thresh tuỳ biến; còn lại uỷ thác centralizer
                     switch (methord)
                     {
-                        case MethordEdge.CloseEdges:
-                            return Filters.Edge(m);
-                            break;
-                    case MethordEdge.Binary:
-                       return  Filters.Threshold(m, ThresholdBinary, ThresholdTypes.Binary);
-                        break;
-                    case MethordEdge.StrongEdges:
+                        case MethordEdge.StrongEdges:
                             return Filters.GetStrongEdgesOnly(m, thresh);
-                            break;
+                        default:
+                            return Filters.ApplyEdgeMethod(m, methord, ThresholdBinary);
                     }
                 }
            
@@ -1193,7 +1175,7 @@ namespace BeeCore
                             MatType mt = c == 1 ? MatType.CV_8UC1
                                        : c == 3 ? MatType.CV_8UC3
                                        : MatType.CV_8UC4;
-                            using (var m = new Mat(h, w, mt, intpr, s))
+                            using (var m = Mat.FromPixelData(h, w, mt, intpr, s))
                             {
                                 //    Cv2.ImWrite($"Temp\\Temp"+i+".png", m);
                                 ResultMulti[i].BTemp = m.Clone().ToBitmap();
@@ -1688,7 +1670,7 @@ namespace BeeCore
 
 
 
-                                   //Mat matCrop0 = new Mat(h0, w0, type, ptr, step);
+                                    //Mat matCrop0 = Mat.FromPixelData(h0, w0, type, ptr, step);
                                  
                                    list_Patterns[i].SetRawNoCrop(
                                                    ptr,
@@ -2218,7 +2200,7 @@ namespace BeeCore
                         if (pyResult == null) return;
 
                         byte[] edgeBytes = pyResult.As<byte[]>();
-                        matProcess = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
+                        matProcess = Mat.FromPixelData(height, width, MatType.CV_8UC1, edgeBytes);
                     }
                     finally
                     {

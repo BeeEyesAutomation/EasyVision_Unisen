@@ -257,5 +257,20 @@ namespace BeeCore {
             }
             return ParaCam;
         }
+
+        public static CameraCalibrationConfig CameraCalibration()
+        {
+            try
+            {
+                if (File.Exists("Common\\CameraCalibration.config"))
+                    return Access.LoadCameraCalibration("Common\\CameraCalibration.config");
+            }
+            catch (Exception ex)
+            {
+                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Load CameraCalibration", ex.Message.ToString()));
+            }
+
+            return new CameraCalibrationConfig();
+        }
     }
 }

@@ -28,6 +28,8 @@ using static BeeCore.Algorithm.FilletCornerMeasure;
 using Size = OpenCvSharp.Size;
 namespace BeeCore
 {
+    // Camera owns managed camera lifecycle and frame acquisition dispatch.
+    // UI layers should call through this abstraction instead of native SDK wrappers directly.
     public class Camera
     {
         public bool IsSkip = false; 
@@ -97,16 +99,16 @@ namespace BeeCore
                         try
                         {
                             int[] IP = Global.ParaCommon.CardChoosed.Split('.').Select(int.Parse).ToArray();
-                            return BeeCore.HEROJE.Scan(IP[0], IP[1], IP[2], IP[3]).Split('\n');
+                          //  return BeeCore.HEROJE.Scan(IP[0], IP[1], IP[2], IP[3]).Split('\n');
 
                         }
                         catch (Exception)
                         {
-                            return BeeCore.HEROJE.Scan(192, 168, 2, 1).Split('\n');
+                           // return BeeCore.HEROJE.Scan(192, 168, 2, 1).Split('\n');
                         }
                     }
-                    else
-                        return BeeCore.HEROJE.Scan(192, 168, 2, 1).Split('\n');
+                  //  else
+                      //  return BeeCore.HEROJE.Scan(192, 168, 2, 1).Split('\n');
                     break;
             }
             return new string[1];
@@ -119,11 +121,7 @@ namespace BeeCore
         
         public  void DestroyAll()
         {
-            if (Para.TypeCamera == TypeCamera.TinyIV)
-            {
-                 HEROJE.Disconnect();
-                HEROJE.DisConnect();
-            }
+           
             switch (Para.TypeCamera)
             {
                 case TypeCamera.USB:
@@ -667,7 +665,7 @@ namespace BeeCore
             switch (typeCamera)
             {
                 case TypeCamera.TinyIV:
-                    IsConnected = HEROJE.Connect(0);
+                   
                     return IsConnected;
                     break;
                 case TypeCamera.MVS:
@@ -2204,7 +2202,7 @@ namespace BeeCore
             if (matRaw.IsDisposed) matRaw = new Mat();
             IntPtr intPtr = IntPtr.Zero;
             int rows = 0, cols = 0;
-            int matType = MatType.CV_8UC1;
+            int matType = (int)MatType.CV_8UC1;
 
             try
             {
@@ -2231,7 +2229,7 @@ namespace BeeCore
                             }
                             int w = 0, h = 0, s = 0, c = 0;
                         intPtr = PylonCam.CopyLatestImage(out w, out h, out s, out c);
-                            matType = (c == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
+                            matType = (c == 1) ? (int)(OpenCvSharp.MatType.CV_8UC1) : (int)OpenCvSharp.MatType.CV_8UC3;
                             FrameRate = (int)PylonCam.GetMeasuredFps();
                             matRaw = new Mat(h, w, matType); // ho?c CV_8UC1 n?u Mono
                             if (intPtr == IntPtr.Zero)
@@ -2421,7 +2419,7 @@ namespace BeeCore
             switch (Para.TypeCamera)
             {
                 case TypeCamera.TinyIV:
-                    HEROJE.Light(TypeLight, IsOn);
+                    //HEROJE.Light(TypeLight, IsOn);
                     break;
                 case TypeCamera.MVS:
                     Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
@@ -2439,7 +2437,7 @@ namespace BeeCore
             switch (Para.TypeCamera)
             {
                 case TypeCamera.TinyIV:
-                    HEROJE.SetReSolution(TypeReSolution);
+                //    HEROJE.SetReSolution(TypeReSolution);
                     break;
                 default:
                     break;

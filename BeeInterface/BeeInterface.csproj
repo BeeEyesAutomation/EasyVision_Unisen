@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Ownership: operator-facing WinForms workflows, tool forms, dashboards, and runtime orchestration UI. -->
   <Import Project="..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props" Condition="Exists('..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -81,9 +82,6 @@
     <Reference Include="OpenCvSharp.Extensions">
       <HintPath>..\packages\OpenCvSharp4.Extensions.4.11.0.20250507\lib\net48\OpenCvSharp.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="OpenCvSharp.UserInterface">
-      <HintPath>..\BeeCore\bin\x64\Debug\OpenCvSharp.UserInterface.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -102,6 +100,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppRestart.cs" />
+    <Compile Include="Calibration\FormCameraCalibration.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Class\Cryto.cs" />
     <Compile Include="Class\Decompile.cs" />
     <Compile Include="Class\Func.cs" />
@@ -132,6 +133,7 @@
     </Compile>
     <Compile Include="ConvertImg.cs" />
     <Compile Include="CustomGui.cs" />
+    <Compile Include="EdgeButtonsHelper.cs" />
     <Compile Include="Custom\CustomNumericEx.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -452,11 +454,23 @@
     <Compile Include="Custom\RoiToolbar.Designer.cs">
       <DependentUpon>RoiToolbar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Custom\MaskPainter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Custom\MaskPainter.Designer.cs">
+      <DependentUpon>MaskPainter.cs</DependentUpon>
+    </Compile>
     <Compile Include="Custom\ScoreThresholdBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Custom\ScoreThresholdBar.Designer.cs">
       <DependentUpon>ScoreThresholdBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\Tool2Edge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\Tool2Edge.Designer.cs">
+      <DependentUpon>Tool2Edge.cs</DependentUpon>
     </Compile>
     <Compile Include="Tool\_Base\GroupBToolTabRegistrar.cs" />
     <Compile Include="Tool\_Base\IToolView.cs" />
@@ -526,6 +540,12 @@
     </Compile>
     <Compile Include="Tool\ToolMultiOnnx.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolSegmentAI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolSegmentAI.Designer.cs">
+      <DependentUpon>ToolSegmentAI.cs</DependentUpon>
     </Compile>
     <Compile Include="Tool\ToolMultiOnnx.Designer.cs">
       <DependentUpon>ToolMultiOnnx.cs</DependentUpon>
@@ -767,6 +787,9 @@
     <EmbeddedResource Include="Custom\RoiToolbar.resx">
       <DependentUpon>RoiToolbar.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Custom\MaskPainter.resx">
+      <DependentUpon>MaskPainter.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Custom\ScoreThresholdBar.resx">
       <DependentUpon>ScoreThresholdBar.cs</DependentUpon>
     </EmbeddedResource>
@@ -788,6 +811,9 @@
     <EmbeddedResource Include="Tool\ToolAutoTrig.resx">
       <DependentUpon>ToolAutoTrig.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Tool\Tool2Edge.resx">
+      <DependentUpon>Tool2Edge.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolMatchingShape.resx">
       <DependentUpon>ToolMatchingShape.cs</DependentUpon>
     </EmbeddedResource>
@@ -796,6 +822,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolMultiOnnx.resx">
       <DependentUpon>ToolMultiOnnx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolSegmentAI.resx">
+      <DependentUpon>ToolSegmentAI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolMultiPattern.resx">
       <DependentUpon>ToolMultiPattern.cs</DependentUpon>
@@ -848,15 +877,18 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BeeCore\BeeCore.csproj">
-      <Project>{ac6e4007-f2a0-49f3-b777-dde4c58c5adc}</Project>
+      <Project>
+        <!-- Ownership: operator-facing WinForms workflows, tool forms, dashboards, and runtime orchestration UI. -->{ac6e4007-f2a0-49f3-b777-dde4c58c5adc}</Project>
       <Name>BeeCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\BeeGlobal\BeeGlobal.csproj">
-      <Project>{8caf143e-0de7-4856-b0b8-fd22932a3c22}</Project>
+      <Project>
+        <!-- Ownership: operator-facing WinForms workflows, tool forms, dashboards, and runtime orchestration UI. -->{8caf143e-0de7-4856-b0b8-fd22932a3c22}</Project>
       <Name>BeeGlobal</Name>
     </ProjectReference>
     <ProjectReference Include="..\Pattern\Pattern.vcxproj">
-      <Project>{39dd1722-85fe-45b8-8954-88c4146bf8bf}</Project>
+      <Project>
+        <!-- Ownership: operator-facing WinForms workflows, tool forms, dashboards, and runtime orchestration UI. -->{39dd1722-85fe-45b8-8954-88c4146bf8bf}</Project>
       <Name>BeeCpp</Name>
     </ProjectReference>
   </ItemGroup>

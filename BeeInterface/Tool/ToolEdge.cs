@@ -43,11 +43,18 @@ namespace BeeInterface
         }
         private void InvalidateOwnerToolCache() => _ownerTool = null;
         #endregion
+        private EdgeButtonsHelper.ExtraButtons _extraEdgeBtns;
+
         public ToolEdge( )
         {
             InitializeComponent();
             if (Propety == null)
                 Propety = new Edge();
+            _extraEdgeBtns = EdgeButtonsHelper.Attach(tableLayoutPanel15, m =>
+            {
+                Propety.MethordEdge = m;
+                layThreshod.Enabled = false;
+            });
         }
         Stopwatch timer = new Stopwatch();
         public BackgroundWorker worker = new BackgroundWorker();
@@ -91,22 +98,21 @@ namespace BeeInterface
                 AdjScale.Value = state.Scale;
                 AdjAngleRange.Value = state.AngleRange;
                 trackMinInlier.Value = state.MinInliers;
-                btnStable.IsCLick = state.MethordEdge == MethordEdge.Stable ? true : false;
-               
+                btnStrongEdge.IsCLick = btnCloseEdge.IsCLick = btnBinary.IsCLick =
+                    btnInvert.IsCLick = btnStable.IsCLick = false;
+                _extraEdgeBtns?.ResetAll();
+                layThreshod.Enabled = false;
+
                 switch (state.MethordEdge)
                 {
-                    case MethordEdge.StrongEdges:
-                        btnStrongEdge.IsCLick = true; layThreshod.Enabled = false;
-                        break;
-                    case MethordEdge.CloseEdges:
-                        btnCloseEdge.IsCLick = true; layThreshod.Enabled = false;
-                        break;
-                    case MethordEdge.Binary:
-                        btnBinary.IsCLick = true; layThreshod.Enabled = true;
-                        break;
-                    case MethordEdge.InvertBinary:
-                        btnInvert.IsCLick = true; layThreshod.Enabled = true;
-                        break;
+                    case MethordEdge.StrongEdges:   btnStrongEdge.IsCLick = true; break;
+                    case MethordEdge.CloseEdges:    btnCloseEdge.IsCLick = true; break;
+                    case MethordEdge.Stable:        btnStable.IsCLick = true; break;
+                    case MethordEdge.Binary:        btnBinary.IsCLick = true; layThreshod.Enabled = true; break;
+                    case MethordEdge.InvertBinary:  btnInvert.IsCLick = true; layThreshod.Enabled = true; break;
+                    case MethordEdge.UltraThin:
+                    case MethordEdge.Adaptive:
+                    case MethordEdge.DenoiseFirst:  _extraEdgeBtns?.Highlight(state.MethordEdge); break;
                 }
                 if(state.LineOrientation==LineOrientation.Horizontal)
                 {
@@ -140,8 +146,19 @@ namespace BeeInterface
                 AdjClearBig.Enabled = state.IsClearNoiseBig;
                 AdjOpen.Enabled = state.IsOpen;
                 AdjMorphology.Enabled = state.IsClose;
-             
-           
+
+                // Detect mode
+                bool isPair = Propety.DetectMode == EdgeDetectMode.ParallelPair;
+                btnSingleLine.IsCLick = !isPair;
+                btnParallelPair.IsCLick = isPair;
+                btn9.Visible = isPair;
+                layParallelOpts.Visible = false;
+
+                AdjToleranceDeg.Value = Propety.ParallelToleranceDeg;
+                AdjMinGapPx.Value = Propety.MinGapPx;
+                AdjMaxGapPx.Value = Propety.MaxGapPx;
+                AdjMinOverlap.Value = Propety.MinOverlapRatio;
+                AdjContiguousGap.Value = Propety.ContiguousGapPx;
             }
             catch (Exception ex)
             {
@@ -678,6 +695,37 @@ namespace BeeInterface
             layDirection.Visible = !btn3.IsCLick;
         }
 
-       
+        private void btn8_Click(object sender, EventArgs e)
+        {
+            layDetectMode.Visible = !btn8.IsCLick;
+        }
+
+        private void btnSingleLine_Click(object sender, EventArgs e)
+        {
+            Propety.DetectMode = EdgeDetectMode.SingleLine;
+            btnSingleLine.IsCLick = true;
+            btnParallelPair.IsCLick = false;
+            btn9.Visible = false;
+            layParallelOpts.Visible = false;
+        }
+
+        private void btnParallelPair_Click(object sender, EventArgs e)
+        {
+            Propety.DetectMode = EdgeDetectMode.ParallelPair;
+            btnSingleLine.IsCLick = false;
+            btnParallelPair.IsCLick = true;
+            btn9.Visible = true;
+        }
+
+        private void btn9_Click(object sender, EventArgs e)
+        {
+            layParallelOpts.Visible = !btn9.IsCLick;
+        }
+
+        private void AdjToleranceDeg_ValueChanged(float v) => Propety.ParallelToleranceDeg = v;
+        private void AdjMinGapPx_ValueChanged(float v) => Propety.MinGapPx = v;
+        private void AdjMaxGapPx_ValueChanged(float v) => Propety.MaxGapPx = v;
+        private void AdjMinOverlap_ValueChanged(float v) => Propety.MinOverlapRatio = v;
+        private void AdjContiguousGap_ValueChanged(float v) => Propety.ContiguousGapPx = v;
     }
 }

@@ -1,5 +1,6 @@
 using BeeGlobal;
 using System;
+using System.Collections.Generic;
 
 namespace BeeCore.Funtion.Engines
 {
@@ -81,18 +82,27 @@ namespace BeeCore.Funtion.Engines
         public Results Results { get; set; }
         public float ScoreResult { get; set; }
         public int PixelResult { get; set; }
+        public ColorAreaCheckMode CheckMode { get; set; }
+        public ColorAreaScanDirection ScanDirection { get; set; }
+        public IList<ColorAreaRegionResult> RegionResults { get; set; }
 
         public static ColorAreaRunResult From(ColorArea propety)
         {
             if (propety == null)
                 throw new ArgumentNullException("propety");
 
+            propety.EnsureMultiListModel();
             PropetyTool owner = Common.TryGetTool(propety.IndexThread, propety.Index);
             return new ColorAreaRunResult
             {
                 Results = owner != null ? owner.Results : Results.None,
                 ScoreResult = owner != null ? owner.ScoreResult : 0,
-                PixelResult = propety.pxRS
+                PixelResult = propety.pxRS,
+                CheckMode = propety.CheckMode,
+                ScanDirection = propety.ScanDirection,
+                RegionResults = propety.MultiResult != null && propety.MultiResult.Regions != null
+                    ? new List<ColorAreaRegionResult>(propety.MultiResult.Regions)
+                    : new List<ColorAreaRegionResult>()
             };
         }
     }

@@ -16,6 +16,8 @@ using System.Windows.Forms;
 
 namespace BeeInterface
 {
+    // GeneralSetting owns application configuration UI handlers; keep persistent
+    // settings models and device/runtime behavior outside this form.
     public partial class GeneralSetting : Form
     {
         public GeneralSetting()

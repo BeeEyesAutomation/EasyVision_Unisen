@@ -1,5 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Ownership: WinForms application entrypoint and composition root; depends on UI/core projects but should not own vision or hardware implementation details. -->
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -166,11 +167,13 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="BeeInterface\BeeInterface.csproj">
-      <Project>{371880B0-E9F2-464B-A521-DC6D4F4A6C0D}</Project>
+      <Project>
+  <!-- Ownership: WinForms application entrypoint and composition root; depends on UI/core projects but should not own vision or hardware implementation details. -->{371880B0-E9F2-464B-A521-DC6D4F4A6C0D}</Project>
       <Name>BeeInterface</Name>
     </ProjectReference>
     <ProjectReference Include="BeeUi\BeeUi.csproj">
-      <Project>{1adaceb7-cb42-4600-adab-d5223651fe9a}</Project>
+      <Project>
+  <!-- Ownership: WinForms application entrypoint and composition root; depends on UI/core projects but should not own vision or hardware implementation details. -->{1adaceb7-cb42-4600-adab-d5223651fe9a}</Project>
       <Name>BeeUi</Name>
     </ProjectReference>
   </ItemGroup>

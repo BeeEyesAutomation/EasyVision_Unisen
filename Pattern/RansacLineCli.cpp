@@ -14,6 +14,22 @@ static void ApplyCliOpts(const DebugDrawOptionsCli^ in, BeeCpp::DebugDrawOptions
     out.fontScale = in->FontScale;
     out.fontThickness = in->FontThickness;
 }
+
+static Line2DCli ToCliLine(const BeeCpp::LineResult& res)
+{
+    Line2DCli ret{};
+    ret.Found = res.found;
+    ret.X1 = res.p1.x; ret.Y1 = res.p1.y;
+    ret.X2 = res.p2.x; ret.Y2 = res.p2.y;
+    ret.Vx = res.line[0]; ret.Vy = res.line[1];
+    ret.X0 = res.line[2]; ret.Y0 = res.line[3];
+    ret.Inliers = res.inliers;
+    ret.Score = res.score;
+    ret.LengthPx = res.length_px;
+    ret.LengthMm = res.length_mm;
+    return ret;
+}
+
 static LineDirNative ToNative(LineDirectionMode m)
 {
     switch (m)
@@ -99,6 +115,58 @@ Line2DCli RansacLine::FindBestLine(
 
     return ret;
 }
+
+ParallelLinesCli RansacLine::FindLongestParallelPair(
+    IntPtr edgeData,
+    int width,
+    int height,
+    int stride,
+    int iterations,
+    float threshold,
+    int maxPoints,
+    int seed,
+    float mmPerPixel,
+    float minLengthRatio,
+    float parallelToleranceDeg,
+    float minGapPx,
+    float maxGapPx,
+    float minOverlapRatio,
+    float contiguousGapPx)
+{
+    ParallelLinesCli ret{};
+    ret.Found = false;
+
+    if (edgeData == IntPtr::Zero || width <= 1 || height <= 1 || stride < width)
+        return ret;
+
+    cv::Mat edges(height, width, CV_8UC1, edgeData.ToPointer(), (size_t)stride);
+
+    auto res = RansacLineCore::FindLongestParallelPair(
+        edges,
+        iterations,
+        threshold,
+        maxPoints,
+        (unsigned)seed,
+        mmPerPixel,
+        minLengthRatio,
+        parallelToleranceDeg,
+        minGapPx,
+        maxGapPx,
+        minOverlapRatio,
+        contiguousGapPx);
+
+    if (!res.found) return ret;
+
+    ret.Found = true;
+    ret.LineA = ToCliLine(res.lineA);
+    ret.LineB = ToCliLine(res.lineB);
+    ret.CenterLine = ToCliLine(res.centerLine);
+    ret.GapPx = res.gap_px;
+    ret.GapMm = res.gap_mm;
+    ret.AngleDeg = res.angle_deg;
+    return ret;
+}
+
 //Line2DCli RansacLine::FindBestLine(
 //    IntPtr edgeData, int width, int height, int stride,
 //    int iterations, float threshold, int maxPoints, int seed,

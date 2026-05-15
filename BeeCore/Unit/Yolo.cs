@@ -30,7 +30,7 @@ using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using static LibUsbDotNet.Main.UsbTransferQueue;
+
 using static OpenCvSharp.ML.DTrees;
 using static System.Windows.Forms.MonthCalendar;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
@@ -39,6 +39,8 @@ using Point = System.Drawing.Point;
 namespace BeeCore
 {
     [Serializable()]
+    // Large-file guide: keep model/runtime interop, ROI filtering, and result
+    // scoring changes localized in this class until the YOLO unit is split.
     public class Yolo
     {
         public int _Percent = 0;//note
@@ -519,7 +521,7 @@ namespace BeeCore
                                    : (c == 3) ? MatType.CV_8UC3
                                               : MatType.CV_8UC4;
 
-                        using (var mNative = new Mat(h, w, mt, ptr, s))
+                        using (var mNative = Mat.FromPixelData(h, w, mt, ptr, s))
                         {
                             matProcess = mNative.Clone(); // bây gi? d? li?u dã thu?c v? OpenCV (managed)
                         }
@@ -1287,13 +1289,24 @@ namespace BeeCore
                                                                 listRect = ResultFilter.FilterRectRotate(listRect, ThreshOverlap);
                                                                 break;
                                                         }
-                                                        var bestItem = listRect
+                                                        var filteredItems = listRect
                                                             .Where(x => x != null && x.rot != null)
                                                             .OrderByDescending(x => x.Score)
-                                                            .FirstOrDefault();
+                                                            .ToList();
 
-                                                        if (bestItem != null)
-                                                            resultTemp.Add(bestItem);
+                                                        if (filteredItems.Count > 0)
+                                                        {
+                                                            resultTemp.AddRange(filteredItems);
+                                                        }
+                                                        else
+                                                        {
+                                                            var item = new BeeCore.ResultItem("NG");
+                                                            item.rot = roi;
+                                                            item.IsOK = false;
+                                                            item.Score = 0;
+                                                            item.IndexScanBox = IndexScanBox;
+                                                            resultTemp.Add(item);
+                                                        }
                                                     }
                                                     else
                                                     {
@@ -2007,7 +2020,6 @@ namespace BeeCore
 
                                 if (item.IsWidth)
                                     ok &= r.rot._rect.Width >= item.ValueWidth;
-
                                 if (item.IsHeight)
                                     ok &= r.rot._rect.Height >= item.ValueHeight;
 
@@ -3135,7 +3147,7 @@ namespace BeeCore
                     i++;
                     continue;
                 }
-                Color clShow = Global.ParaShow.ColorNone;
+                Color clShow = Global.ParaShow.ColorNG;
 
                 if(IsCropSingle)
                 {
@@ -3226,7 +3238,7 @@ namespace BeeCore
                             );
 
                     }
-                    if (item.IsHeight || item.IsWidth)
+                    if (item.IsHeight)
                     {
                         //mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                         //gc.Transform = mat;
@@ -3259,15 +3271,46 @@ namespace BeeCore
                         //Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(ResultItem[i].Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 20, Global.ParaShow.IsShowDetail);//("+Math.Round( ResultItem[i].Percent) + "%)
                         gc.ResetTransform();
                     }
-
+                    else if ( item.IsWidth)
+                    {
+                        //mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                        //gc.Transform = mat;
+                        mat.Rotate(rs.rot._rectRotation);
+                        gc.Transform = mat;
+                       
+                        System.Drawing.Point point1 = new System.Drawing.Point((int)(rs.rot._PosCenter.X - rs.rot._rect.Width / 2), (int)(rs.rot._PosCenter.Y));
+                        System.Drawing.Point point2 = new System.Drawing.Point((int)(rs.rot._PosCenter.X + rs.rot._rect.Width / 2), (int)(rs.rot._PosCenter.Y));
+                        System.Drawing.Point point3 = new System.Drawing.Point((int)(rs.rot._PosCenter.X - rs.rot._rect.Width / 2), (int)(rs.rot._PosCenter.Y - rs.rot._rect.Height / 2));
+                        System.Drawing.Point point4 = new System.Drawing.Point((int)(rs.rot._PosCenter.X - rs.rot._rect.Width / 2), (int)(rs.rot._PosCenter.Y + rs.rot._rect.Height / 2));
+                        System.Drawing.Point point5 = new System.Drawing.Point((int)(rs.rot._PosCenter.X + rs.rot._rect.Width / 2), (int)(rs.rot._PosCenter.Y - rs.rot._rect.Height / 2));
+                        System.Drawing.Point point6 = new System.Drawing.Point((int)(rs.rot._PosCenter.X + rs.rot._rect.Width / 2), (int)(rs.rot._PosCenter.Y + rs.rot._rect.Height / 2));
+                        gc.DrawLine(new Pen(clShow, 8), point1, point2);
+                        gc.DrawLine(new Pen(clShow, 8), point3, point4);
+                        gc.DrawLine(new Pen(clShow, 8), point5, point6);
+                        mat.Translate(rs.rot._PosCenter.X, rs.rot._PosCenter.Y);
+                        gc.Transform = mat;
+                        String content = (int)Math.Round(rs.rot._rect.Width) + " px";
+                        font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+                        SizeF sz1 = gc.MeasureString(content, font);
+                        gc.DrawString(content, font, new SolidBrush(Global.ParaShow.ColorInfor), new System.Drawing.Point((int)(rs.rot._rect.X + rs.rot._rect.Width / 2), (int)(rs.rot._rect.Y + rs.rot._rect.Height / 2 - sz1.Height / 2)));
+                        String label = rs.Name;
+                        sz1 = gc.MeasureString(label, font);
+                        gc.FillRectangle(new SolidBrush(clShow), new RectangleF((int)(rs.rot._rect.X), (int)(rs.rot._rect.Y - sz1.Height - 2), sz1.Width, sz1.Height + 4));
+                        gc.DrawString(label, font, new SolidBrush(Color.White), new System.Drawing.Point((int)(rs.rot._rect.X), (int)(rs.rot._rect.Y - sz1.Height - 2)));
+                        //String valueScore = Math.Round(ResultItem[i].Score, 1) + "%";
+                        //if (!Global.ParaShow.IsShowScore) valueScore = "";
+                        //if (!Global.ParaShow.IsShowLabel) label = "";
+                        //Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(ResultItem[i].Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 20, Global.ParaShow.IsShowDetail);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        gc.ResetTransform();
+                    }
                     else
                     {
 
                         //  mat = new Matrix();
                         //mat = new Matrix();
-                        if(IsCropSingle)
+                        if (IsCropSingle)
                         {
-                            if(rs.IndexScanBox < item.ListInsideBox.Count())
+                            if (rs.IndexScanBox < item.ListInsideBox.Count())
                             {
                                 RectRotate rectRotate = item.ListInsideBox[rs.IndexScanBox];
                                 mat.Translate(rectRotate._PosCenter.X, rectRotate._PosCenter.Y);
@@ -3281,36 +3324,36 @@ namespace BeeCore
                         mat.Rotate(rs.rot._rectRotation);
                         gc.Transform = mat;
                         if (Global.ParaShow.IsShowPostion)
-                            {
-                                int min = (int)Math.Min(rs.rot._rect.Width / 4, rs.rot._rect.Height / 4);
-                                Draws.Plus(gc, 0, 0, min, cl, Global.ParaShow.ThicknessLine);
-                                String sPos = "X,Y,A _ " + (int)Math.Round(rs.rot._PosCenter.X) + "," + (int)Math.Round(rs.rot._PosCenter.Y) + "," + (int)Math.Round(rs.rot._rectRotation);
+                        {
+                            int min = (int)Math.Min(rs.rot._rect.Width / 4, rs.rot._rect.Height / 4);
+                            Draws.Plus(gc, 0, 0, min, cl, Global.ParaShow.ThicknessLine);
+                            String sPos = "X,Y,A _ " + (int)Math.Round(rs.rot._PosCenter.X) + "," + (int)Math.Round(rs.rot._PosCenter.Y) + "," + (int)Math.Round(rs.rot._rectRotation);
 
-                                gc.DrawString(sPos, font, new SolidBrush(Global.ParaShow.ColorInfor), new PointF(5, 5));
+                            gc.DrawString(sPos, font, new SolidBrush(Global.ParaShow.ColorInfor), new PointF(5, 5));
 
-                            }
+                        }
 
 
                         //  gc.Transform = mat;
 
-                        if (!Global.IsRun  || Global.ParaShow.IsShowDetail)
+                        if (!Global.IsRun || Global.ParaShow.IsShowDetail)
                             if (rs.matProcess != null && !rs.matProcess.Empty())
                             {
                                 Draws.DrawMatInRectRotateNotMatrix(gc, rs.matProcess, rs.rot, clShow, Global.ParaShow.Opacity / 100.0f);
 
                             }
                         font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
-                        String label =  rs.Name;
+                        String label = rs.Name;
                         String valueScore = (int)Math.Round(rs.Score) + "%";
                         if (!Global.ParaShow.IsShowScore) valueScore = "";
                         if (!Global.ParaShow.IsShowLabel) label = "";
 
-                        if(item.IsMinColor)
-                        Draws.Box3Label(gc, rs.rot, label, valueScore, (int)Math.Round((double)rs.ValueColor) + "px", font, clShow, brushText, 30,Global.ParaShow.ThicknessLine,false, Global.ParaShow.FontSize, 1,true);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        if (item.IsMinColor)
+                            Draws.Box3Label(gc, rs.rot, label, valueScore, (int)Math.Round((double)rs.ValueColor) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
                         else if (item.IsArea)
-                        Draws.Box3Label(gc, rs.rot, label, valueScore, (int)Math.Round(rs.Area) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
+                            Draws.Box3Label(gc, rs.rot, label, valueScore, (int)Math.Round(rs.Area) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, true);//("+Math.Round( ResultItem[i].Percent) + "%)
                         else
-                        Draws.Box3Label(gc, rs.rot, label, valueScore, (int)Math.Round(rs.Area) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
+                            Draws.Box3Label(gc, rs.rot, label, valueScore, (int)Math.Round(rs.Area) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, false, Global.ParaShow.FontSize, 1, false);//("+Math.Round( ResultItem[i].Percent) + "%)
                         gc.ResetTransform();
 
                     }

@@ -98,7 +98,7 @@ namespace BeeCore.Algorithm
                 {
                     L = Lrefit,
                     Inliers = inliers,
-                    AngleDeg = LineDirectionDeg(Lrefit)
+                    AngleDeg = ContourGeometry.LineDirectionDeg(Lrefit)
                 });
 
                 // loại bỏ inliers để tìm line khác
@@ -168,7 +168,7 @@ namespace BeeCore.Algorithm
 
                 // (4) dựng line còn lại: ÉP 90° với best và đi qua farP
                 var other = BuildPerpLineThroughPoint(best.L, farP);
-                var otherCand = new LineCandidate { L = other, AngleDeg = LineDirectionDeg(other) };
+                var otherCand = new LineCandidate { L = other, AngleDeg = ContourGeometry.LineDirectionDeg(other) };
 
                 // (5) gán nhãn H/V + ép giao đúng farP cho line tương ứng
                 if (IsHorizontal(best) && IsVertical(otherCand))
@@ -205,7 +205,7 @@ namespace BeeCore.Algorithm
                         var ci = cands[i];
                         var cj = cands[j];
 
-                        double angDiff90 = AngleDiffTo90(ci.L, cj.L);
+                        double angDiff90 = ContourGeometry.AngleDiffTo90(ci.L, cj.L);
                         if (angDiff90 > 30.0) continue;
 
                         int sumInliers = ci.Count + cj.Count;
@@ -289,8 +289,8 @@ namespace BeeCore.Algorithm
             if (axis == AxisOption.OnlyY) { dx = 0; sx = 0; }
 
             // Độ dài cung ngắn hơn
-            double AI = ArcLengthBetween(contour, A, I);
-            double BI = ArcLengthBetween(contour, B, I);
+            double AI = ContourGeometry.ArcLengthBetween(contour, A, I);
+            double BI = ContourGeometry.ArcLengthBetween(contour, B, I);
 
             // Khoảng cách đoạn thẳng AO, BO
             double AO = Math.Sqrt((A.X - O.X) * (A.X - O.X) + (A.Y - O.Y) * (A.Y - O.Y));
@@ -451,7 +451,7 @@ namespace BeeCore.Algorithm
             foreach (var c in cands)
             {
                 if (ReferenceEquals(c, best)) continue;
-                double angDiff90 = AngleDiffTo90(best.L, c.L);
+                double angDiff90 = ContourGeometry.AngleDiffTo90(best.L, c.L);
                 if (angDiff90 < bestAngDiff)
                 {
                     bestAngDiff = angDiff90;
@@ -478,29 +478,6 @@ namespace BeeCore.Algorithm
                 lineV = ReferenceEquals(hLine, best) ? bestOther.L : best.L;
             }
             foundPair = true;
-        }
-
-        private double LineDirectionDeg(LineAB l)
-        {
-            var dx = l.P2.X - l.P1.X;
-            var dy = l.P2.Y - l.P1.Y;
-            double a = Math.Atan2(dy, dx) * 180.0 / Math.PI;
-            if (a < 0) a += 180.0;
-            return a;
-        }
-
-        private double AngleDiffTo90(LineAB a, LineAB b)
-        {
-            var v1 = new Point2f(a.P2.X - a.P1.X, a.P2.Y - a.P1.Y);
-            var v2 = new Point2f(b.P2.X - b.P1.X, b.P2.Y - b.P1.Y);
-            double dot = v1.X * v2.X + v1.Y * v2.Y;
-            double n1 = Math.Sqrt(v1.X * v1.X + v1.Y * v1.Y);
-            double n2 = Math.Sqrt(v2.X * v2.X + v2.Y * v2.Y);
-            if (n1 < 1e-6 || n2 < 1e-6) return 0;
-            double c = dot / (n1 * n2);
-            c = Math.Max(-1, Math.Min(1, c));
-            double ang = Math.Acos(c) * 180.0 / Math.PI; // 0..180
-            return Math.Abs(ang - 90.0);
         }
 
         private double NormalizeDeg(double a)
@@ -688,9 +665,6 @@ namespace BeeCore.Algorithm
             return n;
         }
 
-        private static double DistancePointLine(Point2f p, LineAB L)
-            => Math.Abs(L.A * p.X + L.B * p.Y + L.C);
-
         private static Point2f FootOfPerpendicular(Point2f p, LineAB L)
         {
             float d = L.A * p.X + L.B * p.Y + L.C;
@@ -730,22 +704,9 @@ namespace BeeCore.Algorithm
             return false;
         }
 
-        private static List<Point2f> GetIntersections(LineAB L, Point[] contour)
-        {
-            var list = new List<Point2f>();
-            for (int i = 0; i < contour.Length; i++)
-            {
-                var p1 = (Point2f)contour[i];
-                var p2 = (Point2f)contour[(i + 1) % contour.Length];
-                if (LineSegmentIntersect(L, p1, p2, out var X))
-                    list.Add(X);
-            }
-            return list;
-        }
-
         private Point2f NearestIntersectionToPoint(LineAB L, Point[] contour, Point2f P0, out bool ok)
         {
-            var ints = GetIntersections(L, contour);
+            var ints = ContourGeometry.GetIntersections(L, contour);
             ok = ints.Count > 0;
             if (!ok) return default;
 
@@ -777,41 +738,6 @@ namespace BeeCore.Algorithm
             }
             if (best == double.MaxValue) return ClosestPointToLine(contour, L);
             return bestP;
-        }
-
-        private int NearestIndex(Point[] contour, Point2f P)
-        {
-            int idx = -1; double best = double.MaxValue;
-            for (int i = 0; i < contour.Length; i++)
-            {
-                double dx = contour[i].X - P.X, dy = contour[i].Y - P.Y;
-                double d2 = dx * dx + dy * dy;
-                if (d2 < best) { best = d2; idx = i; }
-            }
-            return idx;
-        }
-
-        private double ArcLengthBetween(Point[] contour, Point2f P1, Point2f P2)
-        {
-            int i1 = NearestIndex(contour, P1);
-            int i2 = NearestIndex(contour, P2);
-            if (i1 < 0 || i2 < 0) return double.NaN;
-
-            double len1 = 0;
-            for (int i = i1; i != i2; i = (i + 1) % contour.Length)
-            {
-                var a = contour[i]; var b = contour[(i + 1) % contour.Length];
-                len1 += Math.Sqrt((a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y));
-            }
-
-            double len2 = 0;
-            for (int i = i2; i != i1; i = (i + 1) % contour.Length)
-            {
-                var a = contour[i]; var b = contour[(i + 1) % contour.Length];
-                len2 += Math.Sqrt((a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y));
-            }
-
-            return Math.Min(len1, len2);
         }
 
         private void DrawLine(Mat img, LineAB L, Scalar color, int thickness)

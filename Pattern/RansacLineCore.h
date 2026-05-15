@@ -14,6 +14,16 @@ namespace BeeCpp {
         float         length_px = 0.f;   // độ dài theo pixel
         float         length_mm = 0.f;   // độ dài theo mm (= length_px * mmPerPixel)
     };
+
+    struct ParallelLinePairResult {
+        bool       found = false;
+        LineResult lineA;
+        LineResult lineB;
+        LineResult centerLine;
+        float      gap_px = 0.f;
+        float      gap_mm = 0.f;
+        float      angle_deg = 0.f;
+    };
     enum LineDirNative
     {
         Any = 0,        // như hiện tại
@@ -52,6 +62,21 @@ namespace BeeCpp {
             float angleCenterDeg = 0.0f,   // dùng cho AngleRange
             float angleToleranceDeg = 10.0f,
             LineScanPriority scanMode = LineScanPriority::None // <<< NEW
+        );
+
+        static ParallelLinePairResult FindLongestParallelPair(
+            const cv::Mat& edges8u1,
+            int iterations = 3000,
+            float threshold = 1.5f,
+            int maxPoints = 12000,
+            unsigned seed = 987654321u,
+            float mmPerPixel = 1.0f,
+            float minLengthRatio = 0.20f,
+            float parallelToleranceDeg = 5.0f,
+            float minGapPx = 3.0f,
+            float maxGapPx = 0.0f,
+            float minOverlapRatio = 0.25f,
+            float contiguousGapPx = 25.0f
         );
 
         // Overload cũ (tương thích ngược)

@@ -32,6 +32,7 @@ namespace BeeCore
     [Serializable()]
     public class Pitch
     {
+        public int MaxThread = 0;
         [NonSerialized]
         public Line2D Line;
         public object Clone()
@@ -44,6 +45,8 @@ namespace BeeCore
         public int Index = -1;
         [NonSerialized]
         public BeeCppCli.PitchCliResult PitchResult;
+        [NonSerialized]
+        public BeeCppCli.PinPitchCliResult PinPitchResult;
         [NonSerialized]
         public Mat matProcess = new Mat();
         public RectRotate rotArea, rotCheck, rotCrop, rotMask;
@@ -60,6 +63,61 @@ namespace BeeCore
         [NonSerialized]
        // public ParallelGapDetector ParallelGapDetector;
         public BeeCppCli.PitchCli PitchMeasure;
+        [NonSerialized]
+        public BeeCppCli.PinPitchCli PinPitchMeasure;
+        public PitchMeasureMode MeasureMode = PitchMeasureMode.PeakRoot;
+        public int ExpectedPinCount = 4;
+        public PinPitchArrangeMode PinArrangeMode = PinPitchArrangeMode.X;
+        public bool UsePinAutoThreshold = true;
+        public bool UseProjectedPitch = true;
+        public int PinManualThreshold = 180;
+        public double PinMinAreaPx = 12.0;
+        public double PinMaxAreaRatio = 0.10;
+        public double PinMinAspect = 0.45;
+        public double PinMaxAspect = 2.20;
+        public double PinMinFillRatio = 0.20;
+        public bool UsePinOutlineCenter = true;
+        public int PinOutlineThresholdOffset = 14;
+        public int PinOutlineClose = 7;
+        public int PinOutlineDilate = 5;
+        public int PinOutlinePadding = 8;
+        public int PinMaxOutlineExpand = 90;
+        // Bug B+C fix: top-hat tách pin khỏi background không thuần đen (halo / phản chiếu).
+        // Default OFF — chỉ bật khi có background xám/halo thực sự, vì top-hat có thể
+        // loại bỏ pin nếu kernel nhỏ hơn kích thước pin. Khi bật, để TopHatKernelPx=0
+        // cho auto, hoặc set thủ công > kích thước pin lớn nhất.
+        public bool UseTopHat = false;
+        public int TopHatKernelPx = 0;       // 0 = auto = max(81, min(image dim) * 0.6)
+        // Bug C+D fix: reject blob halo (solidity < threshold). Pin vuông thật ~ 1.0;
+        // halo merge với pin -> contour lồi lõm -> solidity giảm.
+        public double MinSolidity = 0.80;    // 0 = không filter
+        // Bug B fix: kẹp dilate <= 3 khi outline mode để không phình halo.
+        // Default OFF để giữ behavior cũ; bật khi thấy box detect lan ra ngoài pin.
+        public bool ReduceDilateForOutline = false;
+        // Bug 1+3+4 fix (2026-05-08 runtime): mask từ Canny edges thay threshold pixel sáng.
+        // Threshold blob bias về vùng phản chiếu + bóng mờ; Canny chỉ phản hồi gradient sắc
+        // -> theo biên thật của pin pad, bóng mờ tự bị loại (gradient yếu).
+        public bool UseEdgeBoundary = true;
+        public int EdgeCannyLow = 20;
+        public int EdgeCannyHigh = 60;
+        // Bug 1+2 fix: center từ midpoint của projection bounds trên 2 trục minAreaRect.
+        // Robust với pin xéo nhiều hướng + bright spot không nằm ở giữa pin.
+        public bool UseEdgeGeometryCenter = true;
+        // Runtime trial 2 fix: pin pad contrast yếu -> mask global chỉ bắt bright core,
+        // box quá nhỏ. Refinement quanh seed bằng CLAHE+Sobel để tìm full pad boundary.
+        public bool UseGradientRefinement = true;
+        public int GradientPatchMargin = 60;
+        public int GradientThreshold = 25;
+        public double ClaheClipLimit = 3.0;
+        public int ClaheTileSize = 8;
+        public float NominalPitchMm = 0;
+        public float PitchToleranceMm = 0.05f;   // legacy mm-based tolerance (giữ để backward-compat, không còn dùng cho score)
+        public bool ShowPinDebugOverlay = true;
+        // ===== New options =====
+        // Vẽ khoảng cách Pin-Pin: Relative (chiếu lên trục hàng pin) | Absolute (Euclidean)
+        public PinDistanceMode PinDistanceMode = PinDistanceMode.Relative;
+        // Dùng Global.Config.Scale (chung) thay vì Pitch.Scale (per-tool, cũ)
+        public bool UseSharedScale = false;
         public bool IsEnCrestPitch = true;
         public bool IsEnRootPitch = true;
         public bool IsEnCrestHeight = true;
@@ -92,8 +150,34 @@ namespace BeeCore
         public float TempHeightRoot = 0;
         public float TempCountCrest = 0;
         public float TempCountRoot = 0;
+        public float Pitch12Mm = 0;
+        public float Pitch23Mm = 0;
+        public float Pitch34Mm = 0;
+        public float SpanP1P4Mm = 0;
         public void Default()
         {
+            MeasureMode = PitchMeasureMode.PeakRoot;
+            ExpectedPinCount = 4;
+            PinArrangeMode = PinPitchArrangeMode.X;
+            UsePinAutoThreshold = true;
+            UseProjectedPitch = true;
+            PinManualThreshold = 180;
+            PitchToleranceMm = 0.05f;
+            UsePinOutlineCenter = true;
+            PinOutlineThresholdOffset = 14;
+            PinOutlineClose = 7;
+            PinOutlineDilate = 5;
+            PinOutlinePadding = 8;
+            PinMaxOutlineExpand = 90;
+            UseEdgeBoundary = true;
+            EdgeCannyLow = 20;
+            EdgeCannyHigh = 60;
+            UseEdgeGeometryCenter = true;
+            UseGradientRefinement = true;
+            GradientPatchMargin = 60;
+            GradientThreshold = 25;
+            ClaheClipLimit = 3.0;
+            ClaheTileSize = 8;
             Magin = 0;
             ValueGau = 3;
             Compare = Compares.Equal;
@@ -150,21 +234,13 @@ namespace BeeCore
                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
 
 
-                    switch (MethordEdge)
+                    if (MeasureMode == PitchMeasureMode.PinPitch)
                     {
-                        case MethordEdge.CloseEdges:
-                            matProcess = Filters.Edge(matCrop);
-                            break;
-                        case MethordEdge.StrongEdges:
-                            matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                            break;
-                        case MethordEdge.Binary:
-                            matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
-                            break;
-                        case MethordEdge.InvertBinary:
-                            matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                            break;
+                        RunPinPitch(matCrop, rotArea);
+                        return;
                     }
+
+                    matProcess = Filters.ApplyEdgeMethod(matCrop, MethordEdge, ThresholdBinary);
                     if (IsClearNoiseSmall)
                         matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
                     if (IsClose)
@@ -175,7 +251,7 @@ namespace BeeCore
                         matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
                     
                     PitchMeasure.SetGaussianSigma(ValueGau, -1.0);
-                    PitchMeasure.SetScaleMmPerPx(Scale);
+                    PitchMeasure.SetScaleMmPerPx(EffectiveScale);
                     if (LineOrientation==LineOrientation.Vertical)
                     {
                         PitchMeasure.SetMargins(0,Magin);
@@ -202,8 +278,134 @@ namespace BeeCore
 
 
         }
+        private void RunPinPitch(Mat matCrop, RectRotate area)
+        {
+            Mat gray = matCrop;
+            if (gray.Type() == MatType.CV_8UC3)
+            {
+                gray = new Mat();
+                Cv2.CvtColor(matCrop, gray, ColorConversionCodes.BGR2GRAY);
+            }
+
+            matProcess = gray.Clone();
+            if (PinPitchMeasure == null)
+                PinPitchMeasure = new BeeCppCli.PinPitchCli();
+
+            PinPitchMeasure.SetOptions(
+                ExpectedPinCount,
+                ToPinArrangeModeCli(PinArrangeMode),
+                PinDistanceMode == PinDistanceMode.Relative,
+                UsePinAutoThreshold,
+                PinManualThreshold,
+                IsClose ? SizeClose : 0,
+                IsOpen ? SizeOpen : 0,
+                PinMinAreaPx,
+                PinMaxAreaRatio,
+                PinMinAspect,
+                PinMaxAspect,
+                PinMinFillRatio,
+                UsePinOutlineCenter,
+                PinOutlineThresholdOffset,
+                PinOutlineClose,
+                PinOutlineDilate,
+                PinOutlinePadding,
+                PinMaxOutlineExpand,
+                EffectiveScale,
+                UseTopHat,
+                TopHatKernelPx,
+                MinSolidity,
+                ReduceDilateForOutline,
+                UseEdgeBoundary,
+                EdgeCannyLow,
+                EdgeCannyHigh,
+                UseEdgeGeometryCenter,
+                UseGradientRefinement,
+                GradientPatchMargin,
+                GradientThreshold,
+                ClaheClipLimit,
+                ClaheTileSize);
+
+            PinPitchMeasure.SetImage(gray.Data, gray.Width, gray.Height, (int)gray.Step(), gray.Channels());
+            PinPitchResult = PinPitchMeasure.Measure();
+            ApplyPinPitchResultToPoints(area);
+        }
+
+        private static BeeCppCli.PinArrangeModeCli ToPinArrangeModeCli(PinPitchArrangeMode mode)
+        {
+            switch (mode)
+            {
+                case PinPitchArrangeMode.Y:
+                    return BeeCppCli.PinArrangeModeCli.Y;
+                case PinPitchArrangeMode.RowProjection:
+                    return BeeCppCli.PinArrangeModeCli.RowProjection;
+                default:
+                    return BeeCppCli.PinArrangeModeCli.X;
+            }
+        }
+
+        private void ApplyPinPitchResultToPoints(RectRotate area)
+        {
+            listP_Center = new List<System.Drawing.Point>();
+            rectRotates = new List<RectRotate>();
+            Pitch12Mm = Pitch23Mm = Pitch34Mm = SpanP1P4Mm = 0;
+
+            if (PinPitchResult == null)
+                return;
+
+            if (PinPitchResult.AdjacentPitchMm != null)
+            {
+                if (PinPitchResult.AdjacentPitchMm.Length > 0) Pitch12Mm = (float)PinPitchResult.AdjacentPitchMm[0];
+                if (PinPitchResult.AdjacentPitchMm.Length > 1) Pitch23Mm = (float)PinPitchResult.AdjacentPitchMm[1];
+                if (PinPitchResult.AdjacentPitchMm.Length > 2) Pitch34Mm = (float)PinPitchResult.AdjacentPitchMm[2];
+            }
+            SpanP1P4Mm = (float)PinPitchResult.SpanP1P4Mm;
+
+            if (PinPitchResult.Pins == null)
+                return;
+
+            foreach (var pin in PinPitchResult.Pins)
+            {
+                var p = TransformLocalToWorld(area, new PointF((float)pin.X, (float)pin.Y));
+                listP_Center.Add(new System.Drawing.Point((int)Math.Round(p.X), (int)Math.Round(p.Y)));
+                // Bug A fix: dùng kích thước & góc xoay thật của pin (per-pin minAreaRect).
+                // Trước đây hardcode 6x6 marker + rotation=0 -> consumers (Width PointToLine, ...)
+                // không lock được pin xéo theo nhiều hướng khác nhau.
+                float wPx = (float)pin.WidthPx;
+                float hPx = (float)pin.HeightPx;
+                if (wPx < 1f) wPx = 6f;
+                if (hPx < 1f) hPx = 6f;
+                // RectRotate convention: _rect = (-w/2, -h/2, w, h) ở local frame, _rectRotation theo độ.
+                // pin.AngleDeg là góc trong crop-local; cộng area._rectRotation để ra world frame.
+                float rotDeg = (float)pin.AngleDeg + area._rectRotation;
+                rectRotates.Add(new RectRotate(
+                    new RectangleF(-wPx * 0.5f, -hPx * 0.5f, wPx, hPx),
+                    p,
+                    rotDeg,
+                    AnchorPoint.None));
+            }
+        }
+
+        private static PointF TransformLocalToWorld(RectRotate area, PointF p)
+        {
+            using (var matLocal = new Matrix())
+            {
+                matLocal.Translate(area._PosCenter.X, area._PosCenter.Y);
+                matLocal.Rotate(area._rectRotation);
+                matLocal.Translate(area._rect.X, area._rect.Y);
+                var pts = new[] { p };
+                matLocal.TransformPoints(pts);
+                return pts[0];
+            }
+        }
+
         public void Complete()
         {
+            if (MeasureMode == PitchMeasureMode.PinPitch)
+            {
+                CompletePinPitch();
+                return;
+            }
+
            if(!Global.IsRun&& IsCalib)
             {
                 TempPitchCrest =(float)( Values == Values.Mean ? PitchResult.PitchMeanMM : (Values == Values.Median ? PitchResult.PitchMedianMM : (Values == Values.Min ? PitchResult.PitchMinMM : PitchResult.PitchMaxMM)));
@@ -326,6 +528,54 @@ namespace BeeCore
          
 
         }
+        private void CompletePinPitch()
+        {
+            PropetyTool owner = Common.TryGetTool(IndexThread, Index);
+            if (owner == null)
+                return;
+
+            owner.Results = Results.OK;
+            if (PinPitchResult == null || !PinPitchResult.Found || PinPitchResult.Pins == null || PinPitchResult.Pins.Length < ExpectedPinCount)
+            {
+                owner.ScoreResult = 999;
+                owner.Results = Results.NG;
+                return;
+            }
+
+            // Calib: lưu nominal = trung bình các pitch hiện tại (giống cách PeakRoot lưu Temp*)
+            if (!Global.IsRun && IsCalib)
+            {
+                float sum = 0;
+                int count = 0;
+                if (PinPitchResult.AdjacentPitchMm != null)
+                {
+                    foreach (double pitch in PinPitchResult.AdjacentPitchMm)
+                    {
+                        sum += (float)pitch;
+                        count++;
+                    }
+                }
+                if (count > 0)
+                    NominalPitchMm = sum / count;
+            }
+
+            // Chung Score với PeakRoot: tính worst % deviation rồi so sánh với owner.Score
+            owner.ScoreResult = 0;
+            if (NominalPitchMm > 0 && PinPitchResult.AdjacentPitchMm != null)
+            {
+                int numPin = 0;
+                float Delta = 0;
+                foreach (double pitch in PinPitchResult.AdjacentPitchMm)
+                {
+                    numPin++; Delta +=(float) Math.Abs(pitch - NominalPitchMm);
+                   
+                }
+                owner.ScoreResult= (float)Math.Round((Delta / numPin), 2); ;
+                if (owner.ScoreResult > owner.Score)
+                    owner.Results = Results.NG;
+            }
+        }
+
         public async Task SendResult()
         {
             if (Common.TryGetTool(IndexThread, Index).IsSendResult)
@@ -367,6 +617,9 @@ namespace BeeCore
             Pen pen = new Pen(Color.Blue, 2);
             String nameTool = (int)(Index + 1) + "." + Common.TryGetTool(Global.IndexProgChoose, Index).Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            if (MeasureMode == PitchMeasureMode.PinPitch)
+                return DrawPinPitchResult(gc, rotA, nameTool, font, brushText, cl);
+
             if (Global.ParaShow.IsShowBox)
             {
                 String crest = "", root = "";
@@ -449,14 +702,182 @@ namespace BeeCore
             return gc;
         }
 
-
-        public void SetModel()
+        private Graphics DrawPinPitchResult(Graphics gc, RectRotate rotA, string nameTool, Font font, Brush brushText, Color cl)
         {
-            rotMask = null;
-          
+            string content = PinPitchResult != null
+                ? $"Pins={PinPitchResult.Pins?.Length ?? 0} P12={Pitch12Mm:0.###} P23={Pitch23Mm:0.###} P34={Pitch34Mm:0.###} Span={SpanP1P4Mm:0.###}mm"
+                : "Pins=0";
+
+            if (Global.ParaShow.IsShowBox)
+                Draws.Box2Label(gc, rotA, nameTool, content, font, cl, brushText, 16, Global.ParaShow.ThicknessLine);
+
+            gc.ResetTransform();
+            using (var mat = new Matrix())
+            {
+                if (!Global.IsRun)
+                {
+                    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                }
+                mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                mat.Rotate(rotA._rectRotation);
+                mat.Translate(rotA._rect.X, rotA._rect.Y);
+                gc.Transform = mat;
+            }
+
+            // Gôm lại: 1 vòng lặp vẽ Pin + biên dạng detect + đường đo + label khoảng cách.
+            if (PinPitchResult?.Pins != null && PinPitchResult.Pins.Length > 0)
+            {
+                var pins = PinPitchResult.Pins;
+                int n = pins.Length;
+
+                // Trục hàng pin. Relative đo giữa các hình chiếu vuông góc của tâm pin lên trục này.
+                double rvx = PinPitchResult.RowVx;
+                double rvy = PinPitchResult.RowVy;
+                double rlen = Math.Sqrt(rvx * rvx + rvy * rvy);
+                bool rowValid = rlen > 1e-6;
+                if (rowValid) { rvx /= rlen; rvy /= rlen; }
+                double rnx = -rvy;
+                double rny = rvx;
+                var rowOrigin = new PointF((float)PinPitchResult.RowX0, (float)PinPitchResult.RowY0);
+
+                double mmPerPx = (PinPitchResult.ScaleMmPerPx > 1e-9) ? PinPitchResult.ScaleMmPerPx : EffectiveScale;
+                var labelFont = new Font("Segoe UI", Global.ParaShow.FontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+
+                using (var penLine = new Pen(Color.DeepPink, Math.Max(1, Global.ParaShow.ThicknessLine)))
+                using (var penBox = new Pen(Color.Lime, Math.Max(1, Global.ParaShow.ThicknessLine)))
+                using (var penTick = new Pen(Color.Red, Math.Max(2, Global.ParaShow.ThicknessLine + 1)))
+                using (var brushPin = new SolidBrush(Color.Yellow))
+                using (var brushLabel = new SolidBrush(Color.DarkOrange))
+                using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+                {
+                    for (int i = 0; i < n; i++)
+                    {
+                        var pin = pins[i];
+                        var p = new PointF((float)pin.X, (float)pin.Y);
+
+                        // (1) Vẽ Pin: biên dạng detect + dấu cộng + ID
+                        DrawPinDetectedBox(gc, pin, penBox);
+                        Draws.Plus(gc, (int)Math.Round(p.X), (int)Math.Round(p.Y), 16, Color.Yellow, 2);
+                        gc.DrawString($"P{pin.Id}", font, brushPin, p.X + 5, p.Y - 18);
+
+                        // (2) Vẽ đường đo tới pin kế + label khoảng cách trên đường đo
+                        if (i >= n - 1) continue;
+                        var b = pins[i + 1];
+                        var pb = new PointF((float)b.X, (float)b.Y);
+
+                        // Tính khoảng cách (mm) theo mode
+                        double dx = pb.X - p.X;
+                        double dy = pb.Y - p.Y;
+                        double distMm;
+                        PointF measureA = p;
+                        PointF measureB = pb;
+                        double angleDx = dx;
+                        double angleDy = dy;
+                        if (PinDistanceMode == PinDistanceMode.Absolute || !rowValid)
+                        {
+                            distMm = Math.Sqrt(dx * dx + dy * dy) * mmPerPx;
+                            gc.DrawLine(penLine, measureA, measureB);
+                        }
+                        else
+                        {
+                            measureA = ProjectToRowAxis(p, rowOrigin, rvx, rvy);
+                            measureB = ProjectToRowAxis(pb, rowOrigin, rvx, rvy);
+                            double mdx = measureB.X - measureA.X;
+                            double mdy = measureB.Y - measureA.Y;
+                            double proj = Math.Sqrt(mdx * mdx + mdy * mdy);
+                            distMm = proj * mmPerPx;
+                            angleDx = rvx;
+                            angleDy = rvy;
+
+                            gc.DrawLine(penLine, measureA, measureB);
+                            DrawRelativePitchTick(gc, penTick, measureA, rnx, rny);
+                            DrawRelativePitchTick(gc, penTick, measureB, rnx, rny);
+                        }
+
+                        // Vẽ label trên đoạn đo (xoay theo hướng đoạn, đặt ngay giữa)
+                        double angRad = Math.Atan2(angleDy, angleDx);
+                        float angDeg = (float)(angRad * 180.0 / Math.PI);
+                        float mx = (measureA.X + measureB.X) * 0.5f;
+                        float my = (measureA.Y + measureB.Y) * 0.5f;
+                        string text = $"{distMm:0.###} mm";
+                        var state = gc.Save();
+                        gc.TranslateTransform(mx, my);
+                        gc.RotateTransform(angDeg);
+                        gc.DrawString(text, labelFont, brushLabel, 0f, -2f, sf);
+                        gc.Restore(state);
+                    }
+                }
+                labelFont.Dispose();
+            }
+
+            gc.ResetTransform();
+            return gc;
+        }
+
+        private static PointF ProjectToRowAxis(PointF p, PointF origin, double vx, double vy)
+        {
+            double dx = p.X - origin.X;
+            double dy = p.Y - origin.Y;
+            double t = dx * vx + dy * vy;
+            return new PointF((float)(origin.X + t * vx), (float)(origin.Y + t * vy));
+        }
+
+        private static void DrawRelativePitchTick(Graphics gc, Pen pen, PointF center, double nx, double ny)
+        {
+            const float halfLen = 28f;
+            var a = new PointF((float)(center.X - nx * halfLen), (float)(center.Y - ny * halfLen));
+            var b = new PointF((float)(center.X + nx * halfLen), (float)(center.Y + ny * halfLen));
+            gc.DrawLine(pen, a, b);
+        }
+
+        private static void DrawPinDetectedBox(Graphics gc, BeeCppCli.PinCenterCli pin, Pen pen)
+        {
+            float w = (float)Math.Max(1.0, pin.WidthPx);
+            float h = (float)Math.Max(1.0, pin.HeightPx);
+            float cx = (float)pin.X;
+            float cy = (float)pin.Y;
+            double angle = pin.AngleDeg * Math.PI / 180.0;
+            double ca = Math.Cos(angle);
+            double sa = Math.Sin(angle);
+            float hx = w * 0.5f;
+            float hy = h * 0.5f;
+
+            var pts = new[]
+            {
+                RotateLocal(cx, cy, -hx, -hy, ca, sa),
+                RotateLocal(cx, cy,  hx, -hy, ca, sa),
+                RotateLocal(cx, cy,  hx,  hy, ca, sa),
+                RotateLocal(cx, cy, -hx,  hy, ca, sa),
+            };
+            gc.DrawPolygon(pen, pts);
+        }
+
+        private static PointF RotateLocal(float cx, float cy, float x, float y, double ca, double sa)
+        {
+            return new PointF((float)(cx + x * ca - y * sa), (float)(cy + x * sa + y * ca));
+        }
+
+
+        public void SetModel(bool IsCopy=false)
+        {
             if (rotArea == null) rotArea = new RectRotate();
+            if (rotCrop == null) rotCrop = new RectRotate();
+            if (rotMask == null) rotMask = new RectRotate();
+
+            rotCrop.Name = "Area Temp";
+            rotCrop.TypeCrop = TypeCrop.Crop;
+
+
+            rotMask.Name = "Area Mask";
+            rotMask.TypeCrop = TypeCrop.Mask;
+
+            rotArea.Name = "Area Check";
+            rotArea.TypeCrop = TypeCrop.Area;
+         
             PitchMeasure = new BeeCppCli.PitchCli();
-            Common.TryGetTool(IndexThread, Index).StepValue = 0.1f;
+            PinPitchMeasure = new BeeCppCli.PinPitchCli();
+            Common.TryGetTool(IndexThread, Index).StepValue = 0.01f;
     
             Common.TryGetTool(IndexThread, Index).MinValue = 0;
           
@@ -465,6 +886,8 @@ namespace BeeCore
         }
         public float Scale = 1;
         public int IndexThread = 0;
+        // Scale hiệu lực: nếu UseSharedScale → lấy Global.Config.Scale; ngược lại → Scale per-tool
+        public float EffectiveScale => UseSharedScale ? Global.Config.Scale : Scale;
   
     }
 }

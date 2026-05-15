@@ -122,6 +122,20 @@ namespace BeeCore
         public LineDirScan LineDirScan { set; get; }
 
         public float AspectLen=0.6f;
+        [System.Runtime.Serialization.OptionalField]
+        public EdgeDetectMode DetectMode = EdgeDetectMode.SingleLine;
+        [System.Runtime.Serialization.OptionalField]
+        public float ParallelToleranceDeg = 5.0f;
+        [System.Runtime.Serialization.OptionalField]
+        public float MinGapPx = 3.0f;
+        [System.Runtime.Serialization.OptionalField]
+        public float MaxGapPx = 0.0f;
+        [System.Runtime.Serialization.OptionalField]
+        public float MinOverlapRatio = 0.25f;
+        [System.Runtime.Serialization.OptionalField]
+        public float ContiguousGapPx = 25.0f;
+        [NonSerialized]
+        public ParallelLinesCli ParallelLines = new ParallelLinesCli();
 
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
@@ -136,58 +150,70 @@ namespace BeeCore
                 if (!matProcess.Empty()) matProcess.Dispose();
                 if (matCrop.Type() == MatType.CV_8UC3)
                     Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
-                if(matCrop.Empty()) 
+                if(matCrop.Empty())
                     return;
                 Cv2.EqualizeHist(matCrop, matProcess);
-                switch (MethordEdge)
-                { 
-                    case MethordEdge.CloseEdges:
-                        matProcess = Filters.Edge(matCrop);
-                        break;
-                    case MethordEdge.StrongEdges:
-                        matProcess = Filters.GetStrongEdgesStable(matCrop);
-                        break;
-                    case MethordEdge.Stable:
-                        matProcess = Filters.GetStrongEdgesStable(matCrop);
-                        break;
-                    case MethordEdge.Binary:
-                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
-                        break;
-                    case MethordEdge.InvertBinary:
-                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                        break;
-                }
-               
+                matProcess = Filters.ApplyEdgeMethod(matCrop, MethordEdge, ThresholdBinary);
+
                 if (IsClose)
                     matProcess = Filters.Morphology(matProcess, MorphTypes.Close, new Size(SizeClose, SizeClose));
                 if (IsOpen)
                     matProcess = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
                 if (IsClearNoiseSmall)
                     matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
-                //if (IsClearNoiseBig)
-                //    matProcess = Filters.ClearNoiseBig(matProcess, SizeClearBig*100);
 
-             
-                Line2DCli =  RansacLine.FindBestLine(
-                    matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
-                    iterations: RansacIterations,
-                    threshold: (float)RansacThreshold,
-                    maxPoints: 120000,
-                    seed: Index,
-                    mmPerPixel: 1/Scale, AspectLen, (LineDirectionMode)((int)LineOrientation), (BeeCpp.LineScanMode)((int)LineDirScan),0, AngleRange
-                );
+                if (DetectMode == EdgeDetectMode.ParallelPair)
+                {
+                    if (IsClearNoiseBig)
+                        matProcess = Filters.ClearNoiseLengh(matProcess, SizeClearBig);
+                    ParallelLines = RansacLine.FindLongestParallelPair(
+                        matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
+                        iterations: RansacIterations,
+                        threshold: (float)RansacThreshold,
+                        maxPoints: 120000,
+                        seed: Index,
+                        mmPerPixel: 1 / Scale,
+                        minLengthRatio: AspectLen,
+                        parallelToleranceDeg: ParallelToleranceDeg,
+                        minGapPx: MinGapPx,
+                        maxGapPx: MaxGapPx,
+                        minOverlapRatio: MinOverlapRatio,
+                        contiguousGapPx: ContiguousGapPx
+                    );
+                    Line2DCli = ParallelLines.Found ? ParallelLines.CenterLine : new Line2DCli();
+                }
+                else
+                {
+                    Line2DCli =  RansacLine.FindBestLine(
+                        matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
+                        iterations: RansacIterations,
+                        threshold: (float)RansacThreshold,
+                        maxPoints: 120000,
+                        seed: Index,
+                        mmPerPixel: 1/Scale, AspectLen, (LineDirectionMode)((int)LineOrientation), (BeeCpp.LineScanMode)((int)LineDirScan),0, AngleRange
+                    );
+                }
             
                 PointF p1 = new PointF(Line2DCli.X1, Line2DCli.Y1);
                 PointF p2 = new PointF(Line2DCli.X2, Line2DCli.Y2);
-                System.Drawing.Point pCenter = new System.Drawing.Point((int)rotArea._PosCenter.X - (int)rotArea._rect.Width / 2 + (int)p1.X, (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)p1.Y);
-                System.Drawing.Point pCenter2 = new System.Drawing.Point((int)rotArea._PosCenter.X - (int)rotArea._rect.Width / 2 + (int)p2.X, (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)p2.Y);
+                // Áp dụng cùng matrix transform với DrawResult (translate→rotate→translate)
+                // để toạ độ global khớp đúng vị trí line vẽ ra, kể cả khi ROI bị xoay.
+                System.Drawing.Point pCenter, pCenter2;
+                using (var matLocal = new System.Drawing.Drawing2D.Matrix())
+                {
+                    matLocal.Translate(rotArea._PosCenter.X, rotArea._PosCenter.Y);
+                    matLocal.Rotate(rotArea._rectRotation);
+                    matLocal.Translate(rotArea._rect.X, rotArea._rect.Y);
+                    var pts = new[] { p1, p2 };
+                    matLocal.TransformPoints(pts);
+                    pCenter  = new System.Drawing.Point((int)Math.Round(pts[0].X), (int)Math.Round(pts[0].Y));
+                    pCenter2 = new System.Drawing.Point((int)Math.Round(pts[1].X), (int)Math.Round(pts[1].Y));
+                }
                 listP_Center = new List<System.Drawing.Point>();
                 rectRotates = new List<RectRotate>();
                 listP_Center.Add(pCenter);
                 listP_Center.Add(pCenter2);
                 rectRotates.Add(new RectRotate(new RectangleF(pCenter.X, pCenter.Y, pCenter2.X, pCenter2.Y), new PointF(0, 0), 0,0));
-            
-
             }
             //using (Mat src = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             //    {
@@ -247,7 +273,7 @@ namespace BeeCore
             //            FilterCLi.RunEdgePipeline(ptr, w, h, mt, (ulong)s, EdgePipelineOptionsCli, dst.Data, dst.Type(), (ulong)sDst);
             //            Line2DCli = RansacLine.FindBestLine(dst.Data, dst.Width, dst.Height,(int) dst.Step(), RansacIterations, (float)RansacThreshold, 1000, 0, Scale);
             //            matProcess = dst.Clone();
-            //            //using (var mNative = new Mat(h, w, dstType, intPtrOut, (int)dstStep))
+            //            //using (var mNative = Mat.FromPixelData(h, w, dstType, intPtrOut, dstStep))
             //            //    {
             //            //        matProcess = mNative.Clone(); // bây giờ dữ liệu đã thuộc về OpenCV (managed)
             //            //    }
@@ -281,20 +307,10 @@ namespace BeeCore
         public float PerValue;
         public void Complete()
         {
-            //switch (SegmentStatType)
-            //{
-            //    case SegmentStatType.Average:
-            //        WidthResult = (float)GapResult.GapMedium /Scale;
-            //        break;
-            //    case SegmentStatType.Shortest:
-            //        WidthResult = (float)GapResult.GapMin / Scale;
-            //        break;
-            //    case SegmentStatType.Longest:
-            //        WidthResult = (float)GapResult.GapMax / Scale;
-            //        break;
-            //}
-            if(Line2DCli.Found == true)
-            WidthResult = Line2DCli.LengthMm;
+            if (DetectMode == EdgeDetectMode.ParallelPair && ParallelLines.Found)
+                WidthResult = ParallelLines.GapMm;
+            else if (Line2DCli.Found)
+                WidthResult = Line2DCli.LengthMm;
           
 
                 if (IsCalibs && Line2DCli.Found == true)
@@ -417,29 +433,33 @@ namespace BeeCore
             mat.Translate(rotA._rect.X, rotA._rect.Y);
             gc.Transform = mat;
 
-            //   Draws.DrawInfiniteLine(gc,new Line2D( Line2DCli.Vx, Line2DCli.Vy, Line2DCli.X1, Line2DCli.Y1), new Pen(cl, 2));
-         
+            if (DetectMode == EdgeDetectMode.ParallelPair && ParallelLines.Found)
+            {
+                using (Pen edgePen = new Pen(Color.Orange, Math.Max(1, Global.ParaShow.ThicknessLine)))
+                {
+                    DrawCliSegment(gc, ParallelLines.LineA, edgePen);
+                    DrawCliSegment(gc, ParallelLines.LineB, edgePen);
+                }
+            }
+
             PointF p1 = new PointF(Line2DCli.X1, Line2DCli.Y1);
             PointF p2 = new PointF(Line2DCli.X2, Line2DCli.Y2);
-             Draws.DrawTicks(gc, p1,LineOrientation, pen);
-            Draws.DrawTicks(gc, p2,LineOrientation, pen);
+            Draws.DrawTicks(gc, p1, LineOrientation, pen);
+            Draws.DrawTicks(gc, p2, LineOrientation, pen);
             gc.DrawLine(pen, p1, p2);
-            gc.DrawString($"{Line2DCli.LengthMm:F2}mm +"+PerValue+"%", new Font("Arial", Global.ParaShow.FontSize), new SolidBrush(Global.ParaShow.ColorInfor), p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
-            // gc.ResetTransform();
-            //mat = new Matrix();
-            //if (!Global.IsRun)
-            //{
-            //    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
-            //    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
-            //    gc.Transform = mat;
-            //}
-            //gc.DrawString("X:" + listP_Center[0].X + ":" + listP_Center[0].X, new Font("Arial", 24, FontStyle.Bold), new SolidBrush(cl), new PointF(0, 0));
-
-            //gc.DrawEllipse(new Pen(Brushes.Red, 4), new Rectangle(listP_Center[0].X, listP_Center[0].Y, 10, 10));
+            string edgeLabel = DetectMode == EdgeDetectMode.ParallelPair && ParallelLines.Found
+                ? $"{WidthResult:F2}mm gap, L={Line2DCli.LengthMm:F2}"
+                : $"{Line2DCli.LengthMm:F2}mm +{PerValue}%";
+            gc.DrawString(edgeLabel, new Font("Arial", Global.ParaShow.FontSize), new SolidBrush(Global.ParaShow.ColorInfor), p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
 
             return gc;
         }
 
+        private static void DrawCliSegment(Graphics gc, Line2DCli line, Pen pen)
+        {
+            if (!line.Found) return;
+            gc.DrawLine(pen, line.X1, line.Y1, line.X2, line.Y2);
+        }
 
         public void SetModel( bool IsCoppy=false)
         {

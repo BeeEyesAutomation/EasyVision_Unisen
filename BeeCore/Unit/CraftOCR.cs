@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using static LibUsbDotNet.Main.UsbTransferQueue;
+
 using static OpenCvSharp.ML.DTrees;
 using static System.Windows.Forms.MonthCalendar;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;

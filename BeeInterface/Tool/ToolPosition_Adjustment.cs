@@ -37,11 +37,18 @@ namespace BeeInterface
         }
         private void InvalidateOwnerToolCache() => _ownerTool = null;
         #endregion
+        private EdgeButtonsHelper.ExtraButtons _extraEdgeBtns;
+
         public ToolPosition_Adjustment( )
         {
             InitializeComponent();
             if(Propety==null)
             Propety = new PositionAdj();
+            _extraEdgeBtns = EdgeButtonsHelper.Attach(layEdge, m =>
+            {
+                Propety.MethordEdge = m;
+                layThreshod.Enabled = false;
+            });
         }
         public void LoadPara()
         {
@@ -51,7 +58,7 @@ namespace BeeInterface
                 imgTemp.Image = Propety.bmRaw;
             }
             EditRectRot1.IsHide = false;
-            EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotCrop, Propety.rotMask };
+            EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotCrop };
             EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
             EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
 
@@ -92,6 +99,7 @@ namespace BeeInterface
             AdjMorphology.Enabled = Propety.IsClose;
             AdjStepAngle.Value = Propety.StepAngle;
             AdjMaximumObj.Value = Propety.MaxObject;
+            layOverLap.Visible = Propety.EnableNms;
             switch (Propety.MethodSample)
             {
                 case MethodSample.Pattern:
@@ -129,25 +137,20 @@ namespace BeeInterface
                     trackAngle.Visible = false;
                     break;
             }
+            btnStrongEdge.IsCLick = btnCloseEdge.IsCLick = btnBinary.IsCLick = btnInvert.IsCLick = false;
+            _extraEdgeBtns?.ResetAll();
+            layThreshod.Enabled = false;
             switch (Propety.MethordEdge)
             {
-                case MethordEdge.StrongEdges:
-                    btnStrongEdge.IsCLick = true; layThreshod.Enabled = false;
-                    break;
-                case MethordEdge.CloseEdges:
-                    btnCloseEdge.IsCLick = true; layThreshod.Enabled = false;
-                    break;
-                case MethordEdge.Binary:
-                    btnBinary.IsCLick = true; layThreshod.Enabled = true;
-                    break;
-                case MethordEdge.InvertBinary:
-                    btnInvert.IsCLick = true; layThreshod.Enabled = true;
-                    break;
+                case MethordEdge.StrongEdges:   btnStrongEdge.IsCLick = true; break;
+                case MethordEdge.CloseEdges:    btnCloseEdge.IsCLick = true; break;
+                case MethordEdge.Binary:        btnBinary.IsCLick = true; layThreshod.Enabled = true; break;
+                case MethordEdge.InvertBinary:  btnInvert.IsCLick = true; layThreshod.Enabled = true; break;
+                case MethordEdge.UltraThin:
+                case MethordEdge.Adaptive:
+                case MethordEdge.DenoiseFirst:  _extraEdgeBtns?.Highlight(Propety.MethordEdge); break;
             }
-            if (Propety.IsHighSpeed)
-                btnHighSpeed.IsCLick = true;
-            else
-                btnNormal.IsCLick = true;
+          
             PositionAdjustmentEngineRunner.MarkOwnerWaiting(OwnerTool);
              if (OwnerTool != null)
              {
@@ -734,7 +737,37 @@ namespace BeeInterface
         {
 
         }
+        private void btnEnableValidator_Click(object sender, EventArgs e)
+        {
+            Propety.EnableValidator = btnEnableValidator.IsCLick;
 
+        }
+
+        private void btnEnableKeepFilter_Click(object sender, EventArgs e)
+        {
+            Propety.EnableKeepFilter = btnEnableKeepFilter.IsCLick;
+        }
+
+        private void btnEnableOverLap_Click(object sender, EventArgs e)
+        {
+            Propety.EnableNms = btnEnableOverLap.IsCLick;
+            layOverLap.Visible = Propety.EnableNms;
+             
+        }
+        private void btnEasy_Click(object sender, EventArgs e)
+        {
+            Propety.DifficultyPattern = DifficultyPattern.Easy;
+        }
+
+        private void btnNormal_Click_1(object sender, EventArgs e)
+        {
+            Propety.DifficultyPattern = DifficultyPattern.Normal;
+        }
+
+        private void btnHard_Click(object sender, EventArgs e)
+        {
+            Propety.DifficultyPattern = DifficultyPattern.Hard;
+        }
         private void btnEnBet_Click(object sender, EventArgs e)
         {
            // Propety.IsBet = btnEnBet.IsCLick;

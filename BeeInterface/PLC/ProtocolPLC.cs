@@ -30,6 +30,8 @@ using ComboBox = System.Windows.Forms.ComboBox;
 
 namespace BeeInterface
 {
+    // ProtocolPLC owns PLC configuration UI and status presentation; keep transport
+    // and protocol state ownership in PLC_Communication and BeeGlobal.Protocol.
     public partial class ProtocolPLC : UserControl
     {
         //List<String> OldIn = new List<string>(16);

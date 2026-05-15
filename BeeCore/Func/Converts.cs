@@ -79,12 +79,25 @@ static void DrawRectRotate(Graphics g, RectRotate rr, float zoom, PointF scroll,
             }
         }
 
-    public static string BeforeFirstDigit(string s)
+        public static string BeforeFirstDigit(string s)
         {
             if (string.IsNullOrEmpty(s)) return string.Empty;
             int i = 0;
             while (i < s.Length && !char.IsDigit(s[i])) i++;
             return s.Substring(0, i);
+        }
+
+        public static int NumberFromString(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return 0;
+
+            string onlyNumber = new string(input.Where(char.IsDigit).ToArray());
+
+            if (string.IsNullOrEmpty(onlyNumber))
+                return 0;
+
+            return int.Parse(onlyNumber);
         }
 
         public static double? StringtoDouble(string s)

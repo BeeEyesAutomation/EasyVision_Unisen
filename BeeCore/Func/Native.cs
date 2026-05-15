@@ -49,7 +49,7 @@ namespace BeeCore
                             intPtr= GetCrop(ref rows, ref cols, ref Type);
                             break;
                     }
-                     raw = new Mat(rows, cols, Type, intPtr);
+                     raw = Mat.FromPixelData(rows, cols, Type, intPtr);
                     return raw.Clone();
                 
             }

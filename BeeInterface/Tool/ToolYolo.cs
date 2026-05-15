@@ -38,6 +38,8 @@ namespace BeeInterface
         SetModel, SetLabels, Retrain
     }
     [Serializable()]
+    // ToolYolo owns WinForms parameter binding and test/calibration event handlers;
+    // keep YOLO processing behavior in BeeCore.Unit.Yolo.
     public partial class ToolYolo : UserControl
     {
         

@@ -1,4 +1,4 @@
-﻿using BeeCore;
+using BeeCore;
 using BeeCore.Funtion;
 using BeeGlobal;
 
@@ -21,8 +21,10 @@ namespace BeeInterface
 {
    
     [Serializable()]
+    // SettingStep1 owns camera setup UI only; keep SDK lifecycle and frame reads in BeeCore.Camera.
     public partial class SettingStep1 : UserControl
     {
+        private RJButton _btnCameraCalibration;
    
         public SettingStep1()
         {
@@ -31,7 +33,7 @@ namespace BeeInterface
             //this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             //this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             //this.SetStyle(ControlStyles.UserPaint, true);
-            //this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
+            //this.AutoScaleMode = AutoScaleMode.Dpi; // ho?c AutoScaleMode.Font
             this.HandleCreated += SettingStep1_HandleCreated;
             //p.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, p.Width, p.Height, 5, 5));
             //  p2.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, p2.Width, p2.Height, 5, 5));
@@ -40,7 +42,7 @@ namespace BeeInterface
 
         private void SettingStep1_HandleCreated(object sender, EventArgs e)
         {
-           
+            EnsureCalibrationButton();
         }
 
         private void btnNextStep_Click(object sender, EventArgs e)
@@ -148,8 +150,51 @@ namespace BeeInterface
         bool IsReaded = false;
         private void SettingStep1_Load(object sender, EventArgs e)
         {
-           
-         
+            EnsureCalibrationButton();
+        }
+
+        private void EnsureCalibrationButton()
+        {
+            if (_btnCameraCalibration != null || tableLayoutPanel11 == null)
+                return;
+
+            _btnCameraCalibration = new RJButton
+            {
+                AutoFont = true,
+                AutoImage = false,
+                Dock = DockStyle.Fill,
+                Text = "Calibration",
+                TextColor = Color.Black,
+                BackgroundColor = Color.WhiteSmoke,
+                BackColor = Color.WhiteSmoke,
+                BorderColor = Color.WhiteSmoke,
+                BorderRadius = 5,
+                BorderSize = 1,
+                IsNotChange = true,
+                IsUnGroup = true,
+                Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold),
+                Margin = new Padding(3)
+            };
+            _btnCameraCalibration.Click += btnCameraCalibration_Click;
+
+            tableLayoutPanel11.SuspendLayout();
+            tableLayoutPanel11.ColumnCount = 3;
+            tableLayoutPanel11.ColumnStyles.Clear();
+            tableLayoutPanel11.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 42F));
+            tableLayoutPanel11.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 29F));
+            tableLayoutPanel11.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 29F));
+            tableLayoutPanel11.Controls.Add(_btnCameraCalibration, 1, 0);
+            tableLayoutPanel11.SetColumn(btnNextStep, 0);
+            tableLayoutPanel11.SetColumn(btnCancel, 2);
+            tableLayoutPanel11.ResumeLayout();
+        }
+
+        private void btnCameraCalibration_Click(object sender, EventArgs e)
+        {
+            using (FormCameraCalibration form = new FormCameraCalibration())
+            {
+                form.ShowDialog(FindForm());
+            }
         }
 
         private void Global_LiveChanged(bool obj)

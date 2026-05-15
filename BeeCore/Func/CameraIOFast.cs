@@ -24,7 +24,7 @@ namespace BeeCore.Func
 
             IntPtr intPtr = IntPtr.Zero;
             int rows = 0, cols = 0, strideBytes = 0;
-            int matType = MatType.CV_8UC1;
+            int matType = (int)MatType.CV_8UC1;
 
             try
             {

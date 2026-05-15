@@ -311,21 +311,7 @@ namespace BeeCore
                         if (!matProcess.IsDisposed)
                             if (!matProcess.Empty()) matProcess.Dispose();
                       
-                        switch (MethordEdge)
-                        {
-                            case MethordEdge.CloseEdges:
-                                matProcess = Filters.Edge(matCrop);
-                                break;
-                            case MethordEdge.StrongEdges:
-                                matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                                break;
-                            case MethordEdge.Binary:
-                                matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
-                                break;
-                            case MethordEdge.InvertBinary:
-                                matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                                break;
-                        }
+                        matProcess = Filters.ApplyEdgeMethod(matCrop, MethordEdge, ThresholdBinary);
 
                         matProcess = ApplyShapeMaskAndCompose(matProcess, ctx, rotCrop, rotMask, returnMaskOnly: false);
                     }
@@ -358,7 +344,7 @@ namespace BeeCore
                                     : MatType.CV_8UC4;
 
                         // Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
-                        using (var m = new Mat(h, w, mt, intpr, s))
+                        using (var m = Mat.FromPixelData(h, w, mt, intpr, s))
                         {
                             // CopyTo hoặc Clone đều OK; Clone gọn hơn:
                             mat = m.Clone();
@@ -471,21 +457,7 @@ namespace BeeCore
                                 if (!matProcess.IsDisposed)
                                     if (!matProcess.Empty()) matProcess.Dispose();
 
-                                switch (MethordEdge)
-                                {
-                                    case MethordEdge.CloseEdges:
-                                        matProcess = Filters.Edge(matCrop);
-                                        break;
-                                    case MethordEdge.StrongEdges:
-                                        matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                                        break;
-                                    case MethordEdge.Binary:
-                                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
-                                        break;
-                                    case MethordEdge.InvertBinary:
-                                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                                        break;
-                                }
+                                matProcess = Filters.ApplyEdgeMethod(matCrop, MethordEdge, ThresholdBinary);
 
                                 matProcess = ApplyShapeMaskAndCompose(matProcess, ctx, rotArea, rotMask, returnMaskOnly: false);
                             //Cv2.ImWrite("process.png", matProcess);
@@ -777,7 +749,7 @@ namespace BeeCore
                     if (pyResult == null) return;
 
                     byte[] edgeBytes = pyResult.As<byte[]>();
-                    matProcess = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
+                    matProcess = Mat.FromPixelData(height, width, MatType.CV_8UC1, edgeBytes);
                 }
                 finally
                 {

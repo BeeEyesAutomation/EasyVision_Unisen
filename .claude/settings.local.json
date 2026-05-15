@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal)",
+      "PowerShell(python docs/PinPitchMeasurePlan/trial/_run_trial.py 2>&1)",
+      "PowerShell(Select-String -Path build.log -Pattern \"error\" -CaseSensitive:$false | Select-Object -First 10 | ForEach-Object { $_.Line })",
+      "Bash(not exist *)",
+      "PowerShell(if \\(-not \\(Test-Path \"E:\\\\Code\\\\EasyVision_Unisen\\\\docs\"\\)\\) { New-Item -ItemType Directory -Path \"E:\\\\Code\\\\EasyVision_Unisen\\\\docs\" | Out-Null }; Copy-Item \"C:\\\\Users\\\\chitu\\\\.claude\\\\plans\\\\preview-tool-width-ch-nh-concurrent-crystal.md\" \"E:\\\\Code\\\\EasyVision_Unisen\\\\docs\\\\WidthPlan.md\")",
+      "Bash(MSBuild BeeCore/BeeCore.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal)",
+      "Bash(where MSBuild)",
+      "Bash(where msbuild *)",
+      "Bash(ls \"/c/Program Files/Microsoft Visual Studio/2022/\"*\"/MSBuild/Current/Bin/MSBuild.exe\" 2>&1 | head -3)",
+      "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/MSBuild.exe\" BeeCore/BeeCore.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /nologo)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" BeeCore\\\\BeeCore.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /nologo 2>&1)",
+      "Bash(MSBuild EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal)",
+      "PowerShell($vs = Get-ChildItem \"C:\\\\Program Files\\\\Microsoft Visual Studio\" -ErrorAction SilentlyContinue; $vs | ForEach-Object { $_.FullName }; [System.IO.Directory]::GetFiles\\(\"C:\\\\\", \"MSBuild.exe\", \"AllDirectories\"\\) | Select-Object -First 5)",
+      "Bash(chmod +x tools/check_propety_tools.sh)",
+      "Bash(bash tools/check_propety_tools.sh)",
+      "Bash(cp \"/c/Users/chitu/.claude/plans/c-beecpp-pattern2-cpp-l-n-golden-sonnet.md\" \"docs/PatternExtern/PLAN.md\" && ls -la docs/PatternExtern/)",
+      "Bash(awk 'NR>=2776 && NR<=3300 && /^}/{print NR\": \"$0; exit}' Pattern/Pattern2.cpp)",
+      "Bash(grep -n \"^}$\\\\|^List<\\\\|^void Pattern2::\\\\|^int Pattern2::\" Pattern/Pattern2.cpp)",
+      "Bash(awk 'NR>=1')",
+      "Bash(awk 'NR>=30')",
+      "Bash(which MSBuild.exe 2>/dev/null; ls \"/c/Program Files/Microsoft Visual Studio/2022/\"*/MSBuild/Current/Bin/MSBuild.exe 2>/dev/null | head -3)",
+      "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/MSBuild.exe\" Pattern/Pattern.vcxproj -t:Build -p:Configuration=Release -p:Platform=x64 -v:minimal)",
+      "Bash(awk 'NR<=1400 && /^namespace |^[[:space:]]*namespace[[:space:]]*\\\\{|^\\\\}/' Pattern/Pattern2.cpp)",
+      "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/MSBuild.exe\" EasyVision.sln -t:Build -p:Configuration=Release -p:Platform=x64 -v:minimal)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/MSBuild.exe\" BeeCore.csproj -t:Build -p:Configuration=Release -p:Platform=x64 -v:minimal)"
+    ]
+  }
+}

@@ -772,7 +772,7 @@ namespace BeeInterface
             this.trackScore.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.trackScore.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.trackScore.ColorTrack = System.Drawing.Color.LightGray;
-            this.trackScore.Decimals = 1;
+            this.trackScore.Decimals = 2;
             this.trackScore.DisabledDesaturateMix = 0.3F;
             this.trackScore.DisabledDimFactor = 0.9F;
             this.trackScore.Dock = System.Windows.Forms.DockStyle.Fill;

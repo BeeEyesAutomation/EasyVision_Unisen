@@ -284,7 +284,7 @@ namespace BeeCore
 
                         // Chuyển kết quả ngược về byte[] rồi sang Mat
                         byte[] edgeBytes = result.As<byte[]>();
-                        matTemp = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
+                        matTemp = Mat.FromPixelData(height, width, MatType.CV_8UC1, edgeBytes);
                     }
                     // crop = Cropper.CropRotatedRect(bmMask, rotCrop, rotMask);
 
@@ -395,7 +395,7 @@ namespace BeeCore
 
                         // Chuyển kết quả ngược về byte[] rồi sang Mat
                         byte[] edgeBytes = result.As<byte[]>();
-                        matProcess = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
+                        matProcess = Mat.FromPixelData(height, width, MatType.CV_8UC1, edgeBytes);
                     }
 
                     break;

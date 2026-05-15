@@ -21,7 +21,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 using static BeeCore.Cropper;
-using static LibUsbDotNet.Main.UsbTransferQueue;
+
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 using Point = OpenCvSharp.Point;
 using Size = OpenCvSharp.Size;
@@ -39,6 +39,11 @@ namespace BeeCore
 
 
         }
+        public DifficultyPattern DifficultyPattern;
+        public bool EnableNms = true;
+        public bool EnableKeepFilter = false;
+        public bool EnableValidator = false;
+        public bool EnableScaleSearch = false;
         [NonSerialized]
         public bool IsNew = false;
         public void SetModel(bool IsCopy=false)
@@ -387,7 +392,7 @@ namespace BeeCore
                                     : c == 3 ? MatType.CV_8UC3
                                     : MatType.CV_8UC4;
                         // Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
-                        using (var m = new Mat(h, w, mt, intpr, s))
+                        using (var m = Mat.FromPixelData(h, w, mt, intpr, s))
                         {
                             // CopyTo hoặc Clone đều OK; Clone gọn hơn:
                             mat = m.Clone();
@@ -490,9 +495,14 @@ namespace BeeCore
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             Common.TryGetTool(Global.IndexProgChoose, Index).Results = Results.NG;
-            float DeltaAngle = (rotCrop._rectRotation) - (rotArea._rectRotation);
-            AngleLower = DeltaAngle - Angle;
-            AngleUper = DeltaAngle + Angle;
+            if (!Global.IsRun)
+            {
+
+
+                float DeltaAngle = (rotCrop._rectRotation) - (rotArea._rectRotation);
+                AngleLower = DeltaAngle - Angle;
+                AngleUper = DeltaAngle + Angle;
+            }
             IsDone = false;
             rotArea = rotArea; // <-- gán này không tác dụng ra ngoài, bỏ đi
 
@@ -617,24 +627,7 @@ namespace BeeCore
                                      
                                         try
                                         {
-                                            switch (MethordEdge)
-                                            {
-                                                case MethordEdge.CloseEdges:
-                                                    matProcess = Filters.Edge(matCrop);
-                                                    break;
-                                                case MethordEdge.StrongEdges:
-                                                    matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                                                    break;
-                                                case MethordEdge.Binary:
-                                                    matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
-                                                    break;
-                                                case MethordEdge.InvertBinary:
-                                                    matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                                                    break;
-                                                default:
-                                                    matProcess = matCrop; // fallback
-                                                    break;
-                                            }
+                                            matProcess = Filters.ApplyEdgeMethod(matCrop, MethordEdge, ThresholdBinary);
 
                                             // Hậu xử lý hình thái học / khử nhiễu (mỗi hàm có thể trả Mat mới → nhớ dispose cái cũ)
                                             if (IsClearNoiseSmall)

@@ -15,16 +15,25 @@ namespace BeeInterface
 
         private void ToolCircle_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
-           if(OwnerTool.StatusTool==StatusTool.Done)
-                if (Propety.IsCalibs)
+            if (!Global.IsRun)
+            {
+                if (OwnerTool.StatusTool == StatusTool.Done)
                 {
-                    btnCalib.IsCLick = false;
-                    Propety.IsCalibs = false;
-                    btnCalib.Enabled = true;
-                    trackMinInlier.Value = Propety.MinInliers;
-                    numMaxRadius.Value = Propety.MaxRadius;
-                    numMinRadius.Value = Propety.MinRadius;
+
+
+                    if (Propety.IsCalibs)
+                    {
+                        btnCalib.IsCLick = false;
+                        Propety.IsCalibs = false;
+                        btnCalib.Enabled = true;
+                        trackMinInlier.Value = Propety.MinInliers;
+                        numMaxRadius.Value = Propety.MaxRadius;
+                        numMinRadius.Value = Propety.MinRadius;
+                    }
+                    btnTest.Enabled = true;
                 }
+               
+            }
         }
 
         private void trackScore_ValueChanged(float obj)
@@ -167,18 +176,10 @@ namespace BeeInterface
             //Lay1.Visible=lb1
         }
 
-        private void btn1_Click(object sender, EventArgs e)
-        {
-            Lay1.Visible = !btn1.IsCLick;
-        }
-
+     
         private void btn2_Click(object sender, EventArgs e)
         {
-            Lay2.Visible = !btn2.IsCLick;
-            Lay21.Visible = !btn2.IsCLick;
-            Lay22.Visible = !btn2.IsCLick;
-            Lay23.Visible = !btn2.IsCLick;
-            Lay24.Visible = !btn2.IsCLick;
+           EditRectRot1.Visible=!btn2.IsCLick;
 
         }
 

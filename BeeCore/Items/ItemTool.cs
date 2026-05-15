@@ -180,7 +180,7 @@ namespace BeeCore
                 {if (NotChange) return;
                     if (TriggerNum != TriggerNum.Trigger1) 
                         return;
-                    this.value = (float)Math.Round(value, 1);
+                    this.value = (float)Math.Round(value, 2);
                     pTick = new Point(pTrack.X + (int)((value * 1.0 / (Max - Min)) * (this.szTrack.Width - imgTick.Width)), pTrack.Y);
                     BeeCore.Common.TryGetTool(IndexThread, IndexTool).Score = Value;
                     this.Invalidate();

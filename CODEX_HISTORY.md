@@ -731,3 +731,608 @@ Known state:
 - Generated `tests/BeeCore.Persistence.Tests/bin` and `obj` folders were removed after verification.
 - Native version files are generated/touched by builds and remain part of the existing dirty worktree pattern.
 - The Release baseline still has many warnings, including native conversion warnings, architecture mismatch warnings, and package version conflict warnings in `BeeMain`.
+
+## 2026-05-07 - Centralize MethordEdge + 3 phương pháp Extract Edge mới
+
+Scope:
+- Refactor toàn bộ pipeline Extract Edge (used by Edge, Edge2, Width, Circle, Pitch, EdgePixel, Corner, AutoTrig, PositionAdj, Patterns, MultiPattern, MultiOnnx, CheckMissing, Intersect, Tool2Edge).
+- Mục tiêu: gom switch trùng ở 14 nơi → 1 method centralizer; thêm 3 phương pháp mới hỗ trợ hình phức tạp (metallic/uneven lighting/thin edges); fix bug `StrongEdges` ≡ `Stable` ở `Edge.cs` cũ.
+
+Files touched:
+- `BeeGlobal/Enums.cs` — `MethordEdge` enum: thêm 3 value `UltraThin`, `Adaptive`, `DenoiseFirst` (cuối enum để giữ ordinal cũ — backward-compat serialization OK).
+- `BeeCore/Algorithm/Filters.cs` — thêm 2 method `public static`:
+  - `AdaptiveEdge(Mat raw)` — Cv2.AdaptiveThreshold Gaussian + Canny + morph close, blockSize auto từ kích thước ảnh.
+  - `ApplyEdgeMethod(Mat src, MethordEdge method, int thresholdBinary = 127)` — centralizer chuyển hướng tới method tương ứng.
+- `BeeInterface/EdgeButtonsHelper.cs` (NEW) — static helper class gắn 3 button (UltraThin/Adaptive/Denoise) lên row mới của TableLayoutPanel; có `ExtraButtons.ResetAll()` và `Highlight(MethordEdge)`.
+- `BeeInterface/BeeInterface.csproj` — đăng ký `EdgeButtonsHelper.cs`.
+- 14 Unit files (`BeeCore/Unit/*.cs`): thay switch 4-5 case bằng 1 dòng `Filters.ApplyEdgeMethod(...)`.
+  - Edge.cs, Edge2.cs, Width.cs, Circle.cs, Pitch.cs, EdgePixel.cs, MeasureCorner.cs, AutoTrig.cs, PositionAdj.cs, Patterns.cs, CheckMissing.cs (2 switch), MultiPattern.cs (2 switch — DoWork inline + Processing wrapper), MultiOnnx.cs (Processing wrapper, giữ nhánh đặc biệt `EdgeForCenterline` + `GetStrongEdgesOnly(thresh)`), Intersect.cs.
+- 9 Tool UI files (`BeeInterface/Tool/Tool*.cs`): thêm field `_extraEdgeBtns`, gắn helper trong constructor, cập nhật `LoadPara` switch để reset state + 3 case mới gộp gọi `Highlight()`.
+  - ToolEdge / Tool2Edge / ToolWidth / ToolCircle / ToolPitch / ToolEdgePixel / ToolCorner / ToolAutoTrig / ToolPosition_Adjustment.
+
+Implementation notes:
+- 3 phương pháp mới mapping:
+  - `UltraThin` → `Filters.GetUltraThinEdgesFast(src)` (đã tồn tại — morphological gradient cho cạnh 1px).
+  - `Adaptive` → `Filters.AdaptiveEdge(src)` (mới — adaptive Gaussian threshold cho ánh sáng không đều).
+  - `DenoiseFirst` → `Filters.RemoveWhiteNoiseThenEdge(src)` (đã tồn tại — xoá glare/noise trước rồi edge).
+- **Bug fix:** Trước đây trong `BeeCore/Unit/Edge.cs`, case `MethordEdge.StrongEdges` và `MethordEdge.Stable` cùng gọi `GetStrongEdgesStable()` (2 case giống hệt). Inconsistent với `Width.cs` dùng `GetStrongEdgesOnly()` cho `StrongEdges`. Sau refactor: cả 2 đều qua `ApplyEdgeMethod` — `StrongEdges` → `GetStrongEdgesOnly` (percentile), `Stable` → `GetStrongEdgesStable` (Sobel + Otsu) đúng semantic.
+- `MultiOnnx.Processing` và `MultiPattern.Processing` giữ nhánh đặc biệt cho `CloseEdges` (EdgeForCenterline) và `StrongEdges` (custom thresh param), còn lại uỷ thác centralizer qua `default:`.
+- UI helper dùng pattern programmatic add row vào TableLayoutPanel có sẵn (panel name khác nhau giữa các tool: `tableLayoutPanel15` / `lay31` / `lay61` / `layEdge`) → KHÔNG sửa Designer.cs để tránh rủi ro break designer.
+- Threshold panel name không đồng nhất (`layThreshod` ở hầu hết tool, `lay32` ở ToolCircle, `lay62` ở ToolWidth) → mỗi tool truyền lambda riêng.
+
+Known state:
+- 9 file khác trong `BeeCore/Unit/` còn dùng `case MethordEdge.` riêng đã được centralize. `MultiOnnx.cs` và `MultiPattern.cs` có 1 switch còn case literal vì giữ nhánh đặc biệt.
+- Build verify: chưa chạy ở pass này (đề nghị user chạy `MSBuild EasyVision.sln /p:Configuration=Release /p:Platform=x64`).
+- Smoke test cần thiết: load 1 project mẫu, mở từng tool có Extract Edge, click qua 8 button (cũ + 3 mới), confirm UI không exception và inspection chạy đúng.
+- Files Edge2.cs / Tool2Edge.{cs,Designer.cs,resx} / Edge2EngineRunner.cs vẫn untracked — user sẽ commit/track.
+
+Notes for future agents:
+- Pattern clone tool: `Edge2` (suffix Unit) ↔ `Tool2Edge` (prefix Form). Khi update Edge logic, **luôn** apply cho cả `Edge.cs` + `Edge2.cs` và `ToolEdge.cs` + `Tool2Edge.cs`. Chi tiết ở `~/.claude/projects/E--Code-EasyVision-Unisen/memory/project_clone_tools.md`.
+- Switch `MethordEdge` mới chỉ còn ở `MultiOnnx.Processing` và `MultiPattern.Processing` (cần giữ thresh param + EdgeForCenterline) — đừng centralize tiếp 2 chỗ này.
+- Khi thêm phương pháp Extract Edge mới: chỉ sửa 3 nơi: enum (Enums.cs), case trong `Filters.ApplyEdgeMethod`, và (nếu muốn expose UI) thêm button trong `EdgeButtonsHelper.Make/Attach` + trường tương ứng trong `ExtraButtons.Highlight`.
+
+## 2026-05-07 - Fix RANSAC line detect khi crop ROI lớn + nhiễu rìa
+
+Scope:
+- Fix bug `RansacLine.FindLongestParallelPair` (Edge2 / Tool2Edge) bỏ qua line khi ROI lớn có noise rìa (vành tròn ngoài, glare metallic).
+- User report: ROI nhỏ vừa khít → detect được; ROI lớn cùng vật → KHÔNG detect.
+
+Files touched:
+- `Pattern/RansacLineCore.cpp` line 1031-1034: đổi `imageDiag` → `std::min(W, H)` cho `minLenPx`.
+- `BeeCore/Unit/Edge2.cs` line 157-158: bật pre-filter `Filters.ClearNoiseLengh(matProcess, SizeClearBig)` khi `IsClearNoiseBig=true` (trước đó comment-out).
+
+Root cause:
+- `FindLongestParallelPair` dùng `imageDiag = sqrt(W²+H²)` để tính `minLenPx = minLengthRatio × imageDiag`. Với `AspectLen=0.6f` mặc định + crop 1000×1000 → minLenPx = 848px. Line vật lý ~300px → reject ở line 1071. Crop nhỏ → diag nhỏ → cùng line vật lý pass.
+- Hàm chị em `FindBestLine` (line 1323) dùng `ComputeMinLenPx` với `ratio × W` hoặc `ratio × H` tuỳ direction — nhất quán hơn. Sửa `FindLongestParallelPair` dùng `min(W,H)` đồng nhất ngữ nghĩa.
+- Pre-filter `IsClearNoiseBig` trước đó bị comment-out → user enable checkbox cũng không tác dụng. Bây giờ dùng `ClearNoiseLengh` (filter theo bounding-box length) — phù hợp loại fragment ngắn ở rìa noise, giữ line dài thật.
+
+Implementation notes:
+- `FindLongestParallelPair` chỉ có 1 caller (`Edge2.cs` qua `RansacLine.FindLongestParallelPair` CLI binding) → đổi semantic minLenPx an toàn, không impact tool khác.
+- Sau fix: `AspectLen=0.6` với crop 1000×1000 → minLenPx = 600px (vs 848 trước đó). Crop hẹp 200×1500 → minLenPx = 120px (vs 1513 — gần như loại mọi line).
+- Cần rebuild native `Pattern.dll` cho fix có hiệu lực: `MSBuild EasyVision.sln /t:Pattern:Build /p:Configuration=Release /p:Platform=x64`.
+
+Verification:
+- Build native chưa chạy ở pass này.
+- User cần smoke test: load lại project mẫu có Edge2 với ROI lớn, click Test → confirm detect được parallel lines.
+- Nếu vẫn fail: tăng `RansacIterations` (200 → 800-1500), giảm `AspectLen` (0.6 → 0.3), bật `IsClearNoiseBig` với `SizeClearBig` 30-100.
+
+Notes for future agents:
+- Khi tune RANSAC line: parameter `AspectLen` (= `minLengthRatio` native) là ratio so với `min(W,H)` chứ KHÔNG phải diagonal nữa. Update doc/UI hint nếu có.
+- Với ROI noise dày: nên enable `IsClearNoiseBig` (UI checkbox) — gọi `ClearNoiseLengh` filter contour length. Khác với `IsClearNoiseSmall` (= `ClearNoise` filter area).
+- Nếu user tiếp tục báo fail RANSAC: cân nhắc adaptive iterations (tăng theo số non-zero points), hoặc thêm pre-step `Cv2.Dilate` 1-2px để dày line vs noise.
+
+## 2026-05-07 - Fix Edge/Edge2 listP_Center bỏ rotation (Measure vẽ lệch)
+
+Scope:
+- User report: Tool Measure vẽ line màu đỏ KHÔNG khớp với line tím Edge2 detect → góc đo lệch khi ROI Edge2 bị xoay (vd inherit rotation từ Position_Adjustment).
+
+Files touched:
+- `BeeCore/Unit/Edge2.cs` line 179-182: thay phép tịnh tiến đơn giản `(PosCenter - rect/2 + p)` bằng `Matrix(Translate→Rotate→Translate).TransformPoints` — đồng nhất với DrawResult line 416-418.
+- `BeeCore/Unit/Edge.cs` line 165-166: cùng fix.
+
+Root cause:
+- `Edge2.DrawResult` vẽ line dùng `mat.Translate(PosCenter) → mat.Rotate(_rectRotation) → mat.Translate(_rect.X, _rect.Y)` → line vẽ đúng ngay cả khi ROI xoay.
+- Nhưng `listP_Center` lưu global coords lại tính bằng `PosCenter.X - W/2 + X1` → **chỉ tịnh tiến, KHÔNG xoay**. Khi `_rectRotation ≠ 0`, listP_Center sai vị trí.
+- Measure đọc `tool.Propety2.listP_Center[0..1]` (qua `TryCopyLineFromToolPoints`) → vẽ line đỏ tại vị trí không-xoay → lệch khỏi line tím Edge2 → góc Measure tính sai (sai cả số lẫn vị trí).
+- `_rect.X = -W/2`, `_rect.Y = -H/2` (xem `BeeGlobal/RectRotate.cs:157`) — nên Matrix.Translate(_rect.X, _rect.Y) tương đương translate(-W/2, -H/2). Fix đúng convention chuẩn.
+
+Implementation notes:
+- Dùng `System.Drawing.Drawing2D.Matrix.TransformPoints` để khớp **đúng** sequence transform với DrawResult — tránh sai số khi tự viết rotation matrix bằng tay.
+- Fix áp dụng cho cả Edge.cs (cùng bug pattern) — ngay cả nếu user hiện không dùng Edge với ROI xoay, fix proactive đảm bảo nhất quán.
+- Khi rotation = 0: kết quả y hệt code cũ (Matrix với rotation 0 = identity rotation).
+
+Verification:
+- User cần test lại với ROI Edge2 inherit rotation từ Position_Adjustment → confirm line đỏ Measure overlap chính xác lên line tím Edge2 → góc đo đúng.
+- Build: `MSBuild EasyVision.sln /p:Configuration=Release /p:Platform=x64`. Pure C# fix, không cần rebuild native.
+
+Notes for future agents:
+- **Convention chung trong repo**: local point trong matProcess (ROI-cropped image) → global = `Matrix(Translate(PosCenter) * Rotate(_rectRotation) * Translate(_rect.X, _rect.Y))` áp dụng. KHÔNG dùng phép tịnh tiến đơn giản nếu ROI có thể xoay.
+- Tool nào output `listP_Center` (Edge, Edge2, Circle, Pitch, ...) cần check có apply rotation không. Nếu không, mọi consumer (Measure, Position_Adjustment, ...) sẽ vẽ/tính sai khi ROI xoay.
+- `_rect.X/Y` = `-W/2, -H/2` luôn (per `RectRotate.cs:157`), nên `mat.Translate(_rect.X, _rect.Y)` ≡ shift tới ROI center.
+
+## 2026-05-07 - PinPitch/Width planning handoff
+
+Scope:
+- Added planning docs for pin pitch measurement and point-to-line distance measurement.
+- No code implementation yet; markdown/session/history only.
+
+Decisions:
+- Use existing `TypeTool.Pitch`; add `PitchMeasureMode.PinPitch` for P1..P4 center detection and pin pitch values.
+- Use existing `TypeTool.Width`; add `WidthMeasureMode.PointToLine` for one selected point/pin center to one line `L`.
+- Do not put distance-to-line controls/results inside Pitch. Pitch owns centers/pitch; Width owns distance/width.
+- Use existing `RansacLine.FindBestLine` for reference line `L`; do not duplicate RANSAC line fitting.
+- C++ native should use independent `PinPitchCore` + thin `PinPitchCli`; optional `VisionGeometryCore` for shared geometry helpers.
+- Do not inherit `PinPitchCore` from existing `PitchCore`; `PitchCore` remains for crest/root profile pitch.
+
+Planning files:
+- `docs/PinPitchMeasurePlan/AGENTS.md`
+- `docs/PinPitchMeasurePlan/Plan.md`
+- `docs/PinPitchMeasurePlan/CoreGuiImplementationPlan.md`
+- `docs/PinPitchMeasurePlan/pin-pitch-map.md`
+
+Next implementation order:
+1. `PP-001`: native `PinPitchCore/Cli` center detector.
+2. `PP-002`: Width `PointToLine` core mode.
+3. `PP-003`: line `L` detection using `RansacLine.FindBestLine`.
+4. `PP-004/PP-005`: result scoring and GUI for Pitch/Width.
+
+Build:
+- Not run. Changes are markdown-only.
+
+## 2026-05-07 - Agent permission and English documentation rule
+
+Scope:
+- Updated repository agent rules and PinPitch planning docs.
+- No code implementation; documentation/session/history only.
+
+Changes:
+- Added `Agent Permission and Language Rules` to root `AGENTS.md`.
+- Agents have standing permission for in-scope inspection, edits, map/session updates, and non-destructive verification commands without asking first.
+- Agents should only ask when a repository stop condition is hit, destructive filesystem/git-history work is requested, out-of-scope fixes are required after a failed build, or ambiguity would make a reasonable assumption risky.
+- All agent-facing documentation must be written in English: plans, map entries, AGENTS files, session logs, history notes, implementation notes, comments for future agents, and handoff notes.
+- User-facing final summaries can remain in the user's language unless requested otherwise.
+- Updated `docs/PinPitchMeasurePlan/AGENTS.md` with the English-only rule for that planning folder.
+- Converted remaining Vietnamese planning text in `CoreGuiImplementationPlan.md` and `Plan.md` to English.
+
+Build:
+- Not run. Changes are markdown-only.
+
+## 2026-05-07 - PP-001 native PinPitch detector
+
+Scope:
+- Implemented the native PinPitch detector foundation for ToolPitch PinPitch mode.
+
+Files added:
+- `Pattern/VisionGeometryCore.h`
+- `Pattern/VisionGeometryCore.cpp`
+- `Pattern/PinPitchCore.h`
+- `Pattern/PinPitchCore.cpp`
+- `Pattern/PinPitchCli.h`
+- `Pattern/PinPitchCli.cpp`
+
+Files updated:
+- `Pattern/Pattern.vcxproj`
+- `Pattern/version.h`
+- `Pattern/.version.hash`
+- `docs/PinPitchMeasurePlan/pin-pitch-map.md`
+
+Implementation notes:
+- `PinPitchCore` is independent from existing `PitchCore`; no inheritance was added.
+- `PinPitchCli` is a thin C++/CLI wrapper in namespace `BeeCppCli`, matching existing `PitchCli` style.
+- `VisionGeometryCore` contains reusable distance/projection/sort/fit-line helpers.
+- The detector accepts 1/3/4-channel 8-bit input, builds a bright-object mask with Otsu or manual threshold, filters contour candidates by area/aspect/fill ratio, estimates centers primarily from rotated contour geometry, and falls back to weighted centroid only when geometry is weak.
+- The result exposes pins, adjacent pitch values, P1-P4 span, row line, row residual, scale, and optional debug BGR buffer with `FreeBuffer` ownership.
+
+Verification:
+- Release x64 build passed.
+- Warning count: 424 existing-style warnings.
+
+Next:
+- PP-002: extend Width with `PointToLine` mode and point source selection.
+
+## 2026-05-07 - PP-002/PP-005 C# core and lightweight GUI wiring
+
+Scope:
+- Continued PinPitch/Width integration on the managed C# side.
+
+Files updated:
+- `BeeGlobal/Enums.cs`
+- `BeeCore/Unit/Pitch.cs`
+- `BeeCore/Unit/Width.cs`
+- `BeeCore/Func/Engines/WidthEngineRunner.cs`
+- `BeeInterface/Tool/ToolPitch.cs`
+- `BeeInterface/Tool/ToolWidth.cs`
+- `docs/PinPitchMeasurePlan/pin-pitch-map.md`
+
+Implementation notes:
+- Added `PitchMeasureMode` and `WidthMeasureMode` enums.
+- Pitch now has a `PinPitch` core path that calls `BeeCppCli.PinPitchCli`, maps local pin centers back to global coordinates, fills `listP_Center` as P1..P4, stores P12/P23/P34/P1-P4 values, and draws a simple P1..P4 overlay.
+- Width now has `PointToLine` mode that resolves one selected source point, detects reference line L through `RansacLine.FindBestLine`, projects the point to L, writes distance to `WidthResult`, and draws point/line/foot/distance overlay.
+- ToolPitch now has a lightweight programmatic panel for PeakRoot/PinPitch mode, expected pins, nominal pitch, tolerance, and projected pitch.
+- ToolWidth now has a lightweight programmatic panel for ParallelLines/PointToLine mode, point source, point index, nominal distance, and tolerance.
+- Designer files were intentionally not edited in this pass to reduce WinForms designer churn.
+
+Verification:
+- First Release x64 build passed.
+- A warning-count rerun hit the known transient `BeeCV/version.h` prebuild stream error, then passed on rerun.
+- Final Release x64 build passed with 424 warnings.
+
+Next:
+- Validate with the sample pin image and tune PinPitch threshold/area/fill options.
+- Polish ToolPitch/ToolWidth designer layout if the programmatic panels are not acceptable for operators.
+
+## 2026-05-07 - PP-004/PP-005 PinPitch arrange mode
+
+Scope:
+- Fixed PinPitch ordering before pitch calculation.
+
+Files updated:
+- `Pattern/PinPitchCore.h`
+- `Pattern/PinPitchCore.cpp`
+- `Pattern/PinPitchCli.h`
+- `Pattern/PinPitchCli.cpp`
+- `BeeGlobal/Enums.cs`
+- `BeeCore/Unit/Pitch.cs`
+- `BeeInterface/Tool/ToolPitch.cs`
+- `docs/PinPitchMeasurePlan/pin-pitch-map.md`
+
+Implementation notes:
+- Replaced the native `sortHorizontal` option with explicit `PinArrangeMode`: `X`, `Y`, and `RowProjection`.
+- PinPitch now assigns P1..Pn after arranging detected centers by the selected mode, then computes adjacent pitch and P1-P4 span.
+- Managed Pitch now stores `PinPitchArrangeMode` and passes it through the C++/CLI wrapper.
+- ToolPitch now exposes an `Arrange` combo box so operators can choose X or Y ordering for the sample orientation instead of relying on line orientation.
+
+Verification:
+- Release x64 build passed.
+- Warning count: 460 existing-style warnings.
+
+Next:
+- Validate `Arrange=X` on the horizontal sample image and use `Arrange=Y` for vertical pin stacks.
+
+## 2026-05-12 - P3X.1.1 BeeNativeSegAI skeleton
+
+Scope:
+- Started the Tool Segment AI native foundation from `docs/AiPlan`.
+
+Files updated:
+- `BeeNativeSegAI/BeeNativeSegAI.vcxproj`
+- `BeeNativeSegAI/pch.h`
+- `BeeNativeSegAI/framework.h`
+- `BeeNativeSegAI/dllmain.cpp`
+- `BeeNativeSegAI/SegAINativeExport.h`
+- `BeeNativeSegAI/BeeNativeSegAI.cpp`
+- `EasyVision.sln`
+
+Implementation notes:
+- Added a standalone `BeeNativeSegAI` x64 dynamic library project using v143/C++17.
+- Linked only OpenCV 4.5.5 for the Phase 1 native skeleton.
+- Added `SEGAI_GetVersion` and `SEGAI_GetBuildInfo` exports.
+- Added a Release x64 post-build copy into the root `bin\x64\Release` output folder, matching the actual `BeeMain.csproj` output path in this repo.
+
+Verification:
+- `MSBuild BeeNativeSegAI\BeeNativeSegAI.vcxproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- Build produced `BeeNativeSegAI\x64\Release\BeeNativeSegAI.dll`; generated project artifacts were cleaned after verification, and the copied runtime DLL remains at `bin\x64\Release\BeeNativeSegAI.dll`.
+- `dumpbin /EXPORTS` shows `SEGAI_GetVersion` and `SEGAI_GetBuildInfo`.
+
+Next:
+- P3X.1.2: implement `SegFeatureExtractor::ExtractCPU` 24-D feature extraction.
+
+## 2026-05-12 - P3X.1.2 SegmentAI CPU feature extractor
+
+Scope:
+- Implemented the native CPU feature extraction foundation for Tool Segment AI.
+
+Files updated:
+- `BeeNativeSegAI/SegFeatureCore.h`
+- `BeeNativeSegAI/SegFeatureCore.cpp`
+- `BeeNativeSegAI/BeeNativeSegAI.cpp`
+- `BeeNativeSegAI/SegAINativeExport.h`
+- `BeeNativeSegAI/BeeNativeSegAI.vcxproj`
+
+Implementation notes:
+- Added `BeeSegAI::FeatureConfig` and `BeeSegAI::SegFeatureExtractor`.
+- Implemented `ExtractCPU` with the planned 24 feature planes: uniform LBP, HSV mean/std, four Gabor magnitudes, gradient magnitude/orientation, Laplacian, ROI position, three intensity neighborhood means, three edge-density scales, local contrast, and distance-to-ROI-edge.
+- Added `PackSamples` and `PlanesToInterleaved` for trainer/inferer use in later tasks.
+- Added `SEGAI_RunFeatureSelfTest` as a native diagnostic export that runs feature extraction on a synthetic BGR image and validates plane count, type, size, value range, packing, and ROI interleaving.
+- Left `ExtractGpu` as an explicit P3X.1.11 stub so this task stays CPU-only.
+
+Verification:
+- `MSBuild BeeNativeSegAI\BeeNativeSegAI.vcxproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- PowerShell/C# P/Invoke smoke call returned `SEGAI_RunFeatureSelfTest=0`.
+- Generated project artifacts were cleaned after verification; the copied runtime DLL remains at `bin\x64\Release\BeeNativeSegAI.dll`.
+
+Next:
+- P3X.1.3: implement `SegTrainer` and `.segai` save/load round-trip.
+
+## 2026-05-12 - P3X.1.3 SegmentAI trainer and segai file format
+
+Scope:
+- Implemented RTrees training and `.segai` model persistence for the native SegmentAI layer.
+
+Files updated:
+- `BeeNativeSegAI/SegTrainerCore.h`
+- `BeeNativeSegAI/SegTrainerCore.cpp`
+- `BeeNativeSegAI/SegAIFileFormat.h`
+- `BeeNativeSegAI/SegAIFileFormat.cpp`
+- `BeeNativeSegAI/BeeNativeSegAI.cpp`
+- `BeeNativeSegAI/SegAINativeExport.h`
+- `BeeNativeSegAI/BeeNativeSegAI.vcxproj`
+
+Implementation notes:
+- Added `BeeSegAI::SegTrainer` with sample ingestion, deterministic class-balanced subsampling, RTrees training, model save/load, and single-pixel prediction helper.
+- Added `.segai` binary wrapper with 72-byte header, feature config fields, RTrees YAML payload, and CRC32 validation.
+- Mask labels accepted by native training: `1` or `>=200` for defect, `2` or `[100,199]` for normal, `0` for ignore.
+- Extended `SEGAI_RunFeatureSelfTest` to train on a synthetic BGR/mask pair, save a `.segai`, load it back, verify threshold/min-area metadata, and predict one defect plus one normal pixel.
+
+Verification:
+- `MSBuild BeeNativeSegAI\BeeNativeSegAI.vcxproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- PowerShell/C# P/Invoke smoke call returned `SEGAI_RunFeatureSelfTest=0`.
+- `dumpbin /EXPORTS` shows `SEGAI_GetVersion`, `SEGAI_GetBuildInfo`, and `SEGAI_RunFeatureSelfTest`.
+- Generated project artifacts were cleaned after verification; the copied runtime DLL remains at `bin\x64\Release\BeeNativeSegAI.dll`.
+
+Next:
+- P3X.1.4: implement `SegInferer::Predict` CPU-only mask inference.
+
+## 2026-05-12 - P3X.1.4/P3X.1.5 SegmentAI inferer and native exports
+
+Scope:
+- Implemented CPU-only native inference plus full C exports and a standalone native test harness.
+
+Files updated:
+- `BeeNativeSegAI/SegInferCore.h`
+- `BeeNativeSegAI/SegInferCore.cpp`
+- `BeeNativeSegAI/SegAINativeExport.cpp`
+- `BeeNativeSegAI/SegAINativeExport.h`
+- `BeeNativeSegAI/BeeNativeSegAI.cpp`
+- `BeeNativeSegAI/BeeNativeSegAI.vcxproj`
+- `BeeNativeSegAI/test/SegAITest.cpp`
+- `BeeNativeSegAI/test/SegAITest.vcxproj`
+- `BeeNativeSegAI/test/data/.gitignore`
+- `BeeNativeSegAI/test/data/.gitkeep`
+
+Implementation notes:
+- Added `BeeSegAI::SegInferer` with CPU feature extraction, RTrees prediction over the ROI, connected-components filtering by `minDefectArea`, full-size binary output mask, and scalar defect score.
+- Added full `SEGAI_*` C exports for trainer lifecycle, ROI setup, sample add/clear/count, training, save, inferer lifecycle, load, GPU flag plumbing, predict, and buffer free.
+- Added `SegAITest.exe` project. If no real sample image/mask pair is supplied, it generates a synthetic checkerboard defect sample, trains, saves `.segai`, loads it through the infer export path, predicts, writes an output mask, and reports IoU.
+- Generated synthetic images/model/output are runtime verification artifacts and were cleaned after verification; `test/data/.gitignore` prevents PNG/`.segai` artifacts from being committed accidentally, and `.gitkeep` preserves the folder.
+
+Verification:
+- `MSBuild BeeNativeSegAI\BeeNativeSegAI.vcxproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- `MSBuild BeeNativeSegAI\test\SegAITest.vcxproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- `SegAITest.exe` synthetic fallback completed with `score=0.0747223`, `iou=0.999388`, and `out_pred.png` generated before cleanup.
+- PowerShell/C# P/Invoke smoke call returned `SEGAI_RunFeatureSelfTest=0`.
+- `dumpbin /EXPORTS` shows all planned `SEGAI_*` trainer, inferer, buffer, and diagnostic symbols.
+
+Next:
+- P3X.1.6: implement C# wrapper `BeeCore/Func/NativeSegAI.cs`.
+
+## 2026-05-12 - SegmentAI weld crop sample validation
+
+Scope:
+- Tested the native SegmentAI pipeline with user-provided weld sample crops and `test.png`.
+
+Files updated:
+- `BeeNativeSegAI/SegTrainerCore.cpp`
+- `BeeNativeSegAI/test/SegAITest.cpp`
+
+Implementation notes:
+- `SegTrainer::AddSample` now allows single-class samples. This supports the practical workflow where one crop is all NG/defect and another crop is all OK/normal; `Train` still validates that the total dataset contains both classes.
+- Added a `SegAITest.exe NG.png OK.png test.png` mode. It trains from the NG and OK crops, template-matches those crops back onto the test image to define tight weld ROIs, predicts both ROIs, and writes `out_weld_pred.png` plus `out_weld_overlay.png`.
+- Runtime PNG/`.segai` outputs in `BeeNativeSegAI/test/data` remain ignored by `.gitignore`.
+
+Verification:
+- `MSBuild BeeNativeSegAI\BeeNativeSegAI.vcxproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- `MSBuild BeeNativeSegAI\test\SegAITest.vcxproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- Ran `SegAITest.exe BeeNativeSegAI\test\data\NG.png BeeNativeSegAI\test\data\OK.png BeeNativeSegAI\test\data\test.png`.
+- Result: `trained_defect_pixels=175698`, `trained_normal_pixels=179296`, `left_roi=296,244,498,425`, `right_roi=1222,224,473,456`, `left_score=0.770725`, `right_score=0.176672`, `ratio_left_over_right=4.36247`.
+- PowerShell/C# P/Invoke smoke call returned `SEGAI_RunFeatureSelfTest=0`.
+
+Next:
+- P3X.1.6 remains next: implement C# wrapper `BeeCore/Func/NativeSegAI.cs`.
+
+## 2026-05-13 - P3X.1.6 NativeSegAI C# wrapper
+
+Scope:
+- Added the managed P/Invoke wrapper for the native SegmentAI DLL.
+
+Files updated:
+- `BeeCore/Func/NativeSegAI.cs`
+- `BeeCore/BeeCore.csproj`
+
+Implementation notes:
+- Added `NativeSegAITrainer` with lifecycle, ROI setup, sample add, sample count, train, save, clear, and safe disposal.
+- Added `NativeSegAIInferer` with lifecycle, load, GPU flag plumbing, predict, static GPU availability, static native self-test, and safe disposal.
+- `Predict` copies the native mask into a managed `byte[]` and always calls `SEGAI_FreeBuffer` in `finally`, preserving native buffer ownership.
+- Added `OpenCvSharp.Mat` overloads for BGR image/mask input while keeping low-level `IntPtr` overloads for future tool integration.
+
+Verification:
+- `MSBuild BeeCore\BeeCore.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed with existing repository warnings.
+- `bash tools/check_propety_tools.sh` passed.
+- PowerShell loaded `BeeCore\bin\x64\Release\BeeCore.dll` and returned `BeeCore.NativeSegAIInferer.SEGAI_RunFeatureSelfTest=0`.
+
+Next:
+- P3X.1.7: implement `BeeCore/Unit/SegmentAI.cs` POCO plus `DoWork`/`Complete`/`Train` flow.
+
+## 2026-05-13 - P3X.1.7/P3X.1.8/P3X.1.9 SegmentAI core object, factory registration, and MaskPainter
+
+Scope:
+- Added the managed SegmentAI tool object, engine runner bridge, DataTool registration, and the reusable mask painting UI control.
+
+Files updated:
+- `BeeCore/Unit/SegmentAI.cs`
+- `BeeCore/Func/Engines/SegmentAIEngineRunner.cs`
+- `BeeCore/BeeCore.csproj`
+- `BeeGlobal/Enums.cs`
+- `BeeInterface/DataTool.cs`
+- `BeeInterface/Tool/ToolSegmentAI.cs`
+- `BeeInterface/Custom/MaskPainter.cs`
+- `BeeInterface/Custom/MaskPainter.Designer.cs`
+- `BeeInterface/Custom/MaskPainter.resx`
+- `BeeInterface/BeeInterface.csproj`
+
+Implementation notes:
+- Added serializable `SegmentAI` and `SegSample` models with ROI/crop/mask state, training sample storage, native train/save/load flow, `DoWork` prediction, and `Complete` propagation back to the owning tool.
+- Added `SegmentAIEngineRunner` so the runtime path can execute SegmentAI without embedding native wrapper details in WinForms.
+- Added `TypeTool.SegmentAI` and registered it in `DataTool`. `ToolSegmentAI` is currently a minimal bridge control so factory creation works; the full operator UI remains scoped to P3X.1.10.
+- Added `MaskPainter`, a WinForms UserControl that loads an image, paints NG/OK/erase labels, supports undo/clear, renders a translucent overlay, and exports label bytes compatible with native masks (`0` ignore, `1` defect, `2` normal).
+
+Verification:
+- `MSBuild BeeCore\BeeCore.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed with existing repository warnings.
+- `MSBuild BeeInterface\BeeInterface.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed with existing repository warnings.
+- `MSBuild EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed; captured log contains 425 warning lines, all from existing repository/native dependency warning categories.
+- `bash tools/check_propety_tools.sh` passed.
+
+Next:
+- P3X.1.10: implement the full `ToolSegmentAI` form using `MaskPainter`, sample management, train controls, threshold controls, and preview overlay.
+
+## 2026-05-13 - P3X.1.10 ToolSegmentAI form
+
+Scope:
+- Replaced the temporary SegmentAI bridge control with the first full WinForms operator UI.
+
+Files updated:
+- `BeeInterface/Tool/ToolSegmentAI.cs`
+- `BeeInterface/Tool/ToolSegmentAI.Designer.cs`
+- `BeeInterface/Tool/ToolSegmentAI.resx`
+- `BeeInterface/BeeInterface.csproj`
+
+Implementation notes:
+- Added a 4-tab UI: General, Training Data, Train, and Inference.
+- Added collapsible RJButton-backed parameter sections for storage, sample annotation, train settings, and inference settings.
+- Added sample import flow: Add Sample opens image files, launches a modal `MaskPainter`, saves the copied source image plus a visible grayscale mask (`255` defect, `128` normal), and registers the sample in `SegmentAI.samples`.
+- Added sample list preview with NG/OK overlay and mask pixel counts.
+- Added async training flow with cancellation, progress display, log output, and model reload after successful save.
+- Added inference test flow with image browse, threshold/min-area/GPU controls, native prediction call, score/result labels, and preview overlay.
+- Preserved event balance by wiring every UI event with `-=` before `+=`.
+
+Verification:
+- `MSBuild EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- Captured build log contains 425 warning lines and 0 real error lines. The warning count is within the planned cap and matches existing repository warning categories.
+- `bash tools/check_propety_tools.sh` passed.
+- Event balance check for `ToolSegmentAI.cs` and `ToolSegmentAI.Designer.cs` returned `plus=22 minus=22 equal=True`.
+
+Not run:
+- Manual app smoke test for adding a SegmentAI tool, painting 5 samples, training, and testing preview. This requires interactive EasyVision UI operation.
+
+Next:
+- P3X.1.11: implement and benchmark the GPU/UMat SegmentAI inference path.
+
+## 2026-05-14 - P3X.1.11 SegmentAI GPU/UMat inference path
+
+Scope:
+- Implemented the first GPU-assisted SegmentAI inference path and benchmark harness updates.
+
+Files updated:
+- `BeeNativeSegAI/SegFeatureCore.cpp`
+- `BeeNativeSegAI/SegInferCore.h`
+- `BeeNativeSegAI/SegInferCore.cpp`
+- `BeeNativeSegAI/BeeNativeSegAI.cpp`
+- `BeeNativeSegAI/test/SegAITest.cpp`
+- `BeeNativeSegAI/test/SegAITest.vcxproj`
+
+Implementation notes:
+- Implemented `SegFeatureExtractor::ExtractGpu` using `cv::UMat` for HSV/Gabor/gradient/Laplacian/edge-density/contrast features, while keeping LBP and ROI-distance helper generation compatible by bridging through CPU where OpenCV lacks a direct vectorized UMat equivalent.
+- Added a mutex-protected OpenCL runtime scope in `SegInferCore.cpp`, following the repository pattern used by `Pattern2.cpp`.
+- Split inference into explicit CPU and GPU-assisted paths. The GPU path now crops to the target ROI first, extracts features on `UMat`, merges ROI planes on the GPU side, downloads one interleaved sample matrix, and keeps RTrees prediction plus connected-component filtering on CPU.
+- Extended the native self-test so OpenCL-capable machines also validate GPU plane extraction and CPU/GPU mask agreement.
+- Updated `SegAITest` to benchmark a 1280x960 synthetic image with a 512x512 ROI, print CPU/GPU timings plus agreement, and verify GPU agreement >= 99% when OpenCL is available.
+- Fixed `SegAITest.vcxproj` library lookup so the standalone benchmark links reliably against `BeeNativeSegAI.lib`.
+
+Verification:
+- `MSBuild BeeNativeSegAI\BeeNativeSegAI.vcxproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- `MSBuild BeeNativeSegAI\test\SegAITest.vcxproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- Warm benchmark on the current machine (`NVIDIA RTX A500 Laptop GPU`, OpenCL available):
+  - Run 1 after rebuild: `cpu_ms=97.545400`, `gpu_ms=281.908400`, `gpu_agreement=1.000000`, `iou=1.000000`.
+  - Run 2 warm cache: `cpu_ms=104.258500`, `gpu_ms=161.238200`, `gpu_agreement=1.000000`, `iou=1.000000`.
+- The GPU path now meets the planned latency target (`<= 200ms`) on warm runs and preserves 100% mask agreement in the benchmark.
+
+Residual gap:
+- The current GPU-assisted path does **not** yet beat the improved ROI-cropped CPU baseline on this machine (`gpu_speedup=0.646612x` warm), so the original DoD target of >= 1.5x speedup remains unmet.
+
+Next:
+- Continue P3X.1.11 optimization before moving on: reduce GPU download overhead further or move additional post-feature work off CPU so the GPU path can beat the ROI-cropped CPU baseline.
+
+## 2026-05-14 - P3X.1.11 follow-up tuning
+
+Scope:
+- Ran an additional optimization pass on the same GPU-assisted inference path.
+
+Files updated:
+- `BeeNativeSegAI/SegInferCore.cpp`
+
+Implementation notes:
+- Re-tested OpenCV RTrees batch prediction and reverted it because it was slower than the existing parallel per-row prediction in this codebase.
+- Switched the GPU sample-matrix handoff from explicit `copyTo` to `getMat(cv::ACCESS_READ)` after GPU-side plane merge/reshape, reducing one explicit copy in the hot path.
+
+Verification:
+- `MSBuild BeeNativeSegAI\BeeNativeSegAI.vcxproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- `MSBuild BeeNativeSegAI\test\SegAITest.vcxproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- Warm benchmark after this pass:
+  - Run 1: `cpu_ms=119.318700`, `gpu_ms=279.091800`, `gpu_agreement=1.000000`, `iou=1.000000`.
+  - Run 2: `cpu_ms=71.089500`, `gpu_ms=159.662100`, `gpu_agreement=1.000000`, `iou=1.000000`.
+
+Status:
+- The GPU path remains functionally correct and still satisfies the warm latency target (`~160 ms`), but the CPU ROI-cropped path improved further and is now significantly faster on the current machine.
+
+Next:
+- Keep P3X.1.11 open. The remaining work is architectural optimization, not bug fixing: reduce GPU/CPU synchronization cost or move more of the downstream pipeline off CPU before attempting P3X.1.12.
+
+## 2026-05-14 - P3X.1.12 runtime integration follow-up
+
+Scope:
+- Closed the remaining generic runtime compatibility gaps for `SegmentAI` inside the shared tool pipeline.
+
+Files updated:
+- `BeeCore/Unit/SegmentAI.cs`
+
+Implementation notes:
+- Changed `SetModel` to accept the optional boolean argument used by generic clone/reload paths (`SetModel(true)`), keeping existing call sites compatible.
+- Added `MaxThread` so `PropetyTool.RunToolAsync()` can schedule `SegmentAI` through the same dynamic concurrency path as the other tools.
+- Implemented `DrawResult(Graphics)` so camera/view overlay code can render the last segmentation mask and label through the existing `tool.Propety2.DrawResult(g)` convention.
+- Added a helper that converts the latest byte-mask result into an overlay `Mat` before passing it to the shared rotated-ROI drawing helper.
+
+Verification:
+- `MSBuild BeeCore\BeeCore.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- `MSBuild EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` reached the final copy stage, then failed because `EasyVision (8920)` held `BeeCV.dll`, `BeeCpp.dll`, `BeeCore.dll`, `BeeInterface.dll`, `BeeUi.dll`, and `PylonCli.dll` open.
+
+Status:
+- The `SegmentAI` tool now matches the generic runtime expectations of the app pipeline at compile time.
+- Manual smoke for live overlay/reload/FPS is still pending, so P3X.1.12 remains partial rather than done.
+
+Next:
+- Re-run the full solution build with `EasyVision.exe` closed, then execute the planned manual smoke flow for saved-project reload, overlay rendering, and scan-loop FPS.
+
+## 2026-05-14 - P3X.1.12 build unblock + startup smoke
+
+Scope:
+- Cleared the build blocker and verified that the full solution now produces the updated binaries.
+
+Files updated:
+- `CODEX_HISTORY.md`
+
+Implementation notes:
+- Re-ran the full `EasyVision.sln` Release x64 build after `EasyVision.exe` released the output DLLs.
+- Performed a minimal startup smoke by launching the freshly built `bin\Release\EasyVision.exe`, waiting 8 seconds, and confirming the process stayed alive before shutting down the test instance.
+
+Verification:
+- `MSBuild EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal` passed.
+- Startup smoke passed: launched `EasyVision.exe` test instance `PID 26028`, confirmed `AliveAfter8s = True`, then terminated that test instance.
+
+Status:
+- Build and basic startup are now green.
+- The remaining P3X.1.12 work is manual functional smoke for SegmentAI project reload, overlay visibility, and scan-loop FPS.
+
+Next:
+- Run the in-app SegmentAI smoke scenario on a real project/tool instance, then move to P3X.1.13 once overlay/reload/FPS behavior is confirmed.
+
+## 2026-05-14 - P3X.1.12 real-data weld inference smoke
+
+Scope:
+- Verified the native SegmentAI weld sample flow against the real `NG.png`, `OK.png`, and `test.png` assets already stored under `BeeNativeSegAI/test/data`.
+
+Files updated:
+- `CODEX_HISTORY.md`
+
+Implementation notes:
+- Reused the existing `SegAITest.exe NG.png OK.png test.png` mode that trains from the two weld crops, template-matches them back into the full test image, predicts both weld ROIs, and writes `out_weld_pred.png` plus `out_weld_overlay.png`.
+- This check validates the practical left-weld-NG / right-weld-OK scenario without requiring interactive WinForms steps.
+
+Verification:
+- Ran:
+  - `SegAITest.exe BeeNativeSegAI/test/data/NG.png BeeNativeSegAI/test/data/OK.png BeeNativeSegAI/test/data/test.png`
+- Result:
+  - `left_score=0.771179`
+  - `right_score=0.176176`
+  - `ratio_left_over_right=4.37733`
+  - `left_roi=296,244,498,425`
+  - `right_roi=1222,224,473,456`
+- Output artifacts refreshed:
+  - `BeeNativeSegAI/test/data/out_weld_pred.png`
+  - `BeeNativeSegAI/test/data/out_weld_overlay.png`
+
+Status:
+- Real-image native smoke is consistent with the expected behavior: the left weld is scored much more defect-like than the right weld.
+- Remaining P3X.1.12 scope is now narrowed to in-app manual overlay/reload/FPS confirmation only.
+
+Next:
+- Perform the final manual EasyVision SegmentAI smoke, then proceed to P3X.1.13 hardening if the UI behavior matches the native results.

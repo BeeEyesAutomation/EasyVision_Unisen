@@ -193,7 +193,6 @@ namespace BeeInterface
             this.btnEnQrCode.TabIndex = 23;
             this.btnEnQrCode.TextColor = System.Drawing.Color.Black;
             this.btnEnQrCode.UseVisualStyleBackColor = false;
-            this.btnEnQrCode.Visible = false;
             this.btnEnQrCode.Click += new System.EventHandler(this.btnEnQrCode_Click);
             // 
             // btnShowList

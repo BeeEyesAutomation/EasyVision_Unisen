@@ -645,9 +645,11 @@ namespace BeeInterface
 
         private void btnEnQrCode_Click(object sender, EventArgs e)
         {
-            tmQrCode.Enabled = btnEnQrCode.IsCLick;
-            Global.Main.ActiveControl = txtQrCode;
-txtQrCode.Focus();
+            FormCameraCalibration formCameraCalibration = new FormCameraCalibration();
+            formCameraCalibration.ShowDialog();
+//            tmQrCode.Enabled = btnEnQrCode.IsCLick;
+//            Global.Main.ActiveControl = txtQrCode;
+//txtQrCode.Focus();
         }
 
         private void btnShowList_Click(object sender, EventArgs e)

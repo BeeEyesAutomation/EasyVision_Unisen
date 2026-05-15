@@ -2,7 +2,9 @@
 using BeeCore.Algorithm;
 using BeeCore.Funtion.Engines;
 using BeeGlobal;
+using BeeInterface.Group;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -26,11 +28,18 @@ namespace BeeInterface
         private void InvalidateOwnerToolCache() => _ownerTool = null;
         #endregion
 
+        private EdgeButtonsHelper.ExtraButtons _extraEdgeBtns;
+
         public ToolCircle()
         {
             InitializeComponent();
             if (Propety == null)
                 Propety = new Circle();
+            _extraEdgeBtns = EdgeButtonsHelper.Attach(lay31, m =>
+            {
+                Propety.MethordEdge = m;
+                lay32.Enabled = false;
+            });
         }
 
         Stopwatch timer = new Stopwatch();
@@ -39,6 +48,14 @@ namespace BeeInterface
 
         public void LoadPara()
         {
+            EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotMask };
+            EditRectRot1.Refresh();
+            EditRectRot1.IsHide = false;
+            EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
+            EditRectRot1.RotateCurentChanged += EditRectRot1_RotateCurentChanged;
+            this.VisibleChanged -= ToolVisualMatch_VisibleChanged;
+            this.VisibleChanged += ToolVisualMatch_VisibleChanged;
+
             CircleEngineRunner.MarkOwnerWaiting(OwnerTool);
             if (OwnerTool != null)
             {
@@ -86,20 +103,18 @@ namespace BeeInterface
             AdjClearNoise.Value = state.SizeClearSmall;
             AdjClearBig.Value = state.SizeClearBig;
 
+            btnStrongEdge.IsCLick = btnCloseEdge.IsCLick = btnBinary.IsCLick = btnInvert.IsCLick = false;
+            _extraEdgeBtns?.ResetAll();
+            lay32.Enabled = false;
             switch (state.MethordEdge)
             {
-                case MethordEdge.StrongEdges:
-                    btnStrongEdge.IsCLick = true; lay32.Enabled = false;
-                    break;
-                case MethordEdge.CloseEdges:
-                    btnCloseEdge.IsCLick = true; lay32.Enabled = false;
-                    break;
-                case MethordEdge.Binary:
-                    btnBinary.IsCLick = true; lay32.Enabled = true;
-                    break;
-                case MethordEdge.InvertBinary:
-                    btnInvert.IsCLick = true; lay32.Enabled = true;
-                    break;
+                case MethordEdge.StrongEdges:   btnStrongEdge.IsCLick = true; break;
+                case MethordEdge.CloseEdges:    btnCloseEdge.IsCLick = true; break;
+                case MethordEdge.Binary:        btnBinary.IsCLick = true; lay32.Enabled = true; break;
+                case MethordEdge.InvertBinary:  btnInvert.IsCLick = true; lay32.Enabled = true; break;
+                case MethordEdge.UltraThin:
+                case MethordEdge.Adaptive:
+                case MethordEdge.DenoiseFirst:  _extraEdgeBtns?.Highlight(state.MethordEdge); break;
             }
 
             switch (state.CircleScanDirection)
@@ -112,20 +127,35 @@ namespace BeeInterface
                     break;
             }
 
-            btnArea.IsCLick = true;
+           
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
 
-            btnElip.IsCLick = state.AreaShape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = state.AreaShape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = state.AreaShape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = state.AreaShape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = state.AreaIsWhite;
-            btnBlack.IsCLick = !state.AreaIsWhite;
-            btn1.IsCLick = true;
-            btn2.IsCLick = true;
-            btn3.IsCLick = true;
+            
         }
+        private void ToolVisualMatch_VisibleChanged(object sender, EventArgs e)
+        {
+            if (!this.Visible)
+            {
+                EditRectRot1.IsHide = true;
+                EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
+            }
+        }
+
+        private void EditRectRot1_RotateCurentChanged(RectRotate obj)
+        {
+            switch (obj.TypeCrop)
+            {
+                case TypeCrop.Area:
+                    Propety.rotArea = obj; break;
+                case TypeCrop.Crop:
+                    Propety.rotCrop = obj; break;
+                case TypeCrop.Mask:
+                    Propety.rotMask = obj; break;
+
+            }
+        }
+
 
         private void rjButton3_Click(object sender, EventArgs e)
         {

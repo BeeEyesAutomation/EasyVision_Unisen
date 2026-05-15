@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe' BeeGlobal/BeeGlobal.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /nologo\")",
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe' BeeCore/BeeCore.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /nologo\")",
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe' BeeInterface/BeeInterface.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /nologo\")",
+      "Bash(\"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal)",
+      "PowerShell(cd \"E:\\\\Code\\\\EasyVision_Unisen\"; $output = & \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal 2>&1; @\\($output | Select-String -Pattern 'warning' -SimpleMatch\\).Count)"
+    ]
+  }
+}

@@ -1,5 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Ownership: shared/reusable WinForms controls and standalone utility forms, separate from runtime inspection orchestration. -->
   <Import Project="..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props" Condition="Exists('..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -88,15 +89,11 @@
     </Reference>
     <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\BeeCore\bin\x64\Release\OpenCvSharp.dll</HintPath>
+      <HintPath>..\packages\OpenCvSharp4.4.11.0.20250507\lib\net48\OpenCvSharp.dll</HintPath>
     </Reference>
     <Reference Include="OpenCvSharp.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\BeeCore\bin\x64\Release\OpenCvSharp.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenCvSharp.UserInterface, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\BeeCore\bin\x64\Release\OpenCvSharp.UserInterface.dll</HintPath>
+      <HintPath>..\packages\OpenCvSharp4.Extensions.4.11.0.20250507\lib\net48\OpenCvSharp.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Python.Runtime, Version=3.0.5.0, Culture=neutral, PublicKeyToken=5000fea6cba702dd, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -256,19 +253,23 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BeeCore\BeeCore.csproj">
-      <Project>{ac6e4007-f2a0-49f3-b777-dde4c58c5adc}</Project>
+      <Project>
+  <!-- Ownership: shared/reusable WinForms controls and standalone utility forms, separate from runtime inspection orchestration. -->{ac6e4007-f2a0-49f3-b777-dde4c58c5adc}</Project>
       <Name>BeeCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\BeeGlobal\BeeGlobal.csproj">
-      <Project>{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>
+      <Project>
+  <!-- Ownership: shared/reusable WinForms controls and standalone utility forms, separate from runtime inspection orchestration. -->{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>
       <Name>BeeGlobal</Name>
     </ProjectReference>
     <ProjectReference Include="..\BeeInterface\BeeInterface.csproj">
-      <Project>{371880b0-e9f2-464b-a521-dc6d4f4a6c0d}</Project>
+      <Project>
+  <!-- Ownership: shared/reusable WinForms controls and standalone utility forms, separate from runtime inspection orchestration. -->{371880b0-e9f2-464b-a521-dc6d4f4a6c0d}</Project>
       <Name>BeeInterface</Name>
     </ProjectReference>
     <ProjectReference Include="..\PylonCli\PylonCli.vcxproj">
-      <Project>{04dea65d-1a93-433a-85ae-7366915067cf}</Project>
+      <Project>
+  <!-- Ownership: shared/reusable WinForms controls and standalone utility forms, separate from runtime inspection orchestration. -->{04dea65d-1a93-433a-85ae-7366915067cf}</Project>
       <Name>PylonCli</Name>
     </ProjectReference>
   </ItemGroup>

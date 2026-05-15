@@ -153,7 +153,7 @@ namespace BeeCore
                                     : MatType.CV_8UC4;
 
                         // Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
-                        using (var m = new Mat(h, w, mt, intpr, s))
+                        using (var m = Mat.FromPixelData(h, w, mt, intpr, s))
                         {
 
                             mat = m.Clone();
@@ -298,7 +298,7 @@ namespace BeeCore
 
                     if (intpr != IntPtr.Zero)
                     {
-                        using (Mat mat = new Mat(h, w, OpenCvSharp.MatType.CV_8UC3, intpr, s))
+                        using (Mat mat = Mat.FromPixelData(h, w, OpenCvSharp.MatType.CV_8UC3, intpr, s))
                             mat.CopyTo(matProcess);
 
                     }

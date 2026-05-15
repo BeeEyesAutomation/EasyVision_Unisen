@@ -20,6 +20,16 @@ namespace BeeCpp {
         float LengthMm;
     };
 
+    public value struct ParallelLinesCli {
+        bool Found;
+        Line2DCli LineA;
+        Line2DCli LineB;
+        Line2DCli CenterLine;
+        float GapPx;
+        float GapMm;
+        float AngleDeg;
+    };
+
     public enum class LineDirectionMode
     {
         Any = 0,        // như hiện tại
@@ -78,6 +88,24 @@ namespace BeeCpp {
                 IntPtr dbgOutData, int dbgOutType, size_t dbgOutStep,
                 DebugDrawOptionsCli^ opts,
                 System:: String^ savePath   // null/empty nếu không muốn lưu
+            );
+
+            static ParallelLinesCli FindLongestParallelPair(
+                IntPtr edgeData,
+                int width,
+                int height,
+                int stride,
+                int iterations,
+                float threshold,
+                int maxPoints,
+                int seed,
+                float mmPerPixel,
+                float minLengthRatio,
+                float parallelToleranceDeg,
+                float minGapPx,
+                float maxGapPx,
+                float minOverlapRatio,
+                float contiguousGapPx
             );
         };
 
