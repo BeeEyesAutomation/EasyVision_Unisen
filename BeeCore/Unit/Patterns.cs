@@ -2055,24 +2055,61 @@ namespace BeeCore
         {
             lock (RuntimeLock)
             {
-            Common.TryGetTool(IndexThread, Index).Results = Results.OK;
+            var ownerTool = Common.TryGetTool(IndexThread, Index);
+
+            // Multi-template: judge theo expected count PER LABEL thay vì global rectRotates
+            // count. Mỗi label trong MultiTemplates có ExpectedCount; OK ↔ mọi label đạt đủ
+            // (ExpectedCount > 0 → found ≥ expected; ExpectedCount == 0 → optional, skip).
+            if (IsMultiTemplate)
+            {
+                ownerTool.Results = Results.OK;
+                if (MultiTemplates != null && MultiTemplates.Count > 0)
+                {
+                    var foundPerLabel = new Dictionary<string, int>(StringComparer.Ordinal);
+                    if (ResultItems != null)
+                    {
+                        foreach (var it in ResultItems)
+                        {
+                            if (it == null) continue;
+                            string lbl = it.Name ?? "";
+                            foundPerLabel[lbl] = foundPerLabel.TryGetValue(lbl, out int c) ? c + 1 : 1;
+                        }
+                    }
+                    foreach (var e in MultiTemplates)
+                    {
+                        if (e.ExpectedCount <= 0) continue;
+                        string lbl = e.Label ?? "";
+                        int found = foundPerLabel.TryGetValue(lbl, out int c) ? c : 0;
+                        if (found < e.ExpectedCount)
+                        {
+                            ownerTool.Results = Results.NG;
+                            break;
+                        }
+                    }
+                }
+                if (EnableColorCheck && ResultItems != null && ResultItems.Any(x => x != null && !x.IsOK))
+                    ownerTool.Results = Results.NG;
+                return;
+            }
+
+            ownerTool.Results = Results.OK;
             switch (Compare)
             {
                 case Compares.Equal:
                     if (rectRotates.Count() != LimitCounter)
-                        Common.TryGetTool(IndexThread, Index).Results = Results.NG;
+                        ownerTool.Results = Results.NG;
                     break;
                 case Compares.Less:
                     if (rectRotates.Count() >= LimitCounter)
-                        Common.TryGetTool(IndexThread, Index).Results = Results.NG;
+                        ownerTool.Results = Results.NG;
                     break;
                 case Compares.More:
                     if (rectRotates.Count() <= LimitCounter)
-                        Common.TryGetTool(IndexThread, Index).Results = Results.NG;
+                        ownerTool.Results = Results.NG;
                     break;
             }
             if (EnableColorCheck && ResultItems != null && ResultItems.Any(x => x != null && !x.IsOK))
-                Common.TryGetTool(IndexThread, Index).Results = Results.NG;
+                ownerTool.Results = Results.NG;
             //if (Common.TryGetTool(IndexThread, Index).Results == Results.OK)
             //{if (rectRotates != null)
             //        if (rectRotates.Count > 0)
