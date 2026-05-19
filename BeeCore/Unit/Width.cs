@@ -55,18 +55,10 @@ namespace BeeCore
         public List<System.Drawing.Point> listP_Center = new List<System.Drawing.Point>();
         public List<RectRotate> rectRotates = new List<RectRotate>();
 
-        [NonSerialized]
-        public ParallelGapDetector ParallelGapDetector;
+        
         [NonSerialized]
         public RansacLine RansacLine;
-        [NonSerialized]
-        public Line2DCli ReferenceLineL = new Line2DCli();
-        public WidthMeasureMode MeasureMode = WidthMeasureMode.ParallelLines;
-        public string PointSourceToolName = "";
-        public int PointSourceIndex = 0;
-        public float PointToLineNominalMm = 0;
-        public float PointToLineToleranceMm = 0.05f; // kept for backward-compat; logic now uses owner.Score
-        public bool PointToLineCheckAll = false;
+   
         [NonSerialized]
         public List<(PointF center, PointF foot, float dist)> AllPointResults;
         public LineOrientation ReferenceLineOrientation = LineOrientation.Horizontal;
@@ -78,6 +70,16 @@ namespace BeeCore
         public int MaximumLine = 4;
         public GapExtremum GapExtremum = GapExtremum.Middle;
         public LineOrientation LineOrientation = LineOrientation.Vertical;
+        [System.Runtime.Serialization.OptionalField]
+        public WidthScanDirection ScanDirection = WidthScanDirection.OutToInside;
+        [System.Runtime.Serialization.OptionalField]
+        public int LengthScan = 20;
+        [NonSerialized]
+        public List<RectangleF> ScanBoxes = new List<RectangleF>();
+        [NonSerialized]
+        public Line2DCli EdgeLineA = new Line2DCli();
+        [NonSerialized]
+        public Line2DCli EdgeLineB = new Line2DCli();
         public SegmentStatType SegmentStatType = SegmentStatType.Average;
         public int MinInliers = 2;
         public float WidthResult = 0;
@@ -98,13 +100,15 @@ namespace BeeCore
         public int SizeOpen = 1;
         public void Default()
         {
-            MeasureMode = WidthMeasureMode.ParallelLines;
-            PointToLineToleranceMm = 0.05f;
+          
+            
             ReferenceLineOrientation = LineOrientation.Horizontal;
             ReferenceLineAngleRange = 10;
             ReferenceLineScan = LineDirScan.TopBot;
             GapExtremum = GapExtremum.Middle;
             LineOrientation = LineOrientation.Vertical;
+            ScanDirection = WidthScanDirection.OutToInside;
+            LengthScan = 20;
             SegmentStatType = SegmentStatType.Average;
             MinLen = 0;
             MaxLen = 10000;
@@ -142,7 +146,7 @@ namespace BeeCore
         {
             try
             {
-                if (ParallelGapDetector == null) ParallelGapDetector = new ParallelGapDetector();
+               
                 if (RansacLine == null) RansacLine = new RansacLine();
                 WidthResult = 0;
                 PointToLineFound = false;
@@ -173,15 +177,8 @@ namespace BeeCore
                         matProcess = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
                     if (IsClearNoiseBig)
                         matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
-                    if (MeasureMode == WidthMeasureMode.PointToLine)
-                    {
-                        RunPointToLine(rotArea);
-                        return;
-                    }
-                    ParallelGapDetector.RansacThreshold = RansacThreshold;
-                    ParallelGapDetector.RansacIterations= RansacIterations;
-                    GapResult = new GapResult();
-                    GapResult = ParallelGapDetector.MeasureParallelGap(matCrop, matProcess, MaximumLine, GapExtremum, LineOrientation, SegmentStatType, MinInliers);
+                  
+                    RunParallelGapByEdges();
                     if (GapResult.lineMid != null)
                         if (GapResult.lineMid.Count() > 1)
                         {
@@ -205,128 +202,279 @@ namespace BeeCore
 
         
         }
-        private void RunPointToLine(RectRotate area)
+        private void RunParallelGapByEdges()
         {
-            if (PointToLineCheckAll) { RunPointToLineAll(area); return; }
-            if (!TryResolveSourcePoint(out PointF pointWorld))
+            GapResult = new GapResult();
+            if (ScanBoxes == null) ScanBoxes = new List<RectangleF>();
+            ScanBoxes.Clear();
+            EdgeLineA = new Line2DCli();
+            EdgeLineB = new Line2DCli();
+
+            if (matProcess == null || matProcess.Empty())
                 return;
 
-            PointToLineCenter = Geometry2D.WorldToAreaLocal(pointWorld, area);
-            LineDirectionMode dirMode = ReferenceLineOrientation == LineOrientation.Vertical
-                ? LineDirectionMode.Vertical
-                : LineDirectionMode.Horizontal;
-
-            ReferenceLineL = RansacLine.FindBestLine(
-                matProcess.Data,
-                matProcess.Width,
-                matProcess.Height,
-                (int)matProcess.Step(),
-                RansacIterations,
-                (float)RansacThreshold,
-                120000,
-                Index,
-                1 / Scale,
-                0.2f,
-                dirMode,
-                Geometry2D.ToCliScanMode(ReferenceLineScan),
-                0,
-                ReferenceLineAngleRange);
-
-            if (!ReferenceLineL.Found)
+            var scanJobs = BuildWidthScanBoxes();
+            if (scanJobs.Count == 0)
                 return;
 
-            PointToLineFoot = Geometry2D.ProjectPointToLine(PointToLineCenter, ReferenceLineL);
-            WidthResult = (float)(Geometry2D.DistancePointToLine(PointToLineCenter, ReferenceLineL) / Scale);
-            PointToLineFound = true;
-            listP_Center = new List<System.Drawing.Point> { new System.Drawing.Point((int)Math.Round(pointWorld.X), (int)Math.Round(pointWorld.Y)) };
-            rectRotates = new List<RectRotate>();
+            if (scanJobs.Count == 1)
+            {
+                var job = scanJobs[0];
+                EdgeLineA = FindLineInScanBox(job.Box, job.FirstScanMode);
+                EdgeLineB = FindLineInScanBox(job.Box, job.SecondScanMode);
+            }
+            else
+            {
+                EdgeLineA= FindLineInScanBox(scanJobs[0].Box, scanJobs[0].FirstScanMode);
+                EdgeLineB= FindLineInScanBox(scanJobs[1].Box, scanJobs[1].FirstScanMode);
+                //Task<Line2DCli> edgeATask = Task.Run(() => 
+                //Task<Line2DCli> edgeBTask = Task.Run(() => 
+                //Task.WaitAll(edgeATask, edgeBTask);
+                //EdgeLineA = edgeATask.Result;
+                //EdgeLineB = edgeBTask.Result;
+            }
+
+            if (!EdgeLineA.Found || !EdgeLineB.Found)
+                return;
+
+            GapResult = BuildGapResultFromEdgeLines(EdgeLineA, EdgeLineB);
         }
 
-        private void RunPointToLineAll(RectRotate area)
+        private List<WidthScanJob> BuildWidthScanBoxes()
         {
-            var tools = Common.EnsureToolList(IndexThread);
-            if (tools == null) return;
+            var jobs = new List<WidthScanJob>();
+            int width = matProcess.Width;
+            int height = matProcess.Height;
+            if (width <= 0 || height <= 0)
+                return jobs;
 
-            PropetyTool source = null;
-            if (!string.IsNullOrEmpty(PointSourceToolName))
-                source = tools.FirstOrDefault(t => t != null && t.Name == PointSourceToolName);
-            if (source == null)
-                source = tools.FirstOrDefault(t => t != null && t.TypeTool == TypeTool.Pitch);
-            if (source?.Propety2 == null) return;
-
-            var pts = source.Propety2.listP_Center as List<System.Drawing.Point>;
-            if (pts == null || pts.Count == 0) return;
-            if (string.IsNullOrEmpty(PointSourceToolName)) PointSourceToolName = source.Name;
-
-            LineDirectionMode dirMode = ReferenceLineOrientation == LineOrientation.Vertical
-                ? LineDirectionMode.Vertical : LineDirectionMode.Horizontal;
-            ReferenceLineL = RansacLine.FindBestLine(
-                matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
-                RansacIterations, (float)RansacThreshold, 120000, Index, 1 / Scale, 0.2f,
-                dirMode, Geometry2D.ToCliScanMode(ReferenceLineScan), 0, ReferenceLineAngleRange);
-            if (!ReferenceLineL.Found) return;
-
-            AllPointResults = new List<(PointF, PointF, float)>();
-            float maxDist = 0;
-            PointF worstCenter = PointF.Empty, worstFoot = PointF.Empty;
-            foreach (var p in pts)
+            bool vertical = LineOrientation != LineOrientation.Horizontal;
+            int length = Math.Max(1, LengthScan);
+            if (vertical)
             {
-                PointF ptLocal = Geometry2D.WorldToAreaLocal(new PointF(p.X, p.Y), area);
-                PointF foot = Geometry2D.ProjectPointToLine(ptLocal, ReferenceLineL);
-                float dist = (float)(Geometry2D.DistancePointToLine(ptLocal, ReferenceLineL) / Scale);
-                AllPointResults.Add((ptLocal, foot, dist));
-                if (dist > maxDist) { maxDist = dist; worstCenter = ptLocal; worstFoot = foot; }
+                length = Math.Min(length, width);
+                if (ScanDirection == WidthScanDirection.InsideToOut)
+                {
+                    float x = (width - length) / 2f;
+                    var box = new RectangleF(x, 0, length, height);
+                    ScanBoxes.Add(box);
+                    jobs.Add(new WidthScanJob(box, LineScanMode.RightToLeft, LineScanMode.LeftToRight));
+                }
+                else
+                {
+                    var left = new RectangleF(0, 0, length, height);
+                    var right = new RectangleF(width - length, 0, length, height);
+                    ScanBoxes.Add(left);
+                    ScanBoxes.Add(right);
+                    jobs.Add(new WidthScanJob(left, LineScanMode.LeftToRight, LineScanMode.None));
+                    jobs.Add(new WidthScanJob(right, LineScanMode.RightToLeft, LineScanMode.None));
+                }
             }
-            PointToLineCenter = worstCenter;
-            PointToLineFoot = worstFoot;
-            WidthResult = maxDist;
-            PointToLineFound = true;
-            listP_Center = pts.ToList();
-            rectRotates = new List<RectRotate>();
+            else
+            {
+                length = Math.Min(length, height);
+                if (ScanDirection == WidthScanDirection.InsideToOut)
+                {
+                    float y = (height - length) / 2f;
+                    var box = new RectangleF(0, y, width, length);
+                    ScanBoxes.Add(box);
+                    jobs.Add(new WidthScanJob(box, LineScanMode.BottomToTop, LineScanMode.TopToBottom));
+                }
+                else
+                {
+                    var top = new RectangleF(0, 0, width, length);
+                    var bottom = new RectangleF(0, height - length, width, length);
+                    ScanBoxes.Add(top);
+                    ScanBoxes.Add(bottom);
+                    jobs.Add(new WidthScanJob(top, LineScanMode.TopToBottom, LineScanMode.None));
+                    jobs.Add(new WidthScanJob(bottom, LineScanMode.BottomToTop, LineScanMode.None));
+                }
+            }
+
+            return jobs;
         }
 
-        private bool TryResolveSourcePoint(out PointF point)
+        private Line2DCli FindLineInScanBox(RectangleF box, LineScanMode scanMode)
         {
-            point = PointF.Empty;
-            var tools = Common.EnsureToolList(IndexThread);
-            if (tools == null || tools.Count == 0)
-                return false;
+            Line2DCli empty = new Line2DCli();
+            int x = Math.Max(0, (int)Math.Floor(box.X));
+            int y = Math.Max(0, (int)Math.Floor(box.Y));
+            int w = Math.Min(matProcess.Width - x, Math.Max(1, (int)Math.Round(box.Width)));
+            int h = Math.Min(matProcess.Height - y, Math.Max(1, (int)Math.Round(box.Height)));
+            if (w <= 0 || h <= 0)
+                return empty;
 
-            PropetyTool source = null;
-            if (!string.IsNullOrEmpty(PointSourceToolName))
-                source = tools.FirstOrDefault(t => t != null && t.Name == PointSourceToolName);
-
-            if (source == null)
-                source = tools.FirstOrDefault(t => t != null && t.TypeTool == TypeTool.Pitch);
-
-            if (source == null || source.Propety2 == null)
-                return false;
-
-            try
+            using (Mat scanMat = new Mat(matProcess, new OpenCvSharp.Rect(x, y, w, h)))
             {
-                var pts = source.Propety2.listP_Center as List<System.Drawing.Point>;
-                if (pts == null || PointSourceIndex < 0 || PointSourceIndex >= pts.Count)
-                    return false;
+                LineDirectionMode dirMode = LineOrientation == LineOrientation.Horizontal
+                    ? LineDirectionMode.Horizontal
+                    : LineDirectionMode.Vertical;
+                float mmPerPixel = Math.Abs(Scale) > float.Epsilon ? 1 / Scale : 1;
+                Line2DCli line = RansacLine.FindBestLine(
+                    scanMat.Data,
+                    scanMat.Width,
+                    scanMat.Height,
+                    (int)scanMat.Step(),
+                    RansacIterations,
+                    (float)RansacThreshold,
+                    120000,
+                    Index,
+                    mmPerPixel,
+                    0.2f,
+                    dirMode,
+                    scanMode,
+                    0,
+                    10);
 
-                var p = pts[PointSourceIndex];
-                point = new PointF(p.X, p.Y);
-                if (string.IsNullOrEmpty(PointSourceToolName))
-                    PointSourceToolName = source.Name;
-                return true;
-            }
-            catch
-            {
-                return false;
+                if (!line.Found || line.Inliers < MinInliers)
+                    return empty;
+
+                return OffsetLine(line, x, y);
             }
         }
 
+        private static Line2DCli OffsetLine(Line2DCli line, float dx, float dy)
+        {
+            line.X1 += dx;
+            line.X2 += dx;
+            line.X0 += dx;
+            line.Y1 += dy;
+            line.Y2 += dy;
+            line.Y0 += dy;
+            return line;
+        }
+
+        private static Line2D ToLine2D(Line2DCli line)
+        {
+            return new Line2D(line.Vx, line.Vy, line.X0, line.Y0);
+        }
+
+        private GapResult BuildGapResultFromEdgeLines(Line2DCli edgeA, Line2DCli edgeB)
+        {
+            bool vertical = LineOrientation != LineOrientation.Horizontal;
+            Line2D lineA = ToLine2D(edgeA);
+            Line2D lineB = ToLine2D(edgeB);
+
+            double SolveX(Line2DCli ln, double y)
+            {
+                if (Math.Abs(ln.Vy) < 1e-6) return ln.X0;
+                double t = (y - ln.Y0) / ln.Vy;
+                return ln.X0 + ln.Vx * t;
+            }
+
+            double SolveY(Line2DCli ln, double x)
+            {
+                if (Math.Abs(ln.Vx) < 1e-6) return ln.Y0;
+                double t = (x - ln.X0) / ln.Vx;
+                return ln.Y0 + ln.Vy * t;
+            }
+
+            double minAxisA = vertical ? Math.Min(edgeA.Y1, edgeA.Y2) : Math.Min(edgeA.X1, edgeA.X2);
+            double maxAxisA = vertical ? Math.Max(edgeA.Y1, edgeA.Y2) : Math.Max(edgeA.X1, edgeA.X2);
+            double minAxisB = vertical ? Math.Min(edgeB.Y1, edgeB.Y2) : Math.Min(edgeB.X1, edgeB.X2);
+            double maxAxisB = vertical ? Math.Max(edgeB.Y1, edgeB.Y2) : Math.Max(edgeB.X1, edgeB.X2);
+            double axisStart = Math.Max(minAxisA, minAxisB);
+            double axisEnd = Math.Min(maxAxisA, maxAxisB);
+            if (axisEnd < axisStart)
+            {
+                axisStart = 0;
+                axisEnd = vertical ? matProcess.Height : matProcess.Width;
+            }
+
+            double shortPx;
+            double longPx;
+            double mediumPx;
+            Point[] lineMids = new Point[2];
+
+            if (vertical)
+            {
+                double distStart = Math.Abs(SolveX(edgeB, axisStart) - SolveX(edgeA, axisStart));
+                double distEnd = Math.Abs(SolveX(edgeB, axisEnd) - SolveX(edgeA, axisEnd));
+                shortPx = Math.Min(distStart, distEnd);
+                longPx = Math.Max(distStart, distEnd);
+                double shortAxis = distStart <= distEnd ? axisStart : axisEnd;
+                double longAxis = distStart <= distEnd ? axisEnd : axisStart;
+                double midAxis = (axisStart + axisEnd) / 2.0;
+
+                switch (SegmentStatType)
+                {
+                    case SegmentStatType.Shortest:
+                        lineMids[0] = new Point((int)Math.Round(SolveX(edgeA, shortAxis)), (int)Math.Round(shortAxis));
+                        lineMids[1] = new Point((int)Math.Round(SolveX(edgeB, shortAxis)), (int)Math.Round(shortAxis));
+                        break;
+                    case SegmentStatType.Longest:
+                        lineMids[0] = new Point((int)Math.Round(SolveX(edgeA, longAxis)), (int)Math.Round(longAxis));
+                        lineMids[1] = new Point((int)Math.Round(SolveX(edgeB, longAxis)), (int)Math.Round(longAxis));
+                        break;
+                    default:
+                        lineMids[0] = new Point((int)Math.Round(SolveX(edgeA, midAxis)), (int)Math.Round(midAxis));
+                        lineMids[1] = new Point((int)Math.Round(SolveX(edgeB, midAxis)), (int)Math.Round(midAxis));
+                        break;
+                }
+                mediumPx = Math.Abs(lineMids[1].X - lineMids[0].X);
+            }
+            else
+            {
+                double distStart = Math.Abs(SolveY(edgeB, axisStart) - SolveY(edgeA, axisStart));
+                double distEnd = Math.Abs(SolveY(edgeB, axisEnd) - SolveY(edgeA, axisEnd));
+                shortPx = Math.Min(distStart, distEnd);
+                longPx = Math.Max(distStart, distEnd);
+                double shortAxis = distStart <= distEnd ? axisStart : axisEnd;
+                double longAxis = distStart <= distEnd ? axisEnd : axisStart;
+                double midAxis = (axisStart + axisEnd) / 2.0;
+
+                switch (SegmentStatType)
+                {
+                    case SegmentStatType.Shortest:
+                        lineMids[0] = new Point((int)Math.Round(shortAxis), (int)Math.Round(SolveY(edgeA, shortAxis)));
+                        lineMids[1] = new Point((int)Math.Round(shortAxis), (int)Math.Round(SolveY(edgeB, shortAxis)));
+                        break;
+                    case SegmentStatType.Longest:
+                        lineMids[0] = new Point((int)Math.Round(longAxis), (int)Math.Round(SolveY(edgeA, longAxis)));
+                        lineMids[1] = new Point((int)Math.Round(longAxis), (int)Math.Round(SolveY(edgeB, longAxis)));
+                        break;
+                    default:
+                        lineMids[0] = new Point((int)Math.Round(midAxis), (int)Math.Round(SolveY(edgeA, midAxis)));
+                        lineMids[1] = new Point((int)Math.Round(midAxis), (int)Math.Round(SolveY(edgeB, midAxis)));
+                        break;
+                }
+                mediumPx = Math.Abs(lineMids[1].Y - lineMids[0].Y);
+            }
+
+            return new GapResult
+            {
+                line2Ds = new List<Line2D> { lineA, lineB },
+                LineA = lineA,
+                LineB = lineB,
+                lineMid = lineMids,
+                GapMin = shortPx,
+                GapMedium = mediumPx,
+                GapMax = longPx,
+                Inlier = Math.Min(edgeA.Inliers, edgeB.Inliers)
+            };
+        }
+
+        private struct WidthScanJob
+        {
+            public WidthScanJob(RectangleF box, LineScanMode firstScanMode, LineScanMode secondScanMode)
+            {
+                Box = box;
+                FirstScanMode = firstScanMode;
+                SecondScanMode = secondScanMode;
+            }
+
+            public RectangleF Box;
+            public LineScanMode FirstScanMode;
+            public LineScanMode SecondScanMode;
+        }
+
+      
+
+      
+    
         public void Complete()
         {
-            if (MeasureMode == WidthMeasureMode.PointToLine)
-            {
-                CompletePointToLine();
-                return;
-            }
+         
 
             switch (SegmentStatType)
             {
@@ -396,46 +544,7 @@ namespace BeeCore
 
 
         }
-        private void CompletePointToLine()
-        {
-            PropetyTool owner = Common.TryGetTool(IndexThread, Index);
-            if (owner == null)
-                return;
-
-            if (!PointToLineFound)
-            {
-                owner.ScoreResult = 999;
-                owner.Results = Results.NG;
-                return;
-            }
-
-            if (IsCalibs && !Global.IsRun)
-            {
-                PointToLineNominalMm = WidthResult;
-                WidthTemp = WidthResult;
-            }
-
-            float nominal = PointToLineNominalMm > 0 ? PointToLineNominalMm : WidthTemp;
-            float tolerance = owner.Score;
-
-            if (PointToLineCheckAll && AllPointResults != null && AllPointResults.Count > 0)
-            {
-                float maxDev = 0;
-                foreach (var r in AllPointResults)
-                {
-                    float dev = nominal > 0 ? Math.Abs(r.dist - nominal) : 0;
-                    if (dev > maxDev) maxDev = dev;
-                }
-                owner.ScoreResult = maxDev;
-                owner.Results = maxDev <= tolerance ? Results.OK : Results.NG;
-            }
-            else
-            {
-                float deviation = nominal > 0 ? Math.Abs(WidthResult - nominal) : 0;
-                owner.ScoreResult =(float)Math.Round( deviation,2);
-                owner.Results = deviation <= tolerance ? Results.OK : Results.NG;
-            }
-        }
+      
         public string AddPLC = "";
         public TypeSendPLC TypeSendPLC = TypeSendPLC.Float;
         public bool IsSendResult;
@@ -490,10 +599,8 @@ namespace BeeCore
                     Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.ParaShow.Opacity / 100.0f);
             }
             gc.ResetTransform();
-            if (MeasureMode == WidthMeasureMode.PointToLine)
-                return DrawPointToLine(gc, rotA, cl);
+        
 
-            if (GapResult.line2Ds == null) return gc;
             mat = new Matrix();
             if (!Global.IsRun)
             {
@@ -505,6 +612,12 @@ namespace BeeCore
             mat.Translate(rotA._rect.X, rotA._rect.Y);
             gc.Transform = mat;
             RectangleF rectClient =   new RectangleF(0, 0, rotA._rect.Width, rotA._rect.Height);
+            DrawScanBoxes(gc);
+            if (GapResult.line2Ds == null)
+            {
+                gc.ResetTransform();
+                return gc;
+            }
             if (!Global.IsRun)
                 foreach (var l in GapResult.line2Ds)
                 Draws.DrawInfiniteLine(gc, l, new Pen(Color.Gray, 2), rectClient);
@@ -520,88 +633,20 @@ namespace BeeCore
             return gc;
         }
 
-        private Graphics DrawPointToLine(Graphics gc, RectRotate rotA, Color cl)
+        private void DrawScanBoxes(Graphics gc)
         {
-            if (!PointToLineFound || !ReferenceLineL.Found)
-                return gc;
+            if (ScanBoxes == null || ScanBoxes.Count == 0)
+                return;
 
-            var mat = new Matrix();
-            if (!Global.IsRun)
+            Color scanColor = Color.Orange;// LineOrientation.Horizontal ? Color.Orange : Color.Red;
+            using (Pen scanPen = new Pen(scanColor, Math.Max(1, Global.ParaShow.ThicknessLine)))
             {
-                mat.Translate(Global.pScroll.X, Global.pScroll.Y);
-                mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                foreach (RectangleF box in ScanBoxes)
+                    gc.DrawRectangle(scanPen, box.X, box.Y, box.Width, box.Height);
             }
-            mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-            mat.Rotate(rotA._rectRotation);
-            mat.Translate(rotA._rect.X, rotA._rect.Y);
-            gc.Transform = mat;
-
-            RectangleF rectClient = new RectangleF(0, 0, rotA._rect.Width, rotA._rect.Height);
-            using (Pen linePen = new Pen(cl, Global.ParaShow.ThicknessLine))
-            using (Pen measurePen = new Pen(Global.ParaShow.ColorInfor, Global.ParaShow.ThicknessLine))
-            using (Font font = new Font("Arial", Global.ParaShow.FontSize))
-            using (Brush brush = new SolidBrush(Global.ParaShow.ColorInfor))
-            {
-                // Draw reference line as a finite segment spanning the foot points + margin
-                {
-                    float vx = ReferenceLineL.Vx, vy = ReferenceLineL.Vy;
-                    float x0 = ReferenceLineL.X0, y0 = ReferenceLineL.Y0;
-                    float margin = Math.Max(20f, Math.Min(rectClient.Width, rectClient.Height) * 0.05f);
-                    float tMin, tMax;
-                    if (PointToLineCheckAll && AllPointResults != null && AllPointResults.Count > 0)
-                    {
-                        tMin = float.MaxValue; tMax = float.MinValue;
-                        foreach (var r in AllPointResults)
-                        {
-                            float t = (r.foot.X - x0) * vx + (r.foot.Y - y0) * vy;
-                            if (t < tMin) tMin = t;
-                            if (t > tMax) tMax = t;
-                        }
-                    }
-                    else
-                    {
-                        float t = (PointToLineFoot.X - x0) * vx + (PointToLineFoot.Y - y0) * vy;
-                        tMin = tMax = t;
-                    }
-                    PointF segA = new PointF(x0 + (tMin - margin) * vx, y0 + (tMin - margin) * vy);
-                    PointF segB = new PointF(x0 + (tMax + margin) * vx, y0 + (tMax + margin) * vy);
-                    gc.DrawLine(linePen, segA, segB);
-                }
-
-                if (PointToLineCheckAll && AllPointResults != null && AllPointResults.Count > 0)
-                {
-                    PropetyTool owner = Common.TryGetTool(IndexThread, Index);
-                    float tolerance = owner != null ? owner.Score : float.MaxValue;
-                    float nominal = PointToLineNominalMm > 0 ? PointToLineNominalMm : WidthTemp;
-                    for (int i = 0; i < AllPointResults.Count; i++)
-                    {
-                        var r = AllPointResults[i];
-                        float dev = nominal > 0 ? Math.Abs(r.dist - nominal) : 0;
-                        Color ptColor = dev <= tolerance ? Global.ParaShow.ColorOK : Global.ParaShow.ColorNG;
-                        using (Pen ptPen = new Pen(ptColor, Global.ParaShow.ThicknessLine))
-                        {
-                            gc.DrawLine(ptPen, r.center, r.foot);
-                            Draws.Plus(gc, (int)Math.Round(r.center.X), (int)Math.Round(r.center.Y), 14, ptColor, 2);
-                            gc.FillEllipse(new SolidBrush(ptColor), r.foot.X - 4, r.foot.Y - 4, 8, 8);
-                        }
-                        PointF mid = new PointF((r.center.X + r.foot.X) / 2, (r.center.Y + r.foot.Y) / 2);
-                        gc.DrawString($"P{i + 1}:{r.dist:F3} mm", font, brush, mid.X + 5, mid.Y + 5);
-                    }
-                }
-                else
-                {
-                    gc.DrawLine(measurePen, PointToLineCenter, PointToLineFoot);
-                    Draws.Plus(gc, (int)Math.Round(PointToLineCenter.X), (int)Math.Round(PointToLineCenter.Y), 16, Color.Yellow, 2);
-                    gc.FillEllipse(Brushes.Red, PointToLineFoot.X - 4, PointToLineFoot.Y - 4, 8, 8);
-                    PointF mid = new PointF((PointToLineCenter.X + PointToLineFoot.X) / 2, (PointToLineCenter.Y + PointToLineFoot.Y) / 2);
-                    gc.DrawString($"{WidthResult:F3}mm", font, brush, mid.X + 5, mid.Y + 5);
-                }
-            }
-
-            gc.ResetTransform();
-            return gc;
         }
 
+      
         public int MaxThread = 0;
         public void SetModel(bool IsCopy=false)
         {
@@ -618,7 +663,7 @@ namespace BeeCore
 
             rotArea.Name = "Area Check";
             rotArea.TypeCrop = TypeCrop.Area;
-            ParallelGapDetector = new ParallelGapDetector();
+        
             RansacLine = new RansacLine();
             Common.TryGetTool(IndexThread, Index).StepValue = 0.1f;
             Common.TryGetTool(IndexThread, Index).MinValue = 0;

@@ -19,11 +19,7 @@ namespace BeeCore.Funtion.Engines
                 ScoreMax = owner.MaxValue,
                 ScoreStep = owner.StepValue,
                 Score = owner.Score,
-                MeasureMode = propety.MeasureMode,
-                PointSourceToolName = propety.PointSourceToolName,
-                PointSourceIndex = propety.PointSourceIndex,
-                PointToLineNominalMm = propety.PointToLineNominalMm,
-                PointToLineCheckAll = propety.PointToLineCheckAll,
+               
                 ReferenceLineOrientation = propety.ReferenceLineOrientation,
                 ReferenceLineAngleRange = propety.ReferenceLineAngleRange,
                 ReferenceLineScan = propety.ReferenceLineScan,
@@ -37,6 +33,8 @@ namespace BeeCore.Funtion.Engines
                 MaxLen = propety.MaxLen,
                 MethordEdge = propety.MethordEdge,
                 LineOrientation = propety.LineOrientation,
+                ScanDirection = propety.ScanDirection,
+                LengthScan = propety.LengthScan,
                 SegmentStatType = propety.SegmentStatType,
                 GapExtremum = propety.GapExtremum,
                 SizeClose = propety.SizeClose,
@@ -121,6 +119,8 @@ namespace BeeCore.Funtion.Engines
         public int MaxLen { get; set; }
         public MethordEdge MethordEdge { get; set; }
         public LineOrientation LineOrientation { get; set; }
+        public WidthScanDirection ScanDirection { get; set; }
+        public int LengthScan { get; set; }
         public SegmentStatType SegmentStatType { get; set; }
         public GapExtremum GapExtremum { get; set; }
         public int SizeClose { get; set; }
@@ -148,7 +148,7 @@ namespace BeeCore.Funtion.Engines
             PropetyTool owner = Common.TryGetTool(propety.IndexThread, propety.Index);
             return new WidthRunResult
             {
-                IsOk = propety.MeasureMode == WidthMeasureMode.PointToLine ? propety.PointToLineFound : propety.GapResult.line2Ds != null,
+              //  IsOk = propety.MeasureMode == WidthMeasureMode.PointToLine ? propety.PointToLineFound : propety.GapResult.line2Ds != null,
                 ScoreResult = owner != null ? owner.ScoreResult : 0,
                 WidthResult = propety.WidthResult,
                 SegmentCount = propety.GapResult.line2Ds != null ? propety.GapResult.line2Ds.Count : 0

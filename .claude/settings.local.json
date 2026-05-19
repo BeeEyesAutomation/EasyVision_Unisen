@@ -27,7 +27,9 @@
       "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/MSBuild.exe\" EasyVision.sln -t:Build -p:Configuration=Release -p:Platform=x64 -v:minimal)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/MSBuild.exe\" BeeCore.csproj -t:Build -p:Configuration=Release -p:Platform=x64 -v:minimal)"
+      "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/MSBuild.exe\" BeeCore.csproj -t:Build -p:Configuration=Release -p:Platform=x64 -v:minimal)",
+      "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/MSBuild.exe\" BeeInterface/BeeInterface.csproj -t:Build -p:Configuration=Release -p:Platform=x64 -v:minimal)",
+      "Bash(awk 'NR>=2381 && NR<=2384' BeeCore/Unit/Patterns.cs)"
     ]
   }
 }

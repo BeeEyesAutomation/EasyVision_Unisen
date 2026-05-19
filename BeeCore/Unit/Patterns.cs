@@ -901,6 +901,7 @@ namespace BeeCore
      
         private RectRotate ToAbsoluteRectRotate(RectRotate area, RectRotate local)
         {
+            if (area == null || local == null) return local?.Clone();
             PointF[] pt = { new PointF(area._rect.X + local._PosCenter.X, area._rect.Y + local._PosCenter.Y) };
             using (var mat = new Matrix())
             {
@@ -916,8 +917,154 @@ namespace BeeCore
                 AnchorPoint.None)
             {
                 Shape = local.Shape,
-                Score = local.Score
+                Score = local.Score,
+                TypeCrop = local.TypeCrop,
+                Name = local.Name
             };
+        }
+
+        public RectRotate AreaLocalToGlobal(RectRotate local)
+        {
+            return AreaLocalToGlobal(rotArea, local);
+        }
+
+        public RectRotate AreaGlobalToLocal(RectRotate global)
+        {
+            return AreaGlobalToLocal(rotArea, global);
+        }
+
+        private static RectRotate AreaLocalToGlobal(RectRotate area, RectRotate local)
+        {
+            if (area == null || local == null) return local == null ? null : new RectRotate(
+                local._rect,
+                local._PosCenter,
+                local._rectRotation,
+                local._dragAnchor)
+            {
+                Shape = local.Shape,
+                Score = local.Score,
+                TypeCrop = local.TypeCrop,
+                Name = local.Name
+            };
+
+            PointF[] pt = { new PointF(area._rect.X + local._PosCenter.X, area._rect.Y + local._PosCenter.Y) };
+            using (var mat = new Matrix())
+            {
+                mat.Translate(area._PosCenter.X, area._PosCenter.Y);
+                mat.Rotate(area._rectRotation);
+                mat.TransformPoints(pt);
+            }
+
+            return new RectRotate(
+                new RectangleF(-local._rect.Width / 2f, -local._rect.Height / 2f, local._rect.Width, local._rect.Height),
+                pt[0],
+                area._rectRotation + local._rectRotation,
+                local._dragAnchor)
+            {
+                Shape = local.Shape,
+                Score = local.Score,
+                TypeCrop = local.TypeCrop,
+                Name = local.Name
+            };
+        }
+
+        private static RectRotate AreaGlobalToLocal(RectRotate area, RectRotate global)
+        {
+            if (area == null || global == null) return global == null ? null : new RectRotate(
+                global._rect,
+                global._PosCenter,
+                global._rectRotation,
+                global._dragAnchor)
+            {
+                Shape = global.Shape,
+                Score = global.Score,
+                TypeCrop = global.TypeCrop,
+                Name = global.Name
+            };
+            float thetaA = area._rectRotation;
+            double sinA = Math.Sin(-thetaA * Math.PI / 180.0);
+            double cosA = Math.Cos(-thetaA * Math.PI / 180.0);
+            double dx = global._PosCenter.X - area._PosCenter.X;
+            double dy = global._PosCenter.Y - area._PosCenter.Y;
+            double interX = dx * cosA - dy * sinA;
+            double interY = dx * sinA + dy * cosA;
+
+            return new RectRotate(
+                new RectangleF(-global._rect.Width / 2f, -global._rect.Height / 2f, global._rect.Width, global._rect.Height),
+                new PointF((float)(interX - area._rect.X), (float)(interY - area._rect.Y)),
+                global._rectRotation - area._rectRotation,
+                global._dragAnchor)
+            {
+                Shape = global.Shape,
+                Score = global.Score,
+                TypeCrop = global.TypeCrop,
+                Name = global.Name
+            };
+        }
+
+        public RectRotate ConstrainAreaToContainLocalLimits(RectRotate proposedArea)
+        {
+            if (proposedArea == null) return null;
+            var constrained = proposedArea.Clone();
+            if (!IsMultiTemplate || !CheckByAreaLimit || MultiTemplates == null || MultiTemplates.Count == 0)
+                return constrained;
+
+            float baseW = Math.Max(1f, rotArea?._rect.Width ?? constrained._rect.Width);
+            float baseH = Math.Max(1f, rotArea?._rect.Height ?? constrained._rect.Height);
+            float maxAbsX = constrained._rect.Width / 2f;
+            float maxAbsY = constrained._rect.Height / 2f;
+
+            foreach (var entry in MultiTemplates)
+            {
+                var limit = entry?.RotLimit;
+                if (limit == null || limit._rect.Width <= 0 || limit._rect.Height <= 0)
+                    continue;
+
+                float cx = limit._PosCenter.X - baseW / 2f;
+                float cy = limit._PosCenter.Y - baseH / 2f;
+                float hw = limit._rect.Width / 2f;
+                float hh = limit._rect.Height / 2f;
+                double rad = limit._rectRotation * Math.PI / 180.0;
+                float cos = (float)Math.Cos(rad);
+                float sin = (float)Math.Sin(rad);
+                var corners = new[]
+                {
+                    new PointF(-hw, -hh),
+                    new PointF(hw, -hh),
+                    new PointF(hw, hh),
+                    new PointF(-hw, hh)
+                };
+
+                foreach (var p in corners)
+                {
+                    float x = cx + p.X * cos - p.Y * sin;
+                    float y = cy + p.X * sin + p.Y * cos;
+                    maxAbsX = Math.Max(maxAbsX, Math.Abs(x));
+                    maxAbsY = Math.Max(maxAbsY, Math.Abs(y));
+                }
+            }
+
+            float width = Math.Max(constrained._rect.Width, (float)Math.Ceiling(maxAbsX * 2f));
+            float height = Math.Max(constrained._rect.Height, (float)Math.Ceiling(maxAbsY * 2f));
+            constrained._rect = new RectangleF(-width / 2f, -height / 2f, width, height);
+            return constrained;
+        }
+
+        public void RebaseLocalLimitsForAreaSize(RectRotate oldArea, RectRotate newArea)
+        {
+            if (oldArea == null || newArea == null || MultiTemplates == null) return;
+            float dx = (newArea._rect.Width - oldArea._rect.Width) / 2f;
+            float dy = (newArea._rect.Height - oldArea._rect.Height) / 2f;
+            if (Math.Abs(dx) < 0.001f && Math.Abs(dy) < 0.001f) return;
+
+            foreach (var entry in MultiTemplates)
+            {
+                if (entry?.RotLimit == null) continue;
+                entry.RotLimit._PosCenter = new PointF(
+                    entry.RotLimit._PosCenter.X + dx,
+                    entry.RotLimit._PosCenter.Y + dy);
+            }
+            MarkBatchDirty();
         }
 
         private ResultItem AddMatchResult(RectRotate area, RectRotate local, float score)
@@ -1771,8 +1918,18 @@ namespace BeeCore
                 perCfg.MaxPos = perMax;
                 if (entry.HasAngleRange)
                 {
-                    perCfg.AngleStartDeg = entry.AngleLower;
-                    perCfg.AngleEndDeg = entry.AngleUpper;
+                    // entry.AngleLower/Upper lưu ở frame rotArea (DeltaAngle = rotCrop - rotArea).
+                    // Khi crop bằng rotLimit, native search ở frame rotLimit nên phải shift:
+                    //   rotCrop - rotLimit = (rotCrop - rotArea) + (rotArea - rotLimit)
+                    // → cộng offset (rotArea.rotation - rotLimit.rotation).
+                    double offset = 0.0;
+                    RectRotate limitGlobalForAngle =  AreaLocalToGlobal(rotArea, entry.RotLimit);
+                    bool hasLimitForAngle = limitGlobalForAngle != null
+                        && limitGlobalForAngle._rect.Width > 0 && limitGlobalForAngle._rect.Height > 0;
+                    if (hasLimitForAngle && rotArea != null)
+                        offset = rotArea._rectRotation - limitGlobalForAngle._rectRotation;
+                    perCfg.AngleStartDeg = entry.AngleLower + offset;
+                    perCfg.AngleEndDeg = entry.AngleUpper + offset;
                 }
 
                 try
@@ -1803,10 +1960,11 @@ namespace BeeCore
                     // 2) Nạp ảnh: nếu có RotLimit hợp lệ, dùng SetImgeRaw để native crop +
                     //    map kết quả về toạ độ global. Nếu thiếu RotLimit, fallback dùng raw
                     //    full image (tương đương Full mode cho entry này).
-                    if (entry.RotLimit != null &&
-                        entry.RotLimit._rect.Width > 0 && entry.RotLimit._rect.Height > 0)
+                    RectRotate limitGlobal = AreaLocalToGlobal(rotArea, entry.RotLimit);
+                    if (limitGlobal != null &&
+                        limitGlobal._rect.Width > 0 && limitGlobal._rect.Height > 0)
                     {
-                        var rrCli = Converts.ToCli(entry.RotLimit);
+                        var rrCli = Converts.ToCli(limitGlobal);
                         Pattern.SetImgeRaw(raw.Data, raw.Width, raw.Height,
                             (int)raw.Step(), raw.Channels(), rrCli, null);
                     }
@@ -1823,15 +1981,15 @@ namespace BeeCore
 
                     // 4) Transform native coords (rotLimit-local) → rotArea-local nếu có
                     //    rotLimit; nếu không (Full fallback), giữ nguyên (rotArea-local).
-                    bool hasLimit = entry.RotLimit != null
-                        && entry.RotLimit._rect.Width > 0 && entry.RotLimit._rect.Height > 0;
+                    bool hasLimit = limitGlobal != null
+                        && limitGlobal._rect.Width > 0 && limitGlobal._rect.Height > 0;
                     foreach (var r in rs)
                     {
                         double cx = r.Cx, cy = r.Cy, angle = r.AngleDeg;
                         if (hasLimit && rotArea != null)
                         {
                             TransformLimitLocalToAreaLocal(
-                                entry.RotLimit, rotArea, r.Cx, r.Cy, r.AngleDeg,
+                                limitGlobal, rotArea, r.Cx, r.Cy, r.AngleDeg,
                                 out cx, out cy, out angle);
                         }
                         var br = new Pattern2BatchResult();
@@ -2121,7 +2279,6 @@ namespace BeeCore
                     // single-template processing bên dưới.
                     if (IsMultiTemplate)
                     {
-                        if (!_batchLearned) LearnPatternsBatch();
                         List<Pattern2BatchResult> listBatch;
                         if (CheckByAreaLimit)
                         {
@@ -2132,6 +2289,7 @@ namespace BeeCore
                         }
                         else
                         {
+                            if (!_batchLearned) LearnPatternsBatch();
                             listBatch = Pattern.MatchBatchStable(cfg);
                         }
                         ProcessBatchResults(listBatch, rotArea);
@@ -2389,7 +2547,8 @@ namespace BeeCore
 				foreach (var entry in MultiTemplates)
 				{
 					if (entry == null || entry.RotLimit == null) continue;
-					var rl = entry.RotLimit;
+					var rl = AreaLocalToGlobal(rotA, entry.RotLimit);
+					if (rl == null) continue;
 					if (rl._rect.Width <= 0 || rl._rect.Height <= 0) continue;
 					var matLim = new Matrix();
 					if (!Global.IsRun)
@@ -2676,10 +2835,8 @@ namespace BeeCore
         public double AngleLower { get; set; } = 0.0;
         public double AngleUpper { get; set; } = 0.0;
 
-        // Per-label area limit (rotated rect trong toạ độ ảnh raw). Khi
-        // Patterns.CheckByAreaLimit=true và RotLimit có kích thước, engine crop ảnh theo
-        // vùng này trước khi match (chỉ tìm label này trong rotLimit). Reference: Yolo.cs
-        // dùng rotLimit + IsCropSingle để giới hạn vùng scan per-label.
+        // Per-label area limit in rotArea-local coordinates. UI/native/draw convert this
+        // to global coordinates at runtime so the limit follows Area Check move/rotation.
         public RectRotate RotLimit { get; set; }
 
         // PNG bytes của template image. JSON sẽ serialize thành base64.

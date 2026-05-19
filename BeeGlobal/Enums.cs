@@ -334,6 +334,11 @@ namespace BeeGlobal
         ParallelLines,
         PointToLine
     }
+    public enum WidthScanDirection
+    {
+        OutToInside = 1,
+        InsideToOut = 2
+    }
     public enum TypeControler
     {
         PLC, IO, PCI

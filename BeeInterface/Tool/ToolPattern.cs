@@ -524,10 +524,28 @@ namespace BeeInterface
 
         private void EditRectRot1_RotateCurentChanged(RectRotate obj)
         {
+            if (_syncingAreaLimitEditor || obj == null)
+                return;
+
             switch (obj.TypeCrop)
             {
                 case TypeCrop.Area:
-                    Propety.rotArea = obj; break;
+                    RectRotate oldArea = Propety.rotArea?.Clone();
+                    RectRotate constrainedArea = Propety.ConstrainAreaToContainLocalLimits(obj);
+                    if (constrainedArea != null)
+                    {
+                        Propety.RebaseLocalLimitsForAreaSize(oldArea, constrainedArea);
+                        obj._rect = constrainedArea._rect;
+                        obj._PosCenter = constrainedArea._PosCenter;
+                        obj._rectRotation = constrainedArea._rectRotation;
+                        obj.Shape = constrainedArea.Shape;
+                        obj.Name = constrainedArea.Name;
+                        obj.TypeCrop = constrainedArea.TypeCrop;
+                    }
+                    Propety.rotArea = obj;
+                    if (Propety.IsMultiTemplate && Propety.CheckByAreaLimit)
+                        PushRotLimitForCurrentRow();
+                    break;
                 case TypeCrop.Crop:
                     Propety.rotCrop = obj; break;
                 case TypeCrop.Mask:
@@ -540,7 +558,13 @@ namespace BeeInterface
                             int idx = dgvTemplates?.CurrentCell?.RowIndex ?? -1;
                             if (idx >= 0 && idx < Propety.MultiTemplates.Count)
                             {
-                                Propety.MultiTemplates[idx].RotLimit = obj;
+                                var limitLocal = Propety.AreaGlobalToLocal(obj);
+                                if (limitLocal != null)
+                                {
+                                    limitLocal.Name = "Limit: " + (Propety.MultiTemplates[idx].Label ?? "");
+                                    limitLocal.TypeCrop = TypeCrop.Limit;
+                                }
+                                Propety.MultiTemplates[idx].RotLimit = limitLocal;
                                 Propety.MarkBatchDirty();
                             }
                         }
@@ -1260,6 +1284,7 @@ namespace BeeInterface
         #region Multi-Template UI (handlers only — controls + layout in Designer.cs)
         // Suppress event reentrancy khi RefreshTemplatesGrid programmatic populate cells.
         private bool _bindingMultiUi = false;
+        private bool _syncingAreaLimitEditor = false;
 
         private void OnModeSingleClicked(object s, EventArgs e)
         {
@@ -1353,20 +1378,35 @@ namespace BeeInterface
             var entry = Propety.MultiTemplates[idx];
             if (entry.RotLimit == null)
             {
-                // Default: centered, 200×200 — user kéo thả.
+                // Default local to Area Check center; render/edit uses global conversion below.
                 entry.RotLimit = new RectRotate(
                     new RectangleF(-100, -100, 200, 200),
-                    new PointF(Propety.rotArea?._PosCenter.X ?? 0,
-                               Propety.rotArea?._PosCenter.Y ?? 0),
+                    new PointF(-(Propety.rotArea?._rect.X ?? 0),
+                               -(Propety.rotArea?._rect.Y ?? 0)),
                     0,
                     AnchorPoint.None);
             }
             entry.RotLimit.Name = "Limit: " + (entry.Label ?? "");
             entry.RotLimit.TypeCrop = TypeCrop.Limit;
 
-            var rots = new List<RectRotate> { Propety.rotArea, Propety.rotCrop, Propety.rotMask, entry.RotLimit };
-            EditRectRot1.Rot = rots;
-            EditRectRot1.Refresh();
+            var limitGlobal = Propety.AreaLocalToGlobal(entry.RotLimit);
+            if (limitGlobal != null)
+            {
+                limitGlobal.Name = entry.RotLimit.Name;
+                limitGlobal.TypeCrop = TypeCrop.Limit;
+            }
+
+            _syncingAreaLimitEditor = true;
+            try
+            {
+                var rots = new List<RectRotate> { Propety.rotArea, Propety.rotCrop, Propety.rotMask, limitGlobal };
+                EditRectRot1.Rot = rots;
+                EditRectRot1.Refresh();
+            }
+            finally
+            {
+                _syncingAreaLimitEditor = false;
+            }
         }
 
         /// <summary>
