@@ -34,6 +34,7 @@ namespace BeeInterface
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToolMeasure));
             this.threadProcess = new System.ComponentModel.BackgroundWorker();
+            this.valuePicker = new BeeInterface.PLC.ucValuePicker();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabP1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -1479,6 +1480,16 @@ namespace BeeInterface
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            //
+            // valuePicker
+            //
+            this.valuePicker.Direction = BeeGlobal.TypeIO.ValueOut;
+            this.valuePicker.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.valuePicker.Location = new System.Drawing.Point(0, 900);
+            this.valuePicker.Name = "valuePicker";
+            this.valuePicker.Size = new System.Drawing.Size(462, 30);
+            this.valuePicker.TabIndex = 99;
+            this.Controls.Add(this.valuePicker);
             this.Controls.Add(this.oK_Cancel1);
             this.Controls.Add(this.pCany);
             this.Controls.Add(this.tabControl2);
@@ -1550,5 +1561,6 @@ namespace BeeInterface
         private AdjustBarEx AdjScale;
         private AdjustBarEx AdjValueSample;
         private RJButton rjButton4;
+        private BeeInterface.PLC.ucValuePicker valuePicker;
     }
 }

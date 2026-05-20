@@ -63,6 +63,10 @@ namespace BeeCore
         public double AngleDetect = 0;
         public double Distance = 0;
         public int IndexThread = 0;
+        // Ten ParaValue.Name trong Global.Comunication.Protocol.ListParaValueOut
+        // de push AngleDetect (Angle hoac Distance theo TypeMeasure) xuong PLC.
+        [System.Runtime.Serialization.OptionalField]
+        public string OutputValueName = "";
 
         
        
@@ -481,6 +485,16 @@ namespace BeeCore
                     }
                     break;
             }
+
+            // Push ket qua xuong PLC neu user co bind OutputValueName
+            try
+            {
+                if (!string.IsNullOrEmpty(OutputValueName))
+                {
+                    Global.Comunication?.Protocol?.SetValueByName(OutputValueName, AngleDetect);
+                }
+            }
+            catch { }
         }
 
         private double GetMultiPointSummaryDistance()

@@ -595,11 +595,25 @@ namespace BeeInterface
             IsLoad3 = true;
             IsLoad4 = true;
             RefreshLineSourceLists();
+            // Bind ucValuePicker <-> Propety.OutputValueName
+            try
+            {
+                valuePicker.Direction = BeeGlobal.TypeIO.ValueOut;
+                valuePicker.Refresh(Propety.OutputValueName);
+                valuePicker.SelectedNameChanged -= ValuePicker_SelectedNameChanged;
+                valuePicker.SelectedNameChanged += ValuePicker_SelectedNameChanged;
+            }
+            catch { }
             _loadingMeasureUi = false;
             IsLoad1 = false;
             IsLoad2 = false;
             IsLoad3 = false;
             IsLoad4 = false;
+        }
+
+        private void ValuePicker_SelectedNameChanged(string name)
+        {
+            if (Propety != null) Propety.OutputValueName = name ?? "";
         }
 
         int indexTool1 = -1, indexTool2= -1, indexTool3 = -1, indexTool4 = -1;
