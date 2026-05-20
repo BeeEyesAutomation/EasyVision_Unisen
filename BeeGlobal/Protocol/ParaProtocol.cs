@@ -280,6 +280,120 @@ namespace BeeGlobal
                 i++;
             }
         }
+
+        // Doc 1 ParaValue tu PLC theo Adddress + TypeVar, set vao ParaValue.Value
+        // va dong bo vao bien he thong qua TypeValuePLCMap.
+        public bool ReadOneValueInput(ParaValue pv)
+        {
+            if (pv == null || PlcClient == null || !IsConnected) return false;
+            if (string.IsNullOrEmpty(pv.Adddress)) return false;
+            try
+            {
+                dynamic raw;
+                switch (pv.TypeVar)
+                {
+                    case TypeVar.Int:    raw = PlcClient.ReadInt(pv.Adddress); break;
+                    case TypeVar.Float:  raw = PlcClient.ReadFloat(pv.Adddress); break;
+                    case TypeVar.String: raw = PlcClient.ReadStringAsciiKey(pv.Adddress, 16); break;
+                    default: return false;
+                }
+                pv.Value = raw;
+                // Neu source la bien he thong (Qty/NoProg/...), set vao do
+                if (pv.TypeValuePLC != TypeValuePLC.None
+                    && pv.TypeValuePLC != TypeValuePLC.Tool
+                    && pv.TypeValuePLC != TypeValuePLC.Custom)
+                {
+                    TypeValuePLCMap.SetValue(pv.TypeValuePLC, raw, pv);
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        // Doc loop tat ca ListParaValueInput
+        public async Task ReadValueInputsLoop(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                try
+                {
+                    if (IsConnected && !IsBypass && ListParaValueInput != null)
+                    {
+                        var snapshot = ListParaValueInput.ToList();
+                        foreach (var pv in snapshot)
+                        {
+                            if (token.IsCancellationRequested) break;
+                            ReadOneValueInput(pv);
+                        }
+                    }
+                }
+                catch { }
+                int delay = timeRead > 0 ? timeRead : 200;
+                try { await Task.Delay(delay, token); } catch { break; }
+            }
+        }
+
+        // Ghi 1 ParaValue xuong PLC.
+        // Neu Value tren ParaValue chua co (Tool/Custom), neu source he thong thi tu lay qua TypeValuePLCMap.
+        public bool WriteOneValueOutput(ParaValue pv)
+        {
+            if (pv == null || PlcClient == null || !IsConnected) return false;
+            if (string.IsNullOrEmpty(pv.Adddress)) return false;
+            try
+            {
+                dynamic v = pv.Value;
+                if ((v == null || (v is int i && i == 0))
+                    && pv.TypeValuePLC != TypeValuePLC.None
+                    && pv.TypeValuePLC != TypeValuePLC.Tool
+                    && pv.TypeValuePLC != TypeValuePLC.Custom)
+                {
+                    v = TypeValuePLCMap.GetValue(pv.TypeValuePLC, pv);
+                }
+                if (v == null) return false;
+
+                switch (pv.TypeVar)
+                {
+                    case TypeVar.Int:    PlcClient.WriteInt(pv.Adddress, Convert.ToInt32(v)); break;
+                    case TypeVar.Float:  PlcClient.WriteFloat(pv.Adddress, Convert.ToSingle(v)); break;
+                    case TypeVar.String: PlcClient.WriteString(pv.Adddress, Convert.ToString(v), 16); break;
+                    default: return false;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        // Ghi toan bo ListParaValueOut xuong PLC. Goi sau moi vong inspection.
+        public void WriteValueOutputs()
+        {
+            if (!IsConnected || IsBypass || ListParaValueOut == null) return;
+            foreach (var pv in ListParaValueOut.ToList())
+            {
+                WriteOneValueOutput(pv);
+            }
+        }
+
+        // Tien ich: tu tool, set value cho 1 ParaValue Write theo Name. Engine se write trong vong tiep theo.
+        public bool SetValueByName(string name, dynamic v)
+        {
+            var pv = ResolveByName(name, TypeIO.ValueOut);
+            if (pv == null) return false;
+            pv.Value = v;
+            return true;
+        }
+
+        // Tien ich: tool/global lay value tu 1 ParaValue Read theo Name.
+        public dynamic GetValueByName(string name)
+        {
+            var pv = ResolveByName(name, TypeIO.ValueIn);
+            return pv?.Value;
+        }
         [NonSerialized]
         public System.Windows.Forms.Timer timeAlive = new System.Windows.Forms.Timer();
         [NonSerialized]

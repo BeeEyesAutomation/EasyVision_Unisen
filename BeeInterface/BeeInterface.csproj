@@ -386,6 +386,12 @@
     <Compile Include="PLC\ucValueOutput.Designer.cs">
       <DependentUpon>ucValueOutput.cs</DependentUpon>
     </Compile>
+    <Compile Include="PLC\ucValueInput.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PLC\ucValueInput.Designer.cs">
+      <DependentUpon>ucValueInput.cs</DependentUpon>
+    </Compile>
     <Compile Include="PLC\ucBitOutput.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -751,6 +757,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PLC\ucBitInput.resx">
       <DependentUpon>ucBitInput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PLC\ucValueInput.resx">
+      <DependentUpon>ucValueInput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PLC\ucValueOutput.resx">
       <DependentUpon>ucValueOutput.cs</DependentUpon>
