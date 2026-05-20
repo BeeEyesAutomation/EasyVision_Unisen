@@ -162,7 +162,6 @@ namespace BeeInterface
             this.txtAddProg = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.layValueInput = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel13 = new System.Windows.Forms.TableLayoutPanel();
             this.label32 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
@@ -177,6 +176,7 @@ namespace BeeInterface
             this.layValueInputActions = new System.Windows.Forms.TableLayoutPanel();
             this.btnNewInput = new BeeInterface.RJButton();
             this.btnONEditValInput = new BeeInterface.RJButton();
+            this.tabPageValueOutput = new System.Windows.Forms.TabPage();
             this.layValueOutput = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
             this.label36 = new System.Windows.Forms.Label();
@@ -222,7 +222,7 @@ namespace BeeInterface
             this.tabPage2.SuspendLayout();
             this.tableLayoutPanel13.SuspendLayout();
             this.tableLayoutPanel10.SuspendLayout();
-            this.tabPage3.SuspendLayout();
+            this.tabPageValueOutput.SuspendLayout();
             this.tabPageValueInput.SuspendLayout();
             this.layValueInputActions.SuspendLayout();
             this.tableLayoutPanel14.SuspendLayout();
@@ -235,9 +235,8 @@ namespace BeeInterface
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPageValueInput);
+            this.tabControl1.Controls.Add(this.tabPageValueOutput);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -3850,34 +3849,14 @@ namespace BeeInterface
             // 
             // tabPage2
             // 
-            this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage2.Controls.Add(this.layValueInput);
-            this.tabPage2.Controls.Add(this.tableLayoutPanel13);
-            this.tabPage2.Controls.Add(this.tableLayoutPanel10);
-            this.tabPage2.Location = new System.Drawing.Point(4, 33);
+            // tabPage2 (old "Value Input") - orphaned, not added to tabControl1
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(567, 803);
-            this.tabPage2.TabIndex = 4;
-            this.tabPage2.Text = "Value Input";
-            // 
-            // layValueInput
-            // 
-            this.layValueInput.AutoScroll = true;
-            this.layValueInput.ColumnCount = 1;
-            this.layValueInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layValueInput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layValueInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.layValueInput.Location = new System.Drawing.Point(3, 75);
-            this.layValueInput.Name = "layValueInput";
-            this.layValueInput.RowCount = 1;
-            this.layValueInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layValueInput.Size = new System.Drawing.Size(561, 725);
-            this.layValueInput.TabIndex = 65;
-            this.layValueInput.Visible = false;
-            // 
+            this.tabPage2.Text = "Value Input (old)";
+            // layValueInput init moved to tabPageValueInput section below
+            // tableLayoutPanel13 (old header) - orphaned but still need to init to avoid Designer null
+            //
             // tableLayoutPanel13
-            // 
+            //
             this.tableLayoutPanel13.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanel13.ColumnCount = 4;
             this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
@@ -4015,19 +3994,19 @@ namespace BeeInterface
             this.label21.TabIndex = 1;
             this.label21.Text = "Enable Edit";
             this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage3.Controls.Add(this.layValueOutput);
-            this.tabPage3.Controls.Add(this.tableLayoutPanel14);
-            this.tabPage3.Controls.Add(this.tableLayoutPanel12);
-            this.tabPage3.Location = new System.Drawing.Point(4, 33);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(567, 803);
-            this.tabPage3.TabIndex = 5;
-            this.tabPage3.Text = "ValueOutput";
+            //
+            // tabPageValueOutput
+            //
+            this.tabPageValueOutput.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageValueOutput.Controls.Add(this.layValueOutput);
+            this.tabPageValueOutput.Controls.Add(this.tableLayoutPanel14);
+            this.tabPageValueOutput.Controls.Add(this.tableLayoutPanel12);
+            this.tabPageValueOutput.Location = new System.Drawing.Point(4, 33);
+            this.tabPageValueOutput.Name = "tabPageValueOutput";
+            this.tabPageValueOutput.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageValueOutput.Size = new System.Drawing.Size(567, 803);
+            this.tabPageValueOutput.TabIndex = 8;
+            this.tabPageValueOutput.Text = "ValueOutput";
             // 
             // layValueOutput
             // 
@@ -4451,7 +4430,7 @@ namespace BeeInterface
             this.tabPage2.ResumeLayout(false);
             this.tableLayoutPanel13.ResumeLayout(false);
             this.tableLayoutPanel10.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
+            this.tabPageValueOutput.ResumeLayout(false);
             this.tabPageValueInput.ResumeLayout(false);
             this.layValueInputActions.ResumeLayout(false);
             this.tableLayoutPanel14.ResumeLayout(false);
@@ -4616,6 +4595,7 @@ namespace BeeInterface
         private RJButton rjButton12;
         private TableLayoutPanel layValueOutput;
         private TabPage tabPageValueInput;
+        private TabPage tabPageValueOutput;
         private TableLayoutPanel layValueInputActions;
         private RJButton btnNewInput;
         private RJButton btnONEditValInput;
