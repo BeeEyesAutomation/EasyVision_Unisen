@@ -26,6 +26,10 @@ namespace BeeGlobal
         [NonSerialized]
         private CancellationTokenSource _cts = new CancellationTokenSource
             ();
+        [NonSerialized]
+        private CancellationTokenSource _ctsValueRead;
+        [NonSerialized]
+        private Task _taskValueReadLoop;
 
         public TypeControler TypeControler = TypeControler.PLC;
         public String AddProg = "D104";
@@ -313,19 +317,22 @@ namespace BeeGlobal
             }
         }
 
-        // Doc loop tat ca ListParaValueInput
+        // Doc loop tat ca ListParaValueInput - chi chay khi he thong idle (StatusProcessing == None)
         public async Task ReadValueInputsLoop(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {
                 try
                 {
-                    if (IsConnected && !IsBypass && ListParaValueInput != null)
+                    if (IsConnected && !IsBypass
+                        && Global.StatusProcessing == StatusProcessing.None
+                        && ListParaValueInput != null)
                     {
                         var snapshot = ListParaValueInput.ToList();
                         foreach (var pv in snapshot)
                         {
                             if (token.IsCancellationRequested) break;
+                            if (Global.StatusProcessing != StatusProcessing.None) break;
                             ReadOneValueInput(pv);
                         }
                     }
@@ -393,6 +400,21 @@ namespace BeeGlobal
         {
             var pv = ResolveByName(name, TypeIO.ValueIn);
             return pv?.Value;
+        }
+
+        public void StartValueReadLoop()
+        {
+            StopValueReadLoop();
+            _ctsValueRead = new CancellationTokenSource();
+            var token = _ctsValueRead.Token;
+            _taskValueReadLoop = Task.Run(() => ReadValueInputsLoop(token), token);
+        }
+
+        public void StopValueReadLoop()
+        {
+            try { _ctsValueRead?.Cancel(); } catch { }
+            _ctsValueRead = null;
+            _taskValueReadLoop = null;
         }
         [NonSerialized]
         public System.Windows.Forms.Timer timeAlive = new System.Windows.Forms.Timer();
@@ -638,6 +660,7 @@ namespace BeeGlobal
 
                     await WriteOutPut();
                     IO_Processing = IO_Processing.Reset;
+                    StartValueReadLoop();
                     if (TypeControler == TypeControler.PLC)
                     {
                         if (IsOnAlive)
@@ -1224,6 +1247,7 @@ namespace BeeGlobal
         public void Disconnect()
         {
             Global.IsAllowReadPLC = false;
+            StopValueReadLoop();
             PlcClient.StopOneBitReadLoop();
             if (timeAlive != null)
                 timeAlive.Enabled = false;
