@@ -172,6 +172,11 @@ namespace BeeInterface
             this.rjButton1 = new BeeInterface.RJButton();
             this.label21 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPageValueInput = new System.Windows.Forms.TabPage();
+            this.layValueInput = new System.Windows.Forms.TableLayoutPanel();
+            this.layValueInputActions = new System.Windows.Forms.TableLayoutPanel();
+            this.btnNewInput = new BeeInterface.RJButton();
+            this.btnONEditValInput = new BeeInterface.RJButton();
             this.layValueOutput = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
             this.label36 = new System.Windows.Forms.Label();
@@ -218,6 +223,8 @@ namespace BeeInterface
             this.tableLayoutPanel13.SuspendLayout();
             this.tableLayoutPanel10.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.tabPageValueInput.SuspendLayout();
+            this.layValueInputActions.SuspendLayout();
             this.tableLayoutPanel14.SuspendLayout();
             this.tableLayoutPanel12.SuspendLayout();
             this.SuspendLayout();
@@ -230,6 +237,7 @@ namespace BeeInterface
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPageValueInput);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -4035,6 +4043,94 @@ namespace BeeInterface
             this.layValueOutput.Size = new System.Drawing.Size(561, 725);
             this.layValueOutput.TabIndex = 67;
             this.layValueOutput.Visible = false;
+            //
+            // tabPageValueInput
+            //
+            this.tabPageValueInput.Controls.Add(this.layValueInput);
+            this.tabPageValueInput.Controls.Add(this.layValueInputActions);
+            this.tabPageValueInput.Location = new System.Drawing.Point(4, 33);
+            this.tabPageValueInput.Name = "tabPageValueInput";
+            this.tabPageValueInput.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageValueInput.Size = new System.Drawing.Size(567, 803);
+            this.tabPageValueInput.TabIndex = 7;
+            this.tabPageValueInput.Text = "ValueInput";
+            this.tabPageValueInput.UseVisualStyleBackColor = true;
+            //
+            // layValueInput
+            //
+            this.layValueInput.AutoScroll = true;
+            this.layValueInput.ColumnCount = 1;
+            this.layValueInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.layValueInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layValueInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.layValueInput.Location = new System.Drawing.Point(3, 49);
+            this.layValueInput.Name = "layValueInput";
+            this.layValueInput.RowCount = 1;
+            this.layValueInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.layValueInput.Size = new System.Drawing.Size(561, 751);
+            this.layValueInput.TabIndex = 1;
+            //
+            // layValueInputActions
+            //
+            this.layValueInputActions.BackColor = System.Drawing.SystemColors.Control;
+            this.layValueInputActions.ColumnCount = 2;
+            this.layValueInputActions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layValueInputActions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layValueInputActions.Controls.Add(this.btnNewInput, 0, 0);
+            this.layValueInputActions.Controls.Add(this.btnONEditValInput, 1, 0);
+            this.layValueInputActions.Dock = System.Windows.Forms.DockStyle.Top;
+            this.layValueInputActions.Location = new System.Drawing.Point(3, 3);
+            this.layValueInputActions.Name = "layValueInputActions";
+            this.layValueInputActions.RowCount = 1;
+            this.layValueInputActions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.layValueInputActions.Size = new System.Drawing.Size(561, 46);
+            this.layValueInputActions.TabIndex = 0;
+            //
+            // btnNewInput
+            //
+            this.btnNewInput.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnNewInput.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnNewInput.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.btnNewInput.BorderRadius = 5;
+            this.btnNewInput.BorderSize = 1;
+            this.btnNewInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnNewInput.FlatAppearance.BorderSize = 0;
+            this.btnNewInput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNewInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.btnNewInput.ForeColor = System.Drawing.Color.Black;
+            this.btnNewInput.IsCLick = false;
+            this.btnNewInput.IsTouch = true;
+            this.btnNewInput.Location = new System.Drawing.Point(3, 3);
+            this.btnNewInput.Name = "btnNewInput";
+            this.btnNewInput.Size = new System.Drawing.Size(274, 40);
+            this.btnNewInput.TabIndex = 0;
+            this.btnNewInput.Text = "New";
+            this.btnNewInput.TextColor = System.Drawing.Color.Black;
+            this.btnNewInput.UseVisualStyleBackColor = false;
+            this.btnNewInput.Click += new System.EventHandler(this.btnNewInput_Click);
+            //
+            // btnONEditValInput
+            //
+            this.btnONEditValInput.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnONEditValInput.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnONEditValInput.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.btnONEditValInput.BorderRadius = 5;
+            this.btnONEditValInput.BorderSize = 1;
+            this.btnONEditValInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnONEditValInput.FlatAppearance.BorderSize = 0;
+            this.btnONEditValInput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnONEditValInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.btnONEditValInput.ForeColor = System.Drawing.Color.Black;
+            this.btnONEditValInput.IsCLick = false;
+            this.btnONEditValInput.IsTouch = true;
+            this.btnONEditValInput.Location = new System.Drawing.Point(283, 3);
+            this.btnONEditValInput.Name = "btnONEditValInput";
+            this.btnONEditValInput.Size = new System.Drawing.Size(275, 40);
+            this.btnONEditValInput.TabIndex = 1;
+            this.btnONEditValInput.Text = "OFF";
+            this.btnONEditValInput.TextColor = System.Drawing.Color.Black;
+            this.btnONEditValInput.UseVisualStyleBackColor = false;
+            this.btnONEditValInput.Click += new System.EventHandler(this.btnONEditValInput_Click);
             // 
             // tableLayoutPanel14
             // 
@@ -4356,6 +4452,8 @@ namespace BeeInterface
             this.tableLayoutPanel13.ResumeLayout(false);
             this.tableLayoutPanel10.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.tabPageValueInput.ResumeLayout(false);
+            this.layValueInputActions.ResumeLayout(false);
             this.tableLayoutPanel14.ResumeLayout(false);
             this.tableLayoutPanel12.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -4517,5 +4615,9 @@ namespace BeeInterface
         private RJButton btnNew;
         private RJButton rjButton12;
         private TableLayoutPanel layValueOutput;
+        private TabPage tabPageValueInput;
+        private TableLayoutPanel layValueInputActions;
+        private RJButton btnNewInput;
+        private RJButton btnONEditValInput;
     }
 }

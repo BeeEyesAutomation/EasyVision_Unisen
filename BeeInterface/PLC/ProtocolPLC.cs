@@ -354,6 +354,52 @@ namespace BeeInterface
             BtnWriteOutPLC((RJButton)sender);
         }
 
+        public void RefreshLayValueInput()
+        {
+            this.layValueInput.SuspendLayout();
+            this.layValueInput.Controls.Clear();
+            for (int i = this.layValueInput.RowStyles.Count - 1; i >= 0; i--)
+                this.layValueInput.RowStyles.RemoveAt(i);
+            this.layValueInput.RowCount = 0;
+            this.layValueInput.ResumeLayout();
+
+            foreach (ParaValue paraValue in Global.Comunication.Protocol.ListParaValueInput)
+            {
+                ucValueInput uc = new ucValueInput(paraValue);
+                uc.Height = 48;
+                uc.Dock = DockStyle.Fill;
+                uc.TabStop = false;
+                this.layValueInput.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+                this.layValueInput.Controls.Add(uc);
+            }
+            this.layValueInput.RowStyles.Add(new RowStyle(SizeType.AutoSize, 30f));
+            this.layValueInput.RowStyles.Add(new RowStyle(SizeType.Absolute, 30f));
+            this.layValueInput.Controls.Add(new Control());
+        }
+
+        private void btnNewInput_Click(object sender, EventArgs e)
+        {
+            var p = Global.Comunication.Protocol;
+            string name = p.NextDefaultName(TypeIO.ValueIn);
+            p.ListParaValueInput.Add(new ParaValue(name, TypeValuePLC.None, TypeVar.Int, TypeIO.ValueIn, ""));
+            RefreshLayValueInput();
+        }
+
+        private void btnONEditValInput_Click(object sender, EventArgs e)
+        {
+            foreach (Control control in this.layValueInput.Controls)
+            {
+                if (control is ucValueInput uc)
+                {
+                    uc.TabStop = false;
+                    uc.Type.Enabled = btnONEditValInput.IsCLick;
+                    uc.Bit.Enabled = btnONEditValInput.IsCLick;
+                    uc.Blink.Enabled = btnONEditValInput.IsCLick;
+                }
+            }
+            this.btnONEditValInput.Text = this.btnONEditValInput.IsCLick ? "ON" : "OFF";
+        }
+
         public void RefreshLayValueOutput()
         {
             this.layValueOutput.SuspendLayout();
@@ -505,6 +551,7 @@ namespace BeeInterface
 
                 // Out Value
                 RefreshLayValueOutput();
+                RefreshLayValueInput();
 
 
 

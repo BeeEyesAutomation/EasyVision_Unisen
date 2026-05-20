@@ -132,7 +132,7 @@ namespace BeeInterface
         [Category("Behavior")] public int AutoRepeatInterval { get; set; } = 50;      // ms
         [Category("Behavior")] public bool AutoRepeatAccelerate { get; set; } = true;
         [Category("Behavior")] public int AutoRepeatMinInterval { get; set; } = 1;   // ms
-        [Category("Behavior")] public int AutoRepeatAccelDeltaMs { get; set; } = -6;  // m?i tick gi?m b?y nhiêu ms
+        [Category("Behavior")] public int AutoRepeatAccelDeltaMs { get; set; } = -6;  // m?i tick gi?m b?y nhiï¿½u ms
 
         public View()
         {
@@ -230,7 +230,7 @@ namespace BeeInterface
             }
             else if (AutoRepeatAccelerate)
             {
-                int next = _repeatTimer.Interval + AutoRepeatAccelDeltaMs; // âm => nhanh d?n
+                int next = _repeatTimer.Interval + AutoRepeatAccelDeltaMs; // ï¿½m => nhanh d?n
                 _repeatTimer.Interval = Math.Max(AutoRepeatMinInterval, next);
             }
         }
@@ -354,8 +354,8 @@ namespace BeeInterface
             return matResult;
         }
         Color Renk = Color.Red;
-        // Snapshot v? trí + màu sample c?a l?n worker ch?y g?n nh?t.
-        // Paint s? v? ellipse t?i dúng (v? trí, màu) c?a l?n sample dó d? 2 cái luôn kh?p.
+        // Snapshot v? trï¿½ + mï¿½u sample c?a l?n worker ch?y g?n nh?t.
+        // Paint s? v? ellipse t?i dï¿½ng (v? trï¿½, mï¿½u) c?a l?n sample dï¿½ d? 2 cï¿½i luï¿½n kh?p.
         private Point _colorPickClientPt = Point.Empty;
         private Color _colorPickColor = Color.Transparent;
         private bool _colorPickHasSample = false;
@@ -423,13 +423,13 @@ namespace BeeInterface
             rtLeft = w * AS;
          
         }
-        // ===== Helpers: paste trong cùng class form (ho?c l?p ch?a s? ki?n) =====
+        // ===== Helpers: paste trong cï¿½ng class form (ho?c l?p ch?a s? ki?n) =====
         private float ZoomFactor => (float)(imgView.Zoom / 100.0);
 
-        // Th? l?y viewport chu?n c?a Cyotek.ImageBox; n?u không có, fallback don gi?n
+        // Th? l?y viewport chu?n c?a Cyotek.ImageBox; n?u khï¿½ng cï¿½, fallback don gi?n
         private Rectangle GetImageViewPortSafe()
         {
-            // Cyotek.ImageBox có method GetImageViewPort()
+            // Cyotek.ImageBox cï¿½ method GetImageViewPort()
             var mi = imgView.GetType().GetMethod("GetImageViewPort", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             if (mi != null)
             {
@@ -440,7 +440,7 @@ namespace BeeInterface
                 catch { /* ignore */ }
             }
 
-            // Fallback: u?c lu?ng t? AutoScroll + ClientSize (d? dùng cho ph?n l?n layout)
+            // Fallback: u?c lu?ng t? AutoScroll + ClientSize (d? dï¿½ng cho ph?n l?n layout)
             return new Rectangle(
                 imgView.AutoScrollPosition.X,
                 imgView.AutoScrollPosition.Y,
@@ -449,10 +449,10 @@ namespace BeeInterface
             );
         }
 
-        // Chuy?n to? d? Control (pixel trên imgView) ? to? d? ?nh (pixel g?c ?nh)
+        // Chuy?n to? d? Control (pixel trï¿½n imgView) ? to? d? ?nh (pixel g?c ?nh)
         private PointF ControlToImage(Point p)
         {
-            // N?u có PointToImage (Cyotek), uu tiên dùng:
+            // N?u cï¿½ PointToImage (Cyotek), uu tiï¿½n dï¿½ng:
             var m = imgView.GetType().GetMethod("PointToImage", new[] { typeof(Point) });
             if (m != null)
             {
@@ -460,12 +460,12 @@ namespace BeeInterface
                 catch { /* ignore */ }
             }
 
-            // T? tính: (p - viewport.TopLeft) / Zoom
+            // T? tï¿½nh: (p - viewport.TopLeft) / Zoom
             var vp = GetImageViewPortSafe();
             return new PointF((p.X - vp.X) / ZoomFactor, (p.Y - vp.Y) / ZoomFactor);
         }
 
-        // Quay m?t di?m quanh tâm theo góc deg
+        // Quay m?t di?m quanh tï¿½m theo gï¿½c deg
         private static PointF RotateAround(PointF pt, PointF center, float deg)
         {
             float rad = deg * (float)Math.PI / 180f;
@@ -474,7 +474,7 @@ namespace BeeInterface
             return new PointF(center.X + x * cos - y * sin, center.Y + x * sin + y * cos);
         }
 
-        // Quay m?t vector (delta) theo góc deg (không c?ng tâm)
+        // Quay m?t vector (delta) theo gï¿½c deg (khï¿½ng c?ng tï¿½m)
         private static PointF RotateVector(PointF v, float deg)
         {
             float rad = deg * (float)Math.PI / 180f;
@@ -497,8 +497,8 @@ namespace BeeInterface
         private PointF _createEndImg;
         private RectRotate _previewNew;
 
-        // ====== B?n dã có imgView, Global, BeeCore.* ======
-        // imgView: control hi?n th? ?nh (có AutoScrollPosition, Zoom, Pan, ...)
+        // ====== B?n dï¿½ cï¿½ imgView, Global, BeeCore.* ======
+        // imgView: control hi?n th? ?nh (cï¿½ AutoScrollPosition, Zoom, Pan, ...)
 
         // ====== Helpers ======
         private static PointF TransformPoint(Matrix m, PointF p)
@@ -556,7 +556,7 @@ namespace BeeInterface
             }
         }
 
-        // L?y/d?t rr theo TypeCrop (gi?ng nguyên tác)
+        // L?y/d?t rr theo TypeCrop (gi?ng nguyï¿½n tï¿½c)
         //private RectRotate GetCurrentRR()
         //{
         //    return null; 
@@ -591,7 +591,7 @@ namespace BeeInterface
         private static bool HexBoundsContainAll(RectRotate rr)
         {
             var r = rr._rect;
-            var verts = rr.GetHexagonVerticesLocal(); // 6 d?nh local (dã g?m offsets)
+            var verts = rr.GetHexagonVerticesLocal(); // 6 d?nh local (dï¿½ g?m offsets)
             for (int i = 0; i < verts.Length; i++)
                 if (!r.Contains(verts[i])) return false;
             return true;
@@ -600,7 +600,7 @@ namespace BeeInterface
         //  FORM / CONTROL: Mouse handlers 
 
         // ====== MouseDown ======
-        // ?? C? M?I: Polygon b?n trong lúc kéo (hoãn update center/bounds/angle)
+        // ?? C? M?I: Polygon b?n trong lï¿½c kï¿½o (hoï¿½n update center/bounds/angle)
         private bool _polyDirtyDuringDrag = false;
         bool  IsNewShape = false;
         private bool _mouseDown = false;
@@ -655,7 +655,7 @@ namespace BeeInterface
 
             if (rr.IsEmptyForCreate())
             {
-                // cho phép t?o m?i: Rect/Ellipse/Hexagon (thêm Hexagon)
+                // cho phï¿½p t?o m?i: Rect/Ellipse/Hexagon (thï¿½m Hexagon)
                 if (rr.Shape == ShapeType.Rectangle || rr.Shape == ShapeType.Ellipse || rr.Shape == ShapeType.Hexagon)
                 {
                     IsNewShape = true;
@@ -669,7 +669,7 @@ namespace BeeInterface
                 ShowCenterControl(e.Location);
             else
                 HideAngleControl();
-            // ===== Polygon: thêm di?m / ch?n vertex =====
+            // ===== Polygon: thï¿½m di?m / ch?n vertex =====
             using (var inv = GeometryHelper.BuildLocalInverseMatrixFor(rr, (float)imgView.Zoom, imgView.AutoScrollPosition, false, PointF.Empty, 0f))
             {
                 PointF pLocal = GeometryHelper.TransformPoint(inv, e.Location);
@@ -679,9 +679,9 @@ namespace BeeInterface
                     float handle = Global.ParaShow.RadEdit;
                     float closeTol = handle * 1.25f;
 
-                    // N?u polygon dang r?ng -> reset s?ch khung + xoá di?m cu
+                    // N?u polygon dang r?ng -> reset s?ch khung + xoï¿½ di?m cu
                     if (!rr.IsPolygonClosed && (rr.PolyLocalPoints == null || rr.PolyLocalPoints.Count == 0))
-                    {  // 2) Reset c? thao tác/UI
+                    {  // 2) Reset c? thao tï¿½c/UI
                        
                         _maybeCreate = false;
                         _creatingNew = false;
@@ -699,7 +699,7 @@ namespace BeeInterface
                         if (!rr.PolygonTryCloseIfNearFirst(pLocal, closeTol))
                             rr.PolygonAddPointLocal(pLocal);
 
-                        _polyDirtyDuringDrag = true; // hoãn chu?n hoá
+                        _polyDirtyDuringDrag = true; // hoï¿½n chu?n hoï¿½
                         _drag = false;
                         imgView.Invalidate();
                         return;
@@ -730,14 +730,14 @@ namespace BeeInterface
                     }
                 }
             }
-            // các shape khác: hit-test ? MouseMove
+            // cï¿½c shape khï¿½c: hit-test ? MouseMove
         }
 
-        // CHÍNH: dua polygon v? tâm local (0,0), c?p nh?t _PosCenter, _rect & (tu? ch?n) _rectRotation
+        // CHï¿½NH: dua polygon v? tï¿½m local (0,0), c?p nh?t _PosCenter, _rect & (tu? ch?n) _rectRotation
     
 
         // ====== MouseMove ======
-        private float _rotStartAngleLocal = 0f; // góc local lúc b?t d?u xoay (radian)
+        private float _rotStartAngleLocal = 0f; // gï¿½c local lï¿½c b?t d?u xoay (radian)
         private float _rotBase = 0f;            // rotation ban d?u (degree) d? c?ng delta
        
         private void imgView_MouseMove(object sender, MouseEventArgs e)
@@ -902,13 +902,13 @@ namespace BeeInterface
                 // Func<RectRotate> getCurrentRR = GetCurrentRR;
                 ///  Action<RectRotate> setCurrentRR = SetCurrentRR;
                 var rrSrc = Global.rotCurrent;
-                // ====== NHÁNH T?O M?I (sau Clear) ======
+                // ====== NHï¿½NH T?O M?I (sau Clear) ======
                 if (_drag && _maybeCreate &&
                     ((rrSrc != null ? rrSrc._dragAnchor : AnchorPoint.None) == AnchorPoint.None))
                 {
                     _createEndImg = ScreenToImage(e.Location);
 
-                    // Ch? t?o khi kéo TRÁI -> PH?I
+                    // Ch? t?o khi kï¿½o TRï¿½I -> PH?I
                     if (_createEndImg.X > _createStartImg.X)
                     {
                         float w = Math.Max(1f, _createEndImg.X - _createStartImg.X);
@@ -942,14 +942,14 @@ namespace BeeInterface
                     {
                         _previewNew = null;
                         _creatingNew = false;
-                        // không return: cho phép roi xu?ng hit-test/drag hi?n h?u n?u có
+                        // khï¿½ng return: cho phï¿½p roi xu?ng hit-test/drag hi?n h?u n?u cï¿½
                     }
                 }
               
                 if (rrSrc == null) return;
                
               
-                // ====== NHÁNH ÐANG KÉO (drag/resize/rotate/move) ======
+                // ====== NHï¿½NH ï¿½ANG Kï¿½O (drag/resize/rotate/move) ======
                 if (_drag)
                 {
 
@@ -994,13 +994,13 @@ namespace BeeInterface
                             imgView.Cursor = Cursors.Default;
                             break;
                     }
-                    // screen->local dùng tâm & GÓC C? Ð?NH lúc b?t d?u kéo (_dragCenter, _dragRot)
+                    // screen->local dï¿½ng tï¿½m & Gï¿½C C? ï¿½?NH lï¿½c b?t d?u kï¿½o (_dragCenter, _dragRot)
                     var mat = new Matrix();
                     mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
                     float s = (float)(imgView.Zoom / 100.0);
                     mat.Scale(s, s);
                     mat.Translate(_dragCenter.X, _dragCenter.Y);
-                    mat.Rotate(_dragRot); // ? dùng _dragRot c? d?nh cho phiên kéo
+                    mat.Rotate(_dragRot); // ? dï¿½ng _dragRot c? d?nh cho phiï¿½n kï¿½o
                     mat.Invert();
 
                     var point = GeometryHelper.TransformPoint(mat, new PointF(e.X, e.Y)); // local-space (frame c? d?nh)
@@ -1008,7 +1008,7 @@ namespace BeeInterface
                     SizeF deltaSize = SizeF.Empty;
                     float deltaX = 0f, deltaY = 0f;
 
-                    // Không resize bbox cho Polygon
+                    // Khï¿½ng resize bbox cho Polygon
                     bool isPolygonBBoxResize = false;
 
                     if (!isPolygonBBoxResize)
@@ -1021,10 +1021,10 @@ namespace BeeInterface
                             case AnchorPoint.BottomRight:
                                 {
                                     // point = t?a d? local hi?n t?i c?a chu?t
-                                    // _dragStart = t?a d? local lúc b?t d?u kéo
-                                    // _dragRect  = rect local lúc b?t d?u kéo
-                                    // _dragCenter = center world lúc b?t d?u kéo
-                                    // _dragRot = góc c? d?nh c?a phiên drag
+                                    // _dragStart = t?a d? local lï¿½c b?t d?u kï¿½o
+                                    // _dragRect  = rect local lï¿½c b?t d?u kï¿½o
+                                    // _dragCenter = center world lï¿½c b?t d?u kï¿½o
+                                    // _dragRot = gï¿½c c? d?nh c?a phiï¿½n drag
 
                                     float dx = point.X - _dragStart.X;
                                     float dy = point.Y - _dragStart.Y;
@@ -1057,7 +1057,7 @@ namespace BeeInterface
                                             break;
                                     }
 
-                                    // ch?ng âm size / l?t shape
+                                    // ch?ng ï¿½m size / l?t shape
                                     float minSize = 2f;
 
                                     if (right - left < minSize)
@@ -1081,11 +1081,11 @@ namespace BeeInterface
                                     float newW = right - left;
                                     float newH = bottom - top;
 
-                                    // tâm local m?i c?a rect sau resize
+                                    // tï¿½m local m?i c?a rect sau resize
                                     float localCenterX = (left + right) * 0.5f;
                                     float localCenterY = (top + bottom) * 0.5f;
 
-                                    // rect local chu?n luôn centered quanh (0,0)
+                                    // rect local chu?n luï¿½n centered quanh (0,0)
                                     rotateRect._rect = new RectangleF(
                                         -newW / 2f,
                                         -newH / 2f,
@@ -1093,7 +1093,7 @@ namespace BeeInterface
                                         newH
                                     );
 
-                                    // d?i offset local center -> world delta theo góc c? d?nh lúc b?t d?u drag
+                                    // d?i offset local center -> world delta theo gï¿½c c? d?nh lï¿½c b?t d?u drag
                                     PointF worldDelta = RectRotate.Rotate(
                                         new PointF(localCenterX, localCenterY),
                                         _dragRot
@@ -1173,14 +1173,14 @@ namespace BeeInterface
 
 
                                     if (rotateRect.Shape == ShapeType.Polygon)
-                                        rotateRect.UpdateFromPolygon(false); // KHÔNG dè l?i góc v?a xoay
+                                        rotateRect.UpdateFromPolygon(false); // KHï¿½NG dï¿½ l?i gï¿½c v?a xoay
                                     break;
                                     //// === XOAY MU?T V?I ATAN2 & DELTA ANGLE ===
                                     //float angNow = (float)Math.Atan2(point.Y, point.X);
 
                                     //float deltaDeg = (float)((angNow - _rotStartAngleLocal) * 180.0 / Math.PI);
 
-                                    //// chu?n hoá v? [-180, 180] d? tránh "quay vòng"
+                                    //// chu?n hoï¿½ v? [-180, 180] d? trï¿½nh "quay vï¿½ng"
                                     //while (deltaDeg > 180f) deltaDeg -= 360f;
                                     //while (deltaDeg < -180f) deltaDeg += 360f;
 
@@ -1213,7 +1213,7 @@ namespace BeeInterface
                                     //}
                                     //else
                                     //{
-                                    //    // local ? world v?i góc c? d?nh _dragRot
+                                    //    // local ? world v?i gï¿½c c? d?nh _dragRot
                                     //    var localNewCenter = new PointF(point.X - _dragStartOffset.X, point.Y - _dragStartOffset.Y);
                                     //    var worldDelta = RectRotate.Rotate(localNewCenter, _dragRot);
                                     //    rotateRect._PosCenter = new PointF(_dragCenter.X + worldDelta.X, _dragCenter.Y + worldDelta.Y);
@@ -1258,7 +1258,7 @@ namespace BeeInterface
                                             //    //    rotateRect.PolyLocalPoints[0] = pLocal;
                                             //}
 
-                                            // >>> NEW: chu?n hoá l?i frame polygon
+                                            // >>> NEW: chu?n hoï¿½ l?i frame polygon
                                             rotateRect.UpdateFromPolygon(false);
                                         }
                                     }
@@ -1291,7 +1291,7 @@ namespace BeeInterface
     rotateRect._dragAnchor == AnchorPoint.BottomLeft ||
     rotateRect._dragAnchor == AnchorPoint.BottomRight;
 
-                    // block resize góc m?i dã t? set _PosCenter r?i
+                    // block resize gï¿½c m?i dï¿½ t? set _PosCenter r?i
                     if (!resizedByCorner &&
                         rotateRect._dragAnchor != AnchorPoint.None &&
                         rotateRect._dragAnchor != AnchorPoint.Center &&
@@ -1305,7 +1305,7 @@ namespace BeeInterface
                             IsDone = false;
                         }
                     }
-                    //// Sau resize 4 góc: c?p nh?t tâm theo delta dã xoay
+                    //// Sau resize 4 gï¿½c: c?p nh?t tï¿½m theo delta dï¿½ xoay
                     //if (rotateRect._dragAnchor != AnchorPoint.None &&
                     //    rotateRect._dragAnchor != AnchorPoint.Center &&
                     //    rotateRect._dragAnchor != AnchorPoint.Rotation &&
@@ -1313,7 +1313,7 @@ namespace BeeInterface
                     //{
                     //    if (deltaX != 0f || deltaY != 0f)
                     //    {
-                    //        var pDelta = RectRotate.Rotate(new PointF(deltaX, deltaY), _dragRot); // dùng _dragRot
+                    //        var pDelta = RectRotate.Rotate(new PointF(deltaX, deltaY), _dragRot); // dï¿½ng _dragRot
                     //        rotateRect._PosCenter = new PointF(_dragCenter.X + pDelta.X, _dragCenter.Y + pDelta.Y);
                     //        IsDone = false;
                     //    }
@@ -1334,14 +1334,14 @@ namespace BeeInterface
                     //    if (y < 0f) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - y);
                     //    else if (y + h > maxH) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - (y + h - maxH));
                     //}
-                    // xác d?nh dang resize góc
+                    // xï¿½c d?nh dang resize gï¿½c
                     //bool isCornerResize =
                     //    rotateRect._dragAnchor == AnchorPoint.TopLeft ||
                     //    rotateRect._dragAnchor == AnchorPoint.TopRight ||
                     //    rotateRect._dragAnchor == AnchorPoint.BottomLeft ||
                     //    rotateRect._dragAnchor == AnchorPoint.BottomRight;
 
-                    //// ch? clamp khi KHÔNG ph?i resize góc và KHÔNG ph?i rotate
+                    //// ch? clamp khi KHï¿½NG ph?i resize gï¿½c vï¿½ KHï¿½NG ph?i rotate
                     //bool allowClamp =
                     //    !isCornerResize &&
                     //    rotateRect._dragAnchor != AnchorPoint.Rotation;
@@ -1415,7 +1415,7 @@ namespace BeeInterface
 
                     Global.rotCurrent = rrNew;
                 }
-                // ====== NHÁNH HIT-TEST (không kéo) ======
+                // ====== NHï¿½NH HIT-TEST (khï¿½ng kï¿½o) ======
                 else
                 {
 
@@ -1493,7 +1493,7 @@ namespace BeeInterface
                                     _dragStart = new PointF(point.X, point.Y);
                                     rotateRect._dragAnchor = AnchorPoint.Rotation;
                                     _dragRect = polyBounds;
-                                    _dragRot = rotateRect._rectRotation;          // c? d?nh góc phiên kéo
+                                    _dragRot = rotateRect._rectRotation;          // c? d?nh gï¿½c phiï¿½n kï¿½o
                                     _rotStartAngleLocal = (float)Math.Atan2(_dragStart.Y, _dragStart.X);
                                     _rotBase = rotateRect._rectRotation;
                                     anchored = true;
@@ -1504,14 +1504,14 @@ namespace BeeInterface
                                     rotateRect._dragAnchor = AnchorPoint.Center;
                                     _dragRect = RectangleF.Empty;
                                     _dragStartOffset = _dragStart;                // local offset
-                                    _dragRot = rotateRect._rectRotation;          // c? d?nh góc phiên kéo
+                                    _dragRot = rotateRect._rectRotation;          // c? d?nh gï¿½c phiï¿½n kï¿½o
                                     anchored = true;
                                 }
                             }
                         }
                     }
 
-                    // 2) Hexagon: uu tiên 6 d?nh
+                    // 2) Hexagon: uu tiï¿½n 6 d?nh
                     if (!anchored && rotateRect.Shape == ShapeType.Hexagon)
                     {
                         var verts = rotateRect.GetHexagonVerticesLocal();
@@ -1530,7 +1530,7 @@ namespace BeeInterface
                         }
                     }
 
-                    // 3) Rectangle/Ellipse (ho?c Hexagon không trúng d?nh)
+                    // 3) Rectangle/Ellipse (ho?c Hexagon khï¿½ng trï¿½ng d?nh)
                     if (!anchored && rotateRect.Shape != ShapeType.Polygon)
                     {
                         if (rectTopLeft.Contains(point))
@@ -1547,7 +1547,7 @@ namespace BeeInterface
                             _dragStart = new PointF(point.X, point.Y);
                             rotateRect._dragAnchor = AnchorPoint.Rotation;
                             _dragRect = baseRect;
-                            _dragRot = rotateRect._rectRotation;               // c? d?nh góc phiên kéo
+                            _dragRot = rotateRect._rectRotation;               // c? d?nh gï¿½c phiï¿½n kï¿½o
                             _rotStartAngleLocal = (float)Math.Atan2(_dragStart.Y, _dragStart.X);
                             _rotBase = rotateRect._rectRotation;
                         }
@@ -1558,7 +1558,7 @@ namespace BeeInterface
                             rotateRect._dragAnchor = AnchorPoint.Center;
                             _dragRect = baseRect;
                             _dragStartOffset = _dragStart;                       // local offset
-                            _dragRot = rotateRect._rectRotation;                 // c? d?nh góc
+                            _dragRot = rotateRect._rectRotation;                 // c? d?nh gï¿½c
                         }
                         else
                         {
@@ -1575,7 +1575,7 @@ namespace BeeInterface
                     }
                 }
 
-                // ===== Khoá pan/zoom khi có anchor =====
+                // ===== Khoï¿½ pan/zoom khi cï¿½ anchor =====
                 var cur = Global.rotCurrent;
 
                 if (cur != null && cur._dragAnchor != AnchorPoint.None|| IsNewShape||cur._rect.Width==0)
@@ -1663,9 +1663,9 @@ namespace BeeInterface
                 numberPad = new AdjustNumberPad();
                
                 Global.Main.Controls.Add(numberPad);
-                numberPad.KeepSquareLayout = false;   // mu?n vuông
-                numberPad.AllowResizePad = true;     // cho kéo resize góc ph?i du?i
-                numberPad.SaveLayoutOnDisk = true;   // t? luu size + v? trí
+                numberPad.KeepSquareLayout = false;   // mu?n vuï¿½ng
+                numberPad.AllowResizePad = true;     // cho kï¿½o resize gï¿½c ph?i du?i
+                numberPad.SaveLayoutOnDisk = true;   // t? luu size + v? trï¿½
              //   numberPad.Location = new Point(mouseScreenPos.X + 10, mouseScreenPos.Y + 10);
             }
 
@@ -1708,7 +1708,7 @@ namespace BeeInterface
             _polyDirtyDuringDrag = false;
             if (Global.IndexToolSelected == -1) return;
             if (Global.IsRun) return;
-            // Ch?t nhánh t?o m?i
+            // Ch?t nhï¿½nh t?o m?i
             if (_creatingNew)
             {
                 float minSize = 3f;
@@ -1753,7 +1753,7 @@ namespace BeeInterface
 
                 if (rr != null)
                 {
-                    // CH? chu?n hoá khi polygon ÐÃ ÐÓNG
+                    // CH? chu?n hoï¿½ khi polygon ï¿½ï¿½ ï¿½ï¿½NG
                     if (rr.Shape == ShapeType.Polygon && _polyDirtyDuringDrag)
                     {
                         if (rr.IsPolygonClosed)
@@ -1774,7 +1774,7 @@ namespace BeeInterface
             imgView.Invalidate();
         }
 
-        // ===== Helper bbox t?m cho polygon (không ghi vào rr._rect) =====
+        // ===== Helper bbox t?m cho polygon (khï¿½ng ghi vï¿½o rr._rect) =====
         private static RectangleF BboxOf(System.Collections.Generic.IList<PointF> pts)
         {
             if (pts == null || pts.Count == 0) return RectangleF.Empty;
@@ -1826,7 +1826,7 @@ namespace BeeInterface
             {
                 HideAngleControl();
 
-                // V? ?nh 2 cung fit và canh gi?a (ví d? overlay trong su?t)
+                // V? ?nh 2 cung fit vï¿½ canh gi?a (vï¿½ d? overlay trong su?t)
                 //  DrawImageFit(e.Graphics, bmp2, targetRect);
 
                 //  gcResult = gc;
@@ -1919,7 +1919,7 @@ namespace BeeInterface
             if (Global.IsRun)
             {
 
-                // V? ?nh 2 cung fit và canh gi?a (ví d? overlay trong su?t)
+                // V? ?nh 2 cung fit vï¿½ canh gi?a (vï¿½ d? overlay trong su?t)
                 //  DrawImageFit(e.Graphics, bmp2, targetRect);
 
                 //  gcResult = gc;
@@ -2071,7 +2071,7 @@ namespace BeeInterface
                     {
                         gc.ResetTransform();
 
-                        // L?y v? trí cursor hi?n t?i trong imgView; ch? v? preview khi cursor th?c s? n?m trong control
+                        // L?y v? trï¿½ cursor hi?n t?i trong imgView; ch? v? preview khi cursor th?c s? n?m trong control
                         Point cur = imgView.PointToClient(Cursor.Position);
                         if (imgView.ClientRectangle.Contains(cur))
                         {
@@ -2278,8 +2278,8 @@ namespace BeeInterface
                     G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     if (imgView.Image != null)
                     {
-                        imgView.Image.Dispose();   // tránh leak b? nh? n?u là Bitmap t? t?o
-                        imgView.Image = null;      // xoá ?nh kh?i control
+                        imgView.Image.Dispose();   // trï¿½nh leak b? nh? n?u lï¿½ Bitmap t? t?o
+                        imgView.Image = null;      // xoï¿½ ?nh kh?i control
                     }
 
                     imgView.Text = "Wait Change Program ...";
@@ -2333,8 +2333,8 @@ namespace BeeInterface
 
                         {
                         imgView.Text = "";
-                        imgView.Image.Dispose();   // tránh leak b? nh? n?u là Bitmap t? t?o
-                        imgView.Image = null;      // xoá ?nh kh?i control
+                        imgView.Image.Dispose();   // trï¿½nh leak b? nh? n?u lï¿½ Bitmap t? t?o
+                        imgView.Image = null;      // xoï¿½ ?nh kh?i control
                     }    
                    
                 }    
@@ -2527,8 +2527,8 @@ namespace BeeInterface
                                 if (imgView.Image != null)
                                 {
                                     imgView.Text = "Waiting Checking...";
-                                    imgView.Image.Dispose();   // tránh leak b? nh? n?u là Bitmap t? t?o
-                                    imgView.Image = null;      // xoá ?nh kh?i control
+                                    imgView.Image.Dispose();   // trï¿½nh leak b? nh? n?u lï¿½ Bitmap t? t?o
+                                    imgView.Image = null;      // xoï¿½ ?nh kh?i control
                                 }
                             Global.StatusProcessing = StatusProcessing.None;
                         }));
@@ -2548,8 +2548,8 @@ namespace BeeInterface
                                 if (imgView.Image != null)
                                 {
                                     imgView.Text = "Waiting Checking...";
-                                    imgView.Image.Dispose();   // tránh leak b? nh? n?u là Bitmap t? t?o
-                                    imgView.Image = null;      // xoá ?nh kh?i control
+                                    imgView.Image.Dispose();   // trï¿½nh leak b? nh? n?u lï¿½ Bitmap t? t?o
+                                    imgView.Image = null;      // xoï¿½ ?nh kh?i control
                                 }
                                 _renderer.ClearImages();
                             }
@@ -2599,8 +2599,8 @@ namespace BeeInterface
                             if (imgView.Image != null)
                             {
                                 imgView.Text = "Waiting Checking...";
-                                imgView.Image.Dispose();   // tránh leak b? nh? n?u là Bitmap t? t?o
-                                imgView.Image = null;      // xoá ?nh kh?i control
+                                imgView.Image.Dispose();   // trï¿½nh leak b? nh? n?u lï¿½ Bitmap t? t?o
+                                imgView.Image = null;      // xoï¿½ ?nh kh?i control
                             }
                         }));
                     }
@@ -2901,7 +2901,8 @@ namespace BeeInterface
                     break;
                 case StatusProcessing.Done:
                     {
-                  
+                        try { Global.Comunication?.Protocol?.WriteValueOutputs(); } catch { }
+
                         Global.IsDoneTrig = false;
                         if(!IsShowHis)
                             this.Invoke((Action)(() =>
@@ -3436,32 +3437,32 @@ namespace BeeInterface
         private readonly object _camLock = new object();   // b?o v? ngu?n camera (n?u c?n)
         private readonly object _swapLock = new object();   // b?o v? A/B & _displayMat
 
-        // Double-buffer Mat (KHÔNG readonly d? có th? thay th? khi b? Dispose)
+        // Double-buffer Mat (KHï¿½NG readonly d? cï¿½ th? thay th? khi b? Dispose)
         private Mat _bufA = new Mat();
         private Mat _bufB = new Mat();
         private Mat _displayMat; // tr? t?i buffer dang hi?n th? (A ho?c B)
 
         private bool _disposed;
 
-        // --- helper: d?m b?o có buffer làm vi?c h?p l?, dúng size/type; n?u b? Dispose -> t?o m?i và gán l?i field
+        // --- helper: d?m b?o cï¿½ buffer lï¿½m vi?c h?p l?, dï¿½ng size/type; n?u b? Dispose -> t?o m?i vï¿½ gï¿½n l?i field
         private Mat EnsureWorkingBuffer(Mat src)
         {
-            // N?u dang hi?n th? A thì v? vào B, ngu?c l?i
+            // N?u dang hi?n th? A thï¿½ v? vï¿½o B, ngu?c l?i
             bool useB = ReferenceEquals(_displayMat, _bufA);
             Mat target = useB ? _bufB : _bufA;
 
             if (target == null || target.IsDisposed)
             {
-                target = new Mat();                     // t?o m?i n?u dã Dispose
+                target = new Mat();                     // t?o m?i n?u dï¿½ Dispose
                 if (useB) _bufB = target; else _bufA = target;
             }
 
-            // target.Create s? c?p phát dúng kích thu?c/ki?u; không c?n Release tru?c
+            // target.Create s? c?p phï¿½t dï¿½ng kï¿½ch thu?c/ki?u; khï¿½ng c?n Release tru?c
             target.Create(src.Rows, src.Cols, src.Type());
             return target;
         }
 
-        // --- chu?n hoá v? 8UC3 d? ToBitmap nhanh; tr? alias n?u dã 8UC3, ngu?c l?i t?o b?n t?m (caller s? Dispose n?u createdTemp = true)
+        // --- chu?n hoï¿½ v? 8UC3 d? ToBitmap nhanh; tr? alias n?u dï¿½ 8UC3, ngu?c l?i t?o b?n t?m (caller s? Dispose n?u createdTemp = true)
         private static Mat EnsureBgr8Uc3AliasOrConvert(Mat working, out bool createdTemp)
         {
             createdTemp = false;
@@ -3522,8 +3523,8 @@ namespace BeeInterface
             _bufB.Dispose();
             _displayMat = null;
 
-            // 2) KHÔNG dispose bmResult ? dây n?u app còn dùng nó bên ngoài.
-            // Tu? nhu c?u, b?n có th? ch? d?ng hu?:
+            // 2) KHï¿½NG dispose bmResult ? dï¿½y n?u app cï¿½n dï¿½ng nï¿½ bï¿½n ngoï¿½i.
+            // Tu? nhu c?u, b?n cï¿½ th? ch? d?ng hu?:
             // lock(_bmLock) { BeeCore.Common.bmResult?.Dispose(); BeeCore.Common.bmResult = null; }
         }
 
@@ -4087,11 +4088,11 @@ namespace BeeInterface
         private Thread _displayThread;
         private readonly AutoResetEvent _frameReady = new AutoResetEvent(false);
         private Bitmap _sharedFrame;
-        private int _uiPending; // 0: idle, 1: dang d?y frame lên UI
+        private int _uiPending; // 0: idle, 1: dang d?y frame lï¿½n UI
         void PublishFrame(Bitmap src)
         {
             if (!Global.IsLive) { src.Dispose(); return; }
-            // Clone 1 l?n ? producer, không clone trong display thread
+            // Clone 1 l?n ? producer, khï¿½ng clone trong display thread
             var clone = (Bitmap)src.Clone();
             var old = Interlocked.Exchange(ref _sharedFrame, clone); // gi? frame m?i nh?t, drop cu
             old?.Dispose();
@@ -4112,7 +4113,7 @@ namespace BeeInterface
             _displayThread?.Join();
             _displayThread = null;
 
-            // Clear ?nh trên UI
+            // Clear ?nh trï¿½n UI
             if (IsHandleCreated && !IsDisposed)
                 BeginInvoke(new Action(() =>
                 {
@@ -4121,7 +4122,7 @@ namespace BeeInterface
                     old?.Dispose();
                 }));
 
-            // D?n rác còn sót
+            // D?n rï¿½c cï¿½n sï¿½t
             var leftover = Interlocked.Exchange(ref _sharedFrame, null);
             leftover?.Dispose();
             if (BeeCore.Common.listCamera[Global.IndexCCCD]!= null)
@@ -4141,14 +4142,14 @@ namespace BeeInterface
         {
             while (Global.IsLive)
             {
-                _frameReady.WaitOne(50);        // ch? tín hi?u có frame (ho?c timeout d? thoát nhanh)
+                _frameReady.WaitOne(50);        // ch? tï¿½n hi?u cï¿½ frame (ho?c timeout d? thoï¿½t nhanh)
                 if (!Global.IsLive) break;
 
-                // L?y quy?n s? h?u frame m?i nh?t và làm r?ng buffer chung
+                // L?y quy?n s? h?u frame m?i nh?t vï¿½ lï¿½m r?ng buffer chung
                 var frame = Interlocked.Exchange(ref _sharedFrame, null);
                 if (frame == null) continue;
 
-                // Ch? cho phép 1 c?p nh?t UI pending; n?u UI chua k?p x? lý ? drop frame
+                // Ch? cho phï¿½p 1 c?p nh?t UI pending; n?u UI chua k?p x? lï¿½ ? drop frame
                 if (Interlocked.Exchange(ref _uiPending, 1) == 1)
                 {
                     frame.Dispose();
@@ -4165,7 +4166,7 @@ namespace BeeInterface
                             {
                                 var old = imgView.Image;
                                 imgView.Image = frame;   // chuy?n quy?n s? h?u cho PictureBox
-                                old?.Dispose();          // h?y ?nh cu sau khi gán
+                                old?.Dispose();          // h?y ?nh cu sau khi gï¿½n
                             }
                             finally
                             {
@@ -4395,7 +4396,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             }
             else if (mat.Type() != MatType.CV_8UC3)
             {
-                // n?u b?n có BGRA/16bit... thì x? riêng (t?m b?)
+                // n?u b?n cï¿½ BGRA/16bit... thï¿½ x? riï¿½ng (t?m b?)
                 throw new NotSupportedException($"Mat type not supported: {mat.Type()}");
             }
 
@@ -4581,13 +4582,13 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                         {
                             UpdateFrame(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw);
                             // Global.Config.SizeCCD = BeeCore.Common.listCamera[Global.IndexCCCD].GetSzCCD();
-                            // matRaw là OpenCvSharp.Mat
+                            // matRaw lï¿½ OpenCvSharp.Mat
                             //var bmp = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw);
-                            //// Ð?y frame m?i nh?t và h?y frame cu m?t cách an toàn, không c?n lock
+                            //// ï¿½?y frame m?i nh?t vï¿½ h?y frame cu m?t cï¿½ch an toï¿½n, khï¿½ng c?n lock
                             //var old = Interlocked.Exchange(ref _sharedFrame, bmp);
                             //old?.Dispose();
 
-                            //// (tu? ch?n) báo cho display thread là có frame m?i
+                            //// (tu? ch?n) bï¿½o cho display thread lï¿½ cï¿½ frame m?i
                             //_frameReady?.Set();
                             //using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw))
                             //{
@@ -4680,8 +4681,8 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
         private void workGetColor_DoWork(object sender, DoWorkEventArgs e)
         {
-            // L?y v? trí cursor dang n?m ? dâu trong imgView. Luu C? client-space (d? Paint v? ellipse)
-            // VÀ image-space (d? sample pixel) trong cùng 1 l?n Invoke ? 2 cái luôn paired, không drift.
+            // L?y v? trï¿½ cursor dang n?m ? dï¿½u trong imgView. Luu C? client-space (d? Paint v? ellipse)
+            // Vï¿½ image-space (d? sample pixel) trong cï¿½ng 1 l?n Invoke ? 2 cï¿½i luï¿½n paired, khï¿½ng drift.
             Point clientPt = Point.Empty;
             Point imgPt = Point.Empty;
             try
@@ -4702,11 +4703,11 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             }
             catch
             {
-                return; // imgView b? dispose gi?a ch?ng ? b? qua frame này
+                return; // imgView b? dispose gi?a ch?ng ? b? qua frame nï¿½y
             }
 
-            // Cursor không n?m trong vùng ?nh ? không sample, không update snapshot
-            // (PointToImage tr? v? (-1,-1) ho?c out-of-range khi cursor ngoài image area c?a Cyotek)
+            // Cursor khï¿½ng n?m trong vï¿½ng ?nh ? khï¿½ng sample, khï¿½ng update snapshot
+            // (PointToImage tr? v? (-1,-1) ho?c out-of-range khi cursor ngoï¿½i image area c?a Cyotek)
             try
             {
                 var cam = BeeCore.Common.listCamera[Global.IndexCCCD];
@@ -4716,7 +4717,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 {
                     if (raw.Empty()) return;
 
-                    // N?u cursor ra ngoài ?nh th?t, ?n ellipse luôn
+                    // N?u cursor ra ngoï¿½i ?nh th?t, ?n ellipse luï¿½n
                     if (imgPt.X < 0 || imgPt.Y < 0 || imgPt.X >= raw.Width || imgPt.Y >= raw.Height)
                     {
                         _colorPickHasSample = false;
@@ -4742,7 +4743,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
                     Global.ColorSample = sampled;
                     
-                    // Snapshot atomic: client point + màu sampled t?i di?m dó
+                    // Snapshot atomic: client point + mï¿½u sampled t?i di?m dï¿½
                     _colorPickClientPt = clientPt;
                     _colorPickColor = sampled;
                     _colorPickHasSample = true;
@@ -5752,8 +5753,8 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                             if (imgView.Image != null)
                             {
                                 imgView.Text = "No Data Raw";
-                                imgView.Image.Dispose();   // tránh leak b? nh? n?u là Bitmap t? t?o
-                                imgView.Image = null;      // xoá ?nh kh?i control
+                                imgView.Image.Dispose();   // trï¿½nh leak b? nh? n?u lï¿½ Bitmap t? t?o
+                                imgView.Image = null;      // xoï¿½ ?nh kh?i control
                             }
                             _renderer.ClearImages(); return;
                         }
@@ -5774,8 +5775,8 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                             if (imgView.Image != null)
                             {
                                 imgView.Text = "No Data Result";
-                                imgView.Image.Dispose();   // tránh leak b? nh? n?u là Bitmap t? t?o
-                                imgView.Image = null;      // xoá ?nh kh?i control
+                                imgView.Image.Dispose();   // trï¿½nh leak b? nh? n?u lï¿½ Bitmap t? t?o
+                                imgView.Image = null;      // xoï¿½ ?nh kh?i control
                             }
                             _renderer.ClearImages(); return;
                         }    
@@ -5923,7 +5924,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         //        rr._dragAnchor = AnchorPoint.None;
         //        rr.ActiveVertexIndex = -1;
 
-        //        // N?u là polygon dang d?ng d?
+        //        // N?u lï¿½ polygon dang d?ng d?
         //        if (rr.Shape == ShapeType.Polygon && rr.IsPolygonClosed == false)
         //        {
                     
@@ -5934,10 +5935,10 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
 
 
-        //    // 3) Gán shape m?i & chu?n b? khung
+        //    // 3) Gï¿½n shape m?i & chu?n b? khung
         //    if (rr == null)
         //    {
-        //        // tu? code luu tr? c?a b?n mà t?o m?i:
+        //        // tu? code luu tr? c?a b?n mï¿½ t?o m?i:
         //        rr = new RectRotate();
         //        if (Global.TypeCrop == TypeCrop.Area) prop.rotArea = rr;
         //        else if (Global.TypeCrop == TypeCrop.Mask) prop.rotMask = rr;
@@ -5949,22 +5950,22 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         //    switch (newShape)
         //    {
         //        case ShapeType.Polygon:
-        //            // Local s?ch, xoá di?m cu: ch? click di?m d?u tiên
+        //            // Local s?ch, xoï¿½ di?m cu: ch? click di?m d?u tiï¿½n
         //            rr.ResetFrameForNewPolygonHard();
-        //            rr.AutoOrientPolygon = false; // thu?ng t?t lúc d?ng, b?n có th? d? true n?u quen
+        //            rr.AutoOrientPolygon = false; // thu?ng t?t lï¿½c d?ng, b?n cï¿½ th? d? true n?u quen
         //            break;
 
         //        case ShapeType.Rectangle:
         //        case ShapeType.Ellipse:
         //        case ShapeType.Hexagon:
-        //            // Không c?n xoá toàn b?; ch? d?m b?o không kéo theo tr?ng thái cu
+        //            // Khï¿½ng c?n xoï¿½ toï¿½n b?; ch? d?m b?o khï¿½ng kï¿½o theo tr?ng thï¿½i cu
         //            rr._dragAnchor = AnchorPoint.None;
         //            rr.ActiveVertexIndex = -1;
 
-        //            // Option: reset rotation cho phiên m?i (tu? UX)
+        //            // Option: reset rotation cho phiï¿½n m?i (tu? UX)
         //            // rr._rectRotation = 0f;
 
-        //            // Ð? tr?ng _rect: user kéo trái?ph?i d? t?o m?i theo logic MouseDown/Move c?a b?n
+        //            // ï¿½? tr?ng _rect: user kï¿½o trï¿½i?ph?i d? t?o m?i theo logic MouseDown/Move c?a b?n
         //            rr._rect = RectangleF.Empty;
 
         //            // Hexagon: offsets v? 0
@@ -6070,12 +6071,12 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
         //        if (rr != null)
         //        {
-        //            // K?t thúc kéo: b? anchor, b? active vertex
+        //            // K?t thï¿½c kï¿½o: b? anchor, b? active vertex
         //            rr._dragAnchor = AnchorPoint.None;
         //            rr.ActiveVertexIndex = -1;
         //        }
 
-        //        // Reset c? kéo
+        //        // Reset c? kï¿½o
         //        _drag = false;
 
         //        //// Tr? quy?n pan/zoom
@@ -6084,7 +6085,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         //        //imgView.AllowClickZoom = true;
         //        //imgView.AllowDoubleClick = true;
 
-        //        // V? l?i (d? m?t highlight kéo)
+        //        // V? l?i (d? m?t highlight kï¿½o)
         //        imgView.Invalidate();
         //    }
         //    catch
