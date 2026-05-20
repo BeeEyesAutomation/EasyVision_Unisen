@@ -363,12 +363,17 @@ namespace BeeInterface
             this.layValueInput.RowCount = 0;
             this.layValueInput.ResumeLayout();
 
+            bool edit = btnONEditValInput != null && btnONEditValInput.IsCLick;
             foreach (ParaValue paraValue in Global.Comunication.Protocol.ListParaValueInput)
             {
                 ucValueInput uc = new ucValueInput(paraValue);
                 uc.Height = 48;
                 uc.Dock = DockStyle.Fill;
                 uc.TabStop = false;
+                uc.Type.Enabled = edit;
+                uc.Bit.Enabled = edit;
+                uc.Blink.Enabled = edit;
+                AttachDeleteMenu(uc, paraValue, TypeIO.ValueIn);
                 this.layValueInput.RowStyles.Add(new RowStyle(SizeType.AutoSize));
                 this.layValueInput.Controls.Add(uc);
             }
@@ -382,6 +387,12 @@ namespace BeeInterface
             var p = Global.Comunication.Protocol;
             string name = p.NextDefaultName(TypeIO.ValueIn);
             p.ListParaValueInput.Add(new ParaValue(name, TypeValuePLC.None, TypeVar.Int, TypeIO.ValueIn, ""));
+            // Tu dong bat Edit mode khi them moi de user sua duoc ngay
+            if (btnONEditValInput != null && !btnONEditValInput.IsCLick)
+            {
+                btnONEditValInput.IsCLick = true;
+                btnONEditValInput.Text = "ON";
+            }
             RefreshLayValueInput();
         }
 
@@ -400,6 +411,31 @@ namespace BeeInterface
             this.btnONEditValInput.Text = this.btnONEditValInput.IsCLick ? "ON" : "OFF";
         }
 
+        // Right-click 1 ucValueInput / ucValueOutput de Delete
+        private void AttachDeleteMenu(UserControl uc, ParaValue pv, TypeIO dir)
+        {
+            var menu = new ContextMenuStrip();
+            var item = new ToolStripMenuItem("Delete \"" + (string.IsNullOrEmpty(pv.Name) ? "Value" : pv.Name) + "\"");
+            item.Click += (s, e) =>
+            {
+                if (MessageBox.Show("Delete " + pv.Name + "?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+                var p = Global.Comunication.Protocol;
+                if (dir == TypeIO.ValueIn) p.ListParaValueInput.Remove(pv);
+                else p.ListParaValueOut.Remove(pv);
+                if (dir == TypeIO.ValueIn) RefreshLayValueInput();
+                else RefreshLayValueOutput();
+            };
+            menu.Items.Add(item);
+            uc.ContextMenuStrip = menu;
+            // gan ContextMenuStrip cho moi child de right-click bat ki cho nao tren uc
+            foreach (Control c in uc.Controls) AttachContextRecursive(c, menu);
+        }
+        private void AttachContextRecursive(Control c, ContextMenuStrip menu)
+        {
+            c.ContextMenuStrip = menu;
+            foreach (Control child in c.Controls) AttachContextRecursive(child, menu);
+        }
+
         public void RefreshLayValueOutput()
         {
             this.layValueOutput.SuspendLayout();
@@ -415,6 +451,7 @@ namespace BeeInterface
             this.layValueOutput.ResumeLayout();
 
 
+            bool editOut = btnONEditValOutput != null && btnONEditValOutput.IsCLick;
             foreach (ParaValue paraValue in Global.Comunication.Protocol.ListParaValueOut)
             {
 
@@ -423,6 +460,10 @@ namespace BeeInterface
                 ucValueOutput.Height = 48;
                 ucValueOutput.Dock = DockStyle.Fill;
                 ucValueOutput.TabStop = false;
+                ucValueOutput.Type.Enabled = editOut;
+                ucValueOutput.Bit.Enabled = editOut;
+                ucValueOutput.Blink.Enabled = editOut;
+                AttachDeleteMenu(ucValueOutput, paraValue, TypeIO.ValueOut);
                 this.layValueOutput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
                 this.layValueOutput.Controls.Add(ucValueOutput);
 
@@ -1450,6 +1491,11 @@ namespace BeeInterface
             var p = Global.Comunication.Protocol;
             string name = p.NextDefaultName(TypeIO.ValueOut);
             p.ListParaValueOut.Add(new ParaValue(name, TypeValuePLC.None, TypeVar.Int, TypeIO.ValueOut, ""));
+            if (btnONEditValOutput != null && !btnONEditValOutput.IsCLick)
+            {
+                btnONEditValOutput.IsCLick = true;
+                btnONEditValOutput.Text = "ON";
+            }
             RefreshLayValueOutput();
         }
 
