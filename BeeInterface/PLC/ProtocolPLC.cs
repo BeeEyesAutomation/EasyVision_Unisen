@@ -438,6 +438,9 @@ namespace BeeInterface
 
         public void RefreshLayValueOutput()
         {
+            this.layValueOutput.Visible = true;
+            this.tableLayoutPanel12.Visible = true; // toolbar New/Edit
+            this.tableLayoutPanel14.Visible = true; // header Bit/Type/Value/ResetBit
             this.layValueOutput.SuspendLayout();
             this.layValueOutput.Controls.Clear();
             for (int i = this.layValueOutput.RowStyles.Count - 1; i >= 0; i--)
