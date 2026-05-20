@@ -38,13 +38,20 @@ namespace BeeGlobal
         Bottom, Left, Right, Top, MidBotRight
 
     }
-    public enum TypeValuePLC {
-        TotalOK,
-        TotalNG,
-        Total,
-        Cycle,Tool
-
-
+    public enum TypeValuePLC
+    {
+        None,
+        TotalOK,      // Global.Config.SumOK
+        TotalNG,      // Global.Config.SumNG
+        Total,        // Global.Config.SumTime
+        Qty,          // Protocol.ValueQty
+        Cycle,        // Global.Cycle
+        NoProg,       // Protocol.NoProg
+        CountProg,    // Protocol.ValueCountProg
+        Progress,     // Protocol.ValueProgress
+        PO,           // Protocol.ValuePO
+        Tool,         // ParaValue.Value <- tool result (via ToolKey)
+        Custom,       // ParaValue.Value tu do (user dat ten)
     }
     public enum SideLR
     {

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.layOut = new System.Windows.Forms.TableLayoutPanel();
-            this.lbName = new System.Windows.Forms.Label();
+            this.lbName = new System.Windows.Forms.TextBox();
             this.Bit = new System.Windows.Forms.ComboBox();
             this.Blink = new BeeInterface.RJButton();
             this.Type = new System.Windows.Forms.ComboBox();
@@ -61,18 +61,18 @@
             this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layOut.Size = new System.Drawing.Size(460, 43);
             this.layOut.TabIndex = 57;
-            // 
+            //
             // lbName
-            // 
-            this.lbName.AutoSize = true;
+            //
             this.lbName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbName.Location = new System.Drawing.Point(3, 0);
+            this.lbName.Location = new System.Drawing.Point(3, 3);
             this.lbName.Name = "lbName";
-            this.lbName.Size = new System.Drawing.Size(50, 43);
+            this.lbName.Size = new System.Drawing.Size(50, 37);
             this.lbName.TabIndex = 60;
-            this.lbName.Text = "Bit 00";
-            this.lbName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lbName.Text = "Value0";
+            this.lbName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.lbName.TextChanged += new System.EventHandler(this.lbName_TextChanged);
             // 
             // Bit
             // 
@@ -227,6 +227,7 @@
             this.txtAdd.Name = "txtAdd";
             this.txtAdd.Size = new System.Drawing.Size(113, 37);
             this.txtAdd.TabIndex = 61;
+            this.txtAdd.TextChanged += new System.EventHandler(this.txtAdd_TextChanged);
             // 
             // ucValueOutput
             // 
@@ -249,7 +250,7 @@
         public RJButton Blink;
         public System.Windows.Forms.ComboBox Type;
         public System.Windows.Forms.ComboBox Bit;
-        private System.Windows.Forms.Label lbName;
+        public System.Windows.Forms.TextBox lbName;
         private TextBoxAuto txtAdd;
     }
 }

@@ -250,6 +250,36 @@ namespace BeeGlobal
         public bool IsChangeAlive = false;
         public List<ParaValue> ListParaValueOut = new List<ParaValue>();
         public List<ParaValue> ListParaValueInput = new List<ParaValue>();
+
+        // Tim ParaValue theo Name. dir = null: tim ca 2 list. dir = ValueIn / ValueOut: lock list.
+        public ParaValue ResolveByName(string name, TypeIO? dir = null)
+        {
+            if (string.IsNullOrEmpty(name)) return null;
+            if (dir == null || dir == TypeIO.ValueOut)
+            {
+                var hit = ListParaValueOut?.FirstOrDefault(v => v.Name == name);
+                if (hit != null) return hit;
+            }
+            if (dir == null || dir == TypeIO.ValueIn)
+            {
+                var hit = ListParaValueInput?.FirstOrDefault(v => v.Name == name);
+                if (hit != null) return hit;
+            }
+            return null;
+        }
+
+        // Sinh ten mac dinh "Value0", "Value1",... khong trung trong list dich.
+        public string NextDefaultName(TypeIO dir)
+        {
+            var list = (dir == TypeIO.ValueIn) ? ListParaValueInput : ListParaValueOut;
+            int i = 0;
+            while (true)
+            {
+                string candidate = "Value" + i;
+                if (list.All(v => v.Name != candidate)) return candidate;
+                i++;
+            }
+        }
         [NonSerialized]
         public System.Windows.Forms.Timer timeAlive = new System.Windows.Forms.Timer();
         [NonSerialized]
@@ -1136,7 +1166,7 @@ namespace BeeGlobal
         [NonSerialized]
         Stopwatch CT = new Stopwatch();
         [NonSerialized]
-        public float CTMid = 0, CTMin = 0, CTMax = 0;
+        public float CTMin = 0, CTMax = 0;
         public float CTRead, CTWrite;
         bool IsWait = false;
         public IO_Processing _IO_Processing = IO_Processing.None;

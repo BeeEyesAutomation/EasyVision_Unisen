@@ -1400,7 +1400,9 @@ namespace BeeInterface
 
         private void btnNew_Click(object sender, EventArgs e)
         {
-            Global.Comunication.Protocol.ListParaValueOut.Add(new ParaValue(TypeValuePLC.TotalNG, TypeVar.Int, TypeIO.Output, ""));
+            var p = Global.Comunication.Protocol;
+            string name = p.NextDefaultName(TypeIO.ValueOut);
+            p.ListParaValueOut.Add(new ParaValue(name, TypeValuePLC.None, TypeVar.Int, TypeIO.ValueOut, ""));
             RefreshLayValueOutput();
         }
 

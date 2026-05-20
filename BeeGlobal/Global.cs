@@ -18,6 +18,21 @@ namespace BeeGlobal
     {
         public static String PathRaw = "";
         public static String PathRS = "";
+
+        private static float _Cycle = 0f;
+        public static event Action<float> CycleChanged;
+        public static float Cycle
+        {
+            get => _Cycle;
+            set
+            {
+                if (_Cycle != value)
+                {
+                    _Cycle = value;
+                    CycleChanged?.Invoke(_Cycle);
+                }
+            }
+        }
         public static  Dictionary<string, SemaphoreSlim> _toolSemaphores
         = new Dictionary<string, SemaphoreSlim>();
         public static readonly object _toolSchedulerLock = new object();
