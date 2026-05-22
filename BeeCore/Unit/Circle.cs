@@ -133,6 +133,7 @@ namespace BeeCore
                     if(matProcess==null) matProcess = new Mat();
                     if (!matProcess.IsDisposed)
                         if (!matProcess.Empty()) matProcess.Dispose();
+
                     matProcess = Filters.ApplyEdgeMethod(matCrop, MethordEdge, ThresholdBinary);
                     if (rotArea.Shape == ShapeType.Ellipse)
                         matProcess = ApplyShapeMaskAndCompose(matProcess, ctx, rotArea, rotMask, returnMaskOnly: false);

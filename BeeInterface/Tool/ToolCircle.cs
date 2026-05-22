@@ -28,18 +28,14 @@ namespace BeeInterface
         private void InvalidateOwnerToolCache() => _ownerTool = null;
         #endregion
 
-        private EdgeButtonsHelper.ExtraButtons _extraEdgeBtns;
+
 
         public ToolCircle()
         {
             InitializeComponent();
             if (Propety == null)
                 Propety = new Circle();
-            _extraEdgeBtns = EdgeButtonsHelper.Attach(lay31, m =>
-            {
-                Propety.MethordEdge = m;
-                lay32.Enabled = false;
-            });
+           
         }
 
         Stopwatch timer = new Stopwatch();
@@ -103,18 +99,14 @@ namespace BeeInterface
             AdjClearNoise.Value = state.SizeClearSmall;
             AdjClearBig.Value = state.SizeClearBig;
 
-            btnStrongEdge.IsCLick = btnCloseEdge.IsCLick = btnBinary.IsCLick = btnInvert.IsCLick = false;
-            _extraEdgeBtns?.ResetAll();
-            lay32.Enabled = false;
+         
+            lay62.Enabled = false;
             switch (state.MethordEdge)
             {
                 case MethordEdge.StrongEdges:   btnStrongEdge.IsCLick = true; break;
                 case MethordEdge.CloseEdges:    btnCloseEdge.IsCLick = true; break;
-                case MethordEdge.Binary:        btnBinary.IsCLick = true; lay32.Enabled = true; break;
-                case MethordEdge.InvertBinary:  btnInvert.IsCLick = true; lay32.Enabled = true; break;
-                case MethordEdge.UltraThin:
-                case MethordEdge.Adaptive:
-                case MethordEdge.DenoiseFirst:  _extraEdgeBtns?.Highlight(state.MethordEdge); break;
+                case MethordEdge.Binary:        btnBinary.IsCLick = true; lay62.Enabled = true; break;
+              
             }
 
             switch (state.CircleScanDirection)
@@ -178,6 +170,12 @@ namespace BeeInterface
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
+        }
+
+        private void btnStable_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.Stable;
+            lay62.Enabled = false;
         }
     }
 }

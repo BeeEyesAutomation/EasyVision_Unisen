@@ -490,7 +490,7 @@
             this.rjButton3.FlatAppearance.BorderSize = 0;
             this.rjButton3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rjButton3.ForeColor = System.Drawing.Color.Black;
-            this.rjButton3.Image = global::BeeInterface.Properties.Resources.Circle_1;
+            this.rjButton3.Image = global::BeeInterface.Properties.Resources.Circle;
             this.rjButton3.IsCLick = false;
             this.rjButton3.IsNotChange = false;
             this.rjButton3.IsRect = false;

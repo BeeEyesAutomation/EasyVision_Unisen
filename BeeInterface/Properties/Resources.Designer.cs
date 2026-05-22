@@ -663,16 +663,6 @@ namespace BeeInterface.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Circle_1 {
-            get {
-                object obj = ResourceManager.GetObject("Circle_1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap Close_Window {
             get {
                 object obj = ResourceManager.GetObject("Close_Window", resourceCulture);

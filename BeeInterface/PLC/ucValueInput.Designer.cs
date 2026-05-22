@@ -61,14 +61,14 @@
             this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layOut.Size = new System.Drawing.Size(460, 43);
             this.layOut.TabIndex = 57;
-            //
+            // 
             // lbName
-            //
+            // 
             this.lbName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbName.Location = new System.Drawing.Point(3, 3);
             this.lbName.Name = "lbName";
-            this.lbName.Size = new System.Drawing.Size(50, 37);
+            this.lbName.Size = new System.Drawing.Size(50, 26);
             this.lbName.TabIndex = 60;
             this.lbName.Text = "Value0";
             this.lbName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;

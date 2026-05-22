@@ -741,13 +741,6 @@ namespace BeeInterface
             bool needMultiSrc = !isAngle && method == MeasureMethod.MultiPointToLine;
             bool noLine2 = !isAngle && (method == MeasureMethod.PointToPoint || method == MeasureMethod.MultiPointToLine);
 
-            if (needMultiSrc)
-            {
-                Propety.Line1InputMode = MeasureLineInputMode.Line;
-                if (cbLine1Mode != null)
-                    cbLine1Mode.SelectedItem = MeasureLineInputMode.Line;
-            }
-
             cbDirect.Enabled = !isAngle && method == MeasureMethod.PointToPoint;
             cbMethord.Enabled = needMultiSrc;
 
@@ -756,7 +749,7 @@ namespace BeeInterface
 
             SetLineHeaderVisible(1, true);
             SetLineHeaderVisible(2, needLine2Full || needSinglePoint);
-            cbLine1Mode.Visible = !needMultiSrc;
+            cbLine1Mode.Visible = true;
             label1.Text = needMultiSrc ? "Reference Line" : "Line 1";
             label2.Visible = needLine2Full || needSinglePoint;
             tableLayoutPanel4.Visible = needLine2Full || needSinglePoint;

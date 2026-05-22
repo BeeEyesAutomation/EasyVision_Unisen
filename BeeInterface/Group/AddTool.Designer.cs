@@ -40,7 +40,7 @@ namespace BeeInterface
             this.toolPage1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolPage1.Location = new System.Drawing.Point(0, 0);
             this.toolPage1.Name = "toolPage1";
-            this.toolPage1.Size = new System.Drawing.Size(833, 615);
+            this.toolPage1.Size = new System.Drawing.Size(899, 717);
             this.toolPage1.TabIndex = 0;
             this.toolPage1.Load += new System.EventHandler(this.toolPage1_Load);
             // 
@@ -48,7 +48,7 @@ namespace BeeInterface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(833, 615);
+            this.ClientSize = new System.Drawing.Size(899, 717);
             this.Controls.Add(this.toolPage1);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;

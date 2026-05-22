@@ -29,7 +29,18 @@
       "Bash(git commit -m ' *)",
       "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/MSBuild.exe\" BeeCore.csproj -t:Build -p:Configuration=Release -p:Platform=x64 -v:minimal)",
       "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/MSBuild.exe\" BeeInterface/BeeInterface.csproj -t:Build -p:Configuration=Release -p:Platform=x64 -v:minimal)",
-      "Bash(awk 'NR>=2381 && NR<=2384' BeeCore/Unit/Patterns.cs)"
+      "Bash(awk 'NR>=2381 && NR<=2384' BeeCore/Unit/Patterns.cs)",
+      "Bash(MSBuild.exe BeeGlobal/BeeGlobal.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /nologo)",
+      "PowerShell(& 'C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe' BeeInterface\\\\BeeInterface.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /nologo 2>&1)",
+      "Bash(git reset *)",
+      "Bash(git commit -m 'feat\\(plc\\): ucValueInput + engine Read/Write loops *)",
+      "Bash(git commit -m 'feat\\(plc\\): ucValuePicker + start/stop ReadValueInputsLoop in Connect/Disconnect *)",
+      "Bash(git commit -m 'feat\\(plc\\): tab ValueInput trong ProtocolPLC + auto WriteValueOutputs sau inspection *)",
+      "Bash(git commit -m 'fix\\(plc\\): new ParaValue tu dong bat Edit mode + right-click Delete *)",
+      "Bash(git commit -m 'feat\\(plc\\): ToolMeasure pilot - push AngleDetect xuong PLC qua ucValuePicker *)",
+      "Bash(git commit -m 'fix\\(plc\\): force visible layValueOutput + toolbar + header trong RefreshLayValueOutput *)",
+      "Bash(git commit -m 'fix\\(plc\\): bo tabPage2 \\('\\\\''Value Input'\\\\'' cu\\) + tabPage3 \\('\\\\''ValueOutput'\\\\'' cu\\) khoi tabControl1 *)",
+      "Bash(\"C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/MSBuild.exe\" BeeInterface/BeeInterface.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /nologo)"
     ]
   }
 }
