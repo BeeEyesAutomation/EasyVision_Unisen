@@ -2919,10 +2919,15 @@ namespace BeeInterface
                     }
                     this.Invoke((Action)(() =>
                     {
-                        ShowResultTotal();
+                        if (Global.Config != null
+                            && Global.Config.ThreadingMode == ThreadingMode.Parallel
+                            && Global.Config.ProcessingMode != ProcessingMode.SingleProgramSingleCamera)
+                            ShowResultTotalParallel();
+                        else
+                            ShowResultTotal();
                         CheckStatusMode();
                     }));
-                  
+
                     Global.StatusProcessing = StatusProcessing.Done;
                     break;
                 case StatusProcessing.Done:
@@ -3812,6 +3817,73 @@ namespace BeeInterface
             }
             // btnCap.Enabled = true;
         }
+
+        // Parallel render: a parallel cycle finishes all programs at once, so the
+        // legacy single-program ShowResultTotal (keyed on Global.IndexProgChoose /
+        // TriggerNum) would only repaint the last program's slot. This loops the
+        // plan and pushes every program's camera into its own renderer slot.
+        // Reuses the same primitives (DrawResult / TryUpdateRendererImage) on the
+        // UI thread, so per-call Global.IndexProgChoose/IndexCCCD stay consistent.
+        public void ShowResultTotalParallel()
+        {
+            try
+            {
+                var plan = BeeCore.ProgramRunPlanner.Build(Global.TriggerNum);
+                if (plan.Count == 0) { ShowResultTotal(); return; }
+
+                Global.ScaleZoom = (float)(imgView.Zoom / 100.0);
+                Global.pScroll = new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+
+                switch (plan.Count)
+                {
+                    case 1:
+                        _renderer.LayoutPreset = CollageLayout.One;
+                        break;
+                    case 2:
+                        _renderer.LayoutPreset = CollageLayout.Two;
+                        _renderer.Orientation = LayoutOrientation.ForceVertical;
+                        break;
+                    case 3:
+                        _renderer.LayoutPreset = CollageLayout.ThreeRow;
+                        _renderer.Orientation = LayoutOrientation.ForceVertical;
+                        break;
+                    default:
+                        _renderer.LayoutPreset = CollageLayout.FourGrid;
+                        break;
+                }
+
+                foreach (var unit in plan)
+                {
+                    Global.IndexProgChoose = unit.ProgramIndex;
+                    Global.IndexCCCD = unit.CameraIndex;
+
+                    Camera cam = (unit.CameraIndex >= 0 && unit.CameraIndex < BeeCore.Common.listCamera.Count)
+                                 ? BeeCore.Common.listCamera[unit.CameraIndex] : null;
+                    if (cam == null) continue;
+                    if (cam.matRaw == null || cam.matRaw.IsDisposed || cam.matRaw.Empty()) continue;
+
+                    cam.DrawResult();
+                    TryUpdateRendererImage(unit.ProgramIndex, cam, FillMode1.Contain);
+
+                    if (Global.ToolSettings != null
+                        && Global.ToolSettings.Labels != null
+                        && unit.ProgramIndex < Global.ToolSettings.Labels.Count)
+                    {
+                        Global.ToolSettings.Labels[unit.ProgramIndex].Results = Global.ListResult[unit.ProgramIndex];
+                        Global.ToolSettings.Labels[unit.ProgramIndex].BackColor = Color.FromArgb(246, 204, 120);
+                    }
+                }
+
+                Global.Config.SizeCCD = _renderer.szImage;
+                if (Global.Config.IsShowFull)
+                    ShowTool.Full(imgView, Global.Config.SizeCCD);
+            }
+            catch (Exception ex)
+            {
+                Global.LogError("DrawRS", "ShowResultTotalParallel failed", ex);
+            }
+        }
+
         public float SumCycle = 0;
         public void CheckStatusMode()
         {

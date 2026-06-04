@@ -1371,3 +1371,23 @@ Blockers / left dirty:
 - UI exposes Multi-1Cam, Parallel toggle, and comma-list camera map. A richer DataGridView mapping editor was deferred in favor of the low-risk TextBoxAuto comma list (Designer cannot be opened in VS in this environment).
 - Parallel mode not smoke-tested against hardware/sample project in this session (build-verified only). 6-combo smoke matrix (plan section 10.1) still to be run by a human on a real rig; recommend starting with SimCam.
 - NumProgram/NumCamera/MaxParallelPrograms have no dedicated numeric UI control; NumProgram/NumCamera derive from NumTrig via ApplyProcessingMode, MaxParallelPrograms defaults to 2 (config-file editable).
+
+## 2026-06-04 - Parallel multi-program on-screen rendering (follow-up)
+
+Scope:
+- BeeInterface/Group/View.cs: added ShowResultTotalParallel(); Drawing state
+  calls it instead of ShowResultTotal() when ThreadingMode.Parallel +
+  non-Single mode. Loops ProgramRunPlanner plan, sets Global.IndexProgChoose/
+  IndexCCCD per program, repaints each program's camera into its own renderer
+  slot (slot index = program index) via existing DrawResult/TryUpdateRendererImage.
+  Legacy single-program ShowResultTotal path untouched.
+
+Build: MSBuild EasyVision.sln Release|x64 -> 0 errors.
+
+Notes for future agents:
+- Runs on UI thread (invoked from Drawing), so per-call Global.IndexProgChoose/
+  IndexCCCD stay consistent across DrawResult/TryUpdateRendererImage.
+- Still display-only and NOT visually verified (no screen in build env). On a real
+  rig, confirm the 2/3/4-program collage layouts render each program in its slot.
+- DrawResult() overlay text still keyed on Global.IndexProgChoose/TriggerNum; now
+  set per-program inside the loop so each slot's text matches its program.
