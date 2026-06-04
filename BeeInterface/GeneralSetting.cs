@@ -76,8 +76,7 @@ namespace BeeInterface
             if (btnDisPLC.IsCLick)btnDisPLC.Text = "ON";
             else btnDisPLC.Text = "OFF";
             numFlowChart.Value = Global.Config.NumTrig;
-            btnMulti.IsCLick = Global.Config.IsMultiProg;
-            btnSingle.IsCLick = !Global.Config.IsMultiProg;
+            RefreshModeButtons();
             switch (Global.Config.TypeSave)
             {
                 case 1: btnSmall.IsCLick = true; break;
@@ -205,12 +204,81 @@ namespace BeeInterface
 
         private void btnMulti_Click(object sender, EventArgs e)
         {
-            Global.Config.IsMultiProg = btnMulti.IsCLick;
+            ApplyProcessingMode(ProcessingMode.MultiProgramMultiCamera);
         }
 
         private void btnSingle_Click(object sender, EventArgs e)
         {
-            Global.Config.IsMultiProg = !btnSingle.IsCLick;
+            ApplyProcessingMode(ProcessingMode.SingleProgramSingleCamera);
+        }
+
+        private void btnMulti1Cam_Click(object sender, EventArgs e)
+        {
+            ApplyProcessingMode(ProcessingMode.MultiProgramSingleCamera);
+        }
+
+        private void btnParallel_Click(object sender, EventArgs e)
+        {
+            Global.Config.ThreadingMode = btnParallel.IsCLick ? ThreadingMode.Parallel : ThreadingMode.Sequential;
+            btnParallel.Text = btnParallel.IsCLick ? "Parallel ON" : "Parallel OFF";
+        }
+
+        // Single source of truth for the 3-way mode radio. Keeps Config + legacy
+        // flags + NumProgram/NumCamera consistent (T10).
+        private void ApplyProcessingMode(ProcessingMode mode)
+        {
+            Global.Config.ProcessingMode = mode;
+            Global.Config.SyncLegacyFlags();
+
+            int n = (int)numFlowChart.Value;
+            if (n < 1) n = 1;
+            switch (mode)
+            {
+                case ProcessingMode.SingleProgramSingleCamera:
+                    Global.Config.NumProgram = 1;
+                    Global.Config.NumCamera = 1;
+                    break;
+                case ProcessingMode.MultiProgramSingleCamera:
+                    Global.Config.NumProgram = n;
+                    Global.Config.NumCamera = 1;
+                    break;
+                case ProcessingMode.MultiProgramMultiCamera:
+                    Global.Config.NumProgram = n;
+                    Global.Config.NumCamera = n;
+                    break;
+            }
+        }
+
+        private void RefreshModeButtons()
+        {
+            btnSingle.IsCLick = Global.Config.ProcessingMode == ProcessingMode.SingleProgramSingleCamera;
+            btnMulti.IsCLick = Global.Config.ProcessingMode == ProcessingMode.MultiProgramMultiCamera;
+            btnMulti1Cam.IsCLick = Global.Config.ProcessingMode == ProcessingMode.MultiProgramSingleCamera;
+            btnParallel.IsCLick = Global.Config.ThreadingMode == ThreadingMode.Parallel;
+            btnParallel.Text = btnParallel.IsCLick ? "Parallel ON" : "Parallel OFF";
+
+            // Camera↔Program map editor: only meaningful for Multi-MultiCam (T11).
+            var map = Global.Config.ProgramCameraMap ?? new int[] { 0, 1, 2, 3 };
+            txtCamMap.Text = string.Join(",", map);
+            txtCamMap.Enabled = Global.Config.ProcessingMode == ProcessingMode.MultiProgramMultiCamera;
+        }
+
+        // Parse a comma-separated camera-slot list (e.g. "0,1,0,3") into
+        // Config.ProgramCameraMap. Always keeps length 4 (fixed-size lists). T11.
+        private void txtCamMap_TextChanged(object sender, EventArgs e)
+        {
+            var parts = (txtCamMap.Text ?? "").Split(new[] { ',', ' ', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var map = new int[] { 0, 1, 2, 3 };
+            for (int i = 0; i < parts.Length && i < map.Length; i++)
+            {
+                if (int.TryParse(parts[i].Trim(), out int slot))
+                {
+                    if (slot < 0) slot = 0;
+                    if (slot > 3) slot = 3;
+                    map[i] = slot;
+                }
+            }
+            Global.Config.ProgramCameraMap = map;
         }
 
 
@@ -220,6 +288,8 @@ namespace BeeInterface
         private void numTrigger_ValueChanged(float obj)
         {
             Global.Config.NumTrig = (int)numFlowChart.Value;
+            // Keep NumProgram/NumCamera aligned with NumTrig per the active mode (T10).
+            ApplyProcessingMode(Global.Config.ProcessingMode);
         }
 
         private void btnSave_Click(object sender, EventArgs e)

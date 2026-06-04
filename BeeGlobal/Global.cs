@@ -316,6 +316,17 @@ namespace BeeGlobal
         //}
         public static dynamic  StepEdit;
         public static LogsDashboard LogsDashboard;
+        public static void LogError(string source, string message, Exception exception = null)
+        {
+            try
+            {
+                string fullMessage = exception == null ? message : message + ": " + exception.Message;
+                LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, source, fullMessage));
+            }
+            catch
+            {
+            }
+        }
         public static List<ItemNew> itemNews = new List<ItemNew>();
         public static bool IsLoadProgFist = false;
        
@@ -427,6 +438,56 @@ namespace BeeGlobal
         public static int IndexCCCD = 0;
         public static String PathPython = "";
         public static int IndexProgChoose = 0;
+        public static void SelectProgram(int indexProg)
+        {
+            IndexProgChoose = indexProg;
+            var cfg = Config;
+            if (cfg == null) { IndexCCCD = 0; return; }
+            switch (cfg.ProcessingMode)
+            {
+                case ProcessingMode.SingleProgramSingleCamera:
+                    IndexCCCD = 0;
+                    break;
+                case ProcessingMode.MultiProgramSingleCamera:
+                    IndexCCCD = 0;
+                    break;
+                case ProcessingMode.MultiProgramMultiCamera:
+                    if (cfg.ProgramCameraMap != null && indexProg >= 0 && indexProg < cfg.ProgramCameraMap.Length)
+                        IndexCCCD = cfg.ProgramCameraMap[indexProg];
+                    else
+                        IndexCCCD = indexProg; // fallback = legacy behavior
+                    break;
+                default:
+                    if (cfg.IsMultiProg) IndexCCCD = indexProg;
+                    break;
+            }
+        }
+        public static void SelectProgramForTrigger(TriggerNum triggerNum)
+        {
+            if (Config == null || !Config.IsMultiProg)
+            {
+                SelectProgram(0);
+                return;
+            }
+
+            switch (triggerNum)
+            {
+                case TriggerNum.Trigger2:
+                    SelectProgram(1);
+                    break;
+                case TriggerNum.Trigger3:
+                    SelectProgram(2);
+                    break;
+                case TriggerNum.Trigger4:
+                    SelectProgram(3);
+                    break;
+                case TriggerNum.Trigger0:
+                case TriggerNum.Trigger1:
+                default:
+                    SelectProgram(0);
+                    break;
+            }
+        }
         public static String Project = "";
         public static RectRotate rotAreaAdj;
       

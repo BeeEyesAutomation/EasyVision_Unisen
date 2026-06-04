@@ -28,6 +28,21 @@ namespace BeeGlobal
         public bool IsMultiCamera = false;
         public bool IsONNG = false;
         public int NumTrig = 1;
+
+        // Multi-Program / Multi-Camera / Threading (plan §2)
+        public ProcessingMode ProcessingMode = ProcessingMode.SingleProgramSingleCamera;
+        public ThreadingMode  ThreadingMode  = ThreadingMode.Sequential;
+        public int NumProgram = 1;            // 1..4
+        public int NumCamera  = 1;            // 1..4
+        public int MaxParallelPrograms = 2;   // tran luong program song song
+        public int[] ProgramCameraMap = new int[] { 0, 1, 2, 3 };
+
+        public void SyncLegacyFlags()
+        {
+            IsMultiProg   = ProcessingMode != ProcessingMode.SingleProgramSingleCamera;
+            IsMultiCamera = ProcessingMode == ProcessingMode.MultiProgramMultiCamera;
+        }
+
         public bool IsAutoReload = false;
     
         public Size SizeCCD;

@@ -2642,13 +2642,39 @@ namespace BeeInterface
                     }
                     else
                     {
-                        foreach (Camera camera in BeeCore.Common.listCamera)
-                        {
-                            if (camera == null) continue;
-                            camera.Read();
+                        EnsureCamerasForPlan();
 
-                            if (camera.Para.TypeCamera == TypeCamera.USB)
+                        if (Global.Config != null
+                            && Global.Config.ProcessingMode == ProcessingMode.MultiProgramMultiCamera
+                            && Global.Config.ThreadingMode == ThreadingMode.Parallel)
+                        {
+                            // T8: read all cameras in parallel for Multi-Camera Parallel mode.
+                            var tasks = new List<Task>();
+                            foreach (Camera camera in BeeCore.Common.listCamera)
+                            {
+                                if (camera == null) continue;
+                                var cam = camera;
+                                tasks.Add(Task.Run(async () =>
+                                {
+                                    await cam.ReadAwait();
+                                    if (cam.Para.TypeCamera == TypeCamera.USB)
+                                        await cam.ReadAwait();
+                                }));
+                            }
+                            try { Task.WaitAll(tasks.ToArray()); }
+                            catch (Exception ex)
+                            { Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Name, ex.Message)); }
+                        }
+                        else
+                        {
+                            foreach (Camera camera in BeeCore.Common.listCamera)
+                            {
+                                if (camera == null) continue;
                                 camera.Read();
+
+                                if (camera.Para.TypeCamera == TypeCamera.USB)
+                                    camera.Read();
+                            }
                         }
                         if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
                         {
@@ -2904,6 +2930,7 @@ namespace BeeInterface
                         try { Global.Comunication?.Protocol?.WriteValueOutputs(); } catch { }
 
                         Global.IsDoneTrig = false;
+                        if (Checking1 != null) Checking1.IsDoneTrig = false; // T6: per-program state
                         if(!IsShowHis)
                             this.Invoke((Action)(() =>
                         {
@@ -3008,7 +3035,7 @@ namespace BeeInterface
                                 if (Global.TriggerNum == TriggerNum.Trigger1)
                                 {
                                     Global.TriggerNum = TriggerNum.Trigger0;
-                                    Global.IndexProgChoose = 0;
+                                    Global.SelectProgram(0);
                                 }    
                                    
                                 break;
@@ -3016,7 +3043,7 @@ namespace BeeInterface
                                 if (Global.TriggerNum == TriggerNum.Trigger2)
                                 {
                                     Global.TriggerNum = TriggerNum.Trigger0;
-                                    Global.IndexProgChoose = 0;
+                                    Global.SelectProgram(0);
                                 }    
                                    
                                 break;
@@ -3024,7 +3051,7 @@ namespace BeeInterface
                                 if (Global.TriggerNum == TriggerNum.Trigger3)
                                 {
                                     Global.TriggerNum = TriggerNum.Trigger0;
-                                    Global.IndexProgChoose = 0;
+                                    Global.SelectProgram(0);
                                 }    
                                    
                                 break;
@@ -3032,14 +3059,14 @@ namespace BeeInterface
                                 if (Global.TriggerNum == TriggerNum.Trigger4)
                                 {
                                     Global.TriggerNum = TriggerNum.Trigger0;
-                                    Global.IndexProgChoose = 0;
+                                    Global.SelectProgram(0);
                                 }    
                                     
                                 break;
                         }
                         if (Global.NumProgFromPLC < 2)
                         {
-                            Global.IndexProgChoose = 0;
+                            Global.SelectProgram(0);
                             Global.TriggerNum = TriggerNum.Trigger0;
                         }
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Trig", Global.NumProgFromPLC+ Global.TriggerNum.ToString()));
@@ -3614,8 +3641,9 @@ namespace BeeInterface
                    
 
                    
-                        if (BeeCore.Common.listCamera[Global.IndexCCCD] == null) return;
-                        BeeCore.Common.listCamera[Global.IndexCCCD].DrawResult();
+                        Camera drawCamera;
+                        if (!TryDrawCurrentCameraResult(out drawCamera))
+                            return;
                     // Results results = Global.TotalOK==true ? Results.OK : Results.NG;
                     TriggerNum triggerNum = Global.TriggerNum;
                     if (Global.Comunication.Protocol.TypeControler != TypeControler.PCI)
@@ -3631,17 +3659,11 @@ namespace BeeInterface
                                 Global.ToolSettings.Labels[3].BackColor = Color.LightGray;
                                 if (Global.ImgShow == ImgShow.Result)
                                 {
-                                    if (_renderer.Count() < 1)
-                                        _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
-                                    else
-                                        _renderer.ModifyImage(0, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                                    TryUpdateRendererImage(0, drawCamera, FillMode1.Contain);
                                 }
                                 else if (Global.ImgShow == ImgShow.Raw)
                                 {
-                                    if (_renderer.Count() < 1)
-                                        _renderer.AddImage(BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
-                                    else
-                                        _renderer.ModifyImage(0, BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
+                                    TryUpdateRendererImage(0, drawCamera, FillMode1.Contain);
                                 }
                                 break;
                             case TriggerNum.Trigger2:
@@ -3652,17 +3674,11 @@ namespace BeeInterface
                                 Global.ToolSettings.Labels[3].BackColor = Color.LightGray;
                                 if (Global.ImgShow == ImgShow.Result)
                                 {
-                                    if (_renderer.Count() < 2)
-                                        _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Cover);
-                                    else
-                                        _renderer.ModifyImage(1, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                                    TryUpdateRendererImage(1, drawCamera, FillMode1.Contain);
                                 }
                                 else if (Global.ImgShow == ImgShow.Raw)
                                 {
-                                    if (_renderer.Count() < 2)
-                                        _renderer.AddImage(BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
-                                    else
-                                        _renderer.ModifyImage(1, BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
+                                    TryUpdateRendererImage(1, drawCamera, FillMode1.Contain);
                                 }
                                 break;
                             case TriggerNum.Trigger3:
@@ -3673,17 +3689,11 @@ namespace BeeInterface
                                 Global.ToolSettings.Labels[3].BackColor = Color.LightGray;
                                 if (Global.ImgShow == ImgShow.Result)
                                 {
-                                    if (_renderer.Count() < 3)
-                                        _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
-                                    else
-                                        _renderer.ModifyImage(2, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                                    TryUpdateRendererImage(2, drawCamera, FillMode1.Contain);
                                 }
                                 else if (Global.ImgShow == ImgShow.Raw)
                                 {
-                                    if (_renderer.Count() < 3)
-                                        _renderer.AddImage(BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
-                                    else
-                                        _renderer.ModifyImage(2, BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
+                                    TryUpdateRendererImage(2, drawCamera, FillMode1.Contain);
                                 }
 
                                 break;
@@ -3696,17 +3706,11 @@ namespace BeeInterface
                                 if (Global.ImgShow == ImgShow.Result)
                                 {
 
-                                    if (_renderer.Count() < 4)
-                                        _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
-                                    else
-                                        _renderer.ModifyImage(3, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                                    TryUpdateRendererImage(3, drawCamera, FillMode1.Contain);
                                 }
                                 else if (Global.ImgShow == ImgShow.Raw)
                                 {
-                                    if (_renderer.Count() < 4)
-                                        _renderer.AddImage(BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
-                                    else
-                                        _renderer.ModifyImage(3, BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
+                                    TryUpdateRendererImage(3, drawCamera, FillMode1.Contain);
                                 }
                                 break;
                         }
@@ -3722,7 +3726,12 @@ namespace BeeInterface
                        
                             var old = imgView.Image;
                           
-                        imgView.Image = BeeCore.Common.listCamera[0].bmResult;
+                        if (drawCamera.bmResult == null)
+                        {
+                            Global.LogError("DrawRS", "Result image is null. Program=" + Global.IndexProgChoose + ", Camera=" + drawCamera.IndexCCD);
+                            return;
+                        }
+                        imgView.Image = drawCamera.bmResult;
                         old?.Dispose();
                         //if(BeeCore.Common.listCamera[Global.IndexCCCD].IsConnected)
                         //                Global.Config.SizeCCD = BeeCore.Common.listCamera[Global.IndexCCCD].GetSzCCD();
@@ -3858,6 +3867,7 @@ namespace BeeInterface
                         Global.TriggerNum = TriggerNum.Trigger4;
                         break;
                 }
+                Global.SelectProgramForTrigger(Global.TriggerNum);
                 timer = CycleTimerSplit.Start();
                 Global.StatusProcessing = StatusProcessing.Read;
             }
@@ -3912,16 +3922,16 @@ namespace BeeInterface
                     {
                         case TriggerNum.Trigger0:
                             Global.TriggerNum = TriggerNum.Trigger1;
-                            Global.IndexProgChoose = 0;
+                            Global.SelectProgram(0);
                             break;
                         case TriggerNum.Trigger1:
                             Global.TriggerNum = TriggerNum.Trigger2;
-                            if (BeeCore.Common.TryGetToolList(1) != null)   
-                                Global.IndexProgChoose = 1;
+                            if (BeeCore.Common.TryGetToolList(1) != null)
+                                Global.SelectProgram(1);
                             else
                             {
                                 Global.TriggerNum = TriggerNum.Trigger1;
-                                Global.IndexProgChoose = 0;
+                                Global.SelectProgram(0);
 
                                
                             }    
@@ -3931,11 +3941,11 @@ namespace BeeInterface
                             Global.TriggerNum = TriggerNum.Trigger3;
                            
                             if (BeeCore.Common.TryGetToolList(2) != null)
-                                Global.IndexProgChoose = 2;
+                                Global.SelectProgram(2);
                             else
                             {
                                 Global.TriggerNum = TriggerNum.Trigger1;
-                                Global.IndexProgChoose = 0;
+                                Global.SelectProgram(0);
 
 
                             }
@@ -3944,11 +3954,11 @@ namespace BeeInterface
                         case TriggerNum.Trigger3:
                             Global.TriggerNum = TriggerNum.Trigger4;
                             if (BeeCore.Common.TryGetToolList(3) != null)
-                                Global.IndexProgChoose = 3;
+                                Global.SelectProgram(3);
                             else
                             {
                                 Global.TriggerNum = TriggerNum.Trigger1;
-                                Global.IndexProgChoose = 0;
+                                Global.SelectProgram(0);
 
 
                             }
@@ -3961,7 +3971,7 @@ namespace BeeInterface
 
                 {
                     Global.TriggerNum = TriggerNum.Trigger1;
-                    Global.IndexProgChoose = 0;
+                    Global.SelectProgram(0);
                    
                     Global.StatusProcessing = StatusProcessing.Read;
                 }
@@ -4331,15 +4341,27 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             if (!Global.IsLive && Global.IsRun && Global.StatusProcessing != StatusProcessing.Read) return;
                 if (Global.IsLive||!Global.IsRun)
             {
-                if (BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown) return;
+                Camera cameraLive = BeeCore.Common.listCamera[Global.IndexCCCD];
+                if (cameraLive == null)
+                {
+                    Global.LogError("Live", "Camera is null while reading live. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
+                    return;
+                }
+                if (!cameraLive.IsConnected)
+                {
+                    Global.LogError("Live", "Camera is not connected while reading live. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
+                    return;
+                }
+                if (cameraLive.IsMouseDown) return;
+                if (cameraLive.IsSetPara) return;
                 try
                 {
-                    BeeCore.Common.listCamera[Global.IndexCCCD].Read();
+                    cameraLive.Read();
                 }
                   
-                catch(Exception)
+                catch(Exception ex)
                 {
-
+                    Global.LogError("Live", "Read live camera failed. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD, ex);
                 }
             }
             else if(Global.IsRun&&Global.StatusProcessing==StatusProcessing.Read)
@@ -5376,6 +5398,155 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 }
             }
         }
+        // T8: instantiate camera objects referenced by the current run plan so a
+        // Multi-Camera mapping does not hit a null slot. Object ctor only stores
+        // Para/Index (no hardware connect) — connection stays with startup flow.
+        private void EnsureCamerasForPlan()
+        {
+            var cfg = Global.Config;
+            if (cfg == null || cfg.ProcessingMode != ProcessingMode.MultiProgramMultiCamera)
+                return; // single / multi-1cam already use slot 0 which exists
+
+            var plan = BeeCore.ProgramRunPlanner.Build(Global.TriggerNum);
+            foreach (var unit in plan)
+            {
+                int slot = unit.CameraIndex;
+                if (slot < 0 || slot >= BeeCore.Common.listCamera.Count) continue;
+                if (BeeCore.Common.listCamera[slot] != null) continue;
+
+                ParaCamera para = (Global.listParaCamera != null
+                                   && slot < Global.listParaCamera.Count
+                                   && Global.listParaCamera[slot] != null)
+                                   ? Global.listParaCamera[slot] : new ParaCamera();
+                BeeCore.Common.listCamera[slot] = new Camera(para, slot);
+            }
+        }
+
+        // T7: per-unit sequential driver — extracted from the legacy else-branch
+        // of RunProcessing so MultiProgramSingleCamera and T9 Parallel can reuse.
+        private void RunUnitSequential(BeeCore.ProgramRunUnit unit, Checking checking)
+        {
+            checking.StatusProcessing = StatusProcessing.None;
+            checking.indexThread = unit.ProgramIndex;
+
+            // Keep Global.* in sync so legacy readers (Camera/Header/Sum) see
+            // the unit currently being driven.
+            Global.IndexProgChoose = unit.ProgramIndex;
+            Global.IndexCCCD = unit.CameraIndex;
+
+            if (unit.ProgramIndex == 0)
+            {
+                ResetShowFlowChart();
+            }
+
+            checking.Start();
+            checking.StatusProcessingChanged -= Checking1_StatusProcessingChanged1;
+            checking.StatusProcessingChanged += Checking1_StatusProcessingChanged1;
+        }
+
+        // T9: parallel program execution. Each program runs on its own Checking
+        // instance; SumResult(programIndex) keeps result aggregation race-free
+        // (Camera.SumResult no longer depends on Global.IndexProgChoose).
+        // Tool image reads are already snapshot-safe (each tool clones matRaw),
+        // and matRaw is stable through the Checking phase (next Read only happens
+        // after all programs complete), so no extra Mat snapshot is required.
+        private void RunProcessingParallel()
+        {
+            var plan = BeeCore.ProgramRunPlanner.Build(Global.TriggerNum);
+            if (plan.Count == 0)
+            {
+                Global.StatusProcessing = Global.IsByPassResult ? StatusProcessing.Drawing : StatusProcessing.SendResult;
+                return;
+            }
+
+            ResetShowFlowChart();
+
+            var checkings = new[] { Checking1, Checking2, Checking3, Checking4 };
+            int maxPar = Global.Config.MaxParallelPrograms;
+            if (maxPar < 1) maxPar = 1;
+            var sem = new SemaphoreSlim(maxPar);
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    var tasks = new List<Task>();
+                    foreach (var unit in plan)
+                    {
+                        var u = unit;
+                        int idx = (u.ProgramIndex >= 0 && u.ProgramIndex < checkings.Length) ? u.ProgramIndex : 0;
+                        tasks.Add(RunUnitParallelAsync(u, checkings[idx], sem));
+                    }
+                    await Task.WhenAll(tasks);
+                }
+                catch (Exception ex)
+                {
+                    Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Name, ex.Message));
+                }
+                finally
+                {
+                    sem.Dispose();
+                }
+
+                // Gather: NG if any program in the plan is NG.
+                Global.TotalOK = Results.OK;
+                foreach (var unit in plan)
+                {
+                    if (Global.ListResult[unit.ProgramIndex] == Results.NG)
+                    {
+                        Global.TotalOK = Results.NG;
+                        break;
+                    }
+                }
+                // Point display globals at the last program for the draw phase.
+                var last = plan[plan.Count - 1];
+                Global.IndexProgChoose = last.ProgramIndex;
+                Global.IndexCCCD = last.CameraIndex;
+
+                if (Global.IsByPassResult)
+                    Global.StatusProcessing = StatusProcessing.Drawing;
+                else
+                    Global.StatusProcessing = StatusProcessing.SendResult;
+            });
+        }
+
+        private async Task RunUnitParallelAsync(BeeCore.ProgramRunUnit unit, Checking checking, SemaphoreSlim sem)
+        {
+            await sem.WaitAsync();
+            var tcs = new TaskCompletionSource<bool>();
+            Action<StatusProcessing> handler = (s) =>
+            {
+                if (s == StatusProcessing.Done) tcs.TrySetResult(true);
+            };
+            try
+            {
+                checking.StatusProcessingChanged -= handler;
+                checking.StatusProcessingChanged += handler;
+
+                checking.indexThread = unit.ProgramIndex;
+                checking.StatusProcessing = StatusProcessing.None;
+                checking.Start();
+
+                int timeout = Global.Config != null ? Global.Config.TimerOutChecking : 3000;
+                if (timeout < 1000) timeout = 1000;
+                await Task.WhenAny(tcs.Task, Task.Delay(timeout * 4));
+            }
+            catch (Exception ex)
+            {
+                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Name, ex.Message));
+            }
+            finally
+            {
+                checking.StatusProcessingChanged -= handler;
+
+                var cam = (unit.CameraIndex >= 0 && unit.CameraIndex < BeeCore.Common.listCamera.Count)
+                          ? BeeCore.Common.listCamera[unit.CameraIndex] : null;
+                Global.ListResult[unit.ProgramIndex] = cam != null ? cam.SumResult(unit.ProgramIndex) : Results.None;
+
+                sem.Release();
+            }
+        }
+
         public  void RunProcessing()
         {if (Global.Comunication.Protocol.TypeControler == TypeControler.PCI)
             {
@@ -5431,21 +5602,30 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
               
                 
             }
+            else if (Global.Config != null
+                     && Global.Config.ThreadingMode == ThreadingMode.Parallel
+                     && Global.Config.ProcessingMode != ProcessingMode.SingleProgramSingleCamera)
+            {
+                // T9: run all programs of the plan concurrently.
+                RunProcessingParallel();
+            }
             else
             {
-                Checking1.StatusProcessing = StatusProcessing.None;
-                Checking1.indexThread = Global.IndexProgChoose;
+                // T7: route through ProgramRunPlanner so MultiProgramSingleCamera /
+                // Parallel (T9) can reuse the same per-unit driver. In legacy
+                // Multi-Cam PLC-driven path, BuildSingle returns the trigger's
+                // program with identity camera map ⇒ behavior unchanged.
+                var unit = BeeCore.ProgramRunPlanner.BuildSingle(Global.TriggerNum);
+                // Honor PLC-driven program selection: IndexProgChoose is already
+                // set by SelectProgramForTrigger; prefer it over BuildSingle's
+                // trigger-derived value to stay bit-identical with legacy.
+                unit.ProgramIndex = Global.IndexProgChoose;
+                if (Global.Config != null && Global.Config.ProcessingMode == ProcessingMode.MultiProgramMultiCamera
+                    && Global.Config.ProgramCameraMap != null
+                    && unit.ProgramIndex >= 0 && unit.ProgramIndex < Global.Config.ProgramCameraMap.Length)
+                    unit.CameraIndex = Global.Config.ProgramCameraMap[unit.ProgramIndex];
 
-              
-                if (Global.IndexProgChoose==0)
-                {
-                    ResetShowFlowChart();
-                }
-               
-                Checking1.Start();
-                Checking1.StatusProcessingChanged -= Checking1_StatusProcessingChanged1;
-                Checking1.StatusProcessingChanged += Checking1_StatusProcessingChanged1;
-               
+                RunUnitSequential(unit, Checking1);
             }
        
 
@@ -5784,6 +5964,10 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                     break;
             }
           
+            Camera showCamera = GetCameraForRender("ChangeImgShow");
+            if (showCamera == null)
+                return;
+
             switch (Global.IndexProgChoose)
             {
 
@@ -5791,51 +5975,33 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
                     if (Global.ImgShow == ImgShow.Result)
                     {
-                        if (_renderer.Count() < 1)
-                            _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
-                        else
-                            _renderer.ModifyImage(0, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                        TryUpdateRendererImage(0, showCamera, FillMode1.Contain);
                     }
                     else if (Global.ImgShow == ImgShow.Raw)
                     {
-                        if (_renderer.Count() < 1)
-                            _renderer.AddImage(BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
-                        else
-                            _renderer.ModifyImage(0, BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
+                        TryUpdateRendererImage(0, showCamera, FillMode1.Contain);
                     }
                     break;
                 case 1:
 
                     if (Global.ImgShow == ImgShow.Result)
                     {
-                        if (_renderer.Count() < 2)
-                            _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
-                        else
-                            _renderer.ModifyImage(1, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                        TryUpdateRendererImage(1, showCamera, FillMode1.Contain);
                     }
                     else if (Global.ImgShow == ImgShow.Raw)
                     {
-                        if (_renderer.Count() < 2)
-                            _renderer.AddImage(BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
-                        else
-                            _renderer.ModifyImage(1, BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
+                        TryUpdateRendererImage(1, showCamera, FillMode1.Contain);
                     }
                     break;
                 case 2:
 
                     if (Global.ImgShow == ImgShow.Result)
                     {
-                        if (_renderer.Count() < 3)
-                            _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
-                        else
-                            _renderer.ModifyImage(2, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                        TryUpdateRendererImage(2, showCamera, FillMode1.Contain);
                     }
                     else if (Global.ImgShow == ImgShow.Raw)
                     {
-                        if (_renderer.Count() < 3)
-                            _renderer.AddImage(BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
-                        else
-                            _renderer.ModifyImage(2, BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
+                        TryUpdateRendererImage(2, showCamera, FillMode1.Contain);
                     }
 
                     break;
@@ -5844,17 +6010,11 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                     if (Global.ImgShow == ImgShow.Result)
                     {
 
-                        if (_renderer.Count() < 4)
-                            _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
-                        else
-                            _renderer.ModifyImage(3, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                        TryUpdateRendererImage(3, showCamera, FillMode1.Contain);
                     }
                     else if (Global.ImgShow == ImgShow.Raw)
                     {
-                        if (_renderer.Count() < 4)
-                            _renderer.AddImage(BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
-                        else
-                            _renderer.ModifyImage(3, BeeCore.Common.listCamera[0].matRaw.ToBitmap(), FillMode1.Contain);
+                        TryUpdateRendererImage(3, showCamera, FillMode1.Contain);
                     }
                     break;
             }
@@ -6044,6 +6204,131 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             indexFile = 0;
      
 
+        }
+
+        private Camera GetCameraForRender(string source)
+        {
+            try
+            {
+                if (Global.Config != null && Global.Config.IsMultiProg)
+                    Global.SelectProgram(Global.IndexProgChoose);
+
+                int index = Global.IndexCCCD;
+                if (BeeCore.Common.listCamera == null || index < 0 || index >= BeeCore.Common.listCamera.Count)
+                {
+                    Global.LogError(source, "Camera slot is missing. Program=" + Global.IndexProgChoose + ", Camera=" + index);
+                    return null;
+                }
+
+                Camera camera = BeeCore.Common.listCamera[index];
+                if (camera == null)
+                {
+                    Global.LogError(source, "Camera is null. Program=" + Global.IndexProgChoose + ", Camera=" + index);
+                    return null;
+                }
+
+                return camera;
+            }
+            catch (Exception ex)
+            {
+                Global.LogError(source, "Get camera failed. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD, ex);
+                return null;
+            }
+        }
+
+        private bool TryDrawCurrentCameraResult(out Camera camera)
+        {
+            camera = GetCameraForRender("DrawRS");
+            if (camera == null)
+                return false;
+
+            try
+            {
+                if (camera.matRaw == null || camera.matRaw.IsDisposed || camera.matRaw.Empty())
+                {
+                    Global.LogError("DrawRS", "Raw image is null or empty. Program=" + Global.IndexProgChoose + ", Camera=" + camera.IndexCCD);
+                    return false;
+                }
+
+                camera.DrawResult();
+
+                if (camera.bmResult == null)
+                {
+                    Global.LogError("DrawRS", "Result image is null after DrawResult. Program=" + Global.IndexProgChoose + ", Camera=" + camera.IndexCCD);
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Global.LogError("DrawRS", "DrawResult failed. Program=" + Global.IndexProgChoose + ", Camera=" + camera.IndexCCD, ex);
+                return false;
+            }
+        }
+
+        private bool TryUpdateRendererImage(int imageIndex, Camera camera, FillMode1 fillMode)
+        {
+            try
+            {
+                if (camera == null)
+                {
+                    Global.LogError("DrawRS", "Cannot update renderer because camera is null. Program=" + Global.IndexProgChoose + ", ImageIndex=" + imageIndex);
+                    return false;
+                }
+
+                Bitmap image;
+                if (Global.ImgShow == ImgShow.Result)
+                {
+                    if (camera.bmResult == null)
+                    {
+                        Global.LogError("DrawRS", "Result image is null. Program=" + Global.IndexProgChoose + ", Camera=" + camera.IndexCCD + ", ImageIndex=" + imageIndex);
+                        return false;
+                    }
+
+                    image = camera.bmResult;
+                }
+                else
+                {
+                    if (camera.matRaw == null || camera.matRaw.IsDisposed || camera.matRaw.Empty())
+                    {
+                        Global.LogError("DrawRS", "Raw image is null or empty. Program=" + Global.IndexProgChoose + ", Camera=" + camera.IndexCCD + ", ImageIndex=" + imageIndex);
+                        return false;
+                    }
+
+                    image = camera.matRaw.ToBitmap();
+                }
+
+                EnsureRendererSlot(imageIndex, image.Width, image.Height);
+
+                if (_renderer.Count() <= imageIndex)
+                    _renderer.AddImage(image, fillMode);
+                else
+                    _renderer.ModifyImage(imageIndex, image, fillMode);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Global.LogError("DrawRS", "Update renderer failed. Program=" + Global.IndexProgChoose + ", ImageIndex=" + imageIndex, ex);
+                return false;
+            }
+        }
+
+        private void EnsureRendererSlot(int imageIndex, int width, int height)
+        {
+            int safeWidth = Math.Max(1, width);
+            int safeHeight = Math.Max(1, height);
+
+            while (_renderer.Count() < imageIndex)
+            {
+                using (Bitmap placeholder = new Bitmap(safeWidth, safeHeight))
+                using (Graphics g = Graphics.FromImage(placeholder))
+                {
+                    g.Clear(Color.Black);
+                    _renderer.AddImage(placeholder, FillMode1.Contain);
+                }
+            }
         }
 
  

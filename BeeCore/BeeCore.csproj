@@ -297,6 +297,7 @@
     <Compile Include="Func\Engines\Edge2EngineRunner.cs" />
     <Compile Include="Func\Engines\OCREngineRunner.cs" />
     <Compile Include="Func\Crop.cs" />
+    <Compile Include="Func\ProgramRunPlan.cs" />
     <Compile Include="Func\Engines\CircleEngineRunner.cs" />
     <Compile Include="Func\Engines\ColorAreaEngineRunner.cs" />
     <Compile Include="Func\Engines\CornerEngineRunner.cs" />

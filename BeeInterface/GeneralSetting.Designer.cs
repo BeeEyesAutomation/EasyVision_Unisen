@@ -99,6 +99,9 @@ namespace BeeInterface
             this.layP2 = new System.Windows.Forms.TableLayoutPanel();
             this.btnMulti = new BeeInterface.RJButton();
             this.btnSingle = new BeeInterface.RJButton();
+            this.btnMulti1Cam = new BeeInterface.RJButton();
+            this.btnParallel = new BeeInterface.RJButton();
+            this.txtCamMap = new BeeInterface.TextBoxAuto();
             this.layShowProgressing = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.btnHideProgessing = new BeeInterface.RJButton();
@@ -2978,14 +2981,20 @@ namespace BeeInterface
             this.layP2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.layP2.Controls.Add(this.btnMulti, 1, 0);
             this.layP2.Controls.Add(this.btnSingle, 0, 0);
+            this.layP2.Controls.Add(this.btnMulti1Cam, 0, 1);
+            this.layP2.Controls.Add(this.btnParallel, 1, 1);
+            this.layP2.Controls.Add(this.txtCamMap, 0, 2);
+            this.layP2.SetColumnSpan(this.txtCamMap, 2);
             this.layP2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layP2.Location = new System.Drawing.Point(5, 180);
             this.layP2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.layP2.Name = "layP2";
             this.layP2.Padding = new System.Windows.Forms.Padding(5);
-            this.layP2.RowCount = 1;
-            this.layP2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layP2.Size = new System.Drawing.Size(427, 55);
+            this.layP2.RowCount = 3;
+            this.layP2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.layP2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.layP2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.layP2.Size = new System.Drawing.Size(427, 155);
             this.layP2.TabIndex = 39;
             this.layP2.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel2_Paint);
             // 
@@ -3103,9 +3112,99 @@ namespace BeeInterface
             this.btnSingle.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnSingle.UseVisualStyleBackColor = false;
             this.btnSingle.Click += new System.EventHandler(this.btnSingle_Click);
-            // 
+            //
+            // btnMulti1Cam
+            //
+            this.btnMulti1Cam.AutoFont = true;
+            this.btnMulti1Cam.AutoFontHeightRatio = 0.75F;
+            this.btnMulti1Cam.AutoFontMax = 100F;
+            this.btnMulti1Cam.AutoFontMin = 6F;
+            this.btnMulti1Cam.AutoFontWidthRatio = 0.92F;
+            this.btnMulti1Cam.BackColor = System.Drawing.Color.White;
+            this.btnMulti1Cam.BackgroundColor = System.Drawing.Color.White;
+            this.btnMulti1Cam.BorderColor = System.Drawing.Color.White;
+            this.btnMulti1Cam.BorderRadius = 5;
+            this.btnMulti1Cam.BorderSize = 1;
+            this.btnMulti1Cam.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnMulti1Cam.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnMulti1Cam.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnMulti1Cam.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnMulti1Cam.Corner = BeeGlobal.Corner.Left;
+            this.btnMulti1Cam.DebounceResizeMs = 6;
+            this.btnMulti1Cam.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnMulti1Cam.FlatAppearance.BorderSize = 0;
+            this.btnMulti1Cam.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMulti1Cam.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.07813F);
+            this.btnMulti1Cam.ForeColor = System.Drawing.Color.Black;
+            this.btnMulti1Cam.IsCLick = false;
+            this.btnMulti1Cam.IsNotChange = false;
+            this.btnMulti1Cam.IsRect = false;
+            this.btnMulti1Cam.IsTouch = false;
+            this.btnMulti1Cam.IsUnGroup = false;
+            this.btnMulti1Cam.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMulti1Cam.Multiline = false;
+            this.btnMulti1Cam.Name = "btnMulti1Cam";
+            this.btnMulti1Cam.Size = new System.Drawing.Size(208, 45);
+            this.btnMulti1Cam.TabIndex = 40;
+            this.btnMulti1Cam.Text = "Multi-1Cam";
+            this.btnMulti1Cam.TextColor = System.Drawing.Color.Black;
+            this.btnMulti1Cam.UseVisualStyleBackColor = false;
+            this.btnMulti1Cam.Click += new System.EventHandler(this.btnMulti1Cam_Click);
+            //
+            // btnParallel
+            //
+            this.btnParallel.AutoFont = true;
+            this.btnParallel.AutoFontHeightRatio = 0.75F;
+            this.btnParallel.AutoFontMax = 100F;
+            this.btnParallel.AutoFontMin = 6F;
+            this.btnParallel.AutoFontWidthRatio = 0.92F;
+            this.btnParallel.BackColor = System.Drawing.Color.White;
+            this.btnParallel.BackgroundColor = System.Drawing.Color.White;
+            this.btnParallel.BorderColor = System.Drawing.Color.White;
+            this.btnParallel.BorderRadius = 5;
+            this.btnParallel.BorderSize = 1;
+            this.btnParallel.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnParallel.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnParallel.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnParallel.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnParallel.Corner = BeeGlobal.Corner.Right;
+            this.btnParallel.DebounceResizeMs = 6;
+            this.btnParallel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnParallel.FlatAppearance.BorderSize = 0;
+            this.btnParallel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnParallel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.07813F);
+            this.btnParallel.ForeColor = System.Drawing.Color.Black;
+            this.btnParallel.IsCLick = false;
+            this.btnParallel.IsNotChange = false;
+            this.btnParallel.IsRect = false;
+            this.btnParallel.IsTouch = false;
+            this.btnParallel.IsUnGroup = true;
+            this.btnParallel.Margin = new System.Windows.Forms.Padding(0);
+            this.btnParallel.Multiline = false;
+            this.btnParallel.Name = "btnParallel";
+            this.btnParallel.Size = new System.Drawing.Size(209, 45);
+            this.btnParallel.TabIndex = 41;
+            this.btnParallel.Text = "Parallel OFF";
+            this.btnParallel.TextColor = System.Drawing.Color.Black;
+            this.btnParallel.UseVisualStyleBackColor = false;
+            this.btnParallel.Click += new System.EventHandler(this.btnParallel_Click);
+            //
+            // txtCamMap
+            //
+            this.txtCamMap.AutoFont = true;
+            this.txtCamMap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCamMap.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.txtCamMap.MaxFontSize = 16F;
+            this.txtCamMap.MinFontSize = 9F;
+            this.txtCamMap.Multiline = false;
+            this.txtCamMap.Name = "txtCamMap";
+            this.txtCamMap.Size = new System.Drawing.Size(417, 39);
+            this.txtCamMap.TabIndex = 42;
+            this.txtCamMap.Text = "0,1,2,3";
+            this.txtCamMap.TextChanged += new System.EventHandler(this.txtCamMap_TextChanged);
+            //
             // layShowProgressing
-            // 
+            //
             this.layShowProgressing.ColumnCount = 1;
             this.layShowProgressing.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layShowProgressing.Controls.Add(this.tableLayoutPanel3, 0, 0);
@@ -7412,6 +7511,9 @@ namespace BeeInterface
         private System.Windows.Forms.TabPage Processing;
         private RJButton btnSingle;
         private RJButton btnMulti;
+        private RJButton btnMulti1Cam;
+        private RJButton btnParallel;
+        private TextBoxAuto txtCamMap;
         private System.Windows.Forms.TableLayoutPanel layPage1;
         private System.Windows.Forms.TableLayoutPanel layP2;
         private AdjustBarEx numFlowChart;

@@ -214,6 +214,17 @@ namespace BeeCore {
 
                 }
 
+                // Migrate old config: IsMultiProg=true (legacy) => MultiProgramMultiCamera
+                if (config.ProcessingMode == ProcessingMode.SingleProgramSingleCamera && config.IsMultiProg)
+                {
+                    config.ProcessingMode = ProcessingMode.MultiProgramMultiCamera;
+                    if (config.NumProgram <= 1) config.NumProgram = config.NumTrig > 0 ? config.NumTrig : 1;
+                    if (config.NumCamera  <= 1) config.NumCamera  = config.NumTrig > 0 ? config.NumTrig : 1;
+                }
+                if (config.ProgramCameraMap == null || config.ProgramCameraMap.Length < 4)
+                    config.ProgramCameraMap = new int[] { 0, 1, 2, 3 };
+                config.SyncLegacyFlags();
+
                 config.IsExternal = true;
             }
             catch (Exception ex)

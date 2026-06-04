@@ -1336,3 +1336,38 @@ Status:
 
 Next:
 - Perform the final manual EasyVision SegmentAI smoke, then proceed to P3X.1.13 hardening if the UI behavior matches the native results.
+
+## 2026-06-04 - Multi-Program / Multi-Camera / Multi-Thread (T1-T12)
+
+Scope:
+- Feature: configurable ProcessingMode (Single / Multi-1Cam / Multi-MultiCam) + ThreadingMode (Sequential / Parallel) with camera<->program mapping.
+- Plan: docs/architecture/PLAN_MultiProgram_MultiCamera_Threading.md.
+
+Files touched:
+- BeeGlobal/Enums.cs: added enums ProcessingMode, ThreadingMode (T1).
+- BeeGlobal/Config.cs: added ProcessingMode, ThreadingMode, NumProgram, NumCamera, MaxParallelPrograms, ProgramCameraMap (int[4]); SyncLegacyFlags() keeps IsMultiProg/IsMultiCamera in sync (T2).
+- BeeCore/Data/LoadData.cs: migrate legacy IsMultiProg=true -> MultiProgramMultiCamera after deserialize; default ProgramCameraMap; SyncLegacyFlags (T3).
+- BeeGlobal/Global.cs: SelectProgram() switches on ProcessingMode and reads ProgramCameraMap; identity map {0,1,2,3} + MultiProgramMultiCamera reproduces legacy IndexCCCD=indexProg exactly (T4).
+- BeeCore/Func/ProgramRunPlan.cs (NEW): ProgramRunUnit + ProgramRunPlanner.Build()/BuildSingle() for the 3 modes (T5).
+- BeeCore/Checking.cs: moved per-program state IndexToolAuto/IsDoneTrig to instance fields (race-free for parallel); mirrors to Global.* for legacy readers (T6).
+- BeeInterface/Group/View.cs:
+  - RunProcessing(): routes through ProgramRunPlanner; Sequential per-unit driver (T7); Parallel branch RunProcessingParallel + RunUnitParallelAsync with SemaphoreSlim(MaxParallelPrograms) throttle + per-unit TaskCompletionSource barrier (T9).
+  - Read state: EnsureCamerasForPlan() instantiates null camera slots referenced by plan; parallel camera read via Task.WaitAll only in MultiProgramMultiCamera+Parallel; all other modes keep legacy foreach bit-identical (T8).
+- BeeCore/Func/Camera.cs: added non-breaking SumResult(int programIndex) overload; old SumResult() delegates to it. Parallel path aggregates each program's own tool list instead of racing on Global.IndexProgChoose (T9).
+- BeeInterface/GeneralSetting.cs + .Designer.cs: added RJButtons btnMulti1Cam (3rd mode) + btnParallel (threading toggle) into layP2 2x2 grid; ApplyProcessingMode/RefreshModeButtons single source of truth (T10); txtCamMap TextBoxAuto comma-list editor for ProgramCameraMap, enabled only in Multi-MultiCam (T11).
+
+Build verification:
+- Command: MSBuild EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64
+- Result: pass, 0 errors. EasyVision.exe + all native DLLs produced.
+- tools/check_propety_tools.sh region: 0 direct Common.PropetyTools[] access in new code.
+
+Notes for future agents:
+- Tool image reads are already snapshot-safe: every Unit clones listCamera[IndexCCD].matRaw at run time; matRaw is stable through the Checking phase (next Read only fires after all programs finish), so parallel needs no extra Mat snapshot.
+- Tool.IndexCCD defaults to 0 and is persisted per-tool in .prog (not pulled from Global.IndexCCCD). Per-program camera binding lives in each tool's serialized IndexCCD; ProgramCameraMap controls IndexCCCD for result aggregation/camera Read.
+- Checking self-drives: setting StatusProcessing spawns a Task that calls ProcessingAll until Done/None. Parallel reuses Checking1..4 (one per program index).
+- DrawResult() in Camera.cs still reads Global.IndexProgChoose/TriggerNum/StatusProcessing for overlay text (display only). Parallel path points display globals at the last plan program after gather. If multi-program overlays are needed later, DrawResult must be parameterized too.
+
+Blockers / left dirty:
+- UI exposes Multi-1Cam, Parallel toggle, and comma-list camera map. A richer DataGridView mapping editor was deferred in favor of the low-risk TextBoxAuto comma list (Designer cannot be opened in VS in this environment).
+- Parallel mode not smoke-tested against hardware/sample project in this session (build-verified only). 6-combo smoke matrix (plan section 10.1) still to be run by a human on a real rig; recommend starting with SimCam.
+- NumProgram/NumCamera/MaxParallelPrograms have no dedicated numeric UI control; NumProgram/NumCamera derive from NumTrig via ApplyProcessingMode, MaxParallelPrograms defaults to 2 (config-file editable).

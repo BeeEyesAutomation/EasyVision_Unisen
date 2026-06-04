@@ -367,7 +367,8 @@ namespace BeeGlobal
     public enum ShapeType
     {
         Rectangle,
-        Ellipse, Hexagon, Polygon
+        Ellipse, Hexagon, Polygon,
+        Ring
     }
 
     public enum AnchorPoint
@@ -583,6 +584,17 @@ Color,Binary}
         Shift,
 
         None
+    }
+    public enum ProcessingMode
+    {
+        SingleProgramSingleCamera = 0,
+        MultiProgramSingleCamera  = 1,
+        MultiProgramMultiCamera   = 2,
+    }
+    public enum ThreadingMode
+    {
+        Sequential = 0,
+        Parallel   = 1,
     }
     public class Enums
     {

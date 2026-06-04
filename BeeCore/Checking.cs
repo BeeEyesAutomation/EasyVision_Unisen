@@ -41,15 +41,16 @@ namespace BeeCore
                     PropetyTool.StatusTool = StatusTool.WaitCheck;
                 }
 
-                if (Global.Config.IsAutoTrigger && Global.IsRun && !Global.IsDoneTrig)
+                if (Global.Config.IsAutoTrigger && Global.IsRun && !IsDoneTrig)
                 {
-                    Global.IndexToolAuto = BeeCore.Common.EnsureToolList(indexThread).FindIndex(a => a.TypeTool == TypeTool.AutoTrig);
-                    if (Global.IndexToolAuto > -1)
+                    IndexToolAuto = BeeCore.Common.EnsureToolList(indexThread).FindIndex(a => a.TypeTool == TypeTool.AutoTrig);
+                    Global.IndexToolAuto = IndexToolAuto; // mirror for legacy readers (View/Camera)
+                    if (IndexToolAuto > -1)
                     {
 
-                        BeeCore.Common.TryGetTool(indexThread, Global.IndexToolAuto).RunToolAsync();
-                        BeeCore.Common.TryGetTool(indexThread, Global.IndexToolAuto).StatusToolChanged -= Checking_StatusToolChanged;
-                        BeeCore.Common.TryGetTool(indexThread, Global.IndexToolAuto).StatusToolChanged += Checking_StatusToolChanged;
+                        BeeCore.Common.TryGetTool(indexThread, IndexToolAuto).RunToolAsync();
+                        BeeCore.Common.TryGetTool(indexThread, IndexToolAuto).StatusToolChanged -= Checking_StatusToolChanged;
+                        BeeCore.Common.TryGetTool(indexThread, IndexToolAuto).StatusToolChanged += Checking_StatusToolChanged;
                         //if (!BeeCore.Common.TryGetTool(indexThread, Global.IndexToolAuto).worker.IsBusy)
                         //    BeeCore.Common.TryGetTool(indexThread, Global.IndexToolAuto).worker.RunWorkerAsync();
                         StatusProcessing = StatusProcessing.Waiting;
@@ -213,6 +214,10 @@ namespace BeeCore
         }
         public int indexThread = 0;
 
+        // Per-program state (moved off Global.* so Parallel mode is race-free — plan T6)
+        public int IndexToolAuto = -1;
+        public bool IsDoneTrig = false;
+
         public void ProcessingAll()
         {
 
@@ -271,15 +276,15 @@ namespace BeeCore
 
                     break;
                 case StatusProcessing.Waiting:
-                    if (BeeCore.Common.TryGetTool(indexThread, Global.IndexToolAuto).StatusTool == StatusTool.Done)
+                    if (BeeCore.Common.TryGetTool(indexThread, IndexToolAuto).StatusTool == StatusTool.Done)
                     {
-                        if (!Global.IsDoneTrig)
+                        if (!IsDoneTrig)
                         {
-                            if (BeeCore.Common.TryGetTool(indexThread, Global.IndexToolAuto).TypeTool == TypeTool.AutoTrig)
+                            if (BeeCore.Common.TryGetTool(indexThread, IndexToolAuto).TypeTool == TypeTool.AutoTrig)
                             {
 
 
-                                if (BeeCore.Common.TryGetTool(indexThread, Global.IndexToolAuto).Results == Results.NG)
+                                if (BeeCore.Common.TryGetTool(indexThread, IndexToolAuto).Results == Results.NG)
                                 {
 
                                     StatusProcessing = StatusProcessing.Done;
@@ -287,7 +292,8 @@ namespace BeeCore
                                 }
                                 else
                                 {
-                                    Global.IsDoneTrig = true;
+                                    IsDoneTrig = true;
+                                    Global.IsDoneTrig = true; // mirror for legacy readers
                                     StatusProcessing = StatusProcessing.Checking;
 
                                 }

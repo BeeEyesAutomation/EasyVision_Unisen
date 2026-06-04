@@ -147,17 +147,17 @@ namespace BeeCore
         public  Bitmap bmResult;
         private Mat EnsureWorkingBuffer(Mat src)
         {
-            // N?u dang hi?n th? A thì v? vào B, ngu?c l?i
+            // N?u dang hi?n th? A thï¿½ v? vï¿½o B, ngu?c l?i
             bool useB = ReferenceEquals(_displayMat, _bufA);
             Mat target = useB ? _bufB : _bufA;
 
             if (target == null || target.IsDisposed)
             {
-                target = new Mat();                     // t?o m?i n?u dã Dispose
+                target = new Mat();                     // t?o m?i n?u dï¿½ Dispose
                 if (useB) _bufB = target; else _bufA = target;
             }
 
-            // target.Create s? c?p phát dúng kích thu?c/ki?u; không c?n Release tru?c
+            // target.Create s? c?p phï¿½t dï¿½ng kï¿½ch thu?c/ki?u; khï¿½ng c?n Release tru?c
             target.Create(src.Rows, src.Cols, src.Type());
             return target;
         }
@@ -166,7 +166,7 @@ namespace BeeCore
         private readonly object _camLock = new object();   // b?o v? ngu?n camera (n?u c?n)
         private readonly object _swapLock = new object();   // b?o v? A/B & _displayMat
 
-        // Double-buffer Mat (KHÔNG readonly d? có th? thay th? khi b? Dispose)
+        // Double-buffer Mat (KHï¿½NG readonly d? cï¿½ th? thay th? khi b? Dispose)
         private Mat _bufA = new Mat();
         private Mat _bufB = new Mat();
         private Mat _displayMat; // tr? t?i buffer dang hi?n th? (A ho?c B)
@@ -222,15 +222,18 @@ namespace BeeCore
             return dst;
         }
         public Results Results = Results.OK;
-        public Results SumResult()
+        public Results SumResult() => SumResult(Global.IndexProgChoose);
+
+        // T9: explicit program index so parallel programs aggregate their own
+        // tool list instead of racing on Global.IndexProgChoose.
+        public Results SumResult(int programIndex)
         {
             Results = Results.OK;
-            // foreach (List<PropetyTool> PropetyTools in BeeCore.Common.PropetyTools)
             {
-                if (BeeCore.Common.TryGetToolList(Global.IndexProgChoose) == null) return Results.None;
-                foreach (PropetyTool PropetyTool in BeeCore.Common.EnsureToolList(Global.IndexProgChoose))
+                if (BeeCore.Common.TryGetToolList(programIndex) == null) return Results.None;
+                foreach (PropetyTool PropetyTool in BeeCore.Common.EnsureToolList(programIndex))
                 {
-                  
+
                     if (PropetyTool.UsedTool == UsedTool.NotUsed)
                     {
                         continue;
@@ -241,7 +244,7 @@ namespace BeeCore
                         break;
                     }
                 }
-               
+
             }
             return Results;
         }
@@ -267,6 +270,7 @@ namespace BeeCore
             if (src == null || src.Empty() || src.Width <= 0 || src.Height <= 0)
             {
                 src?.Dispose();
+                Global.LogError("DrawRS", "Skip DrawResult because source image is null or empty. Program=" + Global.IndexProgChoose + ", Camera=" + IndexCCD);
                 return;
             }
 
@@ -280,7 +284,7 @@ namespace BeeCore
 
             src.Dispose();
 
-            // Cache giá tr? tránh race condition
+            // Cache giï¿½ tr? trï¿½nh race condition
             int triggerLocal =(int) Global.TriggerNum;
             var resultLocal = Results;
 
@@ -301,7 +305,7 @@ namespace BeeCore
                         g.PixelOffsetMode = PixelOffsetMode.Half;
 
                         //========================
-                        // 1. V? TEXT (không scale)
+                        // 1. V? TEXT (khï¿½ng scale)
                         //========================
                         bool hasFinalResult = resultLocal == Results.OK || resultLocal == Results.NG;
                         bool canShowFinalResult = !Global.IsRun ||
@@ -424,7 +428,7 @@ namespace BeeCore
                 }
                 catch(Exception ex)
                 {
-                    Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "DrawRS", ex.Message));
+                    Global.LogError("DrawRS", "DrawResult failed. Program=" + Global.IndexProgChoose + ", Camera=" + IndexCCD, ex);
                                    
                 }
                 finally
@@ -569,10 +573,10 @@ namespace BeeCore
 
         //                //  bmResult.Save("Result"+ IndexCCD + ".png");
         //            }
-        //            canvas = null; // tránh dispose ? finally
+        //            canvas = null; // trï¿½nh dispose ? finally
 
 
-        //            // 6) Xác nh?n buffer hi?n th?
+        //            // 6) Xï¿½c nh?n buffer hi?n th?
         //            lock (_swapLock)
         //            {
         //                _displayMat = working;
@@ -741,47 +745,67 @@ namespace BeeCore
         public async Task<bool> SetFullPara()
 
         {
-          
-            if (Para.Width.Value > Para.Width.Min + 1 && Para.Height.Value > Para.Height.Min + 1)
-            {
-                if (Para.TypeCamera == TypeCamera.USB)
-                {
-                    CCDPlus.SetWidth((int)Para.Width.Value);
-                    CCDPlus.SetHeight((int)Para.Height.Value);
-                    await TimingUtils.DelayAccurateAsync(100);
-                    CCDPlus.SetFocus((int)Para.Focus);
-                    CCDPlus.SetZoom((int)Para.Zoom);
-                    CCDPlus.SetExposure(-(int)Para.Exposure.Value);
-
-                }
-                else
-                {
-                    if(Para.TypeCamera== TypeCamera.MVS)
-                    {
-                        await SetAutoWb();
-                        await SetReverseX();
-                        await SetReverseY();
-                        if (!Para.IsWB)
-                        {
-                            await SetR_WB();
-                            await SetG_WB();
-                            await SetB_WB();
-                        }    
-                    }    
-                        
-                    await SetWidth();
-                    await SetHeight();
-                    await SetOffSetX();
-                    await SetOffSetY();
-
-                    await SetExpo();
-                    await SetGain();
-                    await SetShift();
-                }
-            }
             return true;
-        }
+            if (Para == null)
+            {
+                Global.LogError("SetFullPara", "Camera parameter is null. Camera=" + IndexCCD);
+                return false;
+            }
 
+            if (!IsConnected)
+            {
+                Global.LogError("SetFullPara", "Camera is not connected. Camera=" + IndexCCD + ", Name=" + Para.Name);
+                return false;
+            }
+
+            try
+            {
+                if (Para.Width.Value > Para.Width.Min + 1 && Para.Height.Value > Para.Height.Min + 1)
+                {
+                    if (Para.TypeCamera == TypeCamera.USB)
+                    {
+                        CCDPlus.SetWidth((int)Para.Width.Value);
+                        CCDPlus.SetHeight((int)Para.Height.Value);
+                        await TimingUtils.DelayAccurateAsync(100);
+                        CCDPlus.SetFocus((int)Para.Focus);
+                        CCDPlus.SetZoom((int)Para.Zoom);
+                        CCDPlus.SetExposure(-(int)Para.Exposure.Value);
+
+                    }
+                    else
+                    {
+                        if (Para.TypeCamera == TypeCamera.MVS)
+                        {
+                            await SetAutoWb();
+                            await SetReverseX();
+                            await SetReverseY();
+                            if (!Para.IsWB)
+                            {
+                                await SetR_WB();
+                                await SetG_WB();
+                                await SetB_WB();
+                            }
+                        }
+
+                        await SetWidth();
+                        await SetHeight();
+                        await SetOffSetX();
+                        await SetOffSetY();
+
+                        await SetExpo();
+                        await SetGain();
+                        await SetShift();
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Err += ex.Message;
+                Global.LogError("SetFullPara", "Set full camera parameter failed. Camera=" + IndexCCD + ", Name=" + Para.Name, ex);
+                return false;
+            }
+        }
         //public static void SetRaw()
         //{
         //    //{if (matRaw == null) matRaw = new Mat();
@@ -2075,15 +2099,15 @@ namespace BeeCore
         //public unsafe bool TryGrabFast_NoStride(ref Mat matRaw)
         //{
         //    IntPtr intPtr = IntPtr.Zero;   // buffer t? native (MVS/USB)
-        //    IntPtr pylonPtr = IntPtr.Zero; // buffer t? Pylon (khác hàm free)
+        //    IntPtr pylonPtr = IntPtr.Zero; // buffer t? Pylon (khï¿½c hï¿½m free)
         //    int rows = 0, cols = 0;
         //    int matTypeCode = (int)MatType.CV_8UC1; // native tr? v? code; ta cast v? MatType khi t?o Mat
-        //    int srcStride = 0;   // stride (bytes/row) c?a ngu?n n?u có
+        //    int srcStride = 0;   // stride (bytes/row) c?a ngu?n n?u cï¿½
 
         //    try
         //    {
-        //        // N?u dang ? ch? d? ch? set tham s? (không grab), nên return false thay vì true
-        //        // d? caller bi?t chua có frame m?i. N?u b?n c? tình mu?n "OK", gi? true.
+        //        // N?u dang ? ch? d? ch? set tham s? (khï¿½ng grab), nï¿½n return false thay vï¿½ true
+        //        // d? caller bi?t chua cï¿½ frame m?i. N?u b?n c? tï¿½nh mu?n "OK", gi? true.
         //        if (Global.IsSetPara)
         //            return false;
 
@@ -2099,13 +2123,13 @@ namespace BeeCore
         //                    if (intPtr == IntPtr.Zero || rows <= 0 || cols <= 0)
         //                        return false;
 
-        //                    // Stride ngu?n n?u API có (gi? s? CCDPlus có hàm tr? stride; n?u không, dùng packed)
+        //                    // Stride ngu?n n?u API cï¿½ (gi? s? CCDPlus cï¿½ hï¿½m tr? stride; n?u khï¿½ng, dï¿½ng packed)
         //                    srcStride = 0;// CCDPlus.GetStride != null ? CCDPlus.GetStride(IndexCCD) : cols * (int)new Mat(rows, cols, (MatType)matTypeCode).ElemSize();
 
-        //                    // Ð?m b?o matRaw dúng kích thu?c & ki?u
+        //                    // ï¿½?m b?o matRaw dï¿½ng kï¿½ch thu?c & ki?u
         //                    EnsureMat(ref matRaw, rows, cols, (MatType)matTypeCode);
 
-        //                    // Copy t?ng dòng, tôn tr?ng stride ngu?n & dích
+        //                    // Copy t?ng dï¿½ng, tï¿½n tr?ng stride ngu?n & dï¿½ch
         //                    CopyRows((byte*)intPtr, matRaw, rows, cols);
         //                    Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "ReadCCD", "OK"));
         //                    return true;
@@ -2124,20 +2148,20 @@ namespace BeeCore
         //                    var mt = (c == 1) ? MatType.CV_8UC1 : MatType.CV_8UC3;
         //                    FrameRate = (int)PylonCam.GetMeasuredFps();
 
-        //                    // C?p phát (ho?c reuse) dích dúng size/ki?u
+        //                    // C?p phï¿½t (ho?c reuse) dï¿½ch dï¿½ng size/ki?u
         //                    EnsureMat(ref matRaw, h, w, mt);
 
-        //                    // Copy theo stride ngu?n s và step dích
+        //                    // Copy theo stride ngu?n s vï¿½ step dï¿½ch
         //                    CopyRows((byte*)pylonPtr, matRaw, h, w, s);
 
-        //                    // N?u SDK yêu c?u tr? buffer (tu? API c?a b?n), g?i release ? dây
-        //                    // PylonCam.ReleaseBuffer(); // n?u có
+        //                    // N?u SDK yï¿½u c?u tr? buffer (tu? API c?a b?n), g?i release ? dï¿½y
+        //                    // PylonCam.ReleaseBuffer(); // n?u cï¿½
         //                    Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "ReadCCD", "OK"));
         //                    return true;
         //                }
         //        }
 
-        //        // N?u roi ra ngoài switch (lo?i camera chua h? tr?)
+        //        // N?u roi ra ngoï¿½i switch (lo?i camera chua h? tr?)
         //        return false;
         //    }
         //    catch (Exception ex)
@@ -2148,17 +2172,17 @@ namespace BeeCore
         //    }
         //    finally
         //    {
-        //        // Ch? free buffer thu?c v? CCDPlus n?u API yêu c?u b?n gi?i phóng
+        //        // Ch? free buffer thu?c v? CCDPlus n?u API yï¿½u c?u b?n gi?i phï¿½ng
         //        if (intPtr != IntPtr.Zero)
         //            Native.FreeBuffer(intPtr);
 
-        //        // V?i pylonPtr: thu?ng là buffer thu?c SDK; ch? release n?u SDK yêu c?u.
+        //        // V?i pylonPtr: thu?ng lï¿½ buffer thu?c SDK; ch? release n?u SDK yï¿½u c?u.
         //        // if (pylonPtr != IntPtr.Zero) PylonCam.ReleaseBuffer(pylonPtr);
         //    }
         //}
 
         /// <summary>
-        /// Ð?m b?o mat != null, chua Dispose, và có dúng size/type; n?u khác thì Dispose + t?o m?i.
+        /// ï¿½?m b?o mat != null, chua Dispose, vï¿½ cï¿½ dï¿½ng size/type; n?u khï¿½c thï¿½ Dispose + t?o m?i.
         /// </summary>
         private static void EnsureMat(ref Mat m, int rows, int cols, MatType type)
         {
@@ -2170,18 +2194,18 @@ namespace BeeCore
         }
 
         /// <summary>
-        /// Copy theo t?ng dòng, tôn tr?ng stride ngu?n & step dích.
-        /// N?u không truy?n stride ngu?n (srcStride=0), suy ra packed: srcStride = cols * elemSize.
+        /// Copy theo t?ng dï¿½ng, tï¿½n tr?ng stride ngu?n & step dï¿½ch.
+        /// N?u khï¿½ng truy?n stride ngu?n (srcStride=0), suy ra packed: srcStride = cols * elemSize.
         /// </summary>
         private static unsafe void CopyRows(byte* srcBase, Mat dst, int rows, int cols, int srcStride = 0)
         {
             int elem = (int)dst.ElemSize();               // bytes per pixel
-            long dstStep = (long)dst.Step();              // bytes per row ? dích
+            long dstStep = (long)dst.Step();              // bytes per row ? dï¿½ch
             long bytesPerRow = (long)cols * elem;
 
             if (srcStride <= 0) srcStride = (int)bytesPerRow;
 
-            // Không copy quá gi?i h?n step dích
+            // Khï¿½ng copy quï¿½ gi?i h?n step dï¿½ch
             long copyCount = bytesPerRow <= dstStep ? bytesPerRow : dstStep;
 
             byte* dstBase = (byte*)dst.DataPointer;
@@ -2273,9 +2297,9 @@ namespace BeeCore
 
                 int elem = (int)matRaw.ElemSize();
                 long bytesPerRow = (long)cols * elem;
-                long dstStep = (long)matRaw.Step();      // có th? >= bytesPerRow do alignment
+                long dstStep = (long)matRaw.Step();      // cï¿½ th? >= bytesPerRow do alignment
 
-                // Copy t?ng dòng d? an toàn v?i step c?a dích
+                // Copy t?ng dï¿½ng d? an toï¿½n v?i step c?a dï¿½ch
                 long copyBytes = Math.Min(bytesPerRow, dstStep);
                 for (int r = 0; r < rows; r++)
                 {
@@ -2346,7 +2370,7 @@ namespace BeeCore
                         }
                         else
                         {
-                          await  SetFullPara();
+                         // await  SetFullPara();
                             numTry = 0;
                             Global.CameraStatus = CameraStatus.Ready;
                             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Success"));
@@ -2355,7 +2379,7 @@ namespace BeeCore
                     }
                     else
                     {
-                        await SetFullPara();
+                     //   await SetFullPara();
                         numTry = 0;
                         Global.CameraStatus = CameraStatus.Ready;
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Success"));
