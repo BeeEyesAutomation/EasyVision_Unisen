@@ -954,9 +954,9 @@ namespace BeeGlobal
                                                     Global.IsAllowReadPLC = false;
                                                     Global.TriggerNum = TriggerNum.Trigger4;
                                                     if (Global.Config.IsMultiProg)
-                                                        Global.IndexProgChoose = 3;
+                                                        Global.SelectProgram(3);
                                                     else
-                                                        Global.IndexProgChoose = 0;
+                                                        Global.SelectProgram(0);
                                                     Global.StatusProcessing = StatusProcessing.Trigger;
 
                                                     IO_Processing = IO_Processing.Trigger;
@@ -967,9 +967,9 @@ namespace BeeGlobal
                                                 if (GetInPut(I_O_Input.Trigger3) == true)
                                                 {
                                                     if (Global.Config.IsMultiProg)
-                                                        Global.IndexProgChoose = 2;
+                                                        Global.SelectProgram(2);
                                                     else
-                                                        Global.IndexProgChoose = 0;
+                                                        Global.SelectProgram(0);
                                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 3..."));
                                                     Global.TriggerInternal = false;
                                                     Global.IsAllowReadPLC = false;
@@ -983,9 +983,9 @@ namespace BeeGlobal
                                                 if (GetInPut(I_O_Input.Trigger2) == true)
                                                 {
                                                     if (Global.Config.IsMultiProg)
-                                                        Global.IndexProgChoose = 1;
+                                                        Global.SelectProgram(1);
                                                     else
-                                                        Global.IndexProgChoose = 0;
+                                                        Global.SelectProgram(0);
                                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 2..."));
                                                     Global.TriggerInternal = false;
                                                     Global.IsAllowReadPLC = false;
@@ -1000,7 +1000,7 @@ namespace BeeGlobal
                                                 {
                                                     IsTrig = true;
 
-                                                    Global.IndexProgChoose = 0;
+                                                    Global.SelectProgram(0);
                                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
                                                     Global.TriggerInternal = false;
                                                     Global.IsAllowReadPLC = false;
@@ -1049,6 +1049,7 @@ namespace BeeGlobal
 
                                                 Global.IsAllowReadPLC = false;
                                                 Global.TriggerNum = TriggerNum.Trigger1;
+                                                Global.SelectProgramForTrigger(Global.TriggerNum);
                                                 Global.StatusProcessing = StatusProcessing.Trigger;
                                                 IO_Processing = IO_Processing.Trigger;
                                                 break;
@@ -1057,6 +1058,7 @@ namespace BeeGlobal
 
                                                 Global.IsAllowReadPLC = false;
                                                 Global.TriggerNum = TriggerNum.Trigger2;
+                                                Global.SelectProgramForTrigger(Global.TriggerNum);
                                                 Global.StatusProcessing = StatusProcessing.Trigger;
                                                 IO_Processing = IO_Processing.Trigger;
                                                 break;
@@ -1065,6 +1067,7 @@ namespace BeeGlobal
 
                                                 Global.IsAllowReadPLC = false;
                                                 Global.TriggerNum = TriggerNum.Trigger3;
+                                                Global.SelectProgramForTrigger(Global.TriggerNum);
                                                 Global.StatusProcessing = StatusProcessing.Trigger;
                                                 IO_Processing = IO_Processing.Trigger;
                                                 break;
@@ -1073,6 +1076,7 @@ namespace BeeGlobal
 
                                                 Global.IsAllowReadPLC = false;
                                                 Global.TriggerNum = TriggerNum.Trigger4;
+                                                Global.SelectProgramForTrigger(Global.TriggerNum);
                                                 Global.StatusProcessing = StatusProcessing.Trigger;
                                                 IO_Processing = IO_Processing.Trigger;
                                                 break;
@@ -1216,15 +1220,19 @@ namespace BeeGlobal
                                     {
                                         case TriggerNum.Trigger0:
                                             Global.TriggerNum = TriggerNum.Trigger1;
+                                            Global.SelectProgramForTrigger(Global.TriggerNum);
                                             break;
                                         case TriggerNum.Trigger1:
                                             Global.TriggerNum = TriggerNum.Trigger2;
+                                            Global.SelectProgramForTrigger(Global.TriggerNum);
                                             break;
                                         case TriggerNum.Trigger2:
                                             Global.TriggerNum = TriggerNum.Trigger3;
+                                            Global.SelectProgramForTrigger(Global.TriggerNum);
                                             break;
                                         case TriggerNum.Trigger3:
                                             Global.TriggerNum = TriggerNum.Trigger4;
+                                            Global.SelectProgramForTrigger(Global.TriggerNum);
                                             break;
 
                                     }

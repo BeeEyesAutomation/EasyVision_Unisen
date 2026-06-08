@@ -561,6 +561,18 @@ namespace BeeCpp
 		bool EnableGpu;             // OpenCL/UMat acceleration for matchTemplate, CPU fallback if unavailable
 		bool EnableCpuMultiThread;  // CPU-only angle scan parallelism; ignored when EnableGpu is active
 		int CpuThreads;             // <=0 => auto hardware_concurrency
+
+		// ===== Occlusion-robust angle refinement =====
+		// Chống lệch góc khi keo (hoặc nhiễu cục bộ) ăn vào biên dạng template.
+		// Với mỗi candidate, quét lại góc trong cửa sổ cục bộ quanh góc coarse, chấm điểm
+		// bằng trimmed cell-NCC (loại % ô tệ nhất = vùng keo) và chọn góc tối ưu robust.
+		// Giữ được xoay thật của phôi (mọi ô lệch theo) nhưng loại xoay giả do keo.
+		bool   EnableAngleRobustRefine; // default false (giữ nguyên hành vi cũ)
+		double AngleRefineSpanDeg;      // nửa cửa sổ quét quanh góc coarse (deg)
+		double AngleRefineStepDeg;      // bước quét tinh (deg)
+		double AngleRefineTrimFrac;     // tỉ lệ ô tệ nhất bị loại (0..0.9); ~vùng keo
+		int    AngleRefineGrid;         // lưới ô NxN trên template
+
 		Pattern2StableConfig(bool init)
 		{
 			AngleStartDeg = -10.0;
@@ -590,6 +602,11 @@ namespace BeeCpp
 			EnableGpu = false;
 			EnableCpuMultiThread = false;
 			CpuThreads = 0;
+			EnableAngleRobustRefine = false;
+			AngleRefineSpanDeg = 6.0;
+			AngleRefineStepDeg = 0.5;
+			AngleRefineTrimFrac = 0.40;
+			AngleRefineGrid = 6;
 		}
 	};
 

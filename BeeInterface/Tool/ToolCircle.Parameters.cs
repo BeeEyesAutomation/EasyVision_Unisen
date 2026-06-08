@@ -60,11 +60,27 @@ namespace BeeInterface
         private void btnInsideOut_Click(object sender, EventArgs e)
         {
             Propety.CircleScanDirection = BeeCore.Algorithm.CircleScanDirection.InsideOut;
+            numLengthScan.Enabled = false; // LengthScan chỉ dùng cho OutsideIn
         }
 
         private void btnOutsideIn_Click(object sender, EventArgs e)
         {
             Propety.CircleScanDirection = BeeCore.Algorithm.CircleScanDirection.OutsideIn;
+            numLengthScan.Enabled = true;
+        }
+
+        private void numLengthScan_ValueChanged(float obj)
+        {
+            Propety.LengthScan = (int)numLengthScan.Value;
+        }
+
+        private void AdjRingRatio_ValueChanged(float obj)
+        {
+            float v = AdjRingRatio.Value;
+            if (v < 0.01f) v = 0.01f;
+            if (v > 0.99f) v = 0.99f;
+            if (Propety.rotArea != null)
+                Propety.rotArea.RingInnerRatio = v;
         }
 
         private void btnCloseEdge_Click(object sender, EventArgs e)

@@ -80,6 +80,9 @@ namespace BeeCore
             if (rotCrop == null) rotCrop = new RectRotate();
             if (rotMask == null) rotMask = new RectRotate();
 
+            // Auto-migrate: ép rotArea về Ring cho ToolCircle
+            EnsureRingShape();
+
            
 
 
@@ -105,13 +108,33 @@ namespace BeeCore
         public Exception exEr;
         public bool IsCalibs = false;
         public CircleScanDirection CircleScanDirection = CircleScanDirection.InsideOut;
+        /// <summary>
+        /// Chiều rộng cửa sổ quét (pixel) khi OutsideIn — giới hạn vùng từ outer vào inner.
+        /// Chỉ áp dụng cho OutsideIn.
+        /// </summary>
+        [System.Runtime.Serialization.OptionalField]
+        public int LengthScan = 30;
         public MethordEdge MethordEdge = MethordEdge.CloseEdges;
+        /// <summary>
+        /// Auto-migrate: nếu rotArea đang là Ellipse thì chuyển sang Ring với RingInnerRatio mặc định.
+        /// Gọi trước DoWork hoặc trong SetModel.
+        /// </summary>
+        public void EnsureRingShape()
+        {
+            if (rotArea != null && rotArea.Shape == ShapeType.Ellipse)
+            {
+                rotArea.Shape = ShapeType.Ring;
+                if (rotArea.RingInnerRatio <= 0f || rotArea.RingInnerRatio >= 1f)
+                    rotArea.RingInnerRatio = 0.7f;
+            }
+        }
+
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             try
             {
                 RadiusResult = 0;
-                rectRotates = new List<RectRotate>();            
+                rectRotates = new List<RectRotate>();
                 listP_Center = new List<Point>();
                 Common.TryGetTool(IndexThread, Index).StatusTool = StatusTool.Processing;
                 if (IsCalibs)
@@ -125,8 +148,8 @@ namespace BeeCore
                     if (raw.Empty()) return;
                     Mat matCrop = new Mat();
                     PatchCropContext ctx=new PatchCropContext();
-                   
-                    if (rotArea.Shape == ShapeType.Ellipse)
+
+                    if (rotArea.Shape == ShapeType.Ellipse || rotArea.Shape == ShapeType.Ring)
                         matCrop = Cropper.CropOuterPatch(raw, rotArea, out ctx);
                     else
                         matCrop = Cropper.CropRotatedRect(raw, rotArea, rotMask);
@@ -135,7 +158,7 @@ namespace BeeCore
                         if (!matProcess.Empty()) matProcess.Dispose();
 
                     matProcess = Filters.ApplyEdgeMethod(matCrop, MethordEdge, ThresholdBinary);
-                    if (rotArea.Shape == ShapeType.Ellipse)
+                    if (rotArea.Shape == ShapeType.Ellipse || rotArea.Shape == ShapeType.Ring)
                         matProcess = ApplyShapeMaskAndCompose(matProcess, ctx, rotArea, rotMask, returnMaskOnly: false);
                     //Cv2.ImWrite("CropCircle.png", matProcess);
                     var circles = RansacCircleFitter.DetectCircles(
@@ -155,18 +178,24 @@ namespace BeeCore
                         float height = Convert.ToSingle(radius * 2);
                         //float Score = Convert.ToSingle(100);
                         rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None));
-                        
-                        listP_Center.Add(new System.Drawing.Point((int)rotAreaAdjustment._PosCenter.X - (int)rotAreaAdjustment._rect.Width / 2 + (int)pCenter.X, (int)rotAreaAdjustment._PosCenter.Y - (int)rotAreaAdjustment._rect.Height / 2 + (int)pCenter.Y));
+
+                        // FIX: rotAreaAdjustment là [NonSerialized] có thể null khi DoWork chạy trước SetModel
+                        if (rotAreaAdjustment != null)
+                        {
+                            listP_Center.Add(new System.Drawing.Point((int)rotAreaAdjustment._PosCenter.X - (int)rotAreaAdjustment._rect.Width / 2 + (int)pCenter.X, (int)rotAreaAdjustment._PosCenter.Y - (int)rotAreaAdjustment._rect.Height / 2 + (int)pCenter.Y));
+                        }
                         RadiusResult = (float)((radius) / Scale);
                         RadiusResult = (float)Math.Round(RadiusResult, 2);
                         if (IsCalibs)
                         {
                             MinInliers = (int)((Inliers * (80)) / 100.0);
-                            double Delta =(  Common.TryGetTool(IndexThread, Index).Score) /100.0;
+                            // FIX: TryGetTool có thể trả null nếu indices out-of-range
+                            var toolCalib = Common.TryGetTool(IndexThread, Index);
+                            double Delta = (toolCalib?.Score ?? 0) / 100.0;
                             MinRadius = (float)(RadiusResult * (1-Delta));
                             MaxRadius = (float)(RadiusResult * (1 + Delta));
                            // IsCalibs = false;
-                        }    
+                        }
                         
                         // Cv2.Circle(src, (OpenCvSharp.Point)center, (int)radius, Scalar.Red, 2);
                     }

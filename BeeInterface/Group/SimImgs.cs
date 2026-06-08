@@ -79,16 +79,16 @@ namespace BeeUi.Unit
                 {
                     case TriggerNum.Trigger0:
                         Global.TriggerNum = TriggerNum.Trigger1;
-                        Global.IndexProgChoose = 0;
+                        Global.SelectProgram(0);
                         break;
                     case TriggerNum.Trigger1:
                         Global.TriggerNum = TriggerNum.Trigger2;
                         if (BeeCore.Common.TryGetToolList(1) != null)
-                            Global.IndexProgChoose = 1;
+                            Global.SelectProgram(1);
                         else
                         {
                             Global.TriggerNum = TriggerNum.Trigger1;
-                            Global.IndexProgChoose = 0;
+                            Global.SelectProgram(0);
 
 
                         }
@@ -98,11 +98,11 @@ namespace BeeUi.Unit
                         Global.TriggerNum = TriggerNum.Trigger3;
 
                         if (BeeCore.Common.TryGetToolList(2) != null)
-                            Global.IndexProgChoose = 2;
+                            Global.SelectProgram(2);
                         else
                         {
                             Global.TriggerNum = TriggerNum.Trigger1;
-                            Global.IndexProgChoose = 0;
+                            Global.SelectProgram(0);
 
 
                         }
@@ -111,11 +111,11 @@ namespace BeeUi.Unit
                     case TriggerNum.Trigger3:
                         Global.TriggerNum = TriggerNum.Trigger4;
                         if (BeeCore.Common.TryGetToolList(3) != null)
-                            Global.IndexProgChoose = 3;
+                            Global.SelectProgram(3);
                         else
                         {
                             Global.TriggerNum = TriggerNum.Trigger1;
-                            Global.IndexProgChoose = 0;
+                            Global.SelectProgram(0);
 
 
                         }

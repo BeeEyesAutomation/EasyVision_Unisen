@@ -40,7 +40,25 @@
       "Bash(git commit -m 'feat\\(plc\\): ToolMeasure pilot - push AngleDetect xuong PLC qua ucValuePicker *)",
       "Bash(git commit -m 'fix\\(plc\\): force visible layValueOutput + toolbar + header trong RefreshLayValueOutput *)",
       "Bash(git commit -m 'fix\\(plc\\): bo tabPage2 \\('\\\\''Value Input'\\\\'' cu\\) + tabPage3 \\('\\\\''ValueOutput'\\\\'' cu\\) khoi tabControl1 *)",
-      "Bash(\"C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/MSBuild.exe\" BeeInterface/BeeInterface.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /nologo)"
+      "Bash(\"C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/MSBuild.exe\" BeeInterface/BeeInterface.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /nologo)",
+      "Bash(\"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" \"E:\\\\Code\\\\EasyVision_Unisen\\\\EasyVision.sln\" /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal 2>&1)",
+      "Bash(\"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" \"E:\\\\Code\\\\EasyVision_Unisen\\\\EasyVision.sln\" /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal)",
+      "Bash(findstr /i pattern)",
+      "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/MSBuild.exe\" EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal 2>&1)",
+      "Bash(where MSBuild.exe)",
+      "Bash(MSBuild.exe BeeInterface/BeeInterface.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /nologo)",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin;C:\\\\Program Files \\(x86\\)\\\\Microsoft Visual Studio\\\\2019\\\\Community\\\\MSBuild\\\\Current\\\\Bin;C:\\\\Program Files \\(x86\\)\\\\Microsoft Visual Studio\\\\2022\\\\BuildTools\\\\MSBuild\\\\Current\\\\Bin;\" + $env:Path; \\(Get-Command MSBuild -ErrorAction SilentlyContinue\\).Source)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" BeeGlobal\\\\BeeGlobal.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /nologo)",
+      "Bash(git checkout *)",
+      "Bash(git merge *)",
+      "Bash(git branch *)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /nologo 2>&1)",
+      "PowerShell(Start-Sleep -Seconds 3; $p = Get-Process -Name EasyVision -ErrorAction SilentlyContinue; if \\($p\\) { Write-Output \"STILL RUNNING - PID $\\($p.Id\\)\" } else { Write-Output \"CLOSED\" })",
+      "Bash(\"/c/Program Files \\(x86\\)/Microsoft Visual Studio/Installer/vswhere.exe\" -latest -products '*' -requires Microsoft.Component.MSBuild -find \"MSBuild/**/Bin/MSBuild.exe\")",
+      "Bash(\"C:/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/MSBuild.exe\" EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /m)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" EasyVision.sln /t:Build /p:Configuration=Release /p:Platform=x64 /v:minimal /m)"
     ]
   }
 }

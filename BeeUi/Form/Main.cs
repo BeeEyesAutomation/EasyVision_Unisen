@@ -74,7 +74,7 @@ namespace BeeUi
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
-            Task.Delay(1000);
+            Thread.Sleep(1000); // FIX: Task.Delay không await là no-op; FormClosing không thể async => dùng Thread.Sleep
             //if(G.DeviceConnectForm!=null)
             //G.DeviceConnectForm.FormClosingDo(sender, e);
             editTool1.DesTroy();

@@ -267,19 +267,30 @@ namespace BeeInterface
         {
             btnDownLoadPara.IsCLick = true;
             btnDownLoadPara.Enabled = false;
-            BeeCore.Common.listCamera[Global.IndexCCCD].IsSetPara= true;
-            if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera == TypeCamera.USB)
+            SyncSelectedCamera();
+            Camera camera = GetConnectedCamera("SetPara");
+            if (camera == null)
             {
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Zoom = BeeCore.Common.listCamera[Global.IndexCCCD].GetZoom();
-                AdjZoom.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Zoom;
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Focus = BeeCore.Common.listCamera[Global.IndexCCCD].GetFocus();
-                AdjFocus.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Focus;
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Value = BeeCore.Common.listCamera[Global.IndexCCCD].GetWidthUSB();
-                AdjWidth.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Value;
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Value = BeeCore.Common.listCamera[Global.IndexCCCD].GetHeightUSB();
-                AdjHeight.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Value;
-              await BeeCore.Common.listCamera[Global.IndexCCCD].GetExpo();
-                trackExposure.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value;
+                btnDownLoadPara.IsCLick = false;
+                btnDownLoadPara.Enabled = true;
+                return;
+            }
+
+            try
+            {
+            camera.IsSetPara= true;
+            if (camera.Para.TypeCamera == TypeCamera.USB)
+            {
+                camera.Para.Zoom = camera.GetZoom();
+                AdjZoom.Value = camera.Para.Zoom;
+                camera.Para.Focus = camera.GetFocus();
+                AdjFocus.Value = camera.Para.Focus;
+                camera.Para.Width.Value = camera.GetWidthUSB();
+                AdjWidth.Value = camera.Para.Width.Value;
+                camera.Para.Height.Value = camera.GetHeightUSB();
+                AdjHeight.Value = camera.Para.Height.Value;
+              await camera.GetExpo();
+                trackExposure.Value = camera.Para.Exposure.Value;
             }
             else
             {
@@ -377,11 +388,20 @@ namespace BeeInterface
             }
             //  btnCenterX.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterX);
             //  btnCenterY.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterY);
-            lbErr.Text = BeeCore.Common.listCamera[Global.IndexCCCD].Err;
+            lbErr.Text = camera.Err;
+            }
+            catch (Exception ex)
+            {
+                Global.LogError("SetPara", "Set/read camera parameter failed. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD, ex);
+            }
+            finally
+            {
             btnDownLoadPara.IsCLick = false;
             btnDownLoadPara.Enabled = true;
             await TimingUtils.DelayAccurateAsync(50);
-            BeeCore.Common.listCamera[Global.IndexCCCD].IsSetPara = false;
+                if (camera != null)
+                    camera.IsSetPara = false;
+            }
         }
 
         private  void btnCenterX_Click(object sender, EventArgs e)
@@ -418,14 +438,19 @@ namespace BeeInterface
 
         private void btnChnageCamera_Click(object sender, EventArgs e)
         {
-            
-            if (Global.ScanCCD == null)
-                return;
+            SyncSelectedCamera();
             if (Global.IsLive)
                 MessageBox.Show("Please Stop Live");
             else
             {
                 Global.IsChange = true;
+                if (Global.ScanCCD == null || Global.ScanCCD.IsDisposed)
+                {
+                    Type scanCcdType = Type.GetType("BeeUi.ScanCCD, BeeUi");
+                    if (scanCcdType == null)
+                        return;
+                    Global.ScanCCD = Activator.CreateInstance(scanCcdType);
+                }
                 Global.ScanCCD.TypeCameraNew = BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera;
                 Global.ScanCCD.ShowDialog();
             }    
@@ -511,47 +536,74 @@ namespace BeeInterface
 
         private async void trackExposure_MouseUp(object sender, MouseEventArgs e)
         {
-            BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = false;
-            BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value = (int)trackExposure.Value;
-            await BeeCore.Common.listCamera[Global.IndexCCCD].SetExpo();
-            trackExposure.IsInital = true;
-            trackExposure.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value;
+            Camera camera = GetCameraForParameter("SetExposure");
+            if (camera == null) return;
+            camera.IsMouseDown = false;
+            await ExecuteCameraParameterUpdate(camera, "SetExposure", async () =>
+            {
+                camera.Para.Exposure.Value = (int)trackExposure.Value;
+                await camera.SetExpo();
+                trackExposure.IsInital = true;
+                trackExposure.Value = camera.Para.Exposure.Value;
+            });
         }
         private async void trackExposure_ValueChanged(float obj)
         {
-            if (BeeCore.Common.listCamera[Global.IndexCCCD].IsSetPara) return;
-            if (BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown) return;
+            Camera camera = GetCameraForParameter("SetExposure");
+            if (camera == null) return;
+            if (camera.IsSetPara) return;
+            if (camera.IsMouseDown) return;
+            if (Global.IsLive) return;
 
-            BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value = (int)trackExposure.Value;
-            await BeeCore.Common.listCamera[Global.IndexCCCD].SetExpo();
-            trackExposure.IsInital = true;
-            trackExposure.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value;
+            await ExecuteCameraParameterUpdate(camera, "SetExposure", async () =>
+            {
+                camera.Para.Exposure.Value = (int)trackExposure.Value;
+                await camera.SetExpo();
+                trackExposure.IsInital = true;
+                trackExposure.Value = camera.Para.Exposure.Value;
+            });
         }
 
         private async void trackGain_MouseUp(object sender, MouseEventArgs e)
         {
-            BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = false;
-            BeeCore.Common.listCamera[Global.IndexCCCD].Para.Gain.Value = (int)trackGain.Value;
-            await BeeCore.Common.listCamera[Global.IndexCCCD].SetGain();
-            trackGain.IsInital = true;
-            trackGain.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Gain.Value;
+            Camera camera = GetCameraForParameter("SetGain");
+            if (camera == null) return;
+            camera.IsMouseDown = false;
+            await ExecuteCameraParameterUpdate(camera, "SetGain", async () =>
+            {
+                camera.Para.Gain.Value = (int)trackGain.Value;
+                await camera.SetGain();
+                trackGain.IsInital = true;
+                trackGain.Value = camera.Para.Gain.Value;
+            });
         }
         private async void trackGain_ValueChanged(float obj)
         {
-            if (BeeCore.Common.listCamera[Global.IndexCCCD].IsSetPara) return;
-            if (BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown) return;
-            BeeCore.Common.listCamera[Global.IndexCCCD].Para.Gain.Value = (int)trackGain.Value;
-            await BeeCore.Common.listCamera[Global.IndexCCCD].SetGain();
-            trackGain.IsInital = true;
-            trackGain.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Gain.Value;
+            Camera camera = GetCameraForParameter("SetGain");
+            if (camera == null) return;
+            if (camera.IsSetPara) return;
+            if (camera.IsMouseDown) return;
+            if (Global.IsLive) return;
+            await ExecuteCameraParameterUpdate(camera, "SetGain", async () =>
+            {
+                camera.Para.Gain.Value = (int)trackGain.Value;
+                await camera.SetGain();
+                trackGain.IsInital = true;
+                trackGain.Value = camera.Para.Gain.Value;
+            });
         }
         private async void trackShift_MouseUp(object sender, MouseEventArgs e)
         {
-            BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = false;
-            BeeCore.Common.listCamera[Global.IndexCCCD].Para.Shift.Value = (int)trackShift.Value;
-            await BeeCore.Common.listCamera[Global.IndexCCCD].SetShift();
-            trackShift.IsInital = true;
-            trackShift.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Shift.Value;
+            Camera camera = GetCameraForParameter("SetShift");
+            if (camera == null) return;
+            camera.IsMouseDown = false;
+            await ExecuteCameraParameterUpdate(camera, "SetShift", async () =>
+            {
+                camera.Para.Shift.Value = (int)trackShift.Value;
+                await camera.SetShift();
+                trackShift.IsInital = true;
+                trackShift.Value = camera.Para.Shift.Value;
+            });
         }
      
       
@@ -568,12 +620,18 @@ namespace BeeInterface
         }
         private async void trackShift_ValueChanged(float obj)
         {
-            if (BeeCore.Common.listCamera[Global.IndexCCCD].IsSetPara) return;
-            if (BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown) return;
-            BeeCore.Common.listCamera[Global.IndexCCCD].Para.Shift.Value = (int)trackShift.Value;
-            await BeeCore.Common.listCamera[Global.IndexCCCD].SetShift();
-            trackShift.IsInital = true;
-            trackShift.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Shift.Value;
+            Camera camera = GetCameraForParameter("SetShift");
+            if (camera == null) return;
+            if (camera.IsSetPara) return;
+            if (camera.IsMouseDown) return;
+            if (Global.IsLive) return;
+            await ExecuteCameraParameterUpdate(camera, "SetShift", async () =>
+            {
+                camera.Para.Shift.Value = (int)trackShift.Value;
+                await camera.SetShift();
+                trackShift.IsInital = true;
+                trackShift.Value = camera.Para.Shift.Value;
+            });
         }
 
         private void AdjWidth_MouseDown(object sender, MouseEventArgs e)
@@ -587,6 +645,7 @@ namespace BeeInterface
         }
         public void RefreshData()
         {
+            SyncSelectedCamera();
             AdjScale.Value = Global.Config.Scale;
             btnIsAllTimeLight.IsCLick = Global.Comunication.Protocol.IsLightAllTime;
             btnIsBlinkLight.IsCLick =! Global.Comunication.Protocol.IsLightAllTime;
@@ -769,6 +828,7 @@ namespace BeeInterface
         {
             if(this.Visible)
             {
+                SyncSelectedCamera();
                 RefreshData();
                 btnInternal.IsCLick = !Global.Config.IsExternal;
                 btnExternal.IsCLick = Global.Config.IsExternal;
@@ -1297,6 +1357,119 @@ namespace BeeInterface
         private void btnScale_Click(object sender, EventArgs e)
         {
             layScale.Visible = !btnScale.IsCLick;
+        }
+
+        private static void SyncSelectedCamera()
+        {
+            if (Global.Config != null && Global.Config.IsMultiProg)
+                Global.SelectProgram(Global.IndexProgChoose);
+
+            EnsureCameraSlot(Global.IndexCCCD);
+        }
+
+        private static void EnsureCameraSlot(int index)
+        {
+            if (Global.listParaCamera == null)
+                Global.listParaCamera = new List<ParaCamera>();
+
+            while (Global.listParaCamera.Count <= index)
+                Global.listParaCamera.Add(null);
+
+            if (BeeCore.Common.listCamera == null)
+                BeeCore.Common.listCamera = new List<Camera>();
+
+            while (BeeCore.Common.listCamera.Count <= index)
+                BeeCore.Common.listCamera.Add(null);
+
+            if (Global.listParaCamera[index] == null)
+                Global.listParaCamera[index] = new ParaCamera();
+
+            if (BeeCore.Common.listCamera[index] == null)
+                BeeCore.Common.listCamera[index] = new Camera(Global.listParaCamera[index], index);
+        }
+
+        private static Camera GetConnectedCamera(string source)
+        {
+            if (BeeCore.Common.listCamera == null || Global.IndexCCCD < 0 || Global.IndexCCCD >= BeeCore.Common.listCamera.Count)
+            {
+                Global.LogError(source, "Camera slot is missing. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
+                return null;
+            }
+
+            Camera camera = BeeCore.Common.listCamera[Global.IndexCCCD];
+            if (camera == null)
+            {
+                Global.LogError(source, "Camera is null. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
+                return null;
+            }
+
+            if (!camera.IsConnected)
+            {
+                Global.LogError(source, "Camera is not connected. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
+                return null;
+            }
+
+            return camera;
+        }
+
+        private static Camera GetCameraForParameter(string source)
+        {
+            try
+            {
+                if (Global.Config != null && Global.Config.IsMultiProg)
+                    Global.SelectProgram(Global.IndexProgChoose);
+
+                if (BeeCore.Common.listCamera == null || Global.IndexCCCD < 0 || Global.IndexCCCD >= BeeCore.Common.listCamera.Count)
+                {
+                    Global.LogError(source, "Camera slot is missing. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
+                    return null;
+                }
+
+                Camera camera = BeeCore.Common.listCamera[Global.IndexCCCD];
+                if (camera == null)
+                {
+                    Global.LogError(source, "Camera is null. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
+                    return null;
+                }
+
+                if (!camera.IsConnected)
+                {
+                    Global.LogError(source, "Camera is not connected. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
+                    return null;
+                }
+
+                return camera;
+            }
+            catch (Exception ex)
+            {
+                Global.LogError(source, "Get camera for parameter failed. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD, ex);
+                return null;
+            }
+        }
+
+        private static async Task ExecuteCameraParameterUpdate(Camera camera, string source, Func<Task> update)
+        {
+            if (camera == null || update == null)
+                return;
+
+            try
+            {
+                camera.IsSetPara = true;
+                if (Global.IsLive)
+                    await TimingUtils.DelayAccurateAsync(30);
+
+                await update();
+            }
+            catch (Exception ex)
+            {
+                Global.LogError(source, "Set camera parameter failed. Program=" + Global.IndexProgChoose + ", Camera=" + camera.IndexCCD, ex);
+            }
+            finally
+            {
+                if (Global.IsLive)
+                    await TimingUtils.DelayAccurateAsync(30);
+                camera.IsSetPara = false;
+            }
         }
     }
 }

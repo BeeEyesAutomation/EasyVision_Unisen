@@ -848,15 +848,19 @@ namespace BeeInterface
                             {
                                 case TriggerNum.Trigger0:
                                     Global.TriggerNum = TriggerNum.Trigger1;
+                                    Global.SelectProgramForTrigger(Global.TriggerNum);
                                     break;
                                 case TriggerNum.Trigger1:
                                     Global.TriggerNum = TriggerNum.Trigger2;
+                                    Global.SelectProgramForTrigger(Global.TriggerNum);
                                     break;
                                 case TriggerNum.Trigger2:
                                     Global.TriggerNum = TriggerNum.Trigger3;
+                                    Global.SelectProgramForTrigger(Global.TriggerNum);
                                     break;
                                 case TriggerNum.Trigger3:
                                     Global.TriggerNum = TriggerNum.Trigger4;
+                                    Global.SelectProgramForTrigger(Global.TriggerNum);
                                     break;
 
                             }

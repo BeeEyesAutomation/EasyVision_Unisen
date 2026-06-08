@@ -37,6 +37,8 @@ namespace BeeCore.Funtion.Engines
                 IsClearNoiseBig = propety.IsClearNoiseBig,
                 MethordEdge = propety.MethordEdge,
                 CircleScanDirection = propety.CircleScanDirection,
+                LengthScan = propety.LengthScan,
+                RingInnerRatio = propety.rotArea != null ? propety.rotArea.RingInnerRatio : 0.7f,
                 AreaShape = propety.rotArea != null ? propety.rotArea.Shape : ShapeType.Rectangle,
                 AreaIsWhite = propety.rotArea == null || propety.rotArea.IsWhite
             };
@@ -121,6 +123,8 @@ namespace BeeCore.Funtion.Engines
         public bool IsClearNoiseBig { get; set; }
         public MethordEdge MethordEdge { get; set; }
         public CircleScanDirection CircleScanDirection { get; set; }
+        public int LengthScan { get; set; }
+        public float RingInnerRatio { get; set; }
         public ShapeType AreaShape { get; set; }
         public bool AreaIsWhite { get; set; }
     }

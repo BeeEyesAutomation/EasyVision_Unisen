@@ -226,7 +226,7 @@ namespace BeeInterface
             _valWMin = S(BASE_VALW_MIN, _scale);
             _valRightMargin = S(BASE_VAL_RMARG, _scale);
 
-            _itemHeight = _nameH + _padY + (_lineH * BASE_LINES) + _rowSpace;
+            _itemHeight = _nameH + _padY + (_lineH * BASE_LINES) + _rowSpace + _lineH;
 
             if (_editorBar != null)
             {
@@ -437,6 +437,14 @@ namespace BeeInterface
             Rectangle leftRect = new Rectangle(lineRect.X, lineRect.Y, leftW, lineRect.Height);
             Rectangle valRect = new Rectangle(valX, lineRect.Y + 2, valW, lineRect.Height - 4);
 
+            if (lineIndex == 9)
+            {
+                int btnWide = Math.Max((int)(_lineH * 2.2f), _lineH * 2);
+                int rightLimitL = lineRect.Right - _valRightMargin;
+                int btnXL = rightLimitL - btnWide;
+                leftRect = new Rectangle(lineRect.X, lineRect.Y, Math.Max(1, btnXL - 6 - lineRect.X), _lineH);
+            }
+
             bool enabled = it.IsUse;
 
             Size glyph = CheckBoxRenderer.GetGlyphSize(g, CheckBoxState.UncheckedNormal);
@@ -461,16 +469,17 @@ namespace BeeInterface
 
             if (lineIndex == 9)
             {
-                int btnW = (int)(_lineH * 2.2f);
-                int valueAreaW = valRect.Width - btnW - 6;
+                int btnW = Math.Max((int)(_lineH * 2.2f), _lineH * 2);
+                int rightLimit = lineRect.Right - _valRightMargin;
+                int btnX = rightLimit - btnW;
+                Rectangle btnRect = new Rectangle(btnX, lineRect.Y, btnW, _lineH * 2);
 
-                Rectangle valueArea = new Rectangle(valRect.X, valRect.Y, valueAreaW, valRect.Height);
-                Rectangle btnRect = new Rectangle(valueArea.Right + 6, valRect.Y, btnW, valRect.Height);
+                int row2Y = lineRect.Y + _lineH;
+                int valAreaW = Math.Max(1, btnX - 6 - lineRect.X);
+                int half = valAreaW / 2;
 
-                int half = valueArea.Width / 2;
-
-                Rectangle rMin = new Rectangle(valueArea.X, valueArea.Y, half - 2, valueArea.Height);
-                Rectangle rExt = new Rectangle(valueArea.X + half + 2, valueArea.Y, half - 2, valueArea.Height);
+                Rectangle rMin = new Rectangle(lineRect.X, row2Y + 2, half - 2, _lineH - 4);
+                Rectangle rExt = new Rectangle(lineRect.X + half + 2, row2Y + 2, half - 2, _lineH - 4);
 
                 DrawValueBoxWithLabel(g, rMin, "Min", it.ValueMinColor, it.IsMinColor);
                 DrawValueBoxWithLabel(g, rExt, "Ext", it.ValueExternColor, it.IsMinColor);
@@ -606,7 +615,7 @@ namespace BeeInterface
                 Rectangle leftRect = new Rectangle(lineRect.X, lineRect.Y, leftW, lineRect.Height);
                 Rectangle valRect = new Rectangle(valX, lineRect.Y + 2, valW, lineRect.Height - 4);
 
-                if (leftRect.Contains(pt))
+                if (line < 9 && leftRect.Contains(pt))
                 {
                     if (line == 0) seg = Segment.X;
                     else if (line == 1) seg = Segment.XMax;
@@ -617,7 +626,6 @@ namespace BeeInterface
                     else if (line == 6) seg = Segment.Height;
                     else if (line == 7) seg = Segment.Counter;
                     else if (line == 8) seg = Segment.Distance;
-                    else if (line == 9) seg = Segment.MinColor;
 
                     targetRect = leftRect;
                     return true;
@@ -625,16 +633,26 @@ namespace BeeInterface
 
                 if (line == 9)
                 {
-                    int colColorW = (int)(_lineH * 2.2f);
-                    int colValueW = valRect.Width - colColorW - 6;
+                    int colColorW = Math.Max((int)(_lineH * 2.2f), _lineH * 2);
+                    int rightLimit9 = lineRect.Right - _valRightMargin;
+                    int btnX9 = rightLimit9 - colColorW;
+                    Rectangle btnRect2 = new Rectangle(btnX9, lineRect.Y, colColorW, _lineH * 2);
 
-                    Rectangle valArea = new Rectangle(valRect.X, valRect.Y, colValueW, valRect.Height);
-                    Rectangle btnRect2 = new Rectangle(valArea.Right + 6, valRect.Y, colColorW, valRect.Height);
+                    Rectangle labelRect9 = new Rectangle(lineRect.X, lineRect.Y, Math.Max(1, btnX9 - 6 - lineRect.X), _lineH);
 
-                    int half = valArea.Width / 2;
+                    int row2Y9 = lineRect.Y + _lineH;
+                    int valAreaW9 = Math.Max(1, btnX9 - 6 - lineRect.X);
+                    int half = valAreaW9 / 2;
 
-                    Rectangle valRect1 = new Rectangle(valArea.X, valArea.Y, half - 2, valArea.Height);
-                    Rectangle valRect2 = new Rectangle(valArea.X + half + 2, valArea.Y, half - 2, valArea.Height);
+                    Rectangle valRect1 = new Rectangle(lineRect.X, row2Y9 + 2, half - 2, _lineH - 4);
+                    Rectangle valRect2 = new Rectangle(lineRect.X + half + 2, row2Y9 + 2, half - 2, _lineH - 4);
+
+                    if (labelRect9.Contains(pt))
+                    {
+                        seg = Segment.MinColor;
+                        targetRect = labelRect9;
+                        return true;
+                    }
 
                     if (valRect1.Contains(pt))
                     {
@@ -1122,28 +1140,18 @@ namespace BeeInterface
             int lineY = baseY + _padY + lineIndex * _lineH;
             Rectangle lineRect = new Rectangle(_padX, lineY, w - _padX * 2, _lineH);
 
-            int splitX = lineRect.X + (int)Math.Round(lineRect.Width * _labelRatio);
-            int valX = splitX + _gap;
+            int btnW = Math.Max((int)(_lineH * 2.2f), _lineH * 2);
+            int rightLimit = lineRect.Right - _valRightMargin;
+            int btnX = rightLimit - btnW;
+            btnRect = new Rectangle(btnX, lineRect.Y, btnW, _lineH * 2);
 
-            int availForValue = w - _padX * 2 - _valRightMargin;
-            int desiredValW = Math.Max(_valWMin, (int)(availForValue * _valueWidthRatio));
+            int row2Y = lineRect.Y + _lineH;
+            int valAreaW = btnX - 6 - lineRect.X;
+            if (valAreaW <= 4) return false;
 
-            int valRight = lineRect.Right - _valRightMargin;
-            int maxValW = Math.Max(1, valRight - valX);
-            int valW = Math.Min(desiredValW, maxValW);
-
-            Rectangle valRect = new Rectangle(valX, lineRect.Y + 2, valW, lineRect.Height - 4);
-
-            int btnW = (int)(_lineH * 2.2f);
-            int valueAreaW = valRect.Width - btnW - 6;
-            if (valueAreaW <= 4) return false;
-
-            Rectangle valueArea = new Rectangle(valRect.X, valRect.Y, valueAreaW, valRect.Height);
-            btnRect = new Rectangle(valueArea.Right + 6, valRect.Y, btnW, valRect.Height);
-
-            int half = valueArea.Width / 2;
-            rMin = new Rectangle(valueArea.X, valueArea.Y, half - 2, valueArea.Height);
-            rExt = new Rectangle(valueArea.X + half + 2, valueArea.Y, half - 2, valueArea.Height);
+            int half = valAreaW / 2;
+            rMin = new Rectangle(lineRect.X, row2Y + 2, half - 2, _lineH - 4);
+            rExt = new Rectangle(lineRect.X + half + 2, row2Y + 2, half - 2, _lineH - 4);
 
             return true;
         }

@@ -21,39 +21,30 @@ namespace BeeInterface
 
         private void btnCamera1_Click(object sender, EventArgs e)
         {
-            Global.IndexProgChoose = 0;
-
-            ShowTool.ShowChart( Global.ToolSettings.pAllTool , BeeCore.Common.EnsureToolList(Global.IndexProgChoose));
-            Global.EditTool.RefreshGuiEdit(Step.Step1);
-            this.Close();
-           
+            SelectFlowChart(0);
         }
 
         private void btnCamera2_Click(object sender, EventArgs e)
         {
-            Global.IndexProgChoose = 1;
-            if (BeeCore.Common.TryGetToolList(Global.IndexProgChoose) == null)
-                BeeCore.Common.SetToolList(Global.IndexProgChoose, new List<BeeCore.PropetyTool>());
-            ShowTool.ShowChart(Global.ToolSettings.pAllTool , BeeCore.Common.EnsureToolList(Global.IndexProgChoose));
-
-            Global.EditTool.RefreshGuiEdit(Step.Step1);
-            this.Close();
+            SelectFlowChart(1);
         }
 
         private void btnCamera3_Click(object sender, EventArgs e)
         {
-            Global.IndexProgChoose = 2;
-            if (BeeCore.Common.TryGetToolList(Global.IndexProgChoose) == null)
-                BeeCore.Common.SetToolList(Global.IndexProgChoose, new List<BeeCore.PropetyTool>());
-            Global.EditTool.RefreshGuiEdit(Step.Step1);
-            this.Close();
+            SelectFlowChart(2);
         }
 
         private void btnCamera4_Click(object sender, EventArgs e)
         {
-            Global.IndexProgChoose = 3;
+            SelectFlowChart(3);
+        }
+
+        private void SelectFlowChart(int indexProg)
+        {
+            Global.SelectProgram(indexProg);
             if (BeeCore.Common.TryGetToolList(Global.IndexProgChoose) == null)
                 BeeCore.Common.SetToolList(Global.IndexProgChoose, new List<BeeCore.PropetyTool>());
+            ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.EnsureToolList(Global.IndexProgChoose));
             Global.EditTool.RefreshGuiEdit(Step.Step1);
             this.Close();
         }

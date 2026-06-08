@@ -85,7 +85,10 @@ namespace BeeInterface
             // Forms Designer không cố parse custom method trong InitializeComponent (sẽ
             // báo "Method not found" khi mở form trong Designer).
             BuildMultiTemplateUi();
+            BuildResizeTemplateUi();
             BuildColorUi();
+            BuildMethodSelectorUi();
+            BuildSubTemplateTabUi();
 
             if (Propety == null)
                 Propety = new Patterns();
@@ -126,14 +129,19 @@ namespace BeeInterface
             btnHard.IsCLick=Propety.DifficultyPattern==DifficultyPattern.Hard?true:false;
             btnNormal.IsCLick=Propety.DifficultyPattern==DifficultyPattern.Normal?true:false;
             btnEasy.IsCLick=Propety.DifficultyPattern==DifficultyPattern.Easy?true:false;
+            if (Propety.EnableResizeTemplate && Propety.EnableScaleSearch)
+                Propety.EnableScaleSearch = false;
             btnEnScale.IsCLick= Propety.EnableScaleSearch  ;
             btnEnScale.Text = Propety.EnableScaleSearch == true ? "ON" : "OFF";
             numAdjScale.Enabled = Propety.EnableScaleSearch;
+            numAdjStepScale.Enabled = Propety.EnableScaleSearch;
             numAdjScale.Value = Propety.ScalePattern;
             numAdjStepScale.Value = Propety.ScaleStep;
+            SyncResizeTemplateUi();
             btnEnableKeepFilter.IsCLick = Propety.EnableKeepFilter;
             btnEnableOverLap.IsCLick = Propety.EnableNms;
             btnEnableValidator.IsCLick = Propety.EnableValidator;
+            btnAntiGlue.IsCLick = Propety.EnableAngleRobustRefine;
             btnEnScale.IsCLick = Propety.EnableScaleSearch;
             float angle = (Propety.rotCrop._rectRotation) - (Propety.rotArea._rectRotation);
             Propety.AngleLower = angle - Propety.Angle;
@@ -234,6 +242,9 @@ namespace BeeInterface
                     btnGetColorNG.IsCLick = false;
                 EditRectRot1.IsHide = true;
                 EditRectRot1.RotateCurentChanged -= EditRectRot1_RotateCurentChanged;
+                // FIX C6: thiếu unsubscribe StatusToolChanged khi không visible -> sẽ leak khi LoadPara chạy lại với OwnerTool khác
+                if (OwnerTool != null)
+                    OwnerTool.StatusToolChanged -= ToolPattern_StatusToolChanged;
             }
         }
 
@@ -576,9 +587,11 @@ namespace BeeInterface
         private void ToolPattern_StatusToolChanged(PropetyTool tool, StatusTool obj)
         {
             if (Global.IsRun) return;
+            // FIX C5: OwnerTool có thể null nếu event fire sau khi tool bị remove; cũng filter sender khác OwnerTool
+            if (OwnerTool == null || tool != OwnerTool) return;
             if (OwnerTool.StatusTool == StatusTool.Done)
             {
-                btnTest.Enabled = true;
+                if (btnTest != null) btnTest.Enabled = true;
             }
         }
 
@@ -1057,8 +1070,15 @@ namespace BeeInterface
         private void btnEnScale_Click(object sender, EventArgs e)
         {
             Propety.EnableScaleSearch = btnEnScale.IsCLick;
+            if (Propety.EnableScaleSearch)
+            {
+                Propety.EnableResizeTemplate = false;
+                SyncResizeTemplateUi();
+            }
             btnEnScale.Text = Propety.EnableScaleSearch == true ? "ON" : "OFF";
             numAdjScale.Enabled = Propety.EnableScaleSearch;
+            numAdjStepScale.Enabled = Propety.EnableScaleSearch;
+            Propety.MarkBatchDirty();
 
         }
 
@@ -1072,6 +1092,55 @@ namespace BeeInterface
             Propety.ScaleStep = (int)numAdjStepScale.Value;
         }
 
+        //private void btnResizeTemplate_Click(object sender, EventArgs e)
+        //{
+        //    if (layResizeTemplate != null && btnResizeTemplate != null)
+        //        layResizeTemplate.Visible = !btnResizeTemplate.IsCLick;
+    //    }
+
+        private void btnEnableResizeTemplate_Click(object sender, EventArgs e)
+        {
+            if (Propety == null) return;
+            Propety.EnableResizeTemplate = btnEnableResizeTemplate.IsCLick;
+            if (Propety.EnableResizeTemplate)
+            {
+                Propety.EnableScaleSearch = false;
+                btnEnScale.IsCLick = false;
+                btnEnScale.Text = "OFF";
+                numAdjScale.Enabled = false;
+                numAdjStepScale.Enabled = false;
+            }
+            SyncResizeTemplateUi();
+            Propety.MarkBatchDirty();
+        }
+
+        private void AdjResizeTemplate_ValueChanged(float obj)
+        {
+            if (Propety == null || AdjResizeTemplate == null) return;
+            int value = (int)AdjResizeTemplate.Value;
+            if (value < 25) value = 25;
+            if (value > 100) value = 100;
+            Propety.ResizeTemplatePercent = value;
+            Propety.MarkBatchDirty();
+        }
+
+        private void SyncResizeTemplateUi()
+        {
+            if (Propety == null || btnEnableResizeTemplate == null || AdjResizeTemplate == null)
+                return;
+
+            int value = Propety.ResizeTemplatePercent;
+            if (value < 25) value = 25;
+            if (value > 100) value = 100;
+            Propety.ResizeTemplatePercent = value;
+
+            btnEnableResizeTemplate.IsCLick = Propety.EnableResizeTemplate;
+            btnEnableResizeTemplate.Text = Propety.EnableResizeTemplate ? "ON" : "OFF";
+            AdjResizeTemplate.Enabled = Propety.EnableResizeTemplate;
+            if ((int)AdjResizeTemplate.Value != value)
+                AdjResizeTemplate.Value = value;
+        }
+
         private void btnEnableValidator_Click(object sender, EventArgs e)
         {Propety.EnableValidator = btnEnableValidator.IsCLick;
 
@@ -1080,6 +1149,11 @@ namespace BeeInterface
         private void btnEnableKeepFilter_Click(object sender, EventArgs e)
         {
             Propety.EnableKeepFilter = btnEnableKeepFilter.IsCLick;
+        }
+
+        private void btnAntiGlue_Click(object sender, EventArgs e)
+        {
+            Propety.EnableAngleRobustRefine = btnAntiGlue.IsCLick;
         }
 
         private void btnEnableOverLap_Click(object sender, EventArgs e)
@@ -1289,41 +1363,76 @@ namespace BeeInterface
         private void OnModeSingleClicked(object s, EventArgs e)
         {
             if (Propety == null) return;
-            Propety.IsMultiTemplate = false;
+            Propety.TemplateMode = PatternMode.Single;
             UpdateModeToggleUi();
         }
 
         private void OnModeMultiClicked(object s, EventArgs e)
         {
             if (Propety == null) return;
-            Propety.IsMultiTemplate = true;
+            Propety.TemplateMode = PatternMode.Multi;
             UpdateModeToggleUi();
+        }
+
+        private void OnModeMultiNoLimitClicked(object s, EventArgs e)
+        {
+            if (Propety == null) return;
+            Propety.TemplateMode = PatternMode.MultiNoLimit;
+            // MultiNoLimit không dùng per-label RotLimit → ép CheckByAreaLimit off để
+            // dispatch trong DoWork đi đúng nhánh MatchBatchStable + ẩn rotLimit overlay.
+            Propety.CheckByAreaLimit = false;
+            Propety.MarkBatchDirty();
+            UpdateModeToggleUi();
+            PushRotLimitForCurrentRow();
         }
 
         private void UpdateModeToggleUi()
         {
             if (Propety == null) return;
-            bool multi = Propety.IsMultiTemplate;
-            // RJButton.IsCLick highlight (pattern dùng cho Best/All Object, btnHard/Normal/Easy).
-            if (btnModeSingle != null) btnModeSingle.IsCLick = !multi;
-            if (btnModeMulti != null) btnModeMulti.IsCLick = multi;
-            if (multi)
+            var method = Propety.Method;
+            bool isSingleAny = (method == PatternMethod.SingleLabel
+                                || method == PatternMethod.SingleLabelAreaLimit
+                                || method == PatternMethod.SingleLabelNoLimit);
+            bool isMultiAny = !isSingleAny;
+
+            // Highlight 6 new method buttons (built in BuildMethodSelectorUi).
+            HighlightMethodButton(method);
+
+            // Sample area: Single → imgTemp; Multi → dgvTemplates.
+            if (isMultiAny)
             {
                 this.laySample.Controls.Remove(this.imgTemp);
-                this.laySample.Controls.Add(this.dgvTemplates, 0, 0);
-                 btnAddSample.Visible = true;
-                 btnDeleteSample.Visible = true;
+                if (!this.laySample.Controls.Contains(this.dgvTemplates))
+                    this.laySample.Controls.Add(this.dgvTemplates, 0, 0);
+                btnAddSample.Visible = true;
+                btnDeleteSample.Visible = true;
             }
             else
             {
                 this.laySample.Controls.Remove(this.dgvTemplates);
-                this.laySample.Controls.Add(this.imgTemp, 0, 0);
+                if (!this.laySample.Controls.Contains(this.imgTemp))
+                    this.laySample.Controls.Add(this.imgTemp, 0, 0);
                 btnAddSample.Visible = false;
                 btnDeleteSample.Visible = false;
             }
-            // Area toggle chỉ hiện ở multi-mode.
-            if (tlpAreaToggle != null) tlpAreaToggle.Visible = multi;
+
+            // tlpAreaToggle (Full/Crop button cũ) đã được thay thế bằng Method selector,
+            // nhưng giữ control trong Designer cho compat — luôn ẩn.
+            if (tlpAreaToggle != null) tlpAreaToggle.Visible = false;
+
+            // Sub-templates tab: hiện ở mọi method. Refresh visibility/UI per method.
+            RefreshSubTemplateUiForMethod();
             UpdateAreaToggleUi();
+        }
+
+        private void HighlightMethodButton(PatternMethod m)
+        {
+            if (btnMSingleLabel != null)         btnMSingleLabel.IsCLick         = (m == PatternMethod.SingleLabel);
+            if (btnMSingleLabelAreaLimit != null) btnMSingleLabelAreaLimit.IsCLick = (m == PatternMethod.SingleLabelAreaLimit);
+            if (btnMSingleLabelNoLimit != null)   btnMSingleLabelNoLimit.IsCLick   = (m == PatternMethod.SingleLabelNoLimit);
+            if (btnMMultiLabel != null)          btnMMultiLabel.IsCLick          = (m == PatternMethod.MultiLabel);
+            if (btnMMultiLabelAreaLimit != null)  btnMMultiLabelAreaLimit.IsCLick  = (m == PatternMethod.MultiLabelAreaLimit);
+            if (btnMMultiLabelNoLimit != null)    btnMMultiLabelNoLimit.IsCLick    = (m == PatternMethod.MultiLabelNoLimit);
         }
 
         private void UpdateAreaToggleUi()
@@ -1359,13 +1468,14 @@ namespace BeeInterface
         private void OnDgvSelectionChanged(object s, EventArgs e)
         {
             PushRotLimitForCurrentRow();
+            RefreshSubTemplateUiForMethod();
         }
 
         private void PushRotLimitForCurrentRow()
         {
             if (Propety == null || EditRectRot1 == null) return;
             int idx = dgvTemplates?.CurrentCell?.RowIndex ?? -1;
-            if (!Propety.IsMultiTemplate || !Propety.CheckByAreaLimit
+            if (Propety.TemplateMode != PatternMode.Multi || !Propety.CheckByAreaLimit
                 || idx < 0 || idx >= Propety.MultiTemplates.Count)
             {
                 // Không hiển thị rotLimit khi single-mode/Full-mode/chưa chọn row.
@@ -1467,8 +1577,27 @@ namespace BeeInterface
             switch (e.ColumnIndex)
             {
                 case 0: // Label
-                    entry.Label = row.Cells["colLabel"].Value?.ToString() ?? "";
-                    break;
+                    {
+                        string oldLabel = entry.Label ?? "";
+                        string newLabel = row.Cells["colLabel"].Value?.ToString() ?? "";
+                        entry.Label = newLabel;
+                        // MultiNoLimit: nhiều row chia sẻ cùng Label (group). Khi user đổi
+                        // label trên 1 row, các row khác trùng oldLabel phải đổi theo để
+                        // group không bị vỡ.
+                        if (Propety.TemplateMode == PatternMode.MultiNoLimit
+                            && oldLabel != newLabel)
+                        {
+                            for (int i = 0; i < Propety.MultiTemplates.Count; i++)
+                            {
+                                var other = Propety.MultiTemplates[i];
+                                if (other == entry) continue;
+                                if ((other.Label ?? "") == oldLabel)
+                                    other.Label = newLabel;
+                            }
+                            RefreshTemplatesGrid();
+                        }
+                        break;
+                    }
                 case 2: // Score
                     entry.ScoreThreshold = ParseFloatSafe(row.Cells["colScore"].Value, 70f);
                     break;
@@ -1570,6 +1699,388 @@ namespace BeeInterface
                     // Không có row chọn → thêm mới như Sample workflow.
                     TryAutoAddSampleToMulti();
                 }
+            }
+        }
+
+        // ================================================================
+        // 6-Method selector (Q5: 6 RJButton trong TableLayoutPanel 2×3)
+        // Thay thế lay11 cũ (3 button Single/Multi/MultiNoLimit) bằng grid mới.
+        // ================================================================
+        private TableLayoutPanel layMethod;
+        private RJButton btnMSingleLabel, btnMSingleLabelAreaLimit, btnMSingleLabelNoLimit;
+        private RJButton btnMMultiLabel, btnMMultiLabelAreaLimit, btnMMultiLabelNoLimit;
+
+        private void BuildMethodSelectorUi()
+        {
+            // Hide lay11 cũ và parent (giữ trong Designer cho backward-compat — chỉ ẩn).
+            if (lay11 != null)
+            {
+                lay11.Visible = false;
+                var parent = lay11.Parent as TableLayoutPanel;
+                if (parent != null)
+                {
+                    int row = parent.GetRow(lay11);
+                    int col = parent.GetColumn(lay11);
+
+                    layMethod = new TableLayoutPanel();
+                    layMethod.BackColor = lay11.BackColor;
+                    layMethod.Dock = DockStyle.Fill;
+                    layMethod.Margin = lay11.Margin;
+                    layMethod.Padding = new Padding(5);
+                    layMethod.ColumnCount = 3;
+                    layMethod.RowCount = 2;
+                    for (int i = 0; i < 3; i++)
+                        layMethod.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+                    for (int i = 0; i < 2; i++)
+                        layMethod.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+                    layMethod.Name = "layMethod";
+
+                    btnMSingleLabel         = CreateMethodButton("Single Label",         OnMSingleLabelClicked);
+                    btnMSingleLabelAreaLimit = CreateMethodButton("Single + AreaLimit",  OnMSingleLabelAreaLimitClicked);
+                    btnMSingleLabelNoLimit   = CreateMethodButton("Single + NoLimit",    OnMSingleLabelNoLimitClicked);
+                    btnMMultiLabel          = CreateMethodButton("Multi Label",          OnMMultiLabelClicked);
+                    btnMMultiLabelAreaLimit  = CreateMethodButton("Multi + AreaLimit",   OnMMultiLabelAreaLimitClicked);
+                    btnMMultiLabelNoLimit    = CreateMethodButton("Multi + NoLimit",     OnMMultiLabelNoLimitClicked);
+
+                    layMethod.Controls.Add(btnMSingleLabel,         0, 0);
+                    layMethod.Controls.Add(btnMSingleLabelAreaLimit, 1, 0);
+                    layMethod.Controls.Add(btnMSingleLabelNoLimit,   2, 0);
+                    layMethod.Controls.Add(btnMMultiLabel,          0, 1);
+                    layMethod.Controls.Add(btnMMultiLabelAreaLimit,  1, 1);
+                    layMethod.Controls.Add(btnMMultiLabelNoLimit,    2, 1);
+
+                    // Cần 2 row chiều cao gấp đôi lay11 cũ.
+                    parent.RowStyles[row] = new RowStyle(SizeType.Absolute, 100);
+                    parent.Controls.Add(layMethod, col, row);
+                }
+            }
+        }
+
+        private RJButton CreateMethodButton(string text, EventHandler onClick)
+        {
+            var b = new RJButton();
+            b.AutoFont = true;
+            b.AutoFontHeightRatio = 0.65F;
+            b.AutoFontMin = 6F;
+            b.AutoFontMax = 14F;
+            b.BackColor = System.Drawing.Color.FromArgb(250, 250, 250);
+            b.BackgroundColor = System.Drawing.Color.FromArgb(250, 250, 250);
+            b.BorderColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            b.BorderRadius = 8;
+            b.BorderSize = 1;
+            b.ClickBotColor = System.Drawing.Color.FromArgb(247, 211, 139);
+            b.ClickMidColor = System.Drawing.Color.FromArgb(246, 204, 120);
+            b.ClickTopColor = System.Drawing.Color.FromArgb(244, 192, 89);
+            b.Dock = DockStyle.Fill;
+            b.FlatAppearance.BorderSize = 0;
+            b.FlatStyle = FlatStyle.Flat;
+            b.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            b.ForeColor = System.Drawing.Color.Black;
+            b.TextColor = System.Drawing.Color.Black;
+            b.Margin = new Padding(2);
+            b.Text = text;
+            b.UseVisualStyleBackColor = false;
+            b.Click -= onClick;
+            b.Click += onClick;
+            return b;
+        }
+
+        private void OnMSingleLabelClicked(object s, EventArgs e)         { SetMethod(PatternMethod.SingleLabel); }
+        private void OnMSingleLabelAreaLimitClicked(object s, EventArgs e) { SetMethod(PatternMethod.SingleLabelAreaLimit); }
+        private void OnMSingleLabelNoLimitClicked(object s, EventArgs e)   { SetMethod(PatternMethod.SingleLabelNoLimit); }
+        private void OnMMultiLabelClicked(object s, EventArgs e)          { SetMethod(PatternMethod.MultiLabel); }
+        private void OnMMultiLabelAreaLimitClicked(object s, EventArgs e)  { SetMethod(PatternMethod.MultiLabelAreaLimit); }
+        private void OnMMultiLabelNoLimitClicked(object s, EventArgs e)    { SetMethod(PatternMethod.MultiLabelNoLimit); }
+
+        private void SetMethod(PatternMethod m)
+        {
+            if (Propety == null) return;
+            Propety.Method = m;
+            UpdateModeToggleUi();
+            PushRotLimitForCurrentRow();
+        }
+
+        // ================================================================
+        // Sub-Templates tab (Q6: tab riêng trong tabControl2)
+        // ================================================================
+        private TabPage tabSubTemplates;
+        private DataGridView dgvSubTemplates;
+        private RJButton btnSubAdd, btnSubReplace, btnSubDelete;
+        private NumericUpDown numSubPad;
+        private Label lblSubContext;
+
+        private void BuildSubTemplateTabUi()
+        {
+            if (tabControl2 == null) return;
+
+            tabSubTemplates = new TabPage("Sub-Templates");
+            tabSubTemplates.Name = "tabSubTemplates";
+            tabSubTemplates.BackColor = System.Drawing.Color.White;
+
+            var root = new TableLayoutPanel();
+            root.Dock = DockStyle.Fill;
+            root.ColumnCount = 1;
+            root.RowCount = 3;
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 36)); // context label
+            root.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); // grid
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 60)); // toolbar
+
+            lblSubContext = new Label();
+            lblSubContext.Dock = DockStyle.Fill;
+            lblSubContext.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            lblSubContext.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            lblSubContext.Padding = new Padding(8, 0, 0, 0);
+            lblSubContext.Text = "Sub-templates for: (none)";
+
+            dgvSubTemplates = new DataGridView();
+            dgvSubTemplates.Dock = DockStyle.Fill;
+            dgvSubTemplates.AllowUserToAddRows = false;
+            dgvSubTemplates.AllowUserToDeleteRows = false;
+            dgvSubTemplates.RowHeadersVisible = false;
+            dgvSubTemplates.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvSubTemplates.RowTemplate.Height = 60;
+            dgvSubTemplates.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvSubTemplates.Columns.Add(new DataGridViewImageColumn { Name = "colSubImg", HeaderText = "Image", ImageLayout = DataGridViewImageCellLayout.Zoom, FillWeight = 25 });
+            dgvSubTemplates.Columns.Add(new DataGridViewTextBoxColumn { Name = "colSubLabel", HeaderText = "Label", FillWeight = 30 });
+            dgvSubTemplates.Columns.Add(new DataGridViewTextBoxColumn { Name = "colSubScore", HeaderText = "Score", FillWeight = 15 });
+            dgvSubTemplates.Columns.Add(new DataGridViewTextBoxColumn { Name = "colSubAngleLow", HeaderText = "AngLow", FillWeight = 15 });
+            dgvSubTemplates.Columns.Add(new DataGridViewTextBoxColumn { Name = "colSubAngleUp", HeaderText = "AngUp", FillWeight = 15 });
+            dgvSubTemplates.CellValueChanged -= OnDgvSubCellValueChanged;
+            dgvSubTemplates.CellValueChanged += OnDgvSubCellValueChanged;
+
+            var toolbar = new TableLayoutPanel();
+            toolbar.Dock = DockStyle.Fill;
+            toolbar.ColumnCount = 4;
+            toolbar.RowCount = 1;
+            toolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            toolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            toolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
+            toolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
+
+            btnSubAdd = CreateMethodButton("+ Add Sub", OnSubAddClicked);
+            btnSubReplace = CreateMethodButton("⟳ Replace", OnSubReplaceClicked);
+            btnSubDelete = CreateMethodButton("- Delete", OnSubDeleteClicked);
+
+            var padPanel = new TableLayoutPanel();
+            padPanel.Dock = DockStyle.Fill;
+            padPanel.ColumnCount = 2;
+            padPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            padPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            var lblPad = new Label { Text = "Pad px", Dock = DockStyle.Fill, TextAlign = System.Drawing.ContentAlignment.MiddleRight };
+            numSubPad = new NumericUpDown { Minimum = 0, Maximum = 500, Value = 20, Dock = DockStyle.Fill };
+            numSubPad.ValueChanged -= OnSubPadChanged;
+            numSubPad.ValueChanged += OnSubPadChanged;
+            padPanel.Controls.Add(lblPad, 0, 0);
+            padPanel.Controls.Add(numSubPad, 1, 0);
+
+            toolbar.Controls.Add(btnSubAdd, 0, 0);
+            toolbar.Controls.Add(btnSubReplace, 1, 0);
+            toolbar.Controls.Add(btnSubDelete, 2, 0);
+            toolbar.Controls.Add(padPanel, 3, 0);
+
+            root.Controls.Add(lblSubContext, 0, 0);
+            root.Controls.Add(dgvSubTemplates, 0, 1);
+            root.Controls.Add(toolbar, 0, 2);
+
+            tabSubTemplates.Controls.Add(root);
+            tabControl2.TabPages.Add(tabSubTemplates);
+        }
+
+        /// <summary>
+        /// Lấy list sub-template hiện tại theo method + selection. Multi → entry đang chọn.
+        /// Single → SubTemplatesSingle.
+        /// </summary>
+        private List<SubTemplateEntry> GetActiveSubList(out string context)
+        {
+            context = "(none)";
+            if (Propety == null) return null;
+            var method = Propety.Method;
+            if (method == PatternMethod.SingleLabel
+                || method == PatternMethod.SingleLabelAreaLimit
+                || method == PatternMethod.SingleLabelNoLimit)
+            {
+                context = "Single template";
+                return Propety.SubTemplatesSingle;
+            }
+            int idx = dgvTemplates?.CurrentCell?.RowIndex ?? -1;
+            if (idx < 0 || idx >= Propety.MultiTemplates.Count) return null;
+            var entry = Propety.MultiTemplates[idx];
+            context = "Main label: " + (entry.Label ?? "");
+            return entry.SubTemplates;
+        }
+
+        private int GetActiveSubPadPx()
+        {
+            if (Propety == null) return 20;
+            var method = Propety.Method;
+            if (method == PatternMethod.SingleLabel
+                || method == PatternMethod.SingleLabelAreaLimit
+                || method == PatternMethod.SingleLabelNoLimit)
+                return Propety.SubSearchPadPxSingle;
+            int idx = dgvTemplates?.CurrentCell?.RowIndex ?? -1;
+            if (idx < 0 || idx >= Propety.MultiTemplates.Count) return 20;
+            return Propety.MultiTemplates[idx].SubSearchPadPx;
+        }
+
+        private void SetActiveSubPadPx(int value)
+        {
+            if (Propety == null) return;
+            var method = Propety.Method;
+            if (method == PatternMethod.SingleLabel
+                || method == PatternMethod.SingleLabelAreaLimit
+                || method == PatternMethod.SingleLabelNoLimit)
+            { Propety.SubSearchPadPxSingle = value; return; }
+            int idx = dgvTemplates?.CurrentCell?.RowIndex ?? -1;
+            if (idx < 0 || idx >= Propety.MultiTemplates.Count) return;
+            Propety.MultiTemplates[idx].SubSearchPadPx = value;
+        }
+
+        private void RefreshSubTemplateUiForMethod()
+        {
+            if (dgvSubTemplates == null) return;
+            string ctx;
+            var list = GetActiveSubList(out ctx);
+            if (lblSubContext != null) lblSubContext.Text = "Sub-templates for: " + ctx;
+
+            dgvSubTemplates.Rows.Clear();
+            if (list != null)
+            {
+                foreach (var sub in list)
+                {
+                    var bmp = sub.GetBitmap();
+                    int rowIdx = dgvSubTemplates.Rows.Add();
+                    var row = dgvSubTemplates.Rows[rowIdx];
+                    row.Cells["colSubImg"].Value = bmp;
+                    row.Cells["colSubLabel"].Value = sub.Label;
+                    row.Cells["colSubScore"].Value = sub.ScoreThreshold;
+                    row.Cells["colSubAngleLow"].Value = sub.AngleLower;
+                    row.Cells["colSubAngleUp"].Value = sub.AngleUpper;
+                }
+            }
+            if (numSubPad != null)
+            {
+                int pad = GetActiveSubPadPx();
+                if (pad < (int)numSubPad.Minimum) pad = (int)numSubPad.Minimum;
+                if (pad > (int)numSubPad.Maximum) pad = (int)numSubPad.Maximum;
+                if ((int)numSubPad.Value != pad) numSubPad.Value = pad;
+            }
+        }
+
+        private void OnSubAddClicked(object s, EventArgs e)
+        {
+            string ctx;
+            var list = GetActiveSubList(out ctx);
+            if (list == null) { MessageBox.Show("Select a main template row first."); return; }
+            var bmp = CropSubFromCurrentRotCrop();
+            if (bmp == null) return;
+            try
+            {
+                var sub = new SubTemplateEntry
+                {
+                    Label = "sub" + (list.Count + 1),
+                    ScoreThreshold = 70f,
+                };
+                sub.SetBitmap(bmp);
+                list.Add(sub);
+                RefreshSubTemplateUiForMethod();
+            }
+            finally { bmp.Dispose(); }
+        }
+
+        /// <summary>
+        /// Crop bitmap từ raw bằng rotCrop hiện tại. Trả null + show message nếu invalid.
+        /// Shared bởi OnSubAddClicked + OnSubReplaceClicked.
+        /// </summary>
+        private Bitmap CropSubFromCurrentRotCrop()
+        {
+            if (Propety == null) return null;
+            var rotCrop = Propety.rotCrop;
+            if (rotCrop == null || rotCrop._rect.Width <= 0 || rotCrop._rect.Height <= 0)
+            {
+                MessageBox.Show("Hãy kéo box rotCrop trên ảnh trước.");
+                return null;
+            }
+            try
+            {
+                using (Mat raw = BeeCore.Common.listCamera[Propety.IndexCCD].matRaw.Clone())
+                using (Mat crop = Cropper.CropRotatedRect(raw, rotCrop, null))
+                {
+                    if (crop == null || crop.Empty())
+                    {
+                        MessageBox.Show("Crop trả về empty — kiểm tra rotCrop có nằm trong ảnh không.");
+                        return null;
+                    }
+                    return OpenCvSharp.Extensions.BitmapConverter.ToBitmap(crop);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Crop failed: " + ex.Message);
+                return null;
+            }
+        }
+
+        private void OnSubReplaceClicked(object s, EventArgs e)
+        {
+            string ctx;
+            var list = GetActiveSubList(out ctx);
+            if (list == null) { MessageBox.Show("Select a main template row first."); return; }
+            int idx = dgvSubTemplates?.CurrentCell?.RowIndex ?? -1;
+            if (idx < 0 || idx >= list.Count)
+            {
+                MessageBox.Show("Chọn 1 row sub-template để replace.");
+                return;
+            }
+            var bmp = CropSubFromCurrentRotCrop();
+            if (bmp == null) return;
+            try
+            {
+                var sub = list[idx];
+                sub.SetBitmap(bmp); // SetBitmap đã invalidate _learned + _cachedBitmap
+                RefreshSubTemplateUiForMethod();
+                if (idx < dgvSubTemplates.Rows.Count)
+                    dgvSubTemplates.CurrentCell = dgvSubTemplates.Rows[idx].Cells[1];
+            }
+            finally { bmp.Dispose(); }
+        }
+
+        private void OnSubDeleteClicked(object s, EventArgs e)
+        {
+            string ctx;
+            var list = GetActiveSubList(out ctx);
+            if (list == null) return;
+            int idx = dgvSubTemplates?.CurrentCell?.RowIndex ?? -1;
+            if (idx < 0 || idx >= list.Count) return;
+            list[idx].InvalidateLearned();
+            list.RemoveAt(idx);
+            RefreshSubTemplateUiForMethod();
+        }
+
+        private void OnSubPadChanged(object s, EventArgs e)
+        {
+            SetActiveSubPadPx((int)numSubPad.Value);
+        }
+
+        private void OnDgvSubCellValueChanged(object s, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            string ctx;
+            var list = GetActiveSubList(out ctx);
+            if (list == null || e.RowIndex >= list.Count) return;
+            var sub = list[e.RowIndex];
+            var row = dgvSubTemplates.Rows[e.RowIndex];
+            switch (e.ColumnIndex)
+            {
+                case 1: sub.Label = row.Cells["colSubLabel"].Value?.ToString() ?? ""; break;
+                case 2: sub.ScoreThreshold = ParseFloatSafe(row.Cells["colSubScore"].Value, 70f); break;
+                case 3:
+                    sub.AngleLower = ParseFloatSafe(row.Cells["colSubAngleLow"].Value, -180f);
+                    sub.HasAngleRange = (sub.AngleLower != -180.0 || sub.AngleUpper != 180.0);
+                    break;
+                case 4:
+                    sub.AngleUpper = ParseFloatSafe(row.Cells["colSubAngleUp"].Value, 180f);
+                    sub.HasAngleRange = (sub.AngleLower != -180.0 || sub.AngleUpper != 180.0);
+                    break;
             }
         }
     }

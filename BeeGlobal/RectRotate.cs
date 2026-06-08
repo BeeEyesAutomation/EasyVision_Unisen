@@ -160,6 +160,12 @@ namespace BeeGlobal
         public float _rectRotation { get { return _angle; } set { _angle = value; } }
         public AnchorPoint _dragAnchor { get; set; }
         public ShapeType Shape { get; set; } = ShapeType.Rectangle;
+        /// <summary>
+        /// Tỷ lệ bán kính inner ellipse / outer ellipse khi Shape == Ring.
+        /// Giá trị 0..1 (0 = inner thu nhỏ về tâm, 1 = inner = outer = không có ring).
+        /// Mặc định 0.7 (inner chiếm 70% outer).
+        /// </summary>
+        public float RingInnerRatio { get; set; } = 0.7f;
         public bool IsWhite = false;
         public PointF[] HexVertexOffsets { get;  set; }   // offsets from default hex (local)
         public List<PointF> PolyLocalPoints { get;  set; } // polygon points (local)

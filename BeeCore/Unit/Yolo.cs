@@ -711,7 +711,7 @@ namespace BeeCore
 
             List<string> lines = new List<string>();
             if (item.IsArea)
-                lines.Add("MinArea: " + (int)Math.Round(sumArea / 100.0) + "/" + item.ValueArea);
+                lines.Add("MinArea: " + (int)Math.Round(sumArea ) + "/" + item.ValueArea);
             if (item.IsMinColor)
                 lines.Add("MinColor: " + (int)Math.Round(sumColor) + "/" + item.ValueMinColor);
             if (item.IsHeight)
@@ -2073,7 +2073,17 @@ namespace BeeCore
                                 // AREA
                                 //--------------------------------
 
-
+                                if(item.IsArea)
+                                {
+                                    if (item.ValueArea > 0)
+                                    {
+                                        ok &= r.Area >= item.ValueArea;
+                                    }
+                                    else
+                                    {
+                                        ok &= r.Area <= Math.Abs(item.ValueArea);
+                                    }
+                                }
                                 //--------------------------------
                                 // COLOR
                                 //--------------------------------
@@ -2262,7 +2272,7 @@ namespace BeeCore
                                 }    
                              
 
-                                scan.NumInside = objsValid.Count;
+                                
                                 foreach (var r in objsValid)
                                 {
                                     float percentColor;
@@ -2364,12 +2374,27 @@ namespace BeeCore
 
                                         }
                                     }
-                                    //--------------------------------
-                                    // AREA
-                                    //--------------------------------
-                                    if (item.IsArea)
+                                       
+                                        //--------------------------------
+                                        // AREA
+                                        //--------------------------------
+                                        if (item.IsArea)
                                     {
-                                        ok &= sumArea >= item.ValueArea ;
+                                        if (scan.Dir == Dir.Mask )
+                                        {
+                                            
+                                                if (item.ValueArea > 0)
+                                                {
+                                                    ok &= r.Area >= item.ValueArea;
+                                                }
+                                                else
+                                                {
+                                                    ok &= r.Area <= Math.Abs(item.ValueArea);
+                                                }
+                                         
+                                        }
+                                        else
+                                            ok &= sumArea >= item.ValueArea;
                                     }
                                     if (item.IsMinColor)
                                     {
@@ -2511,8 +2536,8 @@ namespace BeeCore
 
                                 scan.IsOK = boxOK;
                                 k++;
-
-                                numOK += objsValid.Count(x => x.IsOK);
+                                    scan.NumInside = objsValid.Count(x => x.IsOK);
+                                    numOK += objsValid.Count(x => x.IsOK);
                                 if (objsValid.Count(x => x.IsOK) > 0)
                                     itemHasAnyOk = true;
                             }
@@ -3159,13 +3184,26 @@ namespace BeeCore
                 else
                 {
                     if (rs.IsOK == true)
-                        if(IsColorAllObjLabel)
-                        clShow = cl;
+                    {
+                        if (IsColorAllObjLabel)
+                            clShow = cl;
+                        else
+                            clShow = Global.ParaShow.ColorOK;
+                    }
                     else
-                        clShow = Global.ParaShow.ColorOK;
+                    {
+                        if (IsColorAllObjLabel)
+                            clShow = Global.ParaShow.ColorNone;
+                        else
+                            clShow = Global.ParaShow.ColorNG;
+                    }    
+                      
 
                 }
 
+
+                if (string.Equals(rs.Name, "isMark", StringComparison.OrdinalIgnoreCase))
+                    clShow = Global.ParaShow.ColorNone;
 
                     mat = new Matrix();
                 if (!Global.IsRun)
@@ -3196,6 +3234,8 @@ namespace BeeCore
                         i++;
                         continue;
                     }
+                    if (item.IsLabelMark)
+                        clShow = Global.ParaShow.ColorNone;
 
                     if (item.IsY)
                     {
@@ -3326,8 +3366,10 @@ namespace BeeCore
                         if (Global.ParaShow.IsShowPostion)
                         {
                             int min = (int)Math.Min(rs.rot._rect.Width / 4, rs.rot._rect.Height / 4);
-                            Draws.Plus(gc, 0, 0, min, cl, Global.ParaShow.ThicknessLine);
-                            String sPos = "X,Y,A _ " + (int)Math.Round(rs.rot._PosCenter.X) + "," + (int)Math.Round(rs.rot._PosCenter.Y) + "," + (int)Math.Round(rs.rot._rectRotation);
+                            Draws.Plus(gc, 0, 0, min, clShow, Global.ParaShow.ThicknessLine);
+                            double x = Math.Round((rs.rot._PosCenter.X / Global.Config.Scale), 1);
+                            double y = Math.Round((rs.rot._PosCenter.Y / Global.Config.Scale), 1);
+                            String sPos = "X,Y,A _ " + x + "," + y + "," + Math.Round(rs.rot._rectRotation, 1);
 
                             gc.DrawString(sPos, font, new SolidBrush(Global.ParaShow.ColorInfor), new PointF(5, 5));
 
@@ -3376,8 +3418,10 @@ namespace BeeCore
                     if (Global.ParaShow.IsShowPostion)
                     {
                         int min = (int)Math.Min(rs.rot._rect.Width / 4, rs.rot._rect.Height / 4);
-                        Draws.Plus(gc, 0, 0, min, cl, Global.ParaShow.ThicknessLine);
-                        String sPos = "X,Y,A _ " + (int)Math.Round(rs.rot._PosCenter.X) + "," + (int)Math.Round(rs.rot._PosCenter.Y) + "," + (int)Math.Round(rs.rot._rectRotation);
+                        Draws.Plus(gc, 0, 0, min, clShow, Global.ParaShow.ThicknessLine);
+                        double x = Math.Round((rs.rot._PosCenter.X / Global.Config.Scale), 1);
+                        double y = Math.Round((rs.rot._PosCenter.Y / Global.Config.Scale), 1);
+                        String sPos = "X,Y,A _ " + x + "," + y + "," + Math.Round(rs.rot._rectRotation, 1);
 
                         gc.DrawString(sPos, font, new SolidBrush(Global.ParaShow.ColorInfor), new PointF(5, 5));
 

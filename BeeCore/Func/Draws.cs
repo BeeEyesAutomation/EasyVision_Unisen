@@ -831,6 +831,18 @@ namespace BeeCore
                 {
                     case ShapeType.Rectangle: path.AddRectangle(rr._rect); break;
                     case ShapeType.Ellipse: path.AddEllipse(rr._rect); break;
+                    case ShapeType.Ring:
+                        {
+                            // Outer ellipse
+                            path.AddEllipse(rr._rect);
+                            // Inner ellipse — NO outline at intersection (user spec: bỏ outline tại vị trí giao nhau)
+                            float ratio = Math.Max(0.01f, Math.Min(0.99f, rr.RingInnerRatio));
+                            float iw = rr._rect.Width * ratio;
+                            float ih = rr._rect.Height * ratio;
+                            path.StartFigure();
+                            path.AddEllipse(-iw / 2f, -ih / 2f, iw, ih);
+                        }
+                        break;
                     case ShapeType.Hexagon: path.AddPolygon(rr.GetHexagonVerticesLocal()); break;
                     case ShapeType.Polygon:
                         var poly = rr.GetPolygonVerticesLocal();
@@ -1061,6 +1073,16 @@ Pen outlinePen)
                     {
                         case ShapeType.Rectangle: path.AddRectangle(rr._rect); break;
                         case ShapeType.Ellipse: path.AddEllipse(rr._rect); break;
+                        case ShapeType.Ring:
+                            {
+                                path.AddEllipse(rr._rect);
+                                float ratio = Math.Max(0.01f, Math.Min(0.99f, rr.RingInnerRatio));
+                                float iw = rr._rect.Width * ratio;
+                                float ih = rr._rect.Height * ratio;
+                                path.StartFigure();
+                                path.AddEllipse(-iw / 2f, -ih / 2f, iw, ih);
+                            }
+                            break;
                         case ShapeType.Hexagon: path.AddPolygon(rr.GetHexagonVerticesLocal()); break;
                         case ShapeType.Polygon:
                             var poly = rr.GetPolygonVerticesLocal();
@@ -1074,9 +1096,9 @@ Pen outlinePen)
                     if (outlinePen != null) g.DrawPath(outlinePen, path);
                 }
 
-              
 
-      
+
+
         }
        
         static GraphicsPath BuildLocalPath(RectRotate rr)
@@ -1099,6 +1121,15 @@ Pen outlinePen)
                     {
                         if (rr.IsPolygonClosed) p.AddPolygon(poly);
                         else p.AddLines(poly); // chưa đóng thì chỉ hiển thị outline
+                    }
+                    break;
+                case ShapeType.Ring:
+                    {
+                        p.AddEllipse(rr._rect);
+                        float ratio = Math.Max(0.01f, Math.Min(0.99f, rr.RingInnerRatio));
+                        float iw = rr._rect.Width * ratio;
+                        float ih = rr._rect.Height * ratio;
+                        p.AddEllipse(-iw / 2f, -ih / 2f, iw, ih);
                     }
                     break;
             }
@@ -1298,6 +1329,17 @@ Pen outlinePen)
                         PointF[] pts = rr.GetPolygonVerticesLocal();
                         if (pts != null && pts.Length >= 3)
                             path.AddPolygon(pts);
+                    }
+                    break;
+                case ShapeType.Ring:
+                    {
+                        // Outer ellipse
+                        path.AddEllipse(rr._rect);
+                        // Inner ellipse (dùng RingInnerRatio)
+                        float ratio = Math.Max(0.01f, Math.Min(0.99f, rr.RingInnerRatio));
+                        float iw = rr._rect.Width * ratio;
+                        float ih = rr._rect.Height * ratio;
+                        path.AddEllipse(-iw / 2f, -ih / 2f, iw, ih);
                     }
                     break;
             }
@@ -1551,10 +1593,25 @@ Pen outlinePen)
                 case ShapeType.Hexagon:
                     FillRectRotate(gc, RectDraw, zoom, new Point(posAutoScroll.X, posAutoScroll.Y), backcolor);
                     break;
-               
+                case ShapeType.Ring:
+                    {
+                        // Fill outer ellipse
+                        gc.FillEllipse(backcolor, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+                        // Cut out inner ellipse (fill with transparent/background)
+                        float ratio = Math.Max(0.01f, Math.Min(0.99f, RectDraw.RingInnerRatio));
+                        float iw = _rect.Width * ratio;
+                        float ih = _rect.Height * ratio;
+                        using (var clearBrush = new SolidBrush(Color.FromArgb(0, 0, 0, 0)))
+                        {
+                            gc.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                            gc.FillEllipse(clearBrush, -iw / 2f, -ih / 2f, iw, ih);
+                            gc.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                        }
+                    }
+                    break;
             }
-          
-              
+
+
             gc.ResetTransform();
         }
         public static void FillListRectMask(Graphics gc, Color cl, List<RectRotate> ListRect,RectRotate rotArea, System.Drawing.Point posAutoScroll, float zoom, int Opacity = 10)

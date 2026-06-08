@@ -44,6 +44,10 @@ namespace BeeInterface
 
         public void LoadPara()
         {
+            // Auto-migrate old Ellipse → Ring
+            Propety.EnsureRingShape();
+
+            EditRectRot1.ForceShape = ShapeType.Ring; // ToolCircle luôn ép Ring
             EditRectRot1.Rot = new List<RectRotate> { Propety.rotArea, Propety.rotMask };
             EditRectRot1.Refresh();
             EditRectRot1.IsHide = false;
@@ -99,14 +103,18 @@ namespace BeeInterface
             AdjClearNoise.Value = state.SizeClearSmall;
             AdjClearBig.Value = state.SizeClearBig;
 
-         
+            // LengthScan + RingInnerRatio
+            numLengthScan.Value = state.LengthScan;
+            AdjRingRatio.Value = state.RingInnerRatio;
+            // LengthScan chỉ active khi OutsideIn
+            numLengthScan.Enabled = state.CircleScanDirection == CircleScanDirection.OutsideIn;
+
             lay62.Enabled = false;
             switch (state.MethordEdge)
             {
                 case MethordEdge.StrongEdges:   btnStrongEdge.IsCLick = true; break;
                 case MethordEdge.CloseEdges:    btnCloseEdge.IsCLick = true; break;
                 case MethordEdge.Binary:        btnBinary.IsCLick = true; lay62.Enabled = true; break;
-              
             }
 
             switch (state.CircleScanDirection)
@@ -119,11 +127,8 @@ namespace BeeInterface
                     break;
             }
 
-           
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
-
-            
         }
         private void ToolVisualMatch_VisibleChanged(object sender, EventArgs e)
         {

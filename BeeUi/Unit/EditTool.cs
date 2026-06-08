@@ -192,7 +192,7 @@ namespace BeeUi
                 System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             piDB?.SetValue(c, true, null);
 
-            // gi˙p redraw mu?t khi resize
+            // giÔøΩp redraw mu?t khi resize
             var piRR = t.GetProperty("ResizeRedraw",
                 System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             piRR?.SetValue(c, true, null);
@@ -202,14 +202,12 @@ namespace BeeUi
             try
             {
                 Global.Step= Step;
-             
-                if (BeeCore.Common.listCamera[Global.IndexCCCD] == null)
+
+                if (!EnsureCameraReadyForEdit(Step))
                 {
-                    BeeCore.Common.listCamera[Global.IndexCCCD] = new Camera(new ParaCamera(), Global.IndexProgChoose);
-                    Global.ScanCCD.ShowDialog();
                     return;
                 }
-              
+
                 Global.IndexToolSelected = -1;
                 if(Global.EditTool.View.btnLive.IsCLick)
                 {
@@ -268,7 +266,9 @@ namespace BeeUi
                                     {
                                         Direction = MergeDirection.Vertical
                                     };
-                                    Mat matRS=new Mat();
+                                    // FIX: b·ªè allocation th·ª´a - matRS s·∫Ω ƒë∆∞·ª£c g√°n trong switch; n·∫øu kh√¥ng match case n√†o,
+                                    // matRegStep1=null s·∫Ω ƒë∆∞·ª£c handle b·ªüi null-check ·ªü d∆∞·ªõi (line 313)
+                                    Mat matRS = null;
                         switch(Global.NumProgFromPLC)
                                     {
                                         case 2:
@@ -316,10 +316,14 @@ namespace BeeUi
                                     if (BeeCore.Common.listCamera[Global.IndexCCCD] != null)
                                         if (!matRegStep1.IsDisposed)
                                         {
-                                            BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = new Mat();
-                                        BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = matRegStep1.Clone();
+                                            // FIX: dispose Mat c≈© tr∆∞·ªõc khi g√°n ƒë·ªÉ tr√°nh leak; b·ªè "new Mat()" th·ª´a ngay tr∆∞·ªõc Clone
+                                            BeeCore.Common.listCamera[Global.IndexCCCD].matRaw?.Dispose();
+                                            BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = matRegStep1.Clone();
                                             G.IsCalib = false;
+                                            // FIX: dispose ·∫£nh PictureBox c≈© tr∆∞·ªõc khi g√°n m·ªõi
+                                            var __oldImg1 = Global.EditTool.View.imgView.Image;
                                             Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+                                            __oldImg1?.Dispose();
                                             Global.EditTool.View.imgView.Invalidate();
                                             Global.EditTool.View.imgView.Update();
                                             ShowTool.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
@@ -440,7 +444,10 @@ namespace BeeUi
                                     {
                                         BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = matReg.Clone();
                                         G.IsCalib = false;
+                                        // FIX: dispose ·∫£nh c≈©
+                                        var __oldImg2 = Global.EditTool.View.imgView.Image;
                                         Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+                                        __oldImg2?.Dispose();
                                         Global.EditTool.View.imgView.Invalidate();
                                         Global.EditTool.View.imgView.Update();
                                         ShowTool.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
@@ -510,7 +517,10 @@ namespace BeeUi
                                         pEditTool.Visible = true;
                                         BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = matReg2.Clone();
                                         G.IsCalib = false;
+                                        // FIX: dispose ·∫£nh c≈©
+                                        var __oldImg3 = Global.EditTool.View.imgView.Image;
                                         Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+                                        __oldImg3?.Dispose();
                                         Global.EditTool.View.imgView.Invalidate();
                                         Global.EditTool.View.imgView.Update();
                                         ShowTool.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
@@ -606,29 +616,86 @@ namespace BeeUi
         
         }
       
-        public async void DesTroy()
+        private bool EnsureCameraReadyForEdit(Step step)
         {
+            if (step == Step.Run)
+                return true;
 
+            if (Global.Config != null && Global.Config.IsMultiProg)
+                Global.SelectProgram(Global.IndexProgChoose);
 
-            if (Global.Config.IsEnClock)
-                clock.Stop();
-        SaveData.Config(Global.Config);
-            View.tmContinuous.Enabled = false;
-            if(Global.LogsDashboard!=null)
-            Global.LogsDashboard.Dispose();
-           foreach (Camera camera in BeeCore.Common.listCamera)
-                if(camera!=null)
-				camera.DestroyAll();
+            EnsureCameraSlot(Global.IndexCCCD);
 
-            View.tmContinuous.Enabled = false;
-           
-            if (Global.Comunication.Protocol.IsConnected)
+            Camera camera = BeeCore.Common.listCamera[Global.IndexCCCD];
+            bool mustConnectBeforeEdit = Global.Config != null && Global.Config.IsMultiProg && (camera == null || !camera.IsConnected);
+
+            if (camera == null)
             {
-                Global.Comunication.Protocol.IO_Processing = IO_Processing.Close;
+                ParaCamera paraCamera = Global.listParaCamera[Global.IndexCCCD] ?? new ParaCamera();
+                Global.listParaCamera[Global.IndexCCCD] = paraCamera;
+                camera = new Camera(paraCamera, Global.IndexCCCD);
+                BeeCore.Common.listCamera[Global.IndexCCCD] = camera;
             }
 
-          
-            await Task.Delay(100);
+            if (mustConnectBeforeEdit)
+            {
+                ShowScanCameraDialog();
+                return false;
+            }
+
+            return true;
+        }
+
+        private static void EnsureCameraSlot(int index)
+        {
+            if (Global.listParaCamera == null)
+                Global.listParaCamera = new List<ParaCamera>();
+
+            while (Global.listParaCamera.Count <= index)
+                Global.listParaCamera.Add(null);
+
+            if (BeeCore.Common.listCamera == null)
+                BeeCore.Common.listCamera = new List<Camera>();
+
+            while (BeeCore.Common.listCamera.Count <= index)
+                BeeCore.Common.listCamera.Add(null);
+        }
+
+        private static void ShowScanCameraDialog()
+        {
+            if (Global.ScanCCD == null || Global.ScanCCD.IsDisposed)
+                Global.ScanCCD = new ScanCCD();
+
+            Global.ScanCCD.ShowDialog();
+        }
+        public async void DesTroy()
+        {
+            // FIX C9: async void cleanup ‚Äî wrap try-catch ƒë·ªÉ exception khi shutdown kh√¥ng crash app
+            try
+            {
+                if (Global.Config.IsEnClock)
+                    clock.Stop();
+                SaveData.Config(Global.Config);
+                View.tmContinuous.Enabled = false;
+                if (Global.LogsDashboard != null)
+                    Global.LogsDashboard.Dispose();
+                foreach (Camera camera in BeeCore.Common.listCamera)
+                    if (camera != null)
+                        camera.DestroyAll();
+
+                View.tmContinuous.Enabled = false;
+
+                if (Global.Comunication.Protocol.IsConnected)
+                {
+                    Global.Comunication.Protocol.IO_Processing = IO_Processing.Close;
+                }
+
+                await Task.Delay(100);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("[EditTool.DesTroy] " + ex);
+            }
         }
         private void Form_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -692,7 +759,7 @@ namespace BeeUi
 
             }    
              
-            // Chua ch?y gÏ
+            // Chua ch?y gÔøΩ
 
 
             lbVersion.Text= GetDllVersion("BeeUi.dll").ToString()??"----";
@@ -794,7 +861,7 @@ namespace BeeUi
             {
                 if (obj)
                 {
-                     formWarning = new FormWarning("ESOP", "N˙t nh?n ESOP d„ du?c Nh?n !!! " + Global.Ex);
+                     formWarning = new FormWarning("ESOP", "NÔøΩt nh?n ESOP dÔøΩ du?c Nh?n !!! " + Global.Ex);
                     formWarning.btnCancel.Visible = false;
                     formWarning.TopMost = true;
                     formWarning.Show();
@@ -853,7 +920,7 @@ namespace BeeUi
                 View.imgView.Image = System.Drawing.Image.FromFile(e.Path);
             }
             ShowTool.Full(View.imgView, View.imgView.Image.Size);
-            // lblInfo.Text = $"{e.Caption}  ({e.OriginalSize.Width}◊{e.OriginalSize.Height})";
+            // lblInfo.Text = $"{e.Caption}  ({e.OriginalSize.Width}ÔøΩ{e.OriginalSize.Height})";
         }
 
    
@@ -962,15 +1029,23 @@ namespace BeeUi
 
         private async void btnFull_Click(object sender, EventArgs e)
         {
-            btnFull.Checked=!btnFull.Checked; 
-            pTop.Visible = !btnFull.Checked;
-           pHeader.Visible = !btnFull.Checked;
-            View.pBtn.Visible = !btnFull.Checked;
-            btnShowTop.Checked = Global.EditTool.pTop.Visible;
-            btnShowDashBoard.Checked = Global.EditTool.pInfor.Visible;
-            btnMenu.Checked = Global.EditTool.View.pBtn.Visible;
-            await Task.Delay(100);
-            ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
+            // FIX C9: async void event handler ‚Äî wrap try-catch
+            try
+            {
+                btnFull.Checked = !btnFull.Checked;
+                pTop.Visible = !btnFull.Checked;
+                pHeader.Visible = !btnFull.Checked;
+                View.pBtn.Visible = !btnFull.Checked;
+                btnShowTop.Checked = Global.EditTool.pTop.Visible;
+                btnShowDashBoard.Checked = Global.EditTool.pInfor.Visible;
+                btnMenu.Checked = Global.EditTool.View.pBtn.Visible;
+                await Task.Delay(100);
+                ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("[btnFull_Click] " + ex);
+            }
         }
 
         private void btnShowTop_Click(object sender, EventArgs e)
@@ -1096,9 +1171,12 @@ namespace BeeUi
                 View.indexFile = 0;
                 View.pathFileSeleted = View.Files[View.indexFile];
 
-                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = View.listMat[View.indexFile]; ;// Cv2.ImRead(Files[indexFile]);
-              Native.SetImg(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = View.listMat[View.indexFile];// Cv2.ImRead(Files[indexFile]) ‚Äî FIX: b·ªè double-assign th·ª´a
+                Native.SetImg(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                // FIX: dispose ·∫£nh c≈©
+                var __oldImg4 = View.imgView.Image;
                 View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+                __oldImg4?.Dispose();
             }
         }
 
@@ -1122,7 +1200,10 @@ namespace BeeUi
               
                 if (View.indexFile >= View.listMat.Count) View.indexFile = 0;
                 BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = View.listMat[View.indexFile];// Cv2.ImRead(Files[indexFile]);
+                // FIX: dispose ·∫£nh c≈©
+                var __oldImg5 = View.imgView.Image;
                 View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+                __oldImg5?.Dispose();
             View.timer = CycleTimerSplit.Start();
             Global.TriggerNum = TriggerNum.Trigger1;
                 Global.StatusProcessing = StatusProcessing.Checking;
@@ -1159,7 +1240,10 @@ namespace BeeUi
                 else
                 {
                     BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = Cv2.ImRead(openFile.FileName);
+                    // FIX: dispose ·∫£nh c≈©
+                    var __oldImg6 = View.imgView.Image;
                     View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+                    __oldImg6?.Dispose();
                 }
             }
             }
@@ -1237,7 +1321,7 @@ namespace BeeUi
 
         private void btnLogo_Click(object sender, EventArgs e)
         {
-            // L?y v? trÌ ngay du?i n˙t
+            // L?y v? trÔøΩ ngay du?i nÔøΩt
             Point menuPoint = new Point(0, btnLogo.Height);
 
             //if(btnLogo.IsCLick)
@@ -1248,46 +1332,51 @@ namespace BeeUi
         Camera CameraLive;
         private async void btnLiveCam_Click(object sender, EventArgs e)
         {
-            numCam.Visible = !btnLive.IsCLick;
-            CameraLive = new Camera(new ParaCamera(), 5);
-            CameraLive.IndexCCD = 5;
-            CameraLive.IndexConnect = (int)numCam.Value;
-            CameraLive.Para.TypeCamera = TypeCamera.USB;
-            CameraLive.Init(CameraLive.Para.TypeCamera);
+            // FIX C9: async void event handler ‚Äî wrap try-catch
+            try
+            {
+                numCam.Visible = !btnLive.IsCLick;
+                CameraLive = new Camera(new ParaCamera(), 5);
+                CameraLive.IndexCCD = 5;
+                CameraLive.IndexConnect = (int)numCam.Value;
+                CameraLive.Para.TypeCamera = TypeCamera.USB;
+                CameraLive.Init(CameraLive.Para.TypeCamera);
 
-            CameraLive.IsConnected=await CameraLive.Connect("", CameraLive.Para.TypeCamera);
-            if(!CameraLive.IsConnected)
-            {
-                btnLive.IsCLick = false;
-                MessageBox.Show("Fail live camera");
-                return;
-            }
-            else
-            {
-                if(btnLive.IsCLick)
+                CameraLive.IsConnected = await CameraLive.Connect("", CameraLive.Para.TypeCamera);
+                if (!CameraLive.IsConnected)
                 {
-                    StartLive();
-                    if (!workLive.IsBusy)
-                        workLive.RunWorkerAsync();
+                    btnLive.IsCLick = false;
+                    MessageBox.Show("Fail live camera");
+                    return;
                 }
                 else
                 {
-                    StopLive();
-                    CameraLive.DisConnect(TypeCamera.USB);
-                   
-                }    
-              
-
-            }    
+                    if (btnLive.IsCLick)
+                    {
+                        StartLive();
+                        if (!workLive.IsBusy)
+                            workLive.RunWorkerAsync();
+                    }
+                    else
+                    {
+                        StopLive();
+                        CameraLive.DisConnect(TypeCamera.USB);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("[btnLiveCam_Click] " + ex);
+            }
         }
         private Thread _displayThread;
         private readonly AutoResetEvent _frameReady = new AutoResetEvent(false);
         private Bitmap _sharedFrame;
-        private int _uiPending; // 0: idle, 1: dang d?y frame lÍn UI
+        private int _uiPending; // 0: idle, 1: dang d?y frame lÔøΩn UI
         void PublishFrame(Bitmap src)
         {
             if (!Global.IsLive) { src.Dispose(); return; }
-            // Clone 1 l?n ? producer, khÙng clone trong display thread
+            // Clone 1 l?n ? producer, khÔøΩng clone trong display thread
             var clone = (Bitmap)src.Clone();
             var old = Interlocked.Exchange(ref _sharedFrame, clone); // gi? frame m?i nh?t, drop cu
             old?.Dispose();
@@ -1308,7 +1397,7 @@ namespace BeeUi
             _displayThread?.Join();
             _displayThread = null;
 
-            // Clear ?nh trÍn UI
+            // Clear ?nh trÔøΩn UI
             if (IsHandleCreated && !IsDisposed)
                 BeginInvoke(new Action(() =>
                 {
@@ -1317,7 +1406,7 @@ namespace BeeUi
                     old?.Dispose();
                 }));
 
-            // D?n r·c cÚn sÛt
+            // D?n rÔøΩc cÔøΩn sÔøΩt
             var leftover = Interlocked.Exchange(ref _sharedFrame, null);
             leftover?.Dispose();
             if (CameraLive.matRaw!= null)
@@ -1337,14 +1426,14 @@ namespace BeeUi
         {
             while (btnLive.IsCLick)
             {
-                _frameReady.WaitOne(50);        // ch? tÌn hi?u cÛ frame (ho?c timeout d? tho·t nhanh)
+                _frameReady.WaitOne(50);        // ch? tÔøΩn hi?u cÔøΩ frame (ho?c timeout d? thoÔøΩt nhanh)
                 if (!btnLive.IsCLick) break;
 
-                // L?y quy?n s? h?u frame m?i nh?t v‡ l‡m r?ng buffer chung
+                // L?y quy?n s? h?u frame m?i nh?t vÔøΩ lÔøΩm r?ng buffer chung
                 var frame = Interlocked.Exchange(ref _sharedFrame, null);
                 if (frame == null) continue;
 
-                // Ch? cho phÈp 1 c?p nh?t UI pending; n?u UI chua k?p x? l˝ ? drop frame
+                // Ch? cho phÔøΩp 1 c?p nh?t UI pending; n?u UI chua k?p x? lÔøΩ ? drop frame
                 if (Interlocked.Exchange(ref _uiPending, 1) == 1)
                 {
                     frame.Dispose();
@@ -1361,7 +1450,7 @@ namespace BeeUi
                             {
                                 var old = imgLive.Image;
                                 imgLive.Image = frame;   // chuy?n quy?n s? h?u cho PictureBox
-                                old?.Dispose();          // h?y ?nh cu sau khi g·n
+                                old?.Dispose();          // h?y ?nh cu sau khi gÔøΩn
                             }
                             finally
                             {
@@ -1398,14 +1487,14 @@ namespace BeeUi
                         if (!CameraLive.matRaw.Empty())
                         {
                            // Global.Config.SizeCCD = CameraLive.GetSzCCD();
-                            // matRaw l‡ OpenCvSharp.Mat
+                            // matRaw lÔøΩ OpenCvSharp.Mat
                             var bmp = BitmapConverter.ToBitmap(CameraLive.matRaw);
 
-                            // –?y frame m?i nh?t v‡ h?y frame cu m?t c·ch an to‡n, khÙng c?n lock
+                            // ÔøΩ?y frame m?i nh?t vÔøΩ h?y frame cu m?t cÔøΩch an toÔøΩn, khÔøΩng c?n lock
                             var old = Interlocked.Exchange(ref _sharedFrame, bmp);
                             old?.Dispose();
 
-                            // (tu? ch?n) b·o cho display thread l‡ cÛ frame m?i
+                            // (tu? ch?n) bÔøΩo cho display thread lÔøΩ cÔøΩ frame m?i
                             _frameReady?.Set();
                             //using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw))
                             //{
@@ -1476,7 +1565,7 @@ namespace BeeUi
             }
 
             //string tarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ProgramBackup.tar");
-            //// Import l?i v‡o \Program
+            //// Import l?i vÔøΩo \Program
             //TarProgramHelper.ImportToDefaultProgram(tarPath);
         }
 

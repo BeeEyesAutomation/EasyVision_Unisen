@@ -436,38 +436,40 @@ namespace BeeCore
             if (bound.Width <= 0 || bound.Height <= 0)
                 return new Mat();
 
-            Mat small = new Mat(src, bound);
-
-            // ===== 3. Tính lại center trong ROI nhỏ =====
-            float localCx = cx - bound.X;
-            float localCy = cy - bound.Y;
-
-            Point2f center = new Point2f(localCx, localCy);
-
-            // ===== 4. rotate ROI nhỏ =====
-            using (Mat M = Cv2.GetRotationMatrix2D(center, angleDeg, 1.0))
+            // FIX: wrap small và rotated trong using để tránh Mat leak khi early return
+            using (Mat small = new Mat(src, bound))
             {
+                // ===== 3. Tính lại center trong ROI nhỏ =====
+                float localCx = cx - bound.X;
+                float localCy = cy - bound.Y;
 
-                Mat rotated = new Mat();
-                Cv2.WarpAffine(
-                    small,
-                    rotated,
-                    M,
-                    small.Size(),
-                    InterpolationFlags.Linear,
-                    BorderTypes.Constant);
+                Point2f center = new Point2f(localCx, localCy);
 
-                // ===== 5. crop final =====
-                int x2 = (int)(localCx - w / 2);
-                int y2 = (int)(localCy - h / 2);
+                // ===== 4. rotate ROI nhỏ =====
+                using (Mat M = Cv2.GetRotationMatrix2D(center, angleDeg, 1.0))
+                using (Mat rotated = new Mat())
+                {
+                    Cv2.WarpAffine(
+                        small,
+                        rotated,
+                        M,
+                        small.Size(),
+                        InterpolationFlags.Linear,
+                        BorderTypes.Constant);
 
-                Rect finalRoi = new Rect(x2, y2, (int)w, (int)h);
-                finalRoi = finalRoi & new Rect(0, 0, rotated.Width, rotated.Height);
+                    // ===== 5. crop final =====
+                    int x2 = (int)(localCx - w / 2);
+                    int y2 = (int)(localCy - h / 2);
 
-                if (finalRoi.Width <= 0 || finalRoi.Height <= 0)
-                    return new Mat();
+                    Rect finalRoi = new Rect(x2, y2, (int)w, (int)h);
+                    finalRoi = finalRoi & new Rect(0, 0, rotated.Width, rotated.Height);
 
-                return new Mat(rotated, finalRoi).Clone();
+                    if (finalRoi.Width <= 0 || finalRoi.Height <= 0)
+                        return new Mat();
+
+                    using (Mat finalView = new Mat(rotated, finalRoi))
+                        return finalView.Clone();
+                }
             }
         }
         public static Mat CropRotatedRectUltraFast2(Mat src, RectRotate rot)
@@ -1044,6 +1046,25 @@ namespace BeeCore
                                 arr[i] = new OpenCvSharp.Point((int)Math.Round(p.X), (int)Math.Round(p.Y));
                             }
                             Cv2.FillPoly(mask, new[] { arr }, new Scalar(fillValue));
+                        }
+                        break;
+                    }
+
+                case ShapeType.Ring:
+                    {
+                        // Draw outer ellipse (fill)
+                        var outerBox = new RotatedRect(centerInMask, new Size2f(W, H), angleInPatch);
+                        Cv2.Ellipse(mask, outerBox, new Scalar(fillValue), -1);
+
+                        // Cut out inner ellipse (draw with INVERSE fill value)
+                        float ratio = Math.Max(0.01f, Math.Min(0.99f, rr.RingInnerRatio));
+                        int innerW = (int)Math.Round(W * ratio);
+                        int innerH = (int)Math.Round(H * ratio);
+                        if (innerW > 0 && innerH > 0)
+                        {
+                            byte inverseFill = (fillValue == 255) ? (byte)0 : (byte)255;
+                            var innerBox = new RotatedRect(centerInMask, new Size2f(innerW, innerH), angleInPatch);
+                            Cv2.Ellipse(mask, innerBox, new Scalar(inverseFill), -1);
                         }
                         break;
                     }

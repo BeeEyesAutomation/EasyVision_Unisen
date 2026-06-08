@@ -1542,6 +1542,82 @@ namespace
 		return std::isfinite(maxv) ? maxv : -1.0;
 	}
 
+	// Occlusion-robust NCC: chia template/ROI thành lưới ô, NCC từng ô, loại trimFrac ô
+	// tệ nhất (vùng keo/nhiễu cục bộ), rồi trung bình phần còn lại. Dùng làm hàm chấm điểm
+	// cho angle refinement: đỉnh score nằm ở góc thật vì các ô sạch quyết định.
+	static double RobustCellNCC(const cv::Mat& templ, const cv::Mat& roi, int grid, double trimFrac)
+	{
+		if (templ.empty() || roi.empty() || templ.size() != roi.size()) return -1.0;
+		if (templ.type() != CV_8UC1 || roi.type() != CV_8UC1) return -1.0;
+
+		const int g = std::max(2, grid);
+		const int cw = templ.cols / g;
+		const int ch = templ.rows / g;
+		if (cw < 4 || ch < 4) return ScoreSameSizeNCC(templ, roi); // ô quá nhỏ → fallback toàn khối
+
+		std::vector<double> cell;
+		cell.reserve((size_t)g * g);
+		for (int j = 0; j < g; ++j)
+			for (int i = 0; i < g; ++i)
+			{
+				const cv::Rect c(i * cw, j * ch, cw, ch);
+				const double s = ScoreSameSizeNCC(templ(c), roi(c));
+				if (std::isfinite(s)) cell.push_back(std::max(0.0, s));
+			}
+		if (cell.empty()) return -1.0;
+
+		std::sort(cell.begin(), cell.end()); // tăng dần
+		const double tf = std::max(0.0, std::min(0.9, trimFrac));
+		int drop = (int)std::floor(cell.size() * tf);
+		drop = std::min(drop, (int)cell.size() - 1); // luôn giữ ≥ 1 ô
+		double sum = 0.0; int cnt = 0;
+		for (size_t k = (size_t)drop; k < cell.size(); ++k) { sum += cell[k]; ++cnt; }
+		return cnt > 0 ? sum / cnt : -1.0;
+	}
+
+	// Gradient-orientation (shape) score kiểu Halcon — bền nhất với keo/che khuất cục bộ.
+	// Cả template và roiGray đã ở CÙNG frame (ROI đã rectify về trục template). Chấm tại các
+	// pixel BIÊN của template: so hướng gradient template vs ROI bằng |t·r| (polarity-invariant),
+	// chuẩn hoá theo tổng số pixel biên template.
+	//   - Pixel biên bị keo phủ → ROI phẳng (mag~0) hoặc lệch hướng → đóng góp ~0, KHÔNG kéo
+	//     điểm âm như NCC cường độ → không tạo cực đại giả ở góc nghiêng.
+	//   - Biên dịch chuyển do keo → tại đúng vị trí biên template, ROI không còn biên mạnh → 0.
+	//   => Góc tối ưu là góc căn được NHIỀU biên sạch nhất = góc thật.
+	static double GradientOrientationScore(
+		const cv::Mat& tGx, const cv::Mat& tGy, const cv::Mat& tEdgeMask, const cv::Mat& roiGray)
+	{
+		if (tGx.empty() || tGy.empty() || tEdgeMask.empty() || roiGray.empty()) return -1.0;
+		if (tGx.size() != roiGray.size() || tEdgeMask.size() != roiGray.size()) return -1.0;
+		if (roiGray.type() != CV_8UC1) return -1.0;
+
+		cv::Mat rGx, rGy;
+		cv::Sobel(roiGray, rGx, CV_32F, 1, 0, 3);
+		cv::Sobel(roiGray, rGy, CV_32F, 0, 1, 3);
+
+		double sum = 0.0;
+		int cnt = 0;
+		for (int y = 0; y < tGx.rows; ++y)
+		{
+			const float* tgx = tGx.ptr<float>(y);
+			const float* tgy = tGy.ptr<float>(y);
+			const uchar* em = tEdgeMask.ptr<uchar>(y);
+			const float* rgx = rGx.ptr<float>(y);
+			const float* rgy = rGy.ptr<float>(y);
+			for (int x = 0; x < tGx.cols; ++x)
+			{
+				if (!em[x]) continue;
+				const double tn = std::sqrt((double)tgx[x] * tgx[x] + (double)tgy[x] * tgy[x]);
+				if (tn < 1e-6) continue;
+				++cnt; // tính cả biên bị che (đóng góp 0) → chuẩn hoá đồng đều mọi góc
+				const double rn = std::sqrt((double)rgx[x] * rgx[x] + (double)rgy[x] * rgy[x]);
+				if (rn < 1e-6) continue; // ROI phẳng tại biên (keo nhoè/biên dịch) → 0
+				const double dot = ((double)tgx[x] * rgx[x] + (double)tgy[x] * rgy[x]) / (tn * rn);
+				sum += std::abs(dot); // polarity-invariant: chịu được đảo tương phản do keo
+			}
+		}
+		return cnt > 0 ? sum / cnt : -1.0;
+	}
+
 	static double EdgeIoU(const cv::Mat& a, const cv::Mat& b)
 	{
 		if (a.empty() || b.empty()) return 0.0;
@@ -2979,6 +3055,26 @@ List<Rotaterectangle>^ Pattern2::RunStableMatchOnFeatures(Pattern2StableConfig c
 		if (sb != nullptr)
 			sb->AppendLine(System::String::Format(CultureInfo::InvariantCulture, "coarseCount={0}", coarse->Count));
 
+		// Precompute template gradient direction (1 lần/scale) cho gradient-orientation refine.
+		// Dùng tplEdge (mask biên template) làm tập điểm chấm. Bền với keo ăn vào biên.
+		cv::Mat tplRefGx, tplRefGy, tplRefEdge;
+		if (cfg.EnableAngleRobustRefine && !tplGray.empty())
+		{
+			cv::Sobel(tplGray, tplRefGx, CV_32F, 1, 0, 3);
+			cv::Sobel(tplGray, tplRefGy, CV_32F, 0, 1, 3);
+			if (!tplEdge.empty() && tplEdge.size() == tplGray.size() && tplEdge.type() == CV_8UC1)
+				tplRefEdge = tplEdge;
+			else
+			{
+				cv::Mat mag, mag8;
+				cv::magnitude(tplRefGx, tplRefGy, mag);
+				double mx = 0.0; cv::minMaxLoc(mag, nullptr, &mx);
+				if (mx > 1e-6) mag.convertTo(mag8, CV_8UC1, 255.0 / mx);
+				else mag8 = cv::Mat::zeros(tplGray.size(), CV_8UC1);
+				cv::threshold(mag8, tplRefEdge, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+			}
+		}
+
 		for each(Rotaterectangle rr in coarse)
 		{
 			const int candidateId = debugCandidateId++;
@@ -2986,7 +3082,41 @@ List<Rotaterectangle>^ Pattern2::RunStableMatchOnFeatures(Pattern2StableConfig c
 			const int h = std::max(1, (int)std::round(rr.Height));
 			if (w <= 4 || h <= 4) continue;
 
-			const double angDeg = rr.AngleDeg;
+			const cv::Point2f center((float)rr.Cx, (float)rr.Cy);
+
+			// Occlusion-robust angle refinement: quét lại góc quanh góc coarse, chấm bằng
+			// gradient-orientation score (Halcon-style) để keo ăn vào biên không kéo lệch góc.
+			// Tắt mặc định (EnableAngleRobustRefine).
+			double angDeg = rr.AngleDeg;
+			if (cfg.EnableAngleRobustRefine && w > 8 && h > 8)
+			{
+				const double span = std::max(0.5, cfg.AngleRefineSpanDeg);
+				const double step = std::max(0.1, cfg.AngleRefineStepDeg);
+				double bestRob = -2.0;
+				double bestAng = angDeg;
+				for (double a = rr.AngleDeg - span; a <= rr.AngleDeg + span + 1e-9; a += step)
+				{
+					const double ar = a * D2R;
+					const cv::Point2f rvW((float)(w * std::cos(ar)), (float)(-w * std::sin(ar)));
+					const cv::Point2f rvH((float)(h * std::sin(ar)), (float)(h * std::cos(ar)));
+					const cv::Point2f rlt(
+						center.x - 0.5f * (rvW.x + rvH.x),
+						center.y - 0.5f * (rvW.y + rvH.y));
+					cv::Mat pad;
+					img->GetRotatedROI(srcValidatorGray, cv::Size(w, h), rlt, a, pad);
+					if (pad.empty() || pad.cols < w + 6 || pad.rows < h + 6) continue;
+					cv::Mat roiG = pad(cv::Rect(3, 3, w, h)).clone();
+					if (roiG.size() != tplGray.size())
+						cv::resize(roiG, roiG, tplGray.size(), 0, 0, cv::INTER_LINEAR);
+					// Gradient-orientation score (Halcon-style): bền với keo ăn vào biên.
+					double rob = GradientOrientationScore(tplRefGx, tplRefGy, tplRefEdge, roiG);
+					if (rob < -0.5) // fallback nếu thiếu gradient template
+						rob = RobustCellNCC(tplNorm, NormalizeForCompare(roiG), cfg.AngleRefineGrid, cfg.AngleRefineTrimFrac);
+					if (rob > bestRob) { bestRob = rob; bestAng = a; }
+				}
+				angDeg = bestAng;
+			}
+
 			const double angRad = angDeg * D2R;
 
 			const cv::Point2f vW(
@@ -2996,7 +3126,6 @@ List<Rotaterectangle>^ Pattern2::RunStableMatchOnFeatures(Pattern2StableConfig c
 				(float)(h * std::sin(angRad)),
 				(float)(h * std::cos(angRad)));
 
-			const cv::Point2f center((float)rr.Cx, (float)rr.Cy);
 			const cv::Point2f ptLT(
 				center.x - 0.5f * (vW.x + vH.x),
 				center.y - 0.5f * (vW.y + vH.y));

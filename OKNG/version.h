@@ -2,8 +2,8 @@
 
 #define VER_MAJOR 1
 #define VER_MINOR 1
-#define VER_BUILD 14
-#define VER_REVISION 260521
+#define VER_BUILD 7
+#define VER_REVISION 260608
 
 #define STRINGIZE2(x) #x
 #define STRINGIZE(x) STRINGIZE2(x)

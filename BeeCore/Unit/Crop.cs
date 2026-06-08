@@ -71,11 +71,10 @@ namespace BeeCore
 
                 try
                 {
-                    if (matProcess!=null)
+                    if (matProcess != null)
                         if (!matProcess.IsDisposed)
-                        if (!matProcess.IsDisposed)
-                        if (!matProcess.Empty())
-                            matProcess.Release();
+                            if (!matProcess.Empty())
+                                matProcess.Release();
                     if (rotArea != null)
                     {
                         matProcess = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask);

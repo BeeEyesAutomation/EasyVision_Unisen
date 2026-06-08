@@ -185,6 +185,7 @@ namespace BeeCore
                 if (PassDebounce())
                 {
                     int trigIndex = NextTriggerIndex();
+                    Global.SelectProgramForTrigger(Global.TriggerNum);
 
                     TriggerEvent ev = new TriggerEvent
                     {

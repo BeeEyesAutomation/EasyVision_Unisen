@@ -109,8 +109,21 @@ namespace BeeInterface.Group
             btnRect.IsCLick = rotCurrent.Shape == ShapeType.Rectangle;
             btnHexagon.IsCLick = rotCurrent.Shape == ShapeType.Hexagon;
             btnPolygon.IsCLick = rotCurrent.Shape == ShapeType.Polygon;
+            if (btnRing != null)
+                btnRing.IsCLick = rotCurrent.Shape == ShapeType.Ring;
             btnWhite.IsCLick = rotCurrent.IsWhite;
             btnBlack.IsCLick = !rotCurrent.IsWhite;
+
+            // Nếu ForceShape đang bật, ẩn các nút shape khác, chỉ hiện nút đúng shape
+            if (ForceShape.HasValue)
+            {
+                bool isRing = ForceShape.Value == ShapeType.Ring;
+                btnRect.Visible = !isRing;
+                btnElip.Visible = !isRing;
+                btnHexagon.Visible = !isRing;
+                btnPolygon.Visible = !isRing;
+                if (btnRing != null) btnRing.Visible = isRing;
+            }
         }
 
         private void DetachGlobalEvents()
@@ -159,6 +172,12 @@ namespace BeeInterface.Group
             }    
           
         }
+
+        /// <summary>
+        /// Khi != null, ép shape cố định — ẩn các nút shape khác.
+        /// Dùng cho ToolCircle: ForceShape = ShapeType.Ring.
+        /// </summary>
+        public ShapeType? ForceShape { get; set; }
 
         ShapeType ShapeType = ShapeType.Rectangle;
         private void SetShapeFor( ShapeType shape)
@@ -251,6 +270,7 @@ namespace BeeInterface.Group
                 case ShapeType.Rectangle:
                 case ShapeType.Ellipse:
                 case ShapeType.Hexagon:
+                case ShapeType.Ring:
                     // Không cần xoá toàn bộ; chỉ đảm bảo không kéo theo trạng thái cũ
                     rotCurrent._dragAnchor = AnchorPoint.None;
                     rotCurrent.ActiveVertexIndex = -1;
@@ -318,6 +338,12 @@ namespace BeeInterface.Group
             ShapeType = ShapeType.Polygon;
 
             SetShapeFor( ShapeType);
+        }
+
+        private void btnRing_Click(object sender, EventArgs e)
+        {
+            ShapeType = ShapeType.Ring;
+            SetShapeFor(ShapeType);
         }
         private void btnNone_Click(object sender, EventArgs e)
         {

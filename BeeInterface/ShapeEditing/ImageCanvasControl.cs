@@ -292,7 +292,7 @@ namespace BeeInterface.ShapeEditing
 
             if (rr.IsEmptyForCreate())
             {
-                if (rr.Shape == ShapeType.Rectangle || rr.Shape == ShapeType.Ellipse || rr.Shape == ShapeType.Hexagon)
+                if (rr.Shape == ShapeType.Rectangle || rr.Shape == ShapeType.Ellipse || rr.Shape == ShapeType.Hexagon || rr.Shape == ShapeType.Ring)
                 {
                     InteractionState.IsNewShape = true;
                     InteractionState.MaybeCreate = true;
@@ -491,7 +491,7 @@ namespace BeeInterface.ShapeEditing
             var center = new PointF(InteractionState.CreateStartImage.X + w / 2f, yTop + h / 2f);
 
             ShapeType shape = rrSrc != null ? rrSrc.Shape : ShapeType.Rectangle;
-            if (shape != ShapeType.Rectangle && shape != ShapeType.Ellipse && shape != ShapeType.Hexagon)
+            if (shape != ShapeType.Rectangle && shape != ShapeType.Ellipse && shape != ShapeType.Hexagon && shape != ShapeType.Ring)
                 shape = ShapeType.Rectangle;
 
             var rrNew = new RectRotate(new RectangleF(-w / 2f, -h / 2f, w, h), center, 0f, AnchorPoint.None)

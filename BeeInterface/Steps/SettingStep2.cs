@@ -27,26 +27,11 @@ namespace BeeInterface
 
         private void btnNextStep_Click(object sender, EventArgs e)
         {
-            if (Global.ParaCommon.matRegister != null)
+            SyncSelectedCamera();
+            Bitmap registerBitmap = GetSelectedRegisterBitmap();
+            if (registerBitmap != null)
             {
-                switch (Global.IndexProgChoose)
-                {
-                    case 0:
-                        Global.Config.SizeCCD = Global.ParaCommon.matRegister.Size;// = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                        break;
-                    case 1:
-                        Global.Config.SizeCCD = Global.ParaCommon.matRegister2.Size;// Global.ParaCommon.matRegister2 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                        break;
-                    case 2:
-                        Global.Config.SizeCCD = Global.ParaCommon.matRegister3.Size;//  Global.ParaCommon.matRegister3 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                        break;
-                    case 3:
-                        Global.Config.SizeCCD = Global.ParaCommon.matRegister4.Size;//   Global.ParaCommon.matRegister4 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                        break;
-                }
-                //if (!Global.ParaCommon.matRegister.IsDisposed())
-                //    Global.Config.SizeCCD = Global.ParaCommon.matRegister.Size;
-
+                Global.Config.SizeCCD = registerBitmap.Size;
                 Global.Step = Step.Step3;
             }
             else
@@ -58,18 +43,21 @@ namespace BeeInterface
         bool IsLoad = false;
         public void LoadImg()
         {
+            SyncSelectedCamera();
             IsLoad = true;
             if (Global.listRegsImg == null)
             {
                 Global.listRegsImg = new List<ItemRegsImg>();
-                if (Global.ParaCommon.matRegister != null)
-                    Global.listRegsImg.Add(new ItemRegsImg("IMAGE", Global.ParaCommon.matRegister));
+                Bitmap registerBitmap = GetSelectedRegisterBitmap();
+                if (registerBitmap != null)
+                    Global.listRegsImg.Add(new ItemRegsImg("IMAGE", registerBitmap));
             }
             if (Global.listRegsImg.Count == 0)
             {
                 Global.listRegsImg = new List<ItemRegsImg>();
-                if (Global.ParaCommon.matRegister != null)
-                    Global.listRegsImg.Add(new ItemRegsImg("IMAGE", Global.ParaCommon.matRegister));
+                Bitmap registerBitmap = GetSelectedRegisterBitmap();
+                if (registerBitmap != null)
+                    Global.listRegsImg.Add(new ItemRegsImg("IMAGE", registerBitmap));
             }
             RegisterImg.LoadAllItem(Global.listRegsImg, Global.ParaCommon.ListIndexMatReg[Global.IndexProgChoose]);
           
@@ -88,6 +76,7 @@ namespace BeeInterface
        
         private void btnLoadImge_Click(object sender, EventArgs e)
         {
+            SyncSelectedCamera();
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.Multiselect = false;
             if (fileDialog.ShowDialog() == DialogResult.OK)
@@ -100,21 +89,7 @@ namespace BeeInterface
                     if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty())
                     {
 
-                        switch (Global.IndexProgChoose)
-                        {
-                            case 0:
-                                Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                                break;
-                            case 1:
-                                Global.ParaCommon.matRegister2 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                                break;
-                            case 2:
-                                Global.ParaCommon.matRegister3 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                                break;
-                            case 3:
-                                Global.ParaCommon.matRegister4 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                                break;
-                        }
+                        SetSelectedRegisterBitmap(BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone()));
                     }
                     else
                         return;
@@ -136,6 +111,7 @@ namespace BeeInterface
 
         private void btnCapCamera_Click(object sender, EventArgs e)
         {
+            SyncSelectedCamera();
             Global.Comunication.Protocol.IsOnLight = true;
             Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
             Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
@@ -157,48 +133,55 @@ namespace BeeInterface
 
         private void workRead_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            SyncSelectedCamera();
+            Camera camera = GetConnectedCamera("ReadMaster");
+            if (camera == null)
+                return;
+
+            try
+            {
+                camera.Read();
+            }
+            catch (Exception ex)
+            {
+                Global.LogError("ReadMaster", "Read camera failed. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD, ex);
+                return;
+            }
           
-            BeeCore.Common.listCamera[Global.IndexCCCD].Read();
-          
-            if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw != null)
+            if (camera.matRaw != null)
             {
 
 
-                if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.IsDisposed)
+                if (!camera.matRaw.IsDisposed)
                 {
-                    if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty())
+                    if (!camera.matRaw.Empty())
                     {
-                        switch (Global.IndexProgChoose)
-                        {
-                            case 0:
-                                Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                                break;
-                            case 1:
-                                Global.ParaCommon.matRegister2 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                                break;
-                            case 2:
-                                Global.ParaCommon.matRegister3 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                                break;
-                            case 3:
-                                Global.ParaCommon.matRegister4 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                                break;
-                        }
+                        SetSelectedRegisterBitmap(BitmapConverter.ToBitmap(camera.matRaw.Clone()));
                     }
                     else
+                    {
+                        Global.LogError("ReadMaster", "Read image is empty. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
                         return;
+                    }
                 }
                 else
-                    
+                {
+                    Global.LogError("ReadMaster", "Read image is disposed. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
                     return;
+                }
             }
             else
-                { return; }
+            {
+                Global.LogError("ReadMaster", "Read image is null. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
+                return;
+            }
 
             
-                btnNextStep.Enabled = true;
-            Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
-            Global.Config.SizeCCD =new System.Drawing.Size( BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Height);
-          if (Global.ParaCommon.matRegister.IsDisposed())
+            btnNextStep.Enabled = true;
+            Global.EditTool.View.imgView.Image = camera.matRaw.ToBitmap();
+            Global.Config.SizeCCD =new System.Drawing.Size( camera.matRaw.Size().Width, camera.matRaw.Size().Height);
+          Bitmap registerBitmap = GetSelectedRegisterBitmap();
+          if (registerBitmap == null || registerBitmap.IsDisposed())
             { MessageBox.Show("Fail"); }    
 
         }
@@ -217,7 +200,7 @@ namespace BeeInterface
 
         private void RegisterImg_SelectedItemChanged(object sender, RegisterImgSelectionChangedEventArgs e)
         {
-      
+            SyncSelectedCamera();
             if (IsLoad)
             {
                 IsLoad = false;
@@ -228,7 +211,7 @@ namespace BeeInterface
             {if(clone==null)
                 {
                     BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = new Mat();
-                    Global.ParaCommon.matRegister = null;
+                    SetSelectedRegisterBitmap(null);
                   //  Global.EditTool.View.imgView.Image.Dispose();
                     BeginInvoke(new Action(() =>
                     {
@@ -240,21 +223,7 @@ namespace BeeInterface
                 }    
                 // phần Global của bạn — giữ nguyên
                 BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = clone.Clone();
-                switch (Global.IndexProgChoose)
-                {
-                    case 0:
-                        Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                        break;
-                    case 1:
-                        Global.ParaCommon.matRegister2 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                        break;
-                    case 2:
-                        Global.ParaCommon.matRegister3 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                        break;
-                    case 3:
-                        Global.ParaCommon.matRegister4 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
-                        break;
-                }
+                SetSelectedRegisterBitmap(BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone()));
              //   Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
                 Global.Config.SizeCCD = new System.Drawing.Size(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Height);
              //   Global.EditTool.View.matResgiter = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone();
@@ -274,6 +243,93 @@ namespace BeeInterface
         private void RegisterImg_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private static void SyncSelectedCamera()
+        {
+            if (Global.Config != null && Global.Config.IsMultiProg)
+                Global.SelectProgram(Global.IndexProgChoose);
+
+            EnsureCameraSlot(Global.IndexCCCD);
+        }
+
+        private static void EnsureCameraSlot(int index)
+        {
+            if (Global.listParaCamera == null)
+                Global.listParaCamera = new List<ParaCamera>();
+
+            while (Global.listParaCamera.Count <= index)
+                Global.listParaCamera.Add(null);
+
+            if (BeeCore.Common.listCamera == null)
+                BeeCore.Common.listCamera = new List<Camera>();
+
+            while (BeeCore.Common.listCamera.Count <= index)
+                BeeCore.Common.listCamera.Add(null);
+
+            if (Global.listParaCamera[index] == null)
+                Global.listParaCamera[index] = new ParaCamera();
+
+            if (BeeCore.Common.listCamera[index] == null)
+                BeeCore.Common.listCamera[index] = new Camera(Global.listParaCamera[index], index);
+        }
+
+        private static Camera GetConnectedCamera(string source)
+        {
+            if (BeeCore.Common.listCamera == null || Global.IndexCCCD < 0 || Global.IndexCCCD >= BeeCore.Common.listCamera.Count)
+            {
+                Global.LogError(source, "Camera slot is missing. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
+                return null;
+            }
+
+            Camera camera = BeeCore.Common.listCamera[Global.IndexCCCD];
+            if (camera == null)
+            {
+                Global.LogError(source, "Camera is null. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
+                return null;
+            }
+
+            if (!camera.IsConnected)
+            {
+                Global.LogError(source, "Camera is not connected. Program=" + Global.IndexProgChoose + ", Camera=" + Global.IndexCCCD);
+                return null;
+            }
+
+            return camera;
+        }
+
+        private static Bitmap GetSelectedRegisterBitmap()
+        {
+            switch (Global.IndexProgChoose)
+            {
+                case 1:
+                    return Global.ParaCommon.matRegister2;
+                case 2:
+                    return Global.ParaCommon.matRegister3;
+                case 3:
+                    return Global.ParaCommon.matRegister4;
+                default:
+                    return Global.ParaCommon.matRegister;
+            }
+        }
+
+        private static void SetSelectedRegisterBitmap(Bitmap bitmap)
+        {
+            switch (Global.IndexProgChoose)
+            {
+                case 1:
+                    Global.ParaCommon.matRegister2 = bitmap;
+                    break;
+                case 2:
+                    Global.ParaCommon.matRegister3 = bitmap;
+                    break;
+                case 3:
+                    Global.ParaCommon.matRegister4 = bitmap;
+                    break;
+                default:
+                    Global.ParaCommon.matRegister = bitmap;
+                    break;
+            }
         }
     }
 }

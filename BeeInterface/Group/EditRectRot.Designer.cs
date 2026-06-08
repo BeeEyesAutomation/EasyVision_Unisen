@@ -43,6 +43,7 @@
             this.btnElip = new BeeInterface.RJButton();
             this.btnRect = new BeeInterface.RJButton();
             this.btnNone = new BeeInterface.RJButton();
+            this.btnRing = new BeeInterface.RJButton();
             this.layLimit = new System.Windows.Forms.TableLayoutPanel();
             this.btnEdit = new BeeInterface.RJButton();
             this.label20 = new System.Windows.Forms.Label();
@@ -261,6 +262,7 @@
             this.lay23.Controls.Add(this.btnElip, 2, 0);
             this.lay23.Controls.Add(this.btnRect, 1, 0);
             this.lay23.Controls.Add(this.btnNone, 5, 0);
+            this.lay23.Controls.Add(this.btnRing, 0, 0);
             this.lay23.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lay23.Location = new System.Drawing.Point(5, 150);
             this.lay23.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
@@ -556,7 +558,65 @@
             this.btnNone.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnNone.UseVisualStyleBackColor = false;
             this.btnNone.Click += new System.EventHandler(this.btnNone_Click);
-            // 
+            //
+            // btnRing
+            //
+            this.btnRing.AutoFont = true;
+            this.btnRing.AutoFontHeightRatio = 0.75F;
+            this.btnRing.AutoFontMax = 100F;
+            this.btnRing.AutoFontMin = 6F;
+            this.btnRing.AutoFontWidthRatio = 0.92F;
+            this.btnRing.AutoImage = true;
+            this.btnRing.AutoImageMaxRatio = 0.75F;
+            this.btnRing.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnRing.AutoImageTint = true;
+            this.btnRing.BackColor = System.Drawing.Color.White;
+            this.btnRing.BackgroundColor = System.Drawing.Color.White;
+            this.btnRing.BorderColor = System.Drawing.Color.White;
+            this.btnRing.BorderRadius = 10;
+            this.btnRing.BorderSize = 1;
+            this.btnRing.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnRing.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnRing.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnRing.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnRing.Corner = BeeGlobal.Corner.None;
+            this.btnRing.DebounceResizeMs = 6;
+            this.btnRing.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnRing.FlatAppearance.BorderSize = 0;
+            this.btnRing.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRing.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.07813F);
+            this.btnRing.ForeColor = System.Drawing.Color.Black;
+            this.btnRing.Image = null;
+            this.btnRing.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRing.ImageDisabled = null;
+            this.btnRing.ImageHover = null;
+            this.btnRing.ImageNormal = null;
+            this.btnRing.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnRing.ImagePressed = null;
+            this.btnRing.ImageTextSpacing = 6;
+            this.btnRing.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnRing.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnRing.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnRing.ImageTintOpacity = 0.5F;
+            this.btnRing.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnRing.IsCLick = false;
+            this.btnRing.IsNotChange = false;
+            this.btnRing.IsRect = false;
+            this.btnRing.IsTouch = false;
+            this.btnRing.IsUnGroup = false;
+            this.btnRing.Location = new System.Drawing.Point(9, 3);
+            this.btnRing.Margin = new System.Windows.Forms.Padding(0);
+            this.btnRing.Multiline = false;
+            this.btnRing.Name = "btnRing";
+            this.btnRing.Size = new System.Drawing.Size(73, 44);
+            this.btnRing.TabIndex = 61;
+            this.btnRing.Text = "Ring";
+            this.btnRing.TextColor = System.Drawing.Color.Black;
+            this.btnRing.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnRing.UseVisualStyleBackColor = false;
+            this.btnRing.Visible = false;
+            this.btnRing.Click += new System.EventHandler(this.btnRing_Click);
+            //
             // layLimit
             // 
             this.layLimit.BackColor = System.Drawing.Color.White;
@@ -1278,6 +1338,7 @@
         private RJButton btnElip;
         private RJButton btnRect;
         private RJButton btnNone;
+        public RJButton btnRing;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TableLayoutPanel layRange;
         private RJButton btnCropFull;

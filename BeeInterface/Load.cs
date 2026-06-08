@@ -35,7 +35,7 @@ namespace BeeInterface
             Global.itemNews.Add(new ItemNew(TypeTool.Corner, GroupTool.Extra_Tool_1, Properties.Resources.Corner, Properties.Resources.Corner, "Content.."));
             Global.itemNews.Add(new ItemNew(TypeTool.Measure, GroupTool.Extra_Tool_1, Properties.Resources.Measure, Properties.Resources.Measure, "Content.."));
        
-            Global.itemNews.Add(new ItemNew(TypeTool.Learning, GroupTool.Extra_Tool_2, Properties.Resources.Learning, Properties.Resources.Learning, "Content..",Global.IsLearning));
+            Global.itemNews.Add(new ItemNew(TypeTool.Learning, GroupTool.Extra_Tool_2, Properties.Resources.Pattern, Properties.Resources.Learning, "Content..",Global.IsLearning));
             Global.itemNews.Add(new ItemNew(TypeTool.MultiLearning, GroupTool.Extra_Tool_2, Properties.Resources.Learning, Properties.Resources.Learning, "Content.."));
 
             Global.itemNews.Add(new ItemNew(TypeTool.CraftOCR, GroupTool.Extra_Tool_2, Properties.Resources.OCR, Properties.Resources.contentOCR, "Content..",Global.IsOCR));

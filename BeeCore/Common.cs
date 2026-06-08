@@ -313,24 +313,27 @@ namespace BeeCore
                         {
 
 
-                           
+                            if (File.Exists("Tool\\Learning.py"))
+                            {
                                 try
                                 {
                                     Global.IsIntialPython = true;
-                                    G.np = Py.Import("numpy");
+
                                     dynamic mod = Py.Import("Tool.Learning");
                                     dynamic cls = mod.GetAttr("ObjectDetector"); // class
                                     G.objYolo = cls.Invoke();
                                     Global.IsLearning = true;
-                                File.WriteAllText("OK.txt", "");
-                            }
+                                    File.WriteAllText("OK.txt", "");
+                                }
                                 catch (Exception ex)
                                 {
-                                File.WriteAllText("ErrLearning.txt" ,ex.Message);
-                                    Global.IsLearning = false;
+                                    File.WriteAllText("ErrLearning.txt", ex.Message);
+                                    Global.IsLearning = true;
                                 }
-                          
-                            if(Directory.Exists( Global.PathPython+ "\\Lib\\site-packages\\craft_text_detector"))//
+                            }
+                          else
+                                Global.IsLearning = true;
+                            if (Directory.Exists( Global.PathPython+ "\\Lib\\site-packages\\craft_text_detector"))//
                              
                             {
                                 try

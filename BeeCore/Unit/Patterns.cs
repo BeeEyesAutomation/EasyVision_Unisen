@@ -429,11 +429,28 @@ namespace BeeCore
         private int delayTrig;
         public List< System.Drawing.Point > listP_Center=new List<System.Drawing.Point>();
 
+        // Sub-template hits parallel với rectRotates / ResultItems. Index i = sub hits của
+        // main instance thứ i. Reset mỗi DoWork. [NonSerialized] vì hits chỉ runtime.
+        [NonSerialized]
+        public List<List<SubHit>> SubHitsPerItem = new List<List<SubHit>>();
+
         // ===== Multi-template mode =====
-        // Khi IsMultiTemplate=true, engine bỏ qua single-template flow và đi qua API batch
-        // (Pattern.LearnPatternBatchBegin/AddBatchTemplate/MatchBatchStable). Backward-compat:
-        // serialize mặc định IsMultiTemplate=false, MultiTemplates=[] cho project cũ.
-        public bool IsMultiTemplate { get; set; } = false;
+        // 3-state mode (Single / Multi / MultiNoLimit). MultiNoLimit = Multi nhưng không có
+        // per-label RotLimit + cho phép nhiều row chia sẻ cùng Label (judge per unique label).
+        // Backward-compat: project JSON cũ chỉ có IsMultiTemplate (bool) → shim getter/setter
+        // map sang TemplateMode (Single ↔ Multi). MultiNoLimit chỉ set qua TemplateMode.
+        public PatternMode TemplateMode { get; set; } = PatternMode.Single;
+
+        // Shim: chỉ phục vụ load project cũ. Engine/UI mới đọc TemplateMode trực tiếp.
+        public bool IsMultiTemplate
+        {
+            get => TemplateMode != PatternMode.Single;
+            set
+            {
+                if (value && TemplateMode == PatternMode.Single) TemplateMode = PatternMode.Multi;
+                else if (!value) TemplateMode = PatternMode.Single;
+            }
+        }
 
         // Lazy getter: BinaryFormatter/[Serializable] dùng FormatterServices.GetUninitializedObject
         // bypass auto-property initializer → field có thể null sau deserialize. Phải lazy-init
@@ -456,6 +473,305 @@ namespace BeeCore
         // (Pattern.SetImgeRaw với rotLimitCli). Nếu false (default), match toàn bộ ảnh raw
         // 1 lần qua MatchBatchStable. Theo yêu cầu UX: toggle "Full | Crop".
         public bool CheckByAreaLimit { get; set; } = false;
+
+        // ===== 6-Method Shim (Q3: giữ TemplateMode + CheckByAreaLimit làm storage) =====
+        // PatternMethod là enum 6-state expose ra UI; runtime đọc thẳng TemplateMode +
+        // CheckByAreaLimit nên backend không đổi. Project JSON cũ chỉ có 2 field này.
+        // - SingleLabel{None,AreaLimit,NoLimit}: chỉ phân biệt qua field _singleAreaPolicy
+        //   (transient field — không cần persist vì Single mode hiện tại đã match toàn ROI).
+        public PatternMethod Method
+        {
+            get
+            {
+                if (TemplateMode == PatternMode.Single)
+                {
+                    switch (_singleAreaPolicy)
+                    {
+                        case SingleAreaPolicy.AreaLimit: return PatternMethod.SingleLabelAreaLimit;
+                        case SingleAreaPolicy.NoLimit: return PatternMethod.SingleLabelNoLimit;
+                        default: return PatternMethod.SingleLabel;
+                    }
+                }
+                if (TemplateMode == PatternMode.MultiNoLimit) return PatternMethod.MultiLabelNoLimit;
+                return CheckByAreaLimit ? PatternMethod.MultiLabelAreaLimit : PatternMethod.MultiLabel;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case PatternMethod.SingleLabel:
+                        TemplateMode = PatternMode.Single;
+                        _singleAreaPolicy = SingleAreaPolicy.None;
+                        break;
+                    case PatternMethod.SingleLabelAreaLimit:
+                        TemplateMode = PatternMode.Single;
+                        _singleAreaPolicy = SingleAreaPolicy.AreaLimit;
+                        break;
+                    case PatternMethod.SingleLabelNoLimit:
+                        TemplateMode = PatternMode.Single;
+                        _singleAreaPolicy = SingleAreaPolicy.NoLimit;
+                        break;
+                    case PatternMethod.MultiLabel:
+                        TemplateMode = PatternMode.Multi;
+                        CheckByAreaLimit = false;
+                        break;
+                    case PatternMethod.MultiLabelAreaLimit:
+                        TemplateMode = PatternMode.Multi;
+                        CheckByAreaLimit = true;
+                        break;
+                    case PatternMethod.MultiLabelNoLimit:
+                        TemplateMode = PatternMode.MultiNoLimit;
+                        CheckByAreaLimit = false;
+                        break;
+                }
+                MarkBatchDirty();
+            }
+        }
+
+        // Persist SingleArea policy chỉ cần khi user chọn AreaLimit/NoLimit trong Single mode.
+        // Field public để serializer ghi nhận; legacy project (=Single mode) load với None.
+        public SingleAreaPolicy SingleAreaMode
+        {
+            get { return _singleAreaPolicy; }
+            set { _singleAreaPolicy = value; }
+        }
+        private SingleAreaPolicy _singleAreaPolicy = SingleAreaPolicy.None;
+
+        // ===== Sub-templates cho Single modes =====
+        // Multi modes lưu sub-list per entry (Pattern2TemplateEntry.SubTemplates). Single modes
+        // chỉ có 1 main template duy nhất → sub-list ở level Patterns. Lazy-init để load JSON cũ.
+        private List<SubTemplateEntry> _subTemplatesSingle;
+        public List<SubTemplateEntry> SubTemplatesSingle
+        {
+            get { return _subTemplatesSingle ?? (_subTemplatesSingle = new List<SubTemplateEntry>()); }
+            set { _subTemplatesSingle = value; }
+        }
+        public int SubSearchPadPxSingle { get; set; } = 20;
+
+        // ===== Sub-template validation helper =====
+        // Q2: per-instance check. Trả true nếu (không có sub configured) hoặc (ít nhất 1 sub
+        // detected trong patch quanh main). subCount = -1 khi không có sub configured.
+        private bool ValidateSubTemplatesForInstance(
+            List<SubTemplateEntry> subs, int padPx, RectRotate absoluteMain, Mat raw,
+            out int subCount, List<SubHit> hitsOut = null)
+        {
+            subCount = -1;
+            if (subs == null || subs.Count == 0) return true;
+            if (raw == null || raw.Empty() || absoluteMain == null) return false;
+
+            // 1) Crop rotated rect của absoluteMain (inflated bởi padPx). Dùng
+            // Cropper.CropRotatedRect → patch là rectified Mat, pixel (0,0) = corner của
+            // rotated rect. Bằng cách này search area = ĐÚNG main area, không tràn ra
+            // ngoài main bbox như axis-aligned crop trước đây.
+            int pad = Math.Max(0, padPx);
+            var mainInflated = absoluteMain.Clone();
+            mainInflated._rect = new System.Drawing.RectangleF(
+                absoluteMain._rect.X - pad,
+                absoluteMain._rect.Y - pad,
+                absoluteMain._rect.Width + 2 * pad,
+                absoluteMain._rect.Height + 2 * pad);
+            if (mainInflated._rect.Width < 8 || mainInflated._rect.Height < 8) return false;
+
+            // 2) Crop. Cropper trả tight-packed Mat (step = width*channels).
+            subCount = 0;
+            using (var patch = Cropper.CropRotatedRect(raw, mainInflated, null))
+            {
+                if (patch == null || patch.Empty()
+                    || patch.Width < 8 || patch.Height < 8) return false;
+                Mat patchGray = patch;
+                bool ownsGray = false;
+                if (patch.Channels() != 1)
+                {
+                    patchGray = new Mat();
+                    Cv2.CvtColor(patch, patchGray, ColorConversionCodes.BGR2GRAY);
+                    ownsGray = true;
+                }
+                // patch-local → raw global: shift về main-center frame, rotate, translate.
+                double radMain = mainInflated._rectRotation * Math.PI / 180.0;
+                float cosM = (float)Math.Cos(radMain);
+                float sinM = (float)Math.Sin(radMain);
+                float halfPw = patch.Width * 0.5f;
+                float halfPh = patch.Height * 0.5f;
+                float cxMain = mainInflated._PosCenter.X;
+                float cyMain = mainInflated._PosCenter.Y;
+                try
+                {
+                    foreach (var sub in subs)
+                    {
+                        var learned = sub.EnsureLearned();
+                        if (learned == null) continue;
+                        try
+                        {
+                            learned.SetRawNoCrop(
+                                patchGray.Data, patchGray.Width, patchGray.Height,
+                                (int)patchGray.Step(), patchGray.Channels());
+                            GC.KeepAlive(patchGray);
+
+                            var cfg = new Pattern2StableConfig(true);
+                            cfg.MinAcceptScore = sub.ScoreThreshold / 100.0;
+                            if (sub.HasAngleRange)
+                            {
+                                cfg.AngleStartDeg = sub.AngleLower;
+                                cfg.AngleEndDeg = sub.AngleUpper;
+                            }
+                            else
+                            {
+                                cfg.AngleStartDeg = -180.0;
+                                cfg.AngleEndDeg = 180.0;
+                            }
+                            cfg.MaxPos = 1; // chỉ cần 1 hit
+                            var rs = learned.MatchStable(cfg);
+                            // Pattern2 trả Score ở scale 0..100 (Pattern2.cpp dMatchScore*100).
+                            // sub.ScoreThreshold cũng 0..100 (UI scale). So sánh trực tiếp.
+                            if (rs != null && rs.Count > 0
+                                && rs[0].Score >= sub.ScoreThreshold)
+                            {
+                                subCount++;
+                                // Convert hit patch-local → raw global.
+                                // Patch là rectified của mainInflated. Patch center = main center,
+                                // patch X-axis = main X-axis sau khi rotate ngược _rectRotation.
+                                //   localX = hit.Cx - patch.Width/2
+                                //   localY = hit.Cy - patch.Height/2
+                                //   globalX = localX*cos - localY*sin + main.Cx
+                                //   globalY = localX*sin + localY*cos + main.Cy
+                                // Sub angle = hit.AngleDeg + main._rectRotation.
+                                var hit = rs[0];
+                                float localX = (float)hit.Cx - halfPw;
+                                float localY = (float)hit.Cy - halfPh;
+                                float globalX = localX * cosM - localY * sinM + cxMain;
+                                float globalY = localX * sinM + localY * cosM + cyMain;
+                                hitsOut?.Add(new SubHit
+                                {
+                                    Label = sub.Label ?? "",
+                                    Center = new System.Drawing.PointF(globalX, globalY),
+                                    Width = (float)hit.Width,
+                                    Height = (float)hit.Height,
+                                    AngleDeg = (float)hit.AngleDeg + mainInflated._rectRotation,
+                                    Score = (float)hit.Score,
+                                });
+                                // Nếu caller không cần list hits → early exit ở hit đầu (Q2).
+                                if (hitsOut == null) return true;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Global.LogsDashboard?.AddLog(
+                                new LogEntry(DateTime.Now, LeveLLog.WARN,
+                                    "Pattern.SubTemplate.Match",
+                                    $"Label='{sub.Label}': {ex.Message}"));
+                        }
+                    }
+                }
+                finally { if (ownsGray) patchGray.Dispose(); }
+            }
+            // Trả true nếu có hit (Q2: ≥1).
+            return subCount >= 1;
+        }
+
+        // ===== Resize Template (speed-up) =====
+        public bool EnableResizeTemplate { get; set; } = false;
+        public int ResizeTemplatePercent { get; set; } = 50; // 25..100
+
+        private double EffectiveResizeRatio()
+        {
+            if (!EnableResizeTemplate) return 1.0;
+            int p = ResizeTemplatePercent;
+            if (p >= 100) return 1.0;
+            if (p < 25) p = 25;
+            return p / 100.0;
+        }
+
+        private const int MIN_TEMPLATE_DIM_AFTER_SCALE = 16;
+        private static bool IsTemplateTooSmall(int w, int h, double ratio)
+        {
+            int minDim = Math.Min((int)Math.Floor(w * ratio), (int)Math.Floor(h * ratio));
+            return minDim < MIN_TEMPLATE_DIM_AFTER_SCALE;
+        }
+
+        [NonSerialized]
+        private double _batchLearnResizeRatio = 1.0;
+        [NonSerialized]
+        private double _singleLearnResizeRatio = 1.0;
+
+        private double ResolveResizeRatioForTemplate(int w, int h, string context)
+        {
+            double ratio = EffectiveResizeRatio();
+            if (ratio >= 1.0) return 1.0;
+            if (!IsTemplateTooSmall(w, h, ratio)) return ratio;
+
+            Global.LogsDashboard?.AddLog(
+                new LogEntry(DateTime.Now, LeveLLog.WARN,
+                    "Pattern.ResizeTemplate",
+                    $"{context}: template {w}x{h} would become smaller than {MIN_TEMPLATE_DIM_AFTER_SCALE}px; using original size."));
+            return 1.0;
+        }
+
+        private double ResolveResizeRatioForBatch()
+        {
+            double ratio = EffectiveResizeRatio();
+            if (ratio >= 1.0) return 1.0;
+            if (MultiTemplates == null || MultiTemplates.Count == 0) return ratio;
+
+            foreach (var entry in MultiTemplates)
+            {
+                var bmp = entry?.GetBitmap();
+                if (bmp == null) continue;
+                if (!IsTemplateTooSmall(bmp.Width, bmp.Height, ratio)) continue;
+
+                Global.LogsDashboard?.AddLog(
+                    new LogEntry(DateTime.Now, LeveLLog.WARN,
+                        "Pattern.ResizeTemplate",
+                        $"Batch fallback: template '{entry.Label ?? ""}' {bmp.Width}x{bmp.Height} would become smaller than {MIN_TEMPLATE_DIM_AFTER_SCALE}px; using original size for the batch."));
+                return 1.0;
+            }
+
+            return ratio;
+        }
+
+        private static RectRotate ScaleRectRotate(RectRotate src, double ratio)
+        {
+            if (src == null || ratio >= 1.0 || ratio <= 0.0) return src;
+            var c = src.Clone();
+            c._rect = new System.Drawing.RectangleF(
+                (float)(src._rect.X * ratio),
+                (float)(src._rect.Y * ratio),
+                (float)(src._rect.Width * ratio),
+                (float)(src._rect.Height * ratio));
+            c._PosCenter = new System.Drawing.PointF(
+                (float)(src._PosCenter.X * ratio),
+                (float)(src._PosCenter.Y * ratio));
+            if (c.PolyLocalPoints != null && c.PolyLocalPoints.Count > 0)
+            {
+                c.PolyLocalPoints = c.PolyLocalPoints
+                    .Select(p => new System.Drawing.PointF(
+                        (float)(p.X * ratio),
+                        (float)(p.Y * ratio)))
+                    .ToList();
+            }
+            if (c.HexVertexOffsets != null)
+            {
+                for (int i = 0; i < c.HexVertexOffsets.Length; i++)
+                {
+                    c.HexVertexOffsets[i] = new System.Drawing.PointF(
+                        (float)(c.HexVertexOffsets[i].X * ratio),
+                        (float)(c.HexVertexOffsets[i].Y * ratio));
+                }
+            }
+            return c;
+        }
+
+        private static double ScaleBack(double value, double ratio)
+        {
+            return (ratio > 0.0 && ratio < 1.0) ? value / ratio : value;
+        }
+
+        private static Mat ResizeMat(Mat src, double ratio)
+        {
+            if (src == null || src.Empty() || ratio >= 1.0 || ratio <= 0.0) return null;
+            var dst = new Mat();
+            Cv2.Resize(src, dst, new Size(), ratio, ratio, InterpolationFlags.Area);
+            return dst;
+        }
 
         [NonSerialized]
         public BeeCpp.Pattern2 Pattern =new BeeCpp.Pattern2();
@@ -537,7 +853,37 @@ namespace BeeCore
 
 
 
-                    Pattern.LearnPatternStable();
+                    Mat resizedTemplate = null;
+                    try
+                    {
+                        Mat templateForLearn = IsNoCrop ? img : mat;
+                        if (TypeMode == Mode.Pattern && templateForLearn != null && !templateForLearn.Empty())
+                        {
+                            double learnRatio = ResolveResizeRatioForTemplate(
+                                templateForLearn.Width,
+                                templateForLearn.Height,
+                                "Single");
+                            _singleLearnResizeRatio = learnRatio;
+                            resizedTemplate = ResizeMat(templateForLearn, learnRatio);
+                            if (resizedTemplate != null && !resizedTemplate.Empty())
+                            {
+                                Pattern.SetImgeSampleNoCrop(
+                                    resizedTemplate.Data,
+                                    resizedTemplate.Width,
+                                    resizedTemplate.Height,
+                                    (int)resizedTemplate.Step(),
+                                    resizedTemplate.Channels());
+                                GC.KeepAlive(resizedTemplate);
+                            }
+                        }
+
+                        Pattern.LearnPatternStable();
+                    }
+                    finally
+                    {
+                        if (resizedTemplate != null && !resizedTemplate.IsDisposed)
+                            resizedTemplate.Dispose();
+                    }
                     if (!IsNoCrop)
                     {
                         if (mat != null && !mat.Empty())
@@ -1805,6 +2151,9 @@ namespace BeeCore
         public bool EnableKeepFilter = false;
         public bool EnableValidator = false;
         public bool EnableScaleSearch = false;
+        // Chống lệch góc khi keo/nhiễu ăn vào biên dạng template (occlusion-robust angle refine).
+        // Mặc định tắt để giữ nguyên kết quả pattern cũ; bật riêng cho tool bị dính keo.
+        public bool EnableAngleRobustRefine = false;
         public bool UseCpu = true;
         public bool UseGpu = false;
         public bool EnableMultiThread = false;
@@ -1833,13 +2182,14 @@ namespace BeeCore
             cfg.EnableKeepFilter = EnableKeepFilter;
             cfg.EnableNms = EnableNms;
             cfg.EnableAutoThreshold = true;
-            cfg.EnableScaleSearch = EnableScaleSearch;
+            cfg.EnableScaleSearch = EnableScaleSearch && !EnableResizeTemplate;
             cfg.ScaleMin = (100 - ScalePattern) / 100.0;
             cfg.ScaleMax = (100 + ScalePattern) / 100.0;
             cfg.ScaleStep = ScaleStep / 100.0;
             cfg.EnableGpu = UseGpu;
             cfg.EnableCpuMultiThread = EnableMultiThread;
             cfg.CpuThreads = NumThreads;
+            cfg.EnableAngleRobustRefine = EnableAngleRobustRefine;
             cfg.DebugLog = false;
             return cfg;
         }
@@ -1932,6 +2282,11 @@ namespace BeeCore
                     perCfg.AngleEndDeg = entry.AngleUpper + offset;
                 }
 
+                double entryRatio = ResolveResizeRatioForTemplate(
+                    bmp.Width,
+                    bmp.Height,
+                    "AreaLimit[" + (entry.Label ?? idx.ToString()) + "]");
+
                 try
                 {
                     // 1) Học template từ entry bitmap.
@@ -1939,6 +2294,7 @@ namespace BeeCore
                     {
                         Mat gray = m;
                         bool ownsGray = false;
+                        Mat resizedTemplate = null;
                         if (m.Channels() != 1)
                         {
                             gray = new Mat();
@@ -1949,31 +2305,49 @@ namespace BeeCore
                         }
                         try
                         {
-                            GC.KeepAlive(gray);
-                            Pattern.SetImgeSampleNoCrop(gray.Data, gray.Width, gray.Height,
-                                (int)gray.Step(), gray.Channels());
+                            Mat templateForLearn = gray;
+                            resizedTemplate = ResizeMat(gray, entryRatio);
+                            if (resizedTemplate != null && !resizedTemplate.Empty())
+                                templateForLearn = resizedTemplate;
+
+                            GC.KeepAlive(templateForLearn);
+                            Pattern.SetImgeSampleNoCrop(templateForLearn.Data, templateForLearn.Width, templateForLearn.Height,
+                                (int)templateForLearn.Step(), templateForLearn.Channels());
                             Pattern.LearnPatternStable(perCfg);
                         }
-                        finally { if (ownsGray) gray.Dispose(); }
+                        finally
+                        {
+                            if (resizedTemplate != null && !resizedTemplate.IsDisposed)
+                                resizedTemplate.Dispose();
+                            if (ownsGray) gray.Dispose();
+                        }
                     }
 
                     // 2) Nạp ảnh: nếu có RotLimit hợp lệ, dùng SetImgeRaw để native crop +
                     //    map kết quả về toạ độ global. Nếu thiếu RotLimit, fallback dùng raw
                     //    full image (tương đương Full mode cho entry này).
                     RectRotate limitGlobal = AreaLocalToGlobal(rotArea, entry.RotLimit);
+                    Mat rawForMatch = raw;
+                    Mat resizedRaw = null;
+                    try
+                    {
+                        resizedRaw = ResizeMat(raw, entryRatio);
+                        if (resizedRaw != null && !resizedRaw.Empty())
+                            rawForMatch = resizedRaw;
+
                     if (limitGlobal != null &&
                         limitGlobal._rect.Width > 0 && limitGlobal._rect.Height > 0)
                     {
-                        var rrCli = Converts.ToCli(limitGlobal);
-                        Pattern.SetImgeRaw(raw.Data, raw.Width, raw.Height,
-                            (int)raw.Step(), raw.Channels(), rrCli, null);
+                        var rrCli = Converts.ToCli(ScaleRectRotate(limitGlobal, entryRatio));
+                        Pattern.SetImgeRaw(rawForMatch.Data, rawForMatch.Width, rawForMatch.Height,
+                            (int)rawForMatch.Step(), rawForMatch.Channels(), rrCli, null);
                     }
                     else
                     {
-                        Pattern.SetRawNoCrop(raw.Data, raw.Width, raw.Height,
-                            (int)raw.Step(), raw.Channels());
+                        Pattern.SetRawNoCrop(rawForMatch.Data, rawForMatch.Width, rawForMatch.Height,
+                            (int)rawForMatch.Step(), rawForMatch.Channels());
                     }
-                    GC.KeepAlive(raw);
+                    GC.KeepAlive(rawForMatch);
 
                     // 3) Match single API.
                     var rs = Pattern.MatchStable(perCfg);
@@ -1985,11 +2359,13 @@ namespace BeeCore
                         && limitGlobal._rect.Width > 0 && limitGlobal._rect.Height > 0;
                     foreach (var r in rs)
                     {
-                        double cx = r.Cx, cy = r.Cy, angle = r.AngleDeg;
+                        double cx = ScaleBack(r.Cx, entryRatio);
+                        double cy = ScaleBack(r.Cy, entryRatio);
+                        double angle = r.AngleDeg;
                         if (hasLimit && rotArea != null)
                         {
                             TransformLimitLocalToAreaLocal(
-                                limitGlobal, rotArea, r.Cx, r.Cy, r.AngleDeg,
+                                limitGlobal, rotArea, cx, cy, r.AngleDeg,
                                 out cx, out cy, out angle);
                         }
                         var br = new Pattern2BatchResult();
@@ -1998,10 +2374,16 @@ namespace BeeCore
                         br.Cx = cx;
                         br.Cy = cy;
                         br.AngleDeg = angle;
-                        br.Width = r.Width;
-                        br.Height = r.Height;
+                        br.Width = ScaleBack(r.Width, entryRatio);
+                        br.Height = ScaleBack(r.Height, entryRatio);
                         br.Score = r.Score;
                         results.Add(br);
+                    }
+                    }
+                    finally
+                    {
+                        if (resizedRaw != null && !resizedRaw.IsDisposed)
+                            resizedRaw.Dispose();
                     }
                 }
                 catch (Exception ex)
@@ -2026,6 +2408,8 @@ namespace BeeCore
             if (MultiTemplates == null || MultiTemplates.Count == 0) return;
 
             var learnCfg = BuildStableConfig();
+            double batchRatio = ResolveResizeRatioForBatch();
+            _batchLearnResizeRatio = batchRatio;
             Pattern.LearnPatternBatchBegin();
             try
             {
@@ -2037,6 +2421,7 @@ namespace BeeCore
                     {
                         Mat gray = m;
                         bool ownsGray = false;
+                        Mat resizedTemplate = null;
                         if (m.Channels() != 1)
                         {
                             gray = new Mat();
@@ -2047,6 +2432,11 @@ namespace BeeCore
                         }
                         try
                         {
+                            Mat templateForLearn = gray;
+                            resizedTemplate = ResizeMat(gray, batchRatio);
+                            if (resizedTemplate != null && !resizedTemplate.Empty())
+                                templateForLearn = resizedTemplate;
+
                             var tplCfg = new Pattern2BatchTemplateConfig(
                                 e.Label ?? "",
                                 e.ScoreThreshold / 100.0,
@@ -2058,14 +2448,16 @@ namespace BeeCore
                                 tplCfg.AngleStartDeg = e.AngleLower;
                                 tplCfg.AngleEndDeg = e.AngleUpper;
                             }
-                            GC.KeepAlive(gray);
+                            GC.KeepAlive(templateForLearn);
                             Pattern.AddBatchTemplate(
-                                gray.Data, gray.Width, gray.Height,
-                                (int)gray.Step(), gray.Channels(),
+                                templateForLearn.Data, templateForLearn.Width, templateForLearn.Height,
+                                (int)templateForLearn.Step(), templateForLearn.Channels(),
                                 learnCfg, tplCfg);
                         }
                         finally
                         {
+                            if (resizedTemplate != null && !resizedTemplate.IsDisposed)
+                                resizedTemplate.Dispose();
                             if (ownsGray) gray.Dispose();
                         }
                     }
@@ -2076,6 +2468,7 @@ namespace BeeCore
             catch (Exception ex)
             {
                 _batchLearned = false;
+                _batchLearnResizeRatio = 1.0;
                 Global.LogsDashboard?.AddLog(
                     new LogEntry(DateTime.Now, LeveLLog.ERROR, "Pattern2.Batch.Learn", ex.ToString()));
             }
@@ -2086,10 +2479,35 @@ namespace BeeCore
         /// đếm match per label, judge OK/NG theo expected count.
         /// Push từng match vào ResultItems với <see cref="ResultItem.Name"/> = label.
         /// </summary>
-        private void ProcessBatchResults(List<Pattern2BatchResult> listBatch, RectRotate rotArea)
+        /// <summary>
+        /// Single mode sub-template validation. SubTemplatesSingle lưu ở Patterns instance
+        /// (không phải per-entry như Multi). Mark item.IsOK=false nếu fail; Complete() pick up.
+        /// </summary>
+        private void ApplySingleSubValidation(ResultItem item, RectRotate rotArea, RectRotate localRect, Mat raw)
+        {
+            // Stash hits cho mọi instance để DrawResult vẽ; index align với rectRotates.
+            var hits = new List<SubHit>();
+            SubHitsPerItem.Add(hits);
+            if (item == null) return;
+            if (_subTemplatesSingle == null || _subTemplatesSingle.Count == 0) return;
+            var absolute = ToAbsoluteRectRotate(rotArea, localRect);
+            bool ok = ValidateSubTemplatesForInstance(
+                _subTemplatesSingle, SubSearchPadPxSingle, absolute, raw, out _, hits);
+            if (!ok) item.IsOK = false;
+        }
+
+        private void ProcessBatchResults(List<Pattern2BatchResult> listBatch, RectRotate rotArea, double resultScaleRatio, Mat raw)
         {
             var owner = Common.TryGetTool(Global.IndexProgChoose, Index);
             var globalThreshold = Common.TryGetTool(IndexThread, Index).Score; // 0..100
+
+            // Map label → entry để lookup sub-templates O(1) trong loop.
+            var entryByLabel = new Dictionary<string, Pattern2TemplateEntry>(StringComparer.Ordinal);
+            foreach (var e in MultiTemplates)
+            {
+                var key = e.Label ?? "";
+                if (!entryByLabel.ContainsKey(key)) entryByLabel[key] = e;
+            }
 
             // BestObj filter: chỉ giữ match top-score cho MỖI label (không phải top-1 tổng thể).
             // Bước này áp lên listBatch trước khi đếm/đẩy vào ResultItems.
@@ -2124,8 +2542,11 @@ namespace BeeCore
                     // angle range (xem Pattern2BatchTemplateConfig.HasAngleRange).
                     if (r.Score < globalThreshold) continue;
 
-                    float w = (float)r.Width, h = (float)r.Height;
-                    var pCenter = new System.Drawing.PointF((float)r.Cx, (float)r.Cy);
+                    float w = (float)ScaleBack(r.Width, resultScaleRatio);
+                    float h = (float)ScaleBack(r.Height, resultScaleRatio);
+                    var pCenter = new System.Drawing.PointF(
+                        (float)ScaleBack(r.Cx, resultScaleRatio),
+                        (float)ScaleBack(r.Cy, resultScaleRatio));
                     float angle = (float)r.AngleDeg;
                     float score = (float)r.Score;
                     scoreSum += score;
@@ -2134,27 +2555,69 @@ namespace BeeCore
                     var localRect = new RectRotate(
                         new System.Drawing.RectangleF(-w / 2f, -h / 2f, w, h),
                         pCenter, angle, AnchorPoint.None);
+
+                    // Sub-template per-instance check (Q2). Tìm entry theo label; nếu entry
+                    // có SubTemplates → validate trước khi count. Fail → vẫn AddMatchResult
+                    // (để UI thấy NG instance) nhưng không cộng vào perLabelCount.
+                    string lbl = r.Label ?? "";
+                    bool subOk = true;
+                    var hits = new List<SubHit>();
+                    if (entryByLabel.TryGetValue(lbl, out var entry)
+                        && entry != null
+                        && entry.SubTemplates != null
+                        && entry.SubTemplates.Count > 0)
+                    {
+                        var absolute = ToAbsoluteRectRotate(rotArea, localRect);
+                        subOk = ValidateSubTemplatesForInstance(
+                            entry.SubTemplates, entry.SubSearchPadPx, absolute, raw, out _, hits);
+                    }
+
                     var item = AddMatchResult(rotArea, localRect, score);
+                    SubHitsPerItem.Add(hits);
                     if (item != null)
                     {
                         // Tận dụng ResultItem.Name làm label (tránh thêm field mới phá serialize).
                         item.Name = r.Label ?? "";
+                        if (!subOk) item.IsOK = false;
                     }
 
-                    string lbl = r.Label ?? "";
-                    if (perLabelCount.ContainsKey(lbl))
+                    if (subOk && perLabelCount.ContainsKey(lbl))
                         perLabelCount[lbl] = perLabelCount[lbl] + 1;
                 }
             }
 
-            // Judge OK/NG: mỗi label có ExpectedCount > 0 phải đạt ≥ expected.
+            // Judge OK/NG. MultiNoLimit: aggregate per unique Label (ExpectedCount = max của
+            // các row cùng label), vì nhiều row có thể chia sẻ Label. Multi: judge per-row
+            // (giữ behavior cũ — mỗi row 1 label độc lập).
             bool overallOk = true;
-            foreach (var e in MultiTemplates)
+            if (TemplateMode == PatternMode.MultiNoLimit)
             {
-                if (e.ExpectedCount <= 0) continue; // 0 = optional
-                string lbl = e.Label ?? "";
-                int found = perLabelCount.TryGetValue(lbl, out int c) ? c : 0;
-                if (found < e.ExpectedCount) { overallOk = false; break; }
+                var expectedPerLabel = new Dictionary<string, int>(StringComparer.Ordinal);
+                foreach (var e in MultiTemplates)
+                {
+                    string lbl = e.Label ?? "";
+                    int cur = expectedPerLabel.TryGetValue(lbl, out int v) ? v : 0;
+                    if (e.ExpectedCount > cur) expectedPerLabel[lbl] = e.ExpectedCount;
+                    else if (!expectedPerLabel.ContainsKey(lbl)) expectedPerLabel[lbl] = e.ExpectedCount;
+                }
+                foreach (var kv in expectedPerLabel)
+                {
+                    if (kv.Value <= 0) continue;
+                    int found = perLabelCount.TryGetValue(kv.Key, out int c) ? c : 0;
+                    if (found < kv.Value) { overallOk = false; break; }
+                }
+            }
+            else
+            {
+                foreach (var e in MultiTemplates)
+                {
+                    e.IsOK = true;
+                    if (e.ExpectedCount <= 0) continue; // 0 = optional
+                    string lbl = e.Label ?? "";
+                    int found = perLabelCount.TryGetValue(lbl, out int c) ? c : 0;
+                    if (found < e.ExpectedCount) {
+                        e.IsOK = false; overallOk = false;  }
+                }
             }
 
             owner.Results = overallOk ? Results.OK : Results.NG;
@@ -2178,6 +2641,7 @@ namespace BeeCore
             ClearResultItems();
             listP_Center = new List<System.Drawing.Point>();
             list_AngleCenter = new List<float>();
+            SubHitsPerItem = new List<List<SubHit>>();
             using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 if (raw.Empty()) return;
@@ -2191,6 +2655,7 @@ namespace BeeCore
 
                 Mat matProcess = null;
                 byte[] rentedBuffer = null;
+                double resizeRatio = 1.0;
 
                 try
                 {
@@ -2199,16 +2664,71 @@ namespace BeeCore
                     //  matCrop = Cropper.CropRotatedRect(raw, rotArea, rotMask);
 
                     // 2) Tiền xử lý theo chế độ
+                    if (TypeMode == Mode.Pattern)
+                    {
+                        if (IsMultiTemplate && CheckByAreaLimit && TemplateMode == PatternMode.Multi)
+                        {
+                            resizeRatio = 1.0;
+                        }
+                        else if (IsMultiTemplate)
+                        {
+                            resizeRatio = ResolveResizeRatioForBatch();
+                        }
+                        else if (bmRaw != null)
+                        {
+                            resizeRatio = _singleLearnResizeRatio > 0.0 ? _singleLearnResizeRatio : 1.0;
+                        }
+                        else
+                        {
+                            resizeRatio = EffectiveResizeRatio();
+                        }
+                    }
+
                     switch (TypeMode)
                     {
                         case Mode.Pattern:
-                           
-                                matProcess = raw; // reuse backing store
-                            
-                            var rrCli = Converts.ToCli(rotArea); // như ở reply trước
-                            RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
+                            Mat rawForPattern = raw;
+                            Mat resizedRawForPattern = ResizeMat(raw, resizeRatio);
+                            if (resizedRawForPattern != null && !resizedRawForPattern.Empty())
+                                rawForPattern = resizedRawForPattern;
+                            else if (resizedRawForPattern != null)
+                                resizedRawForPattern.Dispose();
 
-                            Pattern.SetImgeRaw(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels(), rrCli, rrMaskCli);
+                            matProcess = rawForPattern; // reuse backing store
+
+                            // Q7: Single-mode sub-policy quyết định crop source.
+                            // - None (default): SetImgeRaw(rotArea, rotMask) — match toàn ROI.
+                            // - AreaLimit: SetImgeRaw(rotLimit) thay rotArea.
+                            // - NoLimit: SetRawNoCrop — bỏ qua ROI hoàn toàn.
+                            // Multi modes vẫn dùng nhánh None (backend Multi tự lo crop sau).
+                            bool isSingleMode = (TemplateMode == PatternMode.Single);
+                            var singlePolicy = _singleAreaPolicy;
+
+                            if (isSingleMode && singlePolicy == SingleAreaPolicy.NoLimit)
+                            {
+                                Pattern.SetRawNoCrop(matProcess.Data, matProcess.Width, matProcess.Height,
+                                    (int)matProcess.Step(), matProcess.Channels());
+                            }
+                            else if (isSingleMode && singlePolicy == SingleAreaPolicy.AreaLimit
+                                     && rotLimit != null
+                                     && rotLimit._rect.Width > 0 && rotLimit._rect.Height > 0)
+                            {
+                                var rrLimit = Converts.ToCli(ScaleRectRotate(rotLimit, resizeRatio));
+                                RectRotateCli? rrMaskCliLim = (rotMask != null)
+                                    ? Converts.ToCli(ScaleRectRotate(rotMask, resizeRatio))
+                                    : (RectRotateCli?)null;
+                                Pattern.SetImgeRaw(matProcess.Data, matProcess.Width, matProcess.Height,
+                                    (int)matProcess.Step(), matProcess.Channels(), rrLimit, rrMaskCliLim);
+                            }
+                            else
+                            {
+                                var rrCli = Converts.ToCli(ScaleRectRotate(rotArea, resizeRatio));
+                                RectRotateCli? rrMaskCli = (rotMask != null)
+                                    ? Converts.ToCli(ScaleRectRotate(rotMask, resizeRatio))
+                                    : (RectRotateCli?)null;
+                                Pattern.SetImgeRaw(matProcess.Data, matProcess.Width, matProcess.Height,
+                                    (int)matProcess.Step(), matProcess.Channels(), rrCli, rrMaskCli);
+                            }
 
                             break;
 
@@ -2263,11 +2783,12 @@ namespace BeeCore
                     cfg.EnableKeepFilter = EnableKeepFilter;
                     cfg.EnableNms = EnableNms;
                     cfg.EnableAutoThreshold = true;
+                    cfg.EnableAngleRobustRefine = EnableAngleRobustRefine;
 
                     float ScaleMin =(float) ((100 - ScalePattern)/100.0);
                     float ScaleMax = (float)((100 +ScalePattern) / 100.0);
                     // scale mẫu
-                    cfg.EnableScaleSearch = EnableScaleSearch;
+                    cfg.EnableScaleSearch = EnableScaleSearch && !EnableResizeTemplate;
                     cfg.DebugLog = false;
                     cfg.ScaleMin = ScaleMin;
                     cfg.ScaleMax = ScaleMax;
@@ -2280,19 +2801,22 @@ namespace BeeCore
                     if (IsMultiTemplate)
                     {
                         List<Pattern2BatchResult> listBatch;
-                        if (CheckByAreaLimit)
+                        if (CheckByAreaLimit && TemplateMode == PatternMode.Multi)
                         {
                             // Mỗi label crop ảnh theo RotLimit trước khi match → native
                             // MatchBatchStable với source = crop của entry hiện tại. Kết quả
                             // đã trong toạ độ raw global (SetImgeRaw map ngược).
                             listBatch = RunBatchWithPerLabelAreaLimit(cfg, raw, rotArea, rotMask);
+                            ProcessBatchResults(listBatch, rotArea, 1.0, raw);
                         }
                         else
                         {
                             if (!_batchLearned) LearnPatternsBatch();
                             listBatch = Pattern.MatchBatchStable(cfg);
+                            ProcessBatchResults(listBatch, rotArea,
+                                _batchLearnResizeRatio > 0.0 ? _batchLearnResizeRatio : resizeRatio,
+                                raw);
                         }
-                        ProcessBatchResults(listBatch, rotArea);
                         return; // exit DoWork; finally block vẫn chạy.
                     }
 
@@ -2322,25 +2846,30 @@ namespace BeeCore
 
                                     if (rotBest.Score >= Common.TryGetTool(IndexThread, Index).Score)
                                     {
-                                        float w = (float)rotBest.Width;
-                                        float h = (float)rotBest.Height;
-                                        var pCenter = new System.Drawing.PointF((float)rotBest.Cx, (float)rotBest.Cy);
+                                        float w = (float)ScaleBack(rotBest.Width, resizeRatio);
+                                        float h = (float)ScaleBack(rotBest.Height, resizeRatio);
+                                        var pCenter = new System.Drawing.PointF(
+                                            (float)ScaleBack(rotBest.Cx, resizeRatio),
+                                            (float)ScaleBack(rotBest.Cy, resizeRatio));
                                         float angle = (float)rotBest.AngleDeg;
                                         float score = (float)rotBest.Score;
                                         scoreSum += score;
                                         var localRect = new RectRotate(
                                            new System.Drawing.RectangleF(-w / 2f, -h / 2f, w, h),
                                            pCenter, angle, AnchorPoint.None);
-                                        AddMatchResult(rotArea, localRect, score);
+                                        var itemBest = AddMatchResult(rotArea, localRect, score);
+                                        ApplySingleSubValidation(itemBest, rotArea, localRect, raw);
                                     }
                             }
                         else
                         {
                             foreach (Rotaterectangle rot in listRS)
                             {
-                                float w = (float)rot.Width;
-                                float h = (float)rot.Height;
-                                var pCenter = new System.Drawing.PointF((float)rot.Cx, (float)rot.Cy);
+                                float w = (float)ScaleBack(rot.Width, resizeRatio);
+                                float h = (float)ScaleBack(rot.Height, resizeRatio);
+                                var pCenter = new System.Drawing.PointF(
+                                    (float)ScaleBack(rot.Cx, resizeRatio),
+                                    (float)ScaleBack(rot.Cy, resizeRatio));
                                 float angle = (float)rot.AngleDeg;
                                 float score = (float)rot.Score;
                                 scoreSum += score;
@@ -2351,7 +2880,8 @@ namespace BeeCore
                                 var localRect = new RectRotate(
                                     new System.Drawing.RectangleF(-w / 2f, -h / 2f, w, h),
                                     pCenter, angle, AnchorPoint.None);
-                                AddMatchResult(rotArea, localRect, score);
+                                var item = AddMatchResult(rotArea, localRect, score);
+                                ApplySingleSubValidation(item, rotArea, localRect, raw);
                             }
                         }
                         
@@ -2435,6 +2965,10 @@ namespace BeeCore
                 }
                 if (EnableColorCheck && ResultItems != null && ResultItems.Any(x => x != null && !x.IsOK))
                     ownerTool.Results = Results.NG;
+                // Sub-template per-instance NG (Q2): bất kỳ instance nào IsOK=false do
+                // ValidateSubTemplatesForInstance fail → tool NG.
+                if (ResultItems != null && ResultItems.Any(x => x != null && !x.IsOK))
+                    ownerTool.Results = Results.NG;
                 return;
             }
 
@@ -2455,6 +2989,9 @@ namespace BeeCore
                     break;
             }
             if (EnableColorCheck && ResultItems != null && ResultItems.Any(x => x != null && !x.IsOK))
+                ownerTool.Results = Results.NG;
+            // Single-mode sub-template per-instance NG (Q2).
+            if (ResultItems != null && ResultItems.Any(x => x != null && !x.IsOK))
                 ownerTool.Results = Results.NG;
             //if (Common.TryGetTool(IndexThread, Index).Results == Results.OK)
             //{if (rectRotates != null)
@@ -2496,6 +3033,7 @@ namespace BeeCore
             List<ResultItem> resultItemsSnapshot;
             List<System.Drawing.Point> listPCenterSnapshot;
             List<float> listAngleCenterSnapshot;
+            List<List<SubHit>> subHitsSnapshot;
 
             lock (RuntimeLock)
             {
@@ -2509,6 +3047,9 @@ namespace BeeCore
                 resultItemsSnapshot = ResultItems != null ? new List<ResultItem>(ResultItems) : new List<ResultItem>();
                 listPCenterSnapshot = listP_Center != null ? new List<System.Drawing.Point>(listP_Center) : new List<System.Drawing.Point>();
                 listAngleCenterSnapshot = list_AngleCenter != null ? new List<float>(list_AngleCenter) : new List<float>();
+                subHitsSnapshot = SubHitsPerItem != null
+                    ? SubHitsPerItem.Select(h => h != null ? new List<SubHit>(h) : new List<SubHit>()).ToList()
+                    : new List<List<SubHit>>();
             }
 			var mat = new Matrix();
 			if (!Global.IsRun)
@@ -2546,7 +3087,9 @@ namespace BeeCore
 			{
 				foreach (var entry in MultiTemplates)
 				{
-					if (entry == null || entry.RotLimit == null) continue;
+                        Color clNG = Color.DeepSkyBlue;
+                        if (!entry.IsOK) clNG = Global.ParaShow.ColorNG;
+                    if (entry == null || entry.RotLimit == null) continue;
 					var rl = AreaLocalToGlobal(rotA, entry.RotLimit);
 					if (rl == null) continue;
 					if (rl._rect.Width <= 0 || rl._rect.Height <= 0) continue;
@@ -2560,7 +3103,7 @@ namespace BeeCore
 					matLim.Rotate(rl._rectRotation);
 					gc.Transform = matLim;
 					Draws.Box1Label(gc, rl, entry.Label ?? "", font, brushText,
-						Color.DeepSkyBlue, Global.ParaShow.ThicknessLine);
+                        clNG, Global.ParaShow.ThicknessLine);
 					gc.ResetTransform();
 				}
 			}
@@ -2571,7 +3114,7 @@ namespace BeeCore
 				foreach (RectRotate rot in rectRotatesSnapshot)
 				{
                     ResultItem item = (resultItemsSnapshot != null && resultItemsSnapshot.Count >= i) ? resultItemsSnapshot[i - 1] : null;
-                    Color clItem = (item == null || item.IsOK) ? cl : Global.ParaShow.ColorNG;
+                    Color clItem = (item == null || item.IsOK) ? Global.ParaShow.ColorOK : Global.ParaShow.ColorNG;
 
                     mat = new Matrix();
                     if (!Global.IsRun)
@@ -2589,9 +3132,11 @@ namespace BeeCore
                     {
                         int min = (int)Math.Min(rot._rect.Width / 4, rot._rect.Height / 4);
                         Draws.Plus(gc, 0, 0, min, clItem, Global.ParaShow.ThicknessLine);
-                        String sPos = "X,Y,A _ " + listPCenterSnapshot[i - 1].X + "," + listPCenterSnapshot[i - 1].Y + "," + Math.Round(listAngleCenterSnapshot[i - 1], 1);
-                        if (ZeroPos == ZeroPos.ZeroADJ)
-                            sPos = "*X,Y,A _ " + listPCenterSnapshot[i - 1].X + "," + listPCenterSnapshot[i - 1].Y + "," + Math.Round(listAngleCenterSnapshot[i - 1], 1);
+                            double x =Math.Round( ( listPCenterSnapshot[i - 1].X / Global.Config.Scale),1);
+                            double y = Math.Round((listPCenterSnapshot[i - 1].Y / Global.Config.Scale),1);
+                            String sPos = "X,Y,A _ " + x + "," + y + "," + Math.Round(listAngleCenterSnapshot[i - 1], 1);
+                        //if (ZeroPos == ZeroPos.ZeroADJ)
+                        //    sPos = "*X,Y,A _ " + listPCenterSnapshot[i - 1].X + "," + listPCenterSnapshot[i - 1].Y + "," + Math.Round(listAngleCenterSnapshot[i - 1], 1);
 
                         gc.DrawString(sPos, font, new SolidBrush(Global.ParaShow.ColorInfor), new PointF(5, 5));
                     }
@@ -2651,6 +3196,46 @@ namespace BeeCore
 
                     }
                     gc.ResetTransform();
+
+                    // ===== Draw sub-template hits (Q-extra) =====
+                    // hits ở raw-global coords. Vẽ với transform screen-only (pScroll/zoom)
+                    // → translate đến Center → rotate AngleDeg → vẽ rect (-w/2,-h/2,w,h).
+                    if (subHitsSnapshot != null && (i - 1) < subHitsSnapshot.Count)
+                    {
+                        var hitsForItem = subHitsSnapshot[i - 1];
+                        if (hitsForItem != null && hitsForItem.Count > 0)
+                        {
+                            using (var penSub = new Pen(Color.Lime, Math.Max(1, Global.ParaShow.ThicknessLine)))
+                            using (var brushSub = new SolidBrush(Color.Lime))
+                            using (var fontSub = new Font("Arial", Math.Max(8, Global.ParaShow.FontSize - 2)))
+                            {
+                                foreach (var h in hitsForItem)
+                                {
+                                    var matSub = new Matrix();
+                                    if (!Global.IsRun)
+                                    {
+                                        matSub.Translate(Global.pScroll.X, Global.pScroll.Y);
+                                        matSub.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                                    }
+                                    matSub.Translate(h.Center.X, h.Center.Y);
+                                    matSub.Rotate(h.AngleDeg);
+                                    gc.Transform = matSub;
+                                    float hw = h.Width * 0.5f, hh = h.Height * 0.5f;
+                                    gc.DrawRectangle(penSub, -hw, -hh, h.Width, h.Height);
+                                    // Plus marker tại center
+                                    int crossSize = (int)Math.Max(4, Math.Min(h.Width, h.Height) / 6);
+                                    gc.DrawLine(penSub, -crossSize, 0, crossSize, 0);
+                                    gc.DrawLine(penSub, 0, -crossSize, 0, crossSize);
+                                    // Label + score
+                                    // h.Score đã ở scale 0..100; không nhân thêm.
+                                    string lblTxt = (h.Label ?? "") + " " + Math.Round(h.Score, 1) + "%";
+                                    gc.DrawString(lblTxt, fontSub, brushSub, hw + 2, -hh);
+                                    gc.ResetTransform();
+                                }
+                            }
+                        }
+                    }
+
 					i++;
 				}
 			}
@@ -2818,6 +3403,58 @@ namespace BeeCore
     }
 
     /// <summary>
+    /// 3-state mode cho Pattern tool.
+    /// Single: 1 template duy nhất (single-image flow).
+    /// Multi: nhiều template, mỗi row 1 Label độc lập, có thể bật CheckByAreaLimit để
+    ///   crop ảnh theo per-label RotLimit trước khi match.
+    /// MultiNoLimit: nhiều template, nhiều row có thể chia sẻ cùng Label (group). Bỏ qua
+    ///   RotLimit hoàn toàn, judge OK/NG per unique label (ExpectedCount = max của các row
+    ///   cùng label, threshold lấy min).
+    /// </summary>
+    public enum PatternMode
+    {
+        Single = 0,
+        Multi = 1,
+        MultiNoLimit = 2,
+    }
+
+    /// <summary>
+    /// 6-method taxonomy. Là shim trên (TemplateMode + CheckByAreaLimit), không thay backend.
+    /// </summary>
+    public enum PatternMethod
+    {
+        SingleLabel              = 0,  // 1 template, match toàn ROI
+        SingleLabelAreaLimit     = 1,  // 1 template, RotLimit crop trên ROI
+        SingleLabelNoLimit       = 2,  // 1 template, raw full (bỏ qua ROI)
+        MultiLabel               = 3,  // batch, mỗi row 1 Label độc lập
+        MultiLabelAreaLimit      = 4,  // batch + per-row RotLimit
+        MultiLabelNoLimit        = 5,  // batch + group rows by Label
+    }
+
+    /// <summary>
+    /// 1 sub-template detected hit, lưu coords trong raw global frame. Dùng để vẽ overlay.
+    /// </summary>
+    public class SubHit
+    {
+        public string Label { get; set; } = "";
+        public System.Drawing.PointF Center { get; set; }
+        public float Width { get; set; }
+        public float Height { get; set; }
+        public float AngleDeg { get; set; }
+        public float Score { get; set; }
+    }
+
+    /// <summary>
+    /// Sub-policy chỉ áp dụng cho Single mode (UI-only — không đổi backend flow hiện tại).
+    /// </summary>
+    public enum SingleAreaPolicy
+    {
+        None       = 0,  // match toàn ROI (default — Single mode legacy)
+        AreaLimit  = 1,  // crop theo rotLimit (single-template RotLimit)
+        NoLimit    = 2,  // bỏ qua ROI, match full raw
+    }
+
+    /// <summary>
     /// Một template trong multi-template mode của <see cref="Patterns"/>.
     /// Lưu bitmap dạng PNG byte[] để JSON-serialize được (Bitmap không serialize trực tiếp).
     /// </summary>
@@ -2828,7 +3465,7 @@ namespace BeeCore
         public float ScoreThreshold { get; set; } = 70f;   // 0..100 (UI scale)
         public int ExpectedCount { get; set; } = 1;        // ≥0; 0 = optional
         public int MaxPerTemplate { get; set; } = 0;       // 0 = follow global MaxObject
-
+        public bool IsOK = false;
         // Per-template angle range (deg). Lưu lúc Add từ DeltaAngle ± Angle. Override
         // cfg.AngleStart/EndDeg trong native batch khi check.
         public bool HasAngleRange { get; set; } = false;
@@ -2841,6 +3478,20 @@ namespace BeeCore
 
         // PNG bytes của template image. JSON sẽ serialize thành base64.
         public byte[] TemplatePng { get; set; }
+
+        // ===== Sub-templates (validation after main detected) =====
+        // Sau khi main được detect, crop bbox quanh main (inflate SubSearchPadPx) → match
+        // từng sub-template; có ≥1 hit → instance OK. RequireSubPerInstance=true: mọi
+        // main instance đều phải có ≥1 sub. false: chỉ cần 1 main bất kỳ có sub là OK.
+        // Backward-compat: project JSON cũ thiếu field → lazy-init trong getter.
+        private List<SubTemplateEntry> _subTemplates;
+        public List<SubTemplateEntry> SubTemplates
+        {
+            get { return _subTemplates ?? (_subTemplates = new List<SubTemplateEntry>()); }
+            set { _subTemplates = value; }
+        }
+        public int SubSearchPadPx { get; set; } = 20;
+        public bool RequireSubPerInstance { get; set; } = true;
 
         [NonSerialized]
         private Bitmap _cachedBitmap;
@@ -2869,5 +3520,109 @@ namespace BeeCore
                 TemplatePng = ms.ToArray();
             }
         }
+    }
+
+    /// <summary>
+    /// Sub-template gắn vào 1 main template. Q1: detect bằng Pattern2 trên cropped patch
+    /// quanh main bbox. Q4: lazy-learn 1 lần, cache Pattern2 instance trong [NonSerialized]
+    /// field, invalidate khi PNG bytes thay đổi.
+    /// </summary>
+    [Serializable]
+    public class SubTemplateEntry
+    {
+        public string Label { get; set; } = "";
+        public float ScoreThreshold { get; set; } = 70f;        // 0..100
+        public bool HasAngleRange { get; set; } = false;
+        public double AngleLower { get; set; } = -180.0;
+        public double AngleUpper { get; set; } = 180.0;
+
+        // PNG bytes (giống Pattern2TemplateEntry để JSON-serialize được).
+        public byte[] TemplatePng { get; set; }
+
+        [NonSerialized]
+        private Bitmap _cachedBitmap;
+
+        // Q4: lazy-learn cache. Key = handle Pattern2 đã LearnPatternStable từ PNG này.
+        // Invalidate khi SetBitmap đổi PNG hoặc khi user chỉnh angle/score (chỉ cần re-match,
+        // không cần re-learn — nên chỉ invalidate khi PNG đổi).
+        [NonSerialized]
+        private BeeCpp.Pattern2 _learned;
+        [NonSerialized]
+        private bool _learnedFlag;
+
+        public Bitmap GetBitmap()
+        {
+            if (_cachedBitmap != null) return _cachedBitmap;
+            if (TemplatePng == null || TemplatePng.Length == 0) return null;
+            try
+            {
+                using (var ms = new System.IO.MemoryStream(TemplatePng))
+                    _cachedBitmap = new Bitmap(ms);
+            }
+            catch { _cachedBitmap = null; }
+            return _cachedBitmap;
+        }
+
+        public void SetBitmap(Bitmap bmp)
+        {
+            _cachedBitmap = null;
+            _learned = null;
+            _learnedFlag = false;
+            if (bmp == null) { TemplatePng = null; return; }
+            using (var ms = new System.IO.MemoryStream())
+            {
+                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                TemplatePng = ms.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Lấy Pattern2 đã learn (lazy). Trả null nếu PNG trống hoặc learn fail.
+        /// </summary>
+        internal BeeCpp.Pattern2 EnsureLearned()
+        {
+            if (_learnedFlag && _learned != null) return _learned;
+            var bmp = GetBitmap();
+            if (bmp == null) { _learnedFlag = true; _learned = null; return null; }
+
+            Mat m = null;
+            Mat gray = null;
+            try
+            {
+                m = OpenCvSharp.Extensions.BitmapConverter.ToMat(bmp);
+                if (m == null || m.Empty()) { _learnedFlag = true; _learned = null; return null; }
+                if (m.Channels() != 1)
+                {
+                    gray = new Mat();
+                    Cv2.CvtColor(m, gray, ColorConversionCodes.BGR2GRAY);
+                }
+                else gray = m;
+
+                var p = new BeeCpp.Pattern2();
+                p.SetImgeSampleNoCrop(gray.Data, gray.Width, gray.Height,
+                    (int)gray.Step(), gray.Channels());
+                p.LearnPatternStable();
+                _learned = p;
+                _learnedFlag = true;
+                return _learned;
+            }
+            catch (Exception ex)
+            {
+                Global.LogsDashboard?.AddLog(
+                    new LogEntry(DateTime.Now, LeveLLog.ERROR, "Pattern.SubTemplate.Learn",
+                        $"Label='{Label}': {ex.Message}"));
+                _learned = null;
+                _learnedFlag = true;
+                return null;
+            }
+            finally
+            {
+                if (gray != null && gray != m) gray.Dispose();
+                m?.Dispose();
+            }
+        }
+
+        /// <summary>Invalidate cached learn (gọi khi user edit Add/Delete/Reload).</summary>
+        public void InvalidateLearned() { _learned = null; _learnedFlag = false; }
     }
 }
